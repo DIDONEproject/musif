@@ -1,0 +1,6 @@
+results
+.vscode
+.idea
+__pycache__
+raw_files
+logs
