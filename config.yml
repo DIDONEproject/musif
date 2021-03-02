@@ -1,0 +1,10 @@
+data_dir: data
+intermediate_files_dir: intermediate
+logs_dir: logs
+log_level: DEBUG
+sequential: false
+features:
+  - melodic
+#  - harmonic
+#  - texture
+split: true

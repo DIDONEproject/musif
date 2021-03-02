@@ -1,0 +1,16 @@
+arias_scoring_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Arias_scoring.xlsx"
+characters_gender_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Groupings\\Characters gender.xlsx"
+arias_clefs_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Arias_clefs.xlsx"
+instruments_abbreviations_file: data/instruments_abbreviations.json
+instruments_families_file: data/instruments_families.json
+families_abbreviations_file: data/families_abbreviations.json
+translations_file: data/translations.json
+intermediate_files_dir: intermediatea
+logs_dir: logs
+log_level: DEBUG
+sequential: false
+features:
+  - melodic
+#  - harmonic
+#  - texture
+split: false
