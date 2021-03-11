@@ -15,7 +15,7 @@ from musif.common.translate import translate_word
 def get_musescoreInstrument_nameAndFamily(i, instrument_familiy, p):
     i_name = re.sub('\W+', ' ', i.instrumentName)
     name = translate_word(i_name)
-    name = exceptions_instrument_parsing(name, p)
+    # name = exceptions_instrument_parsing(name, p)
     family = instrument_familiy[name]
     return name, family
 

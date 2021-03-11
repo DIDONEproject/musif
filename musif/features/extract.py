@@ -1,67 +1,68 @@
 import glob
-from collections import Counter
 from os import path
 
 import pandas as pd
 
-from musif.config import default_features, default_sequential, default_split, read_logger
-from musif.features.all.custom.file_name import get_file_name_features
-from musif.features.all.general import get_general_features
-from musif.features.all.scoring import choose_score_parts, get_scoring_features
-from musif.features.melody.ambitus import get_ambitus_features
-from musif.features.melody.general import get_basic_features
-from musif.features.melody.interval import get_interval_features, get_interval_type_features
-from musif.features.melody.lyrics import get_lyrics_features
-from musif.features.melody.scale import get_emphasized_scale_degrees_features
-from musif.features.model import Features
+from musif.config import default_features, default_sequential, default_split
+from musif.features.score.custom.file_name import get_file_name_features
+from musif.features.score.general import get_general_features
+from musif.features.score.scoring import get_scoring_features
 from musif.musicxml import *
-from musif.scoreinfo import ScoreInfoExtractor
 
 
 class FeaturesExtractor:
 
-    def __init__(self, sequential: bool = None, features: List[Features] = None, split: bool = None):
+    def __init__(self, sequential: bool = None, split: bool = None):
         self._sequential = sequential or default_sequential
         self._features_filter = set(features or default_features)
         self._split_parts = split or default_split
-        self._score_info_extractor = ScoreInfoExtractor(self._sequential)
 
     def from_dir(self, musicxml_scores_dir: str, parts_filter: List[str] = None) -> DataFrame:
         musicxml_files = glob.glob(path.join(musicxml_scores_dir, f'*.{MUSICXML_FILE_EXTENSION}'))
         return self.from_files(musicxml_files, parts_filter)
 
     def from_files(self, musicxml_score_files: List[str], parts_filter: List[str] = None) -> DataFrame:
-        features_dfs = [self.from_file(musicxml_file, parts_filter)
-                        for musicxml_file in musicxml_score_files]
+        features_dfs = [self.from_file(musicxml_file, parts_filter) for musicxml_file in musicxml_score_files]
         return pd.concat(features_dfs, axis=1)
 
     def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> DataFrame:
+        score = self._parse_file(musicxml_file)
+
+        score_features, map_to_musicxml_parts = self._extract_score_features(musicxml_file, score)
+
+        matching_parts = self._find_matching_parts(score, parts_filter, map_to_musicxml_parts)
+        if len(matching_parts) == 0:
+            read_logger.warning(f"No parts were found for file {musicxml_file}")
+        parts_features = []
+        for i, part in enumerate(matching_parts):
+            part_features = {}  # part_features = self._process_part(musicxml_part, parts_filter, score_info, repetition_elements, tonality)
+            parts_features.append(part_features)
+
+        return self._combine_score_and_part_features(score_features, parts_features)
+
+    def _parse_file(self, musicxml_file: str) -> Score:
         score = parse(musicxml_file)
         split_wind_layers(score)
-        features, map_to_musicxml_parts = self._extract_global_features(musicxml_file, score)
+        return score
 
-        # # parts_features = []
-        # # for i, musicxml_part in enumerate(musicxml_parts):
-        # #     part_features = self._process_part(musicxml_part, parts_filter, score_info, repetition_elements, tonality)
-        # #     parts_features.append(part_features)
-        #
-        # features = pd.concat(parts_features, axis=1) if self._split_parts else self._group_features(parts_features)
-
-        return features
-
-    def _extract_global_features(self, musicxml_file: str, score: Score, parts_filter: List[str] = None) -> Tuple[dict, dict]:
+    def _extract_score_features(self, musicxml_file: str, score: Score, parts_filter: List[str] = None) -> Tuple[dict, dict]:
         features, map_to_musicxml_parts = get_scoring_features(score)
         features.update(get_file_name_features(musicxml_file))
         features.update(get_general_features(score))
         repetition_elements = get_repetition_elements(score)
         parts_filter = set(parts_filter or features["Scoring"].split(","))
-        musicxml_parts = choose_score_parts(score, parts_filter, map_to_musicxml_parts)
-        if len(musicxml_parts) == 0:
-            read_logger.warning(f"No parts were found for file {musicxml_file}")
         tonality = get_key(score)
         return features, map_to_musicxml_parts
 
-    # def _process_part(self, part: musicxml.Part, parts_filter: List[str], repetition_elements, tonality: str) -> DataFrame:
+    def _find_matching_parts(self, score: Score, parts_filter: List[str], abbreviation_to_part: Dict[str, str]) -> List[Part]:
+        parts_filter = set(parts_filter)
+        chosen_score_part_names = {score_part_name for abbreviation, score_part_name in abbreviation_to_part.items() if abbreviation in parts_filter}
+        return [part for part in score.parts if part.partName in chosen_score_part_names]
+
+    def _combine_score_and_part_features(self, score_features: dict, part_features: List[dict]) -> DataFrame:
+        return DataFrame({})
+
+        # def _process_part(self, part: musicxml.Part, parts_filter: List[str], repetition_elements, tonality: str) -> DataFrame:
     #     features = {}
     #     features.update(get_basic_features(score_info))
     #     voice_part_expanded = musicxml.expand_part(part, repetition_elements)
@@ -151,5 +152,40 @@ class FeaturesExtractor:
     #     emphasised_scale_degrees_info_A.append(dict(general_variables_dict, **ivA_EmphDict))
     #     emphasised_scale_degrees_info_B.append(dict(general_variables_dict, **ivB_EmphDict))
 
-    def _group_features(self, part_features: List[DataFrame]) -> DataFrame:
-        pass
+    # def join_ivalues(self, dictionary_list):
+    #     result_dictionary = {}
+    #     for k in dictionary_list[0]:  # traverse each key
+    #         # MEAN
+    #         if k in ['Intervallic ratio', 'Trimmed intervallic ratio', 'dif. Trimmed', '% Trimmed', 'Absolute intervallic ratio', 'Std', 'Absolute Std',
+    #                  'Syllabic ratio']:
+    #             result_dictionary[k] = sum([d[k] for d in dictionary_list]) / len(dictionary_list)
+    #         # MAX
+    #         elif k in ['HighestNote', 'HighestIndex', 'HighestMeanNote', 'HighestMeanIndex']:
+    #             mean = 'Mean' in k
+    #             indexes = [d['HighestIndex' if not mean else 'HighestMeanIndex'] for d in dictionary_list]
+    #             max_index = max(indexes)
+    #             result_dictionary[k] = max_index if k in ['HighestIndex', 'HighestMeanIndex'] else \
+    #                 [d['HighestNote' if not mean else 'HighestMeanNote'] for d in dictionary_list][indexes.index(max_index)]
+    #         elif k in ['AmbitusLargestInterval', 'AmbitusLargestSemitones', 'AscendingInterval', 'AscendingSemitones']:
+    #             ascending = 'Ascending' in k
+    #             semitones = [d['AmbitusLargestSemitones' if not ascending else 'AscendingSemitones'] for d in dictionary_list]
+    #             max_semitones = max(semitones)
+    #             result_dictionary[k] = max_semitones if k in ['AmbitusLargestSemitones', 'AscendingSemitones'] else \
+    #                 [d['AmbitusLargestInterval' if not ascending else 'AscendingInterval'] for d in dictionary_list][semitones.index(max_semitones)]
+    #         # MIN
+    #         elif k in ['LowestNote', 'LowestIndex', 'LowestMeanNote', 'LowestMeanIndex']:
+    #             mean = 'Mean' in k
+    #             indexes = [d['LowestIndex' if not mean else 'LowestMeanIndex'] for d in dictionary_list]
+    #             lowest_index = min(indexes)
+    #             result_dictionary[k] = lowest_index if k in ['LowestIndex', 'LowestMeanIndex'] else \
+    #                 [d['LowestNote' if mean else 'LowestMeanNote'] for d in dictionary_list][indexes.index(lowest_index)]
+    #         elif k in ['AmbitusSmallestInterval', 'AmbitusSmallestSemitones', 'DescendingInterval', 'DescendingSemitones']:
+    #             descending = 'Descending' in k
+    #             semitones = [d['AmbitusSmallestSemitones' if not ascending else 'DescendingSemitones'] for d in dictionary_list]
+    #             lowest_semitones = min(semitones)
+    #             result_dictionary[k] = lowest_semitones if k in ['AmbitusSmallestSemitones', 'DescendingSemitones'] else \
+    #                 [d['AmbitusSmallestInterval' if not descending else 'DescendingInterval'] for d in dictionary_list][semitones.index(lowest_semitones)]
+    #         # OTHER
+    #         elif k in ['AmbitusAbsoluteInterval', 'AmbitusAbsoluteSemitones', 'AmbitusMeanInterval', 'AmbitusMeanSemitones']:
+    #             result_dictionary[k] = ','.join([result_dictionary['LowestNote'], result_dictionary['HighestNote']])
+    #     return result_dictionary
