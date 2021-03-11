@@ -26,32 +26,29 @@ class FeaturesExtractor:
         return pd.concat(features_dfs, axis=1)
 
     def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> DataFrame:
-        score = self._parse_file(musicxml_file)
+        score, repetition_elements, tonality = self._parse_file(musicxml_file)
 
         score_features, map_to_musicxml_parts = self._extract_score_features(musicxml_file, score)
 
         matching_parts = self._find_matching_parts(score, parts_filter, map_to_musicxml_parts)
         if len(matching_parts) == 0:
             read_logger.warning(f"No parts were found for file {musicxml_file}")
-        parts_features = []
-        for i, part in enumerate(matching_parts):
-            part_features = {}  # part_features = self._process_part(musicxml_part, parts_filter, score_info, repetition_elements, tonality)
-            parts_features.append(part_features)
+        parts_features = [self._extract_part_features(part, repetition_elements, tonality, score_features, map_to_musicxml_parts)
+                          for part in matching_parts]
 
         return self._combine_score_and_part_features(score_features, parts_features)
 
-    def _parse_file(self, musicxml_file: str) -> Score:
+    def _parse_file(self, musicxml_file: str) -> Tuple[Score, List[str], str]:
         score = parse(musicxml_file)
         split_wind_layers(score)
-        return score
+        repetition_elements = get_repetition_elements(score)
+        tonality = get_key(score)
+        return score, repetition_elements, tonality
 
-    def _extract_score_features(self, musicxml_file: str, score: Score, parts_filter: List[str] = None) -> Tuple[dict, dict]:
+    def _extract_score_features(self, musicxml_file: str, score: Score) -> Tuple[dict, dict]:
         features, map_to_musicxml_parts = get_scoring_features(score)
         features.update(get_file_name_features(musicxml_file))
         features.update(get_general_features(score))
-        repetition_elements = get_repetition_elements(score)
-        parts_filter = set(parts_filter or features["Scoring"].split(","))
-        tonality = get_key(score)
         return features, map_to_musicxml_parts
 
     def _find_matching_parts(self, score: Score, parts_filter: List[str], abbreviation_to_part: Dict[str, str]) -> List[Part]:
@@ -62,7 +59,8 @@ class FeaturesExtractor:
     def _combine_score_and_part_features(self, score_features: dict, part_features: List[dict]) -> DataFrame:
         return DataFrame({})
 
-        # def _process_part(self, part: musicxml.Part, parts_filter: List[str], repetition_elements, tonality: str) -> DataFrame:
+    def _extract_part_features(self, part: Part, repetition_elements: List[str], tonality: str, score_features: dict, map_to_musicalxml_parts: Dict[str, str]) -> dict:
+        return {}
     #     features = {}
     #     features.update(get_basic_features(score_info))
     #     voice_part_expanded = musicxml.expand_part(part, repetition_elements)
