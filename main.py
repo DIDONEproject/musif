@@ -1,4 +1,4 @@
-from musif.extract import FeaturesExtractor
+from musif import FeaturesExtractor
 
 if __name__ == "__main__":
 

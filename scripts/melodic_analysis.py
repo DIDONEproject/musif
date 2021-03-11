@@ -1,52 +1,42 @@
-########################################################################
-# MAIN SCRIPT 
-########################################################################
-# usage: melodicAnalysis.py
-#        --xml <xml files directory>
-#        --msc <annotated musescore files directory>
-#         -f (<minimum number of factors>) <maximum number of factors>
-#         <--sequential>
-########################################################################
 import argparse
-import itertools
 import os
 import sys
 from os import path
 from typing import List
 
-from musif.config import abbreviation_to_sound
+from pandas import DataFrame
+
 from musif import VERSION
-from musif.common.instrument import extract_instrument_and_number_from_part, to_part
-from musif.extract import FeaturesExtractor
-from musif.scoreinfo import ScoreInfoExtractor
+from musif.features.extract import FeaturesExtractor
 
 
 def choose_parts(xml_dir: str, sequential: bool = None) -> List[str]:
     """
     Function to let the user choose the instrument to work with given all the instruments in his/her corpus #
     """
-    score_infos = ScoreInfoExtractor(sequential=sequential).from_dir(xml_dir)
-    unique_abbreviated_parts = list(set(list(itertools.chain(*[score_info.real_scoring.split(',') for score_info in score_infos]))))
-    if '' in unique_abbreviated_parts:
-        unique_abbreviated_parts.remove('')
-    parts = []
-    for abbreviated_part in unique_abbreviated_parts:
-        abbreviated_instrument, part_number = extract_instrument_and_number_from_part(abbreviated_part)
-        part = to_part(abbreviation_to_sound[abbreviated_instrument], part_number)
-        parts.append((abbreviated_part, part))
-    parts.sort()
-    options = {str(i): f"{str(i)} - {part[1]}" for i, part in enumerate(parts, 1)}
-    print('Which part do you want to process?:')
-    print('\n'.join(list(options.values())))
-    choice = input('Please, type the number(s) associated to the part separated by comma or space: ').strip()
-    sequence = choice.split(',')
-    if len(sequence) < 2:
-        sequence = choice.split(' ')
-    chosen_parts = ','.join([parts[int(number.strip())-1][0] for number in sequence])
-    return chosen_parts
+    # score_infos = ScoreInfoExtractor(sequential=sequential).from_dir(xml_dir)
+    # unique_abbreviated_parts = list(set(list(itertools.chain(*[score_info.real_scoring.split(',') for score_info in score_infos]))))
+    # if '' in unique_abbreviated_parts:
+    #     unique_abbreviated_parts.remove('')
+    # parts = []
+    # for abbreviated_part in unique_abbreviated_parts:
+    #     abbreviated_instrument, part_number = extract_instrument_and_number_from_part(abbreviated_part)
+    #     part = to_part_name(abbreviation_to_sound[abbreviated_instrument], part_number)
+    #     parts.append((abbreviated_part, part))
+    # parts.sort()
+    # options = {str(i): f"{str(i)} - {part[1]}" for i, part in enumerate(parts, 1)}
+    # print('Which part do you want to process?:')
+    # print('\n'.join(list(options.values())))
+    # choice = input('Please, type the number(s) associated to the part separated by comma or space: ').strip()
+    # sequence = choice.split(',')
+    # if len(sequence) < 2:
+    #     sequence = choice.split(' ')
+    # chosen_parts = ','.join([parts[int(number.strip())-1][0] for number in sequence])
+    # return chosen_parts
+    return ["obI", "obII"]
 
-
-# def write_files(args, all_dataframes, instrument_complete):
+def write_files(args: argparse.Namespace, features: DataFrame):
+    pass
 #     if not any(df.shape[0] != 0 for df in all_dataframes):
 #         print("There has been a problem in the information extraction process from the scores. Please, execute the program again.")
 #         print("If the problem persists open a issue on GitHub and it will be solved as soon as possible.")
@@ -126,9 +116,8 @@ def main():
 
     args = parse_args(sys.argv[1:])
     chosen_parts = choose_parts(args.xml, args.sequential)
-    FeaturesExtractor(sequential=args.sequential).from_dir(args.xml, args.msc, chosen_parts)
-    # all_dataframes, instrument_complete = read_files(args.xml)
-    # write_files(args, all_dataframes, instrument_complete)
+    features = FeaturesExtractor(sequential=args.sequential).from_dir(args.xml, chosen_parts)
+    write_files(args, features)
 
 
 if __name__ == "__main__":

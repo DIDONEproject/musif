@@ -1,17 +1,16 @@
-from typing import List, Optional, Tuple, Dict, Set
+from typing import List, Optional, Tuple
 
 from music21 import text
 from music21.stream import Part, Score
 from roman import toRoman
 
+from musif.common.constants import VOICE_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
 from musif.config import family_to_abbreviation, scoring_family_order, scoring_order, sound_to_abbreviation, sound_to_family
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 ABBREVIATED_PARTS_SCORING_ORDER = [instr + num for instr in scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
-VOICE_FAMILY = 'voice'
-STR_SOUND_GROUPS = [{'violin', 'viola', 'basso continuo'}, {'violin', 'viola', 'cello'}]
 
 
 def get_scoring_features(score: Score) -> Tuple[dict, dict]:
@@ -97,20 +96,6 @@ def extract_part_roman_number_by_position(part: Part, parts: List[Part]) -> Opti
     return None
 
 
-def get_matching_str_groups(sounds: List[str]) -> List[set]:
-    my_sounds = set(sounds)
-    str_groups = []
-    for str_sounds_set in STR_SOUND_GROUPS:
-        matching = True
-        for str_sound in str_sounds_set:
-            if str_sound not in my_sounds:
-                matching = False
-                break
-        if matching:
-            str_groups.append(str_sounds_set)
-    return str_groups
-
-
 def replace_naming_exceptions(sound: str, part: str) -> str:
     if 'da caccia' in sound:
         sound = sound.replace('da caccia', '')
@@ -125,8 +110,4 @@ def replace_naming_exceptions(sound: str, part: str) -> str:
         sound = 'basso continuo'
     return sound
 
-
-def choose_score_parts(score: Score, parts_filter: Set[str], abbreviation_to_part: Dict[str, str]) -> List[Part]:
-    chosen_score_part_names = {score_part_name for abbreviation, score_part_name in abbreviation_to_part.items() if abbreviation in parts_filter}
-    return [part for part in score.parts if part.partName in chosen_score_part_names]
 

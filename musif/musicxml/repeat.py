@@ -179,6 +179,7 @@ def expand_score_repetitions(score, repeat_elements):
 
 
 def get_expanded_measures(part_measures, repeat_elements):
+    global repeat_bracket
     measures_list = []
     startsin0 = part_measures[0].measureNumber is 0  # Everything should be -1
 

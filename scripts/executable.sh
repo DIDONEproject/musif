@@ -1,1 +1,0 @@
-python melodicAnalysis.py --xml "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\xml"  --msc "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Harmonic analysis\\ms3" -f 1
