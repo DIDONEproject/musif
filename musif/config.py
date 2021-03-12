@@ -1,16 +1,18 @@
 import multiprocessing
 from os import path
+from glob import glob
 
 from musif.common.logs import get_logger
-from musif.common.utils import read_object_from_json_file, read_object_from_yaml_file, read_dicts_from_csv
+from musif.common.utils import get_file_name, read_object_from_json_file, read_object_from_yaml_file, read_dicts_from_csv
 
 _DIR = path.split(__file__)[0]
 _config = read_object_from_yaml_file(path.join(_DIR, "../config.yml"))
 
 data_dir = _config["data_dir"]
+metadata_dir = _config["metadata_dir"]
 logs_dir = _config["logs_dir"]
 
-arias_metadata = read_dicts_from_csv(path.join(data_dir, "arias_metadata.csv"))
+score_metadata = {get_file_name(file): read_dicts_from_csv(file) for file in glob(path.join(metadata_dir, "*.csv"))}
 characters_gender = read_dicts_from_csv(path.join(data_dir, "characters_gender.csv"))
 # arias_clefs = read_dicts_from_csv(path.join(data_dir, "arias_clefs.csv"))
 sound_to_abbreviation = read_object_from_json_file(path.join(data_dir, "sound_abbreviation.json"))

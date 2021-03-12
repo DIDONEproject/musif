@@ -1,18 +1,22 @@
 import glob
 from os import path
+from typing import Dict, List, Tuple
 
 import pandas as pd
+from music21.stream import Part, Score
 
-from musif.config import default_features, default_sequential, default_split
+from musif.config import default_features, default_sequential, default_split, read_logger
+from musif.features import Features
 from musif.features.score.custom.file_name import get_file_name_features
 from musif.features.score.general import get_general_features
+from musif.features.score.metadata import get_metadata_features
 from musif.features.score.scoring import get_scoring_features
-from musif.musicxml import *
+from musif.musicxml import DataFrame, MUSICXML_FILE_EXTENSION, get_key, get_repetition_elements, parse, split_wind_layers
 
 
 class FeaturesExtractor:
 
-    def __init__(self, sequential: bool = None, split: bool = None):
+    def __init__(self, sequential: bool = None, split: bool = None, features: List[Features] = None):
         self._sequential = sequential or default_sequential
         self._features_filter = set(features or default_features)
         self._split_parts = split or default_split
@@ -27,15 +31,14 @@ class FeaturesExtractor:
 
     def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> DataFrame:
         score, repetition_elements, tonality = self._parse_file(musicxml_file)
-
         score_features, map_to_musicxml_parts = self._extract_score_features(musicxml_file, score)
-
         matching_parts = self._find_matching_parts(score, parts_filter, map_to_musicxml_parts)
         if len(matching_parts) == 0:
             read_logger.warning(f"No parts were found for file {musicxml_file}")
-        parts_features = [self._extract_part_features(part, repetition_elements, tonality, score_features, map_to_musicxml_parts)
-                          for part in matching_parts]
-
+        parts_features = [
+            self._extract_part_features(part, repetition_elements, tonality, score_features, map_to_musicxml_parts)
+            for part in matching_parts
+        ]
         return self._combine_score_and_part_features(score_features, parts_features)
 
     def _parse_file(self, musicxml_file: str) -> Tuple[Score, List[str], str]:
@@ -49,10 +52,11 @@ class FeaturesExtractor:
         features, map_to_musicxml_parts = get_scoring_features(score)
         features.update(get_file_name_features(musicxml_file))
         features.update(get_general_features(score))
+        features.update(get_metadata_features(score))
         return features, map_to_musicxml_parts
 
     def _find_matching_parts(self, score: Score, parts_filter: List[str], abbreviation_to_part: Dict[str, str]) -> List[Part]:
-        parts_filter = set(parts_filter)
+        parts_filter = set(parts_filter or list(abbreviation_to_part.keys()))
         chosen_score_part_names = {score_part_name for abbreviation, score_part_name in abbreviation_to_part.items() if abbreviation in parts_filter}
         return [part for part in score.parts if part.partName in chosen_score_part_names]
 
