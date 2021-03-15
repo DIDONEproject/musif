@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from musif.common.translate import translate_word
 from musif.common.utils import write_object_to_json_file
 
+
 def create_instrument_abbreviations_file(file_path: str):
     """
     Function to generate a JSON file indicating the relationshipe between

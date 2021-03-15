@@ -1,7 +1,5 @@
-from os import path
 from typing import List
 
-from musif.common.utils import read_object_from_json_file
 
 def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     sort_dictionary = {elem: i for i, elem in enumerate(reference_list)}

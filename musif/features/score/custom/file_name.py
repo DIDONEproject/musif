@@ -1,6 +1,3 @@
-import math
-
-
 def get_file_name_features(file_name: str) -> dict:
     """
     get variables from file_name
@@ -13,7 +10,7 @@ def get_file_name_features(file_name: str) -> dict:
     aria_title = file_name.split("-", 2)[1]
     composer = file_name.split("-", -1)[-1].split("[", 2)[0]
     year = file_name.split("-", -2)[-2]
-    decade = str(int(year) // 100) + str(math.floor(int(year) % 100 / 10) * 10) + "s"
+    decade = str(int(year) // 100) + str(int(year[-2:]) // 10) + "0s"
     act = file_name.split("[", 1)[-1].split(".", 1)[0]
     scene = file_name.split(".", 1)[-1].split("]", 1)[0]
 

@@ -1,5 +1,5 @@
 import itertools
-from typing import List
+from typing import List, Tuple
 
 from music21.bar import Repeat
 from music21.chord import Chord
@@ -179,7 +179,7 @@ def expand_score_repetitions(score, repeat_elements):
 
 
 def get_expanded_measures(part_measures, repeat_elements):
-    global repeat_bracket
+    repeat_bracket = sum([1 if 'repeat bracket' in item[1] else 0 for item in repeat_elements]) > 0
     measures_list = []
     startsin0 = part_measures[0].measureNumber is 0  # Everything should be -1
 
@@ -280,8 +280,7 @@ def expand_part(part: Part, repeat_elements):
     return p
 
 
-def get_repetition_elements(score: Score, verbose=True) -> List[str]:
-    repeat_bracket = False
+def get_repetition_elements(score: Score, verbose=True) -> List[tuple]:
     # 1. Get the repeat elements
     repeat_elements = set()
 
@@ -296,7 +295,6 @@ def get_repetition_elements(score: Score, verbose=True) -> List[str]:
                             measure += 1
                         instr_repeat_elements.append((measure, e.name))
             elif isinstance(elem, RepeatBracket):
-                repeat_bracket = True
                 string_e = str(elem)
                 index = string_e.find("music21.stream.Measure")
                 string_e = string_e[index:].replace("music21.stream.Measure ", '')
