@@ -1,7 +1,7 @@
 
 from ms3.score import MSCX
 
-from musif.config import read_logger
+from config import read_logger
 
 
 def extract_harmonic_analysis(mscx_file: str):
