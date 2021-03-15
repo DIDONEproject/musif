@@ -1,14 +1,12 @@
 import copy
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple, Union
 
 from music21 import *
 from music21.note import Note
 from music21.stream import Measure, Part, Score
-from music21.converter import parse
-from pandas import DataFrame
 
-from musif.config import sound_to_family
 from musif.common import group
+from musif.config import sound_to_family
 
 MUSICXML_FILE_EXTENSION = "xml"
 

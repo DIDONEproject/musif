@@ -1,17 +1,24 @@
 import glob
+from collections import Counter
 from os import path
 from typing import Dict, List, Tuple
 
 import pandas as pd
+from music21.converter import parse
 from music21.stream import Part, Score
+from pandas import DataFrame
 
 from musif.config import default_features, default_sequential, default_split, read_logger
-from musif.features import Features
-from musif.features.score.custom.file_name import get_file_name_features
-from musif.features.score.general import get_general_features
-from musif.features.score.metadata import get_metadata_features
-from musif.features.score.scoring import get_scoring_features
-from musif.musicxml import DataFrame, MUSICXML_FILE_EXTENSION, get_key, get_repetition_elements, parse, split_wind_layers
+from musif.features.feature import Features
+from musif.features.parts.melody.ambitus import get_ambitus_features
+from musif.features.parts.melody.interval import get_interval_features, get_interval_type_features
+from musif.features.parts.melody.lyrics import get_lyrics_features
+from musif.features.parts.melody.scale import get_emphasized_scale_degrees_features
+from musif.features.score.custom.custom import get_custom_features
+from musif.features.score.melody.key import get_key_features
+from musif.features.score.melody.scoring import get_scoring_features
+from musif.features.score.melody.time import get_time_features
+from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, get_notes, get_repetition_elements, split_wind_layers
 
 
 class FeaturesExtractor:
@@ -30,29 +37,28 @@ class FeaturesExtractor:
         return pd.concat(features_dfs, axis=1)
 
     def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> DataFrame:
-        score, repetition_elements, tonality = self._parse_file(musicxml_file)
+        score = self._parse_file(musicxml_file)
         score_features, map_to_musicxml_parts = self._extract_score_features(musicxml_file, score)
         matching_parts = self._find_matching_parts(score, parts_filter, map_to_musicxml_parts)
         if len(matching_parts) == 0:
             read_logger.warning(f"No parts were found for file {musicxml_file}")
+        repetition_elements = get_repetition_elements(score)
         parts_features = [
-            self._extract_part_features(part, repetition_elements, tonality, score_features, map_to_musicxml_parts)
+            self._extract_part_features(part, repetition_elements, score_features)
             for part in matching_parts
         ]
         return self._combine_score_and_part_features(score_features, parts_features)
 
-    def _parse_file(self, musicxml_file: str) -> Tuple[Score, List[str], str]:
+    def _parse_file(self, musicxml_file: str) -> Score:
         score = parse(musicxml_file)
         split_wind_layers(score)
-        repetition_elements = get_repetition_elements(score)
-        tonality = get_key(score)
-        return score, repetition_elements, tonality
+        return score
 
     def _extract_score_features(self, musicxml_file: str, score: Score) -> Tuple[dict, dict]:
         features, map_to_musicxml_parts = get_scoring_features(score)
-        features.update(get_file_name_features(musicxml_file))
-        features.update(get_general_features(score))
-        features.update(get_metadata_features(score))
+        features.update(get_custom_features(musicxml_file, score))
+        features.update(get_key_features(score))
+        features.update(get_time_features(score))
         return features, map_to_musicxml_parts
 
     def _find_matching_parts(self, score: Score, parts_filter: List[str], abbreviation_to_part: Dict[str, str]) -> List[Part]:
@@ -63,40 +69,28 @@ class FeaturesExtractor:
     def _combine_score_and_part_features(self, score_features: dict, part_features: List[dict]) -> DataFrame:
         return DataFrame({})
 
-    def _extract_part_features(self, part: Part, repetition_elements: List[str], tonality: str, score_features: dict, map_to_musicalxml_parts: Dict[str, str]) -> dict:
-        return {}
-    #     features = {}
-    #     features.update(get_basic_features(score_info))
-    #     voice_part_expanded = musicxml.expand_part(part, repetition_elements)
-    #     role = score_info.role
-    #     character = score_info.role.split('&')
-    #     # if 'voice' in parts_filter:
-    #     #     role = character[i] if character != '' and len(character) > i else ''
-    #
-    #     tg1 = get_TempoGrouped1(score_info.tempo)
-    #     grouped_variables = {
-    #         "KeySignatureGrouped": get_KeySignatureType(score_info.key_signature),
-    #         "TimeSignatureGrouped": get_TimeSignatureType(score_info.time_signature),
-    #         "TempoGrouped1": tg1,
-    #         "TempoGrouped2": get_TempoGrouped2(tg1)
-    #     }
-    #
-    #     ############# Extract information related to every excel that we need to obtain: From I to V #############
-    #
-    #     notes = musicxml.get_notes(voice_part_expanded)
-    #     numeric_intervals, text_intervals = musicxml.get_intervals(notes)
-    #
-    #     i_values = get_lyrics_features(voice_part_expanded, notes)
-    #     i_values.update(get_interval_features(numeric_intervals))
-    #     i_values.update(get_ambitus_features(voice_part_expanded))
-    #
-    #     text_intervals_count = Counter(text_intervals)
-    #     ii_a_values = text_intervals_count
-    #
-    #     iii_values = get_interval_type_features(text_intervals_count)
-    #
-    #     iv_a_values = get_emphasized_scale_degrees_features(notes, tonality)
-    #
+    def _extract_part_features(self, part: Part, repetition_elements: List[tuple], score_features: dict) -> dict:
+
+        features = {}
+        voice_part_expanded = expand_part(part, repetition_elements)
+        # role = score_info.role
+        # character = score_info.role.split('&')
+        # if 'voice' in parts_filter:
+        #     role = character[i] if character != '' and len(character) > i else ''
+
+        notes = get_notes(voice_part_expanded)
+        numeric_intervals, text_intervals = get_intervals(notes)
+        text_intervals_count = Counter(text_intervals)
+
+        features.update(get_lyrics_features(voice_part_expanded, notes))
+        features.update(get_interval_features(numeric_intervals))
+        features.update(get_ambitus_features(voice_part_expanded))
+        features.update(text_intervals_count)
+        features.update(get_interval_type_features(text_intervals_count))
+        features.update(get_emphasized_scale_degrees_features(notes, score_features["Key"]))
+
+        return features
+
     #     if score_info.old_clef and score_info.old_clef != '':
     #         v_clefs = {c: 1 for c in score_info.old_clef.split(',')}
     #     else:

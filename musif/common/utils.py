@@ -7,7 +7,7 @@ import pandas as pd
 import yaml
 from pandas import DataFrame
 
-from musif.common.constants import ENCODING, CSV_DELIMITER
+from musif.common.constants import CSV_DELIMITER, ENCODING
 
 
 def get_file_name(file_path: str) -> str:

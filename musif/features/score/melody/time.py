@@ -4,20 +4,7 @@ from music21.expressions import TextExpression
 from music21.stream import Measure, Score
 
 
-def get_general_features(score: Score) -> dict:
-    # s = converter.parse(xml_file)
-    my_key = score.analyze("key")
-    key_mode = my_key.mode
-    key_name = (
-        my_key.name.split(" ")[0].strip().replace("-", "b")
-    )  # coger solo la string de antes del espacio? y así quitar major y minor
-    key_name = key_name if key_mode == "major" else key_name.lower()
-
-    key_signature = str()
-    if my_key.sharps:
-        key_signature = "b" * abs(my_key.sharps) if my_key.sharps < 0 else "s" * my_key.sharps
-    else:
-        key_signature = "n"
+def get_time_features(score: Score) -> dict:
 
     # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
     # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo
@@ -38,51 +25,32 @@ def get_general_features(score: Score) -> dict:
                         tempo_mark = element.content
                         break
             break  # only take into account the first bar!
+    time_signature = ",".join(list(set(time_signatures)))
+    time_signature_grouped = get_TimeSignatureType(time_signature)
+    tg1 = get_TempoGrouped1(tempo_mark)
+    tg2 = get_TempoGrouped2(tg1)
 
     return {
-        "Key": key_name,
-        "Mode": key_mode,
-        "KeySignature": key_signature,
         "Tempo": tempo_mark,
-        "TimeSignature": ",".join(list(set(time_signatures))),
+        "TimeSignature": time_signature,
+        "TimeSignatureGrouped": time_signature_grouped,
+        "TempoGrouped1": tg1,
+        "TempoGrouped2": tg2,
     }
 
 
-def get_abbreviated_key(full_key: str) -> str:
-    """
-    returns abbreviated designation of keys (uppercase for major mode; lowercase for minor mode)
-    example: if key == 'D- major': return 'Db'
-    """
-    key_parts = full_key.split(' ')
-    mode = key_parts[1].strip().lower()
-    tonality = key_parts[0].strip()
-    tonality = tonality.lower() if mode == 'minor' else tonality.capitalize()
-    tonality = tonality.replace('-', 'b')  # if the character '-' is not in the string, nothing will change
-    return tonality
-
-
-def get_final(key):
-    """
-    returns 1st degree of the scale (in uppercase)
-    example: if key in ['C- major', 'c- minor']: return 'Cb'
-    """
-    tonalty = key.split(' ')[0]
-    tonalty = tonalty.upper()
-    return tonalty.replace('-', 'b')  # if the character '-' is not in the string, nothing will change
-
-
-def get_mode(key: str) -> str:
-    if key.isupper():
-        return 'M'
+def get_TimeSignatureType(timesignature):
+    # this function classifies time signatures
+    if timesignature in ['1/2', '1/4', '1/8', '1/16', '2/2', '2/4', '2/8', '2/16', '4/4', 'C', '4/2', '4/8', '4/16', '8/2', '8/4', '8/8', '8/16']:
+        return 'simple duple'
+    elif timesignature in ['6/8', '12/2', '12/4', '12/8', '12/16']:
+        return 'compound duple'
+    elif timesignature in ['3/2', '3/4', '3/8', '3/16', '6/2', '6/4', '6/16']:
+        return 'simple triple'
+    elif timesignature in ['9/2', '9/4', '9/8', '9/16']:
+        return 'compound triple'
     else:
-        return 'm'
-
-
-def get_KeySignatureType(keysignature):
-    """
-    returns the key signature type ('bb) for flats, 'ss' for sharps, and 'nn' for naturals
-    """
-    return keysignature[0]
+        return 'other'
 
 
 def get_TempoGrouped1(tempo):
