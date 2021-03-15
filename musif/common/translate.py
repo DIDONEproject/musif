@@ -1,7 +1,7 @@
 import nltk
 from googletrans import Translator
 
-from musif.config import translations_cache
+from config import translations_cache
 
 nltk.download('wordnet', quiet=True)
 from nltk.corpus import wordnet as wn

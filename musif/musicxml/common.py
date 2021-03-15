@@ -6,7 +6,7 @@ from music21.note import Note
 from music21.stream import Measure, Part, Score
 
 from musif.common import group
-from musif.config import sound_to_family
+from config import sound_to_family
 
 MUSICXML_FILE_EXTENSION = "xml"
 

@@ -1,5 +1,5 @@
 import itertools
-from typing import List, Tuple
+from typing import List
 
 from music21.bar import Repeat
 from music21.chord import Chord
@@ -9,7 +9,7 @@ from music21.repeat import RepeatMark
 from music21.spanner import RepeatBracket, Slur
 from music21.stream import Measure, Part, Score
 
-from musif.config import read_logger
+from config import read_logger
 
 
 def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks=False):
