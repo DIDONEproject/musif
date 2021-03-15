@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 import roman
 from music21.stream import Part
 
-from config import family_to_abbreviation, sound_to_abbreviation
+from musif.config import family_to_abbreviation, sound_to_abbreviation
 from musif.features.score.melody.scoring import ROMAN_NUMERALS_FROM_1_TO_20, VOICE_FAMILY
 
 

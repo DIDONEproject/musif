@@ -7,7 +7,7 @@ from roman import toRoman
 from musif.common.constants import VOICE_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
-from config import family_to_abbreviation, scoring_family_order, scoring_order, sound_to_abbreviation, sound_to_family
+from musif.config import family_to_abbreviation, scoring_family_order, scoring_order, sound_to_abbreviation, sound_to_family
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 ABBREVIATED_PARTS_SCORING_ORDER = [instr + num for instr in scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]

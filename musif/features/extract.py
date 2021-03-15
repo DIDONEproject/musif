@@ -8,7 +8,7 @@ from music21.converter import parse
 from music21.stream import Part, Score
 from pandas import DataFrame
 
-from config import default_features, default_sequential, default_split, read_logger
+from musif.config import default_features, default_sequential, default_split, read_logger
 from musif.features.feature import Features
 from musif.features.parts.melody.ambitus import get_ambitus_features
 from musif.features.parts.melody.interval import get_interval_features, get_interval_type_features
