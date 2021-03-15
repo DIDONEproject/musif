@@ -1,4 +1,4 @@
-from config import scores_metadata
+from musif.config import scores_metadata
 
 
 def merge_metadata_features(features: dict, metadata_features: dict, strategy: str = "unique") -> dict:
