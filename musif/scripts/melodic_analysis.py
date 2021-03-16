@@ -10,7 +10,7 @@ from musif import VERSION
 from musif.features.extract import FeaturesExtractor
 
 
-def choose_parts(xml_dir: str, sequential: bool = None) -> List[str]:
+def choose_parts(xml_dir: str) -> List[str]:
     """
     Function to let the user choose the instrument to work with given all the instruments in his/her corpus #
     """
@@ -73,22 +73,6 @@ def parse_args(args_list: list) -> argparse.Namespace:
         help="Number of factors.",
     )
     parser.add_argument(
-        "-o", "--output_dir",
-        default=os.getcwd(),
-        help="Output directory.",
-    )
-    parser.add_argument(
-        "-l", "--logs_dir",
-        default=os.getcwd(),
-        help="Logs directory.",
-    )
-    parser.add_argument(
-        "-s", "--sequential",
-        default=False,
-        action="store_true",
-        help="Enable sequential processing.",
-    )
-    parser.add_argument(
         "-v", "--version", action="version", version=f"musif {VERSION}"
     )
 
@@ -108,8 +92,9 @@ def parse_args(args_list: list) -> argparse.Namespace:
 def main():
 
     args = parse_args(sys.argv[1:])
-    chosen_parts = choose_parts(args.xml, args.sequential)
+    chosen_parts = choose_parts(args.xml)
     features = FeaturesExtractor().from_dir(args.xml, chosen_parts)
+    print(features)
     write_files(args, features)
 
 
