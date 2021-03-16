@@ -7,6 +7,22 @@ def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     orphans = [elem for elem in list_to_sort if elem not in sort_dictionary]
     return sorted(found, key=lambda x: sort_dictionary[x]) + orphans
 
+def sort_dict(dict_to_sort, main_list):
+    indexes = []
+    huerfanos = []
+    for i in dict_to_sort:
+        if i in main_list:
+            indexes.append(main_list.index(i))
+        else:
+            huerfanos.append({i: dict_to_sort[i]})
+            logger.warning(
+                'We do not have the appropiate sorting for {}'.format(i))
+    indexes = sorted(indexes)
+    list_sorted = [{main_list[i]: dict_to_sort[main_list[i]]} for i in indexes]
+    list_sorted = list_sorted + huerfanos
+    dict_sorted = dict((key, d[key]) for d in list_sorted for key in d)
+    return dict_sorted
+
 # class Sorting:
 #     """
 #     This class contains the most appropriate sortings for piece grouping criteria (1st columns in reports)
