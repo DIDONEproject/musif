@@ -17,8 +17,11 @@ from musif.features.parts.melody.lyrics import get_lyrics_features
 from musif.features.parts.melody.scale import get_emphasized_scale_degrees_features
 from musif.features.score.custom.custom import get_custom_features
 from musif.features.score.melody.key import get_key_features
-from musif.features.score.melody.scoring import get_scoring_features
+from musif.features.score.scoring import get_scoring_features
 from musif.features.score.melody.time import get_time_features
+from musif.features.score.texture.densities import get_densities
+from musif.features.score.texture.textures import get_textures
+
 from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, get_notes, get_repetition_elements, split_wind_layers
 
 
@@ -46,6 +49,10 @@ class FeaturesExtractor:
         if len(matching_parts) == 0:
             self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file}")
         repetition_elements = get_repetition_elements(score)
+
+        score_features.update(get_densities(score, matching_parts, repetition_elements, score_features['Scoring']))
+        # score_features.update(get_textures(score, matching_parts, repetition_elements, score_features['Scoring']))
+
         parts_features = [
             self._extract_part_features(part, repetition_elements, score_features)
             for part in matching_parts
