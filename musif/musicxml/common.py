@@ -1,12 +1,11 @@
 import copy
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 
 from music21 import *
 from music21.note import Note
 from music21.stream import Measure, Part, Score
 
 from musif.common import group
-from musif.config import sound_to_family
 
 MUSICXML_FILE_EXTENSION = "xml"
 
@@ -19,7 +18,7 @@ def is_voice(part: Part) -> bool:
 
 
 
-def flat_layers(score):
+def flat_layers(score, sound_to_family: Dict[str, str]):
     """
     Function used to split the possible layers present on wind instruments
 

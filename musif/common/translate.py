@@ -1,18 +1,19 @@
+from typing import Dict
+
 import nltk
 from googletrans import Translator
-
-from musif.config import translations_cache
 
 nltk.download('wordnet', quiet=True)
 from nltk.corpus import wordnet as wn
 
 
-def translate_word(word: str, language: str = None):
+def translate_word(word: str, language: str = None, translations_cache: Dict[str, str] = None):
     t = Translator()
     translator_x_eng = ''
     # Remove instrument specifications (Re), (Do), ...
     parenthesis = word.find('(')
     word = word[:parenthesis] if '(' in word else word
+    translations_cache = translations_cache or {}
     cached_translation = translations_cache.get(word.lower().strip())
     if cached_translation:
         return cached_translation

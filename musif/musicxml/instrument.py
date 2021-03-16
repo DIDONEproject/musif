@@ -2,8 +2,8 @@ from typing import Optional, Tuple
 
 import roman
 from music21.stream import Part
+from musif.config import Configuration
 
-from musif.config import family_to_abbreviation, sound_to_abbreviation
 from musif.features.score.melody.scoring import ROMAN_NUMERALS_FROM_1_TO_20, VOICE_FAMILY
 
 
@@ -32,10 +32,10 @@ def extract_part_roman_number(score_part: Part) -> Optional[str]:
     return None
 
 
-def score_part_to_part_instrument(score_part: Part) -> str:
+def score_part_to_part_instrument(score_part: Part, config: Configuration) -> str:
     family, instrument = score_part_to_family_and_instrument(score_part)
     if family == VOICE_FAMILY:
-        return to_part_name(family_to_abbreviation[family])
+        return to_part_name(config.family_to_abbreviation[family])
     part_number = extract_part_roman_number(score_part)
-    abbreviation = sound_to_abbreviation[instrument]
+    abbreviation = config.sound_to_abbreviation[instrument]
     return to_part_name(abbreviation, part_number)
