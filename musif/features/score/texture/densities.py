@@ -1,6 +1,24 @@
-from music21.stream import Measure, Score, Part
+from music21.stream import Measure, Score, Part, Stream
 from ....common.sort import sort_dict 
-
+from .utils import expand_part
+# from ..scoring import
+set_total_measures = False
+#################################
+def set_ties(subjct, len_notes):
+    if isinstance(subjct, note.Note):
+        if (subjct.tie is not None) and (subjct.tie.type == "stop" or subjct.tie.type == "continue"):
+            if isinstance(len_notes[-1], note.Note):
+                # sum tied notes' length
+                len_notes[-1].duration.quarterLength += subjct.duration.quarterLength
+            else:
+                back_counter = -1
+                while isinstance(len_notes[back_counter], tuple):
+                    back_counter -= - 1
+                else:
+                    # sum tied notes' length across measures
+                    len_notes[back_counter].duration.quarterLength += subjct.duration.quarterLength
+        else:
+            len_notes.append(subjct)
 
 def get_note_list(partVoice):
     elem = partVoice.elements
@@ -30,7 +48,7 @@ def calculate_densities(notes_list, measures_list, names_list):
             density_list.append({f'{names_list[i]}': density})
 
         density_dict = dict((key, d[key]) for d in density_list for key in d)
-        # density_sorting = general_sorting.get_instruments_sorting()
+        density_sorting = general_sorting.get_instruments_sorting()
         density_dict = sort_dict(density_dict, density_sorting)
         return density_dict
     except:
@@ -43,9 +61,10 @@ def get_densities(score: Score, parts: Part, repetition_elements, scoring) -> di
     names_list = []
     # num_voices = len([i for i in partVoices if i.partName.startswith('voice')])
 
+    ## TODO: Implementar seleccionar voces de cantantes
+
     for i, partVoice in enumerate(parts):
-        partVoice_expanded = remove_repeats.expand_part(
-            partVoice, repeat_elements)
+        partVoice_expanded = expand_part(partVoice, repetition_elements)
         # Calculate total notes and measures
         len_notes, measures = get_notes_measures(partVoice_expanded)
 
