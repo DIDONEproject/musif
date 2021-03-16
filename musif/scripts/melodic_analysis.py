@@ -61,8 +61,9 @@ def parse_args(args_list: list) -> argparse.Namespace:
         help="XML directory containing input files.",
     )
     parser.add_argument(
-        "msc",
-        help="MuseScore directory containing input files.",
+        "-c", "--config",
+        default="config.yml",
+        help="Config file.",
     )
     parser.add_argument(
         "-f", "--factors",
@@ -101,14 +102,6 @@ def parse_args(args_list: list) -> argparse.Namespace:
         print(f"XML directory {args.xml} doesn't exist")
         sys.exit(2)
 
-    if args.msc is None:
-        print(f"A MuseScore directory must be passed.")
-        sys.exit(2)
-
-    if not path.exists(args.msc):
-        print(f"MuseScore directory {args.msc} doesn't exist")
-        sys.exit(2)
-
     return args
 
 
@@ -116,7 +109,7 @@ def main():
 
     args = parse_args(sys.argv[1:])
     chosen_parts = choose_parts(args.xml, args.sequential)
-    features = FeaturesExtractor(sequential=args.sequential).from_dir(args.xml, chosen_parts)
+    features = FeaturesExtractor().from_dir(args.xml, chosen_parts)
     write_files(args, features)
 
 

@@ -1,9 +1,9 @@
-from musif.config import scores_metadata
+from musif.config import Configuration
 
 
-def merge_metadata_features(features: dict, metadata_features: dict, strategy: str = "unique") -> dict:
+def merge_metadata_features(features: dict, metadata_features: dict, config: Configuration, strategy: str = "unique") -> dict:
     metadata_features = {}
-    for file_name, metadata in scores_metadata:
+    for file_name, metadata in config.scores_metadata:
         for key, value in metadata:
             if key in features:
                 if strategy == "unique":

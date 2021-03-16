@@ -1,14 +1,15 @@
 import glob
 from collections import Counter
-from os import path
-from typing import Dict, List, Tuple
+from os import getcwd, path
+from typing import Dict, List, Tuple, Union
 
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
 from pandas import DataFrame
 
-from musif.config import default_features, default_sequential, default_split, read_logger
+from musif.common.utils import read_object_from_yaml_file
+from musif.config import Configuration
 from musif.features.feature import Features
 from musif.features.parts.melody.ambitus import get_ambitus_features
 from musif.features.parts.melody.interval import get_interval_features, get_interval_type_features
@@ -23,10 +24,12 @@ from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, 
 
 class FeaturesExtractor:
 
-    def __init__(self, sequential: bool = None, split: bool = None, features: List[Features] = None):
-        self._sequential = sequential or default_sequential
-        self._features_filter = set(features or default_features)
-        self._split_parts = split or default_split
+    def __init__(self, config: Union[dict, str] = None):
+        if not config:
+            config = path.join(getcwd(), "config.yml")
+        if isinstance(config, str):
+            config = read_object_from_yaml_file(config)
+        self._cfg = Configuration(**config)
 
     def from_dir(self, musicxml_scores_dir: str, parts_filter: List[str] = None) -> DataFrame:
         musicxml_files = glob.glob(path.join(musicxml_scores_dir, f'*.{MUSICXML_FILE_EXTENSION}'))
@@ -41,7 +44,7 @@ class FeaturesExtractor:
         score_features, map_to_musicxml_parts = self._extract_score_features(musicxml_file, score)
         matching_parts = self._find_matching_parts(score, parts_filter, map_to_musicxml_parts)
         if len(matching_parts) == 0:
-            read_logger.warning(f"No parts were found for file {musicxml_file}")
+            self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file}")
         repetition_elements = get_repetition_elements(score)
         parts_features = [
             self._extract_part_features(part, repetition_elements, score_features)
@@ -55,7 +58,7 @@ class FeaturesExtractor:
         return score
 
     def _extract_score_features(self, musicxml_file: str, score: Score) -> Tuple[dict, dict]:
-        features, map_to_musicxml_parts = get_scoring_features(score)
+        features, map_to_musicxml_parts = get_scoring_features(score, self._cfg)
         features.update(get_custom_features(musicxml_file, score))
         features.update(get_key_features(score))
         features.update(get_time_features(score))

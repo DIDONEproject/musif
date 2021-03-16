@@ -1,10 +1,11 @@
+from logging import getLogger
 
 from ms3.score import MSCX
-
-from musif.config import read_logger
+from musif.config import READ_LOGGER_NAME
 
 
 def extract_harmonic_analysis(mscx_file: str):
+    read_logger = getLogger(READ_LOGGER_NAME)
     read_logger.debug(f"Extracting harmonic analysis from musescore file '{mscx_file}'")
     harmonic_analysis = None
     try:

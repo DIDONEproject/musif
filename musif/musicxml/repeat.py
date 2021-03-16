@@ -1,4 +1,5 @@
 import itertools
+from logging import getLogger
 from typing import List
 
 from music21.bar import Repeat
@@ -9,7 +10,7 @@ from music21.repeat import RepeatMark
 from music21.spanner import RepeatBracket, Slur
 from music21.stream import Measure, Part, Score
 
-from musif.config import read_logger
+from musif.config import READ_LOGGER_NAME
 
 
 def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks=False):
@@ -304,6 +305,7 @@ def get_repetition_elements(score: Score, verbose=True) -> List[tuple]:
 
     repeat_elements = sorted(list(repeat_elements), key=lambda tup: tup[0])
     if verbose:
+        read_logger = getLogger(READ_LOGGER_NAME)
         read_logger.debug("The repeat elements found in this score are: " + str(repeat_elements))
     return repeat_elements
 
