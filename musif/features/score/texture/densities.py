@@ -1,13 +1,17 @@
-from music21.stream import Measure, Score, Part, Stream
-from ....common.sort import sort_dict 
-from .utils import expand_part
-# from ..scoring import
-set_total_measures = False
-#################################
+from music21.note import Note
+from music21.stream import Measure, Part, Score
+from pandas import DataFrame
+
+from musif.common.sort import sort_dict
+from musif.config import Configuration
+from musif.musicxml import expand_part
+
+set_total_measures = False  # TODO: WTH!?!?
+
 def set_ties(subjct, len_notes):
-    if isinstance(subjct, note.Note):
+    if isinstance(subjct, Note):
         if (subjct.tie is not None) and (subjct.tie.type == "stop" or subjct.tie.type == "continue"):
-            if isinstance(len_notes[-1], note.Note):
+            if isinstance(len_notes[-1], Note):
                 # sum tied notes' length
                 len_notes[-1].duration.quarterLength += subjct.duration.quarterLength
             else:
@@ -24,7 +28,7 @@ def get_note_list(partVoice):
     elem = partVoice.elements
     len_notes = []
     for n in elem:
-        if isinstance(n, stream.Measure):
+        if isinstance(n, Measure):
             for x in n.elements:
                 set_ties(x, len_notes)
     return len_notes
@@ -36,11 +40,11 @@ def get_notes_measures(partVoice):
     else:
         # we get the list of measures that contain at least one note, which means they are not full silences.
         total_measures = len([i for i in partVoice.getElementsByClass('Measure') if (
-            [f for f in i.elements if isinstance(f, note.Note)] != [])])
+            [f for f in i.elements if isinstance(f, Note)] != [])])
     return len(len_notes), total_measures
 
 
-def calculate_densities(notes_list, measures_list, names_list):
+def calculate_densities(notes_list, measures_list, names_list, cfg: Configuration):
     density_list = []
     try:
         for i, part in enumerate(names_list):
@@ -48,11 +52,11 @@ def calculate_densities(notes_list, measures_list, names_list):
             density_list.append({f'{names_list[i]}': density})
 
         density_dict = dict((key, d[key]) for d in density_list for key in d)
-        density_sorting = general_sorting.get_instruments_sorting()
+        density_sorting = cfg.scoring_order
         density_dict = sort_dict(density_dict, density_sorting)
         return density_dict
     except:
-        logger.error('Densities problem found: ', exc_info=True)
+        cfg.read_logger.error('Densities problem found: ', exc_info=True)
         return {}
 
 def get_densities(score: Score, parts: Part, repetition_elements, scoring) -> dict:
@@ -73,11 +77,11 @@ def get_densities(score: Score, parts: Part, repetition_elements, scoring) -> di
         amount_measures.append(measures)
 
     # Once collected all info for all parts, we iterate to calculate densities and textures
-    df = pd.DataFrame(list(zip(names_list, amount_notes_list,
+    df = DataFrame(list(zip(names_list, amount_notes_list,
                                amount_measures)), columns=['names', 'notes', 'measures'])
 
     try:
-        for i, _ in enumerate(partVoices):
+        for i, _ in enumerate(parts):
             # Criteria: split anything that might have two voices in the same part and is not a violin or a voice
             if (df.names[i].replace('I','') not in ['vn', 'voice'] and df['names'][i].endswith('I')):
                 df['notes'][i] = df['notes'][i]+df['notes'][i+1]
@@ -97,4 +101,4 @@ def get_densities(score: Score, parts: Part, repetition_elements, scoring) -> di
     except IndexError:
         print('Problem with the instrument numeration')
     
-    return calculate_densities((notes_list, measures_list, names_list))
+    return calculate_densities(notes_list, measures_list, names_list)
