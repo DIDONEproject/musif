@@ -13,7 +13,7 @@ setup(
     description="Music feature extraction library",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="git@github.com:DIDONEproject/musif.git",
+    url="git@github.com:DIDONEproject/musiF.git",
     packages=find_packages(),
     include_package_data=True,
     classifiers=[
