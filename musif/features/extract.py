@@ -1,38 +1,39 @@
 import glob
 from collections import Counter
 from os import getcwd, path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple
 
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
 from pandas import DataFrame
 
-from musif.common.utils import read_object_from_yaml_file
+from musif.common.utils import get_file_name, read_object_from_yaml_file
 from musif.config import Configuration
-from musif.features.feature import Features
 from musif.features.parts.melody.ambitus import get_ambitus_features
 from musif.features.parts.melody.interval import get_interval_features, get_interval_type_features
 from musif.features.parts.melody.lyrics import get_lyrics_features
 from musif.features.parts.melody.scale import get_emphasized_scale_degrees_features
+from musif.features.score.common.scoring import get_scoring_features
 from musif.features.score.custom.custom import get_custom_features
 from musif.features.score.melody.key import get_key_features
-from musif.features.score.scoring import get_scoring_features
 from musif.features.score.melody.time import get_time_features
+from musif.features.score.metadata import get_metadata_features
 from musif.features.score.texture.densities import get_densities
-from musif.features.score.texture.textures import get_textures
-
 from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, get_notes, get_repetition_elements, split_wind_layers
 
 
 class FeaturesExtractor:
 
-    def __init__(self, config: Union[dict, str] = None):
-        if not config:
-            config = path.join(getcwd(), "config.yml")
-        if isinstance(config, str):
-            config = read_object_from_yaml_file(config)
-        self._cfg = Configuration(**config)
+    def __init__(self, *args, **kwargs):
+        config_data = kwargs
+        if not kwargs:
+            args = args or [path.join(getcwd(), "config.yml")]
+            if isinstance(args[0], str):
+                config_data = read_object_from_yaml_file(args[0])
+            elif isinstance(args[0], dict):
+                config_data = args[0]
+        self._cfg = Configuration(**config_data)
 
     def from_dir(self, musicxml_scores_dir: str, parts_filter: List[str] = None) -> DataFrame:
         musicxml_files = glob.glob(path.join(musicxml_scores_dir, f'*.{MUSICXML_FILE_EXTENSION}'))
@@ -65,10 +66,13 @@ class FeaturesExtractor:
         return score
 
     def _extract_score_features(self, musicxml_file: str, score: Score) -> Tuple[dict, dict]:
-        features, map_to_musicxml_parts = get_scoring_features(score, self._cfg)
-        features.update(get_custom_features(musicxml_file, score))
+        scoring_features, map_to_musicxml_parts = get_scoring_features(score, self._cfg)
+        features = {"FileName": get_file_name(musicxml_file)}
+        features.update(scoring_features)
         features.update(get_key_features(score))
         features.update(get_time_features(score))
+        features.update(get_custom_features(musicxml_file, score))
+        features.update(get_metadata_features(musicxml_file, features, self._cfg))
         return features, map_to_musicxml_parts
 
     def _find_matching_parts(self, score: Score, parts_filter: List[str], abbreviation_to_part: Dict[str, str]) -> List[Part]:

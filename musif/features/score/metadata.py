@@ -1,16 +1,11 @@
 from musif.config import Configuration
 
 
-def merge_metadata_features(features: dict, metadata_features: dict, config: Configuration, strategy: str = "unique") -> dict:
-    metadata_features = {}
-    for file_name, metadata in config.scores_metadata:
-        for key, value in metadata:
-            if key in features:
-                if strategy == "unique":
-                    continue
-                else:
-                    effective_key = file_name.capitalize() + key.capitalize()
-            else:
-                effective_key = key.capitalize()
-            metadata_features[effective_key] = value
-    return metadata_features
+def get_metadata_features(file_name: str, existing_features: dict, config: Configuration) -> dict:
+    metadata = config.scores_metadata.get(file_name)
+    if not metadata:
+        return {}
+    for key in metadata.keys():
+        if key in existing_features:
+            config.read_logger.warning(f"Duplicated feature '{key}' was found in file '{file_name}' and will be skipped.")
+    return metadata
