@@ -1,2 +1,1 @@
 include musif/*/data/*.*
-include musif/config.yml

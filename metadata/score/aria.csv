@@ -1,4 +1,4 @@
-Id,Label,Name,Year,Composer,Librettist,Act,Scene,Act And Scene,Form,Character,Type,City,Country
+AriaId,AriaLabel,AriaName,Year,Composer,Librettist,Act,Scene,Act And Scene,Form,Character,Type,City,Country
 0001,Did,Son_regina,1724,Sarro,M,1,5,105,Al segno,Didone,Female lover 1,Naples,Italy
 0002,Did,Non_ha,1770,Piccinni,M,1,18,118,Al segno,Didone,Female lover 1,Rome,Italy
 0003,Did,Non_ha,1724,Sarro,M,1,17,117,Da capo,Didone,Female lover 1,Naples,Italy

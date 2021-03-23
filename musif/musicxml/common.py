@@ -191,12 +191,13 @@ def get_measures(part: Part) -> List[Measure]:
     return [element for element in part.elements if isinstance(element, Measure)]
 
 
-def get_notes(part: Part) -> List[Note]:
-    my_notes_list = []
-    for measure in get_measures(part):
+def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Measure]]:
+    notes = []
+    measures = get_measures(part)
+    for measure in measures:
         for note in measure.notes:
-            set_ties(note, my_notes_list)
-    return my_notes_list
+            set_ties(note, notes)
+    return notes, measures
 
 
 def get_key(score: Score) -> str:

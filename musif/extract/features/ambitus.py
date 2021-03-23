@@ -2,7 +2,7 @@ from music21 import analysis
 from music21.stream import Part
 
 
-def get_ambitus_features(part: Part) -> dict:
+def get_single_part_features(part: Part) -> dict:
 
     ambitus = analysis.discrete.Ambitus()
     this_aria_ambitus = ambitus.getSolution(part)

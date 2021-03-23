@@ -1,3 +1,3 @@
 from musif.common.constants import ENCODING, VERSION
-from musif.features import Features, FeaturesExtractor
+from musif.extract import Features, FeaturesExtractor
 

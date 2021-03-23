@@ -4,7 +4,7 @@ from music21.expressions import TextExpression
 from music21.stream import Measure, Score
 
 
-def get_time_features(score: Score) -> dict:
+def get_global_features(score: Score) -> dict:
 
     # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
     # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo

@@ -4,7 +4,7 @@ from music21.key import Key
 from music21.stream import Score
 
 
-def get_key_features(score: Score) -> dict:
+def get_global_features(score: Score) -> dict:
     score_key = score.analyze("key")
     key, mode = get_key_and_mode(score_key)
     key_signature = get_key_signature(score_key)
@@ -16,6 +16,11 @@ def get_key_features(score: Score) -> dict:
         "KeySignatureGrouped": key_signature_grouped,
         "Mode": mode,
     }
+
+
+def get_key(score: Score) -> str:
+    score_key = score.analyze("key")
+    return get_key_and_mode(score_key)[0]
 
 
 def get_key_and_mode(score_key: Key) -> Tuple[str, str]:
