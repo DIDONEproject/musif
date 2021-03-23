@@ -4,31 +4,50 @@ from os import path
 from typing import List
 
 from musif.common.logs import get_logger
-from musif.common.utils import get_file_name, read_dicts_from_csv, read_object_from_json_file
-from musif.features.feature import Features
-
+from musif.common.utils import read_dicts_from_csv, read_object_from_json_file
+from musif.extract.model import Features
 
 READ_LOGGER_NAME = "read"
 WRITE_LOGGER_NAME = "write"
 
+_CONFIG_FALLBACK = {
+    "data_dir": "data",
+    "metadata_dir": "metadata",
+    "metadata_col_name": "FileName",
+    "intermediate_dir": "intermediate",
+    "logs_dir": "logs",
+    "log_level": "DEBUG",
+    "sequential": True,
+    "features": [features.value for features in Features],
+    "split": True,
+}
 
 class Configuration:
     def __init__(
         self,
-        data_dir: str,
-        metadata_dir: str,
-        intermediate_files_dir: str,
-        logs_dir: str,
-        log_level: str,
-        sequential: bool,
-        features: List[str],
-        split: bool,
+        data_dir: str = None,
+        metadata_dir: str = None,
+        metadata_col_name: str = None,
+        intermediate_files_dir: str = None,
+        logs_dir: str = None,
+        log_level: str = None,
+        sequential: bool = None,
+        features: List[str] = None,
+        split: bool = None,
     ):
-        self.data_dir = data_dir
-        self.metadata_dir = metadata_dir
-        self.logs_dir = logs_dir
+        self.data_dir = data_dir or _CONFIG_FALLBACK["data_dir"]
+        self.metadata_dir = metadata_dir or _CONFIG_FALLBACK["metadata_dir"]
+        self.metadata_col_name = metadata_col_name or _CONFIG_FALLBACK["metadata_col_name"]
+        self.logs_dir = logs_dir or _CONFIG_FALLBACK["logs_dir"]
+        log_level = log_level or _CONFIG_FALLBACK["log_level"]
+        self.intermediate_dir = intermediate_files_dir or _CONFIG_FALLBACK["intermediate_dir"]
+        self.sequential = sequential or _CONFIG_FALLBACK["sequential"]
+        features = features or _CONFIG_FALLBACK["features"]
+        self.features = [Features(features_name) for features_name in features]
+        self.split = split or _CONFIG_FALLBACK["split"]
+
         self.scores_metadata = {
-            get_file_name(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "*.csv"))
+            path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))
         }
         self.characters_gender = read_dicts_from_csv(path.join(self.data_dir, "characters_gender.csv"))
         self.sound_to_abbreviation = read_object_from_json_file(path.join(self.data_dir, "sound_abbreviation.json"))
@@ -43,7 +62,3 @@ class Configuration:
         self.cpu_workers = (
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
-        self.intermediate_files_dir = intermediate_files_dir
-        self.sequential = sequential
-        self.features = [Features(features_name) for features_name in features]
-        self.split = split

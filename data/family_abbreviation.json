@@ -2,7 +2,8 @@
     "strings": "str", 
     "woodwinds": "ww", 
     "wind": "ww", 
-    "brass": "br", 
+    "brass": "br",
+    "basso continuo": "bc",
     "percussion": "perc",
     "voice": "voice"
 }

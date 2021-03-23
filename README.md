@@ -73,3 +73,19 @@ if __name__ == "__main__":
     features_df = FeaturesExtractor().from_file("scores/xml/score1.xml", "scores/xml/score1.mscx", ["obI", "obII"])
 
 ```
+
+### Example 4 - Different Configuration Options
+
+```
+from musif.extract import FeaturesExtractor
+
+if __name__ == "__main__":
+
+    features1 = FeaturesExtractor().from_file("myfile.xml", ["obI", "obII"])
+    features2 = FeaturesExtractor({"split": True, "data_dir": "data"}).from_file("myfile.xml", ["obI", "obII"])
+    features3 = FeaturesExtractor(split=True, data_dir="data").from_file("myfile.xml", ["obI", "obII"])
+    features4 = FeaturesExtractor("/home/daniel/clients/didone/projects/musiF/config.yml").from_file("myfile.xml", ["obI", "obII"])
+    features5 = FeaturesExtractor("config.yml").from_file("myfile.xml", ["obI", "obII"])
+
+```
+

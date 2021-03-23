@@ -1,5 +1,6 @@
 data_dir: data
 metadata_dir: metadata
+metadata_col_name: FileName
 intermediate_files_dir: intermediate
 logs_dir: logs
 log_level: DEBUG
