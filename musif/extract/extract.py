@@ -82,7 +82,7 @@ class FeaturesExtractor:
 
     def _extract_single_part_features(self, musicxml_file: str, part: Part, score: Score, score_key: str, repetition_elements: List[tuple]) -> dict:
         expanded_part = expand_part(part, repetition_elements)
-        notes, measures_with_notes, measures = get_notes_and_measures(expanded_part)
+        notes, sounding_measures, measures = get_notes_and_measures(expanded_part)
 
         features = {"FileName": path.basename(musicxml_file)}
         features.update(scoring.get_single_part_features(part, score.parts, self._cfg))
@@ -90,7 +90,7 @@ class FeaturesExtractor:
         features.update(interval.get_single_part_features(notes))
         features.update(ambitus.get_single_part_features(expanded_part))
         features.update(scale.get_single_part_features(notes, score_key))
-        features.update(density.get_single_part_features(notes, measures_with_notes, measures))
+        features.update(density.get_single_part_features(notes, sounding_measures, measures))
 
         return features
 

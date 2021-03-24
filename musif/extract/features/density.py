@@ -8,12 +8,12 @@ from pandas import DataFrame
 from musif.musicxml import Measure, Note, Part
 
 
-def get_single_part_features(notes: List[Note], measures_with_notes: List[Measure], measures: List[Measure]) -> dict:
+def get_single_part_features(notes: List[Note], sounding_measures: List[Measure], measures: List[Measure]) -> dict:
     features = {
         "Notes": len(notes),
-        "MeasuresWithNotes": len(measures_with_notes),
+        "SoundingMeasures": len(sounding_measures),
         "Measures": len(measures),
-        "DensityWithNotes": len(notes) / len(measures_with_notes),
+        "SoundingDensity": len(notes) / len(sounding_measures),
         "Density": len(notes) / len(measures),
     }
     return features
@@ -23,22 +23,22 @@ def get_aggregated_parts_features(parts_features: List[dict]) -> List[dict]:
     parts_features = deepcopy(parts_features)
 
     df = DataFrame(parts_features)
-    df_sound = df.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "MeasuresWithNotes": "sum"})
-    df_family = df.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "MeasuresWithNotes": "sum"})
+    df_sound = df.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    df_family = df.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
 
     for features in parts_features:
         sound = features["SoundAbbreviation"]
         features["SoundNotes"] = df_sound.loc[sound, 'Notes']
         features["SoundMeasures"] = df_sound.loc[sound, 'Measures']
-        features["SoundMeasuresWithNotes"] = df_sound.loc[sound, 'MeasuresWithNotes']
+        features["SoundSoundingMeasures"] = df_sound.loc[sound, 'SoundingMeasures']
         features["SoundDensity"] = features["SoundNotes"] / features["SoundMeasures"]
-        features["SoundDensityWithNotes"] = features["SoundNotes"] / features["SoundMeasuresWithNotes"]
+        features["SoundSoundingDensity"] = features["SoundNotes"] / features["SoundSoundingMeasures"]
         family = features["FamilyAbbreviation"]
         features["FamilyNotes"] = df_family.loc[family, 'Notes']
         features["FamilyMeasures"] = df_family.loc[family, 'Measures']
-        features["FamilyMeasuresWithNotes"] = df_family.loc[family, 'MeasuresWithNotes']
+        features["FamilySoundingMeasures"] = df_family.loc[family, 'SoundingMeasures']
         features["FamilyDensity"] = features["SoundNotes"] / features["SoundMeasures"]
-        features["FamilyDensityWithNotes"] = features["SoundNotes"] / features["SoundMeasuresWithNotes"]
+        features["FamilySoundingDensity"] = features["SoundNotes"] / features["SoundSoundingMeasures"]
 
     return parts_features
 
@@ -47,27 +47,27 @@ def get_global_features(parts_features: List[dict], cfg: Configuration) -> dict:
 
     features = {}
     df = DataFrame(parts_features)
-    df_sound = df.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "MeasuresWithNotes": "sum"})
-    df_family = df.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "MeasuresWithNotes": "sum"})
-    df_all = df.aggregate({"Notes": "sum", "Measures": "sum", "MeasuresWithNotes": "sum"})
+    df_sound = df.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    df_family = df.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    df_all = df.aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
     for sound in df_sound.index:
         sound_prefix = f"Sound{sound.capitalize()}"
         features[f"{sound_prefix}Notes"] = df_sound.loc[sound, 'Notes']
-        features[f"{sound_prefix}MeasuresWithNotes"] = df_sound.loc[sound, 'MeasuresWithNotes']
+        features[f"{sound_prefix}SoundingMeasures"] = df_sound.loc[sound, 'SoundingMeasures']
         features[f"{sound_prefix}Measures"] = df_sound.loc[sound, 'Measures']
-        features[f"{sound_prefix}DensityWithNotes"] = features[f"{sound_prefix}Notes"] / features[f"{sound_prefix}MeasuresWithNotes"]
+        features[f"{sound_prefix}SoundingDensity"] = features[f"{sound_prefix}Notes"] / features[f"{sound_prefix}SoundingMeasures"]
         features[f"{sound_prefix}Density"] = features[f"{sound_prefix}Notes"] / features[f"{sound_prefix}Measures"]
     for family in df_family.index:
         family_prefix = f"Family{family.capitalize()}"
         features[f"{family_prefix}Notes"] = df_family.loc[family, 'Notes']
-        features[f"{family_prefix}MeasuresWithNotes"] = df_family.loc[family, 'MeasuresWithNotes']
+        features[f"{family_prefix}SoundingMeasures"] = df_family.loc[family, 'SoundingMeasures']
         features[f"{family_prefix}Measures"] = df_family.loc[family, 'Measures']
-        features[f"{family_prefix}DensityWithNotes"] = features[f"{family_prefix}Notes"] / features[f"{family_prefix}MeasuresWithNotes"]
+        features[f"{family_prefix}SoundingDensity"] = features[f"{family_prefix}Notes"] / features[f"{family_prefix}SoundingMeasures"]
         features[f"{family_prefix}Density"] = features[f"{family_prefix}Notes"] / features[f"{family_prefix}Measures"]
     features["Notes"] = df_all['Notes']
-    features["MeasuresWithNotes"] = df_all['MeasuresWithNotes']
+    features["SoundingMeasures"] = df_all['SoundingMeasures']
     features["Measures"] = df_all['Measures']
-    features["DensityWithNotes"] = features["Notes"] / features["MeasuresWithNotes"]
+    features["SoundingDensity"] = features["Notes"] / features["SoundingMeasures"]
     features["Density"] = features["Notes"] / features["Measures"]
 
     return features
@@ -80,13 +80,13 @@ def get_measures(part: Part) -> List[Measure]:
 def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Measure], List[Measure]]:
     notes = []
     measures = get_measures(part)
-    measure_with_notes = []
+    sounding_measures = []
     for measure in measures:
         if len(measure.notes) > 0:
-            measure_with_notes.append(measure)
+            sounding_measures.append(measure)
         for note in measure.notes:
             set_ties(note, notes)
-    return notes, measure_with_notes, measures
+    return notes, sounding_measures, measures
 
 
 def set_ties(subject, my_notes_list):
