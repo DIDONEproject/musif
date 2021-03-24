@@ -163,43 +163,6 @@ def get_xml_scoring_variables(score):
     return group.get_scoring(score)
 
 
-def set_ties(subject, my_notes_list):
-    """
-    This function converts tied notes into a unique note
-    """
-    if not isinstance(subject, note.Note):
-        return
-    if subject.tie is None:
-        my_notes_list.append(subject)
-        return
-    if subject.tie.type != "stop" and subject.tie.type != "continue":
-        my_notes_list.append(subject)
-        return
-    if isinstance(my_notes_list[-1], note.Note):
-        my_notes_list[-1].duration.quarterLength += subject.duration.quarterLength  # sum tied notes' length
-        return
-    back_counter = -1
-    while isinstance(my_notes_list[back_counter], tuple):
-        back_counter -= -1
-    else:
-        my_notes_list[
-            back_counter
-        ].duration.quarterLength += subject.duration.quarterLength  # sum tied notes' length across measures
-
-
-def get_measures(part: Part) -> List[Measure]:
-    return [element for element in part.elements if isinstance(element, Measure)]
-
-
-def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Measure]]:
-    notes = []
-    measures = get_measures(part)
-    for measure in measures:
-        for note in measure.notes:
-            set_ties(note, notes)
-    return notes, measures
-
-
 def get_key(score: Score) -> str:
     return str(score.analyze("key"))
 

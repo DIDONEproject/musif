@@ -45,13 +45,13 @@ def get_interval_features(numeric_intervals: List[int]):
     descending_semitones_name = Interval(descending_semitones).directedName
 
     return {
-        "Intervallic ratio": interval_ratio,
-        "Trimmed intervallic ratio": trimmed_interval_ratio,
-        "dif. Trimmed": trim_diff,
-        "% Trimmed": trim_ratio,
-        "Absolute intervallic ratio": absolute_interval_mean,
+        "IntervallicRatio": interval_ratio,
+        "TrimmedIntervallicRatio": trimmed_interval_ratio,
+        "TrimmedDiff": trim_diff,
+        "TrimRatio": trim_ratio,
+        "AbsoluteIntervallicRatio": absolute_interval_mean,
         "Std": interval_std,
-        "Absolute Std": absolute_interval_std,
+        "AbsoluteStd": absolute_interval_std,
         "AscendingSemitones": ascending_semitones,
         "AscendingInterval": ascending_semitones_name,
         "DescendingSemitones": descending_semitones,

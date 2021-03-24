@@ -1,5 +1,7 @@
 from typing import List
 
+from musif.config import Configuration
+
 
 def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     sort_dictionary = {elem: i for i, elem in enumerate(reference_list)}
@@ -7,7 +9,7 @@ def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     orphans = [elem for elem in list_to_sort if elem not in sort_dictionary]
     return sorted(found, key=lambda x: sort_dictionary[x]) + orphans
 
-def sort_dict(dict_to_sort, main_list):
+def sort_dict(dict_to_sort, main_list, cfg: Configuration):
     indexes = []
     huerfanos = []
     for i in dict_to_sort:
@@ -15,7 +17,7 @@ def sort_dict(dict_to_sort, main_list):
             indexes.append(main_list.index(i))
         else:
             huerfanos.append({i: dict_to_sort[i]})
-            logger.warning(
+            cfg.read_logger.warning(
                 'We do not have the appropiate sorting for {}'.format(i))
     indexes = sorted(indexes)
     list_sorted = [{main_list[i]: dict_to_sort[main_list[i]]} for i in indexes]
