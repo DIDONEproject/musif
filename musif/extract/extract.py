@@ -11,9 +11,10 @@ from pandas import DataFrame
 from musif.common.utils import read_object_from_yaml_file
 from musif.config import Configuration
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, time
+from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key
 from musif.extract.features.scoring import to_abbreviation
-from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_notes_and_measures, get_repetition_elements, split_wind_layers
+from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_repetition_elements, split_wind_layers
 
 
 class FeaturesExtractor:
@@ -81,7 +82,7 @@ class FeaturesExtractor:
 
     def _extract_single_part_features(self, musicxml_file: str, part: Part, score: Score, score_key: str, repetition_elements: List[tuple]) -> dict:
         expanded_part = expand_part(part, repetition_elements)
-        notes, measures = get_notes_and_measures(expanded_part)
+        notes, measures_with_notes, measures = get_notes_and_measures(expanded_part)
 
         features = {"FileName": path.basename(musicxml_file)}
         features.update(scoring.get_single_part_features(part, score.parts, self._cfg))
@@ -89,7 +90,7 @@ class FeaturesExtractor:
         features.update(interval.get_single_part_features(notes))
         features.update(ambitus.get_single_part_features(expanded_part))
         features.update(scale.get_single_part_features(notes, score_key))
-        features.update(density.get_single_part_features(notes, measures))
+        features.update(density.get_single_part_features(notes, measures_with_notes, measures))
 
         return features
 
@@ -109,6 +110,7 @@ class FeaturesExtractor:
         features.update(key.get_global_features(score))
         features.update(time.get_global_features(score))
         features.update(scoring.get_global_features(parts_features, self._cfg))
+        features.update(density.get_global_features(parts_features, self._cfg))
         features.update(custom.get_global_features(musicxml_file, score, self._cfg))
         features.update(metadata.get_global_features(features, self._cfg))
         return features

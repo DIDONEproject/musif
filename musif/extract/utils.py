@@ -246,7 +246,7 @@ def expand_part(part, repeat_elements):
     return p
     
 def expand_score_repetitions(score, repeat_elements):
-    score = expand_repeat_bars(score) # FIRST EXPAND REPEAT BARS
+    score = expand_repeat_bars(score)  # FIRST EXPAND REPEAT BARS
     final_score = m21.stream.Score()
     final_score.metadata = score.metadata
     

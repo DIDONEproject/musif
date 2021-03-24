@@ -13,7 +13,7 @@ WRITE_LOGGER_NAME = "write"
 _CONFIG_FALLBACK = {
     "data_dir": "data",
     "metadata_dir": "metadata",
-    "metadata_col_name": "FileName",
+    "metadata_id_col": "FileName",
     "intermediate_dir": "intermediate",
     "logs_dir": "logs",
     "log_level": "DEBUG",
@@ -27,7 +27,7 @@ class Configuration:
         self,
         data_dir: str = None,
         metadata_dir: str = None,
-        metadata_col_name: str = None,
+        metadata_id_col: str = None,
         intermediate_files_dir: str = None,
         logs_dir: str = None,
         log_level: str = None,
@@ -37,7 +37,7 @@ class Configuration:
     ):
         self.data_dir = data_dir or _CONFIG_FALLBACK["data_dir"]
         self.metadata_dir = metadata_dir or _CONFIG_FALLBACK["metadata_dir"]
-        self.metadata_col_name = metadata_col_name or _CONFIG_FALLBACK["metadata_col_name"]
+        self.metadata_id_col = metadata_id_col or _CONFIG_FALLBACK["metadata_id_col"]
         self.logs_dir = logs_dir or _CONFIG_FALLBACK["logs_dir"]
         log_level = log_level or _CONFIG_FALLBACK["log_level"]
         self.intermediate_dir = intermediate_files_dir or _CONFIG_FALLBACK["intermediate_dir"]
