@@ -57,6 +57,7 @@ class Configuration:
         self.translations_cache = read_object_from_json_file(path.join(self.data_dir, "translations.json"))
         self.scoring_order = read_object_from_json_file(path.join(self.data_dir, "scoring_order.json"))
         self.scoring_family_order = read_object_from_json_file(path.join(self.data_dir, "scoring_family_order.json"))
+        self.sorting_lists = read_object_from_json_file(path.join(self.data_dir, "sorting_lists.json"))
         self.read_logger = get_logger(READ_LOGGER_NAME, "read.log", self.logs_dir, log_level)
         self.write_logger = get_logger(WRITE_LOGGER_NAME, "write.log", self.logs_dir, log_level)
         self.cpu_workers = (
