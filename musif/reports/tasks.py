@@ -8,7 +8,8 @@ import openpyxl
 import pandas as pd
 from musif.common.sort import sort
 
-from .calculations import compute_value, compute_average
+from .calculations import *
+
 from .constants import *
 from .constants import forbiden_groups, not_used_cols, rows_groups
 from .visualisations import *
