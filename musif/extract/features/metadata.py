@@ -1,5 +1,3 @@
-from os import path
-
 from musif.config import Configuration
 
 

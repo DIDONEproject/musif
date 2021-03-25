@@ -2,9 +2,9 @@ from typing import Optional, Tuple
 
 import roman
 from music21.stream import Part
-from musif.config import Configuration
-
 from musif.features.score.melody.scoring import ROMAN_NUMERALS_FROM_1_TO_20, VOICE_FAMILY
+
+from musif.config import Configuration
 
 
 def extract_instrument_and_number_from_part(part: str) -> Tuple[str, Optional[str]]:

@@ -8,7 +8,6 @@ from music21.converter import parse
 from music21.stream import Part, Score
 from pandas import DataFrame
 
-from musif.common.utils import read_object_from_yaml_file
 from musif.config import Configuration
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, time
 from musif.extract.features.density import get_notes_and_measures
@@ -20,13 +19,7 @@ from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_repetition_
 class FeaturesExtractor:
 
     def __init__(self, *args, **kwargs):
-        config_data = kwargs
-        if not kwargs and args:
-            if isinstance(args[0], str):
-                config_data = read_object_from_yaml_file(args[0])
-            elif isinstance(args[0], dict):
-                config_data = args[0]
-        self._cfg = Configuration(**config_data)
+        self._cfg = Configuration(*args, **kwargs)
 
     def extract(self, obj, parts_filter: List[str] = None) -> Tuple[DataFrame, DataFrame]:
         if isinstance(obj, str):
@@ -96,6 +89,7 @@ class FeaturesExtractor:
 
     def _extract_aggregated_part_features(self, parts_features: List[dict]) -> List[dict]:
         features = deepcopy(parts_features)
+        self._update_features(features, interval.get_aggregated_parts_features(parts_features))
         self._update_features(features, density.get_aggregated_parts_features(parts_features))
         self._update_features(features, scoring.get_aggregated_parts_features(parts_features))
         return features
