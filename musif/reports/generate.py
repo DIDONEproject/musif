@@ -6,25 +6,24 @@
 # based on several characteristics. 
 # Writes the final report files as well as generates the visualisations
 ########################################################################
+import concurrent
+import copy
+import json
+import logging
+import math
+import os
+import sys
+import threading  # for the lock used for visualising, as matplotlib is not thread safe
+from itertools import permutations
 from os import path
 
-import openpyxl
-import os 
-from music21 import pitch, interval, note
-import math
 import numpy as np
+import openpyxl
 import pandas as pd
-import json 
-from itertools import combinations, permutations
-import copy
-import sys
-import concurrent
+from music21 import interval, note, pitch
 from source.SortingGroupings import general_sorting, melody_sorting
-from tqdm import tqdm
 from source.visualisations import *
-import shutil
-import threading #for the lock used for visualising, as matplotlib is not thread safe
-import logging
+from tqdm import tqdm
 
 if not os.path.exists(path.join(os.getcwd(), 'source', 'logs')):
     os.mkdir(path.join(os.getcwd(), 'source', 'logs'))

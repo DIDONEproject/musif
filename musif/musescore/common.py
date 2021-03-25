@@ -1,6 +1,7 @@
 from logging import getLogger
 
 from ms3.score import MSCX
+
 from musif.config import READ_LOGGER_NAME
 
 

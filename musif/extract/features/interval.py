@@ -5,10 +5,22 @@ from typing import Dict, List, Tuple
 from music21.interval import Interval
 from scipy.stats import trim_mean
 
-from musif.musicxml import get_intervals, Note
+from musif.musicxml import Note, get_intervals
 
 
 def get_single_part_features(notes: List[Note]) -> dict:
+    numeric_intervals, text_intervals = get_intervals(notes)
+    text_intervals_count = Counter(text_intervals)
+
+    features = {}
+    features.update(get_interval_features(numeric_intervals))
+    features.update(text_intervals_count)
+    features.update(get_interval_type_features(text_intervals_count))
+
+    return features
+
+
+def get_aggregated_parts_features(parts_features: List[dict]) -> List[dict]:
     numeric_intervals, text_intervals = get_intervals(notes)
     text_intervals_count = Counter(text_intervals)
 

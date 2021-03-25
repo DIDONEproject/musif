@@ -1,9 +1,9 @@
 import copy
-from typing import List, Tuple, Union, Dict
+from typing import Dict, List, Tuple, Union
 
 from music21 import *
 from music21.note import Note
-from music21.stream import Measure, Part, Score
+from music21.stream import Part, Score
 
 from musif.common import group
 

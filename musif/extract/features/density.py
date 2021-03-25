@@ -1,10 +1,10 @@
 from copy import deepcopy
 from typing import List, Tuple
 
-from musif.common.sort import sort_dict
-from musif.config import Configuration
 from pandas import DataFrame
 
+from musif.common.sort import sort_dict
+from musif.config import Configuration
 from musif.musicxml import Measure, Note, Part
 
 

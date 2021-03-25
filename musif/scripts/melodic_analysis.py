@@ -1,13 +1,12 @@
 import argparse
-import os
 import sys
 from os import path
 from typing import List
 
+from musif.features.extract import FeaturesExtractor
 from pandas import DataFrame
 
 from musif import VERSION
-from musif.features.extract import FeaturesExtractor
 
 
 def choose_parts(xml_dir: str) -> List[str]:

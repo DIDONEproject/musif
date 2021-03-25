@@ -1,9 +1,6 @@
-from os import path
-import music21 as m21
-import os
 import itertools
-import copy
-import time
+
+import music21 as m21
 
 file_names = []
 repeat_bracket = False
