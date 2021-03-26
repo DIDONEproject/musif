@@ -30,9 +30,9 @@ from pandas import DataFrame
 # from source.SortingGroupings import general_sorting, melody_sorting
 from tqdm import tqdm
 
-from .calculations import emphasised_scale_degrees, make_intervals_absolute
 from .constants import not_used_cols, rows_groups
-from .tasks import IIIIntervals_types, iiaIntervals, iValues
+from .tasks import (IIIIntervals_types, emphasised_scale_degrees, iiaIntervals,
+                    iValues, make_intervals_absolute)
 
 
 class FeaturesGenerator():
@@ -76,20 +76,32 @@ class FeaturesGenerator():
         nuc = copy.deepcopy(not_used_cols)
 
         # 1. Split all the dataframes to work individually
-        common_columns = all_dataframes.iloc[:, 0:27]
-        # all_info = pd.concat([common_columns, all_dataframes[['Intervalic ratio']], axis=1)
-        # all_info, intervals_info, clefs_info, intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B = all_dataframes
+        common_columns = all_dataframes.iloc[:, 0:all_dataframes.columns.get_loc(
+            'TempoGrouped2')]
 
-        all_info = all_info.dropna(how='all', axis=1)
+        all_info = pd.concat(
+            [common_columns, all_dataframes[['Intervalic ratio']]], axis=1)
+        intervals_list = ["TrimmedIntervallicRatio", "TrimmedDiff", "IntervallicRatio", "TrimRatio", "AbsoluteIntervallicRatio",
+                          "Std", "AbsoluteStd", "AscendingSemitones", "AscendingInterval", "DescendingSemitones", "DescendingInterval"]
+
+        intervals_info = pd.concat(
+            [common_columns, all_dataframes[intervals_list]], axis=1)
+        # all_info = all_info.dropna(how='all', axis=1)
         intervals_info = intervals_info.dropna(how='all', axis=1)
-        intervals_types = intervals_types.dropna(how='all', axis=1)
-        emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
-            how='all', axis=1)
-        emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
-            how='all', axis=1)
-        clefs_info = clefs_info.dropna(how='all', axis=1)
-        print(str(i) + " factor")
+        # intervals_types = intervals_types.dropna(how='all', axis=1)
+        # emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
+        #     how='all', axis=1)
+        # emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
+        #     how='all', axis=1)
+        # clefs_info = clefs_info.dropna(how='all', axis=1)
+        # print(str(i) + " factor")
+        density_list = ["Notes", "SoundingMeasures",
+                        "Measures", "SoundingDensity", "Density"]
+        density = pd.concat(
+            [common_columns, all_dataframes[density_list]], axis=1)
+        density = density.dropna(how='all', axis=1)
 
+        # textures = textures.dropna(how='all', axis=1)
         # 2. Get the additional_info dictionary (special case if there're no factors)
         additional_info = {"Label": ["Aria"],
                            "Aria": ['Label']}  # solo agrupa aria

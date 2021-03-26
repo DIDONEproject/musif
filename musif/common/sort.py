@@ -9,6 +9,7 @@ def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     orphans = [elem for elem in list_to_sort if elem not in sort_dictionary]
     return sorted(found, key=lambda x: sort_dictionary[x]) + orphans
 
+
 def sort_dict(dict_to_sort, main_list, cfg: Configuration):
     indexes = []
     huerfanos = []
@@ -24,6 +25,36 @@ def sort_dict(dict_to_sort, main_list, cfg: Configuration):
     list_sorted = list_sorted + huerfanos
     dict_sorted = dict((key, d[key]) for d in list_sorted for key in d)
     return dict_sorted
+
+########################################
+# data frame sorting for rows display  #
+########################################
+
+
+def sort_dataframe(data, column, sorting_lists, key_to_sort):
+    if key_to_sort == "Alphabetic":
+        dataSorted = data.sort_values(by=[column])
+    else:
+        form_list = sorting_lists[key_to_sort]  # es global
+        indexes = []
+        for i in data[column]:
+            if str(i.lower().strip()) not in ["nan", 'nd']:
+                value = i.strip() if key_to_sort not in [
+                    'FormSorting', 'RoleSorting'] else i.strip().lower()
+                try:
+                    index = form_list.index(value)
+                except:
+                    index = 999
+                    logger.warning('We do not have the value {} in the sorting list {}'.format(
+                        value, key_to_sort))
+                indexes.append(index)
+            else:
+                indexes.append(999)  # at the end of the list
+
+        data.loc[:, "Ranks"] = indexes
+        dataSorted = data.sort_values(by=["Ranks"])
+        dataSorted.drop("Ranks", 1, inplace=True)
+    return dataSorted
 
 # class Sorting:
 #     """
