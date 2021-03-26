@@ -81,20 +81,11 @@ class FeaturesGenerator():
 
         all_info = pd.concat(
             [common_columns, all_dataframes[['Intervalic ratio']]], axis=1)
-        # intervals_info = pd.concat([common_columns, all_dataframes[['Intervalic ratio']], axis=1)
-        # "IntervallicRatio": interval_ratio,
-        # "TrimmedIntervallicRatio": trimmed_interval_ratio,
-        # "TrimmedDiff": trim_diff,
-        # "TrimRatio": trim_ratio,
-        # "AbsoluteIntervallicRatio": absolute_interval_mean,
-        # "Std": interval_std,
-        # "AbsoluteStd": absolute_interval_std,
-        # "AscendingSemitones": ascending_semitones,
-        # "AscendingInterval": ascending_semitones_name,
-        # "DescendingSemitones": descending_semitones,
-        # "DescendingInterval": descending_semitones_name,
-        # all_info, intervals_info, clefs_info, intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B = all_dataframes
+        intervals_list = ["TrimmedIntervallicRatio", "TrimmedDiff", "IntervallicRatio", "TrimRatio", "AbsoluteIntervallicRatio",
+                          "Std", "AbsoluteStd", "AscendingSemitones", "AscendingInterval", "DescendingSemitones", "DescendingInterval"]
 
+        intervals_info = pd.concat(
+            [common_columns, all_dataframes[intervals_list]], axis=1)
         # all_info = all_info.dropna(how='all', axis=1)
         intervals_info = intervals_info.dropna(how='all', axis=1)
         # intervals_types = intervals_types.dropna(how='all', axis=1)
@@ -104,7 +95,13 @@ class FeaturesGenerator():
         #     how='all', axis=1)
         # clefs_info = clefs_info.dropna(how='all', axis=1)
         # print(str(i) + " factor")
+        density_list = ["Notes", "SoundingMeasures",
+                        "Measures", "SoundingDensity", "Density"]
+        density = pd.concat(
+            [common_columns, all_dataframes[density_list]], axis=1)
+        density = density.dropna(how='all', axis=1)
 
+        # textures = textures.dropna(how='all', axis=1)
         # 2. Get the additional_info dictionary (special case if there're no factors)
         additional_info = {"Label": ["Aria"],
                            "Aria": ['Label']}  # solo agrupa aria
