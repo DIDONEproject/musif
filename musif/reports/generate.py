@@ -32,7 +32,7 @@ from tqdm import tqdm
 
 from .constants import not_used_cols, rows_groups
 from .tasks import (IIIIntervals_types, emphasised_scale_degrees, iiaIntervals,
-                    iValues, make_intervals_absolute)
+                    iValues, make_intervals_absolute, densities, textures)
 
 
 class FeaturesGenerator():
@@ -84,10 +84,10 @@ class FeaturesGenerator():
         intervals_list = ["TrimmedIntervallicRatio", "TrimmedDiff", "IntervallicRatio", "TrimRatio", "AbsoluteIntervallicRatio",
                           "Std", "AbsoluteStd", "AscendingSemitones", "AscendingInterval", "DescendingSemitones", "DescendingInterval"]
 
-        intervals_info = pd.concat(
-            [common_columns, all_dataframes[intervals_list]], axis=1)
+        # intervals_info = pd.concat(
+        #     [common_columns, all_dataframes[intervals_list]], axis=1)
         # all_info = all_info.dropna(how='all', axis=1)
-        intervals_info = intervals_info.dropna(how='all', axis=1)
+        # intervals_info = intervals_info.dropna(how='all', axis=1)
         # intervals_types = intervals_types.dropna(how='all', axis=1)
         # emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
         #     how='all', axis=1)
@@ -140,13 +140,15 @@ class FeaturesGenerator():
         if not os.path.exists(results_path_factorx):
             os.mkdir(results_path_factorx)
 
-        absolute_intervals = make_intervals_absolute(intervals_info)
+        # absolute_intervals = make_intervals_absolute(intervals_info)
 
         # # MULTIPROCESSING (one process per group (year, decade, city, country...))
         # if sequential: # 0 and 1 factors
         for groups in rg_groups:
-            self._group_execution(groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info, intervals_info, absolute_intervals,
-                                  intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
+            # self._group_execution(groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info, intervals_info, absolute_intervals,
+            #                       intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
+            self._group_execution(
+                groups, results_path_factorx, additional_info, i, self.sorting_lists, density)
             rows_groups = rg
             not_used_cols = nuc
         # else: # from 2 factors
@@ -178,11 +180,15 @@ class FeaturesGenerator():
             # executor = concurrent.futures.ThreadPoolExecutor()
             # self.visualiser_lock = threading.Lock()
             # futures = []
-            if not all_info.empty:
-                # futures.append(executor.submit(iValues, all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
-                #                self.visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
-                iValues(all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
-                        self.visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None)
+            if not density.empty:
+                densities(density, results_path, '-'.join(groups) + "_IDensities.xlsx",
+                          sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
+
+            # if not all_info.empty:
+            #     # futures.append(executor.submit(iValues, all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
+            #     #                self.visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
+            #     iValues(all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
+            #             self.visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None)
                 # if not intervals_info.empty:
                 #     futures.append(executor.submit(iiaIntervals, intervals_info, '-'.join(groups) + "_2aIntervals.xlsx",
                 #                    sorting_lists["Intervals"], results_path, sorting_lists, self.visualiser_lock, additional_info, groups if groups != [] else None))
