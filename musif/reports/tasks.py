@@ -733,11 +733,18 @@ def emphasised_scale_degrees(data, sorting_list, name, results_path, sorting_lis
 def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
     try:
         workbook = openpyxl.Workbook()
+        density_list = ["Notes", "SoundingMeasures",
+                        "Measures", "SoundingDensity", "Density"]
         # Splitting the dataframes to reorder them
-        data_general = data.iloc[:, 0:data.columns.get_loc(
-            'Total analysed')].copy()
-        data = data.iloc[:, data.columns.get_loc('Total analysed'):].copy()
-        sorting_list = general_sorting.get_instrument_sorting()
+        # data_general = data.iloc[:, 0:data.columns.get_loc(
+        #     'Total analysed')].copy()
+        data_general = data.loc[:, [
+            i for i in data.columns if i not in density_list]].copy()
+        # df[~df.isin(subset).iloc[:,0]]
+
+        data = data[density_list]
+        # sorting_list = general_sorting.get_instrument_sorting()
+        sorting_list = sorting_lists.InstrumentSorting
         cols = sort(data.columns.tolist(), sorting_list)
         cols.remove('Total analysed')
         cols.insert(0, 'Total analysed')
@@ -825,7 +832,8 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
         logger.error('{}  Problem found:'.format(name), exc_info=True)
         print('Problem found')
 
-    def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
+
+def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
     try:
         workbook = openpyxl.Workbook()
         # general_cols = copy.deepcopy(not_used_cols)
@@ -848,7 +856,8 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
         while data[data.columns[i]].name != 'Total analysed':
             third_columns_names.append(data[data.columns[i]].name)
             i -= 1
-        second_column_names = [("", 1), ("Texture", len(third_columns_names))]
+        second_column_names = [
+            ("", 1), ("Texture", len(third_columns_names))]
         third_columns_names.append('Total analysed')
         third_columns_names.reverse()
 

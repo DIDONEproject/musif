@@ -7,6 +7,7 @@
 # Writes the final report files as well as generates the visualisations
 ########################################################################
 import copy
+from genericpath import exists
 import glob
 import json
 import math
@@ -76,13 +77,13 @@ class FeaturesGenerator():
         nuc = copy.deepcopy(not_used_cols)
 
         # 1. Split all the dataframes to work individually
-        common_columns = all_dataframes.iloc[:, 0:all_dataframes.columns.get_loc(
+        common_columns_df = all_dataframes.iloc[:, 0:all_dataframes.columns.get_loc(
             'TempoGrouped2')]
 
-        all_info = pd.concat(
-            [common_columns, all_dataframes[['Intervalic ratio']]], axis=1)
         intervals_list = ["TrimmedIntervallicRatio", "TrimmedDiff", "IntervallicRatio", "TrimRatio", "AbsoluteIntervallicRatio",
                           "Std", "AbsoluteStd", "AscendingSemitones", "AscendingInterval", "DescendingSemitones", "DescendingInterval"]
+        # all_info = pd.concat(
+        #     [common_columns, all_dataframes[['Intervalic ratio']]], axis=1)
 
         # intervals_info = pd.concat(
         #     [common_columns, all_dataframes[intervals_list]], axis=1)
@@ -97,9 +98,9 @@ class FeaturesGenerator():
         # print(str(i) + " factor")
         density_list = ["Notes", "SoundingMeasures",
                         "Measures", "SoundingDensity", "Density"]
-        density = pd.concat(
-            [common_columns, all_dataframes[density_list]], axis=1)
-        density = density.dropna(how='all', axis=1)
+        density_df = pd.concat(
+            [common_columns_df, all_dataframes[density_list]], axis=1)
+        density_df = density_df.dropna(how='all', axis=1)
 
         # textures = textures.dropna(how='all', axis=1)
         # 2. Get the additional_info dictionary (special case if there're no factors)
@@ -109,6 +110,7 @@ class FeaturesGenerator():
             rows_groups = {"Id": ([], "Alphabetic")}
             rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
             for r in rg_keys:
+                dirname = os.path.dirname(__file__)
                 if type(r) == list:
                     not_used_cols += r
                 else:
@@ -117,7 +119,7 @@ class FeaturesGenerator():
             additional_info = ["Label", "Aria", "Composer", "Year"]
 
         rg_groups = [[]]
-        if i >= 2:
+        if i >= 2:  # 2 factors or more
             rg_groups = list(permutations(
                 list(forbiden_groups.keys()), i - 1))[4:]
 
@@ -138,7 +140,7 @@ class FeaturesGenerator():
         results_path_factorx = path.join(main_results_path, str(
             i) + " factor") if i > 0 else path.join(main_results_path, "Data")
         if not os.path.exists(results_path_factorx):
-            os.mkdir(results_path_factorx)
+            os.makedirs(results_path_factorx)
 
         # absolute_intervals = make_intervals_absolute(intervals_info)
 
@@ -148,7 +150,7 @@ class FeaturesGenerator():
             # self._group_execution(groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info, intervals_info, absolute_intervals,
             #                       intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
             self._group_execution(
-                groups, results_path_factorx, additional_info, i, self.sorting_lists, density)
+                groups, results_path_factorx, additional_info, i, self.sorting_lists, density_df)
             rows_groups = rg
             not_used_cols = nuc
         # else: # from 2 factors
@@ -162,7 +164,10 @@ class FeaturesGenerator():
     #####################################################################
     # Function that generates the needed information for each grouping  #
     #####################################################################
-    def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
+    # def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
+
+    def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, density_df):
+
         if groups:
             # if sequential:
             results_path = path.join(results_path_factorx, '_'.join(groups))
@@ -180,8 +185,8 @@ class FeaturesGenerator():
             # executor = concurrent.futures.ThreadPoolExecutor()
             # self.visualiser_lock = threading.Lock()
             # futures = []
-            if not density.empty:
-                densities(density, results_path, '-'.join(groups) + "_IDensities.xlsx",
+            if not density_df.empty:
+                densities(density_df, results_path, '-'.join(groups) + "_Densities.xlsx",
                           sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
 
             # if not all_info.empty:
