@@ -1,23 +1,27 @@
 import re
+from typing import List
 
 from music21.expressions import TextExpression
-from music21.stream import Measure, Score
+from music21.stream import Measure
+from pandas import DataFrame
+
+from musif.config import Configuration
 
 
-def get_global_features(score: Score) -> dict:
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
     # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
     # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo
     # indica el tipo de instrumento y por ultimo el nombre. voice.soprano, strings.violin o strings.viola
 
     time_signatures = []
-    for partVoice in score.parts:
+    for partVoice in score_data["parts"]:
         m = list(partVoice.getTimeSignatures())
         time_signature = m[0].ratioString
         time_signatures.append(time_signature)
 
     tempo_mark = "ND"
-    for measure in score.parts[0]:
+    for measure in score_data["score"].parts[0]:
         if isinstance(measure, Measure):
             for element in measure:
                 if isinstance(element, TextExpression):
