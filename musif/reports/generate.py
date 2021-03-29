@@ -96,8 +96,16 @@ class FeaturesGenerator():
         #     how='all', axis=1)
         # clefs_info = clefs_info.dropna(how='all', axis=1)
         # print(str(i) + " factor")
-        density_list = ["Notes", "SoundingMeasures",
-                        "Measures", "SoundingDensity", "Density"]
+        density_list = ["ScoreNotes", "ScoreSoundingMeasures",
+                        "ScoreMeasures", "ScoreSoundingDensity", "ScoreDensity"]
+        for instrument in all_dataframes.Scoring:
+            part = 'Part'+instrument.capitalize()
+            density_list.append(part+'Notes')
+            density_list.append(part+'SoundingMeasures')
+            density_list.append(part+'Measures')
+            density_list.append(part+'SoundingDensity')
+            density_list.append(part+'Density')
+
         density_df = pd.concat(
             [common_columns_df, all_dataframes[density_list]], axis=1)
         density_df = density_df.dropna(how='all', axis=1)

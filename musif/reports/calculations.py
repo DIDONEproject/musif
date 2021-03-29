@@ -42,105 +42,25 @@ def interval_mean(interval_semitones):
                           str(ndown[0]) + str(ndown[1])])
     return value
 
-    ###############################################################################################
-#####################################################################################
-# Function to compute the average in every kind of variable, based on a computation #
-#####################################################################################
-
-
-def compute_average(dic_data, computation):
-    value = 0
-    if computation in ["mean", "min", "sum", "max", "absolute", "meanSemitones"]:
-        value = round(sum(dic_data) / len(dic_data), 3)
-    elif computation in ["minNote", "maxNote"]:
-        pitch_ps = [pitch.Pitch(n).ps for n in dic_data]
-        value = note_mean(pitch_ps)
-    elif computation in ["meanNote"]:
-        mean_dic_data = []
-        for data in dic_data:
-            pitches = [pitch.Pitch(n).ps for n in data.split('-')]
-            mean_dic_data.append(sum(pitches) / len(pitches))
-        value = note_mean(mean_dic_data)
-    elif computation in ["minInterval", "maxInterval", "absoluteInterval"]:
-        interval_semitones = [interval.Interval(n).semitones for n in dic_data]
-        value = interval_mean(interval_semitones)
-    elif computation == "meanInterval":
-        mean_dic_data = []
-        for data in dic_data:
-            semitones = [interval.Interval(
-                n).semitones for n in data.split('-')]
-            mean_dic_data.append(sum(semitones) / len(semitones))
-        value = interval_mean(mean_dic_data)
-
-    return value
+###############################################################################################
 # Function used to carry out every kind of computation needed, as determined by 'computation'
 ###############################################################################################
 
 
-def compute_value(column_data, computation, ponderate_data, not_grouped_information, ponderate):
+def compute_value(column_data, computation, ponderate_data, not_grouped_information, ponderate, extra_info=None):
     value = 0
     if computation == "mean":
         if not ponderate:
-            value = round(sum(column_data) / len(column_data), 3)
+            # value = round(sum(column_data) / len(column_data), 3)
+            value = round(np.nansum(column_data) /
+                          len([i for i in column_data if str(i) != 'nan']), 3)
         else:
             s = 0
             for v, w in zip(column_data, ponderate_data):
                 s += v * w
             value = round(s / sum(ponderate_data), 3)
-
-    elif computation == "min":
-        value = min(column_data)
-    elif computation == "max":
-        value = max(column_data)
-    elif computation == "minNote":
-        pitch_ps = [pitch.Pitch(n).ps for n in column_data]
-        min_ps = min(pitch_ps)
-        value = column_data.tolist()[pitch_ps.index(min_ps)]
-    elif computation == "maxNote":
-        pitch_ps = [pitch.Pitch(n).ps for n in column_data]
-        max_ps = max(pitch_ps)
-        value = column_data.tolist()[pitch_ps.index(max_ps)]
-    elif computation == "meanNote":
-        pitch_ps = [pitch.Pitch(n).ps for n in column_data]
-        value = note_mean(pitch_ps)
-    elif computation == "minInterval":
-        interval_semitones = [interval.Interval(
-            n).semitones for n in column_data]
-        min_sem = min(interval_semitones)
-        value = column_data.tolist()[interval_semitones.index(min_sem)]
-    elif computation == "maxInterval":
-        interval_semitones = [interval.Interval(
-            n).semitones for n in column_data]
-        max_sem = max(interval_semitones)
-        value = column_data.tolist()[interval_semitones.index(max_sem)]
-    elif computation == "meanInterval" or computation == "meanSemitones":
-        lowest_notes_names = [a.split(',')[0] for a in column_data]
-        max_notes_names = [a.split(',')[1] for a in column_data]
-        min_notes_pitch = [pitch.Pitch(a).ps for a in lowest_notes_names]
-        max_notes_pitch = [pitch.Pitch(a).ps for a in max_notes_names]
-        mean_min = note_mean(min_notes_pitch, round_mean=True)
-        mean_max = note_mean(max_notes_pitch, round_mean=True)
-        i = interval.Interval(noteStart=note.Note(
-            mean_min), noteEnd=note.Note(mean_max))
-        if computation == "meanInterval":
-            value = i.name
-        else:
-            value = i.semitones
-    elif computation == "absoluteInterval" or computation == "absolute":
-        lowest_notes_names = [a.split(',')[0] for a in column_data]
-        max_notes_names = [a.split(',')[1] for a in column_data]
-        min_notes_pitch = [pitch.Pitch(a).ps for a in lowest_notes_names]
-        max_notes_pitch = [pitch.Pitch(a).ps for a in max_notes_names]
-        minimisimo = min(min_notes_pitch)
-        maximisimo = max(max_notes_pitch)
-        noteStart = note.Note(
-            lowest_notes_names[min_notes_pitch.index(minimisimo)])
-        noteEnd = note.Note(max_notes_names[max_notes_pitch.index(maximisimo)])
-        i = interval.Interval(noteStart=noteStart, noteEnd=noteEnd)
-        if computation == "absoluteInterval":
-            value = i.name
-        else:
-            value = i.semitones
+    elif computation == "mean_notes":
+        value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
     elif computation == "sum":
         value = np.nansum(column_data)
         # PONDERATE WITHT THE TOTAL ANALYSED IN THAT ROW
@@ -157,6 +77,8 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
 
             value = np.nansum(values) / sum(ponderate_data)
             value = round(value * 100, 3)
+    if np.isnan(value):
+        value = 0.0
     return value
 
 ##################################################################################################

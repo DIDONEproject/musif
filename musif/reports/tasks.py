@@ -340,6 +340,9 @@ def row_iteration(hoja, columns, row_number, column_number, data, third_columns,
                         _, _ = print_groups(hoja, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
                 else:  # has subgroups, ex: row = Date, subgroups: Year
+                    # if rows_groups[row][0] == ['Role', 'RoleType','Gender']:
+                    #     data_joint=data.copy()
+                    #     data = split_voices(data)
                     for i, subrows in enumerate(rows_groups[row][0]):
                         if (subrows == None or subrows not in forbiden) and subrows in all_columns:
                             if "Tempo" in subrows:
@@ -736,26 +739,27 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
         density_list = ["Notes", "SoundingMeasures",
                         "Measures", "SoundingDensity", "Density"]
         # Splitting the dataframes to reorder them
-        # data_general = data.iloc[:, 0:data.columns.get_loc(
-        #     'Total analysed')].copy()
+
         data_general = data.loc[:, [
             i for i in data.columns if i not in density_list]].copy()
         # df[~df.isin(subset).iloc[:,0]]
 
         data = data[density_list]
+
         # sorting_list = general_sorting.get_instrument_sorting()
         sorting_list = sorting_lists.InstrumentSorting
         cols = sort(data.columns.tolist(), sorting_list)
         cols.remove('Total analysed')
         cols.insert(0, 'Total analysed')
         data = data[cols]
-
         data_total = data.copy()
+
         for column in data.columns:
-            if column.startswith('Total notes'):
+            if column.startswith('Notes'):
+                # TODO: chagne criteria and see how to pass total notes info to row iterations and so on
+
                 # we take the values in data_total dataframe and adjust them to have only the total of notes and values
-                data_total[str(column.replace('Total notes ', ''))
-                           ] = data[column]
+                #    ]= data[column]
                 data = data.drop(columns=[column])
             elif column.startswith('Total measures'):
                 data = data.drop([column], 1)
@@ -772,8 +776,8 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
         data_total = pd.concat([data_general, data_total], axis=1)
 
         computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
-        computations2 = ["sum"] + ["mean_density"] * \
-            (len(third_columns_names)-1)
+        computations2 = ["sum"] + ["mean_notes"] * (len(third_columns_names)-1)
+        (len(third_columns_names)-1)
         columns = third_columns_names
         hoja_iValues(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True,
                      last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
@@ -799,8 +803,8 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
                         os.mkdir(result_visualisations)
                     name_bar = result_visualisations + \
                         '\\' + name.replace('.xlsx', '.png')
-                    bar_plot(name_bar, datag, columns, 'Density',
-                             'Density', title, second_title=str(g))
+                    bar_plot_extended(name_bar, datag, columns, 'Density',
+                                      'Density', title, second_title=str(g))
 
             elif len(not_used_cols) == 4:  # 1 Factor. Try a different condition?
                 groups = [i for i in rows_groups]
@@ -841,7 +845,7 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
 
         # Dropping not interesting columns.
         for column in all_columns[all_columns.index('Total analysed')+1:]:
-            if column not in sorting_lists["TextureSorting"] and not column.startswith('Total notes'):
+            if column not in sorting_lists.TexturesSorting and not column.startswith('Total notes'):
                 data.drop([column], axis=1, inplace=True)
 
         all_columns = data.columns.tolist()
@@ -864,7 +868,7 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         # sorting_list = sorting_lists['TextureSorting']
 
         computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
-        computations2 = ["sum"] + ["mean_texture"] * \
+        computations2 = ["sum"] + ["mean_"] * \
             (len(third_columns_names)-1)
         columns = third_columns_names
         hoja_iValues(workbook.create_sheet("Weighted_text"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
