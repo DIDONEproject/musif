@@ -1,13 +1,15 @@
-from typing import Tuple
+from typing import List, Tuple
 
 from music21.key import Key
 from music21.stream import Score
 
+from musif.config import Configuration
 
-def get_global_features(score: Score) -> dict:
-    score_key = score.analyze("key")
-    key, mode = get_key_and_mode(score_key)
-    key_signature = get_key_signature(score_key)
+
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    key = score_data["key"]
+    mode = score_data["mode"]
+    key_signature = get_key_signature(key)
     key_signature_grouped = get_key_signature_grouped(key_signature)
 
     return {
@@ -18,22 +20,18 @@ def get_global_features(score: Score) -> dict:
     }
 
 
-def get_key(score: Score) -> str:
-    score_key = score.analyze("key")
-    return get_key_and_mode(score_key)[0]
-
-
-def get_key_and_mode(score_key: Key) -> Tuple[str, str]:
+def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:
     """
     returns abbreviated designation of keys (uppercase for major mode; lowercase for minor mode)
     example: if key == 'D- major': return 'Db'
     """
+    score_key = score.analyze("key")
     key_parts = score_key.name.split(" ")
     mode = key_parts[1].strip().lower()
     tonality = key_parts[0]
     tonality = tonality.lower() if mode == 'minor' else tonality.capitalize()
     tonality = tonality.replace('-', 'b')  # if the character '-' is not in the string, nothing will change
-    return tonality, mode
+    return score_key, tonality, mode
 
 
 def get_key_signature(score_key: Key) -> str:
