@@ -1,10 +1,14 @@
+from typing import List
+
+from pandas import DataFrame
+
 from musif.config import Configuration
 
 
-def get_global_features(existing_features: dict, cfg: Configuration) -> dict:
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     features = {}
     for group_name, group_features in cfg.scores_metadata.items():
-        existing_metadata_id = existing_features.get(cfg.metadata_id_col)
+        existing_metadata_id = score_features.get(cfg.metadata_id_col)
         if not existing_metadata_id:
             continue
         if len(group_features) == 0:

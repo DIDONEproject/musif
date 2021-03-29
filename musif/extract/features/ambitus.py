@@ -1,9 +1,11 @@
 from music21 import analysis
-from music21.stream import Part
+
+from musif.config import Configuration
 
 
-def get_single_part_features(part: Part) -> dict:
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
 
+    part = part_data["part"]
     ambitus = analysis.discrete.Ambitus()
     this_aria_ambitus = ambitus.getSolution(part)
     lowest_note, highest_note = ambitus.getPitchSpan(part)

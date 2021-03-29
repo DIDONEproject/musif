@@ -8,7 +8,10 @@ from musif.config import Configuration
 from musif.musicxml import Measure, Note, Part
 
 
-def get_single_part_features(notes: List[Note], sounding_measures: List[Measure], measures: List[Measure]) -> dict:
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+    notes = part_data["notes"]
+    sounding_measures = part_data["sounding_measures"]
+    measures = part_data["sounding_measures"]
     features = {
         "Notes": len(notes),
         "SoundingMeasures": len(sounding_measures),
@@ -19,56 +22,39 @@ def get_single_part_features(notes: List[Note], sounding_measures: List[Measure]
     return features
 
 
-def get_aggregated_parts_features(parts_features: List[dict]) -> List[dict]:
-    parts_features = deepcopy(parts_features)
-
-    df = DataFrame(parts_features)
-    df_sound = df.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
-    df_family = df.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
-
-    for features in parts_features:
-        sound = features["SoundAbbreviation"]
-        features["SoundNotes"] = df_sound.loc[sound, 'Notes']
-        features["SoundMeasures"] = df_sound.loc[sound, 'Measures']
-        features["SoundSoundingMeasures"] = df_sound.loc[sound, 'SoundingMeasures']
-        features["SoundDensity"] = features["SoundNotes"] / features["SoundMeasures"]
-        features["SoundSoundingDensity"] = features["SoundNotes"] / features["SoundSoundingMeasures"]
-        family = features["FamilyAbbreviation"]
-        features["FamilyNotes"] = df_family.loc[family, 'Notes']
-        features["FamilyMeasures"] = df_family.loc[family, 'Measures']
-        features["FamilySoundingMeasures"] = df_family.loc[family, 'SoundingMeasures']
-        features["FamilyDensity"] = features["SoundNotes"] / features["SoundMeasures"]
-        features["FamilySoundingDensity"] = features["SoundNotes"] / features["SoundSoundingMeasures"]
-
-    return parts_features
-
-
-def get_global_features(parts_features: List[dict], cfg: Configuration) -> dict:
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
     features = {}
-    df = DataFrame(parts_features)
-    df_sound = df.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
-    df_family = df.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
-    df_all = df.aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    df_parts = DataFrame(parts_features)
+    df_sound = df_parts.groupby("SoundAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    df_family = df_parts.groupby("FamilyAbbreviation").aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    df_score = df_parts.aggregate({"Notes": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
+    for part_features in parts_features:
+        part_prefix = f"Part{part_features['PartAbbreviation'].capitalize()}"
+        features[f"{part_prefix}Notes"] = part_features["Notes"]
+        features[f"{part_prefix}SoundingMeasures"] = part_features["SoundingMeasures"]
+        features[f"{part_prefix}Measures"] = part_features["Measures"]
+        features[f"{part_prefix}SoundingDensity"] = part_features["SoundingDensity"]
+        features[f"{part_prefix}Density"] = part_features["Density"]
     for sound in df_sound.index:
         sound_prefix = f"Sound{sound.capitalize()}"
-        features[f"{sound_prefix}Notes"] = df_sound.loc[sound, 'Notes']
-        features[f"{sound_prefix}SoundingMeasures"] = df_sound.loc[sound, 'SoundingMeasures']
-        features[f"{sound_prefix}Measures"] = df_sound.loc[sound, 'Measures']
+        features[f"{sound_prefix}Notes"] = df_sound.loc[sound, 'Notes'].tolist()
+        features[f"{sound_prefix}SoundingMeasures"] = df_sound.loc[sound, 'SoundingMeasures'].tolist()
+        features[f"{sound_prefix}Measures"] = df_sound.loc[sound, 'Measures'].tolist()
         features[f"{sound_prefix}SoundingDensity"] = features[f"{sound_prefix}Notes"] / features[f"{sound_prefix}SoundingMeasures"]
         features[f"{sound_prefix}Density"] = features[f"{sound_prefix}Notes"] / features[f"{sound_prefix}Measures"]
     for family in df_family.index:
         family_prefix = f"Family{family.capitalize()}"
-        features[f"{family_prefix}Notes"] = df_family.loc[family, 'Notes']
-        features[f"{family_prefix}SoundingMeasures"] = df_family.loc[family, 'SoundingMeasures']
-        features[f"{family_prefix}Measures"] = df_family.loc[family, 'Measures']
+        features[f"{family_prefix}Notes"] = df_family.loc[family, 'Notes'].tolist()
+        features[f"{family_prefix}SoundingMeasures"] = df_family.loc[family, 'SoundingMeasures'].tolist()
+        features[f"{family_prefix}Measures"] = df_family.loc[family, 'Measures'].tolist()
         features[f"{family_prefix}SoundingDensity"] = features[f"{family_prefix}Notes"] / features[f"{family_prefix}SoundingMeasures"]
         features[f"{family_prefix}Density"] = features[f"{family_prefix}Notes"] / features[f"{family_prefix}Measures"]
-    features["Notes"] = df_all['Notes']
-    features["SoundingMeasures"] = df_all['SoundingMeasures']
-    features["Measures"] = df_all['Measures']
-    features["SoundingDensity"] = features["Notes"] / features["SoundingMeasures"]
-    features["Density"] = features["Notes"] / features["Measures"]
+    features["ScoreNotes"] = df_score['Notes'].tolist()
+    features["ScoreSoundingMeasures"] = df_score['SoundingMeasures'].tolist()
+    features["ScoreMeasures"] = df_score['Measures'].tolist()
+    features["ScoreSoundingDensity"] = features["ScoreNotes"] / features["ScoreSoundingMeasures"]
+    features["ScoreDensity"] = features["ScoreNotes"] / features["ScoreMeasures"]
 
     return features
 
