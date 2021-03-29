@@ -2,7 +2,8 @@ from musif import FeaturesExtractor
 
 if __name__ == "__main__":
 
-    df_scores, df_parts = FeaturesExtractor(metadata_id_col="AriaId").extract("arias/xml")
+    df_scores = FeaturesExtractor(metadata_id_col="AriaId").extract("arias/xml")
+    df_scores.to_csv("myfeatures.csv")
     print()
 
     df1 = FeaturesExtractor({"split": True, "data_dir": "data"}).from_file("arias/xml/Dem01M-O_piu-1735-Leo[1.01][0430].xml", ["obI", "obII"])

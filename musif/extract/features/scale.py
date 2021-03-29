@@ -2,18 +2,22 @@ from collections import Counter
 from typing import List
 
 from music21.note import Note
+from musif.config import Configuration
 
 from musif.musicxml import get_degrees_and_accidentals
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 
 
-def get_single_part_features(notes: List[Note], tonality: str) -> dict:
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
     """
     Function needed to generate IV_emphasised_Scale_Degrees (a)
     It transforms the list of notes into their scale degrees based on the global key
 
     """
+
+    notes = part_data["notes"]
+    tonality = score_data["tonality"]
     notes_degrees = get_notes_degrees(tonality.capitalize(), notes)
     return Counter(notes_degrees)
 
