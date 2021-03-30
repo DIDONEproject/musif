@@ -3,9 +3,14 @@ from typing import List
 
 from music21.expressions import TextExpression
 from music21.stream import Measure
-from pandas import DataFrame
 
 from musif.config import Configuration
+
+TEMPO = "Tempo"
+TIME_SIGNATURE = "TimeSignature"
+TIME_SIGNATURE_GROUPED = "TimeSignatureGrouped"
+TEMPO_GROUPED_1 = "TempoGrouped1"
+TEMPO_GROUPED_2 = "TempoGrouped2"
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
@@ -35,11 +40,11 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     tg2 = get_TempoGrouped2(tg1)
 
     return {
-        "Tempo": tempo_mark,
-        "TimeSignature": time_signature,
-        "TimeSignatureGrouped": time_signature_grouped,
-        "TempoGrouped1": tg1,
-        "TempoGrouped2": tg2,
+        TEMPO: tempo_mark,
+        TIME_SIGNATURE: time_signature,
+        TIME_SIGNATURE_GROUPED: time_signature_grouped,
+        TEMPO_GROUPED_1: tg1,
+        TEMPO_GROUPED_2: tg2,
     }
 
 
