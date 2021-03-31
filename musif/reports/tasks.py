@@ -9,10 +9,9 @@ import pandas as pd
 from musif.common.sort import sort
 
 from .calculations import *
-
 from .constants import *
-from .constants import forbiden_groups, not_used_cols, rows_groups
 from .visualisations import *
+
 from musif.common.sort import sort_dataframe
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
@@ -116,6 +115,32 @@ def write_columns_titles_variable_length(hoja, row, column, column_names, fill):
                          end_row=row, end_column=column + c[1] - 1)
         column += c[1]
 
+# Voices splitting for duetos in Character classification
+
+
+def split_voices(data):
+    data = data.reset_index(drop=True)
+    for ind in data.index:
+        # if '&' in data['Role'][ind]:
+        names = [i for i in data['Role'].tolist()]
+        if '&' in str(names[ind]):
+            voices = data['Role'][ind].split('&')
+            pre_data = data.iloc[:ind]
+            post_data = data.iloc[ind+1:]
+            for i, _ in enumerate(voices):
+                line = data.iloc[[ind]]
+                line['Role'] = voices[i]
+                line['Id'] = str(line['Id'].item()) + \
+                    alfa[i] if str(line['Id'].item()) != '' else ''
+                # line['Id']=str(line['Id'].item()) + alfa[i] if str(line['Id'].item()) != '' else ''
+                line['Total analysed'] = 1/len(voices)
+                line.iloc[:, line.columns.get_loc(
+                    "Total analysed")+1:] = line.iloc[:, line.columns.get_loc("Total analysed")+1:].div(len(voices), axis=1)
+                pre_data = pre_data.append(line, ignore_index=True)
+            data = pre_data.append(post_data).reset_index(drop=True)
+
+    return data
+
 ###########################################################################################################################################################
 # This function is in charge of printing each group: 'Per Opera', 'Per City'...
 #
@@ -199,8 +224,21 @@ def print_groups(hoja, grouped, row_number, column_number, columns, third_column
         # COMPUTE EACH COLUMN'S VALUE FOR THE PRESENT ROW (SUBGROUP) AND PRINT IT
         for i, c in enumerate(columns):
             column_computation = computations_columns[i]
-            value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
-                                  not_grouped_information, ponderate)  # absolute value
+            extra_info = []
+            if column_computation == 'mean_density':
+                extra_info = subgroup_data['Measures' + c]
+                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate, extra_info=extra_info)  # absolute value
+
+            elif column_computation == 'mean_texture':
+                notes = subgroup_data['Notes' + c.split('/')[0]]
+                subgroup_data[c] = notes
+                notes_next = subgroup_data['Total notes ' + c.split('/')[1]]
+                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate, extra_info=notes_next)  # absolute value
+            else:
+                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":
                 total_analysed_row = subgroup_data[c].tolist()
                 hoja.cell(row_number, cnumber).value = value
@@ -340,9 +378,9 @@ def row_iteration(hoja, columns, row_number, column_number, data, third_columns,
                         _, _ = print_groups(hoja, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
                 else:  # has subgroups, ex: row = Date, subgroups: Year
-                    # if rows_groups[row][0] == ['Role', 'RoleType','Gender']:
-                    #     data_joint=data.copy()
-                    #     data = split_voices(data)
+                    if rows_groups[row][0] == ['Role', 'RoleType', 'Gender']:
+                        data_joint = data.copy()
+                        data = split_voices(data)
                     for i, subrows in enumerate(rows_groups[row][0]):
                         if (subrows == None or subrows not in forbiden) and subrows in all_columns:
                             if "Tempo" in subrows:
@@ -372,6 +410,8 @@ def row_iteration(hoja, columns, row_number, column_number, data, third_columns,
                                                     second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
 
                             row_number += 1
+                    if rows_groups[row][0] == ['Role', 'RoleType', 'Gender']:
+                        data = copy.deepcopy(data_joint)
                 row_number += 1
     return row_number
 
@@ -736,48 +776,51 @@ def emphasised_scale_degrees(data, sorting_list, name, results_path, sorting_lis
 def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
     try:
         workbook = openpyxl.Workbook()
-        density_list = ["Notes", "SoundingMeasures",
-                        "Measures", "SoundingDensity", "Density"]
         # Splitting the dataframes to reorder them
+        data_general = data[metadata_columns + ['Total analysed']].copy()
+        data = data[[c for c in data.columns if c not in metadata_columns]]
+        data_general = data_general.dropna(how='all', axis=1)
+        data = data.dropna(how='all', axis=1)
+        density_list = []
+        notes_and_measures = []
+        for inst in [i.capitalize() for i in sorting_lists['InstrumentSorting']]:
+            if inst.startswith('Vn'):
+                col = 'Part' + inst + 'SoundingDensity'  # Add exception for violins
+                if col in data.columns:
+                    density_list.append(col)
+                    notes_and_measures.append('Part' + inst + 'Notes')
+                    notes_and_measures.append(
+                        'Part' + inst + 'SoundingMeasures')
+            else:
+                col = 'Sound' + inst + 'SoundingDensity'
+                if col in data.columns:
+                    density_list.append(col)
+            if 'Sound' + inst + 'Notes' in data.columns:
+                notes_and_measures.append('Sound' + inst + 'Notes')
+                notes_and_measures.append('Sound' + inst + 'SoundingMeasures')
 
-        data_general = data.loc[:, [
-            i for i in data.columns if i not in density_list]].copy()
-        # df[~df.isin(subset).iloc[:,0]]
+        density_df = data[density_list]
+        notes_and_measures = data[notes_and_measures]
 
-        data = data[density_list]
+        density_df.columns = [i.replace('Part', '').replace(
+            'Sounding', '').replace('Density', '').replace('Sound', '') for i in density_df.columns]
 
-        # sorting_list = general_sorting.get_instrument_sorting()
-        sorting_list = sorting_lists.InstrumentSorting
-        cols = sort(data.columns.tolist(), sorting_list)
-        cols.remove('Total analysed')
-        cols.insert(0, 'Total analysed')
-        data = data[cols]
-        data_total = data.copy()
+        notes_and_measures.columns = [i.replace('Part', '').replace('SoundingMeasures', 'Measures').replace(
+            'Sound', '') for i in notes_and_measures.columns]
 
-        for column in data.columns:
-            if column.startswith('Notes'):
-                # TODO: chagne criteria and see how to pass total notes info to row iterations and so on
+        cols = sort(density_df.columns.tolist(), [
+                    i.capitalize() for i in sorting_lists['InstrumentSorting']])
+        density_df = density_df[cols]
+        third_columns_names = density_df.columns.to_list()
 
-                # we take the values in data_total dataframe and adjust them to have only the total of notes and values
-                #    ]= data[column]
-                data = data.drop(columns=[column])
-            elif column.startswith('Total measures'):
-                data = data.drop([column], 1)
-        third_columns_names = []
-
-        i = -1
-        while data[data.columns[i]].name != 'Total analysed':
-            third_columns_names.append(data[data.columns[i]].name)
-            i -= 1
         second_column_names = [("", 1), ("Density", len(third_columns_names))]
-        third_columns_names.append('Total analysed')
-        third_columns_names.reverse()
-        data = pd.concat([data_general, data], axis=1)
-        data_total = pd.concat([data_general, data_total], axis=1)
+        third_columns_names.insert(0, 'Total analysed')
+        data = pd.concat([data_general, density_df], axis=1)
+        data_total = pd.concat([data_general, notes_and_measures], axis=1)
 
         computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
-        computations2 = ["sum"] + ["mean_notes"] * (len(third_columns_names)-1)
-        (len(third_columns_names)-1)
+        computations2 = ["sum"] + ["mean_density"] * \
+            (len(third_columns_names)-1)
         columns = third_columns_names
         hoja_iValues(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True,
                      last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
@@ -790,48 +833,48 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
             workbook.remove_sheet(std)
         workbook.save(os.path.join(results_path, name))
 
-        with visualiser_lock:
-            columns.remove('Total analysed')
-            title = 'Instrumental densities'
-            # VISUALISATIONS
-            if groups:
-                data_grouped = data.groupby(list(groups))
-                for g, datag in data_grouped:
-                    result_visualisations = results_path + \
-                        '\\visualisations\\' + str(g.replace('/', '_'))
-                    if not os.path.exists(result_visualisations):
-                        os.mkdir(result_visualisations)
-                    name_bar = result_visualisations + \
-                        '\\' + name.replace('.xlsx', '.png')
-                    bar_plot_extended(name_bar, datag, columns, 'Density',
-                                      'Density', title, second_title=str(g))
+        # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
+        columns.remove('Total analysed')
+        title = 'Instrumental densities'
+        # VISUALISATIONS
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                result_visualisations = results_path + \
+                    '\\visualisations\\' + str(g.replace('/', '_'))
+                if not os.path.exists(result_visualisations):
+                    os.mkdir(result_visualisations)
+                name_bar = result_visualisations + \
+                    '\\' + name.replace('.xlsx', '.png')
+                bar_plot_extended(name_bar, datag, columns, 'Density',
+                                  'Density', title, second_title=str(g))
 
-            elif len(not_used_cols) == 4:  # 1 Factor. Try a different condition?
-                groups = [i for i in rows_groups]
-                exceptions_list = ['Role', 'KeySignature', 'Tempo']
-                for row in rows_groups:
-                    plot_name = name.replace(
-                        '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
-                    name_bar = results_path + '\\visualisations\\' + plot_name
-                    if row not in not_used_cols:
-                        if len(rows_groups[row][0]) == 0:  # no sub-groups
-                            data_grouped = data.groupby(row, sort=True)
-                            line_plot_extended(
-                                name_bar, data_grouped, columns, 'Density', 'Density', title, second_title='Per ' + str(row))
-                        else:
-                            for i, subrow in enumerate(rows_groups[row][0]):
-                                if subrow not in exceptions_list:
-                                    plot_name = name.replace(
-                                        '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
-                                    name_bar = results_path + '\\visualisations\\' + plot_name
-                                    data_grouped = data.groupby(subrow)
-                                    line_plot_extended(
-                                        name_bar, data_grouped, columns, 'Density', 'Density', title, second_title='Per ' + str(subrow))
-            else:
-                name_bar = results_path + '\\visualisations\\' + \
-                    name.replace('.xlsx', '.png')
-                bar_plot_extended(name_bar, data, columns,
-                                  'Density', 'Density', title)
+        elif len(not_used_cols) == 4:  # 1 Factor. Try a different condition?
+            groups = [i for i in rows_groups]
+            exceptions_list = ['Role', 'KeySignature', 'Tempo']
+            for row in rows_groups:
+                plot_name = name.replace(
+                    '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
+                name_bar = results_path + '\\visualisations\\' + plot_name
+                if row not in not_used_cols:
+                    if len(rows_groups[row][0]) == 0:  # no sub-groups
+                        data_grouped = data.groupby(row, sort=True)
+                        line_plot_extended(
+                            name_bar, data_grouped, columns, 'Density', 'Density', title, second_title='Per ' + str(row))
+                    else:
+                        for i, subrow in enumerate(rows_groups[row][0]):
+                            if subrow not in exceptions_list:
+                                plot_name = name.replace(
+                                    '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
+                                name_bar = results_path + '\\visualisations\\' + plot_name
+                                data_grouped = data.groupby(subrow)
+                                line_plot_extended(
+                                    name_bar, data_grouped, columns, 'Density', 'Density', title, second_title='Per ' + str(subrow))
+        else:
+            name_bar = results_path + '\\visualisations\\' + \
+                name.replace('.xlsx', '.png')
+            bar_plot_extended(name_bar, data, columns,
+                              'Density', 'Density', title)
     except Exception as e:
         logger.error('{}  Problem found:'.format(name), exc_info=True)
         print('Problem found')
@@ -868,7 +911,7 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         # sorting_list = sorting_lists['TextureSorting']
 
         computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
-        computations2 = ["sum"] + ["mean_"] * \
+        computations2 = ["sum"] + ["mean_texture"] * \
             (len(third_columns_names)-1)
         columns = third_columns_names
         hoja_iValues(workbook.create_sheet("Weighted_text"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,

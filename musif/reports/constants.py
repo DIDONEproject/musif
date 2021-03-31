@@ -1,8 +1,11 @@
 import openpyxl
 # The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
+metadata_columns = ['FileName', 'AriaOpera', 'AriaLabel', 'AriaId', 'AriaTitle', 'Composer', 'Year', 'Decade', 'Act', 'Scene', 'ActAndScene', 'AriaName', 'Librettist', 'Form',
+                    'Character', 'Role', 'City', 'Territory', 'Opera', 'Clef1', 'Clef2', 'Clef3', 'Key', 'KeySignature', 'KeySignatureGrouped', 'Mode', 'Tempo', 'TimeSignature', 'TimeSignatureGrouped']
+
 rows_groups = {"Opera": ([], "Alphabetic"),
-               "Label": ([], "Alphabetic"),
-               "Aria": ([], "Alphabetic"),
+               "AriaLabel": ([], "Alphabetic"),
+               "AriaTitle": ([], "Alphabetic"),
                "Composer": ([], "Alphabetic"),
                "Date": ([
                    "Year",
@@ -10,7 +13,7 @@ rows_groups = {"Opera": ([], "Alphabetic"),
                ], ["Alphabetic", "Alphabetic"]),
                "Geography": ([
                    "City",
-                   "Country"
+                   "Territory"
                ], ["Alphabetic", "Alphabetic"]),
                "Drama": ([
                    "Act",
@@ -43,7 +46,7 @@ rows_groups = {"Opera": ([], "Alphabetic"),
                    "RealScoringGrouped"
                ], ["ScoringSorting", "ScoringFamilySorting"])
                }
-not_used_cols = ['Id', 'RealScoring', 'Total analysed', 'OldClef']
+not_used_cols = ['AriaId', 'RealScoring', 'Total analysed', 'OldClef']
 
 
 # Some combinations are not needed when using more than one factor
@@ -53,8 +56,8 @@ forbiden_groups = {"Opera": ['Opera'],
                    "Composer": ['Composer'],
                    "Year": ['Year', 'Decade'],
                    "Decade": ['Decade'],
-                   "City": ['City', 'Country'],
-                   "Country": ['Country'],
+                   "City": ['City', 'Territory'],
+                   "Territory": ['Territory'],
                    "Act": ["Act", 'Act&Scene'],
                    "Scene": ["Scene", "Act&Scene"],
                    "Act&Scene": ["Act", 'Scene', 'Act&Scene'],

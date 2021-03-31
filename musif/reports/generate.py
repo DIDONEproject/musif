@@ -27,11 +27,9 @@ from music21 import interval, note, pitch
 from musif.common.utils import read_object_from_yaml_file
 from musif.config import Configuration
 from pandas import DataFrame
-# import concurrent
-# from source.SortingGroupings import general_sorting, melody_sorting
 from tqdm import tqdm
 
-from .constants import not_used_cols, rows_groups
+from .constants import not_used_cols, rows_groups, metadata_columns
 from .tasks import (IIIIntervals_types, emphasised_scale_degrees, iiaIntervals,
                     iValues, make_intervals_absolute, densities, textures)
 
@@ -41,7 +39,7 @@ class FeaturesGenerator():
     def __init__(self, *args, **kwargs):
         config_data = kwargs
         self._cfg = Configuration(**config_data)
-        self.visualiser_lock = False
+        self.visualiser_lock = True
 
     def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '') -> DataFrame:
         self.global_features = df
@@ -77,9 +75,8 @@ class FeaturesGenerator():
         nuc = copy.deepcopy(not_used_cols)
 
         # 1. Split all the dataframes to work individually
-        common_columns_df = all_dataframes.iloc[:, 0:all_dataframes.columns.get_loc(
-            'TempoGrouped2')]
-
+        common_columns_df = all_dataframes[metadata_columns]
+        common_columns_df['Total analysed'] = 1.0
         intervals_list = ["TrimmedIntervallicRatio", "TrimmedDiff", "IntervallicRatio", "TrimRatio", "AbsoluteIntervallicRatio",
                           "Std", "AbsoluteStd", "AscendingSemitones", "AscendingInterval", "DescendingSemitones", "DescendingInterval"]
         # all_info = pd.concat(
@@ -95,36 +92,29 @@ class FeaturesGenerator():
         # emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
         #     how='all', axis=1)
         # clefs_info = clefs_info.dropna(how='all', axis=1)
-        # print(str(i) + " factor")
-        density_list = ["ScoreNotes", "ScoreSoundingMeasures",
-                        "ScoreMeasures", "ScoreSoundingDensity", "ScoreDensity"]
-        for instrument in all_dataframes.Scoring:
-            part = 'Part'+instrument.capitalize()
-            density_list.append(part+'Notes')
-            density_list.append(part+'SoundingMeasures')
-            density_list.append(part+'Measures')
-            density_list.append(part+'SoundingDensity')
-            density_list.append(part+'Density')
-
+        print(str(i) + " factor")
+        density_list = []
+        for column in all_dataframes.columns:
+            if column.endswith(('Density', 'Notes', 'Measures')):
+                density_list.append(column)
+                all_dataframes.drop(column, axis=1)
         density_df = pd.concat(
             [common_columns_df, all_dataframes[density_list]], axis=1)
-        density_df = density_df.dropna(how='all', axis=1)
 
         # textures = textures.dropna(how='all', axis=1)
         # 2. Get the additional_info dictionary (special case if there're no factors)
-        additional_info = {"Label": ["Aria"],
-                           "Aria": ['Label']}  # solo agrupa aria
+        additional_info = {"AriaLabel": ["AriaTitle"],
+                           "AriaTitle": ["AriaLabel"]}  # solo agrupa aria
         if i == 0:
-            rows_groups = {"Id": ([], "Alphabetic")}
+            rows_groups = {"AriaId": ([], "Alphabetic")}
             rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
             for r in rg_keys:
-                dirname = os.path.dirname(__file__)
                 if type(r) == list:
                     not_used_cols += r
                 else:
                     not_used_cols.append(r)
             # It a list, so it is applicable to all grouppings
-            additional_info = ["Label", "Aria", "Composer", "Year"]
+            additional_info = ["AriaLabel", "AriaId", "Composer", "Year"]
 
         rg_groups = [[]]
         if i >= 2:  # 2 factors or more
@@ -134,16 +124,16 @@ class FeaturesGenerator():
             if i > 2:
                 prohibidas = ['Composer', 'Opera']
                 for g in rg_groups:
-                    if 'Aria' in g:
-                        g_rest = g[g.index('Aria'):]
+                    if "AriaId" in g:
+                        g_rest = g[g.index("AriaId"):]
                         if any(p in g_rest for p in prohibidas):
                             rg_groups.remove(g)
-                    elif 'Label' in g:
-                        g_rest = g[g.index('Label'):]
+                    elif "AriaLabel" in g:
+                        g_rest = g[g.index("AriaLabel"):]
                         if any(p in g_rest for p in prohibidas):
                             rg_groups.remove(g)
             rg_groups = [r for r in rg_groups if r[0]
-                         in list(all_info.columns)]
+                         in list(metadata_columns)]  # ???
 
         results_path_factorx = path.join(main_results_path, str(
             i) + " factor") if i > 0 else path.join(main_results_path, "Data")
