@@ -5,6 +5,7 @@
 # module. Each function generates a different visualisation
 ########################################################################
 
+from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import warnings
 import numpy as np
@@ -12,6 +13,23 @@ from music21 import pitch, interval
 import matplotlib
 matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
+
+
+COLOR = "rgbcmyk"
+'''
+        b: blue
+        g: green
+        r: red
+        c: cyan
+        m: magenta
+        y: yellow
+        k: black
+        w: white
+'''
+MARKERS = [i for i in Line2D.filled_markers if str(i) not in [
+    'None', '', ' ', ',']]
+LINESTYLES = [i for i in Line2D.lineStyles.keys() if str(i) not in [
+    'None', '', ' ']]
 
 
 def box_plot(name, data, second_title=None):

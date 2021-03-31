@@ -1,6 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
+import warnings
 
 
 def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
@@ -45,7 +46,7 @@ def sort_dataframe(data, column, sorting_lists, key_to_sort):
                     index = form_list.index(value)
                 except:
                     index = 999
-                    logger.warning('We do not have the value {} in the sorting list {}'.format(
+                    warnings.warn('We do not have the value {} in the sorting list {}'.format(
                         value, key_to_sort))
                 indexes.append(index)
             else:

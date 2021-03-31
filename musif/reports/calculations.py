@@ -59,7 +59,7 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             for v, w in zip(column_data, ponderate_data):
                 s += v * w
             value = round(s / sum(ponderate_data), 3)
-    elif computation == "mean_notes":
+    elif computation == ("mean_density" or "mean_texture"):
         value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
     elif computation == "sum":
         value = np.nansum(column_data)
@@ -79,6 +79,22 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             value = round(value * 100, 3)
     if np.isnan(value):
         value = 0.0
+    return value
+
+#####################################################################################
+# Function to compute the average in every kind of variable, based on a computation #
+#####################################################################################
+
+
+def compute_average(dic_data, computation):
+    value = 0
+    computation = computation.replace('_density', '')
+    computation = computation.replace('_texture', '')
+    if computation in ["mean", "min", "sum", "max", "absolute", "meanSemitones"]:
+        # value = round(sum(dic_data) / len(dic_data), 3)
+        value = round(np.nansum(dic_data) / (len(dic_data) -
+                                             len([z for z in dic_data if z == 0])), 3)
+
     return value
 
 ##################################################################################################
