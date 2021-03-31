@@ -12,7 +12,7 @@ from musif.extract.features import ambitus, custom, density, interval, key, lyri
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import to_abbreviation
-from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, get_repetition_elements, split_wind_layers
+from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, get_repetition_elements, split_wind_layers, analysis, get_notes_lyrics
 
 
 class FeaturesExtractor:
@@ -54,6 +54,7 @@ class FeaturesExtractor:
         split_wind_layers(score)
         repetition_elements = get_repetition_elements(score)
         score_key, tonality, mode = get_key_and_mode(score)
+        ambitus = analysis.discrete.Ambitus()
         parts = self._filter_parts(score, parts_filter)
         if len(parts) == 0:
             self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter {','.join(parts_filter)}")
@@ -64,6 +65,7 @@ class FeaturesExtractor:
             "key": score_key,
             "tonality": tonality,
             "mode": mode,
+            "ambitus": ambitus,
             "parts": parts,
         }
 
@@ -76,16 +78,22 @@ class FeaturesExtractor:
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         expanded_part = expand_part(part, score_data["repetition_elements"])
         notes, sounding_measures, measures = get_notes_and_measures(expanded_part)
+        lyrics = get_notes_lyrics(notes)
         numeric_intervals, text_intervals = get_intervals(notes)
+        ambitus_solution = score_data["ambitus"].getSolution(part)
+        ambitus_pitch_span = score_data["ambitus"].getPitchSpan(part)
         data = {
             "part": part,
             "abbreviation": to_abbreviation(part, score_data["parts"], self._cfg),
             "expanded_part": expanded_part,
             "notes": notes,
+            "lyrics": lyrics,
             "sounding_measures": sounding_measures,
             "measures": measures,
             "numeric_intervals": numeric_intervals,
             "text_intervals": text_intervals,
+            "ambitus_solution": ambitus_solution,
+            "ambitus_pitch_span": ambitus_pitch_span,
         }
         return data
 
@@ -104,11 +112,12 @@ class FeaturesExtractor:
 
     def _extract_score_features(self, score_data: dict, parts_data: List[dict], parts_features: List[dict]) -> dict:
         score_features = {"FileName": path.basename(score_data["file"])}
-        score_features.update(scoring.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(key.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(interval.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(time.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(density.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(custom.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(key.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(time.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(scoring.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(lyrics.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(interval.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(density.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         return score_features

@@ -5,18 +5,24 @@ from music21.stream import Score
 
 from musif.config import Configuration
 
+KEY = "Key"
+KEY_SIGNATURE = "KeySignature"
+KEY_SIGNATURE_GROUPED = "KeySignatureGrouped"
+MODE = "Mode"
+
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     key = score_data["key"]
+    tonality = score_data["tonality"]
     mode = score_data["mode"]
     key_signature = get_key_signature(key)
     key_signature_grouped = get_key_signature_grouped(key_signature)
 
     return {
-        "Key": key,
-        "KeySignature": key_signature,
-        "KeySignatureGrouped": key_signature_grouped,
-        "Mode": mode,
+        KEY: tonality,
+        KEY_SIGNATURE: key_signature,
+        KEY_SIGNATURE_GROUPED: key_signature_grouped,
+        MODE: mode,
     }
 
 

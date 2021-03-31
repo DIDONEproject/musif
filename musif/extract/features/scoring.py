@@ -1,17 +1,33 @@
-from copy import deepcopy
 from typing import List, Optional, Tuple
 
 from music21 import text
 from music21.stream import Part
-from pandas import DataFrame
 from roman import fromRoman, toRoman
 
 from musif.common.constants import VOICE_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
 from musif.config import Configuration
+from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
+
+PART_NAME = "PartName"
+PART_NUMBER = "PartNumber"
+PART_ABBREVIATION = "PartAbbreviation"
+SOUND = "Sound"
+SOUND_ABBREVIATION = "SoundAbbreviation"
+FAMILY = "Family"
+FAMILY_ABBREVIATION = "FamilyAbbreviation"
+INSTRUMENTAL = "Instrumental"
+CARDINALITY = "Cardinality"
+SCORING = "Scoring"
+SOUND_SCORING = "SoundScoring"
+INSTRUMENTATION = "Instrumentation"
+VOICES = "Voices"
+FAMILY_SCORING = "FamilyScoring"
+FAMILY_INSTRUMENTATION = "FamilyInstrumentation"
+SCORE_CARDINALITY = "ScoreCardinality"
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
@@ -23,29 +39,15 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     family_abbreviation = cfg.family_to_abbreviation[family]
     instrumental = family != VOICE_FAMILY
     return {
-        "PartName": part.partName,
-        "PartNumber": part_number,
-        "PartAbbreviation": part_abbreviation,
-        "Sound": sound,
-        "SoundAbbreviation": sound_abbreviation,
-        "Family": family,
-        "FamilyAbbreviation": family_abbreviation,
-        "Instrumental": instrumental,
+        PART_NAME: part.partName,
+        PART_NUMBER: part_number,
+        PART_ABBREVIATION: part_abbreviation,
+        SOUND: sound,
+        SOUND_ABBREVIATION: sound_abbreviation,
+        FAMILY: family,
+        FAMILY_ABBREVIATION: family_abbreviation,
+        INSTRUMENTAL: instrumental,
     }
-
-
-def get_aggregated_parts_features(parts_features: List[dict]) -> List[dict]:
-    parts_features = deepcopy(parts_features)
-    count_by_sound = {}
-    for features in parts_features:
-        sound = features["Sound"]
-        if sound not in count_by_sound:
-            count_by_sound[sound] = 0
-        count_by_sound[sound] += 1
-    for features in parts_features:
-        sound = features["Sound"]
-        features["SoundCardinality"] = count_by_sound[sound]
-    return parts_features
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
@@ -58,44 +60,52 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     family_abbreviations = []
     instrumental_family_abbreviations = []
     count_by_sound = {}
+    count_by_family = {}
     for features in parts_features:
-        sound = features["Sound"]
-        sound_abbreviation = features["SoundAbbreviation"]
-        abbreviated_part = features["PartAbbreviation"]
-        abbreviated_parts.append(abbreviated_part)
-        if sound not in count_by_sound:
-            count_by_sound[sound] = 0
-        count_by_sound[sound] += 1
+        part = features[PART_ABBREVIATION]
+        sound = features[SOUND]
+        sound_abbreviation = features[SOUND_ABBREVIATION]
+        family = features[FAMILY]
+        family_abbreviation = features[FAMILY_ABBREVIATION]
+        abbreviated_parts.append(part)
+        if sound_abbreviation not in count_by_sound:
+            count_by_sound[sound_abbreviation] = 0
+        count_by_sound[sound_abbreviation] += 1
+        if family_abbreviation not in count_by_family:
+            count_by_family[family_abbreviation] = 0
+        count_by_family[family_abbreviation] += 1
         if sound not in sounds:
             sounds.append(sound)
             sound_abbreviations.append(sound_abbreviation)
-            if features["Instrumental"]:
+            if features[INSTRUMENTAL]:
                 instrument_abbreviations.append(sound_abbreviation)
             else:
                 voice_abbreviations.append(sound_abbreviation)
-        family = features["Family"]
-        family_abbreviation = features["FamilyAbbreviation"]
         if family not in families:
             families.append(family)
             family_abbreviations.append(family_abbreviation)
-            if features["Instrumental"]:
+            if features[INSTRUMENTAL]:
                 instrumental_family_abbreviations.append(family_abbreviation)
-    for features in parts_features:
-        sound = features["Sound"]
-        features["SoundCardinality"] = count_by_sound[sound]
 
     abbreviated_parts_scoring_order = [instr + num
                                        for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
-    return {
-        "Scoring": ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
-        "SoundScoring": ','.join(sort(sound_abbreviations, cfg.scoring_order)),
-        "Instrumentation": ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
-        "Voices": ','.join(sort(voice_abbreviations, cfg.scoring_order)),
-        "FamilyScoring": ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
-        "FamilyInstrumentation": ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        "PartsCardinality": len(parts_features),
-        "ScoringCardinality": len(parts_features),
+    features = {
+        SCORING: ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
+        SOUND_SCORING: ','.join(sort(sound_abbreviations, cfg.scoring_order)),
+        INSTRUMENTATION: ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
+        VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
+        FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
+        FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
+        SCORE_CARDINALITY: len(parts_features),
     }
+    for sound_abbreviation in sound_abbreviations:
+        sound_prefix = get_sound_prefix(sound_abbreviation)
+        features[f"{sound_prefix}{CARDINALITY}"] = count_by_sound[sound_abbreviation]
+    for family_abbreviation in family_abbreviations:
+        family_prefix = get_family_prefix(family_abbreviation)
+        features[f"{family_prefix}{CARDINALITY}"] = count_by_family[family_abbreviation]
+
+    return features
 
 
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
