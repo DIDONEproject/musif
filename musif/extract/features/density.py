@@ -32,9 +32,12 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
     features = {}
     df_parts = DataFrame(parts_features)
-    df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    df_family = df_parts.groupby("FamilyAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_sound = df_parts.groupby("SoundAbbreviation").aggregate(
+        {NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_family = df_parts.groupby("FamilyAbbreviation").aggregate(
+        {NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_score = df_parts.aggregate(
+        {NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
     for part_features in parts_features:
         part_prefix = get_part_prefix(part_features['PartAbbreviation'])
         features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
@@ -45,23 +48,34 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     for sound in df_sound.index:
         sound_prefix = get_sound_prefix(sound)
         features[f"{sound_prefix}{NOTES}"] = df_sound.loc[sound, NOTES].tolist()
-        features[f"{sound_prefix}{SOUNDING_MEASURES}"] = df_sound.loc[sound, SOUNDING_MEASURES].tolist()
-        features[f"{sound_prefix}{MEASURES}"] = df_sound.loc[sound, MEASURES].tolist()
-        features[f"{sound_prefix}{SOUNDING_DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / features[f"{sound_prefix}{SOUNDING_MEASURES}"]
-        features[f"{sound_prefix}{DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / features[f"{sound_prefix}{MEASURES}"]
+        features[f"{sound_prefix}{SOUNDING_MEASURES}"] = df_sound.loc[sound,
+                                                                      SOUNDING_MEASURES].tolist()
+        features[f"{sound_prefix}{MEASURES}"] = df_sound.loc[sound,
+                                                             MEASURES].tolist()
+        features[f"{sound_prefix}{SOUNDING_DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / \
+            features[f"{sound_prefix}{SOUNDING_MEASURES}"]
+        features[f"{sound_prefix}{DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / \
+            features[f"{sound_prefix}{MEASURES}"]
     for family in df_family.index:
         family_prefix = get_family_prefix(family)
-        features[f"{family_prefix}{NOTES}"] = df_family.loc[family, NOTES].tolist()
-        features[f"{family_prefix}{SOUNDING_MEASURES}"] = df_family.loc[family, SOUNDING_MEASURES].tolist()
-        features[f"{family_prefix}{MEASURES}"] = df_family.loc[family, MEASURES].tolist()
-        features[f"{family_prefix}{SOUNDING_DENSITY}"] = features[f"{family_prefix}{NOTES}"] / features[f"{family_prefix}{SOUNDING_MEASURES}"]
-        features[f"{family_prefix}{DENSITY}"] = features[f"{family_prefix}{NOTES}"] / features[f"{family_prefix}{MEASURES}"]
+        features[f"{family_prefix}{NOTES}"] = df_family.loc[family,
+                                                            NOTES].tolist()
+        features[f"{family_prefix}{SOUNDING_MEASURES}"] = df_family.loc[family,
+                                                                        SOUNDING_MEASURES].tolist()
+        features[f"{family_prefix}{MEASURES}"] = df_family.loc[family,
+                                                               MEASURES].tolist()
+        features[f"{family_prefix}{SOUNDING_DENSITY}"] = features[f"{family_prefix}{NOTES}"] / \
+            features[f"{family_prefix}{SOUNDING_MEASURES}"]
+        features[f"{family_prefix}{DENSITY}"] = features[f"{family_prefix}{NOTES}"] / \
+            features[f"{family_prefix}{MEASURES}"]
     score_prefix = get_score_prefix()
     features[f"{score_prefix}{NOTES}"] = df_score[NOTES].tolist()
     features[f"{score_prefix}{SOUNDING_MEASURES}"] = df_score[SOUNDING_MEASURES].tolist()
     features[f"{score_prefix}{MEASURES}"] = df_score[MEASURES].tolist()
-    features[f"{score_prefix}{SOUNDING_DENSITY}"] = features[f"{score_prefix}{NOTES}"] / features[f"{score_prefix}{SOUNDING_MEASURES}"]
-    features[f"{score_prefix}{DENSITY}"] = features[f"{score_prefix}{NOTES}"] / features[f"{score_prefix}{MEASURES}"]
+    features[f"{score_prefix}{SOUNDING_DENSITY}"] = features[f"{score_prefix}{NOTES}"] / \
+        features[f"{score_prefix}{SOUNDING_MEASURES}"]
+    features[f"{score_prefix}{DENSITY}"] = features[f"{score_prefix}{NOTES}"] / \
+        features[f"{score_prefix}{MEASURES}"]
 
     return features
 
@@ -89,7 +103,8 @@ def set_ties(subject, my_notes_list):
         my_notes_list.append(subject)
         return
     if isinstance(my_notes_list[-1], Note):
-        my_notes_list[-1].duration.quarterLength += subject.duration.quarterLength  # sum tied notes' length
+        # sum tied notes' length
+        my_notes_list[-1].duration.quarterLength += subject.duration.quarterLength
         return
     back_counter = -1
     while isinstance(my_notes_list[back_counter], tuple):
@@ -114,26 +129,3 @@ def calculate_densities(notes_list, measures_list, names_list, cfg: Configuratio
     except:
         cfg.read_logger.error('Densities problem found: ', exc_info=True)
         return {}
-
-
-    #
-    #
-    # for i, _ in enumerate(parts):
-    #     # Criteria: split anything that might have two voices in the same part and is not a violin or a voice
-    #     if (df.names[i].replace('I','') not in ['vn', 'voice'] and df['names'][i].endswith('I')):
-    #         df['notes'][i] = df['notes'][i]+df['notes'][i+1]
-    #         df['measures'][i] = df['measures'][i]+df['measures'][i+1]
-    #         df['names'][i] = df.names[i].replace('I', '')
-    #         df = df.drop([i+1], axis=0)
-    #         df.reset_index(drop=True, inplace=True)
-    #         del partVoices[i+1]
-    #         continue
-    #     if (df.names[i].startswith('voice') and num_voices > 1):
-    #         df['notes'][i] = sum(df['notes'][i:i+num_voices])
-    #         df['measures'][i] = sum(df['measures'][i:i+num_voices])
-    #         df = df.drop([i+1], axis=0)
-    #         df.reset_index(drop=True, inplace=True)
-    #         del partVoices[i+1]
-    #         continue
-    #
-    # return calculate_densities(notes_list, measures_list, names_list)
