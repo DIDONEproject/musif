@@ -1,3 +1,7 @@
+from musif.musicxml import MUSICXML_FILE_EXTENSION, expand_part, get_intervals, get_repetition_elements, split_wind_layers, analysis, get_notes_lyrics
+from musif.extract.features.scoring import to_abbreviation
+from musif.extract.features.key import get_key_and_mode
+from musif.extract.features.density import get_notes_and_measures
 import glob
 from os import path
 from typing import Dict, List, Tuple, Union
@@ -7,7 +11,7 @@ from music21.stream import Part, Score
 from pandas import DataFrame
 
 from musif.config import Configuration
-from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, time
+from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, texture, time
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import to_abbreviation, extract_sound, extract_abbreviated_part
@@ -27,7 +31,8 @@ class FeaturesExtractor:
                 return self.from_file(obj, parts_filter)
         if isinstance(obj, list):
             return self.from_files(obj, parts_filter)
-        raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
+        raise ValueError(
+            f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
 
     def from_dir(self, musicxml_scores_dir: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
         musicxml_files = glob.glob(path.join(musicxml_scores_dir, f'*.{MUSICXML_FILE_EXTENSION}'))
@@ -113,7 +118,8 @@ class FeaturesExtractor:
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         expanded_part = expand_part(part, score_data["repetition_elements"])
-        notes, sounding_measures, measures = get_notes_and_measures(expanded_part)
+        notes, sounding_measures, measures = get_notes_and_measures(
+            expanded_part)
         lyrics = get_notes_lyrics(notes)
         numeric_intervals, text_intervals = get_intervals(notes)
         ambitus_solution = score_data["ambitus"].getSolution(part)
@@ -155,14 +161,24 @@ class FeaturesExtractor:
 
     def _extract_score_features(self, score_data: dict, parts_data: List[dict], parts_features: List[dict]) -> dict:
         score_features = {"FileName": path.basename(score_data["file"])}
-        score_features.update(custom.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(key.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(time.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(scoring.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(lyrics.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(interval.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(density.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(custom.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(metadata.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(key.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(time.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(scoring.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(lyrics.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(interval.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(density.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(texture.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
         return score_features
 
     def _extract_corpus_features(self, corpus_dir: str, scores_data: List[dict], parts_data: List[dict], scores_features: List[dict]) -> dict:

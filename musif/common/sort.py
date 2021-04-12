@@ -1,6 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
+import warnings
 
 
 def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
@@ -40,12 +41,12 @@ def sort_dataframe(data, column, sorting_lists, key_to_sort):
         for i in data[column]:
             if str(i.lower().strip()) not in ["nan", 'nd']:
                 value = i.strip() if key_to_sort not in [
-                    'FormSorting', 'RoleSorting'] else i.strip().lower()
+                    'FormSorting', 'CharacterSorting'] else i.strip().lower()
                 try:
                     index = form_list.index(value)
                 except:
                     index = 999
-                    logger.warning('We do not have the value {} in the sorting list {}'.format(
+                    warnings.warn('We do not have the value {} in the sorting list {}'.format(
                         value, key_to_sort))
                 indexes.append(index)
             else:
