@@ -41,7 +41,7 @@ def sort_dataframe(data, column, sorting_lists, key_to_sort):
         for i in data[column]:
             if str(i.lower().strip()) not in ["nan", 'nd']:
                 value = i.strip() if key_to_sort not in [
-                    'FormSorting', 'RoleSorting'] else i.strip().lower()
+                    'FormSorting', 'CharacterSorting'] else i.strip().lower()
                 try:
                     index = form_list.index(value)
                 except:
