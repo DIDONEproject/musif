@@ -1,27 +1,24 @@
-from typing import List
-
 from musif.config import Configuration
 
-LOWEST_NOTE = "LowestNote"
-HIGHEST_NOTE = "HighestNote"
-LOWEST_INDEX = "LowestIndex"
-HIGHEST_INDEX = "HighestIndex"
-LOWEST_MEAN_NOTE = "LowestMeanNote"
-LOWEST_MEAN_INDEX = "LowestMeanIndex"
-HIGHEST_MEAN_NOTE = "HighestMeanNote"
-HIGHEST_MEAN_INDEX = "HighestMeanIndex"
-AMBITUS_LARGEST_INTERVAL = "AmbitusLargestInterval"
-AMBITUS_LARGEST_SEMITONES = "AmbitusLargestSemitones"
-AMBITUS_SMALLEST_INTERVAL = "AmbitusSmallestInterval"
-AMBITUS_SMALLEST_SEMITONES = "AmbitusSmallestSemitones"
-AMBITUS_ABSOLUTE_INTERVAL = "AmbitusAbsoluteInterval"
-AMBITUS_ABSOLUTE_SEMITONES = "AmbitusAbsoluteSemitones"
-AMBITUS_MEAN_INTERVAL = "AmbitusMeanInterval"
-AMBITUS_MEAN_SEMITONES = "AmbitusMeanSemitones"
+LOWEST_NOTE = "AmbitusLowestNote"
+HIGHEST_NOTE = "AmbitusHighestNote"
+LOWEST_INDEX = "AmbitusLowestIndex"
+HIGHEST_INDEX = "AmbitusHighestIndex"
+LOWEST_MEAN_NOTE = "AmbitusLowestMeanNote"
+LOWEST_MEAN_INDEX = "AmbitusLowestMeanIndex"
+HIGHEST_MEAN_NOTE = "AmbitusHighestMeanNote"
+HIGHEST_MEAN_INDEX = "AmbitusHighestMeanIndex"
+LARGEST_INTERVAL = "AmbitusLargestInterval"
+LARGEST_SEMITONES = "AmbitusLargestSemitones"
+SMALLEST_INTERVAL = "AmbitusSmallestInterval"
+SMALLEST_SEMITONES = "AmbitusSmallestSemitones"
+ABSOLUTE_INTERVAL = "AmbitusAbsoluteInterval"
+ABSOLUTE_SEMITONES = "AmbitusAbsoluteSemitones"
+MEAN_INTERVAL = "AmbitusMeanInterval"
+MEAN_SEMITONES = "AmbitusMeanSemitones"
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-
     this_aria_ambitus = part_data["ambitus_solution"]
     lowest_note, highest_note = part_data["ambitus_pitch_span"]
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
@@ -39,12 +36,12 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
         LOWEST_MEAN_INDEX: lowest_index,
         HIGHEST_MEAN_NOTE: highest_note_text,
         HIGHEST_MEAN_INDEX: highest_index,
-        AMBITUS_LARGEST_INTERVAL: this_aria_ambitus.name,
-        AMBITUS_LARGEST_SEMITONES: this_aria_ambitus.semitones,
-        AMBITUS_SMALLEST_INTERVAL: this_aria_ambitus.name,
-        AMBITUS_SMALLEST_SEMITONES: this_aria_ambitus.semitones,
-        AMBITUS_ABSOLUTE_INTERVAL: joined_notes,
-        AMBITUS_ABSOLUTE_SEMITONES: joined_notes,
-        AMBITUS_MEAN_INTERVAL: joined_notes,
-        AMBITUS_MEAN_SEMITONES: joined_notes,
+        LARGEST_INTERVAL: this_aria_ambitus.name,
+        LARGEST_SEMITONES: this_aria_ambitus.semitones,
+        SMALLEST_INTERVAL: this_aria_ambitus.name,
+        SMALLEST_SEMITONES: this_aria_ambitus.semitones,
+        ABSOLUTE_INTERVAL: joined_notes,
+        ABSOLUTE_SEMITONES: joined_notes,
+        MEAN_INTERVAL: joined_notes,
+        MEAN_SEMITONES: joined_notes,
     }
