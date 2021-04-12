@@ -21,10 +21,11 @@ rows_groups = {"Opera": ([], "Alphabetic"),
                    "Act&Scene"
                ], ["Alphabetic", "Alphabetic", "Alphabetic"]),
                "Character": ([
+                   "Character",
                    "Role",
-                   "RoleType",
+                   "RoleType"
                    "Gender"
-               ], ["RoleSorting", "Alphabetic", "Alphabetic"]),
+               ], ["CharacterSorting", "Alphabetic", "Alphabetic", "Alphabetic"]),
                "Form": ([], "FormSorting"),
                "Clef": ([], "Alphabetic"),
                "Key": ([
@@ -51,8 +52,8 @@ not_used_cols = ['AriaId', 'RealScoring', 'Total analysed', 'OldClef']
 
 # Some combinations are not needed when using more than one factor
 forbiden_groups = {"Opera": ['Opera'],
-                   "Label": ['Opera', 'Label'],
-                   "Aria": ['Aria', 'Opera'],
+                   "AriaLabel": ['Opera', 'Label'],
+                   "AriaTitle": ['Aria', 'Opera'],
                    "Composer": ['Composer'],
                    "Year": ['Year', 'Decade'],
                    "Decade": ['Decade'],
@@ -65,7 +66,9 @@ forbiden_groups = {"Opera": ['Opera'],
                    'RoleType': ["RoleType", "Gender"],
                    'Gender': ["Gender"],
                    'Form': ['Form'],
-                   "Clef": ['Clef'],
+                   "Clef1": ['Clef1'],
+                   "Clef2": ['Clef2'],
+                   "Clef3": ['Clef3'],
                    'Key': ['Form', 'Mode', 'Final', 'KeySignature', 'KeySignatureGrouped'],
                    'Mode': ['Mode', 'Final'],
                    'Final': ['Final', 'Key', 'KeySignature'],

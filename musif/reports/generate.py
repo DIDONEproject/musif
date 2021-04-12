@@ -1,8 +1,8 @@
 ########################################################################
-# WRITE MODULE
+# GENERATION MODULE
 ########################################################################
-# This script is ment to read the intermediate files computed by the
-# read module and perform several computations while grouping the data
+# This script is ment to read the intermediate DataFrame computed by the
+# FeaturesExtractor and perform several computations while grouping the data
 # based on several characteristics.
 # Writes the final report files as well as generates the visualisations
 ########################################################################
@@ -18,7 +18,7 @@ import threading  # for the lock used for visualising, as matplotlib is not thre
 from copy import deepcopy
 from itertools import combinations, permutations
 from os import path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import numpy as np
 import openpyxl
@@ -29,9 +29,10 @@ from musif.config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 
-from .constants import not_used_cols, rows_groups, metadata_columns
+from .constants import not_used_cols, rows_groups, metadata_columns, forbiden_groups
 from .tasks import (IIIIntervals_types, emphasised_scale_degrees, iiaIntervals,
                     iValues, make_intervals_absolute, densities, textures)
+import musif.extract.features.ambitus as ambitus
 
 
 class FeaturesGenerator():
@@ -41,11 +42,11 @@ class FeaturesGenerator():
         self._cfg = Configuration(**config_data)
         self.visualiser_lock = True
 
-    def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '') -> DataFrame:
+    def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
+        self.parts_list = [] if parts_list is None else parts_list
         self.global_features = df
         self.num_factors_max = num_factors
         self.main_results_path = main_results_path
-        # self.parts_features = df[1]
         self.sorting_lists = self._read_sorting_lists()
         self._write(self.global_features)
 
@@ -77,94 +78,188 @@ class FeaturesGenerator():
         # 1. Split all the dataframes to work individually
         common_columns_df = all_dataframes[metadata_columns]
         common_columns_df['Total analysed'] = 1.0
-        intervals_list = ["TrimmedIntervallicRatio", "TrimmedDiff", "IntervallicRatio", "TrimRatio", "AbsoluteIntervallicRatio",
-                          "Std", "AbsoluteStd", "AscendingSemitones", "AscendingInterval", "DescendingSemitones", "DescendingInterval"]
-        # all_info = pd.concat(
-        #     [common_columns, all_dataframes[['Intervalic ratio']]], axis=1)
+        all_info_list = []
+        # all_info_list = ['ScoreSyllabicRatio', 'ScoreIntervallicMean', 'ScoreIntervallicStd', 'ScoreAbsoluteIntervallicMean', 'ScoreAbsoluteIntervallicStd', 'ScoreTrimmedAbsoluteIntervallicRatio',
+        #                  'ScoreAbsoluteIntervallicTrimDiff', 'ScoreAbsoluteIntervallicTrimRatio', 'ScoreAscendingSemitones', 'ScoreAscendingInterval', 'ScoreDescendingSemitones', 'ScoreDescendingInterval', ambitus.LOWEST_NOTE]
 
-        # intervals_info = pd.concat(
-        #     [common_columns, all_dataframes[intervals_list]], axis=1)
-        # all_info = all_info.dropna(how='all', axis=1)
-        # intervals_info = intervals_info.dropna(how='all', axis=1)
-        # intervals_types = intervals_types.dropna(how='all', axis=1)
-        # emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
-        #     how='all', axis=1)
-        # emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
-        #     how='all', axis=1)
-        # clefs_info = clefs_info.dropna(how='all', axis=1)
-        print(str(i) + " factor")
+        '''
+        'Intervallic ratio',
+       'Trimmed intervallic ratio', 'dif. Trimmed', '% Trimmed',
+       'Absolute intervallic ratio', 'Std', 'Absolute Std', 'Syllabic ratio',
+       'LowestNote', 'HighestNote', 'LowestIndex', 'HighestIndex',
+       'LowestMeanNote', 'LowestMeanIndex', 'HighestMeanNote',
+       'HighestMeanIndex', 'AmbitusLargestInterval', 'AmbitusLargestSemitones',
+       'AmbitusSmallestInterval', 'AmbitusSmallestSemitones',
+       'AmbitusAbsoluteInterval', 'AmbitusAbsoluteSemitones',
+       'AmbitusMeanInterval', 'AmbitusMeanSemitones', 'AscendingSemitones',
+       'AscendingInterval', 'DescendingSemitones', 'DescendingInterval'],
+       '''
+
+        clefs_info_list = ['Clef1']
+        textures_list = []
         density_list = []
-        for column in all_dataframes.columns:
-            if column.endswith(('Density', 'Notes', 'Measures')):
-                density_list.append(column)
-                all_dataframes.drop(column, axis=1)
+
+        instruments = set([])
+        if self.parts_list:
+            instruments = self.parts_list
+        else:
+            for aria in all_dataframes['Scoring']:
+                for a in aria.split(','):
+                    instruments.add(a)
+
+        instruments = [instrument[0].upper()+instrument[1:]
+                       for instrument in instruments]
+
+        # FIltering columns for each feature
+        for instrument in instruments:
+            # ['sop', 'ten', 'alt', 'mez']:
+            if instrument.lower().startswith('vn'):
+                catch = 'Part'
+            else:
+                catch = 'Sound'
+                if instrument.endswith('II'):
+                    continue
+                instrument = instrument.replace('I', '')
+            # Capitalize does not work beacuse of violins being VnII, etc.
+            density_list.append(
+                catch + instrument + 'Notes')
+            density_list.append(
+                catch + instrument + 'SoundingDensity')
+            density_list.append(
+                catch + instrument + 'SoundingMeasures')
+            textures_list.append(
+                catch + instrument + 'Notes')
+
+        all_info = pd.concat(
+            [common_columns_df, all_dataframes[all_info_list]], axis=1)
+
+        all_info = all_info.dropna(how='all', axis=1)
+        density_df = textures_df = clefs_info = intervals_info = common_columns_df
+
+        textures_df = pd.concat(
+            [textures_df, all_dataframes[textures_list]], axis=1)
         density_df = pd.concat(
-            [common_columns_df, all_dataframes[density_list]], axis=1)
+            [density_df, all_dataframes[density_list]], axis=1)
+        clefs_info = pd.concat(
+            [clefs_info, all_dataframes[clefs_info_list]], axis=1)
+        clefs_info = clefs_info.dropna(how='all', axis=1)
 
-        # textures = textures.dropna(how='all', axis=1)
-        # 2. Get the additional_info dictionary (special case if there're no factors)
-        additional_info = {"AriaLabel": ["AriaTitle"],
-                           "AriaTitle": ["AriaLabel"]}  # solo agrupa aria
-        if i == 0:
-            rows_groups = {"AriaId": ([], "Alphabetic")}
-            rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
-            for r in rg_keys:
-                if type(r) == list:
-                    not_used_cols += r
-                else:
-                    not_used_cols.append(r)
-            # It a list, so it is applicable to all grouppings
-            additional_info = ["AriaLabel", "AriaId", "Composer", "Year"]
+        print(str(i) + " factor")
 
-        rg_groups = [[]]
-        if i >= 2:  # 2 factors or more
-            rg_groups = list(permutations(
-                list(forbiden_groups.keys()), i - 1))[4:]
+        for instrument in list(instruments):
+            results_folder = os.path.join(main_results_path, instrument)
+            if not os.path.exists(results_folder):
+                os.mkdir(results_folder)
 
-            if i > 2:
-                prohibidas = ['Composer', 'Opera']
-                for g in rg_groups:
-                    if "AriaId" in g:
-                        g_rest = g[g.index("AriaId"):]
-                        if any(p in g_rest for p in prohibidas):
-                            rg_groups.remove(g)
-                    elif "AriaLabel" in g:
-                        g_rest = g[g.index("AriaLabel"):]
-                        if any(p in g_rest for p in prohibidas):
-                            rg_groups.remove(g)
-            rg_groups = [r for r in rg_groups if r[0]
-                         in list(metadata_columns)]  # ???
+            # CAPTURING FEATURES that depend total or partially on each part
+            emphasised_A_list = []
+            # intervals_list = ['P-5', 'M3', 'M-2', 'm3', 'm-2', 'P1', 'P5', 'P4', 'P-4', 'm-3', 'M2', 'M-3', 'm2', 'm-6',
+            #   'm6', 'M6', 'P8', 'P-8', 'd5', 'A1', 'M-6', 'M-7', 'A4', 'M-10', 'd-5', 'm7', 'm-7', 'P12', 'A-2', 'M9']
+            '''
+             'M3', 'M-2', 'P1', 'm3',
+            'm-2', 'M-3', 'm2', 'M2', 'P4', 'P-4', 'A1', 'm-3', 'm6', 'm-6', 'A2',
+            'M-7', 'm-9', 'P5', 'd-8', 'd5', 'P-8', 'M6', 'P8', 'd-4', 'm7', 'm-7',
+            'P12', 'A-2', 'A4', 'P-5', 'M9', 'M-6', 'M7', 'M-10', 'd-5', 'A-4',
+            'M10', 'm10', 'm13', 'd1'
+            '''
 
-        results_path_factorx = path.join(main_results_path, str(
-            i) + " factor") if i > 0 else path.join(main_results_path, "Data")
-        if not os.path.exists(results_path_factorx):
-            os.makedirs(results_path_factorx)
+            # Intervals_types_list = ['Part' + instrument + 'RepeatedNotes', 'Part' + instrument+' LeapsAscending', 'Part' + instrument+'LeapsDescending', 'Part' + instrument+'LeapsAll', 'Part' + instrument+'StepwiseMotionAscending', 'Part' + instrument+'StepwiseMotionDescending',  'Part' + instrument+'StepwiseMotionAll',  'Part' + instrument+'Total',  'Part' + instrument+'PerfectAscending',  'Part' + instrument+'PerfectDescending',  'Part' + instrument+'PerfectAll',
+            # 'ScoreMajorAscending', 'ScoreMajorDescending', 'ScoreMajorAll', 'ScoreMinorAscending', 'ScoreMinorDescending', 'ScoreMinorAll', 'ScoreAugmentedAscending', 'ScoreAugmentedDescending', 'ScoreAugmentedAll', 'ScoreDiminishedAscending', 'ScoreDiminishedDescending', 'ScoreDiminishedAll', 'ScoreTotal1']
+            '''
+                'RepeatedNotes',
+            'LeapsAscending', 'LeapsDescending', 'LeapsAll',
+            'StepwiseMotionAscending', 'StepwiseMotionDescending',
+            'StepwiseMotionAll', 'Total', 'PerfectAscending', 'PerfectDescending',
+            'PerfectAll', 'MajorAscending', 'MajorDescending', 'MajorAll',
+            'MinorAscending', 'MinorDescending', 'MinorAll', 'AugmentedAscending',
+            'AugmentedDescending', 'AugmentedAll', 'DiminishedAscending',
+            'DiminishedDescending', 'DiminishedAll', 'Total1']
+            '''
 
-        # absolute_intervals = make_intervals_absolute(intervals_info)
+            # intervals_info = pd.concat(
+            #     [common_columns_df, all_dataframes[intervals_list]], axis=1)
 
-        # # MULTIPROCESSING (one process per group (year, decade, city, country...))
-        # if sequential: # 0 and 1 factors
-        for groups in rg_groups:
-            # self._group_execution(groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info, intervals_info, absolute_intervals,
-            #                       intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
-            self._group_execution(
-                groups, results_path_factorx, additional_info, i, self.sorting_lists, density_df)
-            rows_groups = rg
-            not_used_cols = nuc
-        # else: # from 2 factors
-        #     # process_executor = concurrent.futures.ProcessPoolExecutor()
-        #     futures = [process_executor.submit(self._group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
-        #     kwargs = {'total': len(futures),'unit': 'it','unit_scale': True,'leave': True}
-        #     for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
-        #         rows_groups = rg
-        #         not_used_cols = nuc
+            # Intervals_types = pd.concat(
+            #     [common_columns_df, all_dataframes[Intervals_types_list]], axis=1)
+
+            emphasised_scale_degrees_info_A = pd.concat(
+                [common_columns_df, all_dataframes[emphasised_A_list]], axis=1)
+
+            emphasised_scale_degrees_info_B = common_columns_df
+            Intervals_types = pd.concat(
+                [common_columns_df, all_dataframes[clefs_info_list]], axis=1)
+
+            # dropping nans
+            Intervals_types = Intervals_types.dropna(
+                how='all', axis=1)
+            emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
+                how='all', axis=1)
+            emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
+                how='all', axis=1)
+            intervals_info = intervals_info.dropna(how='all', axis=1)
+            absolute_intervals = make_intervals_absolute(intervals_info)
+
+            # 2. Get the additional_info dictionary (special case if there're no factors)
+            additional_info = {"AriaLabel": ["AriaTitle"],
+                               "AriaTitle": ["AriaLabel"]}  # solo agrupa aria
+            if i == 0:
+                rows_groups = {"AriaId": ([], "Alphabetic")}
+                rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
+                for r in rg_keys:
+                    if type(r) == list:
+                        not_used_cols += r
+                    else:
+                        not_used_cols.append(r)
+                # It a list, so it is applicable to all grouppings
+                additional_info = ["AriaLabel", "AriaId", "Composer", "Year"]
+
+            rg_groups = [[]]
+            if i >= 2:  # 2 factors or more
+                rg_groups = list(permutations(
+                    list(forbiden_groups.keys()), i - 1))[4:]
+
+                if i > 2:
+                    prohibidas = ['Composer', 'Opera']
+                    for g in rg_groups:
+                        if "AriaId" in g:
+                            g_rest = g[g.index("AriaId"):]
+                            if any(p in g_rest for p in prohibidas):
+                                rg_groups.remove(g)
+                        elif "AriaLabel" in g:
+                            g_rest = g[g.index("AriaLabel"):]
+                            if any(p in g_rest for p in prohibidas):
+                                rg_groups.remove(g)
+                rg_groups = [r for r in rg_groups if r[0]
+                             in list(metadata_columns)]  # ???
+
+            results_path_factorx = path.join(main_results_path, instrument, str(
+                i) + " factor") if i > 0 else path.join(main_results_path, instrument, "Data")
+            if not os.path.exists(results_path_factorx):
+                os.makedirs(results_path_factorx)
+
+            # # MULTIPROCESSING (one process per group (year, decade, city, country...))
+            # if sequential: # 0 and 1 factors
+            for groups in rg_groups:
+                # self._group_execution(groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info, intervals_info, absolute_intervals,
+                #                       Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
+                self._group_execution(
+                    groups, results_path_factorx, additional_info, i, self.sorting_lists, density_df, textures_df)
+                rows_groups = rg
+                not_used_cols = nuc
+            # else: # from 2 factors
+            #     # process_executor = concurrent.futures.ProcessPoolExecutor()
+            #     futures = [process_executor.submit(self._group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
+            #     kwargs = {'total': len(futures),'unit': 'it','unit_scale': True,'leave': True}
+            #     for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
+            #         rows_groups = rg
+            #         not_used_cols = nuc
 
     #####################################################################
     # Function that generates the needed information for each grouping  #
     #####################################################################
-    # def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
+    # def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
 
-    def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, density_df):
+    def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, density_df, textures_df):
 
         if groups:
             # if sequential:
@@ -177,7 +272,7 @@ class FeaturesGenerator():
             self._remove_folder_contents(
                 path.join(results_path, 'visualisations'))
         else:
-            os.mkdir(path.join(results_path, 'visualisations'))
+            os.makedirs(path.join(results_path, 'visualisations'))
         # MUTITHREADING
         try:
             # executor = concurrent.futures.ThreadPoolExecutor()
@@ -186,6 +281,9 @@ class FeaturesGenerator():
             if not density_df.empty:
                 densities(density_df, results_path, '-'.join(groups) + "_Densities.xlsx",
                           sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
+            if not textures_df.empty:
+                textures(textures_df, results_path, '-'.join(groups) + "_Textures.xlsx",
+                         sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
 
             # if not all_info.empty:
             #     # futures.append(executor.submit(iValues, all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
@@ -197,9 +295,9 @@ class FeaturesGenerator():
                 #                    sorting_lists["Intervals"], results_path, sorting_lists, self.visualiser_lock, additional_info, groups if groups != [] else None))
                 #     futures.append(executor.submit(iiaIntervals, absolute_intervals, '-'.join(groups) + "_2bIntervals_absolute.xlsx",
                 #                    sorting_lists["Intervals_absolute"], results_path, sorting_lists, self.visualiser_lock, additional_info, groups if groups != [] else None))
-                # if not intervals_types.empty:
-                #     futures.append(executor.submit(IIIIntervals_types, intervals_types, results_path, '-'.join(groups) +
-                #                    "_3Interval_types.xlsx", sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info))
+                # if not Intervals_types.empty:
+                #     futures.append(executor.submit(IIIIntervals_types, Intervals_types, results_path, '-'.join(groups) +
+                #                    "_3Interval_typesIIIIntervals_types.xlsx", sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info))
                 # if not emphasised_scale_degrees_info_A.empty:
                 #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_A, sorting_lists["ScaleDegrees"], '-'.join(
                 #         groups) + "_4aScale_degrees.xlsx", results_path, sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info))
