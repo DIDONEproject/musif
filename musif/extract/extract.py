@@ -35,16 +35,20 @@ class FeaturesExtractor:
             f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
 
     def from_dir(self, musicxml_scores_dir: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        musicxml_files = glob.glob(path.join(musicxml_scores_dir, f'*.{MUSICXML_FILE_EXTENSION}'))
-        corpus_df, score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
+        musicxml_files = glob.glob(
+            path.join(musicxml_scores_dir, f'*.{MUSICXML_FILE_EXTENSION}'))
+        corpus_df, score_df, parts_df = self._process_corpora(
+            musicxml_files, parts_filter)
         return score_df
 
     def from_files(self, musicxml_score_files: List[str], parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        parts_df, score_df, corpus_df = self._process_corpora(musicxml_score_files, parts_filter)
+        parts_df, score_df, corpus_df = self._process_corpora(
+            musicxml_score_files, parts_filter)
         return score_df
 
     def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        parts_df, score_df, corpus_df = self._process_corpora([musicxml_file], parts_filter)
+            parts_df, score_df, corpus_df = self._process_corpora(
+                [musicxml_file], parts_filter)
         return score_df
 
     def _process_corpora(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[DataFrame, DataFrame, DataFrame]:
