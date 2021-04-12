@@ -38,7 +38,6 @@ setup(
         "roman==3.3",
         "scipy",
         "ms3",
-        "pandas",
         "pyyaml",
     ],
     entry_points={

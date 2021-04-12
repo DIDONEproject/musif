@@ -13,18 +13,6 @@ NOTES = "Notes"
 TEXTURE = "Texture"
 
 
-def get_textures(parts_features):
-    textures_list = []
-
-    for f in range(0, len_partvoices):
-        texture = [round(notes_list[f]/notes_list[i], 3)
-                   for i in range(f, len(notes_list)) if f != i]
-        textures_list.append(
-            [{f'{names_list[f]}/{names_list[i+f+1]}': texture[i]} for i in range(0, len(texture))])
-
-    return textures_list
-
-
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
     features = {}

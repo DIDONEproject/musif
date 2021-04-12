@@ -129,6 +129,8 @@ class FeaturesGenerator():
                 catch + instrument + 'SoundingMeasures')
             textures_list.append(
                 catch + instrument + 'Notes')
+            textures_list.append(
+                catch + instrument + 'Texture')
 
         all_info = pd.concat(
             [common_columns_df, all_dataframes[all_info_list]], axis=1)
