@@ -4,7 +4,7 @@ from os import path
 
 from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
-from musif.extract.model import Features
+from musif.extract.model import Features, Level
 
 READ_LOGGER_NAME = "read"
 WRITE_LOGGER_NAME = "write"
@@ -19,6 +19,7 @@ _CONFIG_FALLBACK = {
     "sequential": True,
     "features": [features.value for features in Features],
     "split": True,
+    "level": Level.SCORE.value,
 }
 
 class Configuration:
@@ -39,6 +40,7 @@ class Configuration:
         features = config_data.get("features", _CONFIG_FALLBACK["features"])
         self.features = [Features(features_name) for features_name in features]
         self.split = config_data.get("split", _CONFIG_FALLBACK["split"])
+        self.level = Level(config_data.get("level", _CONFIG_FALLBACK["level"]))
 
         self.scores_metadata = {
             path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))

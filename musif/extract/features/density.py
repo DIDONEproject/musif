@@ -66,13 +66,9 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     return features
 
 
-def get_measures(part: Part) -> List[Measure]:
-    return [element for element in part.getElementsByClass('Measure')]
-
-
 def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Measure], List[Measure]]:
     notes = []
-    measures = get_measures(part)
+    measures = list(part.measures(0, None))
     sounding_measures = []
     for measure in measures:
         if len(measure.notes) > 0:
@@ -86,8 +82,6 @@ def set_ties(subject, my_notes_list):
     """
     This function converts tied notes into a unique note
     """
-    if not isinstance(subject, Note):
-        return
     if subject.tie is None:
         my_notes_list.append(subject)
         return

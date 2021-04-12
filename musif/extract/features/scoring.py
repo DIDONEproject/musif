@@ -1,5 +1,6 @@
 from typing import List, Optional, Tuple
 
+from statistics import mean, stdev
 from music21 import text
 from music21.stream import Part
 from roman import fromRoman, toRoman
@@ -27,25 +28,22 @@ INSTRUMENTATION = "Instrumentation"
 VOICES = "Voices"
 FAMILY_SCORING = "FamilyScoring"
 FAMILY_INSTRUMENTATION = "FamilyInstrumentation"
-SCORE_CARDINALITY = "ScoreCardinality"
+SCORING_COUNT = "ScoringCount"
+SCORING_COUNT_MEAN = "ScoringCountMean"
+SCORING_COUNT_STD = "ScoringCountStd"
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    parts = score_data["parts"]
     part = part_data["part"]
-    sound = extract_sound(part, cfg)
-    part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part, parts, cfg)
-    family = cfg.sound_to_family[sound]
-    family_abbreviation = cfg.family_to_abbreviation[family]
-    instrumental = family != VOICE_FAMILY
+    instrumental = part_data["family"] != VOICE_FAMILY
     return {
         PART_NAME: part.partName,
-        PART_NUMBER: part_number,
-        PART_ABBREVIATION: part_abbreviation,
-        SOUND: sound,
-        SOUND_ABBREVIATION: sound_abbreviation,
-        FAMILY: family,
-        FAMILY_ABBREVIATION: family_abbreviation,
+        PART_NUMBER: part_data["part_number"],
+        PART_ABBREVIATION: part_data["abbreviation"],
+        SOUND: part_data["sound"],
+        SOUND_ABBREVIATION: part_data["sound_abbreviation"],
+        FAMILY: part_data["family"],
+        FAMILY_ABBREVIATION: part_data["family_abbreviation"],
         INSTRUMENTAL: instrumental,
     }
 
@@ -96,7 +94,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
         FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
         FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        SCORE_CARDINALITY: len(parts_features),
+        SCORING_COUNT: len(parts_features),
     }
     for sound_abbreviation in sound_abbreviations:
         sound_prefix = get_sound_prefix(sound_abbreviation)
@@ -105,6 +103,30 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         family_prefix = get_family_prefix(family_abbreviation)
         features[f"{family_prefix}{CARDINALITY}"] = count_by_family[family_abbreviation]
 
+    return features
+
+
+def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
+
+    abbreviated_parts = list({part for score_features in scores_features for part in score_features[SCORING].split(',')})
+    abbreviated_parts_scoring_order = [instr + num for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
+    sound_abbreviations = list({sound for score_features in scores_features for sound in score_features[SOUND_SCORING].split(',')})
+    instrument_abbreviations = list({instrument for score_features in scores_features for instrument in score_features[INSTRUMENTATION].split(',')})
+    voice_abbreviations = list({voice for score_features in scores_features for voice in score_features[VOICES].split(',')})
+    family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_SCORING].split(',')})
+    instrumental_family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_INSTRUMENTATION].split(',')})
+    scoring_count_mean = mean([score_features[SCORING_COUNT] for score_features in scores_features])
+    scoring_count_std = stdev([score_features[SCORING_COUNT] for score_features in scores_features])
+    features = {
+        SCORING: ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
+        SOUND_SCORING: ','.join(sort(sound_abbreviations, cfg.scoring_order)),
+        INSTRUMENTATION: ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
+        VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
+        FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
+        FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
+        SCORING_COUNT_MEAN: scoring_count_mean,
+        SCORING_COUNT_STD: scoring_count_std
+    }
     return features
 
 

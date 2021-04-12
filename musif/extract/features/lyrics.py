@@ -14,10 +14,9 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     lyrics = part_data["lyrics"]
 
     syllabic_ratio = get_syllabic_ratio(notes, lyrics)
-    part_prefix = get_part_prefix(part_data["abbreviation"])
 
     return {
-        f"{part_prefix}{SYLLABIC_RATIO}": syllabic_ratio,
+        SYLLABIC_RATIO: syllabic_ratio,
     }
 
 
@@ -33,9 +32,28 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
         if len(part_data["lyrics"]) > 0:
-            features[f"{part_prefix}{SYLLABIC_RATIO}"] = part_features[f"{part_prefix}{SYLLABIC_RATIO}"]
+            features[f"{part_prefix}{SYLLABIC_RATIO}"] = part_features[f"{SYLLABIC_RATIO}"]
     features[f"{score_prefix}{SYLLABIC_RATIO}"] = syllabic_ratio
 
+    return features
+
+
+def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
+
+    features = {}
+    grouped_parts_data = {}
+    for part_data in parts_data:
+        abb = part_data["abbreviation"]
+        if abb not in grouped_parts_data:
+            grouped_parts_data[abb] = {"notes": [], "lyrics": []}
+        grouped_parts_data[abb]["notes"].extend(part_data["notes"])
+        grouped_parts_data[abb]["lyrics"].extend(part_data["lyrics"])
+    for abbreviation, grouped_part_data in grouped_parts_data.items():
+        part_prefix = get_part_prefix(abbreviation)
+        notes = grouped_part_data["notes"]
+        lyrics = grouped_part_data["lyrics"]
+        if len(lyrics) > 0:
+            features[f"{part_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
     return features
 
 
