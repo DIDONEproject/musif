@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Union
 from music21 import *
 from music21.note import Note
 from music21.stream import Part, Score
+from roman import toRoman
 
 from musif.common import group
 
@@ -106,13 +107,10 @@ def split_wind_layers(score: Score):
                     break
 
             if has_voices:  # recorrer los compases buscando las voices y separamos en dos parts
-                parts_splited = part.voicesToParts().elements
+                parts_splitted = part.voicesToParts().elements
                 num_measure = 0
-                for (
-                    measure
-                ) in (
-                    part.elements
-                ):  # add missing information to both parts (dynamics, text annotations, etc are missing)
+                for measure in part.elements:
+                    # add missing information to both parts (dynamics, text annotations, etc are missing)
                     if isinstance(measure, stream.Measure) and any(
                         not isinstance(e, stream.Voice) for e in measure.elements
                     ):
@@ -120,15 +118,15 @@ def split_wind_layers(score: Score):
                             e for e in measure.elements if not isinstance(e, stream.Voice)
                         ]  # elements such as clefs, dynamics, text annotations...
                         # introducimos esta información en cada voz:
-                        for p in parts_splited:
+                        for p in parts_splitted:
                             p.elements[num_measure].elements += tuple(
                                 e for e in not_voices_elements if e not in p.elements[num_measure].elements
                             )
                         num_measure += 1
-                for num, p in enumerate(parts_splited):
+                for num, p in enumerate(parts_splitted, 1):
                     p_copy = copy.deepcopy(part)
-                    p_copy.id = p_copy.id + " " + "I" * (num + 1)  # only I or II
-                    p_copy.partName = p_copy.partName + " " + "I" * (num + 1)  # only I or II
+                    p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
+                    p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
                     p_copy.elements = p.elements
                     final_parts.append(p_copy)
                 score.remove(part)
@@ -173,7 +171,7 @@ def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, 
     else:
         scl = scale.MinorScale(key.split(" ")[0])
 
-    degrees = [scl.getScaleDegreeAndAccidentalFromPitch(pitch.Pitch(note.name)) for note in notes]
+    degrees = [scl.getScaleDegreeAndAccidentalFromPitch(note.pitches[0]) for note in notes]
 
     return [(degree[0], degree[1].fullName if degree[1] else "") for degree in degrees]
 
@@ -187,7 +185,7 @@ def get_intervals(notes: List[Note]) -> Tuple[List[Union[int, float]], List[str]
     for i in range(len(notes) - 1):
         note = notes[i]
         next_note = notes[i + 1]
-        i = interval.Interval(noteStart=note, noteEnd=next_note)
+        i = interval.Interval(note.pitches[0], next_note.pitches[0])
         numeric_intervals.append(i.semitones)
         text_intervals.append(i.directedName)
     return numeric_intervals, text_intervals
@@ -198,6 +196,6 @@ def contains_text(part: Part) -> bool:
 
 
 def get_notes_lyrics(notes: List[Note]) -> List[str]:
-    return [note.lyric for note in notes if str(note.lyric) not in ["nan", "None"]]
+    return [note.lyric for note in notes if note.lyrics and note.lyrics[0].text is not None]
 
 

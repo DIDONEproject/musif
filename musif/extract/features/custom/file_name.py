@@ -1,8 +1,15 @@
-def get_file_name_features(file_name: str) -> dict:
+from typing import List
+
+from musif.config import Configuration
+
+
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     """
     get variables from file_name
     returns a dictionary so it can be easily input in a df
     """
+
+    file_name = score_data["file"]
 
     opera_title = file_name[0:3]
     label = file_name.split("-", 2)[0]
@@ -26,3 +33,7 @@ def get_file_name_features(file_name: str) -> dict:
         "Scene": scene,
         "ActAndScene": act + scene,
     }
+
+
+def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
+    return {}

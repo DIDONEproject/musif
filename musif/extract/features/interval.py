@@ -1,5 +1,4 @@
 from collections import Counter
-from copy import deepcopy
 from statistics import mean, stdev
 from typing import Dict, List, Tuple
 
@@ -7,77 +6,84 @@ from music21.interval import Interval
 from scipy.stats import trim_mean
 
 from musif.config import Configuration
+from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_family_prefix
+
+INTERVALLIC_MEAN = "IntervallicMean"
+INTERVALLIC_STD = "IntervallicStd"
+ABSOLUTE_INTERVALLIC_MEAN = "AbsoluteIntervallicMean"
+ABSOLUTE_INTERVALLIC_STD = "AbsoluteIntervallicStd"
+TRIMMED_ABSOLUTE_INTERVALLIC_RATIO = "TrimmedAbsoluteIntervallicRatio"
+ABSOLUTE_INTERVALLIC_TRIM_DIFF = "AbsoluteIntervallicTrimDiff"
+ABSOLUTE_INTERVALLIC_TRIM_RATIO = "AbsoluteIntervallicTrimRatio"
+ASCENDING_SEMITONES = "AscendingSemitones"
+ASCENDING_INTERVAL = "AscendingInterval"
+DESCENDING_SEMITONES = "DescendingSemitones"
+DESCENDING_INTERVAL = "DescendingInterval"
+REPEATED_NOTES = "RepeatedNotes"
+LEAPS_ASCENDING = "LeapsAscending"
+LEAPS_DESCENDING = "LeapsDescending"
+LEAPS_ALL = "LeapsAll"
+STEPWISE_MOTION_ASCENDING = "StepwiseMotionAscending"
+STEPWISE_MOTION_DESCENDING = "StepwiseMotionDescending"
+STEPWISE_MOTION_ALL = "StepwiseMotionAll"
+LEAPS_STEPWISE_MOTION_TOTAL = "LeapsStepwiseMotionTotal"
+INTERVALS_PERFECT_ASCENDING = "IntervalsPerfectAscending"
+INTERVALS_PERFECT_DESCENDING = "IntervalsPerfectDescending"
+INTERVALS_PERFECT_ALL = "IntervalsPerfectAll"
+INTERVALS_MAJOR_ASCENDING = "IntervalsMajorAscending"
+INTERVALS_MAJOR_DESCENDING = "IntervalsMajorDescending"
+INTERVALS_MAJOR_ALL = "IntervalsMajorAll"
+INTERVALS_MINOR_ASCENDING = "IntervalsMinorAscending"
+INTERVALS_MINOR_DESCENDING = "IntervalsMinorDescending"
+INTERVALS_MINOR_ALL = "IntervalsMinorAll"
+INTERVALS_AUGMENTED_ASCENDING = "IntervalsAugmentedAscending"
+INTERVALS_AUGMENTED_DESCENDING = "IntervalsAugmentedDescending"
+INTERVALS_AUGMENTED_ALL = "IntervalsAugmentedAll"
+INTERVALS_DIMINISHED_ASCENDING = "IntervalsDiminishedAscending"
+INTERVALS_DIMINISHED_DESCENDING = "IntervalsDiminishedDescending"
+INTERVALS_DIMINISHED_ALL = "IntervalsDiminishedAll"
+INTERVALS_ALL = "IntervalsAll"
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    part_suffix = f"Part{part_data['abbreviation']}"
     numeric_intervals = part_data["numeric_intervals"]
     text_intervals = part_data["text_intervals"]
     text_intervals_count = Counter(text_intervals)
 
     features = {}
-    features.update(get_interval_features(numeric_intervals, part_suffix))
-    features.update(text_intervals_count)
-    features.update(get_interval_type_features(text_intervals_count, part_suffix))
-
-    return features
-
-
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
-    numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
-    text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
-    text_intervals_count = Counter(text_intervals)
-
-    features = {}
-    features.update(get_interval_features(numeric_intervals, "Score"))
-    features.update(text_intervals_count)
-    features.update(get_interval_type_features(text_intervals_count, "Score"))
-
-    return features
-
-
-def get_global_features(numeric_intervals, text_intervals) -> dict:
-    text_intervals_count = Counter(text_intervals)
-
-    features = {}
     features.update(get_interval_features(numeric_intervals))
-    features.update(text_intervals_count)
+    features.update(get_interval_count_features(text_intervals_count))
     features.update(get_interval_type_features(text_intervals_count))
 
     return features
 
 
-def get_aggregated_parts_features(parts_features: List[dict], parts_data: List[dict]) -> List[dict]:
-    parts_features = deepcopy(parts_features)
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    score_prefix = get_score_prefix()
+    numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
+    text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+    text_intervals_count = Counter(text_intervals)
 
-    # df = DataFrame(parts_features)
-    # aggregation_dict = {
-    #     "AscendingSemitones": "sum",
-    #     "Measures": "sum",
-    #     "SoundingMeasures": "sum"
-    # }
-    # df_sound = df.groupby("SoundAbbreviation").aggregate({"AscendingSemitones": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
-    # df_family = df.groupby("FamilyAbbreviation").aggregate({"AscendingSemitones": "sum", "Measures": "sum", "SoundingMeasures": "sum"})
-    #
-    # "IntervallicRatio": interval_ratio,
-    # "TrimmedIntervallicRatio": trimmed_interval_ratio,
-    # "TrimmedDiff": trim_diff,
-    # "TrimRatio": trim_ratio,
-    # "AbsoluteIntervallicRatio": absolute_interval_mean,
-    # "Std": interval_std,
-    # "AbsoluteStd": absolute_interval_std,
-    # "AscendingSemitones": ascending_semitones,
-    # "AscendingInterval": ascending_semitones_name,
-    # "DescendingSemitones": descending_semitones,
-    # "DescendingInterval": descending_semitones_name,
-    #
-    # features.update(get_interval_aggregated_features(parts_features))
-    # features.update(get_interval_type_aggregated_features(parts_features))
-
-    return parts_features
+    features_names = [
+        INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_ABSOLUTE_INTERVALLIC_RATIO,
+        ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO, ASCENDING_SEMITONES, ASCENDING_INTERVAL, DESCENDING_SEMITONES, DESCENDING_INTERVAL,
+        REPEATED_NOTES, LEAPS_ASCENDING, LEAPS_DESCENDING, LEAPS_ALL, STEPWISE_MOTION_ASCENDING, STEPWISE_MOTION_DESCENDING, STEPWISE_MOTION_ALL,
+        LEAPS_STEPWISE_MOTION_TOTAL, INTERVALS_PERFECT_ASCENDING, INTERVALS_PERFECT_DESCENDING, INTERVALS_PERFECT_ALL, INTERVALS_MAJOR_ASCENDING,
+        INTERVALS_MAJOR_DESCENDING, INTERVALS_MAJOR_ALL, INTERVALS_MINOR_ASCENDING, INTERVALS_MINOR_DESCENDING, INTERVALS_MINOR_ALL,
+        INTERVALS_AUGMENTED_ASCENDING, INTERVALS_AUGMENTED_DESCENDING, INTERVALS_AUGMENTED_ALL, INTERVALS_DIMINISHED_ASCENDING, INTERVALS_DIMINISHED_DESCENDING,
+        INTERVALS_DIMINISHED_ALL, INTERVALS_ALL]
+    features = {}
+    for part_data, part_features in zip(parts_data, parts_features):
+        part_prefix = get_part_prefix(part_data["abbreviation"])
+        for feature_name in features_names:
+            features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+    features.update(get_interval_features(numeric_intervals, score_prefix))
+    features.update(get_interval_count_features(text_intervals_count, score_prefix))
+    features.update(get_interval_type_features(text_intervals_count, score_prefix))
+    return features
 
 
-def get_interval_features(numeric_intervals: List[int], prefix: str):
+def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     interval_mean = mean(numeric_intervals)
     interval_std = stdev(numeric_intervals)
     absolute_numeric_intervals = [abs(interval) for interval in numeric_intervals]
@@ -93,23 +99,27 @@ def get_interval_features(numeric_intervals: List[int], prefix: str):
     descending_semitones_name = Interval(descending_semitones).directedName
 
     features = {
-        f"{prefix}IntervallicMean": interval_mean,
-        f"{prefix}IntervallicStd": interval_std,
-        f"{prefix}AbsoluteIntervallicMean": absolute_interval_mean,
-        f"{prefix}AbsoluteIntervallicStd": absolute_interval_std,
-        f"{prefix}TrimmedAbsoluteIntervallicRatio": trimmed_absolute_interval_mean,
-        f"{prefix}AbsoluteIntervallicTrimDiff": trim_diff,
-        f"{prefix}AbsoluteIntervallicTrimRatio": trim_ratio,
-        f"{prefix}AscendingSemitones": ascending_semitones,
-        f"{prefix}AscendingInterval": ascending_semitones_name,
-        f"{prefix}DescendingSemitones": descending_semitones,
-        f"{prefix}DescendingInterval": descending_semitones_name,
+        f"{prefix}{INTERVALLIC_MEAN}": interval_mean,
+        f"{prefix}{INTERVALLIC_STD}": interval_std,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_MEAN}": absolute_interval_mean,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_STD}": absolute_interval_std,
+        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_RATIO}": trimmed_absolute_interval_mean,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": trim_diff,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": trim_ratio,
+        f"{prefix}{ASCENDING_SEMITONES}": ascending_semitones,
+        f"{prefix}{ASCENDING_INTERVAL}": ascending_semitones_name,
+        f"{prefix}{DESCENDING_SEMITONES}": descending_semitones,
+        f"{prefix}{DESCENDING_INTERVAL}": descending_semitones_name,
     }
 
     return features
 
 
-def get_interval_type_features(intervals_count: Dict[str, int], prefix: str):
+def get_interval_count_features(interval_counts: Dict[str, int], prefix: str = "") -> dict:
+    return {f"{prefix}Interval{interval}Frequency": count for interval, count in interval_counts.items()}
+
+
+def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""):
     """
     Function needed for generating IIIIntervals_types. It applies computations to the input dictionary
     The 'intervals' dictionary contains as key the interval name, and as value its frequency.
@@ -123,61 +133,56 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str):
 
     # Leaps (no. semitones >= 3)
     leaps = [iname for iname in intervals_names if Interval(iname).semitones >= 3 or Interval(iname).semitones <= -3]
-    ascending_leaps_data, descending_leaps_data = get_ascending_descending(intervals_count, leaps)
+    ascending_leaps, descending_leaps = get_ascending_descending(intervals_count, leaps)
 
     # Stepwise motion (no. semitones is 1 or 2)
     stepwise = [iname for iname in intervals_names if Interval(iname).semitones in [1, -1, 2, -2]]
-    ascending_stepwise_data, descending_stepwise_data = get_ascending_descending(intervals_count, stepwise)
+    ascending_stepwise, descending_stepwise = get_ascending_descending(intervals_count, stepwise)
 
-    # PERFECT
     perfect = [iname for iname in intervals_names if 'P' in iname or 'p' in iname]
-    ascending_perfect_data, descending_perfect_data = get_ascending_descending(intervals_count, perfect)
+    ascending_perfect, descending_perfect = get_ascending_descending(intervals_count, perfect)
 
-    # MAJOR
     major = [iname for iname in intervals_names if 'M' in iname]
-    ascending_mayor_data, descending_mayor_data = get_ascending_descending(intervals_count, major)
+    ascending_mayor, descending_mayor = get_ascending_descending(intervals_count, major)
 
-    # MINOR
     minor = [iname for iname in intervals_names if 'm' in iname]
-    ascending_minor_data, descending_minor_data = get_ascending_descending(intervals_count, minor)
+    ascending_minor, descending_minor = get_ascending_descending(intervals_count, minor)
 
-    # AUGMENTED
     aug = [iname for iname in intervals_names if 'A' in iname]
-    ascending_aug_data, descending_aug_data = get_ascending_descending(intervals_count, aug)
+    ascending_aug, descending_aug = get_ascending_descending(intervals_count, aug)
 
-    # DIMINISHED
     dimi = [iname for iname in intervals_names if 'd' in iname]
-    ascending_dimi_data, descending_dimi_data = get_ascending_descending(intervals_count, dimi)
+    ascending_dimi, descending_dimi = get_ascending_descending(intervals_count, dimi)
 
     return {
-        f"{prefix}RepeatedNotes": no_semitones_data,
-        f"{prefix}LeapsAscending": ascending_leaps_data,
-        f"{prefix}LeapsDescending": descending_leaps_data,
-        f"{prefix}LeapsAll": sum([ascending_leaps_data, descending_leaps_data]),
-        f"{prefix}StepwiseMotionAscending": ascending_stepwise_data,
-        f"{prefix}StepwiseMotionDescending": descending_stepwise_data,
-        f"{prefix}StepwiseMotionAll": sum([ascending_stepwise_data, descending_stepwise_data]),
-        f"{prefix}Total": sum([ascending_leaps_data, descending_leaps_data]) + sum([ascending_leaps_data, descending_leaps_data]),
-        f"{prefix}PerfectAscending": ascending_perfect_data,
-        f"{prefix}PerfectDescending": descending_perfect_data,
-        f"{prefix}PerfectAll": sum([ascending_perfect_data, descending_perfect_data]),
-        f"{prefix}MajorAscending": ascending_mayor_data,
-        f"{prefix}MajorDescending": descending_mayor_data,
-        f"{prefix}MajorAll": sum([ascending_mayor_data, descending_mayor_data]),
-        f"{prefix}MinorAscending": ascending_minor_data,
-        f"{prefix}MinorDescending": descending_minor_data,
-        f"{prefix}MinorAll": sum([ascending_minor_data, descending_minor_data]),
-        f"{prefix}AugmentedAscending": ascending_aug_data,
-        f"{prefix}AugmentedDescending": descending_aug_data,
-        f"{prefix}AugmentedAll": sum([ascending_aug_data, descending_aug_data]),
-        f"{prefix}DiminishedAscending": ascending_dimi_data,
-        f"{prefix}DiminishedDescending": descending_dimi_data,
-        f"{prefix}DiminishedAll": sum([ascending_dimi_data, descending_dimi_data]),
-        f"{prefix}Total1": sum([ascending_perfect_data, descending_perfect_data])
-                           + sum([ascending_mayor_data, descending_mayor_data])
-                           + sum([ascending_minor_data, descending_minor_data])
-                           + sum([ascending_aug_data, descending_aug_data])
-                           + sum([ascending_dimi_data, descending_dimi_data])
+        f"{prefix}{REPEATED_NOTES}": no_semitones_data,
+        f"{prefix}{LEAPS_ASCENDING}": ascending_leaps,
+        f"{prefix}{LEAPS_DESCENDING}": descending_leaps,
+        f"{prefix}{LEAPS_ALL}": sum([ascending_leaps, descending_leaps]),
+        f"{prefix}{STEPWISE_MOTION_ASCENDING}": ascending_stepwise,
+        f"{prefix}{STEPWISE_MOTION_DESCENDING}": descending_stepwise,
+        f"{prefix}{STEPWISE_MOTION_ALL}": sum([ascending_stepwise, descending_stepwise]),
+        f"{prefix}{LEAPS_STEPWISE_MOTION_TOTAL}": sum([ascending_leaps, descending_leaps]) + sum([ascending_stepwise, descending_stepwise]),
+        f"{prefix}{INTERVALS_PERFECT_ASCENDING}": ascending_perfect,
+        f"{prefix}{INTERVALS_PERFECT_DESCENDING}": descending_perfect,
+        f"{prefix}{INTERVALS_PERFECT_ALL}": sum([ascending_perfect, descending_perfect]),
+        f"{prefix}{INTERVALS_MAJOR_ASCENDING}": ascending_mayor,
+        f"{prefix}{INTERVALS_MAJOR_DESCENDING}": descending_mayor,
+        f"{prefix}{INTERVALS_MAJOR_ALL}": sum([ascending_mayor, descending_mayor]),
+        f"{prefix}{INTERVALS_MINOR_ASCENDING}": ascending_minor,
+        f"{prefix}{INTERVALS_MINOR_DESCENDING}": descending_minor,
+        f"{prefix}{INTERVALS_MINOR_ALL}": sum([ascending_minor, descending_minor]),
+        f"{prefix}{INTERVALS_AUGMENTED_ASCENDING}": ascending_aug,
+        f"{prefix}{INTERVALS_AUGMENTED_DESCENDING}": descending_aug,
+        f"{prefix}{INTERVALS_AUGMENTED_ALL}": sum([ascending_aug, descending_aug]),
+        f"{prefix}{INTERVALS_DIMINISHED_ASCENDING}": ascending_dimi,
+        f"{prefix}{INTERVALS_DIMINISHED_DESCENDING}": descending_dimi,
+        f"{prefix}{INTERVALS_DIMINISHED_ALL}": sum([ascending_dimi, descending_dimi]),
+        f"{prefix}{INTERVALS_ALL}": sum([ascending_perfect, descending_perfect])
+                           + sum([ascending_mayor, descending_mayor])
+                           + sum([ascending_minor, descending_minor])
+                           + sum([ascending_aug, descending_aug])
+                           + sum([ascending_dimi, descending_dimi])
     }
 
 
