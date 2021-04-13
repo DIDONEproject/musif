@@ -35,10 +35,8 @@ setup(
         "nltk==3.5",
         "tqdm==4.56.0",
         "xlrd==2.0.1",
-        "roman==3.3",
         "scipy",
         "ms3",
-        "pandas",
         "pyyaml",
     ],
     entry_points={
