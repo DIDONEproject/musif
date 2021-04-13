@@ -3,9 +3,11 @@ from typing import List
 from music21.note import Note
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_part_prefix, get_score_prefix
+from musif.extract.features.prefix import get_part_prefix
 
 SYLLABIC_RATIO = "SyllabicRatio"
+NOTES = "Notes"
+LYRICS = "Lyrics"
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
@@ -15,25 +17,31 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
     syllabic_ratio = get_syllabic_ratio(notes, lyrics)
 
-    return {
+    features = {
+        NOTES: len(notes),
+        LYRICS: len(lyrics),
         SYLLABIC_RATIO: syllabic_ratio,
     }
+
+    return features
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
-    notes = [note for part_data in parts_data for note in part_data["notes"] if len(part_data["lyrics"]) > 0]
-    lyrics = [lyrics for part_data in parts_data for lyrics in part_data["lyrics"] if len(part_data["lyrics"]) > 0]
+    notes = [note for part_data in parts_data for note in part_data["notes"]]
+    lyrics = [lyrics for part_data in parts_data for lyrics in part_data["lyrics"]]
 
     syllabic_ratio = get_syllabic_ratio(notes, lyrics)
-    score_prefix = get_score_prefix()
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
-        if len(part_data["lyrics"]) > 0:
-            features[f"{part_prefix}{SYLLABIC_RATIO}"] = part_features[f"{SYLLABIC_RATIO}"]
-    features[f"{score_prefix}{SYLLABIC_RATIO}"] = syllabic_ratio
+        for feature_name in (NOTES, LYRICS, SYLLABIC_RATIO):
+            features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+
+    features[NOTES] = len(notes)
+    features[LYRICS] = len(lyrics)
+    features[SYLLABIC_RATIO] = syllabic_ratio
 
     return features
 
