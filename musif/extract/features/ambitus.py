@@ -1,3 +1,7 @@
+from typing import List
+
+from musif.extract.features.prefix import get_part_prefix
+
 from musif.config import Configuration
 
 LOWEST_NOTE = "AmbitusLowestNote"
@@ -17,6 +21,8 @@ ABSOLUTE_SEMITONES = "AmbitusAbsoluteSemitones"
 MEAN_INTERVAL = "AmbitusMeanInterval"
 MEAN_SEMITONES = "AmbitusMeanSemitones"
 
+ALL_FEATURES = [LOWEST_INDEX, LOWEST_NOTE, HIGHEST_INDEX, HIGHEST_NOTE, HIGHEST_MEAN_INDEX, HIGHEST_MEAN_NOTE, LOWEST_MEAN_INDEX, LOWEST_MEAN_NOTE,
+                LARGEST_INTERVAL, LARGEST_SEMITONES, SMALLEST_INTERVAL, SMALLEST_SEMITONES, ABSOLUTE_INTERVAL, ABSOLUTE_SEMITONES, MEAN_INTERVAL, MEAN_SEMITONES]
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
     this_aria_ambitus = part_data["ambitus_solution"]
@@ -45,3 +51,11 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
         MEAN_INTERVAL: joined_notes,
         MEAN_SEMITONES: joined_notes,
     }
+
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    features = {}
+    for part_data, part_features in zip(parts_data, parts_features):
+        part_prefix = get_part_prefix(part_data["abbreviation"])
+        for feature_name in ALL_FEATURES:
+            features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+    return features
