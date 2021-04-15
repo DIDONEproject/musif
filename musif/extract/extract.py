@@ -164,6 +164,7 @@ class FeaturesExtractor:
         score_features.update(scoring.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(lyrics.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(interval.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(ambitus.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(density.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(texture.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         return score_features
