@@ -32,7 +32,10 @@ from tqdm import tqdm
 from .constants import not_used_cols, rows_groups, metadata_columns, forbiden_groups
 from .tasks import (IIIIntervals_types, emphasised_scale_degrees, iiaIntervals,
                     iValues, make_intervals_absolute, densities, textures)
+
 import musif.extract.features.ambitus as ambitus
+import musif.extract.features.interval as interval
+import musif.extract.features.lyrics as lyrics
 
 
 class FeaturesGenerator():
@@ -77,25 +80,10 @@ class FeaturesGenerator():
 
         # 1. Split all the dataframes to work individually
         common_columns_df = all_dataframes[metadata_columns]
+        # self._cfg.scores_metadata['aria.csv'][0].keys()
         common_columns_df['Total analysed'] = 1.0
-        all_info_list = []
-        # all_info_list = ['ScoreSyllabicRatio', 'ScoreIntervallicMean', 'ScoreIntervallicStd', 'ScoreAbsoluteIntervallicMean', 'ScoreAbsoluteIntervallicStd', 'ScoreTrimmedAbsoluteIntervallicRatio',
-        #                  'ScoreAbsoluteIntervallicTrimDiff', 'ScoreAbsoluteIntervallicTrimRatio', 'ScoreAscendingSemitones', 'ScoreAscendingInterval', 'ScoreDescendingSemitones', 'ScoreDescendingInterval', ambitus.LOWEST_NOTE]
 
-        '''
-        'Intervallic ratio',
-       'Trimmed intervallic ratio', 'dif. Trimmed', '% Trimmed',
-       'Absolute intervallic ratio', 'Std', 'Absolute Std', 'Syllabic ratio',
-       'LowestNote', 'HighestNote', 'LowestIndex', 'HighestIndex',
-       'LowestMeanNote', 'LowestMeanIndex', 'HighestMeanNote',
-       'HighestMeanIndex', 'AmbitusLargestInterval', 'AmbitusLargestSemitones',
-       'AmbitusSmallestInterval', 'AmbitusSmallestSemitones',
-       'AmbitusAbsoluteInterval', 'AmbitusAbsoluteSemitones',
-       'AmbitusMeanInterval', 'AmbitusMeanSemitones', 'AscendingSemitones',
-       'AscendingInterval', 'DescendingSemitones', 'DescendingInterval'],
-       '''
-
-        clefs_info_list = ['Clef1']
+        clefs_info_list = ['Clef1', 'Clef2', 'Clef3']
         textures_list = []
         density_list = []
 
@@ -110,7 +98,7 @@ class FeaturesGenerator():
         instruments = [instrument[0].upper()+instrument[1:]
                        for instrument in instruments]
 
-        # FIltering columns for each feature
+        # FIltering columns that differ in instruments for each feature
         for instrument in instruments:
             # ['sop', 'ten', 'alt', 'mez']:
             if instrument.lower().startswith('vn'):
@@ -120,7 +108,7 @@ class FeaturesGenerator():
                 if instrument.endswith('II'):
                     continue
                 instrument = instrument.replace('I', '')
-            # Capitalize does not work beacuse of violins being VnII, etc.
+
             density_list.append(
                 catch + instrument + 'Notes')
             density_list.append(
@@ -132,16 +120,19 @@ class FeaturesGenerator():
             textures_list.append(
                 catch + instrument + 'Texture')
 
-        all_info = pd.concat(
-            [common_columns_df, all_dataframes[all_info_list]], axis=1)
+        '''
+        'Intervallic ratio',
+       'Trimmed intervallic ratio', 'dif. Trimmed', '% Trimmed',
+       'Absolute intervallic ratio', 'Std', 'Absolute Std', 'Syllabic ratio',
+       '''
 
-        all_info = all_info.dropna(how='all', axis=1)
         density_df = textures_df = clefs_info = intervals_info = common_columns_df
 
         textures_df = pd.concat(
             [textures_df, all_dataframes[textures_list]], axis=1)
         density_df = pd.concat(
             [density_df, all_dataframes[density_list]], axis=1)
+
         clefs_info = pd.concat(
             [clefs_info, all_dataframes[clefs_info_list]], axis=1)
         clefs_info = clefs_info.dropna(how='all', axis=1)
@@ -154,29 +145,23 @@ class FeaturesGenerator():
                 os.mkdir(results_folder)
 
             # CAPTURING FEATURES that depend total or partially on each part
-            emphasised_A_list = []
-            # intervals_list = ['P-5', 'M3', 'M-2', 'm3', 'm-2', 'P1', 'P5', 'P4', 'P-4', 'm-3', 'M2', 'M-3', 'm2', 'm-6',
-            #   'm6', 'M6', 'P8', 'P-8', 'd5', 'A1', 'M-6', 'M-7', 'A4', 'M-10', 'd-5', 'm7', 'm-7', 'P12', 'A-2', 'M9']
-            '''
-             'M3', 'M-2', 'P1', 'm3',
-            'm-2', 'M-3', 'm2', 'M2', 'P4', 'P-4', 'A1', 'm-3', 'm6', 'm-6', 'A2',
-            'M-7', 'm-9', 'P5', 'd-8', 'd5', 'P-8', 'M6', 'P8', 'd-4', 'm7', 'm-7',
-            'P12', 'A-2', 'A4', 'P-5', 'M9', 'M-6', 'M7', 'M-10', 'd-5', 'A-4',
-            'M10', 'm10', 'm13', 'd1'
-            '''
+            all_info_list = ['Part'+instrument+interval.INTERVALLIC_MEAN, 'Part'+instrument+interval.INTERVALLIC_STD, 'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_MEAN, 'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_STD, 'Part'+instrument+interval.TRIMMED_ABSOLUTE_INTERVALLIC_RATIO,
+                             'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, 'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, 'Part'+instrument+interval.ASCENDING_SEMITONES, 'Part'+instrument+interval.ASCENDING_INTERVAL, 'Part'+instrument+interval.DESCENDING_SEMITONES, 'Part'+instrument+interval.DESCENDING_INTERVAL, 'Part' + instrument + ambitus.HIGHEST_INDEX, 'Part' + instrument + ambitus.LOWEST_NOTE, 'Part' + instrument + ambitus.LOWEST_MEAN_INDEX, 'Part' + instrument + ambitus.LOWEST_MEAN_NOTE, 'Part' + instrument + ambitus.HIGHEST_MEAN_NOTE, 'Part' + instrument + ambitus.HIGHEST_MEAN_INDEX, 'Part' + instrument + ambitus.LARGEST_INTERVAL, 'Part' + instrument + ambitus.LARGEST_SEMITONES, 'Part' + instrument + ambitus.SMALLEST_INTERVAL, 'Part' + instrument + ambitus.SMALLEST_SEMITONES, 'Part' + instrument + ambitus.ABSOLUTE_INTERVAL, 'Part' + instrument + ambitus.ABSOLUTE_SEMITONES, 'Part' + instrument + ambitus.MEAN_INTERVAL, 'Part' + instrument + ambitus.MEAN_SEMITONES, 'Part'+instrument+lyrics.SYLLABIC_RATIO]
 
-            # Intervals_types_list = ['Part' + instrument + 'RepeatedNotes', 'Part' + instrument+' LeapsAscending', 'Part' + instrument+'LeapsDescending', 'Part' + instrument+'LeapsAll', 'Part' + instrument+'StepwiseMotionAscending', 'Part' + instrument+'StepwiseMotionDescending',  'Part' + instrument+'StepwiseMotionAll',  'Part' + instrument+'Total',  'Part' + instrument+'PerfectAscending',  'Part' + instrument+'PerfectDescending',  'Part' + instrument+'PerfectAll',
-            # 'ScoreMajorAscending', 'ScoreMajorDescending', 'ScoreMajorAll', 'ScoreMinorAscending', 'ScoreMinorDescending', 'ScoreMinorAll', 'ScoreAugmentedAscending', 'ScoreAugmentedDescending', 'ScoreAugmentedAll', 'ScoreDiminishedAscending', 'ScoreDiminishedDescending', 'ScoreDiminishedAll', 'ScoreTotal1']
-            '''
-                'RepeatedNotes',
-            'LeapsAscending', 'LeapsDescending', 'LeapsAll',
-            'StepwiseMotionAscending', 'StepwiseMotionDescending',
-            'StepwiseMotionAll', 'Total', 'PerfectAscending', 'PerfectDescending',
-            'PerfectAll', 'MajorAscending', 'MajorDescending', 'MajorAll',
-            'MinorAscending', 'MinorDescending', 'MinorAll', 'AugmentedAscending',
-            'AugmentedDescending', 'AugmentedAll', 'DiminishedAscending',
-            'DiminishedDescending', 'DiminishedAll', 'Total1']
-            '''
+            emphasised_A_list = []
+            for col in all_dataframes.columns:
+                if col.startswith('Interval'):
+                    # intervals_list.append('Parcol)
+
+                    # intervals_list = ['P-5', 'M3', 'M-2', 'm3', 'm-2', 'P1', 'P5', 'P4', 'P-4', 'm-3', 'M2', 'M-3', 'm2', 'm-6',
+                    #   'm6', 'M6', 'P8', 'P-8', 'd5', 'A1', 'M-6', 'M-7', 'A4', 'M-10', 'd-5', 'm7', 'm-7', 'P12', 'A-2', 'M9']
+
+                    # Intervals_types_list = ['Part' + instrument + 'RepeatedNotes', 'Part' + instrument+' LeapsAscending', 'Part' + instrument+'LeapsDescending', 'Part' + instrument+'LeapsAll', 'Part' + instrument+'StepwiseMotionAscending', 'Part' + instrument+'StepwiseMotionDescending',  'Part' + instrument+'StepwiseMotionAll',  'Part' + instrument+'Total',  'Part' + instrument+'PerfectAscending',  'Part' + instrument+'PerfectDescending',  'Part' + instrument+'PerfectAll',
+                    # 'ScoreMajorAscending', 'ScoreMajorDescending', 'ScoreMajorAll', 'ScoreMinorAscending', 'ScoreMinorDescending', 'ScoreMinorAll', 'ScoreAugmentedAscending', 'ScoreAugmentedDescending', 'ScoreAugmentedAll', 'ScoreDiminishedAscending', 'ScoreDiminishedDescending', 'ScoreDiminishedAll', 'ScoreTotal1']
+            all_info = pd.concat(
+                [common_columns_df, all_dataframes[all_info_list]], axis=1)
+
+            all_info = all_info.dropna(how='all', axis=1)
 
             # intervals_info = pd.concat(
             #     [common_columns_df, all_dataframes[intervals_list]], axis=1)
