@@ -108,15 +108,24 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
 def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
 
-    abbreviated_parts = list({part for score_features in scores_features for part in score_features[SCORING].split(',')})
-    abbreviated_parts_scoring_order = [instr + num for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
-    sound_abbreviations = list({sound for score_features in scores_features for sound in score_features[SOUND_SCORING].split(',')})
-    instrument_abbreviations = list({instrument for score_features in scores_features for instrument in score_features[INSTRUMENTATION].split(',')})
-    voice_abbreviations = list({voice for score_features in scores_features for voice in score_features[VOICES].split(',')})
-    family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_SCORING].split(',')})
-    instrumental_family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_INSTRUMENTATION].split(',')})
-    scoring_count_mean = mean([score_features[SCORING_COUNT] for score_features in scores_features])
-    scoring_count_std = stdev([score_features[SCORING_COUNT] for score_features in scores_features])
+    abbreviated_parts = list(
+        {part for score_features in scores_features for part in score_features[SCORING].split(',')})
+    abbreviated_parts_scoring_order = [
+        instr + num for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
+    sound_abbreviations = list(
+        {sound for score_features in scores_features for sound in score_features[SOUND_SCORING].split(',')})
+    instrument_abbreviations = list(
+        {instrument for score_features in scores_features for instrument in score_features[INSTRUMENTATION].split(',')})
+    voice_abbreviations = list(
+        {voice for score_features in scores_features for voice in score_features[VOICES].split(',')})
+    family_abbreviations = list(
+        {family for score_features in scores_features for family in score_features[FAMILY_SCORING].split(',')})
+    instrumental_family_abbreviations = list(
+        {family for score_features in scores_features for family in score_features[FAMILY_INSTRUMENTATION].split(',')})
+    scoring_count_mean = mean([score_features[SCORING_COUNT]
+                               for score_features in scores_features])
+    scoring_count_std = stdev([score_features[SCORING_COUNT]
+                               for score_features in scores_features]) if len(scores_features) > 1 else 0
     features = {
         SCORING: ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
         SOUND_SCORING: ','.join(sort(sound_abbreviations, cfg.scoring_order)),
@@ -141,7 +150,8 @@ def extract_sound(part: Part, config: Configuration) -> str:
     if instrument is None or instrument.instrumentSound is None:
         sound_name = part.partName.strip().split(' ')[0]
         if sound_name not in config.sound_to_abbreviation:
-            sound_name = translate_word(sound_name, translations_cache=config.translations_cache)
+            sound_name = translate_word(
+                sound_name, translations_cache=config.translations_cache)
             sound_name = replace_naming_exceptions(sound_name, part.partName)
             sound_name = sound_name if sound_name[-1] != 's' else sound_name[:-1]
     else:
@@ -159,10 +169,12 @@ def extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config: 
     if sound not in config.sound_to_abbreviation:
         abbreviation = part.partAbbreviation  # may contain I, II or whatever
         abbreviation_parts = abbreviation.split(' ')
-        abbreviation = abbreviation_parts[0].lower().replace('.', '') + (abbreviation_parts[1] if len(abbreviation_parts) > 1 else '')
+        abbreviation = abbreviation_parts[0].lower().replace(
+            '.', '') + (abbreviation_parts[1] if len(abbreviation_parts) > 1 else '')
     else:
         abbreviation = config.sound_to_abbreviation[sound]
-    part_roman_number = extract_part_roman_number(part) or extract_part_roman_number_by_position(part, parts)
+    part_roman_number = extract_part_roman_number(
+        part) or extract_part_roman_number_by_position(part, parts)
     part_number = fromRoman(part_roman_number) if part_roman_number else 0
     return abbreviation + (part_roman_number or ''), abbreviation, part_number
 
@@ -198,5 +210,3 @@ def replace_naming_exceptions(sound: str, part: str) -> str:
     if 'cello' in sound and 'bass' in part.lower():
         sound = 'basso continuo'
     return sound
-
-

@@ -2,7 +2,7 @@ results
 .vscode
 .idea
 *.ini
-*.csv
+./*.csv
 __pycache__
 raw_files
 logs
