@@ -38,7 +38,7 @@ import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
 
 
-class FeaturesGenerator():
+class FeaturesGenerator:
 
     def __init__(self, *args, **kwargs):
         config_data = kwargs
@@ -152,7 +152,7 @@ class FeaturesGenerator():
             for col in all_dataframes.columns:
                 if col.startswith('Interval'):
                     # intervals_list.append('Parcol)
-
+                    print()
                     # intervals_list = ['P-5', 'M3', 'M-2', 'm3', 'm-2', 'P1', 'P5', 'P4', 'P-4', 'm-3', 'M2', 'M-3', 'm2', 'm-6',
                     #   'm6', 'M6', 'P8', 'P-8', 'd5', 'A1', 'M-6', 'M-7', 'A4', 'M-10', 'd-5', 'm7', 'm-7', 'P12', 'A-2', 'M9']
 
