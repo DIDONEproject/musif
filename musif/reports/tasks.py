@@ -901,13 +901,6 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         third_columns_names = []
         textures_df = pd.DataFrame()
 
-        # textures_list = [i for i in data.columns if i.endswith('Notes')]
-        # notes_list = []
-        # notes_df = data[notes_list]
-        # textures_df = data[textures_list]
-        # notes_df.columns = [i.replace('Part', '').replace(
-        # 'Sound', '') for i in notes_df.columns]
-
         # if column not in sorting_lists["TextureSorting"] and not column.startswith('Total notes'):
         #         data.drop([column], axis=1, inplace=True)
 

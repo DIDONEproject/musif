@@ -1,27 +1,63 @@
 import openpyxl
+import musif.extract.features.interval as interval
 # The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
-metadata_columns = ['FileName', 'AriaOpera', 'AriaLabel', 'AriaId', 'AriaTitle', 'Composer', 'Year', 'Decade', 'Act', 'Scene', 'ActAndScene', 'AriaName', 'Librettist', 'Form',
-                    'Character', 'Role', 'City', 'Territory', 'Opera', 'Clef1', 'Clef2', 'Clef3', 'Key', 'KeySignature', 'KeySignatureGrouped', 'Mode', 'Tempo', 'TimeSignature', 'TimeSignatureGrouped']
 
-rows_groups = {"Opera": ([], "Alphabetic"),
-               "AriaLabel": ([], "Alphabetic"),
-               "AriaTitle": ([], "Alphabetic"),
-               "Composer": ([], "Alphabetic"),
-               "Date": ([
-                   "Year",
-                   "Decade"
+FILENAME = 'FileName'
+ARIA_OPERA = 'AriaOpera'
+ARIA_LABEL = 'AriaLabel'
+ARIA_ID = 'AriaId'
+TITLE = 'AriaTitle'
+COMPOSER = 'Composer'
+DECADE = 'Decade'
+ACT = 'Act'
+SCENE = 'Scene'
+ACTANDSCENE = 'ActAndScene'
+NAME = 'FileName'
+LIBRETTIST = 'Librettist'
+FORM = 'Form'
+CHARACTER = 'Character'
+ROLE = 'Role'
+CITY = 'City'
+TERRITORY = 'Territory'
+OPERA = 'AriaOpera'
+CLEF1 = 'Clef1'
+CLEF2 = 'Clef2'
+CLEF3 = 'Clef3'
+KEY = 'Key'
+KEYSIGNATURE = 'KeySignature'
+KEYSIGNATUREGROUPED = 'KeySignatureGrouped'
+MODE = 'Mode'
+TEMPO = 'Tempo'
+TIMESIGNATURE = 'TimeSignature'
+TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
+
+
+DATE = 'Date'
+YEAR = 'Year'
+DECADE = "Decade"
+CITY = "City"
+metadata_columns = [FILENAME, ARIA_OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER,
+                    ROLE, CITY, TERRITORY, OPERA, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEYSIGNATUREGROUPED, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED]
+
+rows_groups = {OPERA: ([], "Alphabetic"),
+               ARIA_LABEL: ([], "Alphabetic"),
+               TITLE: ([], "Alphabetic"),
+               COMPOSER: ([], "Alphabetic"),
+               DATE: ([
+                   YEAR,
+                   DECADE,
                ], ["Alphabetic", "Alphabetic"]),
                "Geography": ([
-                   "City",
+                   CITY,
                    "Territory"
                ], ["Alphabetic", "Alphabetic"]),
                "Drama": ([
                    "Act",
                    "Scene",
-                   "Act&Scene"
+                   ACTANDSCENE
                ], ["Alphabetic", "Alphabetic", "Alphabetic"]),
-               "Character": ([
-                   "Character",
+               CHARACTER: ([
+                   CHARACTER,
                    "Role",
                    "RoleType"
                    "Gender"
@@ -34,8 +70,8 @@ rows_groups = {"Opera": ([], "Alphabetic"),
                    "KeySignature",
                    "KeySignatureGrouped"], ["KeySorting", "Alphabetic", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
                "Metre": ([
-                   "TimeSignature",
-                   "TimeSignatureGrouped"
+                   TIMESIGNATURE,
+                   TIMESIGNATUREGROUPED
                ], ["TimeSignatureSorting", "Alphabetic"]),
                "Tempo": ([
                    "Tempo",
@@ -47,41 +83,44 @@ rows_groups = {"Opera": ([], "Alphabetic"),
                    "RealScoringGrouped"
                ], ["ScoringSorting", "ScoringFamilySorting"])
                }
-not_used_cols = ['AriaId', 'RealScoring', 'Total analysed', 'OldClef']
+not_used_cols = [ARIA_ID, 'RealScoring', 'Total analysed', 'OldClef']
 
 
 # Some combinations are not needed when using more than one factor
-forbiden_groups = {"Opera": ['Opera'],
-                   "AriaLabel": ['Opera', 'Label'],
-                   "AriaTitle": ['Aria', 'Opera'],
+forbiden_groups = {OPERA: [OPERA],
+                   ARIA_LABEL: [OPERA, ARIA_LABEL],
+                   TITLE: ['Aria', OPERA],
                    "Composer": ['Composer'],
-                   "Year": ['Year', 'Decade'],
-                   "Decade": ['Decade'],
-                   "City": ['City', 'Territory'],
-                   "Territory": ['Territory'],
-                   "Act": ["Act", 'Act&Scene'],
-                   "Scene": ["Scene", "Act&Scene"],
-                   "Act&Scene": ["Act", 'Scene', 'Act&Scene'],
-                   'Role': ["Role", "RoleType", "Gender"],
+                   YEAR: [YEAR, DECADE],
+                   DECADE: [DECADE],
+                   CITY: [CITY, TERRITORY],
+                   TERRITORY: [TERRITORY],
+                   ACT: [ACT, ACTANDSCENE],
+                   SCENE: [SCENE, ACTANDSCENE],
+                   ACTANDSCENE: [ACT, SCENE, ACTANDSCENE],
+                   ROLE: ["Role", "RoleType", "Gender"],
                    'RoleType': ["RoleType", "Gender"],
                    'Gender': ["Gender"],
-                   'Form': ['Form'],
-                   "Clef1": ['Clef1'],
-                   "Clef2": ['Clef2'],
-                   "Clef3": ['Clef3'],
-                   'Key': ['Form', 'Mode', 'Final', 'KeySignature', 'KeySignatureGrouped'],
-                   'Mode': ['Mode', 'Final'],
+                   FORM: [FORM],
+                   CLEF1: [CLEF1],
+                   CLEF2: [CLEF2],
+                   CLEF3: [CLEF3],
+                   KEY: ['Form', 'Mode', 'Final', 'KeySignature', 'KeySignatureGrouped'],
+                   MODE: ['Mode', 'Final'],
                    'Final': ['Final', 'Key', 'KeySignature'],
-                   'KeySignature': ['Key', 'Final', 'KeySignature', 'KeySignatureGrouped'],
-                   'KeySignatureGrouped': ['KeySignatureGrouped'],
-                   'TimeSignature': ['TimeSignature', 'TimeSignatureGrouped'],
-                   "TimeSignatureGrouped": ['TimeSignatureGrouped'],
-                   'Tempo': ['Tempo', "TempoGrouped1", "TempoGrouped2"],
+                   KEYSIGNATURE: ['Key', 'Final', 'KeySignature', 'KeySignatureGrouped'],
+                   KEYSIGNATUREGROUPED: ['KeySignatureGrouped'],
+                   TIMESIGNATURE: [TIMESIGNATURE, TIMESIGNATUREGROUPED],
+                   TIMESIGNATUREGROUPED: [TIMESIGNATUREGROUPED],
+                   TEMPO: [TEMPO, "TempoGrouped1", "TempoGrouped2"],
                    'TempoGrouped1': ['TempoGrouped1', "TempoGrouped2"],
                    'TempoGrouped2': ['TempoGrouped2'],
                    "AbrScoring": ["AbrScoring", "RealScoringGrouped"],
                    "RealScoringGrouped": ["RealScoringGrouped"]
                    }
+
+intervals_list = [interval.REPEATED_NOTES, interval.LEAPS_ASCENDING, interval.LEAPS_DESCENDING, interval.LEAPS_ALL, interval.STEPWISE_MOTION_ALL, interval.STEPWISE_MOTION_ASCENDING, interval.STEPWISE_MOTION_DESCENDING, interval.INTERVALS_ALL, interval.INTERVALS_PERFECT_ASCENDING, interval.INTERVALS_PERFECT_DESCENDING, interval.INTERVALS_PERFECT_ALL, interval.INTERVALS_MAJOR_ALL,
+                  interval.INTERVALS_MAJOR_ASCENDING, interval.INTERVALS_MAJOR_DESCENDING, interval.INTERVALS_MINOR_ALL, interval.INTERVALS_MINOR_ASCENDING, interval.INTERVALS_MINOR_DESCENDING, interval.INTERVALS_AUGMENTED_ALL, interval.INTERVALS_AUGMENTED_ASCENDING, interval.INTERVALS_AUGMENTED_DESCENDING, interval.INTERVALS_DIMINISHED_ALL, interval.INTERVALS_DIMINISHED_ASCENDING, interval.INTERVALS_DIMINISHED_DESCENDING]
 
 yellowFill = openpyxl.styles.PatternFill(
     start_color='F9E220', end_color='F9E220', fill_type='solid')
