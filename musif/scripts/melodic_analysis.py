@@ -3,7 +3,7 @@ import sys
 from os import path
 from typing import List
 
-from musif.features.extract import FeaturesExtractor
+from musif.extract.extract import FeaturesExtractor
 from pandas import DataFrame
 
 from musif import VERSION

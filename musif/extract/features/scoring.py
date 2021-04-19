@@ -9,7 +9,7 @@ from musif.common.constants import VOICE_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
 from musif.config import Configuration
-from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_family_prefix, get_sound_prefix, get_corpus_prefix
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 
@@ -126,15 +126,16 @@ def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Co
                                for score_features in scores_features])
     scoring_count_std = stdev([score_features[SCORING_COUNT]
                                for score_features in scores_features]) if len(scores_features) > 1 else 0
+    corpus_prefix = get_corpus_prefix()
     features = {
-        SCORING: ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
-        SOUND_SCORING: ','.join(sort(sound_abbreviations, cfg.scoring_order)),
-        INSTRUMENTATION: ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
-        VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
-        FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
-        FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        SCORING_COUNT_MEAN: scoring_count_mean,
-        SCORING_COUNT_STD: scoring_count_std
+        f"{corpus_prefix}{SCORING}": ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
+        f"{corpus_prefix}{SOUND_SCORING}": ','.join(sort(sound_abbreviations, cfg.scoring_order)),
+        f"{corpus_prefix}{INSTRUMENTATION}": ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
+        f"{corpus_prefix}{VOICES}": ','.join(sort(voice_abbreviations, cfg.scoring_order)),
+        f"{corpus_prefix}{FAMILY_SCORING}": ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
+        f"{corpus_prefix}{FAMILY_INSTRUMENTATION}": ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
+        f"{corpus_prefix}{SCORING_COUNT_MEAN}": scoring_count_mean,
+        f"{corpus_prefix}{SCORING_COUNT_STD}": scoring_count_std,
     }
     return features
 
