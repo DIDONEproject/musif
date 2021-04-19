@@ -2,7 +2,7 @@ from typing import Optional, Tuple
 
 import roman
 from music21.stream import Part
-from musif.features.score.melody.scoring import ROMAN_NUMERALS_FROM_1_TO_20, VOICE_FAMILY
+from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, VOICE_FAMILY
 
 from musif.config import Configuration
 

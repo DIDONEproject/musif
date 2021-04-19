@@ -14,4 +14,9 @@ def get_score_prefix() -> str:
     return "Score"
 
 
+def get_corpus_prefix() -> str:
+    return "Corpus"
+
+
+
 

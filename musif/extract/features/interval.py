@@ -6,7 +6,7 @@ from music21.interval import Interval
 from scipy.stats import trim_mean
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_family_prefix
+from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_family_prefix, get_corpus_prefix
 
 INTERVALLIC_MEAN = "IntervallicMean"
 INTERVALLIC_STD = "IntervallicStd"
@@ -80,6 +80,19 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     features.update(get_interval_features(numeric_intervals, score_prefix))
     features.update(get_interval_count_features(text_intervals_count, score_prefix))
     features.update(get_interval_type_features(text_intervals_count, score_prefix))
+    return features
+
+
+def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
+    corpus_prefix = get_corpus_prefix()
+    numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
+    text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+    text_intervals_count = Counter(text_intervals)
+
+    features = {}
+    features.update(get_interval_features(numeric_intervals, corpus_prefix))
+    features.update(get_interval_count_features(text_intervals_count, corpus_prefix))
+    features.update(get_interval_type_features(text_intervals_count, corpus_prefix))
     return features
 
 
