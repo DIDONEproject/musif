@@ -9,6 +9,7 @@ from musif.extract.model import Features, Level
 READ_LOGGER_NAME = "read"
 WRITE_LOGGER_NAME = "write"
 
+
 _CONFIG_FALLBACK = {
     "data_dir": "data",
     "metadata_dir": "metadata",
@@ -18,7 +19,7 @@ _CONFIG_FALLBACK = {
     "log_level": "DEBUG",
     "sequential": True,
     "features": [features.value for features in Features],
-    "split": True,
+    "split_keywords": [],
     "level": Level.SCORE.value,
 }
 
@@ -39,7 +40,7 @@ class Configuration:
         self.sequential = config_data.get("sequential", _CONFIG_FALLBACK["sequential"])
         features = config_data.get("features", _CONFIG_FALLBACK["features"])
         self.features = [Features(features_name) for features_name in features]
-        self.split = config_data.get("split", _CONFIG_FALLBACK["split"])
+        self.split_keywords = config_data.get("split_keywords", _CONFIG_FALLBACK["split_keywords"])
         self.level = Level(config_data.get("level", _CONFIG_FALLBACK["level"]))
 
         self.scores_metadata = {

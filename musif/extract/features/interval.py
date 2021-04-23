@@ -3,16 +3,18 @@ from statistics import mean, stdev
 from typing import Dict, List, Tuple
 
 from music21.interval import Interval
-from scipy.stats import trim_mean
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_family_prefix, get_corpus_prefix
+from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_corpus_prefix
 
-INTERVALLIC_MEAN = "IntervallicMean"
+INTERVALLIC_RATIO = "IntervallicRatio"
 INTERVALLIC_STD = "IntervallicStd"
-ABSOLUTE_INTERVALLIC_MEAN = "AbsoluteIntervallicMean"
+ABSOLUTE_INTERVALLIC_RATIO = "AbsoluteIntervallicRatio"
 ABSOLUTE_INTERVALLIC_STD = "AbsoluteIntervallicStd"
+TRIMMED_INTERVALLIC_RATIO = "TrimmedIntervallicRatio"
+TRIMMED_INTERVALLIC_STD = "TrimmedIntervallicStd"
 TRIMMED_ABSOLUTE_INTERVALLIC_RATIO = "TrimmedAbsoluteIntervallicRatio"
+TRIMMED_ABSOLUTE_INTERVALLIC_STD = "TrimmedAbsoluteIntervallicStd"
 ABSOLUTE_INTERVALLIC_TRIM_DIFF = "AbsoluteIntervallicTrimDiff"
 ABSOLUTE_INTERVALLIC_TRIM_RATIO = "AbsoluteIntervallicTrimRatio"
 ASCENDING_SEMITONES = "AscendingSemitones"
@@ -42,7 +44,16 @@ INTERVALS_AUGMENTED_ALL = "IntervalsAugmentedAll"
 INTERVALS_DIMINISHED_ASCENDING = "IntervalsDiminishedAscending"
 INTERVALS_DIMINISHED_DESCENDING = "IntervalsDiminishedDescending"
 INTERVALS_DIMINISHED_ALL = "IntervalsDiminishedAll"
-INTERVALS_ALL = "IntervalsAll"
+
+ALL_FEATURES = [
+    INTERVALLIC_RATIO, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_RATIO, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_RATIO, TRIMMED_INTERVALLIC_STD,
+    TRIMMED_ABSOLUTE_INTERVALLIC_RATIO, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
+    ASCENDING_SEMITONES, ASCENDING_INTERVAL, DESCENDING_SEMITONES, DESCENDING_INTERVAL,
+    REPEATED_NOTES, LEAPS_ASCENDING, LEAPS_DESCENDING, LEAPS_ALL, STEPWISE_MOTION_ASCENDING, STEPWISE_MOTION_DESCENDING, STEPWISE_MOTION_ALL,
+    LEAPS_STEPWISE_MOTION_TOTAL, INTERVALS_PERFECT_ASCENDING, INTERVALS_PERFECT_DESCENDING, INTERVALS_PERFECT_ALL, INTERVALS_MAJOR_ASCENDING,
+    INTERVALS_MAJOR_DESCENDING, INTERVALS_MAJOR_ALL, INTERVALS_MINOR_ASCENDING, INTERVALS_MINOR_DESCENDING, INTERVALS_MINOR_ALL,
+    INTERVALS_AUGMENTED_ASCENDING, INTERVALS_AUGMENTED_DESCENDING, INTERVALS_AUGMENTED_ALL, INTERVALS_DIMINISHED_ASCENDING, INTERVALS_DIMINISHED_DESCENDING,
+    INTERVALS_DIMINISHED_ALL]
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
@@ -64,18 +75,10 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
     text_intervals_count = Counter(text_intervals)
 
-    features_names = [
-        INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_ABSOLUTE_INTERVALLIC_RATIO,
-        ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO, ASCENDING_SEMITONES, ASCENDING_INTERVAL, DESCENDING_SEMITONES, DESCENDING_INTERVAL,
-        REPEATED_NOTES, LEAPS_ASCENDING, LEAPS_DESCENDING, LEAPS_ALL, STEPWISE_MOTION_ASCENDING, STEPWISE_MOTION_DESCENDING, STEPWISE_MOTION_ALL,
-        LEAPS_STEPWISE_MOTION_TOTAL, INTERVALS_PERFECT_ASCENDING, INTERVALS_PERFECT_DESCENDING, INTERVALS_PERFECT_ALL, INTERVALS_MAJOR_ASCENDING,
-        INTERVALS_MAJOR_DESCENDING, INTERVALS_MAJOR_ALL, INTERVALS_MINOR_ASCENDING, INTERVALS_MINOR_DESCENDING, INTERVALS_MINOR_ALL,
-        INTERVALS_AUGMENTED_ASCENDING, INTERVALS_AUGMENTED_DESCENDING, INTERVALS_AUGMENTED_ALL, INTERVALS_DIMINISHED_ASCENDING, INTERVALS_DIMINISHED_DESCENDING,
-        INTERVALS_DIMINISHED_ALL, INTERVALS_ALL]
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
-        for feature_name in features_names:
+        for feature_name in ALL_FEATURES:
             features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
     features.update(get_interval_features(numeric_intervals, score_prefix))
     features.update(get_interval_count_features(text_intervals_count, score_prefix))
@@ -97,26 +100,37 @@ def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Co
 
 
 def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
-    interval_mean = mean(numeric_intervals)
-    interval_std = stdev(numeric_intervals)
-    absolute_numeric_intervals = [abs(interval) for interval in numeric_intervals]
-    absolute_interval_mean = mean(absolute_numeric_intervals)
-    absolute_interval_std = stdev(absolute_numeric_intervals)
+    numeric_intervals = sorted(numeric_intervals)
+    interval_mean = mean(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    interval_std = stdev(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    absolute_numeric_intervals = sorted([abs(interval) for interval in numeric_intervals])
+    absolute_interval_mean = mean(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
+    absolute_interval_std = stdev(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
 
-    trimmed_absolute_interval_mean = trim_mean(absolute_numeric_intervals, 0.1)
+    cutoff = 0.1
+    cutoff_elements = int(cutoff * len(numeric_intervals))
+    trimmed_intervals = numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(numeric_intervals) > 0 else []
+    trimmed_interval_mean = mean(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
+    trimmed_interval_std = stdev(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
+    trimmed_absolute_intervals = absolute_numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(absolute_numeric_intervals) > 0 else []
+    trimmed_absolute_interval_mean = mean(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
+    trimmed_absolute_interval_std = stdev(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
     trim_diff = absolute_interval_mean - trimmed_absolute_interval_mean
-    trim_ratio = trim_diff / absolute_interval_mean
-    ascending_semitones = max(numeric_intervals)
-    ascending_semitones_name = Interval(ascending_semitones).directedName
-    descending_semitones = min(numeric_intervals)
-    descending_semitones_name = Interval(descending_semitones).directedName
+    trim_ratio = trim_diff / absolute_interval_mean if absolute_interval_mean != 0 else 0
+    ascending_semitones = max(numeric_intervals) if len(numeric_intervals) > 0 else None
+    ascending_semitones_name = Interval(ascending_semitones).directedName if ascending_semitones is not None else None
+    descending_semitones = min(numeric_intervals) if len(numeric_intervals) > 0 else None
+    descending_semitones_name = Interval(descending_semitones).directedName if descending_semitones is not None else None
 
     features = {
-        f"{prefix}{INTERVALLIC_MEAN}": interval_mean,
+        f"{prefix}{INTERVALLIC_RATIO}": interval_mean,
         f"{prefix}{INTERVALLIC_STD}": interval_std,
-        f"{prefix}{ABSOLUTE_INTERVALLIC_MEAN}": absolute_interval_mean,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_RATIO}": absolute_interval_mean,
         f"{prefix}{ABSOLUTE_INTERVALLIC_STD}": absolute_interval_std,
+        f"{prefix}{TRIMMED_INTERVALLIC_RATIO}": trimmed_interval_mean,
+        f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_interval_std,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_RATIO}": trimmed_absolute_interval_mean,
+        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_interval_std,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": trim_diff,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": trim_ratio,
         f"{prefix}{ASCENDING_SEMITONES}": ascending_semitones,
@@ -129,7 +143,7 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
 
 
 def get_interval_count_features(interval_counts: Dict[str, int], prefix: str = "") -> dict:
-    return {f"{prefix}Interval{interval}Frequency": count for interval, count in interval_counts.items()}
+    return {f"{prefix}Interval_{interval}": count for interval, count in interval_counts.items()}
 
 
 def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""):
@@ -191,11 +205,6 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""
         f"{prefix}{INTERVALS_DIMINISHED_ASCENDING}": ascending_dimi,
         f"{prefix}{INTERVALS_DIMINISHED_DESCENDING}": descending_dimi,
         f"{prefix}{INTERVALS_DIMINISHED_ALL}": sum([ascending_dimi, descending_dimi]),
-        f"{prefix}{INTERVALS_ALL}": sum([ascending_perfect, descending_perfect])
-                           + sum([ascending_mayor, descending_mayor])
-                           + sum([ascending_minor, descending_minor])
-                           + sum([ascending_aug, descending_aug])
-                           + sum([ascending_dimi, descending_dimi])
     }
 
 

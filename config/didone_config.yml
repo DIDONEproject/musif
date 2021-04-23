@@ -11,4 +11,7 @@ features:
   - melodic
 #  - harmonic
 #  - texture
-split: false
+split_keywords:
+  - woodwind
+  - brass
+  - wind

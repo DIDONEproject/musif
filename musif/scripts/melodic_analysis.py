@@ -1,38 +1,31 @@
 import argparse
+import re
 import sys
 from os import path
 from typing import List
 
-from musif.extract.extract import FeaturesExtractor
+from musif.extract.extract import FeaturesExtractor, PartsExtractor
 from pandas import DataFrame
 
 from musif import VERSION
 
 
-def choose_parts(xml_dir: str) -> List[str]:
+def choose_parts(xml_dir: str, config_file: str) -> List[str]:
     """
     Function to let the user choose the instrument to work with given all the instruments in his/her corpus #
     """
-    # score_infos = ScoreInfoExtractor(sequential=sequential).from_dir(xml_dir)
-    # unique_abbreviated_parts = list(set(list(itertools.chain(*[score_info.real_scoring.split(',') for score_info in score_infos]))))
-    # if '' in unique_abbreviated_parts:
-    #     unique_abbreviated_parts.remove('')
-    # parts = []
-    # for abbreviated_part in unique_abbreviated_parts:
-    #     abbreviated_instrument, part_number = extract_instrument_and_number_from_part(abbreviated_part)
-    #     part = to_part_name(abbreviation_to_sound[abbreviated_instrument], part_number)
-    #     parts.append((abbreviated_part, part))
-    # parts.sort()
-    # options = {str(i): f"{str(i)} - {part[1]}" for i, part in enumerate(parts, 1)}
-    # print('Which part do you want to process?:')
-    # print('\n'.join(list(options.values())))
-    # choice = input('Please, type the number(s) associated to the part separated by comma or space: ').strip()
-    # sequence = choice.split(',')
-    # if len(sequence) < 2:
-    #     sequence = choice.split(' ')
-    # chosen_parts = ','.join([parts[int(number.strip())-1][0] for number in sequence])
-    # return chosen_parts
-    return ["obI", "obII"]
+    parts = PartsExtractor(config_file).extract(xml_dir)
+    options = {str(i): f"{i} - {part}" for i, part in enumerate(parts, 1)}
+    print('Which part do you want to process?:')
+    print('\n'.join(list(options.values())))
+    choice = input('Please, type the number(s) associated to the part separated by commas or spaces, or just press Enter to select all: ').strip()
+    if choice == '':
+        return []
+    sequence = re.findall(r"[\d']+", choice)
+    if len(sequence) < 2:
+        sequence = choice.split(' ')
+    chosen_parts = [parts[int(number.strip())-1] for number in sequence]
+    return chosen_parts
 
 def write_files(args: argparse.Namespace, features: DataFrame):
     pass
@@ -91,8 +84,8 @@ def parse_args(args_list: list) -> argparse.Namespace:
 def main():
 
     args = parse_args(sys.argv[1:])
-    chosen_parts = choose_parts(args.xml)
-    features = FeaturesExtractor().from_dir(args.xml, chosen_parts)
+    chosen_parts = choose_parts(args.xml, args.config)
+    features = FeaturesExtractor(args.config).from_dir(args.xml, chosen_parts)
     print(features)
     write_files(args, features)
 
