@@ -9,4 +9,7 @@ features:
   - melodic
 #  - harmonic
 #  - texture
-split: true
+split_keywords:
+  - woodwind
+  - brass
+  - wind
