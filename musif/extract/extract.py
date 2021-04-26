@@ -175,16 +175,26 @@ class FeaturesExtractor:
 
     def _extract_score_features(self, score_data: dict, parts_data: List[dict], parts_features: List[dict]) -> dict:
         score_features = {"FileName": path.basename(score_data["file"])}
-        score_features.update(custom.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(key.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(time.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(scoring.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(lyrics.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(interval.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(ambitus.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(density.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
-        score_features.update(texture.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(custom.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(metadata.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(key.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(time.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(scoring.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(lyrics.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(interval.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(ambitus.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(density.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
+        score_features.update(texture.get_score_features(
+            score_data, parts_data, self._cfg, parts_features, score_features))
         return score_features
 
     def _extract_corpus_features(self, corpus_dir: str, scores_data: List[dict], parts_data: List[dict], scores_features: List[dict]) -> dict:
