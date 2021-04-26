@@ -27,7 +27,7 @@ def get_custom_modules() -> Generator:
     custom_module_files = [path.basename(file)
                            for file in glob(path.join(custom_package_path, "*"))
                            if not path.basename(file).startswith('__') and path.basename(file).endswith('.py')]
-    module_names = ["musif.extract.features.custom." + path.splitext(file)[0] 
+    module_names = ["musif.extract.features.custom." + path.splitext(file)[0]
                     for file in custom_module_files]
     for module_name in module_names:
         yield __import__(module_name, fromlist=[''])
