@@ -130,7 +130,7 @@
     "Largo non tanto",
     "Larghetto espressivo",
     "Lento",
-    'Lento non però all"eccesso',
+    "Lento non però all\"eccesso",
     "Maestoso",
     "Maestoso ma non presto",
     "Mezzo allegro",
@@ -190,5 +190,5 @@
     "Molto agitato",
     "Andante con un poco di molto",
     "Andante più tosto ma grazioso",
-    "Risoluto",
+    "Risoluto"
 ]

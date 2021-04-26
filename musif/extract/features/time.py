@@ -1,16 +1,26 @@
 import re
+from collections import Counter
+from enum import Enum
 from typing import List
 
 from music21.expressions import TextExpression
 from music21.stream import Measure
 
 from musif.config import Configuration
+from musif.extract.features.prefix import get_corpus_prefix
 
 TEMPO = "Tempo"
 TIME_SIGNATURE = "TimeSignature"
 TIME_SIGNATURE_GROUPED = "TimeSignatureGrouped"
 TEMPO_GROUPED_1 = "TempoGrouped1"
 TEMPO_GROUPED_2 = "TempoGrouped2"
+
+
+class TempoGroup2(Enum):
+    ND = "nd"
+    SLOW = "Slow"
+    MODERATE = "Moderate"
+    FAST = "Fast"
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
@@ -30,14 +40,14 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         if isinstance(measure, Measure):
             for element in measure:
                 if isinstance(element, TextExpression):
-                    if get_TempoGrouped1(element.content) != "ND":
+                    if get_tempo_grouped_1(element.content) != "ND":
                         tempo_mark = element.content
                         break
             break  # only take into account the first bar!
     time_signature = ",".join(list(set(time_signatures)))
-    time_signature_grouped = get_TimeSignatureType(time_signature)
-    tg1 = get_TempoGrouped1(tempo_mark)
-    tg2 = get_TempoGrouped2(tg1)
+    time_signature_grouped = get_time_signature_type(time_signature)
+    tg1 = get_tempo_grouped_1(tempo_mark)
+    tg2 = get_tempo_grouped_2(tg1).value
 
     return {
         TEMPO: tempo_mark,
@@ -49,10 +59,16 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
 
 def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
-    return {}
+    features = {}
+    corpus_prefix = get_corpus_prefix()
+    tempo_grouped_2_counter = Counter([score_features[TEMPO_GROUPED_2] for score_features in scores_features])
+    for group in TempoGroup2:
+        count = tempo_grouped_2_counter.get(group.value, 0)
+        features[f"{corpus_prefix}{TEMPO_GROUPED_2}_{group.value}"] = count
+    return features
 
 
-def get_TimeSignatureType(timesignature):
+def get_time_signature_type(timesignature):
     # this function classifies time signatures
     if timesignature in ['1/2', '1/4', '1/8', '1/16', '2/2', '2/4', '2/8', '2/16', '4/4', 'C', '4/2', '4/8', '4/16', '8/2', '8/4', '8/8', '8/16']:
         return 'simple duple'
@@ -66,7 +82,7 @@ def get_TimeSignatureType(timesignature):
         return 'other'
 
 
-def get_TempoGrouped1(tempo):
+def get_tempo_grouped_1(tempo):
     """
     data cleaning; returns a 1st level of grouping for the tempo markings, removing secondary labels and diminutive endings
     """
@@ -128,7 +144,7 @@ def get_TempoGrouped1(tempo):
     return 'ND'
 
 
-def get_TempoGrouped2(TempoGrouped1):
+def get_tempo_grouped_2(TempoGrouped1) -> TempoGroup2:
     possible_terminations = ['ino', 'etto', 'ietto', 'ssimo', 'issimo', 'hetto']
     slow_basis = ['Adagio', 'Affettuoso', 'Grave', 'Sostenuto', 'Largo', 'Lento', 'Sostenuto']
     slow = slow_basis + [w[:-1] + t for w in slow_basis for t in possible_terminations]
@@ -139,11 +155,11 @@ def get_TempoGrouped2(TempoGrouped1):
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
     if TempoGrouped1 in ['A tempo', 'Giusto']:
-        return 'nd'
+        return TempoGroup2.ND
     elif TempoGrouped1 in slow:
-        return 'Slow'
+        return TempoGroup2.SLOW
     elif TempoGrouped1 in moderate:
-        return 'Moderate'
+        return TempoGroup2.MODERATE
     elif TempoGrouped1 in fast:
-        return 'Fast'
+        return TempoGroup2.FAST
 

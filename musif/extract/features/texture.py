@@ -1,4 +1,3 @@
-from musif.reports.tasks import textures
 from typing import List, Tuple
 
 from pandas import DataFrame
@@ -15,6 +14,8 @@ TEXTURE = "Texture"
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
+    if len(parts_data) == 0:
+        return {}
     features = {}
     notes_list = []
     df_parts = DataFrame(parts_features)

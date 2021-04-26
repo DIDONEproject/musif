@@ -1,5 +1,5 @@
 import copy
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple, Union
 
 from music21 import *
 from music21.note import Note
@@ -18,86 +18,20 @@ def is_voice(part: Part) -> bool:
     return "voice" in instrument.instrumentSound
 
 
-
-def flat_layers(score, sound_to_family: Dict[str, str]):
+def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split the possible layers present on wind instruments
 
     """
     final_parts = []
     for part_index, part in enumerate(score.parts):
+        instrument = part.getInstrument(returnDefault=False)
+
         possible_layers = False
-        # GET ONLY WOODWIND OR BRASS INSTRUMENTS
-        i = part.getInstrument(returnDefault=False)
-        if hasattr(i, "instrumentSound") and i.instrumentSound is not None:  # FINALE
-            if "woodwind" in i.instrumentSound or "brass" in i.instrumentSound or "wind" in i.instrumentSound:
+        for keyword in split_keywords:
+            if keyword in instrument.instrumentSound:
                 possible_layers = True
-        elif hasattr(i, "instrumentName"):  # MUSESCORE
-            name, family = group.get_musescoreInstrument_nameAndFamily(i, sound_to_family, part)
-            if family in ["woodwind", "brass"]:
-                possible_layers = True
-
-        if possible_layers:  # ONLY WIND INSTRUMENTS
-            has_voices = False
-            for measure in part.elements:
-                if isinstance(measure, stream.Measure) and any(isinstance(e, stream.Voice) for e in measure.elements):
-                    has_voices = True
-                    break
-
-            if has_voices:  # recorrer los compases buscando las voices y separamos en dos parts
-                parts_splited = part.voicesToParts().elements
-                num_measure = 0
-                for (
-                    measure
-                ) in (
-                    part.elements
-                ):  # add missing information to both parts (dynamics, text annotations, etc are missing)
-                    if isinstance(measure, stream.Measure) and any(
-                        not isinstance(e, stream.Voice) for e in measure.elements
-                    ):
-                        not_voices_elements = [
-                            e for e in measure.elements if not isinstance(e, stream.Voice)
-                        ]  # elements such as clefs, dynamics, text annotations...
-                        # introducimos esta información en cada voz:
-                        for p in parts_splited:
-                            p.elements[num_measure].elements += tuple(
-                                e for e in not_voices_elements if e not in p.elements[num_measure].elements
-                            )
-                        num_measure += 1
-                for num, p in enumerate(parts_splited):
-                    p_copy = copy.deepcopy(part)
-                    p_copy.id = p_copy.id + " " + "I" * (num + 1)  # only I or II
-                    p_copy.partName = p_copy.partName + " " + "I" * (num + 1)  # only I or II
-                    p_copy.elements = p.elements
-                    final_parts.append(p_copy)
-                score.remove(part)
-            else:
-                final_parts.append(part)  # without any change
-                score.remove(part)
-        else:
-            final_parts.append(part)  # without any change
-            score.remove(part)
-
-    for part in final_parts:
-        try:
-            score.insert(0, part)
-        except:
-            pass  # already inserted
-
-
-def split_wind_layers(score: Score):
-    """
-    Function used to split the possible layers present on wind instruments
-
-    """
-    final_parts = []
-    for part_index, part in enumerate(score.parts):
-        possible_layers = False
-        # GET ONLY WOODWIND OR BRASS INSTRUMENTS
-        i = part.getInstrument(returnDefault=False)
-        if hasattr(i, "instrumentSound") and i.instrumentSound is not None:  # FINALE
-            if "woodwind" in i.instrumentSound or "brass" in i.instrumentSound or "wind" in i.instrumentSound:
-                possible_layers = True
+                break
 
         if possible_layers:  # ONLY WIND INSTRUMENTS
             has_voices = False

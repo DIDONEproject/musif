@@ -2,8 +2,9 @@ from typing import List
 
 from music21.note import Note
 
+from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.prefix import get_part_prefix, get_corpus_prefix, get_score_prefix
 
 SYLLABIC_RATIO = "SyllabicRatio"
 NOTES = "Notes"
@@ -28,40 +29,48 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
-    notes = [note for part_data in parts_data for note in part_data["notes"]]
-    lyrics = [lyrics for part_data in parts_data for lyrics in part_data["lyrics"]]
+    if len(parts_data) == 0:
+        return {}
 
-    syllabic_ratio = get_syllabic_ratio(notes, lyrics)
+    voice_parts_data = [part_data for part_data in parts_data if part_data["family"] == VOICE_FAMILY]
 
     features = {}
-    for part_data, part_features in zip(parts_data, parts_features):
+    for part_data in voice_parts_data:
         part_prefix = get_part_prefix(part_data["abbreviation"])
-        for feature_name in (NOTES, LYRICS, SYLLABIC_RATIO):
-            features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+        features[f"{part_prefix}{NOTES}"] = len(part_data["notes"])
+        features[f"{part_prefix}{LYRICS}"] = len(part_data["lyrics"])
+        features[f"{part_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(part_data["notes"], part_data["lyrics"])
 
-    features[NOTES] = len(notes)
-    features[LYRICS] = len(lyrics)
-    features[SYLLABIC_RATIO] = syllabic_ratio
+    notes = [note for part_data in voice_parts_data for note in part_data["notes"]]
+    lyrics = [lyrics for part_data in voice_parts_data for lyrics in part_data["lyrics"]]
+
+    score_prefix = get_score_prefix()
+    features[f"{score_prefix}{NOTES}"] = len(notes)
+    features[f"{score_prefix}{LYRICS}"] = len(lyrics)
+    features[f"{score_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
 
     return features
 
 
 def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
 
+    voice_parts_data = [part_data for part_data in parts_data if part_data["family"] == VOICE_FAMILY]
+
     features = {}
-    grouped_parts_data = {}
-    for part_data in parts_data:
-        abb = part_data["abbreviation"]
-        if abb not in grouped_parts_data:
-            grouped_parts_data[abb] = {"notes": [], "lyrics": []}
-        grouped_parts_data[abb]["notes"].extend(part_data["notes"])
-        grouped_parts_data[abb]["lyrics"].extend(part_data["lyrics"])
-    for abbreviation, grouped_part_data in grouped_parts_data.items():
-        part_prefix = get_part_prefix(abbreviation)
-        notes = grouped_part_data["notes"]
-        lyrics = grouped_part_data["lyrics"]
-        if len(lyrics) > 0:
-            features[f"{part_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
+    for part_data in voice_parts_data:
+        part_prefix = get_part_prefix(part_data["abbreviation"])
+        features[f"{part_prefix}{NOTES}"] = len(part_data["notes"])
+        features[f"{part_prefix}{LYRICS}"] = len(part_data["lyrics"])
+        features[f"{part_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(part_data["notes"], part_data["lyrics"])
+
+    notes = [note for part_data in voice_parts_data for note in part_data["notes"]]
+    lyrics = [lyrics for part_data in voice_parts_data for lyrics in part_data["lyrics"]]
+
+    corpus_prefix = get_corpus_prefix()
+    features[f"{corpus_prefix}{NOTES}"] = len(notes)
+    features[f"{corpus_prefix}{LYRICS}"] = len(lyrics)
+    features[f"{corpus_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
+
     return features
 
 
