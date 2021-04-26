@@ -18,7 +18,7 @@ def is_voice(part: Part) -> bool:
     return "voice" in instrument.instrumentSound
 
 
-def split_wind_layers(score: Score, split_keywords: List[str]):
+def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split the possible layers present on wind instruments
 

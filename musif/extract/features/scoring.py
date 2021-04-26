@@ -28,9 +28,8 @@ INSTRUMENTATION = "Instrumentation"
 VOICES = "Voices"
 FAMILY_SCORING = "FamilyScoring"
 FAMILY_INSTRUMENTATION = "FamilyInstrumentation"
-SCORING_COUNT = "ScoringCount"
-SCORING_COUNT_MEAN = "ScoringCountMean"
-SCORING_COUNT_STD = "ScoringCountStd"
+CARDINALITY_MEAN = "CardinalityMean"
+CARDINALITY_STD = "CardinalityStd"
 
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
@@ -94,7 +93,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
         FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
         FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        SCORING_COUNT: len(parts_features),
+        CARDINALITY: len(parts_features),
     }
     for sound_abbreviation in sound_abbreviations:
         sound_prefix = get_sound_prefix(sound_abbreviation)
@@ -108,24 +107,15 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
 def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
 
-    abbreviated_parts = list(
-        {part for score_features in scores_features for part in score_features[SCORING].split(',')})
-    abbreviated_parts_scoring_order = [
-        instr + num for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
-    sound_abbreviations = list(
-        {sound for score_features in scores_features for sound in score_features[SOUND_SCORING].split(',')})
-    instrument_abbreviations = list(
-        {instrument for score_features in scores_features for instrument in score_features[INSTRUMENTATION].split(',')})
-    voice_abbreviations = list(
-        {voice for score_features in scores_features for voice in score_features[VOICES].split(',')})
-    family_abbreviations = list(
-        {family for score_features in scores_features for family in score_features[FAMILY_SCORING].split(',')})
-    instrumental_family_abbreviations = list(
-        {family for score_features in scores_features for family in score_features[FAMILY_INSTRUMENTATION].split(',')})
-    scoring_count_mean = mean([score_features[SCORING_COUNT]
-                               for score_features in scores_features])
-    scoring_count_std = stdev([score_features[SCORING_COUNT]
-                               for score_features in scores_features]) if len(scores_features) > 1 else 0
+    abbreviated_parts = list({part for score_features in scores_features for part in score_features[SCORING].split(',')})
+    abbreviated_parts_scoring_order = [instr + num for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
+    sound_abbreviations = list({sound for score_features in scores_features for sound in score_features[SOUND_SCORING].split(',')})
+    instrument_abbreviations = list({instrument for score_features in scores_features for instrument in score_features[INSTRUMENTATION].split(',')})
+    voice_abbreviations = list({voice for score_features in scores_features for voice in score_features[VOICES].split(',')})
+    family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_SCORING].split(',')})
+    instrumental_family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_INSTRUMENTATION].split(',')})
+    scoring_count_mean = mean([score_features[CARDINALITY] for score_features in scores_features])
+    scoring_count_std = stdev([score_features[CARDINALITY] for score_features in scores_features]) if len(scores_features) > 1 else 0
     corpus_prefix = get_corpus_prefix()
     features = {
         f"{corpus_prefix}{SCORING}": ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
@@ -134,8 +124,8 @@ def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Co
         f"{corpus_prefix}{VOICES}": ','.join(sort(voice_abbreviations, cfg.scoring_order)),
         f"{corpus_prefix}{FAMILY_SCORING}": ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
         f"{corpus_prefix}{FAMILY_INSTRUMENTATION}": ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        f"{corpus_prefix}{SCORING_COUNT_MEAN}": scoring_count_mean,
-        f"{corpus_prefix}{SCORING_COUNT_STD}": scoring_count_std,
+        f"{corpus_prefix}{CARDINALITY_MEAN}": scoring_count_mean,
+        f"{corpus_prefix}{CARDINALITY_STD}": scoring_count_std,
     }
     return features
 

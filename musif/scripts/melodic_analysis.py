@@ -11,9 +11,7 @@ from musif import VERSION
 
 
 def choose_parts(xml_dir: str, config_file: str) -> List[str]:
-    """
-    Function to let the user choose the instrument to work with given all the instruments in his/her corpus #
-    """
+
     parts = PartsExtractor(config_file).extract(xml_dir)
     options = {str(i): f"{i} - {part}" for i, part in enumerate(parts, 1)}
     print('Which part do you want to process?:')
@@ -26,6 +24,7 @@ def choose_parts(xml_dir: str, config_file: str) -> List[str]:
         sequence = choice.split(' ')
     chosen_parts = [parts[int(number.strip())-1] for number in sequence]
     return chosen_parts
+
 
 def write_files(args: argparse.Namespace, features: DataFrame):
     pass
@@ -86,7 +85,6 @@ def main():
     args = parse_args(sys.argv[1:])
     chosen_parts = choose_parts(args.xml, args.config)
     features = FeaturesExtractor(args.config).from_dir(args.xml, chosen_parts)
-    print(features)
     write_files(args, features)
 
 

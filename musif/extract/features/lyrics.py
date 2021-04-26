@@ -29,6 +29,9 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
+    if len(parts_data) == 0:
+        return {}
+
     voice_parts_data = [part_data for part_data in parts_data if part_data["family"] == VOICE_FAMILY]
 
     features = {}

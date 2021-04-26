@@ -53,6 +53,8 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     }
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    if len(parts_data) == 0:
+        return {}
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])

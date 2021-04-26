@@ -32,7 +32,7 @@ from musif.musicxml import (
     get_intervals,
     get_notes_lyrics,
     get_repetition_elements,
-    split_wind_layers,
+    split_layers,
 )
 
 _cache = Cache(10000)  # To cache scanned scores
@@ -74,9 +74,11 @@ class PartsExtractor:
         return sort(parts, abbreviated_parts_scoring_order)
 
     def _process_score(self, musicxml_file: str) -> List[str]:
-        score = parse(musicxml_file)
-        split_wind_layers(score, self._cfg.split_keywords)
-        _cache.put(musicxml_file, score)
+        score = _cache.get(musicxml_file)
+        if score is None:
+            score = parse(musicxml_file)
+            split_layers(score, self._cfg.split_keywords)
+            _cache.put(musicxml_file, score)
         parts = list(score.parts)
         parts_abbreviations = [self._get_part(part, parts) for part in parts]
         return parts_abbreviations
@@ -126,9 +128,16 @@ class FeaturesExtractor:
             all_corpus_features.append(corpus_features)
             all_scores_features.extend(scores_features)
             all_parts_features.extend(parts_features)
-        return DataFrame(all_corpus_features), DataFrame(all_scores_features), DataFrame(all_parts_features)
+        df_corpus = DataFrame(all_corpus_features)
+        df_corpus = df_corpus.reindex(sorted(df_corpus.columns), axis=1)
+        df_scores = DataFrame(all_scores_features)
+        df_scores = df_scores.reindex(sorted(df_scores.columns), axis=1)
+        df_parts = DataFrame(all_parts_features)
+        df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
+        return df_corpus, df_scores, df_parts
 
-    def _group_by_dir(self, files: List[str]) -> Dict[str, List[str]]:
+    @staticmethod
+    def _group_by_dir(files: List[str]) -> Dict[str, List[str]]:
         corpus_by_dir = {}
         for file in files:
             corpus_dir = path.dirname(file)
@@ -165,7 +174,7 @@ class FeaturesExtractor:
         ambitus = analysis.discrete.Ambitus()
         parts = self._filter_parts(score, parts_filter)
         if len(parts) == 0:
-            self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter {','.join(parts_filter)}")
+            self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
         data = {
             "score": score,
             "file": musicxml_file,
@@ -175,6 +184,7 @@ class FeaturesExtractor:
             "mode": mode,
             "ambitus": ambitus,
             "parts": parts,
+            "parts_filter": parts_filter,
         }
         return data
 
@@ -182,7 +192,7 @@ class FeaturesExtractor:
         score = _cache.get(musicxml_file)
         if score is None:
             score = parse(musicxml_file)
-            split_wind_layers(score, self._cfg.split_keywords)
+            split_layers(score, self._cfg.split_keywords)
             _cache.put(musicxml_file, score)
         return score
 
@@ -225,7 +235,7 @@ class FeaturesExtractor:
         return data
 
     def _extract_part_features(self, score_data: dict, part_data: dict) -> dict:
-        self._logger.debug(f"Extracting part {part_data['abbreviation']} features.")
+        self._logger.debug(f"Extracting all part \"{part_data['abbreviation']}\" features.")
         part_features = {}
         part_features.update(self._extract_part_module_features(scoring, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(lyrics, score_data, part_data, part_features))
@@ -233,15 +243,15 @@ class FeaturesExtractor:
         part_features.update(self._extract_part_module_features(ambitus, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(scale, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(density, score_data, part_data, part_features))
-        self._logger.debug(f"Finished extraction of all part {part_data['abbreviation']} features.")
+        self._logger.debug(f"Finished extraction of all part \"{part_data['abbreviation']}\" features.")
         return part_features
 
     def _extract_part_module_features(self, module, score_data: dict, part_data: dict, part_features: dict) -> dict:
-        self._logger.debug(f"Extracting {module.__name__} part {part_data['abbreviation']} features.")
+        self._logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
         return module.get_part_features(score_data, part_data, self._cfg, part_features)
 
     def _extract_score_features(self, score_data: dict, parts_data: List[dict], parts_features: List[dict]) -> dict:
-        self._logger.debug(f"Extracting all score {score_data['file']} features.")
+        self._logger.debug(f"Extracting all score \"{score_data['file']}\" features.")
         score_features = {"FileName": path.basename(score_data["file"])}
         score_features.update(self._extract_score_module_features(custom, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(metadata, score_data, parts_data, parts_features, score_features))
@@ -253,15 +263,15 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(ambitus, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        self._logger.debug(f"Finished extraction of all score {score_data['file']} features.")
+        self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
     def _extract_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict) -> dict:
-        self._logger.debug(f"Extracting {module.__name__} score {score_data['file']} features.")
+        self._logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
         return module.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
 
     def _extract_corpus_features(self, corpus_dir: str, scores_data: List[dict], parts_data: List[dict], scores_features: List[dict]) -> dict:
-        self._logger.debug(f"Extracting all corpus {corpus_dir} features.")
+        self._logger.debug(f"Extracting all corpus \"{corpus_dir}\" features.")
         corpus_features = {"Corpus": corpus_dir}
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, custom, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, key, scores_data, parts_data, scores_features, corpus_features))
@@ -270,10 +280,10 @@ class FeaturesExtractor:
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, lyrics, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, interval, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, density, scores_data, parts_data, scores_features, corpus_features))
-        self._logger.debug(f"Finished extraction of all corpus {corpus_dir} features.")
+        self._logger.debug(f"Finished extraction of all corpus \"{corpus_dir}\" features.")
         return corpus_features
 
     def _extract_corpus_module_features(self, corpus_dir: str, module, scores_data: List[dict], parts_data: List[dict], scores_features: List[dict], corpus_features: dict) -> dict:
-        self._logger.debug(f"Extracting {module.__name__} corpus {corpus_dir} features.")
+        self._logger.debug(f"Extracting corpus \"{corpus_dir}\" {module.__name__} features.")
         return module.get_corpus_features(scores_data, parts_data, self._cfg, scores_features, corpus_features)
 
