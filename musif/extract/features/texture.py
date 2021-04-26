@@ -22,26 +22,33 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     df_sound = df_parts.groupby("SoundAbbreviation").aggregate(
         {NOTES: "sum"})
 
-    notes_list = np.asanyarray([len(i['notes']) for i in parts_data])
     for f in range(0, len(parts_features)):
-        textures = notes_list[f]/notes_list[f+1:]
-        t_names = [get_part_prefix(parts_features[f]['PartAbbreviation'])+'_'+get_part_prefix(
-            parts_features[j+f+1]['PartAbbreviation'])+TEXTURE for j in range(0, len(textures))]
 
-        for i, texture in enumerate(textures):
-            features[f"{t_names[i]}"] = texture
+        # notes_list_parts = np.asanyarray([len(i['notes']) for i in parts_data])
 
-    notes_list = np.asanyarray(
-        [df_sound.loc[sound, NOTES].tolist() for sound in df_sound.index])
+        # notes_list_sounds = np.asanyarray(
+        #     [df_sound.loc[sound, NOTES].tolist() for sound in df_sound.index])
+        if parts_features[f]['PartAbbreviation'].lower().startswith('vn'):
+            print('violin')
+            notes_list.append(len(parts_data[f]['notes']))
+        else:
+            # notes_list.append(df_sound.iloc[f][NOTES])
+            pass
+        # textures = notes_list[f]/notes_list[f+1:]
+        # t_names = [get_part_prefix(parts_features[f]['PartAbbreviation'])+'_'+get_part_prefix(
+        #     parts_features[j+f+1]['PartAbbreviation'])+TEXTURE for j in range(0, len(textures))]
+
+        # for i, texture in enumerate(textures):
+        #     features[f"{t_names[i]}"] = texture
 
     for f, sound in enumerate(df_sound.index):
         sound_prefix = get_sound_prefix(sound)
         features[f"{sound_prefix}{NOTES}"] = df_sound.loc[sound, NOTES].tolist()
 
-        textures = notes_list[f]/notes_list[f+1:]
-        t_names = [get_sound_prefix(df_sound.index[f])+'_'+get_sound_prefix(
-            df_sound.index[j+f+1])+TEXTURE for j in range(0, len(textures))]
+        # textures = notes_list[f]/notes_list[f+1:]
+        # t_names = [get_sound_prefix(df_sound.index[f])+'_'+get_sound_prefix(
+        # df_sound.index[j+f+1])+TEXTURE for j in range(0, len(textures))]
 
-        for i, texture in enumerate(textures):
-            features[f"{t_names[i]}"] = texture
+        # for i, texture in enumerate(textures):
+        #     features[f"{t_names[i]}"] = texture
     return features

@@ -14,6 +14,8 @@ from .constants import *
 from .visualisations import *
 
 from musif.common.sort import sort_dataframe
+import musif.extract.features.interval as interval
+import musif.extract.features.lyrics as lyrics
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
@@ -481,10 +483,20 @@ def hoja_iValues(hoja, columns, data, third_columns, computations_columns, sorti
 def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional_info=[], remove_columns=False, groups=None):
     try:
         workbook = openpyxl.Workbook()
-
+        # TODO: HERE rename columns of data
+        data.rename(columns={interval.INTERVALLIC_MEAN: "Invervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_RATIO: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
+                             interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", inplace=True)
         # HOJA 1: STATISTICAL_VALUES
         column_names = ["Total analysed", "Intervallic ratio", "Trimmed intervallic ratio", "dif. Trimmed",
-                        "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std", 'Syllabic ratio']
+                        "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std"]
+
+        if lyrics.SYLLABIC_RATIO in data.columns:
+            data.rename(columns={lyrics.SYLLABIC_RATIO: 'Syllabic ratio'})
+            column_names.append('Syllabic ratio')
+
+        # ??? data[interval." : "% Trimmed"
+        # if instrument is not a voice?? syllabic ratio what
+
         # HAREMOS LA MEDIA DE TODAS LAS COLUMNAS
         computations = ['sum'] + ["mean"]*(len(column_names) - 1)
         hoja_iValues(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
@@ -893,38 +905,53 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
 
 def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
     try:
+
         workbook = openpyxl.Workbook()
         # Splitting the dataframes to reorder them
         data_general = data[metadata_columns + ['Total analysed']].copy()
-        notes_df = data[set(data.columns).difference(data_general.columns)]
+        notes_df = data[[i for i in data.columns if i.endswith('Notes')]]
+
+        textures_df = data[set(data.columns).difference(
+            data_general.columns.tolist() + notes_df.columns.tolist())]
+
         data_general = data_general.dropna(how='all', axis=1)
         third_columns_names = []
-        textures_df = pd.DataFrame()
+        # Pre-treating data columns
+        notes_df.columns = [i.replace('_Sound', '/').replace('Sound',
+                                                             '').replace('Notes', '') for i in notes_df.columns]
+        for column in notes_df.columns:
+            if column not in sorting_lists["TexturesSorting"] and not column.endswith('Notes'):
+                notes_df.drop([column], axis=1, inplace=True)
 
-        # if column not in sorting_lists["TextureSorting"] and not column.startswith('Total notes'):
-        #         data.drop([column], axis=1, inplace=True)
+        for column in textures_df.columns:
+            if column not in sorting_lists["TexturesSorting"] and not column.endswith('Notes'):
+                textures_df.drop([column], axis=1, inplace=True)
 
-        cols = sort(textures_df.columns.tolist(), [
+        textures_df.columns = [i.replace('_Sound', '/').replace('_Part',
+                                                                '/') for i in textures_df.columns]
+
+        cols = sort(texture_df.columns.tolist(), [
                     i.capitalize() for i in sorting_lists['InstrumentSorting']])
+
         textures_df = textures_df[cols]
         third_columns_names = textures_df.columns.to_list()
 
         second_column_names = [("", 1), ("Textures", len(third_columns_names))]
         third_columns_names.insert(0, 'Total analysed')
-
         second_column_names = [
             ("", 1), ("Texture", len(third_columns_names))]
-
-        # sorting_list = sorting_lists['TextureSorting']
 
         computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
         computations2 = ["sum"] + ["mean_texture"] * \
             (len(third_columns_names)-1)
         columns = third_columns_names
-        hoja_iValues(workbook.create_sheet("Weighted_text"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
-                     last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
-        hoja_iValues(workbook.create_sheet("Horizontal_text"), columns, notes_df, third_columns_names, computations2,  sorting_lists, groups=groups,
-                     second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
+
+        data = pd.concat([data_general, textures_df], axis=1)
+
+        # hoja_iValues(workbook.create_sheet("Weighted_textures"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
+        #              last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
+        # hoja_iValues(workbook.create_sheet("Horizontal_textures"), columns, notes_df, third_columns_names, computations2,  sorting_lists, groups=groups,
+        #              second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
         # borramos la hoja por defecto
         if "Sheet" in workbook.get_sheet_names():

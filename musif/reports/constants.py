@@ -1,10 +1,11 @@
+from musif.extract.features.time import TEMPO_GROUPED_1, TEMPO_GROUPED_2
+from musif.extract.features.scoring import FAMILY_SCORING, SCORING
 import openpyxl
 import musif.extract.features.interval as interval
 # The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
 
-FILENAME = 'FileName'
-ARIA_OPERA = 'AriaOpera'
 ARIA_LABEL = 'AriaLabel'
+OPERA = 'AriaOpera'
 ARIA_ID = 'AriaId'
 TITLE = 'AriaTitle'
 COMPOSER = 'Composer'
@@ -19,7 +20,6 @@ CHARACTER = 'Character'
 ROLE = 'Role'
 CITY = 'City'
 TERRITORY = 'Territory'
-OPERA = 'AriaOpera'
 CLEF1 = 'Clef1'
 CLEF2 = 'Clef2'
 CLEF3 = 'Clef3'
@@ -30,14 +30,12 @@ MODE = 'Mode'
 TEMPO = 'Tempo'
 TIMESIGNATURE = 'TimeSignature'
 TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
-
-
 DATE = 'Date'
 YEAR = 'Year'
 DECADE = "Decade"
 CITY = "City"
-metadata_columns = [FILENAME, ARIA_OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER,
-                    ROLE, CITY, TERRITORY, OPERA, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEYSIGNATUREGROUPED, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED]
+metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER,
+                    ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEYSIGNATUREGROUPED, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
 
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
