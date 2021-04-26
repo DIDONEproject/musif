@@ -7,13 +7,13 @@ from music21.interval import Interval
 from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_corpus_prefix
 
-INTERVALLIC_RATIO = "IntervallicRatio"
+INTERVALLIC_MEAN = "IntervallicRatio"
 INTERVALLIC_STD = "IntervallicStd"
-ABSOLUTE_INTERVALLIC_RATIO = "AbsoluteIntervallicRatio"
+ABSOLUTE_INTERVALLIC_MEAN = "AbsoluteIntervallicRatio"
 ABSOLUTE_INTERVALLIC_STD = "AbsoluteIntervallicStd"
-TRIMMED_INTERVALLIC_RATIO = "TrimmedIntervallicRatio"
+TRIMMED_INTERVALLIC_MEAN = "TrimmedIntervallicRatio"
 TRIMMED_INTERVALLIC_STD = "TrimmedIntervallicStd"
-TRIMMED_ABSOLUTE_INTERVALLIC_RATIO = "TrimmedAbsoluteIntervallicRatio"
+TRIMMED_ABSOLUTE_INTERVALLIC_MEAN = "TrimmedAbsoluteIntervallicRatio"
 TRIMMED_ABSOLUTE_INTERVALLIC_STD = "TrimmedAbsoluteIntervallicStd"
 ABSOLUTE_INTERVALLIC_TRIM_DIFF = "AbsoluteIntervallicTrimDiff"
 ABSOLUTE_INTERVALLIC_TRIM_RATIO = "AbsoluteIntervallicTrimRatio"
@@ -46,8 +46,8 @@ INTERVALS_DIMINISHED_DESCENDING = "IntervalsDiminishedDescending"
 INTERVALS_DIMINISHED_ALL = "IntervalsDiminishedAll"
 
 ALL_FEATURES = [
-    INTERVALLIC_RATIO, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_RATIO, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_RATIO, TRIMMED_INTERVALLIC_STD,
-    TRIMMED_ABSOLUTE_INTERVALLIC_RATIO, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
+    INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD,
+    TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
     ASCENDING_SEMITONES, ASCENDING_INTERVAL, DESCENDING_SEMITONES, DESCENDING_INTERVAL,
     REPEATED_NOTES, LEAPS_ASCENDING, LEAPS_DESCENDING, LEAPS_ALL, STEPWISE_MOTION_ASCENDING, STEPWISE_MOTION_DESCENDING, STEPWISE_MOTION_ALL,
     LEAPS_STEPWISE_MOTION_TOTAL, INTERVALS_PERFECT_ASCENDING, INTERVALS_PERFECT_DESCENDING, INTERVALS_PERFECT_ALL, INTERVALS_MAJOR_ASCENDING,
@@ -70,6 +70,8 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    if len(parts_data) == 0:
+        return {}
     score_prefix = get_score_prefix()
     numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
     text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
@@ -123,13 +125,13 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     descending_semitones_name = Interval(descending_semitones).directedName if descending_semitones is not None else None
 
     features = {
-        f"{prefix}{INTERVALLIC_RATIO}": interval_mean,
+        f"{prefix}{INTERVALLIC_MEAN}": interval_mean,
         f"{prefix}{INTERVALLIC_STD}": interval_std,
-        f"{prefix}{ABSOLUTE_INTERVALLIC_RATIO}": absolute_interval_mean,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_MEAN}": absolute_interval_mean,
         f"{prefix}{ABSOLUTE_INTERVALLIC_STD}": absolute_interval_std,
-        f"{prefix}{TRIMMED_INTERVALLIC_RATIO}": trimmed_interval_mean,
+        f"{prefix}{TRIMMED_INTERVALLIC_MEAN}": trimmed_interval_mean,
         f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_interval_std,
-        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_RATIO}": trimmed_absolute_interval_mean,
+        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_interval_mean,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_interval_std,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": trim_diff,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": trim_ratio,

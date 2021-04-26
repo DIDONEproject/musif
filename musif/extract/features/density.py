@@ -5,9 +5,11 @@ from pandas import DataFrame
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
+from musif.extract.features.scoring import CARDINALITY
 from musif.musicxml import Measure, Note, Part
 
 NOTES = "Notes"
+NOTES_MEAN = "NotesMean"
 SOUNDING_MEASURES = "SoundingMeasures"
 MEASURES = "Measures"
 SOUNDING_DENSITY = "SoundingDensity"
@@ -30,6 +32,8 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
+    if len(parts_features) == 0:
+        return {}
     features = {}
     df_parts = DataFrame(parts_features)
     df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
@@ -47,7 +51,9 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         notes = df_sound.loc[sound, NOTES].tolist()
         measures = df_sound.loc[sound, MEASURES].tolist()
         sounding_measures = df_sound.loc[sound, SOUNDING_MEASURES].tolist()
+        sound_parts = score_features[f"{sound_prefix}{CARDINALITY}"]
         features[f"{sound_prefix}{NOTES}"] = notes
+        features[f"{sound_prefix}{NOTES_MEAN}"] = notes / sound_parts if sound_parts > 0 else 0
         features[f"{sound_prefix}{MEASURES}"] = measures
         features[f"{sound_prefix}{SOUNDING_MEASURES}"] = sounding_measures
         features[f"{sound_prefix}{SOUNDING_DENSITY}"] = notes / sounding_measures if sounding_measures != 0 else 0
@@ -57,7 +63,9 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         notes = df_family.loc[family, NOTES].tolist()
         measures = df_family.loc[family, MEASURES].tolist()
         sounding_measures = df_family.loc[family, SOUNDING_MEASURES].tolist()
+        family_parts = score_features[f"{family_prefix}{CARDINALITY}"]
         features[f"{family_prefix}{NOTES}"] = notes
+        features[f"{family_prefix}{NOTES_MEAN}"] = notes / family_parts if family_parts > 0 else 0
         features[f"{family_prefix}{SOUNDING_MEASURES}"] = df_family.loc[family, SOUNDING_MEASURES].tolist()
         features[f"{family_prefix}{MEASURES}"] = measures
         features[f"{family_prefix}{SOUNDING_DENSITY}"] = notes / sounding_measures if sounding_measures != 0 else 0
