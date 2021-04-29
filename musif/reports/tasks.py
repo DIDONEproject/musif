@@ -15,6 +15,7 @@ from .visualisations import *
 
 from musif.common.sort import sort_dataframe
 import musif.extract.features.interval as interval
+import musif.extract.features.ambitus as ambitus
 import musif.extract.features.lyrics as lyrics
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
@@ -229,16 +230,15 @@ def print_groups(hoja, grouped, row_number, column_number, columns, third_column
             column_computation = computations_columns[i]
             extra_info = []
             if column_computation == 'mean_density':
-                extra_info = subgroup_data[c+'Measures']
-                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate, extra_info=extra_info)  # absolute value
-
+                extra_info = subgroup_data[c+'Measures'][0]
+                value = compute_value(subgroup_data[c][0], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate, extra_info=extra_info)
+                                      
             elif column_computation == 'mean_texture':
-                notes = subgroup_data['Notes' + c.split('/')[0]]
-                subgroup_data[c] = notes
-                notes_next = subgroup_data['Total notes ' + c.split('/')[1]]
-                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate, extra_info=notes_next)  # absolute value
+                notes = subgroup_data[c.split('/')[0]+'Notes']
+                notes_next = subgroup_data[c.split('/')[1]+'Notes']
+                value = compute_value(notes[0], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate, extra_info=notes_next[0]) 
             else:
                 value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
@@ -246,7 +246,8 @@ def print_groups(hoja, grouped, row_number, column_number, columns, third_column
                 total_analysed_row = subgroup_data[c].tolist()
                 hoja.cell(row_number, cnumber).value = value
 
-            if c == "% Trimmed":  # EXCEPTION
+            if c == interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO:  # EXCEPTION
+                #TODO: wht is this ?????
                 hoja.cell(row_number, cnumber).value = str(
                     round(value * 100, 1)) + '%'
                 cnumber += 1
@@ -481,11 +482,12 @@ def hoja_iValues(hoja, columns, data, third_columns, computations_columns, sorti
 
 
 def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional_info=[], remove_columns=False, groups=None):
-    try:
+    # try:
         workbook = openpyxl.Workbook()
-        # TODO: HERE rename columns of data
-        data.rename(columns={interval.INTERVALLIC_MEAN: "Invervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_RATIO: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
-                             interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", inplace=True)
+        data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
+                             interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
+        
+        data.rename(columns={ambitus.LOWEST_INDEX: "LowestIndex", ambitus.HIGHEST_INDEX: "HighestIndex", ambitus.HIGHEST_MEAN_INDEX: "HighestMeanIndex", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex", ambitus.LOWEST_NOTE: "LowestNote", ambitus.LOWEST_MEAN_NOTE: "LowestMeanNote",ambitus.HIGHEST_MEAN_NOTE: "HighestMeanNote", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",ambitus.HIGHEST_NOTE: "HighestNote" }, inplace=True)
         # HOJA 1: STATISTICAL_VALUES
         column_names = ["Total analysed", "Intervallic ratio", "Trimmed intervallic ratio", "dif. Trimmed",
                         "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std"]
@@ -493,9 +495,6 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
         if lyrics.SYLLABIC_RATIO in data.columns:
             data.rename(columns={lyrics.SYLLABIC_RATIO: 'Syllabic ratio'})
             column_names.append('Syllabic ratio')
-
-        # ??? data[interval." : "% Trimmed"
-        # if instrument is not a voice?? syllabic ratio what
 
         # HAREMOS LA MEDIA DE TODAS LAS COLUMNAS
         computations = ['sum'] + ["mean"]*(len(column_names) - 1)
@@ -537,34 +536,33 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
             workbook.remove_sheet(std)
         workbook.save(os.path.join(results_path, name))
 
-        with visualiser_lock:
-            # VISUALISATIONS
-            columns_visualisation = [
-                'Intervallic ratio', 'Trimmed intervallic ratio', 'Std']
-            if groups:
-                data_grouped = data.groupby(list(groups))
-                for g, datag in data_grouped:
-                    result_visualisations = path.join(
-                        results_path, 'visualisations', g)
-                    if not os.path.exists(result_visualisations):
-                        os.mkdir(result_visualisations)
+        # with visualiser_lock:
+        # VISUALISATIONS
+        columns_visualisation = [
+            'Intervallic ratio', 'Trimmed intervallic ratio', 'Std']
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                result_visualisations = path.join(
+                    results_path, 'visualisations', g)
+                if not os.path.exists(result_visualisations):
+                    os.mkdir(result_visualisations)
 
-                    name_bar = path.join(
-                        result_visualisations, name.replace('.xlsx', '.png'))
-                    ivalues_bar_plot(
-                        name_bar, datag, columns_visualisation, second_title=str(g))
-                    name_box = path.join(
-                        result_visualisations, 'Ambitus' + name.replace('.xlsx', '.png'))
-                    box_plot(name_box, datag, second_title=str(g))
-            else:
-                name_bar = results_path + \
-                    path.join('visualisations', name.replace('.xlsx', '.png'))
-                ivalues_bar_plot(name_bar, data, columns_visualisation)
+                name_bar = path.join(
+                    result_visualisations, name.replace('.xlsx', '.png'))
+                ivalues_bar_plot(
+                    name_bar, datag, columns_visualisation, second_title=str(g))
                 name_box = path.join(
-                    results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
-                box_plot(name_box, data)
-    except Exception as e:
-        logger.error('{}   Problem found:'.format(name), exc_info=True)
+                    result_visualisations, 'Ambitus' + name.replace('.xlsx', '.png'))
+                box_plot(name_box, datag, second_title=str(g))
+        else:
+            name_bar = path.join(results_path,path.join('visualisations', name.replace('.xlsx', '.png')))
+            ivalues_bar_plot(name_bar, data, columns_visualisation)
+            name_box = path.join(
+                results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
+            box_plot(name_box, data)
+    # except Exception as e:
+    #     logger.error('{}   Problem found:'.format(name), exc_info=True)
 
 
 def iiaIntervals(data, name, sorting_list, results_path, sorting_lists, visualiser_lock, additional_info=[], groups=None):
@@ -799,40 +797,20 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
         density_list = [
             i for i in data.columns if i.endswith('SoundingDensity')]
         density_df = data[density_list]
-        notes_and_measures = [i for i in data.columns if i.endswith(
-            'Measures') or i.endswith('Notes')]
+        notes_and_measures =[i for i in data.columns if i.endswith(
+            'Measures') or i.endswith('Notes') or i.endswith('Mean')]
 
-        # for inst in [i for i in sorting_lists['InstrumentSorting']]:
-        #     if inst.lower().startswith('vn'):
-        #         # Add exception for violins
-        #         col = 'Part' + inst[0].upper()+inst[1:] + 'SoundingDensity'
-        #         if col in data.columns:
-        #             density_list.append(col)
-        #             notes_and_measures.append(
-        #                 'Part' + inst[0].upper()+inst[1:] + 'Notes')
-        #             notes_and_measures.append(
-        #                 'Part' + inst[0].upper()+inst[1:] + 'SoundingMeasures')
-        #     else:
-        #         col = 'Sound' + inst[0].upper()+inst[1:] + 'SoundingDensity'
-        #         if col in data.columns:
-        #             density_list.append(col)
-        #     if 'Sound' + inst[0].upper()+inst[1:] + 'Notes' in data.columns:
-        #         notes_and_measures.append(
-        #             'Sound' + inst[0].upper()+inst[1:] + 'Notes')
-        #         notes_and_measures.append(
-        #             'Sound' + inst[0].upper()+inst[1:] + 'SoundingMeasures')
-
-        # density_df.drop('Total analysed', axis=1)
         notes_and_measures = data[notes_and_measures]
 
-        density_df.columns = [i.replace('Part', '').replace(
-            'Sounding', '').replace('Density', '').replace('Sound', '').replace('Notes', '') for i in density_df.columns]
+        density_df.columns = [i.replace('_','').replace('Part', '').replace(
+            'Sounding', '').replace('Density', '').replace('Family', '').replace('Sound', '').replace('Notes', '') for i in density_df.columns]
 
-        notes_and_measures.columns = [i.replace('Part', '').replace('SoundingMeasures', 'Measures').replace(
-            'Sound', '').replace('Notes', '') for i in notes_and_measures.columns]
+        notes_and_measures.columns = [i.replace('_','').replace('Part', '').replace('SoundingMeasures', 'Measures').replace(
+            'Sound', '').replace('Notes', '').replace('Mean', '').replace('Family', '') for i in notes_and_measures.columns]
 
         cols = sort(density_df.columns.tolist(), [
                     i.capitalize() for i in sorting_lists['InstrumentSorting']])
+        
         density_df = density_df[cols]
         third_columns_names = density_df.columns.to_list()
 
@@ -900,38 +878,31 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
                               'Density', 'Density', title)
     except Exception as e:
         logger.error('{}  Problem found:'.format(name), exc_info=True)
-        print('Problem found in densities task')
+        print('Problem found in densities task: ', e)
 
 
 def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
     try:
-
         workbook = openpyxl.Workbook()
         # Splitting the dataframes to reorder them
         data_general = data[metadata_columns + ['Total analysed']].copy()
-        notes_df = data[[i for i in data.columns if i.endswith('Notes')]]
-
-        textures_df = data[set(data.columns).difference(
-            data_general.columns.tolist() + notes_df.columns.tolist())]
+        notes_df = data[[i for i in data.columns if i.endswith('Notes') or i.endswith('Mean')]]
+        
+        textures_df = data[[c for c in data.columns if c.endswith('Texture')]]
 
         data_general = data_general.dropna(how='all', axis=1)
         third_columns_names = []
         # Pre-treating data columns
-        notes_df.columns = [i.replace('_Sound', '/').replace('Sound',
-                                                             '').replace('Notes', '') for i in notes_df.columns]
-        for column in notes_df.columns:
-            if column not in sorting_lists["TexturesSorting"] and not column.endswith('Notes'):
-                notes_df.drop([column], axis=1, inplace=True)
-
+        notes_df.columns = [i.replace('_', '').replace('Sound','').replace('Family','').replace('Part','').replace('Mean', '') for i in notes_df.columns]
+        textures_df.columns = [i.replace('_', '/').replace('Sound', '').replace('Texture','') for i in textures_df.columns]
+        
         for column in textures_df.columns:
-            if column not in sorting_lists["TexturesSorting"] and not column.endswith('Notes'):
+            if column not in sorting_lists["TexturesSorting"]:
                 textures_df.drop([column], axis=1, inplace=True)
+            else:
+                notes_df[column] = 0
 
-        textures_df.columns = [i.replace('_Sound', '/').replace('_Part',
-                                                                '/') for i in textures_df.columns]
-
-        cols = sort(texture_df.columns.tolist(), [
-                    i.capitalize() for i in sorting_lists['InstrumentSorting']])
+        cols = sort(textures_df.columns.tolist(), sorting_lists['TexturesSorting'])
 
         textures_df = textures_df[cols]
         third_columns_names = textures_df.columns.to_list()
@@ -947,11 +918,12 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         columns = third_columns_names
 
         data = pd.concat([data_general, textures_df], axis=1)
+        notes_df = pd.concat([data_general, notes_df], axis=1)
 
-        # hoja_iValues(workbook.create_sheet("Weighted_textures"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
-        #              last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
-        # hoja_iValues(workbook.create_sheet("Horizontal_textures"), columns, notes_df, third_columns_names, computations2,  sorting_lists, groups=groups,
-        #              second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
+        hoja_iValues(workbook.create_sheet("Weighted_textures"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
+                     last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
+        hoja_iValues(workbook.create_sheet("Horizontal_textures"), columns, notes_df, third_columns_names, computations2,  sorting_lists, groups=groups,
+                     second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
         # borramos la hoja por defecto
         if "Sheet" in workbook.get_sheet_names():
@@ -959,46 +931,46 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
             workbook.remove_sheet(std)
         workbook.save(os.path.join(results_path, name))
 
-        with visualiser_lock:
-            title = 'Textures'
-            columns.remove('Total analysed')
-            # VISUALISATIONS
-            if groups:
-                data_grouped = data.groupby(list(groups))
-                for g, datag in data_grouped:
-                    result_visualisations = results_path + \
-                        '\\visualisations\\' + str(g)
-                    if not os.path.exists(result_visualisations):
-                        os.mkdir(result_visualisations)
-                    name_bar = result_visualisations + \
-                        '\\' + name.replace('.xlsx', '.png')
-                    bar_plot_extended(
-                        name_bar, datag, columns, 'Instrumental Textures', title, second_title=str(g))
-            elif len(not_used_cols) == 4:  # 1 Factor. Try a different condition?
-                groups = [i for i in rows_groups]
-                exceptions_list = ['Role', 'KeySignature', 'Tempo']
-                for row in rows_groups:
-                    plot_name = name.replace(
-                        '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
-                    name_bar = results_path + '\\visualisations\\' + plot_name
-                    if row not in not_used_cols:
-                        if len(rows_groups[row][0]) == 0:  # no sub-groups
-                            data_grouped = data.groupby(row, sort=True)
-                            line_plot_extended(
-                                name_bar, data_grouped, columns, 'Texture', 'Ratio', title, second_title='Per ' + str(row))
-                        else:
-                            for i, subrow in enumerate(rows_groups[row][0]):
-                                if subrow not in exceptions_list:
-                                    plot_name = name.replace(
-                                        '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
-                                    name_bar = results_path + '\\visualisations\\' + plot_name
-                                    data_grouped = data.groupby(subrow)
-                                    line_plot_extended(
-                                        name_bar, data_grouped, columns, 'Texture', 'Ratio', title, second_title='Per ' + str(subrow))
-            else:
-                name_bar = results_path + '\\visualisations\\' + \
-                    name.replace('.xlsx', '.png')
-                bar_plot_extended(name_bar, data, columns,
-                                  'Instrumental Textures', 'Ratio', title)
+        # with visualiser_lock:
+        title = 'Textures'
+        columns.remove('Total analysed')
+        # VISUALISATIONS
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                result_visualisations = results_path + \
+                    '\\visualisations\\' + str(g)
+                if not os.path.exists(result_visualisations):
+                    os.mkdir(result_visualisations)
+                name_bar = result_visualisations + \
+                    '\\' + name.replace('.xlsx', '.png')
+                bar_plot_extended(
+                    name_bar, datag, columns, 'Instrumental Textures', title, second_title=str(g))
+        elif len(not_used_cols) == 4:  # 1 Factor. Try a different condition?
+            groups = [i for i in rows_groups]
+            exceptions_list = ['Role', 'KeySignature', 'Tempo']
+            for row in rows_groups:
+                plot_name = name.replace(
+                    '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
+                name_bar = results_path + '\\visualisations\\' + plot_name
+                if row not in not_used_cols:
+                    if len(rows_groups[row][0]) == 0:  # no sub-groups
+                        data_grouped = data.groupby(row, sort=True)
+                        line_plot_extended(
+                            name_bar, data_grouped, columns, 'Texture', 'Ratio', title, second_title='Per ' + str(row))
+                    else:
+                        for i, subrow in enumerate(rows_groups[row][0]):
+                            if subrow not in exceptions_list:
+                                plot_name = name.replace(
+                                    '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
+                                name_bar = results_path + '\\visualisations\\' + plot_name
+                                data_grouped = data.groupby(subrow)
+                                line_plot_extended(
+                                    name_bar, data_grouped, columns, 'Texture', 'Ratio', title, second_title='Per ' + str(subrow))
+        else:
+            name_bar = results_path + '\\visualisations\\' + \
+                name.replace('.xlsx', '.png')
+            bar_plot_extended(name_bar, data, columns,
+                                'Instrumental Textures', 'Ratio', title)
     except Exception as e:
         logger.error('{}  Problem found:'.format(name), exc_info=True)

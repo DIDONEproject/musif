@@ -36,7 +36,7 @@ from .tasks import (IIIIntervals_types, emphasised_scale_degrees, iiaIntervals,
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
-
+from musif.common.constants import VOICE_FAMILY
 
 class FeaturesGenerator:
 
@@ -70,7 +70,7 @@ class FeaturesGenerator:
             self._factor_execution(
                 all_dataframes, i)
 
-    def _factor_execution(self, all_dataframes, i):
+    def _factor_execution(self, all_dataframes, factor):
         global rows_groups
         global not_used_cols
 
@@ -85,7 +85,8 @@ class FeaturesGenerator:
 
         clefs_info_list = ['Clef1', 'Clef2', 'Clef3']
         textures_list = []
-        density_list = []
+        density_set = set([])
+        notes_set=set([])
         intervals_list = []
         Intervals_types_list = []
         instruments = set([])
@@ -104,32 +105,38 @@ class FeaturesGenerator:
         for instrument in instruments:
             if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
                 catch = 'Part'
+                notes_set.add(catch + instrument + '_Notes')
+            elif instrument.lower() in all_dataframes.Voices[0]:
+                catch='Family'
+                instrument=VOICE_FAMILY.capitalize()
+                notes_set.add(catch + instrument + '_NotesMean')
             else:
                 catch = 'Sound'
                 if instrument.endswith('II'):
                     continue
                 instrument = instrument.replace('I', '')
+                notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
 
-            density_list.append(
-                catch + instrument + 'Notes')
-            density_list.append(
-                catch + instrument + 'SoundingDensity')
-            density_list.append(
-                catch + instrument + 'SoundingMeasures')
+            density_set.add(
+                catch + instrument + '_SoundingDensity')
+            density_set.add(
+                catch + instrument + '_SoundingMeasures')
 
         # Inizalizing new dataframes and defining those that don't depends on each part
         density_df = textures_df = clefs_info = intervals_info = all_info = common_columns_df
 
         textures_df = pd.concat(
-            [textures_df, all_dataframes[[i for i in all_dataframes.columns if i.endswith('Texture') or i.endswith('Notes')]]], axis=1)
+            [textures_df, all_dataframes[[i for i in all_dataframes.columns if i.endswith('Texture')]], all_dataframes[list(notes_set)]], axis=1)
         density_df = pd.concat(
-            [density_df, all_dataframes[density_list]], axis=1)
+            [density_df, all_dataframes[list(density_set)],  all_dataframes[list(notes_set)]], axis=1)
 
         clefs_info = pd.concat(
             [clefs_info, all_dataframes[clefs_info_list]], axis=1)
         clefs_info = clefs_info.dropna(how='all', axis=1)
 
-        print(str(i) + " factor")
+        flag=True #Variable to run common calculations only once
+        
+        print(str(factor) + " factor")
 
         emphasised_A_list = []
 
@@ -138,33 +145,28 @@ class FeaturesGenerator:
             results_folder = os.path.join(main_results_path, instrument)
 
             if not os.path.exists(results_folder):
-                os.mkdir(results_folder)
+                os.makedirs(results_folder)
 
             # CAPTURING FEATURES that depend total or partially on each part
-            all_info_list = ['Part'+instrument+interval.INTERVALLIC_MEAN, 'Part'+instrument+interval.INTERVALLIC_STD, 'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_MEAN, 'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_STD, 'Part'+instrument+interval.TRIMMED_ABSOLUTE_INTERVALLIC_RATIO,
-                             'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, 'Part'+instrument+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, 'Part'+instrument+interval.ASCENDING_SEMITONES, 'Part'+instrument+interval.ASCENDING_INTERVAL, 'Part'+instrument+interval.DESCENDING_SEMITONES, 'Part'+instrument+interval.DESCENDING_INTERVAL, 'Part' + instrument + ambitus.HIGHEST_INDEX, 'Part' + instrument + ambitus.LOWEST_NOTE, 'Part' + instrument + ambitus.LOWEST_MEAN_INDEX, 'Part' + instrument + ambitus.LOWEST_MEAN_NOTE, 'Part' + instrument + ambitus.HIGHEST_MEAN_NOTE, 'Part' + instrument + ambitus.HIGHEST_MEAN_INDEX, 'Part' + instrument + ambitus.LARGEST_INTERVAL, 'Part' + instrument + ambitus.LARGEST_SEMITONES, 'Part' + instrument + ambitus.SMALLEST_INTERVAL, 'Part' + instrument + ambitus.SMALLEST_SEMITONES, 'Part' + instrument + ambitus.ABSOLUTE_INTERVAL, 'Part' + instrument + ambitus.ABSOLUTE_SEMITONES, 'Part' + instrument + ambitus.MEAN_INTERVAL, 'Part' + instrument + ambitus.MEAN_SEMITONES]
+            catch='Part'+instrument +'_'
+            all_info_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
+                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+interval.ASCENDING_SEMITONES, catch+interval.ASCENDING_INTERVAL, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVAL, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.LOWEST_INDEX, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.ABSOLUTE_INTERVAL, catch + ambitus.ABSOLUTE_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
 
             if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_dataframes.columns:
                 all_info_list.append('Part'+instrument+lyrics.SYLLABIC_RATIO)
 
-            '''
-       , 'AbrScoring', ???
-         'Intervallic ratio',-MEAN ????
-       , '% Trimmed',
-       'Absolute intervallic ratio',
-            '''
             for col in all_dataframes.columns:
                 if col.startswith('PartInterval') or col.startswith('SoundInterval'):
                     intervals_list.append(col)
                     Intervals_types_list.append(col)
-                # or all_dataframes[[i for i in all_dataframes.columns if i.endswith('Texture')]]]
+                # or all_dataframes[[i for i in all_dataframes.columns if i.endswith('Interval')]]]
                 # Intervals_types_list = ['Part' + instrument + 'RepeatedNotes', 'Part' + instrument+' LeapsAscending', 'Part' + instrument+'LeapsDescending', 'Part' + instrument+'LeapsAll', 'Part' + instrument+'StepwiseMotionAscending', 'Part' + instrument+'StepwiseMotionDescending',  'Part' + instrument+'StepwiseMotionAll',  'Part' + instrument+'Total',  'Part' + instrument+'PerfectAscending',  'Part' + instrument+'PerfectDescending',  'Part' + instrument+'PerfectAll',
                     # 'ScoreMajorAscending', 'ScoreMajorDescending', 'ScoreMajorAll', 'ScoreMinorAscending', 'ScoreMinorDescending', 'ScoreMinorAll', 'ScoreAugmentedAscending', 'ScoreAugmentedDescending', 'ScoreAugmentedAll', 'ScoreDiminishedAscending', 'ScoreDiminishedDescending', 'ScoreDiminishedAll', 'ScoreTotal1']
 
             # Joining common info and part info
             all_info = pd.concat(
                 [common_columns_df, all_dataframes[all_info_list]], axis=1)
-            all_info.columns = [c.replace('Part'+instrument, '')
+            all_info.columns = [c.replace('Part'+instrument+'_', '')
                                 for c in all_info.columns]
             intervals_info = pd.concat(
                 [common_columns_df, all_dataframes[intervals_list]], axis=1)
@@ -192,7 +194,7 @@ class FeaturesGenerator:
             # 2. Get the additional_info dictionary (special case if there're no factors)
             additional_info = {"AriaLabel": ["AriaTitle"],
                                "AriaTitle": ["AriaLabel"]}  # solo agrupa aria
-            if i == 0:
+            if factor == 0:
                 rows_groups = {"AriaId": ([], "Alphabetic")}
                 rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
                 for r in rg_keys:
@@ -204,11 +206,11 @@ class FeaturesGenerator:
                 additional_info = ["AriaLabel", "AriaId", "Composer", "Year"]
 
             rg_groups = [[]]
-            if i >= 2:  # 2 factors or more
+            if factor >= 2:  # 2 factors or more
                 rg_groups = list(permutations(
-                    list(forbiden_groups.keys()), i - 1))[4:]
+                    list(forbiden_groups.keys()), factor - 1))[4:]
 
-                if i > 2:
+                if factor > 2:
                     prohibidas = ['Composer', 'Opera']
                     for g in rg_groups:
                         if "AriaId" in g:
@@ -223,18 +225,20 @@ class FeaturesGenerator:
                              in list(metadata_columns)]  # ???
 
             results_path_factorx = path.join(main_results_path, instrument, str(
-                i) + " factor") if i > 0 else path.join(main_results_path, instrument, "Data")
+                factor) + " factor") if factor > 0 else path.join(main_results_path, instrument, "Data")
             if not os.path.exists(results_path_factorx):
                 os.makedirs(results_path_factorx)
 
             common_data_path = path.join(main_results_path, 'Common', str(
-                i) + " factor") if i > 0 else path.join(main_results_path, 'common', "Data")
+                factor) + " factor") if factor > 0 else path.join(main_results_path, 'Common', "Data")
 
             if not os.path.exists(common_data_path):
                 os.makedirs(common_data_path)
-            for groups in rg_groups:
-                self._group_execution(
-                    groups, common_data_path, additional_info, i, self.sorting_lists, density_df=density_df, textures_df=textures_df)  # clefs_info)
+            if flag:
+                for groups in rg_groups:
+                    self._group_execution(
+                        groups, common_data_path, additional_info, factor, self.sorting_lists, density_df=density_df, textures_df=textures_df)  # clefs_info)
+                flag=False
 
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
@@ -242,7 +246,7 @@ class FeaturesGenerator:
                 # self._group_execution(groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info, intervals_info, absolute_intervals,
                 #                       Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
                 self._group_execution(
-                    groups, results_path_factorx, additional_info, i, self.sorting_lists, all_info=all_info)
+                    groups, results_path_factorx, additional_info, factor, self.sorting_lists, all_info=all_info)
                 rows_groups = rg
                 not_used_cols = nuc
             # else: # from 2 factors
@@ -258,7 +262,7 @@ class FeaturesGenerator:
     #####################################################################
     # def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, all_info, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
 
-    def _group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, all_info=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(), clefs_info=pd.DataFrame()):
+    def _group_execution(self, groups, results_path_factorx, additional_info, factor, sorting_lists, all_info=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(), clefs_info=pd.DataFrame()):
 
         if groups:
             # if sequential:
@@ -281,13 +285,13 @@ class FeaturesGenerator:
                 #     # futures.append(executor.submit(iValues, all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
                 #     #                self.visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
                 iValues(all_info, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
-                        self.visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None)
+                        self.visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None)
             if not density_df.empty:
                 densities(density_df, results_path, '-'.join(groups) + "_Densities.xlsx",
                           sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
-            # if not textures_df.empty:
-                # textures(textures_df, results_path, '-'.join(groups) + "_Textures.xlsx",
-                #          sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
+            if not textures_df.empty:
+                textures(textures_df, results_path, '-'.join(groups) + "_Textures.xlsx",
+                         sorting_lists, self.visualiser_lock, groups if groups != [] else None, additional_info)
                 # if not intervals_info.empty:
                 #     futures.append(executor.submit(iiaIntervals, intervals_info, '-'.join(groups) + "_2aIntervals.xlsx",
                 #                    sorting_lists["Intervals"], results_path, sorting_lists, self.visualiser_lock, additional_info, groups if groups != [] else None))
@@ -318,5 +322,5 @@ class FeaturesGenerator:
                 #         pass
         except KeyboardInterrupt:
             sys.exit(2)
-        except Exception as e:
-            pass
+        # except Exception as e:
+        #     pass

@@ -1,10 +1,9 @@
 import os
-from musif.extract import score
 from musif import FeaturesExtractor, config
 from musif.reports.generate import FeaturesGenerator
 
 if __name__ == "__main__":
-    # parts = ["vnI", "vnII"]
+    # parts = ["violin"]
     parts = None
 
     df = FeaturesExtractor("config.yml").from_file(
@@ -12,5 +11,4 @@ if __name__ == "__main__":
     # level=FeaturesExtractor.level
     path = '.'
     import pandas as pd
-    # df = pd.read_csv('./myfeatures.csv')
     FeaturesGenerator().generate_reports(df, 1, path, parts)  # level=level)
