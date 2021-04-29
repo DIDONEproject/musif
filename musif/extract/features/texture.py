@@ -3,6 +3,7 @@ from typing import List, Tuple
 from pandas import DataFrame
 
 from musif.common.sort import sort_dict
+from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.musicxml import Measure, Note, Part
@@ -17,39 +18,28 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     if len(parts_data) == 0:
         return {}
     features = {}
-    notes_list = []
+    notes = {}
     df_parts = DataFrame(parts_features)
 
     df_sound = df_parts.groupby("SoundAbbreviation").aggregate(
         {NOTES: "sum"})
+    df_score = DataFrame(score_features, index=[0])
 
     for f in range(0, len(parts_features)):
-
-        # notes_list_parts = np.asanyarray([len(i['notes']) for i in parts_data])
-
-        # notes_list_sounds = np.asanyarray(
-        #     [df_sound.loc[sound, NOTES].tolist() for sound in df_sound.index])
         if parts_features[f]['PartAbbreviation'].lower().startswith('vn'):
-            print('violin')
-            notes_list.append(len(parts_data[f]['notes']))
+            # cheap capitalization to preserve I and II in Violins
+            notes[parts_features[f]['PartAbbreviation'][0].upper()+parts_features[f]['PartAbbreviation'][1:]] = len(parts_data[f]['notes'])
+        elif parts_features[f]['Family'] == VOICE_FAMILY:
+            notes[parts_features[f]['FamilyAbbreviation'].capitalize()] = int(
+                    df_score['Family'+parts_features[f]['FamilyAbbreviation'].capitalize()+'_NotesMean'])
         else:
-            # notes_list.append(df_sound.iloc[f][NOTES])
-            pass
-        # textures = notes_list[f]/notes_list[f+1:]
-        # t_names = [get_part_prefix(parts_features[f]['PartAbbreviation'])+'_'+get_part_prefix(
-        #     parts_features[j+f+1]['PartAbbreviation'])+TEXTURE for j in range(0, len(textures))]
+            if not parts_features[f]['PartAbbreviation'].endswith('II'):
+                notes[parts_features[f]['SoundAbbreviation'].capitalize()] = int(
+                    df_score['Sound'+parts_features[f]['SoundAbbreviation'].capitalize()+'_NotesMean'])
 
-        # for i, texture in enumerate(textures):
-        #     features[f"{t_names[i]}"] = texture
+    for i, (key, value) in enumerate(notes.items()):
+        texture = value/np.asarray(list(notes.values())[i+1:])
+        for j, t in enumerate(texture):
+            features[key + '_' + list(notes.keys())[j+i+1] + TEXTURE] = t
 
-    for f, sound in enumerate(df_sound.index):
-        sound_prefix = get_sound_prefix(sound)
-        features[f"{sound_prefix}{NOTES}"] = df_sound.loc[sound, NOTES].tolist()
-
-        # textures = notes_list[f]/notes_list[f+1:]
-        # t_names = [get_sound_prefix(df_sound.index[f])+'_'+get_sound_prefix(
-        # df_sound.index[j+f+1])+TEXTURE for j in range(0, len(textures))]
-
-        # for i, texture in enumerate(textures):
-        #     features[f"{t_names[i]}"] = texture
     return features
