@@ -5,7 +5,7 @@ from typing import Dict, List, Tuple
 from music21.interval import Interval
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_corpus_prefix
+from musif.extract.features.prefix import get_score_prefix, get_part_prefix, get_corpus_prefix, get_sound_prefix
 
 INTERVALLIC_MEAN = "IntervallicRatio"
 INTERVALLIC_STD = "IntervallicStd"
@@ -15,6 +15,8 @@ TRIMMED_INTERVALLIC_MEAN = "TrimmedIntervallicRatio"
 TRIMMED_INTERVALLIC_STD = "TrimmedIntervallicStd"
 TRIMMED_ABSOLUTE_INTERVALLIC_MEAN = "TrimmedAbsoluteIntervallicRatio"
 TRIMMED_ABSOLUTE_INTERVALLIC_STD = "TrimmedAbsoluteIntervallicStd"
+INTERVALLIC_TRIM_DIFF = "IntervallicTrimDiff"
+INTERVALLIC_TRIM_RATIO = "IntervallicTrimRatio"
 ABSOLUTE_INTERVALLIC_TRIM_DIFF = "AbsoluteIntervallicTrimDiff"
 ABSOLUTE_INTERVALLIC_TRIM_RATIO = "AbsoluteIntervallicTrimRatio"
 ASCENDING_SEMITONES = "AscendingSemitones"
@@ -72,16 +74,36 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     if len(parts_data) == 0:
         return {}
-    score_prefix = get_score_prefix()
-    numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
-    text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
-    text_intervals_count = Counter(text_intervals)
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
+        numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
+        text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+        text_intervals_count = Counter(text_intervals)
+        features.update(get_interval_features(numeric_intervals, part_prefix))
+        features.update(get_interval_count_features(text_intervals_count, part_prefix))
+        features.update(get_interval_type_features(text_intervals_count, part_prefix))
         for feature_name in ALL_FEATURES:
             features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+
+    parts_data_per_sound = {part_data["sound"]: [] for part_data in parts_data}
+    for part_data in parts_data:
+        sound = part_data["sound"]
+        parts_data_per_sound[sound].append(part_data)
+    for sound, parts_data in parts_data_per_sound.items():
+        sound_prefix = get_sound_prefix(sound)
+        numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
+        text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+        text_intervals_count = Counter(text_intervals)
+        features.update(get_interval_features(numeric_intervals, sound_prefix))
+        features.update(get_interval_count_features(text_intervals_count, sound_prefix))
+        features.update(get_interval_type_features(text_intervals_count, sound_prefix))
+
+    numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
+    text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+    text_intervals_count = Counter(text_intervals)
+    score_prefix = get_score_prefix()
     features.update(get_interval_features(numeric_intervals, score_prefix))
     features.update(get_interval_count_features(text_intervals_count, score_prefix))
     features.update(get_interval_type_features(text_intervals_count, score_prefix))
@@ -117,8 +139,10 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     trimmed_absolute_intervals = absolute_numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(absolute_numeric_intervals) > 0 else []
     trimmed_absolute_interval_mean = mean(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
     trimmed_absolute_interval_std = stdev(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
-    trim_diff = absolute_interval_mean - trimmed_absolute_interval_mean
-    trim_ratio = trim_diff / absolute_interval_mean if absolute_interval_mean != 0 else 0
+    trim_diff = interval_mean - trimmed_interval_mean
+    trim_ratio = trim_diff / interval_mean if interval_mean != 0 else 0
+    absolute_trim_diff = absolute_interval_mean - trimmed_absolute_interval_mean
+    absolute_trim_ratio = absolute_trim_diff / absolute_interval_mean if absolute_interval_mean != 0 else 0
     ascending_semitones = max(numeric_intervals) if len(numeric_intervals) > 0 else None
     ascending_semitones_name = Interval(ascending_semitones).directedName if ascending_semitones is not None else None
     descending_semitones = min(numeric_intervals) if len(numeric_intervals) > 0 else None
@@ -133,8 +157,10 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_interval_std,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_interval_mean,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_interval_std,
-        f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": trim_diff,
-        f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": trim_ratio,
+        f"{prefix}{INTERVALLIC_TRIM_DIFF}": trim_diff,
+        f"{prefix}{INTERVALLIC_TRIM_RATIO}": trim_ratio,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": absolute_trim_diff,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": absolute_trim_ratio,
         f"{prefix}{ASCENDING_SEMITONES}": ascending_semitones,
         f"{prefix}{ASCENDING_INTERVAL}": ascending_semitones_name,
         f"{prefix}{DESCENDING_SEMITONES}": descending_semitones,
