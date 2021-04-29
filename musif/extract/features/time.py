@@ -62,9 +62,17 @@ def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Co
     features = {}
     corpus_prefix = get_corpus_prefix()
     tempo_grouped_2_counter = Counter([score_features[TEMPO_GROUPED_2] for score_features in scores_features])
+    time_signature_counter = Counter([score_features[TIME_SIGNATURE] for score_features in scores_features])
+    time_signature_grouped_counter = Counter([score_features[TIME_SIGNATURE_GROUPED] for score_features in scores_features])
     for group in TempoGroup2:
         count = tempo_grouped_2_counter.get(group.value, 0)
         features[f"{corpus_prefix}{TEMPO_GROUPED_2}_{group.value}"] = count
+    for group, count in time_signature_counter.items():
+        formatted_group = group if group else 'nd'
+        features[f"{corpus_prefix}{TIME_SIGNATURE}_{formatted_group}"] = count
+    for group, count in time_signature_grouped_counter.items():
+        formatted_group = ''.join([word.capitalize() for word in group.split(" ")])
+        features[f"{corpus_prefix}{TIME_SIGNATURE_GROUPED}_{formatted_group}"] = count
     return features
 
 
