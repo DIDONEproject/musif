@@ -38,8 +38,12 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
                     df_score['Sound'+parts_features[f]['SoundAbbreviation'].capitalize()+'_NotesMean'])
 
     for i, (key, value) in enumerate(notes.items()):
-        texture = value/np.asarray(list(notes.values())[i+1:])
+        texture = value / np.asarray(list(notes.values())[i+1:])
         for j, t in enumerate(texture):
-            features[key + '_' + list(notes.keys())[j+i+1] + TEXTURE] = t
+            part1 = key
+            part2 = list(notes.keys())[j+i+1]
+            part1_prefix = get_part_prefix(part1)
+            part2_prefix = get_part_prefix(part2)
+            features[f"{part1_prefix}_{part2_prefix}_{TEXTURE}"] = t
 
     return features

@@ -25,7 +25,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         "AriaOpera": opera_title,
         "AriaLabel": label,
         "AriaId": aria_id,
-        "AriaTitle": aria_title,
+        "AriaName": aria_title,
         "Composer": composer,
         "Year": year,
         "Decade": decade,
