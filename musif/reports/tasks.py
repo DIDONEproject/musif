@@ -12,11 +12,13 @@ from musif.common.sort import sort
 from .calculations import *
 from .constants import *
 from .visualisations import *
-
+import sys
+from itertools import combinations, permutations
 from musif.common.sort import sort_dataframe
 import musif.extract.features.interval as interval
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.lyrics as lyrics
+from musif.common.constants import VOICE_FAMILY
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
@@ -26,6 +28,276 @@ fh = logging.FileHandler(
 fh.setLevel(logging.ERROR)
 logger = logging.getLogger("generation")
 logger.addHandler(fh)
+def _remove_folder_contents(path):
+    for filename in os.listdir(path):
+        file_path = os.path.join(path, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+        elif os.path.isdir(file_path):
+            _remove_folder_contents(file_path)
+
+def factor_execution(all_info, factor, parts_list, main_results_path, sorting_lists):
+        global rows_groups
+        global not_used_cols
+
+        main_results_path = os.path.join(main_results_path, 'results')
+        rg = copy.deepcopy(rows_groups)
+        nuc = copy.deepcopy(not_used_cols)
+
+        # 1. Split all the dataframes to work individually
+        common_columns_df = all_info[metadata_columns]
+
+        common_columns_df['Total analysed'] = 1.0
+
+        clefs_info_list = ['Clef1', 'Clef2', 'Clef3']
+        textures_list = []
+        density_set = set([])
+        notes_set=set([])
+        intervals_list = []
+        Intervals_types_list = []
+        instruments = set([])
+        if parts_list:
+            instruments = parts_list
+        else:
+            for aria in all_info['Scoring']:
+                for a in aria.split(','):
+                    instruments.add(a)
+
+        instruments = [instrument[0].upper()+instrument[1:]
+                       for instrument in instruments]
+
+        # Getting general data that requires all info but is ran once
+
+        for instrument in instruments:
+            if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
+                catch = 'Part'
+                notes_set.add(catch + instrument + '_Notes')
+            elif instrument.lower() in all_info.Voices[0]:
+                catch='Family'
+                instrument=VOICE_FAMILY.capitalize()
+                notes_set.add(catch + instrument + '_NotesMean')
+            else:
+                catch = 'Sound'
+                if instrument.endswith('II'):
+                    continue
+                instrument = instrument.replace('I', '')
+                notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
+
+            density_set.add(
+                catch + instrument + '_SoundingDensity')
+            density_set.add(
+                catch + instrument + '_SoundingMeasures')
+
+        # Inizalizing new dataframes and defining those that don't depends on each part
+        density_df = textures_df = clefs_info = intervals_info = melody_values = common_columns_df
+
+        textures_df = pd.concat(
+            [textures_df, all_info[[i for i in all_info.columns if i.endswith('Texture')]], all_info[list(notes_set)]], axis=1)
+        density_df = pd.concat(
+            [density_df, all_info[list(density_set)],  all_info[list(notes_set)]], axis=1)
+
+        clefs_info = pd.concat(
+            [clefs_info, all_info[clefs_info_list]], axis=1)
+        clefs_info = clefs_info.dropna(how='all', axis=1)
+
+        flag=True #Flag to run common calculations only once
+        
+        print(str(factor) + " factor")
+
+        emphasised_A_list = []
+
+        # Running some processes that differ in each part
+        for instrument in list(instruments):
+
+
+            if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
+                type = 'Part'
+            elif instrument.lower() in all_info.Voices[0]:
+                type='Family'
+                instrument=VOICE_FAMILY.capitalize()
+            else:
+                type = 'Sound'
+
+            results_folder = os.path.join(main_results_path, instrument)
+            if not os.path.exists(results_folder):
+                os.makedirs(results_folder)
+                 
+            # CAPTURING FEATURES that depend total or partially on each part
+            catch = type + instrument +'_'
+            melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
+                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+interval.ASCENDING_SEMITONES, catch+interval.ASCENDING_INTERVAL, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVAL, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.LOWEST_INDEX, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.ABSOLUTE_INTERVAL, catch + ambitus.ABSOLUTE_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
+
+            if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_info.columns:
+                melody_values_list.append('Part'+instrument+lyrics.SYLLABIC_RATIO)
+
+            for col in all_info.columns:
+                if col.startswith(catch+'Intervals'):
+                    intervals_list.append(col)
+                    # Intervals_types_list.append(col)
+                # or all_info[[i for i in all_info.columns if i.endswith('Interval')]]]
+            Intervals_types_list = [catch + 'RepeatedNotes', catch + ' LeapsAscending', catch+'LeapsDescending', catch+'LeapsAll', catch+'StepwiseMotionAscending', catch+'StepwiseMotionDescending',  catch+'StepwiseMotionAll',  catch+'Total',  catch+'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll',
+                'ScoreMajorAscending', 'ScoreMajorDescending', 'ScoreMajorAll', 'ScoreMinorAscending', 'ScoreMinorDescending', 'ScoreMinorAll', 'ScoreAugmentedAscending', 'ScoreAugmentedDescending', 'ScoreAugmentedAll', 'ScoreDiminishedAscending', 'ScoreDiminishedDescending', 'ScoreDiminishedAll', 'ScoreTotal1']
+
+            # Joining common info and part info
+            melody_values = pd.concat(
+                [common_columns_df, all_info[melody_values_list]], axis=1)
+            melody_values.columns = [c.replace('Part'+instrument+'_', '')
+                                for c in melody_values.columns]
+            intervals_info = pd.concat(
+                [common_columns_df, all_info[intervals_list]], axis=1)
+
+            Intervals_types = pd.concat(
+                [common_columns_df, all_info[Intervals_types_list]], axis=1)
+
+            emphasised_scale_degrees_info_A = pd.concat(
+                [common_columns_df, all_info[emphasised_A_list]], axis=1)
+
+            emphasised_scale_degrees_info_B = common_columns_df
+
+            # Dropping nans
+            melody_values = melody_values.dropna(how='all', axis=1)
+            Intervals_types = Intervals_types.dropna(
+                how='all', axis=1)
+            emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
+                how='all', axis=1)
+            emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
+                how='all', axis=1)
+            intervals_info = intervals_info.dropna(how='all', axis=1)
+
+            absolute_intervals = make_intervals_absolute(intervals_info)
+
+            # 2. Get the additional_info dictionary (special case if there're no factors)
+            additional_info = {"AriaLabel": ["AriaTitle"],
+                               "AriaTitle": ["AriaLabel"]}  # solo agrupa aria
+            if factor == 0:
+                rows_groups = {"AriaId": ([], "Alphabetic")}
+                rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
+                for r in rg_keys:
+                    if type(r) == list:
+                        not_used_cols += r
+                    else:
+                        not_used_cols.append(r)
+                # It a list, so it is applicable to all grouppings
+                additional_info = ["AriaLabel", "AriaId", "Composer", "Year"]
+
+            rg_groups = [[]]
+            if factor >= 2:  # 2 factors or more
+                rg_groups = list(permutations(
+                    list(forbiden_groups.keys()), factor - 1))[4:]
+
+                if factor > 2:
+                    prohibidas = ['Composer', 'Opera']
+                    for g in rg_groups:
+                        if "AriaId" in g:
+                            g_rest = g[g.index("AriaId"):]
+                            if any(p in g_rest for p in prohibidas):
+                                rg_groups.remove(g)
+                        elif "AriaLabel" in g:
+                            g_rest = g[g.index("AriaLabel"):]
+                            if any(p in g_rest for p in prohibidas):
+                                rg_groups.remove(g)
+                rg_groups = [r for r in rg_groups if r[0]
+                             in list(metadata_columns)]  # ???
+
+            results_path_factorx = path.join(main_results_path, instrument, str(
+                factor) + " factor") if factor > 0 else path.join(main_results_path, instrument, "Data")
+            if not os.path.exists(results_path_factorx):
+                os.makedirs(results_path_factorx)
+
+            common_data_path = path.join(main_results_path, 'Common', str(
+                factor) + " factor") if factor > 0 else path.join(main_results_path, 'Common', "Data")
+
+            if not os.path.exists(common_data_path):
+                os.makedirs(common_data_path)
+            if flag:
+                for groups in rg_groups:
+                    group_execution(
+                        groups, common_data_path, additional_info, factor, sorting_lists, density_df=density_df, textures_df=textures_df, clefs_info=clefs_info)
+                flag=False
+
+            # # MULTIPROCESSING (one process per group (year, decade, city, country...))
+            # if sequential: # 0 and 1 factors
+            for groups in rg_groups:
+                # group_execution(groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals,
+                #                       Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
+                group_execution(
+                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values)
+                rows_groups = rg
+                not_used_cols = nuc
+            # else: # from 2 factors
+            #     # process_executor = concurrent.futures.ProcessPoolExecutor()
+            #     futures = [process_executor.submit(group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
+            #     kwargs = {'total': len(futures),'unit': 'it','unit_scale': True,'leave': True}
+            #     for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
+            #         rows_groups = rg
+            #         not_used_cols = nuc
+#####################################################################
+    # Function that generates the needed information for each grouping  #
+    #####################################################################
+    #group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
+
+def group_execution(groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(), clefs_info=pd.DataFrame()):
+    visualiser_lock = True
+    if groups:
+        # if sequential:
+        results_path = path.join(results_path_factorx, '_'.join(groups))
+        if not os.path.exists(results_path):
+            os.mkdir(results_path)
+    else:
+        results_path = results_path_factorx
+    if os.path.exists(path.join(results_path, 'visualisations')):
+        _remove_folder_contents(
+            path.join(results_path, 'visualisations'))
+    else:
+        os.makedirs(path.join(results_path, 'visualisations'))
+    # MUTITHREADING
+    try:
+        # executor = concurrent.futures.ThreadPoolExecutor()
+        # visualiser_lock = threading.Lock()
+        # futures = []
+        if not melody_values.empty:
+            #     # futures.append(executor.submit(melody_values, melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
+            #     #                visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
+            iValues(melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
+                    visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None )
+        if not density_df.empty:
+            densities(density_df, results_path, '-'.join(groups) + "_Densities.xlsx",
+                        sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+        if not textures_df.empty:
+            textures(textures_df, results_path, '-'.join(groups) + "_Textures.xlsx",
+                        sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+            # if not intervals_info.empty:
+            #     futures.append(executor.submit(iiaIntervals, intervals_info, '-'.join(groups) + "_2aIntervals.xlsx",
+            #                    sorting_lists["Intervals"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None))
+            #     futures.append(executor.submit(iiaIntervals, absolute_intervals, '-'.join(groups) + "_2bIntervals_absolute.xlsx",
+            #                    sorting_lists["Intervals_absolute"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None))
+            # if not Intervals_types.empty:
+            #     futures.append(executor.submit(IIIIntervals_types, Intervals_types, results_path, '-'.join(groups) +
+            #                    "_3Interval_typesIIIIntervals_types.xlsx", sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
+            # if not emphasised_scale_degrees_info_A.empty:
+            #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_A, sorting_lists["ScaleDegrees"], '-'.join(
+            #         groups) + "_4aScale_degrees.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
+            # if not emphasised_scale_degrees_info_B.empty:
+            #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_B, sorting_lists["ScaleDegrees"], '-'.join(
+            #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
+        if not clefs_info.empty:
+            # futures.append(executor.submit(iiaIntervals, clefs_info, '-'.join(groups) + "_5Clefs.xlsx",
+            #                sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None))
+            iiaIntervals(clefs_info, '-'.join(groups) + "_5Clefs.xlsx",
+                            sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
+            # wait for all
+            # if sequential:
+            # kwargs = {'total': len(futures), 'unit': 'it',
+            #             'unit_scale': True, 'leave': True}
+            # for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
+            #     pass
+            # else:
+            #     for f in concurrent.futures.as_completed(futures):
+            #         pass
+    except KeyboardInterrupt:
+        sys.exit(2)
+    # except Exception as e:
+    #     pass
 
 
 def get_groups_add_info(data, row, additional_info):
@@ -87,7 +359,7 @@ def print_averages_total(hoja, row, values, lable_column, values_column, average
     hoja.cell(row, lable_column).fill = orangeFill
 
     for i, v in enumerate(values):
-        if exception and i == exception:  # unicamente ocurre en % Trimmed en iValues
+        if exception and i == exception:  # unicamente ocurre en % Trimmed en melody_values
             hoja.cell(row, values_column).value = str(round(v * 100, 3)) + '%'
         else:
             hoja.cell(row, values_column).value = v if not per else str(v) + "%"
@@ -344,7 +616,7 @@ def print_groups(hoja, grouped, row_number, column_number, columns, third_column
 
 
 ##########################################################################################################
-# Function in charge of printting the data, the arguments are the same as the explained in hoja_iValues  #
+# Function in charge of printting the data, the arguments are the same as the explained in hoja_excel  #
 ##########################################################################################################
 
 
@@ -420,7 +692,7 @@ def row_iteration(hoja, columns, row_number, column_number, data, third_columns,
     return row_number
 
 
-def hoja_iValues(hoja, columns, data, third_columns, computations_columns, sorting_lists, groups=None, first_columns=None, second_columns=None, per=False, average=False, last_column=False, last_column_average=False,
+def hoja_excel(hoja, columns, data, third_columns, computations_columns, sorting_lists, groups=None, first_columns=None, second_columns=None, per=False, average=False, last_column=False, last_column_average=False,
                  columns2=None, data2=None, third_columns2=None, computations_columns2=None, first_columns2=None, second_columns2=None, additional_info=[], ponderate=False):
 
     row_number = 1  # we start writing in row 1
@@ -468,9 +740,9 @@ def hoja_iValues(hoja, columns, data, third_columns, computations_columns, sorti
                 hoja.cell(last_printed[i][1],  i + 1).fill = factors_Fill[i]
 
 ########################################################################
-# Function ment to write the iValues excel
+# Function ment to write the melody_values excel
 # -------
-# data: all_info dataframe
+# data: melody_values dataframe
 # results_path: where to store the data
 # name: name that the excel will take
 # sorting lists: lists that will be used for sorting the results
@@ -498,7 +770,7 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
 
         # HAREMOS LA MEDIA DE TODAS LAS COLUMNAS
         computations = ['sum'] + ["mean"]*(len(column_names) - 1)
-        hoja_iValues(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
+        hoja_excel(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
                      sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
         # HOJA 2: AMBITUS
@@ -517,7 +789,7 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
         columns = columns_alike_our_data(
             third_columns_names, second_column_names, first_column_names)
 
-        hoja_iValues(workbook.create_sheet("Ambitus"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
+        hoja_excel(workbook.create_sheet("Ambitus"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
                      first_columns=first_column_names, second_columns=second_column_names, average=True, additional_info=additional_info)
 
         # HOJA 3: LARGEST_LEAPS
@@ -528,7 +800,7 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
             third_columns_names, second_column_names)
         computations = ["sum", "max", "maxInterval", "min", "minInterval"]
 
-        hoja_iValues(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
+        hoja_excel(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
                      sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
 
         if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
@@ -550,14 +822,14 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
 
                 name_bar = path.join(
                     result_visualisations, name.replace('.xlsx', '.png'))
-                ivalues_bar_plot(
+                melody_values_bar_plot(
                     name_bar, datag, columns_visualisation, second_title=str(g))
                 name_box = path.join(
                     result_visualisations, 'Ambitus' + name.replace('.xlsx', '.png'))
                 box_plot(name_box, datag, second_title=str(g))
         else:
             name_bar = path.join(results_path,path.join('visualisations', name.replace('.xlsx', '.png')))
-            ivalues_bar_plot(name_bar, data, columns_visualisation)
+            melody_values_bar_plot(name_bar, data, columns_visualisation)
             name_box = path.join(
                 results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
             box_plot(name_box, data)
@@ -585,11 +857,11 @@ def iiaIntervals(data, name, sorting_list, results_path, sorting_lists, visualis
         # esta hoja va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
         computations = ["sum"]*len(third_columns_names)
 
-        hoja_iValues(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, sorting_lists,
+        hoja_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
-        hoja_iValues(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, sorting_lists,
+        hoja_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
-        hoja_iValues(workbook.create_sheet("Vertical Per"), third_columns_names, data, third_columns_names, computations, sorting_lists,
+        hoja_excel(workbook.create_sheet("Vertical Per"), third_columns_names, data, third_columns_names, computations, sorting_lists,
                      groups=groups, per=True, average=False, last_column=True, last_column_average=True, additional_info=additional_info)
 
         if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
@@ -649,11 +921,11 @@ def IIIIntervals_types(data, results_path, name, sorting_lists, visualiser_lock,
         columns2 = columns_alike_our_data(
             third_columns_names2, second_column_names2)
 
-        hoja_iValues(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True, last_column_average=False, second_columns=second_column_names, average=True,
+        hoja_excel(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True, last_column_average=False, second_columns=second_column_names, average=True,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
-        hoja_iValues(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
+        hoja_excel(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
-        hoja_iValues(workbook.create_sheet("Vertical Per"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=False, last_column=True, last_column_average=True,
+        hoja_excel(workbook.create_sheet("Vertical Per"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=False, last_column=True, last_column_average=True,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
 
         # borramos la hoja por defecto
@@ -746,11 +1018,11 @@ def emphasised_scale_degrees(data, sorting_list, name, results_path, sorting_lis
             [data[[gc for gc in general_cols if gc in all_columns]], emphdegrees], axis=1)
         _, unique_columns = np.unique(data2.columns, return_index=True)
         data2 = data2.iloc[:, unique_columns]
-        hoja_iValues(workbook.create_sheet("Wheighted"), third_columns_names, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
+        hoja_excel(workbook.create_sheet("Wheighted"), third_columns_names, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info, ponderate=True)
-        hoja_iValues(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
+        hoja_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
-        hoja_iValues(workbook.create_sheet("Vertical Per"), third_columns_names, data, third_columns_names, computations, sorting_lists, groups=groups, per=True, average=False, last_column=True, last_column_average=True,
+        hoja_excel(workbook.create_sheet("Vertical Per"), third_columns_names, data, third_columns_names, computations, sorting_lists, groups=groups, per=True, average=False, last_column=True, last_column_average=True,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
 
         # Delete the default sheet
@@ -823,9 +1095,9 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
         computations2 = ["sum"] + ["mean_density"] * \
             (len(third_columns_names)-1)
         columns = third_columns_names
-        hoja_iValues(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True,
+        hoja_excel(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, sorting_lists, groups=groups, last_column=True,
                      last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
-        hoja_iValues(workbook.create_sheet("Horizontal"), columns, data_total, third_columns_names, computations2,  sorting_lists, groups=groups,
+        hoja_excel(workbook.create_sheet("Horizontal"), columns, data_total, third_columns_names, computations2,  sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
         # Deleting default sheet
@@ -920,9 +1192,9 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         data = pd.concat([data_general, textures_df], axis=1)
         notes_df = pd.concat([data_general, notes_df], axis=1)
 
-        hoja_iValues(workbook.create_sheet("Weighted_textures"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
+        hoja_excel(workbook.create_sheet("Weighted_textures"), columns, data, third_columns_names, computations, sorting_lists, groups=groups,
                      last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
-        hoja_iValues(workbook.create_sheet("Horizontal_textures"), columns, notes_df, third_columns_names, computations2,  sorting_lists, groups=groups,
+        hoja_excel(workbook.create_sheet("Horizontal_textures"), columns, notes_df, third_columns_names, computations2,  sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
         # borramos la hoja por defecto
