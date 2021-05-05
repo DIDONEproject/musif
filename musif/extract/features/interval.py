@@ -30,7 +30,7 @@ LEAPS_ALL = "LeapsAll"
 STEPWISE_MOTION_ASCENDING = "StepwiseMotionAscending"
 STEPWISE_MOTION_DESCENDING = "StepwiseMotionDescending"
 STEPWISE_MOTION_ALL = "StepwiseMotionAll"
-LEAPS_STEPWISE_MOTION_TOTAL = "LeapsStepwiseMotionTotal"
+LEAPS_STEPWISE_MOTION_TOTAL = "LeapsStepwiseMotionAll"
 INTERVALS_PERFECT_ASCENDING = "IntervalsPerfectAscending"
 INTERVALS_PERFECT_DESCENDING = "IntervalsPerfectDescending"
 INTERVALS_PERFECT_ALL = "IntervalsPerfectAll"
@@ -87,9 +87,9 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         for feature_name in ALL_FEATURES:
             features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
 
-    parts_data_per_sound = {part_data["sound"]: [] for part_data in parts_data}
+    parts_data_per_sound = {part_data["sound_abbreviation"]: [] for part_data in parts_data}
     for part_data in parts_data:
-        sound = part_data["sound"]
+        sound = part_data["sound_abbreviation"]
         parts_data_per_sound[sound].append(part_data)
     for sound, parts_data in parts_data_per_sound.items():
         sound_prefix = get_sound_prefix(sound)
