@@ -11,11 +11,11 @@ def get_family_prefix(family_abbreviation: str) -> str:
 
 
 def get_score_prefix() -> str:
-    return "Score"
+    return "Score_"
 
 
 def get_corpus_prefix() -> str:
-    return "Corpus"
+    return "Corpus_"
 
 
 
