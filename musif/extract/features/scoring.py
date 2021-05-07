@@ -132,7 +132,7 @@ def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Co
 
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
     sound = extract_sound(part, cfg)
-    return extract_abbreviated_part(sound, part, parts, cfg)[0]
+    return list(extract_abbreviated_part(sound, part, parts, cfg))[0]
 
 
 def extract_sound(part: Part, config: Configuration) -> str:
