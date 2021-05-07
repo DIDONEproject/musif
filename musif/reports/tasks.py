@@ -28,6 +28,7 @@ fh = logging.FileHandler(
 fh.setLevel(logging.ERROR)
 logger = logging.getLogger("generation")
 logger.addHandler(fh)
+
 def _remove_folder_contents(path):
     for filename in os.listdir(path):
         file_path = os.path.join(path, filename)
@@ -49,7 +50,6 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
 
         common_columns_df['Total analysed'] = 1.0
 
-        clefs_info_list = ['Clef1', 'Clef2', 'Clef3']
         textures_list = []
         density_set = set([])
         notes_set=set([])
@@ -89,16 +89,25 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
                 catch + instrument + '_SoundingMeasures')
 
         # Inizalizing new dataframes and defining those that don't depends on each part
-        density_df = textures_df = clefs_info = intervals_info = melody_values = common_columns_df
+        clefs_info=copy.deepcopy(common_columns_df)
+
+        common_columns_df.Clef2.replace('', np.nan, inplace=True)
+        common_columns_df.Clef3.replace('', np.nan, inplace=True)
+        density_df = textures_df = intervals_info = melody_values = common_columns_df
 
         textures_df = pd.concat(
             [textures_df, all_info[[i for i in all_info.columns if i.endswith('Texture')]], all_info[list(notes_set)]], axis=1)
         density_df = pd.concat(
             [density_df, all_info[list(density_set)],  all_info[list(notes_set)]], axis=1)
 
-        clefs_info = pd.concat(
-            [clefs_info, all_info[clefs_info_list]], axis=1)
-        clefs_info = clefs_info.dropna(how='all', axis=1)
+        clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
+        
+        for clef in clefs_set:
+            clefs_info[clef] = 0
+            for r, j in enumerate(clefs_info.iterrows()):
+                clefs_info[clef].iloc[r] = float(len([i for i in clefs_info[['Clef1','Clef2','Clef3']].iloc[r] if i == clef]))
+        clefs_info.replace('', np.nan, inplace=True)
+        clefs_info.dropna(how='all', axis=1, inplace=True)
 
         flag=True #Flag to run common calculations only once
         
@@ -108,61 +117,63 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
 
         # Running some processes that differ in each part
         for instrument in list(instruments):
-
-
-            if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
-                type = 'Part'
-            elif instrument.lower() in all_info.Voices[0]:
-                type='Family'
-                instrument=VOICE_FAMILY.capitalize()
-            else:
-                type = 'Sound'
-
             results_folder = os.path.join(main_results_path, instrument)
             if not os.path.exists(results_folder):
                 os.makedirs(results_folder)
                  
             # CAPTURING FEATURES that depend total or partially on each part
-            catch = type + instrument +'_'
+            catch = 'Part' + instrument + '_'
+            # List of columns for melody parameters
+
             melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
                              catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+interval.ASCENDING_SEMITONES, catch+interval.ASCENDING_INTERVAL, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVAL, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.LOWEST_INDEX, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.ABSOLUTE_INTERVAL, catch + ambitus.ABSOLUTE_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
 
             if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_info.columns:
                 melody_values_list.append('Part'+instrument+lyrics.SYLLABIC_RATIO)
 
+            #Getting list of columns for intervals
             for col in all_info.columns:
                 if col.startswith(catch+'Intervals'):
                     intervals_list.append(col)
-                    # Intervals_types_list.append(col)
-                # or all_info[[i for i in all_info.columns if i.endswith('Interval')]]]
-            Intervals_types_list = [catch + 'RepeatedNotes', catch + ' LeapsAscending', catch+'LeapsDescending', catch+'LeapsAll', catch+'StepwiseMotionAscending', catch+'StepwiseMotionDescending',  catch+'StepwiseMotionAll',  catch+'Total',  catch+'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll',
-                'ScoreMajorAscending', 'ScoreMajorDescending', 'ScoreMajorAll', 'ScoreMinorAscending', 'ScoreMinorDescending', 'ScoreMinorAll', 'ScoreAugmentedAscending', 'ScoreAugmentedDescending', 'ScoreAugmentedAll', 'ScoreDiminishedAscending', 'ScoreDiminishedDescending', 'ScoreDiminishedAll', 'ScoreTotal1']
 
-            # Joining common info and part info
+            #Getting list of columns for intervals types
+            intervals_types_list = [catch + 'RepeatedNotes', catch + 'LeapsAscending', catch+'LeapsDescending', catch+'LeapsAll', catch+'StepwiseMotionAscending', catch+'StepwiseMotionDescending',  catch+'StepwiseMotionAll']
+            catch+='Intervals'
+            intervals_types_list = intervals_types_list + [catch + 'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll', catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', catch +'MinorDescending', catch +'MinorAll', catch +'AugmentedAscending', catch +'AugmentedDescending', catch +'AugmentedAll', catch +'DiminishedAscending', catch +'DiminishedDescending', catch +'DiminishedAll']
+
+            # Joining common info and part info, renaming columns for excel writing
+            
             melody_values = pd.concat(
                 [common_columns_df, all_info[melody_values_list]], axis=1)
             melody_values.columns = [c.replace('Part'+instrument+'_', '')
                                 for c in melody_values.columns]
             intervals_info = pd.concat(
                 [common_columns_df, all_info[intervals_list]], axis=1)
-
-            Intervals_types = pd.concat(
-                [common_columns_df, all_info[Intervals_types_list]], axis=1)
-
+            intervals_info.columns = [c.replace('Part'+instrument+'_'+'Intervals', '')
+                                for c in intervals_info.columns]
+            intervals_types = pd.concat([common_columns_df, all_info[intervals_types_list]], axis=1)
+            intervals_types.columns = [c.replace('Part'+instrument+'_', '').replace('Intervals', '')
+                                for c in intervals_types.columns]
             emphasised_scale_degrees_info_A = pd.concat(
                 [common_columns_df, all_info[emphasised_A_list]], axis=1)
 
             emphasised_scale_degrees_info_B = common_columns_df
 
             # Dropping nans
+            # melody_values.replace('', np.nan, inplace=True)
+            # intervals_types.replace('', np.nan, inplace=True)
+            # emphasised_scale_degrees_info_A.replace('', np.nan, inplace=True)
+            # emphasised_scale_degrees_info_B.replace('', np.nan, inplace=True)
+            # intervals_info.replace('', np.nan, inplace=True)
+
             melody_values = melody_values.dropna(how='all', axis=1)
-            Intervals_types = Intervals_types.dropna(
-                how='all', axis=1)
-            emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A.dropna(
-                how='all', axis=1)
-            emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B.dropna(
-                how='all', axis=1)
-            intervals_info = intervals_info.dropna(how='all', axis=1)
+            intervals_info.dropna(how='all', axis=1,inplace=True)
+            intervals_types.dropna(
+                how='all', axis=1,inplace=True)
+            emphasised_scale_degrees_info_A.dropna(
+                how='all', axis=1,inplace=True)
+            emphasised_scale_degrees_info_B.dropna(
+                how='all', axis=1,inplace=True)
 
             absolute_intervals = make_intervals_absolute(intervals_info)
 
@@ -221,7 +232,7 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
                 # group_execution(groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals,
                 #                       Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
                 group_execution(
-                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values)
+                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, absolute_intervals=absolute_intervals)
                 rows_groups = rg
                 not_used_cols = nuc
             # else: # from 2 factors
@@ -236,7 +247,7 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
     #####################################################################
     #group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
 
-def group_execution(groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(), clefs_info=pd.DataFrame()):
+def group_execution(groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(),intervals_info=pd.DataFrame(),intervals_types=pd.DataFrame(), clefs_info=pd.DataFrame(), absolute_intervals=None):
     visualiser_lock = True
     if groups:
         # if sequential:
@@ -266,14 +277,13 @@ def group_execution(groups, results_path_factorx, additional_info, factor, sorti
         if not textures_df.empty:
             textures(textures_df, results_path, '-'.join(groups) + "_Textures.xlsx",
                         sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
-            # if not intervals_info.empty:
-            #     futures.append(executor.submit(iiaIntervals, intervals_info, '-'.join(groups) + "_2aIntervals.xlsx",
-            #                    sorting_lists["Intervals"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None))
-            #     futures.append(executor.submit(iiaIntervals, absolute_intervals, '-'.join(groups) + "_2bIntervals_absolute.xlsx",
-            #                    sorting_lists["Intervals_absolute"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None))
-            # if not Intervals_types.empty:
-            #     futures.append(executor.submit(IIIIntervals_types, Intervals_types, results_path, '-'.join(groups) +
-            #                    "_3Interval_typesIIIIntervals_types.xlsx", sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
+        if not intervals_info.empty:
+            iiaIntervals(intervals_info, '-'.join(groups) + "_2aIntervals.xlsx",
+                               sorting_lists["Intervals"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
+            iiaIntervals(absolute_intervals, '-'.join(groups) + "_2bIntervals_absolute.xlsx",
+                            sorting_lists["Intervals_absolute"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
+        if not intervals_types.empty:
+            iiiIntervals_types(intervals_types, results_path, '-'.join(groups) + "_3Interval_types.xlsx", sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
             # if not emphasised_scale_degrees_info_A.empty:
             #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_A, sorting_lists["ScaleDegrees"], '-'.join(
             #         groups) + "_4aScale_degrees.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
@@ -281,8 +291,6 @@ def group_execution(groups, results_path_factorx, additional_info, factor, sorti
             #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_B, sorting_lists["ScaleDegrees"], '-'.join(
             #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
         if not clefs_info.empty:
-            # futures.append(executor.submit(iiaIntervals, clefs_info, '-'.join(groups) + "_5Clefs.xlsx",
-            #                sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None))
             iiaIntervals(clefs_info, '-'.join(groups) + "_5Clefs.xlsx",
                             sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
             # wait for all
@@ -502,15 +510,15 @@ def print_groups(hoja, grouped, row_number, column_number, columns, third_column
             column_computation = computations_columns[i]
             extra_info = []
             if column_computation == 'mean_density':
-                extra_info = subgroup_data[c+'Measures'][0]
-                value = compute_value(subgroup_data[c][0], column_computation, total_analysed_row,
+                extra_info = subgroup_data[c+'Measures']
+                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate, extra_info=extra_info)
                                       
             elif column_computation == 'mean_texture':
                 notes = subgroup_data[c.split('/')[0]+'Notes']
                 notes_next = subgroup_data[c.split('/')[1]+'Notes']
-                value = compute_value(notes[0], column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate, extra_info=notes_next[0]) 
+                value = compute_value(notes, column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate, extra_info=notes_next) 
             else:
                 value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
@@ -822,14 +830,14 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
 
                 name_bar = path.join(
                     result_visualisations, name.replace('.xlsx', '.png'))
-                melody_values_bar_plot(
+                ivalues_bar_plot(
                     name_bar, datag, columns_visualisation, second_title=str(g))
                 name_box = path.join(
                     result_visualisations, 'Ambitus' + name.replace('.xlsx', '.png'))
                 box_plot(name_box, datag, second_title=str(g))
         else:
             name_bar = path.join(results_path,path.join('visualisations', name.replace('.xlsx', '.png')))
-            melody_values_bar_plot(name_bar, data, columns_visualisation)
+            ivalues_bar_plot(name_bar, data, columns_visualisation)
             name_box = path.join(
                 results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
             box_plot(name_box, data)
@@ -838,7 +846,7 @@ def iValues(data, results_path, name, sorting_lists, visualiser_lock, additional
 
 
 def iiaIntervals(data, name, sorting_list, results_path, sorting_lists, visualiser_lock, additional_info=[], groups=None):
-    try:
+    # try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
@@ -869,42 +877,42 @@ def iiaIntervals(data, name, sorting_list, results_path, sorting_lists, visualis
             workbook.remove_sheet(std)
         workbook.save(os.path.join(results_path, name))
 
-        with visualiser_lock:
-            # VISUALISATIONS
-            if 'Clefs' in name:
-                title = 'Use of clefs'
-            elif 'Intervals_absolute' in name:
-                title = 'Presence of intervals (direction dismissed)'
-            else:
-                title = 'Presence of intervals (ascending and descending)'
+        # with visualiser_lock:
+        # VISUALISATIONS
+        if 'Clefs' in name:
+            title = 'Use of clefs'
+        elif 'Intervals_absolute' in name:
+            title = 'Presence of intervals (direction dismissed)'
+        else:
+            title = 'Presence of intervals (ascending and descending)'
 
-            if groups:
-                data_grouped = data.groupby(list(groups))
-                for g, datag in data_grouped:
-                    result_visualisations = path.join(
-                        results_path, 'visualisations', g)
-                    if not os.path.exists(result_visualisations):
-                        os.mkdir(result_visualisations)
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                result_visualisations = path.join(
+                    results_path, 'visualisations', g)
+                if not os.path.exists(result_visualisations):
+                    os.mkdir(result_visualisations)
 
-                    name_bar = path.join(
-                        result_visualisations, name.replace('.xlsx', '.png'))
-                    bar_plot(name_bar, datag, third_columns_names_origin,
-                             'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
-            else:
                 name_bar = path.join(
-                    results_path, 'visualisations', name.replace('.xlsx', '.png'))
-                bar_plot(name_bar, data, third_columns_names_origin,
-                         'Intervals' if 'Clef' not in name else 'Clefs', title)
-    except Exception as e:
-        logger.error('{}  Problem found:'.format(name), exc_info=True)
+                    result_visualisations, name.replace('.xlsx', '.png'))
+                bar_plot(name_bar, datag, third_columns_names_origin,
+                            'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
+        else:
+            name_bar = path.join(
+                results_path, 'visualisations', name.replace('.xlsx', '.png'))
+            bar_plot(name_bar, data, third_columns_names_origin,
+                        'Intervals' if 'Clef' not in name else 'Clefs', title)
+    # except Exception as e:
+    #     logger.error('{}  Problem found:'.format(name), exc_info=True)
 
 #########################################################
 # Function to generate the file 3.Intervals_types.xlsx  #
 #########################################################
 
 
-def IIIIntervals_types(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
-    try:
+def iiiIntervals_types(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
+    # try:
         workbook = openpyxl.Workbook()
 
         second_column_names = [("", 2), ("Leaps", 3), ("StepwiseMotion", 3)]
@@ -957,8 +965,8 @@ def IIIIntervals_types(data, results_path, name, sorting_lists, visualiser_lock,
                 name2 = path.join(results_path, 'visualisations',
                                   name.replace('.xlsx',  '.png'))
                 double_bar_plot(name2, data)
-    except Exception as e:
-        logger.error('3Interval_types  Problem found:', exc_info=True)
+    # except Exception as e:
+    #     logger.error('3Interval_types  Problem found:', exc_info=True)
 ########################################################################################################
 # This function returns the second group of data that we need to show, regarding third_columns_names2  #
 ########################################################################################################
@@ -1154,7 +1162,7 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
 
 
 def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=None, additional_info=[]):
-    try:
+    # try:
         workbook = openpyxl.Workbook()
         # Splitting the dataframes to reorder them
         data_general = data[metadata_columns + ['Total analysed']].copy()
@@ -1166,7 +1174,7 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         third_columns_names = []
         # Pre-treating data columns
         notes_df.columns = [i.replace('_', '').replace('Sound','').replace('Family','').replace('Part','').replace('Mean', '') for i in notes_df.columns]
-        textures_df.columns = [i.replace('_', '/').replace('Sound', '').replace('Texture','') for i in textures_df.columns]
+        textures_df.columns = [i.replace('__Texture','').replace('__', '/').replace('Part', '') for i in textures_df.columns]
         
         for column in textures_df.columns:
             if column not in sorting_lists["TexturesSorting"]:
@@ -1244,5 +1252,5 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
                 name.replace('.xlsx', '.png')
             bar_plot_extended(name_bar, data, columns,
                                 'Instrumental Textures', 'Ratio', title)
-    except Exception as e:
-        logger.error('{}  Problem found:'.format(name), exc_info=True)
+    # except Exception as e:
+    #     logger.error('{}  Problem found:'.format(name), exc_info=True)

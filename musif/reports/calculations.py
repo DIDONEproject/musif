@@ -49,6 +49,7 @@ def interval_mean(interval_semitones):
 
 def compute_value(column_data, computation, ponderate_data, not_grouped_information, ponderate, extra_info=None):
     value = 0
+    
     if computation == "mean":
         if not ponderate:
             value = round(np.nansum(column_data) /
@@ -60,6 +61,57 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             value = round(s / sum(ponderate_data), 3)
     elif computation == "mean_density" or computation == "mean_texture":
         value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
+    elif computation == "min":
+        value = min(column_data)
+    elif computation == "max":
+        value = max(column_data)
+    elif computation == "minNote":
+        # column_data= [0.0 if np.isnan(value) else value for value in column_data ]
+        # pitch_ps = [pitch.Pitch(n).ps if not np.isnan(n) else 0.0 for n in column_data]
+        pitch_ps = [pitch.Pitch(n).ps for n in column_data]
+        min_ps = min(pitch_ps)
+        value = column_data.tolist()[pitch_ps.index(min_ps)]
+    elif computation == "maxNote":
+        pitch_ps = [pitch.Pitch(n).ps for n in column_data]
+        max_ps = max(pitch_ps)
+        value = column_data.tolist()[pitch_ps.index(max_ps)]
+    elif computation == "meanNote":
+        pitch_ps = [pitch.Pitch(n).ps for n in column_data]
+        value = note_mean(pitch_ps)
+    elif computation == "minInterval":
+        interval_semitones = [interval.Interval(n).semitones for n in column_data]
+        min_sem = min(interval_semitones)
+        value = column_data.tolist()[interval_semitones.index(min_sem)]
+    elif computation == "maxInterval":
+        interval_semitones = [interval.Interval(n).semitones for n in column_data]
+        max_sem = max(interval_semitones)
+        value = column_data.tolist()[interval_semitones.index(max_sem)]
+    elif computation == "meanInterval" or computation == "meanSemitones":
+        lowest_notes_names = [a.split(',')[0] for a in column_data]
+        max_notes_names = [a.split(',')[1] for a in column_data]
+        min_notes_pitch = [pitch.Pitch(a).ps for a in lowest_notes_names]
+        max_notes_pitch = [pitch.Pitch(a).ps for a in max_notes_names]
+        mean_min = note_mean(min_notes_pitch, round_mean = True)
+        mean_max = note_mean(max_notes_pitch, round_mean = True)
+        i = interval.Interval(noteStart = note.Note(mean_min), noteEnd = note.Note(mean_max))
+        if computation == "meanInterval":
+            value = i.name
+        else:
+            value = i.semitones
+    elif computation == "absoluteInterval" or computation == "absolute":
+        lowest_notes_names = [a.split(',')[0] for a in column_data]
+        max_notes_names = [a.split(',')[1] for a in column_data]
+        min_notes_pitch = [pitch.Pitch(a).ps for a in lowest_notes_names]
+        max_notes_pitch = [pitch.Pitch(a).ps for a in max_notes_names]
+        minimisimo = min(min_notes_pitch)
+        maximisimo = max(max_notes_pitch)
+        noteStart = note.Note(lowest_notes_names[min_notes_pitch.index(minimisimo)])
+        noteEnd = note.Note(max_notes_names[max_notes_pitch.index(maximisimo)])
+        i = interval.Interval(noteStart = noteStart, noteEnd = noteEnd)
+        if computation == "absoluteInterval":
+            value = i.name
+        else:
+            value = i.semitones
     elif computation == "sum":
         value = np.nansum(column_data)
         # PONDERATE WITHT THE TOTAL ANALYSED IN THAT ROW
@@ -68,16 +120,16 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             # not_grouped_information needed for adding all the elements in total
             for i in range(len(column_data.tolist())):
                 all_columns = not_grouped_information.columns.tolist()
-                total_intervals = np.nansum([not_grouped_information.iloc[i, c] for c in range(
-                    len(all_columns)) if 'All' not in all_columns[c]])
+                total_intervals = np.nansum([not_grouped_information.iloc[i, c] for c in range(len(all_columns)) if 'All' not in all_columns[c]])
                 intervals = column_data.tolist()[i]
                 values.append(
                     (intervals * ponderate_data[i]) / total_intervals)
 
             value = np.nansum(values) / sum(ponderate_data)
             value = round(value * 100, 3)
-    if np.isnan(value):
-        value = 0.0
+    if isinstance(value, (int, float)):
+        if np.isnan(value):
+            value = 0.0
     return value
 
 #####################################################################################

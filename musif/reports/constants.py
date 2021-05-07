@@ -7,7 +7,7 @@ import musif.extract.features.interval as interval
 ARIA_LABEL = 'AriaLabel'
 OPERA = 'AriaOpera'
 ARIA_ID = 'AriaId'
-TITLE = 'AriaTitle'
+TITLE = 'AriaName'
 COMPOSER = 'Composer'
 DECADE = 'Decade'
 ACT = 'Act'
@@ -40,6 +40,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
                TITLE: ([], "Alphabetic"),
                COMPOSER: ([], "Alphabetic"),
+               NAME: ([], "Alphabetic"),
                DATE: ([
                    YEAR,
                    DECADE,
@@ -60,7 +61,10 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    "Gender"
                ], ["CharacterSorting", "Alphabetic", "Alphabetic", "Alphabetic"]),
                "Form": ([], "FormSorting"),
-               "Clef": ([], "Alphabetic"),
+               "Clef1": ([], "Alphabetic"),
+               "Clef2": ([], "Alphabetic"),
+               "Clef3": ([], "Alphabetic"),
+               "Librettist": ([], "Alphabetic"),
                "Key": ([
                    "Key",
                    "Mode",
@@ -75,11 +79,12 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    "TempoGrouped1",
                    "TempoGrouped2"
                ], ["TempoSorting", "TempoGroupedSorting1", "TempoGroupedSorting2"]),
-               "Scoring": ([
-                   "AbrScoring",
-                   "RealScoringGrouped"
+               SCORING: ([
+                   SCORING,
+                   FAMILY_SCORING
                ], ["ScoringSorting", "ScoringFamilySorting"])
                }
+
 not_used_cols = [ARIA_ID, 'RealScoring', 'Total analysed', 'OldClef']
 
 
