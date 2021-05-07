@@ -5,7 +5,7 @@ from pandas import DataFrame
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
-from musif.extract.features.scoring import CARDINALITY
+from musif.extract.features.scoring import NUMBER_OF_PARTS
 from musif.musicxml import Measure, Note, Part
 
 NOTES = "Notes"
@@ -53,7 +53,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         notes = df_sound.loc[sound, NOTES].tolist()
         measures = df_sound.loc[sound, MEASURES].tolist()
         sounding_measures = df_sound.loc[sound, SOUNDING_MEASURES].tolist()
-        sound_parts = score_features[f"{sound_prefix}{CARDINALITY}"]
+        sound_parts = score_features[f"{sound_prefix}{NUMBER_OF_PARTS}"]
         notes_mean = notes / sound_parts if sound_parts > 0 else 0
         measures_mean = measures / sound_parts if sound_parts > 0 else 0
         sounding_measures_mean = sounding_measures / sound_parts if sound_parts > 0 else 0
@@ -70,7 +70,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         notes = df_family.loc[family, NOTES].tolist()
         measures = df_family.loc[family, MEASURES].tolist()
         sounding_measures = df_family.loc[family, SOUNDING_MEASURES].tolist()
-        family_parts = score_features[f"{family_prefix}{CARDINALITY}"]
+        family_parts = score_features[f"{family_prefix}{NUMBER_OF_PARTS}"]
         notes_mean = notes / family_parts if family_parts > 0 else 0
         measures_mean = measures / family_parts if family_parts > 0 else 0
         sounding_measures_mean = sounding_measures / family_parts if family_parts > 0 else 0

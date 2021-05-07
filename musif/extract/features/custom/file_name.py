@@ -1,3 +1,4 @@
+from ntpath import basename
 from typing import List
 
 from musif.config import Configuration
@@ -9,7 +10,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     returns a dictionary so it can be easily input in a df
     """
 
-    file_name = score_data["file"]
+    file_name = basename(score_data["file"])
 
     opera_title = file_name[0:3]
     label = file_name.split("-", 2)[0]

@@ -7,6 +7,7 @@ from music21.stream import Part, Score
 from pandas import DataFrame
 
 from musif.common.cache import Cache
+from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.features import (
@@ -20,7 +21,7 @@ from musif.extract.features import (
     scale,
     scoring,
     texture,
-    time,
+    tempo,
 )
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
@@ -200,7 +201,8 @@ class FeaturesExtractor:
         if parts_filter is None:
             return list(score.parts)
         filter = set(parts_filter)
-        return [part for part in score.parts if to_abbreviation(part, score.parts, self._cfg) in filter]
+        parts = list(score.parts)
+        return [part for part in parts if to_abbreviation(part, parts, self._cfg) in filter]
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         expanded_part = expand_part(part, score_data["repetition_elements"])
@@ -211,7 +213,7 @@ class FeaturesExtractor:
         ambitus_pitch_span = score_data["ambitus"].getPitchSpan(part)
         sound = extract_sound(part, self._cfg)
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part, score_data["parts"], self._cfg)
-        family = self._cfg.sound_to_family[sound]
+        family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = self._cfg.family_to_abbreviation[family]
         family = self._cfg.sound_to_family[sound]
         data = {
@@ -256,7 +258,7 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(custom, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(metadata, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(key, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(time, score_data, parts_data, parts_features, score_features))
+        score_features.update(self._extract_score_module_features(tempo, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(scoring, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(lyrics, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(interval, score_data, parts_data, parts_features, score_features))
@@ -275,7 +277,7 @@ class FeaturesExtractor:
         corpus_features = {"Corpus": corpus_dir}
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, custom, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, key, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, time, scores_data, parts_data, scores_features, corpus_features))
+        corpus_features.update(self._extract_corpus_module_features(corpus_dir, tempo, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, scoring, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, lyrics, scores_data, parts_data, scores_features, corpus_features))
         corpus_features.update(self._extract_corpus_module_features(corpus_dir, interval, scores_data, parts_data, scores_features, corpus_features))
