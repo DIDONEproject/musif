@@ -4,7 +4,8 @@ from music21.note import Note
 
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.features.prefix import get_part_prefix, get_corpus_prefix, get_score_prefix
+from musif.extract.common import filter_parts_data
+from musif.extract.features.prefix import get_corpus_prefix, get_part_prefix, get_score_prefix
 
 SYLLABIC_RATIO = "SyllabicRatio"
 NOTES = "Notes"
@@ -29,6 +30,7 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
+    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
         return {}
 

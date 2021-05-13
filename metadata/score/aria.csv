@@ -1,689 +1,689 @@
-AriaId,AriaOpera,AriaName,Year,Composer,Librettist,Act,Scene,ActAndScene,Form,Character,Gender,RoleType,City,Territory
-0001,Did,Son_regina,1724,Sarro,M,1,5,105,Al segno,Didone,Female,Female lover 1,Naples,Italy
-0002,Did,Non_ha,1770,Piccinni,M,1,18,118,Al segno,Didone,Female,Female lover 1,Rome,Italy
-0003,Did,Non_ha,1724,Sarro,M,1,17,117,Da capo,Didone,Female,Female lover 1,Naples,Italy
-0004,Did,Dovrei_ma,1730,Sarro,M,1,2,102,recit,Enea,Male,Male lover 1,Naples,Italy
-0005,Did,Diro_che,1730,Sarro,M,1,3,103,Al segno,Selene,Female,Female lover 2,Naples,Italy
-0006,Did,Son_regina,1730,Sarro,M,1,5,105,Al segno,Didone,Female,Female lover 1,Naples,Italy
-0007,Did,Non_ha,1730,Sarro,M,1,17,117,Al segno,Didone,Female,Female lover 1,Naples,Italy
-0008,Did,Son_regina,1739,Lampugnani,M,1,5,105,Al segno,Didone,Female,Female lover 1,Padova,Italy
-0009,Did,Ah_non_lasciarmi,1739,Lampugnani,M,2,7,207,Da capo,Didone,Female,Female lover 1,Padova,Italy
-0010,Did,Son_regina,1760,Bernasconi,M,1,5,105,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0011,Did,Ah_non_lasciarmi,1760,Bernasconi,M,2,7,207,Da capo,Didone,Female,Female lover 1,Venice,Italy
-0012,Did,Son_regina,1742,Hasse,M,1,5,105,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
-0013,Did,Non_ha,1742,Hasse,M,1,18,118,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
-0014,Did,Non_ha,1747,Jommelli,M,1,17,117,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0015,Did,Son_regina,1747,Jommelli,M,1,5,105,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0016,Did,Son_regina,1749,Jommelli,M,1,5,105,Al segno,Didone,Female,Female lover 1,Vienna,Empire
-0017,Did,Non_ha,1753,Perez,M,1,17,117,Al segno,Didone,Female,Female lover 1,Genova,Italy
-0018,Did,Non_ha,1762,Sarti,M,1,15,115,ABA,Didone,Female,Female lover 1,Copenhagen,Denmark
-0019,Did,Non_ha,1763,Jommelli,M,1,17,117,Al segno,Didone,Female,Female lover 1,Stuttgart,Empire
-0020,Did,Non_ha,1764,Galuppi,M,1,17,117,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0021,Did,Non_ha,1775,Anfossi,M,1,11,111,AB,Didone,Female,Female lover 1,Venice,Italy
-0022,Did,Ah_non_lasciarmi,1742,Hasse,M,2,6,206,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
-0023,Did,Diro_che,1724,Sarro,M,1,3,103,Da capo,Selene,Female,Female lover 2,Naples,Italy
-0024,Did,Se_dalle,1724,Sarro,M,1,8,108,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0025,Did,Dovrei_ma,1739,Lampugnani,M,1,2,102,recit,Enea,Male,Male lover 1,Padova,Italy
-0026,Did,Tu_mi_scorgi,1739,Lampugnani,M,1,6,106,Al segno,Osmida,Male,Antagonist,Padova,Italy
-0027,Did,Fra_lo,1739,Lampugnani,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Padova,Italy
-0028,Did,Quando_saprai,1739,Lampugnani,M,1,9,109,Al segno,Enea,Male,Male lover 1,Padova,Italy
-0029,Did,Dovrei_ma,1760,Bernasconi,M,1,2,102,recit,Enea,Male,Male lover 1,Venice,Italy
-0030,Did,Diro_che,1760,Bernasconi,M,1,3,103,Al segno,Selene,Female,Female lover 2,Venice,Italy
-0031,Did,Ah_non_lasciarmi,1747,Jommelli,M,2,2,202,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0032,Did,Non_ha,1749,Jommelli,M,1,17,117,Da capo,Didone,Female,Female lover 1,Vienna,Italy
-0033,Did,Son_regina,1753,Perez,M,1,5,105,Al segno,Didone,Female,Female lover 1,Genova,Italy
-0034,Did,Ah_non_lasciarmi,1753,Perez,M,2,6,206,Al segno,Didone,Female,Female lover 1,Genova,Italy
-0035,Did,Ah_non_lasciarmi,1763,Traetta,M,2,4,204,Da capo,Didone,Female,Female lover 1,Venice,Italy
-0036,Did,Ah_non_lasciarmi,1762,Sarti,M,2,4,204,ABA,Didone,Female,Female lover 1,Copenhagen,Denmark
-0037,Did,Ah_non_lasciarmi,1764,Galuppi,M,2,7,207,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0038,Did,Son_regina,1768,Boroni,M,1,5,105,Al segno,Didone,Female,Female lover 1,Prague,Empire
-0039,Did,Ah_non_lasciarmi,1768,Boroni,M,2,5,205,Al segno,Didone,Female,Female lover 1,Prague,Empire
-0040,Did,Son_regina,1769,Majo,M,1,6,106,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0041,Did,Son_regina,1770,Piccinni,M,1,5,105,Al segno,Didone,Female,Female lover 1,Rome,Italy
-0042,Did,Ah_non_lasciarmi,1770,Piccinni,M,2,2,202,Al segno,Didone,Female,Female lover 1,Rome,Italy
-0043,Did,Son_regina,1775,Anfossi,M,1,4,104,ABA,Didone,Female,Female lover 1,Venice,Italy
-0044,Did,Ah_non_lasciarmi,1775,Anfossi,M,2,4,204,ABA,Didone,Female,Female lover 1,Venice,Italy
-0045,Did,Ah_non_lasciarmi,1769,Majo,M,2,3,203,AB,Didone,Female,Female lover 1,Venice,Italy
-0046,Did,Infelice_e,1724,Sarro,M,1,13,113,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0047,Did,Son_regina,1776,Schuster,M,1,5,105,ABA,Didone,Female,Female lover 1,Naples,Italy
-0048,Did,Ah_non_lasciarmi,1749,Jommelli,M,2,4,204,Al segno,Didone,Female,Female lover 1,Vienna,Empire
-0049,Did,Son_regina,1762,Sarti,M,1,5,105,Da capo,Didone,Female,Female lover 1,Copenhagen,Denmark
-0050,Did,Ah_non_lasciarmi,1763,Jommelli,M,2,3,203,Al segno,Didone,Female,Female lover 1,Stuttgart,Empire
-0051,Did,Son_regina,1763,Jommelli,M,1,5,105,Al segno,Didone,Female,Female lover 1,Stuttgart,Empire
-0052,Did,Ah_non_lasciarmi,1776,Schuster,M,2,7,207,ABA,Didone,Female,Female lover 1,Naples,Italy
-0053,Did,Son_regina,1763,Traetta,M,1,5,105,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0054,Did,Aura_con,1739,Lampugnani,X,1,10,110,Al segno,Selene,Female,Female lover 2,Padova,Italy
-0055,Did,Tu_mi_scorgi,1724,Sarro,M,1,6,106,Al segno,Osmida,Male,Antagonist,Naples,Italy
-0056,Did,Fra_lo,1724,Sarro,M,1,7,107,Da capo,Iarba,Male,Male lover 2,Naples,Italy
-0057,Did,Quando_saprai,1724,Sarro,M,1,10,110,Al segno,Enea,Male,Male lover 1,Naples,Italy
-0058,Did,Ogni_amator,1724,Sarro,M,1,11,111,Da capo,Selene,Female,Female lover 2,Naples,Italy
-0059,Did,Son_quel,1724,Sarro,M,1,12,112,Al segno,Iarba,Male,Male lover 2,Naples,Italy
-0060,Did,Tu_mi_disarmi,1724,Sarro,M,1,16,116,Da capo,Iarba,Male,Male lover 2,Naples,Italy
-0061,Did,Se_resto,1724,Sarro,M,1,18,118,Al segno,Enea,Male,Male lover 1,Naples,Italy
-0062,Did,Tu_mi_scorgi,1730,Sarro,M,1,6,106,Al segno,Osmida,Male,Antagonist,Naples,Italy
-0063,Did,Fra_lo,1730,Sarro,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Naples,Italy
-0064,Did,Se_dalle,1730,Sarro,M,1,8,108,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0065,Did,Quando_saprai,1730,Sarro,M,1,10,110,Al segno,Enea,Male,Male lover 1,Naples,Italy
-0066,Did,Ogni_amator,1730,Sarro,M,1,11,111,Da capo,Selene,Female,Female lover 2,Naples,Italy
-0067,Did,Son_quel,1730,Sarro,M,1,12,112,Al segno,Iarba,Male,Male lover 2,Naples,Italy
-0068,Did,Infelice_e,1730,Sarro,M,1,13,113,Al segno,Araspe,Male,Male lover 3,Naples,Italy
-0069,Did,Pensa_che,1730,Sarro,M,2,1,201,Al segno,Osmida,Male,Antagonist,Naples,Italy
-0070,Did,Leon_che,1739,Lampugnani,M,2,2,202,AB,Iarba,Male,Male lover 2,Padova,Italy
-0071,Did,L_augelletto,1739,Lampugnani,M,2,4,204,Al segno,Araspe,Male,Male lover 3,Padova,Italy
-0072,Did,Vedi_nel,1739,Lampugnani,M,2,8,208,Da capo,Enea,Male,Male lover 1,Padova,Italy
-0073,Did,Sono_tanti,1739,Lampugnani,X,2,10,210,Al segno,Osmida,Male,Antagonist,Padova,Italy
-0074,Did,Tormento_il,1739,Lampugnani,M,2,13,213,Al segno,Enea,Male,Male lover 1,Padova,Italy
-0075,Did,Tu_mi_scorgi,1760,Bernasconi,M,1,6,106,Al segno,Osmida,Male,Antagonist,Venice,Italy
-0076,Did,Se_dalle,1760,Bernasconi,M,1,8,108,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0077,Did,Quando_saprai,1760,Bernasconi,M,1,10,110,Da capo,Enea,Male,Male lover 1,Venice,Italy
-0078,Did,Son_quel,1760,Bernasconi,M,1,13,113,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0079,Did,Son_regina,1794,Paisiello,M,1,5,105,ABAB,Didone,Female,Female lover 1,Naples,Italy
-0080,Dem,Misero_pargoletto,1735,Leo,M,3,4,304,Al segno,Timante,Male,Male lover 1,Naples,Italy
-0081,Dem,Misero_pargoletto,1743,Jommelli,M,3,5,305,Da capo,Timante,Male,Male lover 1,Padova,Italy
-0082,Dem,Misero_pargoletto,1766,Bernasconi,M,3,5,305,Al segno,Timante,Male,Male lover 1,Munich,Italy
-0083,Dem,Misero_pargoletto,1748,Hasse,M,3,5,305,Al segno,Timante,Male,Male lover 1,Dresden,Empire
-0086,Dem,Se_tutti,1735,Leo,M,2,6,206,Da capo,Dircea,Female,Female lover 1,Naples,Italy
-0087,Dem,Misero_pargoletto,1758,Ferradini,M,3,4,304,Al segno,Timante,Male,Male lover 1,Milan,Italy
-0088,Dem,Misero_pargoletto,1754,Manna,M,3,5,305,Da capo,Timante,Male,Male lover 1,Turin,Italy
-0089,Dem,Misero_pargoletto,1758,Galuppi,M,3,5,305,Al segno,Timante,Male,Male lover 1,Padova,Italy
-0090,Dem,Misero_pargoletto,1764,Jommelli,M,3,5,305,Al segno,Timante,Male,Male lover 1,Stuttgart,Empire
-0091,Dem,Se_tutti,1743,Jommelli,M,2,6,306,Da capo,Dircea,Female,Female lover 1,Padova,Italy
-0092,Did,Se_resto,1730,Sarro,M,1,18,218,Al segno,Enea,Male,Male lover 1,Naples,Italy
-0093,Dem,Misero_pargoletto,1752,Perez,M,3,5,305,Al segno,Timante,Male,Male lover 1,Lisbon,Portugal
-0094,Dem,Misero_pargoletto,1753,Jommelli,M,3,5,305,Da capo,Timante,Male,Male lover 1,Milan,Italy
-0095,Dem,Misero_pargoletto,1775,Myslivecek,M,3,5,305,ABAB,Timante,Male,Male lover 1,Naples,Italy
-0096,Dem,Misero_pargoletto,1758,Hasse,M,3,5,305,Al segno,Timante,Male,Male lover 1,Naples,Italy
-0097,Dem,Misero_pargoletto,1761,Piccinni,M,3,5,305,Al segno,Timante,Male,Male lover 1,Reggio Emilia,Italy
-0098,Dem,Misero_pargoletto,1790,Errichelli,M,3,,,Da capo,Timante,Male,Male lover 1,,
-0099,Dem,Misero_pargoletto,1771,Sarti,M,3,5,305,Al segno,Timante,Male,Male lover 1,Copenhagen,Denmark
-0100,Dem,Misero_pargoletto,1746,Graun,M,3,5,305,Al segno,Timante,Male,Male lover 1,Berlin,Empire
-0101,Did,Se_resto,1742,Hasse,M,1,19,119,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
-0102,Dem,Misero_pargoletto,1776,Monza,M,3,5,305,AA,Timante,Male,Male lover 1,Alessandria,Italy
-0103,Did,Se_resto,1747,Jommelli,M,1,18,118,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0104,Did,Se_resto,1776,Schuster,M,2,15,215,ABAB,Enea,Male,Male lover 1,Naples,Italy
-0105,Did,Se_resto,1753,Perez,M,1,18,118,Al segno,Enea,Male,Male lover 1,Genova,Italy
-0106,Did,Se_resto,1775,Anfossi,M,2,7,207,ABA,Enea,Male,Male lover 1,Venice,Italy
-0107,Did,Se_resto,1763,Traetta,M,1,18,118,Da capo,Enea,Male,Male lover 1,Venice,Italy
-0108,Did,Se_resto,1749,Jommelli,M,2,18,217,Al segno,Enea,Male,Male lover 1,Rome,Italy
-0109,Did,Se_resto,1764,Galuppi,M,1,18,118,Al segno,Enea,Male,Male lover 1,Venice,Italy
-0110,Dem,Se_tutti,1758,Galuppi,M,2,6,206,Al segno,Dircea,Female,Female lover 1,Padova,Italy
-0111,Dem,Se_tutti,1758,Ferradini,M,2,6,206,Da capo,Dircea,Female,Female lover 1,Milan,Italy
-0112,Did,Se_resto,1770,Piccinni,M,1,19,119,Al segno,Enea,Male,Male lover 1,Rome,Italy
-0113,Dem,Se_tutti,1748,Hasse,M,2,6,206,Al segno,Dircea,Female,Female lover 1,Dresden,Empire
-0114,Dem,Se_tutti,1754,Manna,M,2,7,207,Da capo,Dircea,Female,Female lover 1,Turin,Italy
-0115,Dem,Se_tutti,1752,Perez,M,2,6,206,Al segno,Dircea,Female,Female lover 1,Lisbon,Portugal
-0116,Dem,Se_tutti,1753,Jommelli,M,2,6,206,Da capo,Dircea,Female,Female lover 1,Milan,Italy
-0117,Dem,Se_tutti,1749,Galuppi,M,2,6,206,Da capo,Dircea,Female,Female lover 1,Madrid,Spain
-0118,Dem,Se_tutti,1758,Hasse,M,2,6,206,Al segno,Dircea,Female,Female lover 1,Naples,Italy
-0119,Dem,Se_tutti,1764,Jommelli,M,2,6,206,Da capo,Dircea,Female,Female lover 1,Stuttgart,Empire
-0120,Dem,Se_tutti,1770,Jommelli,M,2,7,207,Al segno,Dircea,Female,Female lover 1,Naples,Italy
-0121,Did,Cadra_fra,,Wagenseil,M,3,,,Al segno,Iarba,Male,Male lover 2,,
-0122,Dem,Se_tutti,1775,Myslivecek,M,2,6,206,ABA,Dircea,Female,Female lover 1,Naples,Italy
-0123,Did,Cadra_fra,1742,Hasse,M,3,19,319,Da capo,Iarba,Male,Male lover 2,Wermsdorf,Empire
-0124,Did,Cadra_fra,1747,Jommelli,M,3,19,319,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0125,Did,Cadra_fra,1768,Boroni,M,3,14,314,ABA,Iarba,Male,Male lover 2,Prague,Empire
-0126,Did,Cadra_fra,1770,Piccinni,M,3,19,319,Al segno,Iarba,Male,Male lover 2,Rome,Italy
-0127,Did,Cadra_fra,1769,Majo,M,3,12,312,ABA,Iarba,Male,Male lover 2,Venice,Italy
-0128,Did,Cadra_fra,1762,Sarti,M,3,15,315,AB,Iarba,Male,Male lover 2,Copenhagen,Denmark
-0129,Did,Cadra_fra,1753,Perez,M,3,18,318,recit,Iarba,Male,Male lover 2,Genova,Italy
-0130,Did,Cadra_fra,1764,Galuppi,M,3,16,316,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0131,Did,Cadra_fra,1730,Sarro,M,3,16,316,Da capo,Iarba,Male,Male lover 2,Naples,Italy
-0132,Did,Cadra_fra,1776,Schuster,M,3,16,316,AA,Iarba,Male,Male lover 2,Naples,Italy
-0133,Did,Cadra_fra,1763,Traetta,M,3,18,318,Da capo,Iarba,Male,Male lover 2,Venice,Italy
-0134,Did,Son_regina,1764,Galuppi,M,1,5,105,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0135,Did,Cadra_fra,1763,Jommelli,M,3,17,317,Al segno,Iarba,Male,Male lover 2,Stuttgart,Empire
-0136,Did,Ah_non_lasciarmi,1794,Paisiello,M,2,6,206,ABA,Didone,Female,Female lover 1,Naples,Italy
-0137,Did,Cadra_fra,1775,Anfossi,M,3,14,314,ABA,Iarba,Male,Male lover 2,Venice,Italy
-0138,Did,Cara_lavverso,1739,Lampugnani,X,1,17,117,Al segno,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Padova,Italy
-0139,Did,Dovrei_ma,1724,Sarro,M,1,2,102,recit,Enea,Male,Male lover 1,Naples,Italy
-0140,Did,Infelice_e,1739,Lampugnani,M,1,13,113,Al segno,Araspe,Male,Male lover 3,Padova,Italy
-0141,Did,Vedi_nel,1730,Sarro,M,2,8,208,Da capo,Enea,Male,Male lover 1,Naples,Italy
-0142,Did,Leon_che,1730,Sarro,M,2,3,203,Al segno,Iarba,Male,Male lover 2,Naples,Italy
-0143,Did,L_augelletto,1730,Sarro,M,2,5,205,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0144,Did,Se_vuoi,1730,Sarro,M,2,7,207,Da capo,Didone,Female,Female lover 1,Naples,Italy
-0145,Did,Ardi_per,1730,Sarro,M,2,4,204,Al segno,Selene,Female,Female lover 2,Naples,Italy
-0146,Did,Ah_non_lasciarmi,1810,Paer,M,2,2,202,ABA,Didone,Female,Female lover 1,Paris,France
-0147,Did,Tu_mi_disarmi,1742,Hasse,M,1,17,117,Al segno,Iarba,Male,Male lover 2,Wermsdorf,Empire
-0148,Did,Ogni_amator,1742,Hasse,M,1,11,111,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
-0149,Did,Quando_saprai,1749,Jommelli,M,1,4,104,Da capo,Enea,Male,Male lover 1,Vienna,Empire
-0150,Did,Tu_mi_scorgi,1749,Jommelli,M,1,3,103,Da capo,Osmida,Male,Antagonist,Vienna,Empire
-0151,Did,Quando_saprai,1742,Hasse,M,1,10,110,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
-0152,Did,Ogni_amator,1749,Jommelli,M,1,7,107,Da capo,Selene,Female,Female lover 2,Vienna,Empire
-0153,Did,Vedi_nel,1749,Jommelli,M,2,10,210,Da capo,Enea,Male,Male lover 1,Vienna,Empire
-0154,Did,Fosca_nube,1730,Sarro,M,2,9,209,Al segno,Iarba,Male,Male lover 2,Naples,Italy
-0155,Did,Tacero_se,1730,Sarro,M,2,11,211,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0156,Did,Non_cede,1730,Sarro,,2,12,212,Da capo,Enea,Male,Male lover 1,Naples,Italy
-0157,Did,Veggio_la,1730,Sarro,M,2,13,213,Al segno,Selene,Female,Female lover 2,Naples,Italy
-0158,Did,Chiamami_pur,1730,Sarro,M,2,16,216,Da capo,Iarba,Male,Male lover 2,Naples,Italy
-0159,Did,Va_lusingando,1730,Sarro,M,2,17,217,Da capo,Didone,Female,Female lover 1,Naples,Italy
-0160,Did,Vivi_superbo,1730,Sarro,M,3,2,302,Da capo,Enea,Male,Male lover 1,Naples,Italy
-0161,Did,Agitata_e,1730,Sarro,M,3,4,304,Da capo,Osmida,Male,Antagonist,Naples,Italy
-0162,Did,Se_ti,1730,Sarro,X,3,5,305,Al segno,Araspe,Male,Male lover 3,Naples,Italy
-0163,Did,Sorge_cosi,1730,Sarro,X,3,6,306,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0164,Did,Va_crescendo,1730,Sarro,M,3,7,307,A,Didone,Female,Female lover 1,Naples,Italy
-0165,Did,Gia_si,1730,Sarro,M,3,13,313,Da capo,Araspe,Male,Male lover 3,Naples,Italy
-0166,Did,Vado_ma,1730,Sarro,M,3,18,318,AB,Didone,Female,Female lover 1,Naples,Italy
-0167,Did,Veggio_la,1739,Lampugnani,M,2,14,214,Al segno,Enea,Male,Male lover 1,Padova,Italy
-0168,Did,Chiamami_pur,1739,Lampugnani,M,2,17,217,Da capo,Iarba,Male,Male lover 2,Padova,Italy
-0169,Did,Parto_bell,1760,Bernasconi,X,1,18,118,Al segno,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Venice,Italy
-0170,Did,Pensa_che,1760,Bernasconi,M,2,1,201,Al segno,Osmida,Male,Antagonist,Venice,Italy
-0171,Did,Leon_che,1741,Bernasconi,M,2,3,203,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0172,Did,Ardi_per,1760,Bernasconi,M,2,4,204,Al segno,Selene,Female,Female lover 2,Venice,Italy
-0173,Did,Vedi_nel,1760,Bernasconi,M,2,8,208,Al segno,Enea,Male,Male lover 1,Venice,Italy
-0174,Did,Tacero_se,1760,Bernasconi,M,2,11,211,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0175,Did,Ah_non_sai,1760,Bernasconi,a,2,12,212,Al segno,Enea,Male,Male lover 1,Venice,Italy
-0176,Did,Cosi_fra,1760,Bernasconi,X,2,13,213,Al segno,Selene,Female,Female lover 2,Venice,Italy
-0177,Did,Chiamami_pur,1760,Bernasconi,M,2,16,216,Da capo,Iarba,Male,Male lover 2,Venice,Italy
-0178,Did,Io_veggo,1760,Bernasconi,m,2,17,217,Al segno,Didone,Female,Female lover 1,Venice,Italy
-0179,Did,Quando_londa,1760,Bernasconi,M,3,7,307,Al segno,Osmida,Male,Antagonist,Venice,Italy
-0180,Did,A_trionfar,1760,Bernasconi,M,3,8,308,Al segno,Enea,Male,Male lover 1,Venice,Italy
-0181,Did,Nel_duol,1760,Bernasconi,M,3,9,309,Al segno,Selene,Female,Female lover 2,Venice,Italy
-0182,Did,Va_crescendo,1760,Bernasconi,M,3,10,310,A,Didone,Female,Female lover 1,Venice,Italy
-0183,Did,Cadra_fra,1760,Bernasconi,M,3,19,319,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0184,Did,Vado_ma,1760,Bernasconi,M,3,21,321,recit,Didone,Female,Female lover 1,Venice,Italy
-0185,Did,Dovrei_ma,1742,Hasse,M,1,2,102,recit,Enea,Male,Male lover 1,Wermsdorf,Empire
-0186,Did,Diro_che,1742,Hasse,M,1,3,103,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
-0187,Did,Tu_mi_scorgi,1742,Hasse,M,1,6,106,Da capo,Osmida,Male,Antagonist,Wermsdorf,Empire
-0188,Did,Fra_lo,1742,Hasse,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Wermsdorf,Empire
-0189,Did,Se_dalle,1742,Hasse,M,1,8,108,Al segno,Araspe,Male,Male lover 3,Wermsdorf,Empire
-0190,Did,Leon_che,1742,Hasse,M,2,2,202,Al segno,Iarba,Male,Male lover 2,Wermsdorf,Empire
-0191,Did,L_augelletto,1742,Hasse,M,2,4,204,Al segno,Araspe,Male,Male lover 3,Wermsdorf,Empire
-0192,Did,Vedi_nel,1742,Hasse,M,2,7,207,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
-0193,Did,Tacero_se,1742,Hasse,M,2,10,210,Da capo,Araspe,Male,Male lover 3,Wermsdorf,Empire
-0194,Did,Veggio_la,1742,Hasse,M,2,12,212,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
-0195,Did,Chiamami_pur,1742,Hasse,M,2,15,215,Da capo,Iarba,Male,Male lover 2,Wermsdorf,Empire
-0196,Did,Va_lusingando,1742,Hasse,M,2,16,216,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
-0197,Did,Vivi_superbo,1742,Hasse,M,3,2,302,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
-0198,Did,Dovrei_ma,1747,Jommelli,M,1,2,102,recit,Enea,Male,Male lover 1,Rome,Italy
-0199,Did,Diro_che,1747,Jommelli,M,1,3,103,Al segno,Selene,Female,Female lover 2,Rome,Italy
-0200,Did,Tu_mi_scorgi,1747,Jommelli,M,1,6,106,Da capo,Osmida,Male,Antagonist,Rome,Italy
-0201,Did,Fra_lo,1747,Jommelli,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Rome,Italy
-0202,Did,Diro_che,1749,Jommelli,M,1,3,103,Da capo,Selene,Female,Female lover 2,Vienna,Empire
-0203,Did,Se_dalle,1749,Jommelli,M,1,8,108,Al segno,Araspe,Male,Male lover 3,Vienna,Empire
-0204,Did,Tacero_se,1749,Jommelli,M,2,8,208,Da capo,Araspe,Male,Male lover 3,Vienna,Empire
-0205,Did,Va_lusingando,1749,Jommelli,M,2,14,214,Al segno,Didone,Female,Female lover 1,Vienna,Empire
-0206,Did,Ardi_per,1749,Jommelli,M,2,1,201,Da capo,Selene,Female,Female lover 2,Vienna,Empire
-0207,Did,Son_quel,1749,Jommelli,M,1,13,113,Al segno,Iarba,Male,Male lover 2,Vienna,Empire
-0208,Did,Tormento_il,1749,Jommelli,M,2,9,209,Da capo,Enea,Male,Male lover 1,Vienna,Empire
-0209,Did,Quando_londa,1749,Jommelli,M,3,6,306,Da capo,Osmida,Male,Antagonist,Vienna,Empire
-0210,Did,A_trionfar,1749,Jommelli,M,3,7,307,Al segno,Enea,Male,Male lover 1,Vienna,Empire
-0211,Did,Gia_si,1760,Bernasconi,M,3,16,316,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0212,Did,Quando_londa,1742,Hasse,M,3,7,307,Al segno,Osmida,Male,Antagonist,Wermsdorf,Empire
-0213,Did,A_trionfar,1742,Hasse,M,3,8,308,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
-0214,Did,Quando_saprai,1747,Jommelli,M,1,9,109,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0215,Did,Infelice_e,1747,Jommelli,M,1,13,113,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0216,Did,Tu_mi_disarmi,1747,Jommelli,M,1,16,116,Al segno,Iarba,Male,Male lover 2,Rome,Italy
-0217,Did,Nel_duol,1749,Jommelli,M,3,8,308,Da capo,Selene,Female,Female lover 2,Vienna,Empire
-0218,Did,Gia_si,1749,Jommelli,M,3,15,315,Da capo,Araspe,Male,Male lover 3,Vienna,Empire
-0219,Did,Fosca_nube,1749,Jommelli,M,3,6,306,Al segno,Iarba,Male,Male lover 2,Vienna,Empire
-0220,Did,Lungi_dal,1747,Jommelli,X,2,1,201,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0221,Did,Vedi_nel,1747,Jommelli,M,2,3,203,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0222,Did,Vivi_superbo,1747,Jommelli,M,3,2,302,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0223,Did,Quando_londa,1747,Jommelli,M,3,7,307,Da capo,Osmida,Male,Antagonist,Rome,Italy
-0224,Did,A_trionfar,1747,Jommelli,M,3,8,308,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0225,Did,Nel_duol,1747,Jommelli,M,3,9,309,Da capo,Selene,Female,Female lover 2,Rome,Italy
-0226,Did,Va_crescendo,1747,Jommelli,M,3,10,310,AA,Didone,Female,Female lover 1,Rome,Italy
-0227,Did,Gia_si,1747,Jommelli,M,3,16,316,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0228,Did,Vado_ma,1747,Jommelli,M,3,21,321,recit,Didone,Female,Female lover 1,Rome,Italy
-0229,Did,Nel_duol,1742,Hasse,M,3,9,309,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
-0230,Did,Dovrei_ma,1753,Perez,M,1,2,102,Al segno,Enea,Male,Male lover 1,Genova,Italy
-0231,Did,Gia_si,1742,Hasse,M,3,16,316,Da capo,Araspe,Male,Male lover 3,Wermsdorf,Empire
-0232,Did,Ombra_cara,1742,Hasse,X,3,18,318,Da capo,Didone,Female,Female lover 1,Wermsdorf,Empire
-0233,Did,Diro_che,1753,Perez,M,1,3,103,Al segno,Selene,Female,Female lover 2,Genova,Italy
-0234,Did,Vado_ma,1742,Hasse,M,3,21,321,AB,Didone,Female,Female lover 1,Wermsdorf,Empire
-0235,Did,Tu_mi_scorgi,1753,Perez,M,1,6,106,Al segno,Osmida,Male,Antagonist,Genova,Italy
-0236,Did,Fra_lo,1753,Perez,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Genova,Italy
-0237,Did,Tacero_se,1747,Jommelli,M,2,6,206,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0238,Did,Ah_le,1747,Jommelli,X,2,7,207,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0239,Did,Quando_saprai,1753,Perez,M,1,9,109,Al segno,Enea,Male,Male lover 1,Genova,Italy
-0240,Did,Veggio_la,1747,Jommelli,M,2,8,208,Da capo,Selene,Female,Female lover 2,Rome,Italy
-0241,Did,Son_quel,1753,Perez,M,1,2,112,Al segno,Iarba,Male,Male lover 2,Genova,Italy
-0242,Did,Dovrei_ma,1763,Traetta,M,1,2,102,ABAB,Enea,Male,Male lover 1,Venice,Italy
-0243,Did,Diro_che,1763,Traetta,M,1,3,103,Da capo,Selene,Female,Female lover 2,Venice,Italy
-0244,Did,Se_dalle,1753,Perez,M,1,13,113,Al segno,Araspe,Male,Male lover 3,Genova,Italy
-0245,Did,Tu_mi_disarmi,1753,Perez,M,1,16,116,Al segno,Iarba,Male,Male lover 2,Genova,Italy
-0246,Did,Fra_lo,1763,Traetta,M,1,7,107,Da capo,Iarba,Male,Male lover 2,Venice,Italy
-0247,Did,Sho_la,1753,Perez,X,2,1,201,Al segno,Selene,Female,Female lover 2,Genova,Italy
-0248,Did,Pace_non,1763,Traetta,X,1,8,108,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0249,Did,Non_so,1753,Perez,a,2,4,204,Al segno,Araspe,Male,Male lover 3,Genova,Italy
-0250,Did,Vedi_nel,1753,Perez,M,2,7,207,Al segno,Enea,Male,Male lover 1,Genova,Italy
-0251,Did,Quando_saprai,1763,Traetta,M,1,10,110,Da capo,Enea,Male,Male lover 1,Venice,Italy
-0252,Did,Fosca_nube,1753,Perez,M,2,8,208,Da capo,Iarba,Male,Male lover 2,Genova,Italy
-0253,Did,Nell_affano,1753,Perez,X,2,11,211,Al segno,Enea,Male,Male lover 1,Genova,Italy
-0254,Did,Io_veggo,1739,Lampugnani,m,2,18,218,Al segno,Didone,Female,Female lover 1,Padova,Italy
-0255,Did,Fra_tutte,1753,Perez,X,2,12,212,Al segno,Selene,Female,Female lover 2,Genova,Italy
-0256,Did,Chiamami_pur,1753,Perez,M,2,15,215,Al segno,Iarba,Male,Male lover 2,Genova,Italy
-0257,Did,Dovrei_ma,1762,Sarti,M,1,2,102,recit,Enea,Male,Male lover 1,Copenhagen,Denmark
-0258,Did,Infelice_abbandonata,1753,Perez,X,2,16,216,Al segno,Didone,Female,Female lover 1,Genova,Italy
-0259,Did,Tu_mi_scorgi,1762,Sarti,M,1,6,106,Al segno,Osmida,Male,Antagonist,Copenhagen,Denmark
-0260,Did,Son_quel,1762,Sarti,M,1,12,112,Da capo,Iarba,Male,Male lover 2,Copenhagen,Denmark
-0261,Did,Teneri_affetti,1753,Perez,X,3,7,307,Al segno,Enea,Male,Male lover 1,Genova,Italy
-0262,Did,Se_dalle,1762,Sarti,M,1,7,107,Da capo,Araspe,Male,Male lover 3,Copenhagen,Denmark
-0263,Did,Chel_nocchier,1753,Perez,X,3,3,303,Al segno,Araspe,Male,Male lover 3,Genova,Italy
-0264,Did,Ardi_per,1762,Sarti,M,2,1,201,Da capo,Selene,Female,Female lover 2,Copenhagen,Denmark
-0265,Did,Non_cede,1762,Sarti,,1,16,116,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
-0266,Did,Vado_ma,1753,Perez,M,3,20,320,recit,Didone,Female,Female lover 1,Genova,Italy
-0267,Did,Va_crescendo,1753,Perez,M,3,9,309,AA,Didone,Female,Female lover 1,Genova,Italy
-0268,Did,Nel_duol,1753,Perez,M,3,8,308,Al segno,Selene,Female,Female lover 2,1751,Perez
-0269,Did,La_caduta,1762,Sarti,M,3,2,302,A,Iarba,Male,Male lover 2,Copenhagen,Denmark
-0270,Did,Fosca_nube,1762,Sarti,M,2,5,205,Da capo,Iarba,Male,Male lover 2,Copenhagen,Denmark
-0271,Did,Quando_saprai,1762,Sarti,M,1,9,109,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
-0272,Did,Quando_londa,1762,Sarti,M,3,4,304,Da capo,Osmida,Male,Antagonist,Copenhagen,Denmark
-0273,Did,Vado_ma,1762,Sarti,M,3,18,318,recit,Didone,Female,Female lover 1,Copenhagen,Denmark
-0274,Did,A_trionfar,1762,Sarti,M,3,5,305,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
-0275,Did,Io_damor,1762,Sarti,M,3,6,306,Al segno,Selene,Female,Female lover 2,Copenhagen,Denmark
-0276,Did,Va_crescendo,1762,Sarti,M,3,6,306,A,Didone,Female,Female lover 1,Copenhagen,Denmark
-0277,Did,Tormento_il,1762,Sarti,M,2,8,208,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
-0278,Did,Chiamami_pur,1762,Sarti,M,2,14,214,AA,Iarba,Male,Male lover 2,Copenhagen,Denmark
-0279,Did,Vado_ma,1768,Boroni,M,3,15,315,recit,Didone,Female,Female lover 1,Prague,Empire
-0280,Did,Dovrei_ma,1768,Boroni,M,1,2,102,AA,Enea,Male,Male lover 1,Prague,Empire
-0281,Did,Tu_mi_scorgi,1768,Boroni,M,1,6,106,Al segno,Osmida,Male,Antagonist,Prague,Empire
-0282,Did,Fra_lo,1768,Boroni,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Prague,Empire
-0283,Did,Quando_saprai,1768,Boroni,M,1,10,110,Al segno,Enea,Male,Male lover 1,Prague,Empire
-0284,Did,Infelice_e,1768,Boroni,M,1,13,113,Al segno,Araspe,Male,Male lover 3,Prague,Empire
-0285,Did,Dovrei_ma,1769,Majo,M,1,3,103,AA,Enea,Male,Male lover 1,Venice,Italy
-0286,Did,Tacero_se,1762,Sarti,M,2,7,207,Al segno,Araspe,Male,Male lover 3,Copenhagen,Denmark
-0287,Did,Tu_mi_disarmi,1768,Boroni,M,1,13,113,Al segno,Iarba,Male,Male lover 2,Prague,Empire
-0288,Did,Pensa_che,1768,Boroni,M,2,1,201,AAA,Osmida,Male,Antagonist,Prague,Empire
-0289,Did,Ogni_amator,1762,Sarti,M,2,9,209,Al segno,Selene,Female,Female lover 2,Copenhagen,Denmark
-0290,Did,Tacero_se,1768,Boroni,M,2,9,209,ABABA,Araspe,Male,Male lover 3,Prague,Empire
-0291,Did,Diro_che,1769,Majo,M,1,4,104,Al segno,Selene,Female,Female lover 2,Venice,Italy
-0292,Did,Dovrei_ma,1810,Paer,M,1,2,102,AA,Enea,Male,Male lover 1,Paris,France
-0293,Did,Fra_lo,1769,Majo,M,1,8,108,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0294,Did,Ah_non_sai,1768,Boroni,a,2,10,210,Al segno,Enea,Male,Male lover 1,Prague,Empire
-0295,Did,Povero_cor,1810,Paer,M,1,4,104,ABC,Didone,Female,Female lover 1,Paris,France
-0296,Did,Veggio_la,1768,Boroni,M,2,11,211,Al segno,Selene,Female,Female lover 2,Prague,Empire
-0297,Did,Quando_saprai,1769,Majo,M,1,10,110,AA,Enea,Male,Male lover 1,Venice,Italy
-0298,Did,A_trionfar,1768,Boroni,M,3,6,306,AA,Enea,Male,Male lover 1,Prague,Empire
-0299,Did,Rupe_esposta,1769,Majo,X,1,12,112,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0300,Did,Nel_duol,1768,Boroni,M,3,7,307,AAA,Selene,Female,Female lover 2,Prague,Empire
-0301,Did,Va_crescendo,1768,Boroni,M,3,7,307,AA,Didone,Female,Female lover 1,Prague,Empire
-0302,Did,Gia_si,1768,Boroni,M,3,11,311,AA,Araspe,Male,Male lover 3,Prague,Empire
-0303,Did,Tu_mi_disarmi,1810,Paer,M,1,9,109,ABCB,Iarba,Male,Male lover 2,Paris,France
-0304,Did,Tu_mi_disarmi,1769,Majo,M,1,14,114,ABA,Iarba,Male,Male lover 2,Venice,Italy
-0305,Did,Quanto_per,1769,Majo,X,1,15,115,AA,Didone,Female,Female lover 1,Venice,Italy
-0306,Did,Fosca_nube,1768,Boroni,M,2,7,207,Al segno,Iarba,Male,Male lover 2,Prague,Empire
-0307,Did,Diro_che,1768,Boroni,M,1,3,103,Al segno,Selene,Female,Female lover 2,Prague,Empire
-0308,Did,No_non_parti,1768,Boroni,X,2,13,213,ABA,"Didone,Enea,Iarba","Female,Male,Male","Female lover 1,Male lover 1,Male lover 2",Prague,Empire
-0309,Did,Accoglio_regina,1810,Paer,X,1,5,105,AB,"Didone,Iarba","Female,Male","Female lover 1,Male lover 2",Paris,France
-0310,Did,Placa_il,1768,Boroni,X,1,7,107,ABAB,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Prague,Empire
-0311,Did,Dovrei_ma,1794,Paisiello,M,1,2,102,recit,Enea,Male,Male lover 1,Naples,Italy
-0312,Did,Passagier_che,1769,Majo,X,1,16,116,Al segno,Enea,Male,Male lover 1,Venice,Italy
-0313,Did,Se_resto,1794,Paisiello,M,2,13,213,ABA,Enea,Male,Male lover 1,Naples,Italy
-0314,Did,Diro_che,1794,Paisiello,M,1,3,113,AA,Selene,Female,Female lover 2,Naples,Italy
-0315,Did,Se_dalle,1794,Paisiello,M,1,7,107,ABCB,Araspe,Male,Male lover 3,Naples,Italy
-0316,Did,Cadra_fra,1794,Paisiello,M,2,15,215,ABA,Iarba,Male,Male lover 2,Naples,Italy
-0317,Did,Tu_mi_disarmi,1794,Paisiello,M,1,15,115,ABA,Iarba,Male,Male lover 2,Naples,Italy
-0318,Did,Pensa_che,1794,Paisiello,M,2,1,201,AB,Osmida,Male,Antagonist,Naples,Italy
-0319,Did,Son_regina,1744,Scalabrini,a,1,1,101,Da capo,Didone,Female,Female lover 1,Hamburg,Empire
-0320,Did,Quando_saprai,1794,Paisiello,M,1,9,109,ABC,Enea,Male,Male lover 1,Naples,Italy
-0321,Did,So_che,1794,Paisiello,g,2,4,204,ABA,Araspe,Male,Male lover 3,Naples,Italy
-0322,Did,Fra_lo,1744,Scalabrini,M,1,3,103,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
-0323,Did,Fra_tutte,1794,Paisiello,X,C-1,10,210,AAA,Selene,Female,Female lover 2,Naples,Italy
-0324,Did,A_trionfar,1763,Jommelli,M,3,6,306,Da capo,Enea,Male,Male lover 1,Stuttgart,Empire
-0325,Did,Vado_ma,1794,Paisiello,M,3,16,316,AAAB,Didone,Female,Female lover 1,Naples,Italy
-0326,Did,Cadra_fra,1744,Scalabrini,M,3,8,308,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
-0327,Did,Ah_non_lasciarmi,1750,Viotti,M,,,,Da capo,Didone,Female,Female lover 1,,
-0328,Did,Diro_che,1763,Jommelli,M,1,3,103,Al segno,Selene,Female,Female lover 2,Stuttgart,Empire
-0329,Did,La_caduta,1763,Jommelli,M,3,2,302,A,Iarba,Male,Male lover 2,Stuttgart,Empire
-0330,Did,Chiamami_pur,1747,Jommelli,M,2,11,211,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0331,Did,Morire_oh,1794,Paisiello,X,1,16,116,AB,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Naples,Italy
-0332,Did,Non_so,1769,Majo,n,2,1,201,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0333,Did,Nel_mirar,1769,Majo,X,2,2,202,Al segno,Osmida,Male,Antagonist,Venice,Italy
-0334,Did,Quando_saprai,1744,Scalabrini,M,1,4,104,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
-0335,Did,Va_crescendo,1744,Scalabrini,M,3,3,303,AB,Selene,Female,Female lover 2,Hamburg,Empire
-0336,Did,L_augelletto,1744,Scalabrini,M,3,4,304,Al segno,Araspe,Male,Male lover 3,Hamburg,Empire
-0337,Did,Diro_che,1776,Schuster,M,1,3,103,ABA,Selene,Female,Female lover 2,Naples,Italy
-0338,Did,Son_quel,1776,Schuster,M,1,7,107,ABAB,Iarba,Male,Male lover 2,Naples,Italy
-0339,Did,Se_il,1747,Jommelli,X,2,12,212,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0340,Did,Veggio_la,1769,Majo,M,2,9,209,ABA,Selene,Female,Female lover 2,Venice,Italy
-0341,Did,Fosca_nube,1769,Majo,M,2,5,205,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0342,Did,Se_dalle,1776,Schuster,M,1,8,108,ABA,Araspe,Male,Male lover 3,Naples,Italy
-0343,Did,Quando_saprai,1776,Schuster,M,1,10,110,ABA,Enea,Male,Male lover 1,Naples,Italy
-0344,Did,Tu_mi_scorgi,1763,Jommelli,M,1,6,106,Al segno,Osmida,Male,Antagonist,Stuttgart,Empire
-0345,Did,Per_pieta,1769,Majo,X,2,8,208,Al segno,Enea,Male,Male lover 1,Venice,Italy
-0346,Did,Va_crescendo,1769,Majo,M,3,4,304,AA,Didone,Female,Female lover 1,Venice,Italy
-0347,Did,Tu_mi_disarmi,1776,Schuster,M,1,16,116,AA,Iarba,Male,Male lover 2,Naples,Italy
-0348,Did,Se_dalle,1763,Jommelli,M,1,8,108,Al segno,Araspe,Male,Male lover 3,Stuttgart,Empire
-0349,Did,Quando_saprai,1763,Jommelli,M,1,10,110,Al segno,Enea,Male,Male lover 1,Stuttgart,Empire
-0350,Did,Non_partir,1769,Majo,X,2,11,211,AB,"Didone,Enea,Iarba","Female,Male,Male","Female lover 1,Male lover 1,Male lover 2",Venice,Italy
-0351,Did,Son_regina,1726,Vinci,a,1,5,105,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0352,Did,Pensa_che,1776,Schuster,M,2,1,201,AA,Osmida,Male,Antagonist,Naples,Italy
-0353,Did,Chiamami_pur,1776,Schuster,M,2,13,213,AA,Iarba,Male,Male lover 2,Naples,Italy
-0354,Did,Se_un,1776,Schuster,X,2,11,211,AA,Selene,Female,Female lover 2,Naples,Italy
-0355,Did,Voglio_che,1776,Schuster,X,2,14,214,ABA,Didone,Female,Female lover 1,Naples,Italy
-0356,Did,Son_quel,1747,Jommelli,M,2,4,204,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0357,Did,Son_quel,1763,Jommelli,M,1,13,113,Al segno,Iarba,Male,Male lover 2,Stuttgart,Empire
-0358,Did,Datre_nubi,1763,Jommelli,X,2,1,201,Al segno,Araspe,Male,Male lover 3,Stuttgart,Empire
-0359,Did,L_augelletto,1776,Schuster,M,2,5,205,ABA,Araspe,Male,Male lover 3,Naples,Italy
-0360,Did,Vorrei_disciogliere,1776,Schuster,M,3,4,304,Al segno,Araspe,Male,Male lover 3,Naples,Italy
-0361,Did,Non_ha,1726,Vinci,M,1,18,118,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0362,Did,Se_resto,1726,Vinci,M,1,19,119,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0363,Did,Son_regina,1780,Astarita,M,1,5,105,ABA,Didone,Female,Female lover 1,Bratislava,Empire
-0364,Did,Ah_non_lasciarmi,1780,Astarita,M,2,6,206,AAA,Didone,Female,Female lover 1,Bratislava,Empire
-0365,Did,Se_resto,1780,Astarita,M,2,15,215,ABAB,Enea,Male,Male lover 1,Bratislava,Empire
-0366,Did,Fosca_nube,1763,Jommelli,M,2,5,205,Al segno,Iarba,Male,Male lover 2,Stuttgart,Empire
-0367,Did,Ombra_cara,1776,Schuster,b,3,17,317,AA,Didone,Female,Female lover 1,Naples,Italy
-0368,Did,Quando_freme,1743,Terradellas,X,2,13,213,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0369,Did,Ah_non_sai,1763,Jommelli,a,2,8,208,Al segno,Enea,Male,Male lover 1,Stuttgart,Empire
-0370,Did,Ah_non_lasciarmi_ingrato,1776,Schuster,X,1,17,117,ABCA,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Naples,Italy
-0371,Did,Cadra_fra,1780,Astarita,M,3,9,309,ABA,Iarba,Male,Male lover 2,Bratislava,Empire
-0372,Did,Ogni_amator,1763,Jommelli,M,2,9,209,Al segno,Selene,Female,Female lover 2,Stuttgart,Empire
-0373,Did,Va_crescendo,1763,Jommelli,M,3,8,308,AAA,Didone,Female,Female lover 1,Stuttgart,Empire
-0374,Did,Vivi_superbo,1744,Scalabrini,M,3,1,301,Al segno,Enea,Male,Male lover 1,Hamburg,Empire
-0375,Did,Ah_non_lasciarmi,1788,Andreozzi,M,,,,AB,Didone,Female,Female lover 1,,
-0376,Did,Diro_che,1780,Astarita,M,1,3,103,ABA,Selene,Female,Female lover 2,Bratislava,Empire
-0377,Did,Dovrei_ma,1780,Astarita,M,1,2,102,ABB,Enea,Male,Male lover 1,Bratislava,Empire
-0378,Did,Son_quel,1780,Astarita,M,1,7,107,ABA,Iarba,Male,Male lover 2,Bratislava,Empire
-0379,Did,Sdegno_ingegno,1744,Scalabrini,X,1,2,102,Da capo,Osmida,Male,Antagonist,Hamburg,Empire
-0380,Did,Se_resto,1744,Scalabrini,M,1,10,110,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
-0381,Did,Scherza_il,1744,Scalabrini,M,2,5,205,Al segno,Osmida,Male,Antagonist,Hamburg,Empire
-0382,Did,Infidel_ti,1763,Jommelli,X,2,11,211,ABC,"Didone,Enea,Iarba","Female,Male,Male","Female lover 1,Male lover 1,Male lover 2",Stuttgart,Empire
-0383,Dem,Se_tutti,1733,Caldara,M,2,6,206,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
-0384,Did,Diro_che,1726,Vinci,M,1,3,103,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0385,Did,Se_dalle,1780,Astarita,M,1,8,108,ABA,Araspe,Male,Male lover 3,Bratislava,Empire
-0386,Dem,Misero_pargoletto,1733,Caldara,M,3,5,305,Da capo,Timante,Male,Male lover 1,Vienna,Empire
-0387,Did,Nel_tuo,1744,Scalabrini,X,1,5,105,Da capo,Selene,Female,Female lover 2,Hamburg,Empire
-0388,Did,Grato_rende,1726,Vinci,a,1,6,106,Da capo,Osmida,Male,Antagonist,Rome,Italy
-0389,Dem,Non_dura,1733,Caldara,M,3,8,308,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
-0390,Dem,Che_mai,1733,Caldara,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
-0391,Dem,Odo_il,1733,Caldara,M,3,6,306,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
-0392,Did,Tu_mi_guardi,1744,Scalabrini,X,2,3,203,Da capo,Didone,Female,Female lover 1,Hamburg,Empire
-0393,Did,Fra_lo,1726,Vinci,M,1,7,107,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0394,Did,Se_dalle,1726,Vinci,M,1,8,108,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0395,Did,Quando_saprai,1726,Vinci,M,1,10,110,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0396,Did,Costanza_mio,1744,Scalabrini,X,1,6,106,Da capo,Araspe,Male,Male lover 3,Hamburg,Empire
-0397,Did,Chiamami_pur,1744,Scalabrini,M,2,12,,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
-0398,Did,Quando_saprai,1780,Astarita,M,1,10,110,ABA,Enea,Male,Male lover 1,Bratislava,Empire
-0399,Dem,La_destra,1733,Caldara,M,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Vienna,Empire
-0400,Dem,Non_odi,1733,Caldara,M,3,1,301,Da capo,Adrasto,Male,Confidant,Vienna,Empire
-0401,Dem,Nel_tuo,1733,Caldara,M,3,2,302,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
-0402,Dem,Ah_che,1733,Caldara,M,3,3,303,Da capo,Matusio,Male,Antagonist,Vienna,Empire
-0403,Dem,Felice_eta,1733,Caldara,M,2,8,208,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
-0404,Dem,Perfidi_gia,1733,Caldara,M,2,10,210,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
-0405,Did,Di_quest_alma,1744,Scalabrini,X,2,9,209,Da capo,Selene,Female,Female lover 2,Hamburg,Empire
-0406,Did,Ogni_amator,1726,Vinci,M,1,11,111,Da capo,Selene,Female,Female lover 2,Rome,Italy
-0407,Dem,No_non,1733,Caldara,M,2,7,207,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
-0408,Dem,Se_ardire,1733,Caldara,M,1,13,113,Da capo,Timante,Male,Male lover 1,Vienna,Empire
-0409,Dem,Tu_sai,1733,Caldara,M,2,1,201,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
-0410,Dem,Il_suo,1733,Caldara,M,1,8,108,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
-0411,Dem,Padre_perdona,1733,Caldara,M,1,12,112,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
-0412,Dem,Prudente_mi,1733,Caldara,M,2,2,202,Da capo,Timante,Male,Male lover 1,Vienna,Empire
-0413,Dem,Se_tronca,1733,Caldara,M,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
-0414,Did,Bel_labbro,1744,Scalabrini,X,2,7,207,Da capo,Araspe,Male,Male lover 3,Hamburg,Empire
-0415,Did,Son_quel,1726,Vinci,M,1,13,113,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0416,Did,Tu_mi_disarmi,1780,Astarita,M,1,16,116,ABAB,Iarba,Male,Male lover 2,Bratislava,Empire
-0417,Dem,In_te,1733,Caldara,M,1,2,102,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
-0418,Dem,Per_lei,1733,Caldara,M,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
-0419,Dem,Sperai_vicino,1733,Caldara,M,1,4,104,Da capo,Timante,Male,Male lover 1,Vienna,Empire
-0420,Dem,O_piu,1733,Caldara,M,1,1,101,Da capo,Matusio,Male,Antagonist,Vienna,Empire
-0421,Dem,Tintendo_ingrata,1733,Caldara,M,1,5,105,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
-0422,Dem,Non_curo,1733,Caldara,M,1,7,107,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
-0423,Did,Su_la,1726,Vinci,M,1,14,114,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0424,Did,Leon_che,1726,Vinci,M,1,14,114,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0425,Did,Ardi_per,1726,Vinci,M,2,3,203,Da capo,Selene,Female,Female lover 2,Rome,Italy
-0426,Did,Se_vuoi,1726,Vinci,M,2,7,207,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0427,Did,Vedi_nel,1726,Vinci,M,2,8,208,Da capo,Enea,Male,Male lover 1,Rome,Italy
-0428,Did,Pensa_che,1780,Astarita,M,2,1,201,AA,Osmida,Male,Antagonist,Bratislava,Empire
-0429,Did,Ah_non_sai,1780,Astarita,b,2,11,211,AA',Enea,Male,Male lover 1,Bratislava,Empire
-0430,Dem,O_piu,1735,Leo,M,1,1,101,Da capo,Matusio,Male,Antagonist,Naples,Italy
-0431,Dem,In_te,1735,Sarro,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Naples,Italy
-0432,Dem,Per_lei,1735,Mancini,M,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
-0433,Dem,Sperai_vicino,1735,Leo,M,1,4,104,Da capo,Timante,Male,Male lover 1,Naples,Italy
-0434,Dem,Non_curo,1735,Sarro,M,1,7,107,Al segno,Creusa,Female,Female lover 2,Naples,Italy
-0435,Did,Son_questidoli,1726,Vinci,M,2,10,210,Da capo,Osmida,Male,Antagonist,Rome,Italy
-0436,Did,Va_crescendo,1780,Astarita,M,2,13,213,AA,Didone,Female,Female lover 1,Bratislava,Empire
-0437,Did,Se_un,1780,Astarita,X,2,12,212,AA,Selene,Female,Female lover 2,Bratislava,Empire
-0438,Did,Chiamami_pur,1780,Astarita,M,2,14,214,ABCA,Iarba,Male,Male lover 2,Bratislava,Empire
-0439,Did,Sono_intrepido,1726,Vinci,X,2,12,212,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0440,Did,L_augelletto,1726,Vinci,M,2,14,214,Da capo,Selene,Female,Female lover 2,Rome,Italy
-0441,Did,Chiamami_pur,1726,Vinci,M,2,17,217,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0442,Did,Non_so,1780,Astarita,b,2,4,204,ABCA,Araspe,Male,Male lover 3,Bratislava,Empire
-0443,Dem,O_piu,1775,Myslivecek,M,1,1,101,ABA,Matusio,Male,Antagonist,Naples,Italy
-0444,Dem,In_te,1775,Myslivecek,M,1,2,102,ABA,Dircea,Female,Female lover 1,Naples,Italy
-0445,Dem,Per_lei,1775,Myslivecek,M,1,3,103,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
-0446,Dem,Sperai_vicino,1775,Myslivecek,M,1,4,104,ABA,Timante,Male,Male lover 1,Naples,Italy
-0447,Dem,Tintendo_ingrata,1775,Myslivecek,M,1,5,105,ABA,Cherinto,Male,Male lover 2,Naples,Italy
-0448,Dem,Non_curo,1775,Myslivecek,M,1,6,106,ABA,Creusa,Female,Female lover 2,Naples,Italy
-0449,Did,Ombra_cara,1780,Astarita,b,3,10,310,AB,Didone,Female,Female lover 1,Bratislava,Empire
-0450,Did,Prende_ardire,1726,Vinci,M,2,18,218,Da capo,Didone,Female,Female lover 1,Rome,Italy
-0451,Dem,Il_suo,1735,Leo,M,1,8,108,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
-0452,Dem,Se_ardire,1735,Sarro,M,1,9,109,Al segno,Timante,Male,Male lover 1,Naples,Italy
-0453,Dem,Cangi_per,1735,Sarro,X,2,1,201,Al segno,Creusa,Female,Female lover 2,Naples,Italy
-0454,Dem,Prudente_mi,1735,Mancini,M,2,2,202,Da capo,Timante,Male,Male lover 1,Naples,Italy
-0455,Did,Vanne_a,1780,Astarita,X,3,4,304,AB,Enea,Male,Male lover 1,Bratislava,Empire
-0456,Dem,Se_tronca,1735,Leo,M,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Naples,Italy
-0457,Dem,E_soccorso,1735,Mancini,M,2,4,204,Da capo,Matusio,Male,Antagonist,Naples,Italy
-0458,Dem,No_non,1735,Sarro,M,2,7,207,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
-0459,Dem,Felice_eta,1735,Mancini,M,2,8,208,Da capo,Creusa,Female,Female lover 2,Naples,Italy
-0460,Dem,La_destra,1735,Leo,M,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Naples,Italy
-0461,Dem,Nel_tuo,1735,Mancini,M,3,1,301,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
-0462,Dem,Del_Sole,1735,Sarro,X,3,2,302,Da capo,Matusio,Male,Antagonist,Naples,Italy
-0463,Dem,O_piu,1743,Jommelli,M,1,1,101,Da capo,Matusio,Male,Antagonist,Padova,Italy
-0464,Dem,In_te,1743,Jommelli,M,1,2,102,Da capo,Dircea,Female,Female lover 1,Padova,Italy
-0465,Dem,Per_lei,1743,Jommelli,M,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Padova,Italy
-0466,Dem,Padre_perdona,1775,Myslivecek,M,1,13,113,ABA,Dircea,Female,Female lover 1,Naples,Italy
-0467,Dem,Tu_sai,1775,Myslivecek,M,2,1,201,ABA,Creusa,Female,Female lover 2,Naples,Italy
-0468,Did,Parmi_dudir,1780,Astarita,X,3,5,305,ABCB,Osmida,Male,Antagonist,Bratislava,Empire
-0469,Did,Odo_il,1735,Mancini,M,3,5,305,Da capo,Demofoonte,Male,Senior ruler,Naples,Italy
-0470,Dem,Che_mai,1735,Sarro,M,3,6,306,Da capo,Dircea,Female,Female lover 1,Naples,Italy
-0471,Dem,Non_dura,1735,Leo,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Naples,Italy
-0472,Did,Va_crescendo,1776,Schuster,M,3,6,306,AA',Didone,Female,Female lover 1,Naples,Italy
-0473,Did,Vedi_nel,1744,Scalabrini,M,2,4,204,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
-0474,Did,Non_ha,1744,Scalabrini,M,1,9,109,Da capo,Dircea,Female,Female lover 1,Hamburg,Empire
-0475,Dem,Sperai_vicino,1743,Jommelli,M,1,4,104,Da capo,Timante,Male,Male lover 1,Padova,Italy
-0476,Dem,Non_curo,1743,Jommelli,M,1,7,107,Da capo,Creusa,Female,Female lover 2,Padova,Italy
-0477,Dem,Il_suo,1743,Jommelli,M,1,8,108,Da capo,Cherinto,Male,Male lover 2,Padova,Italy
-0478,Dem,O_piu,1734,Schiassi,M,1,1,101,Al segno,Matusio,Male,Antagonist,Venice,Italy
-0479,Dem,In_te,1734,Schiassi,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Venice,Italy
-0480,Dem,Io_non,1734,Schiassi,X,1,3,103,Al segno,Adrasto,Male,Confidant,Venice,Italy
-0481,Dem,Per_lei,1734,Schiassi,M,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Venice,Italy
-0482,Dem,Sperai_vicino,1734,Schiassi,M,1,4,104,Al segno,Timante,Male,Male lover 1,Venice,Italy
-0483,Dem,Alma_piu,1734,Schiassi,X,1,5,105,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
-0484,Did,Va_crudele,1780,Astarita,X,1,17,117,AB,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Bratislava,Empire
-0485,Did,Diro_che,,Galuppi,M,1,3,103,Al segno,Selene,Female,Female lover 2,,
-0486,Dem,Prudente_mi,1775,Myslivecek,M,2,2,202,ABA,Timante,Male,Male lover 1,Naples,Italy
-0487,Dem,E_soccorso,1775,Myslivecek,M,2,4,204,ABA,Matusio,Male,Antagonist,Naples,Italy
-0488,Did,Quando_saprai,,Galuppi,M,1,10,110,Al segno,Enea,Male,Male lover 1,,
-0489,Dem,No_non,1775,Myslivecek,M,2,7,207,ABA,Cherinto,Male,Male lover 2,Naples,Italy
-0490,Dem,Odo_il,1775,Myslivecek,M,3,6,306,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
-0491,Dem,Perfidi_gia,1775,Myslivecek,M,2,9,209,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
-0492,Dem,Che_mai,1775,Myslivecek,M,3,7,307,ABA,Dircea,Female,Female lover 1,Naples,Italy
-0493,Did,Ardi_per,,Galuppi,M,,,,Al segno,Selene,Female,Female lover 2,,
-0494,Dem,Non_curo,1734,Schiassi,M,1,7,107,Al segno,Creusa,Female,Female lover 2,Venice,Italy
-0495,Dem,Il_suo,1734,Schiassi,M,1,8,108,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
-0496,Dem,Padre_perdona,1734,Schiassi,M,1,12,112,Da capo,Dircea,Female,Female lover 1,Venice,Italy
-0497,Dem,Son_qual,1734,Schiassi,X,1,13,113,Al segno,Timante,Male,Male lover 1,Venice,Italy
-0498,Dem,Tu_sai,1734,Schiassi,M,2,1,201,Al segno,Creusa,Female,Female lover 2,Venice,Italy
-0499,Dem,Prudente_mi,1737,Schiassi,M,2,2,202,Al segno,Timante,Male,Male lover 1,Venice,Italy
-0500,Dem,Padre_perdona,1743,Jommelli,M,1,12,112,Da capo,Dircea,Female,Female lover 1,Padova,Italy
-0501,Dem,Se_ardire,1743,Jommelli,M,1,13,113,Da capo,Timante,Male,Male lover 1,Padova,Italy
-0502,Dem,Temo_in,1743,Jommelli,B,1,13,113,Da capo,Matusio,Male,Antagonist,Padova,Italy
-0503,Dem,Se_tronca,1734,Schiassi,M,2,3,203,Al segno,Demofoonte,Male,Senior ruler,Venice,Italy
-0504,Dem,E_soccorso,1734,Schiassi,M,2,4,204,Al segno,Matusio,Male,Antagonist,Venice,Italy
-0505,Dem,Se_ti,1775,Myslivecek,X,3,1,301,ABA,Adrasto,Male,Confidant,Naples,Italy
-0506,Did,Ah_non_lasciarmi,,Galuppi,M,,,,Al segno,Didone,Female,Female lover 1,,
-0507,Dem,Prudente_mi,1743,Jommelli,M,2,2,202,Da capo,Timante,Male,Male lover 1,Padova,Italy
-0508,Dem,Se_tronca,1743,Jommelli,M,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Padova,Italy
-0509,Dem,No_non,1743,Jommelli,M,2,7,207,Da capo,Cherinto,Male,Male lover 2,Padova,Italy
-0510,Dem,Se_ardire,1775,Myslivecek,M,1,14,114,ABAB,Timante,Male,Male lover 1,Naples,Italy
-0511,Dem,La_destra,1775,Myslivecek,M,2,10,210,ABC,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",,Italy
-0512,Dem,Lempia_mia,1734,Schiassi,M,2,6,206,Al segno,Dircea,Female,Female lover 1,Venice,Italy
-0513,Dem,No_non,1734,Schiassi,M,2,7,207,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
-0514,Dem,Felice_eta,1734,Schiassi,M,2,8,208,Al segno,Creusa,Female,Female lover 2,Venice,Italy
-0515,Did,Fosca_nube,,Galuppi,M,,,,Al segno,Iarba,Male,Male lover 2,,
-0516,Did,La_caduta,,Galuppi,M,,,,AA',Iarba,Male,Male lover 2,,
-0517,Dem,O_piu,1766,Bernasconi,M,1,1,101,Al segno,Matusio,Male,Antagonist,Munich,Empire
-0518,Dem,In_te,1766,Bernasconi,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Munich,Empire
-0519,Dem,Per_lei,1766,Bernasconi,M,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Munich,Empire
-0520,Dem,Sperai_vicino,1766,Bernasconi,M,1,4,104,Al segno,Timante,Male,Male lover 1,Munich,Empire
-0521,Dem,Tintendo_ingrata,1766,Bernasconi,M,1,5,105,AA',Cherinto,Male,Male lover 2,Munich,Empire
-0522,Dem,Non_curo,1766,Bernasconi,M,1,6,106,Al segno,Creusa,Female,Female lover 2,Munich,Empire
-0523,Dem,Il_suo,1766,Bernasconi,M,1,8,108,Al segno,Cherinto,Male,Male lover 2,Munich,Empire
-0524,Dem,Padre_perdona,1766,Bernasconi,M,1,12,112,Da capo,Dircea,Female,Female lover 1,Munich,Empire
-0525,Dem,Se_ardire,1766,Bernasconi,M,1,13,113,Da capo,Timante,Male,Male lover 1,Munich,Empire
-0526,Dem,Tu_sai,1766,Bernasconi,M,2,1,201,Al segno,Creusa,Female,Female lover 2,Munich,Empire
-0527,Dem,Prudente_mi,1766,Bernasconi,M,2,2,202,Al segno,Timante,Male,Male lover 1,Munich,Empire
-0528,Dem,E_soccorso,1766,Bernasconi,M,2,4,204,Al segno,Matusio,Male,Antagonist,Munich,Empire
-0529,Dem,No_non,1766,Bernasconi,M,2,7,207,Al segno,Cherinto,Male,Male lover 2,Munich,Empire
-0530,Dem,Perfidi_gia,1766,Bernasconi,M,2,10,210,Al segno,Demofoonte,Male,Senior ruler,Munich,Empire
-0531,Dem,La_destra,1766,Bernasconi,M,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Munich,Empire
-0532,Dem,Non_odi,1766,Bernasconi,M,3,1,301,Al segno,Adrasto,Male,Confidant,Munich,Empire
-0533,Dem,Nel_tuo,1766,Bernasconi,M,3,2,302,Al segno,Cherinto,Male,Male lover 2,Munich,Empire
-0534,Dem,Ah_che,1766,Bernasconi,M,3,3,303,Al segno,Matusio,Male,Antagonist,Munich,Empire
-0535,Dem,Odo_il,1766,Bernasconi,M,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Munich,Empire
-0536,Dem,Che_mai,1766,Bernasconi,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Munich,Empire
-0537,Dem,Non_dura,1766,Bernasconi,M,3,8,308,Al segno,Creusa,Female,Female lover 2,Munich,Empire
-0538,Dem,Felice_eta,1743,Jommelli,M,2,8,208,Da capo,Creusa,Female,Female lover 2,Padova,Italy
-0539,Dem,Perfidi_gia,1743,Jommelli,M,2,10,210,Da capo,Demofoonte,Male,Senior ruler,Padova,Italy
-0540,Dem,O_piu,1748,Hasse,M,1,1,101,Al segno,Matusio,Male,Antagonist,Dresden,Empire
-0541,Dem,In_te,1748,Hasse,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Dresden,Empire
-0542,Dem,Prudente_mi,1748,Hasse,M,2,2,202,Al segno,Timante,Male,Male lover 1,Dresden,Empire
-0543,Dem,La_destra,1754,Manna,M,2,12,212,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Turin,Italy
-0544,Dem,Prudente_mi,1754,Manna,M,2,2,202,Da capo,Timante,Male,Male lover 1,Turin,Italy
-0545,Dem,Nel_tuo,1754,Manna,M,3,2,302,Da capo,Cherinto,Male,Male lover 2,Turin,Italy
-0546,Dem,Parto_oh_dio,1754,Manna,X,3,3,303,ABA,Matusio,Male,Antagonist,Turin,Italy
-0547,Dem,Odo_il,1754,Manna,M,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Turin,Italy
-0548,Dem,Che_mai,1754,Manna,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Turin,Italy
-0549,Dem,Perfidi_gia,1734,Schiassi,M,2,10,210,Al segno,"Dircea,Timante,Demofoonte","Female,Male,Male","Female lover 1,Male lover 1,Senior ruler",Venice,Italy
-0550,Dem,Non_odi,1734,Schiassi,M,3,1,301,Al segno,Adrasto,Male,Confidant,Venice,Italy
-0551,Dem,Nel_tuo,1734,Schiassi,M,3,2,302,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
-0552,Dem,Misero_pargoletto,1734,Schiassi,M,3,5,305,Al segno,Timante,Male,Male lover 1,Venice,Italy
-0553,Dem,Odo_il,1734,Schiassi,M,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Venice,Italy
-0554,Dem,Che_mai,1734,Schiassi,M,3,7,307,Al segno,Dircea,Female,Female lover 1,Venice,Italy
-0555,Dem,Non_dura,1734,Schiassi,M,3,8,308,Al segno,Creusa,Female,Female lover 2,Venice,Italy
-0556,Dem,Non_dura,1748,Hasse,M,3,8,308,Al segno,Creusa,Female,Female lover 2,Dresden,Empire
-0557,Dem,Per_lei,1754,Manna,M,1,4,104,Da capo,Demofoonte,Male,Senior ruler,Turin,Italy
-0558,Dem,Tu_sai,1754,Manna,M,2,1,201,Da capo,Creusa,Female,Female lover 2,Turin,Italy
-0559,Dem,Perfidi_gia,1754,Manna,M,2,10,210,Al segno,Demofoonte,Male,Senior ruler,Turin,Italy
-0560,Dem,Non_odi,1754,Manna,M,3,1,301,Da capo,Adrasto,Male,Confidant,Turin,Italy
-0561,Dem,O_piu,1758,Hasse,M,1,1,101,Al segno,Matusio,Male,Antagonist,Naples,Italy
-0562,Dem,In_te,1758,Hasse,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Naples,Italy
-0563,Dem,Per_lei,1758,Hasse,M,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
-0564,Dem,Sperai_vicino,1758,Hasse,M,1,4,104,Al segno,Timante,Male,Male lover 1,Naples,Italy
-0565,Dem,Non_curo,1758,Hasse,M,1,7,107,Al segno,Creusa,Female,Female lover 2,Naples,Italy
-0566,Dem,Il_suo,1758,Hasse,M,1,8,108,Al segno,Cherinto,Male,Male lover 2,Naples,Italy
-0567,Dem,Padre_perdona,1758,Hasse,M,1,10,110,ABA,Dircea,Female,Female lover 1,Naples,Italy
-0568,Dem,Per_lei_mi,1758,Hasse,X,1,11,111,Al segno,Timante,Male,Male lover 1,Naples,Italy
-0569,Dem,Tu_sai,1758,Hasse,M,2,1,201,Al segno,Creusa,Female,Female lover 2,Naples,Italy
-0570,Dem,Prudente_mi,1758,Hasse,M,2,2,202,Al segno,Timante,Male,Male lover 1,Naples,Italy
-0571,Dem,Se_tronca,1758,Hasse,M,2,3,203,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
-0572,Dem,No_non,1758,Hasse,M,2,7,207,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
-0573,Dem,Felice_eta,1758,Hasse,M,2,8,208,Al segno,Creusa,Female,Female lover 2,Naples,Italy
-0574,Dem,Perfidi_gia,1758,Hasse,M,2,10,210,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
-0575,Dem,La_destra,1758,Hasse,M,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Naples,Italy
-0576,Dem,Non_odi,1758,Hasse,M,3,1,301,Da capo,Adrasto,Male,Confidant,Naples,Italy
-0577,Dem,Nel_tuo,1758,Hasse,M,3,2,302,,Cherinto,Male,Male lover 2,Naples,Italy
-0578,Dem,Odo_il,1758,Hasse,M,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
-0579,Dem,Che_mai,1758,Hasse,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Naples,Italy
-0580,Dem,Il_suo,1771,Sarti,M,1,8,108,Al segno,Cherinto,Male,Male lover 2,Copenhagen,Denmark
-0581,Dem,E_soccorso,1771,Sarti,M,2,4,204,Al segno,Matusio,Male,Antagonist,Copenhagen,Denmark
-0582,Dem,No_non,1771,Sarti,M,2,7,207,Al segno,Cherinto,Male,Male lover 2,Copenhagen,Denmark
-0583,Dem,O_piu,1743,Gluck,M,1,1,101,Al segno,Matusio,Male,Antagonist,Milan,Italy
-0584,Dem,In_te,1743,Gluck,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Milan,Italy
-0585,Dem,Per_lei,1743,Gluck,M,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
-0586,Dem,Sperai_vicino,1743,Gluck,M,1,4,104,Da capo,Timante,Male,Male lover 1,Milan,Italy
-0587,Dem,Tintendo_ingrata,1743,Gluck,M,1,5,105,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
-0588,Dem,Non_curo,1743,Gluck,M,1,6,106,Al segno,Creusa,Female,Female lover 2,Milan,Italy
-0589,Dem,Il_suo,1743,Gluck,M,1,8,108,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
-0590,Dem,Padre_perdona,1743,Gluck,M,1,12,112,Al segno,Dircea,Female,Female lover 1,Milan,Italy
-0591,Dem,Tu_sai,1743,Gluck,M,2,1,201,Da capo,Creusa,Female,Female lover 2,Milan,Italy
-0592,Dem,Prudente_mi,1743,Gluck,M,2,3,203,Da capo,Timante,Male,Male lover 1,Milan,Italy
-0593,Dem,Se_tronca,1743,Gluck,M,2,4,204,Al segno,Demofoonte,Male,Senior ruler,Milan,Italy
-0594,Dem,E_soccorso,1743,Gluck,M,2,5,205,Da capo,Matusio,Male,Antagonist,Milan,Italy
-0595,Dem,Se_tutti,1743,Gluck,M,2,7,207,Da capo,Dircea,Female,Female lover 1,Milan,Italy
-0596,Dem,No_non,1743,Gluck,M,2,8,208,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
-0597,Dem,Felice_eta,1743,Gluck,M,2,9,209,Da capo,Creusa,Female,Female lover 2,Milan,Italy
-0598,Dem,Ah_che,1743,Gluck,M,3,3,303,Da capo,Matusio,Male,Antagonist,Milan,Italy
-0599,Dem,Misero_pargoletto,1743,Gluck,M,3,5,305,Al segno,Timante,Male,Male lover 1,Milan,Italy
-0600,Dem,Che_mai,1743,Gluck,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Milan,Italy
-0601,Dem,Nel_tuo,1743,Gluck,M,3,2,302,Al segno,Cherinto,Male,Male lover 2,Milan,Italy
-0602,Dem,Non_dura,1743,Gluck,M,3,8,308,Da capo,Creusa,Female,Female lover 2,Milan,Italy
-0603,Dem,Non_odi,1743,Gluck,M,3,1,301,Da capo,Adrasto,Male,Confidant,Milan,Italy
-0604,Dem,Odo_il,1743,Gluck,M,3,6,306,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
-0605,Dem,Gemo_in,1743,Gluck,X,1,13,113,Al segno,Timante,Male,Male lover 1,Milan,Italy
-0606,Dem,La_destra,1743,Gluck,M,2,12,212,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Milan,Italy
-0607,Dem,Non_e_ver,1743,Gluck,M,2,2,202,Da capo,Adrasto,Male,Confidant,Milan,Italy
-0608,Dem,Per_lei,1748,Hasse,M,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Dresden,Empire
-0609,Dem,Che_mai,1748,Hasse,M,3,7,307,Da capo,Dircea,Female,Female lover 1,Dresden,Empire
-0610,Dem,Non_curo,1748,Hasse,M,1,7,107,Al segno,Creusa,Female,Female lover 2,Dresden,Empire
-0611,Dem,No_non,1754,Manna,M,2,8,208,Da capo,Cherinto,Male,Male lover 2,Turin,Italy
-0612,Dem,Se_tronca,1754,Manna,M,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Turin,Italy
-0613,Dem,O_piu,1761,Piccinni,M,1,1,101,Al segno,Matusio,Male,Antagonist,Reggio Emilia,Italy
-0614,Dem,In_te,1761,Piccinni,M,1,2,102,Al segno,Dircea,Female,Female lover 1,Reggio Emilia,Italy
-0615,Dem,Per_lei,1761,Piccinni,M,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
-0616,Dem,Sperai_vicino,1761,Piccinni,M,1,4,104,Al segno,Timante,Male,Male lover 1,Reggio Emilia,Italy
-0617,Dem,Parto_crudel,1761,Piccinni,X,1,5,105,Al segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
-0618,Dem,Piu_non,1761,Piccinni,X,1,7,107,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
-0619,Dem,Di_quel,1761,Piccinni,X,1,8,108,Da capo,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
-0620,Dem,Se_ardire,1761,Piccinni,M,1,13,113,Da capo,Timante,Male,Male lover 1,Reggio Emilia,Italy
-0621,Dem,Padre_perdona,1761,Piccinni,M,1,12,112,Da capo,Dircea,Female,Female lover 1,Reggio Emilia,Italy
-0622,Dem,Prudente_mi,1761,Piccinni,M,2,2,202,Da capo,Timante,Male,Male lover 1,Reggio Emilia,Italy
-0623,Dem,Del_genitor,1761,Piccinni,X,2,4,204,Al segno,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
-0624,Dem,E_soccorso,1761,Piccinni,M,2,5,205,Al segno,Matusio,Male,Antagonist,Reggio Emilia,Italy
-0625,Dem,La_destra,1761,Piccinni,M,2,12,212,Al segno,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Reggio Emilia,Italy
-0626,Dem,Se_potesse,1761,Piccinni,X,2,7,207,ABA,Dircea,Female,Female lover 1,Reggio Emilia,Italy
-0627,Dem,No_non,1761,Piccinni,M,2,8,208,Al segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
-0628a,Dem,Si_tintendo,1761,Piccinni,X,2,9,209,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
-0628b,Dem,Non_temer,1761,Piccinni,X,2,9,209,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
-0629,Dem,Perfidi_gia,1761,Piccinni,M,2,11,211,Da capo,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
-0630,Dem,Non_odi,1761,Piccinni,M,3,1,301,Da capo,Adrasto,Male,Confidant,Reggio Emilia,Italy
-0631,Dem,Di_speme,1761,Piccinni,X,3,2,302,Al segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
-0632,Dem,E_cessato,1761,Piccinni,X,3,3,303,AA',Matusio,Male,Antagonist,Reggio Emilia,Italy
-0633,Dem,Non_dura,1761,Piccinni,M,3,7,307,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
-0634,Dem,Perche_perche,1761,Piccinni,X,3,8,308,Da capo,Dircea,Female,Female lover 1,Reggio Emilia,Italy
-0635,Ale,E_prezzo,1730,Vinci,M,1,1,101,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
-0636,Ale,Vedrai_con,1730,Vinci,M,1,2,102,Al segno,Poro,Male,Male lover 1,Rome,Italy
-0637,Ale,Vil_trofeo,1730,Vinci,M,1,3,103,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0638,Ale,Chi_vive,1730,Vinci,M,1,4,104,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0639,Ale,O_sugli,1730,Vinci,M,1,5,105,Da capo,Timagene,Male,Antagonist,Rome,Italy
-0640,Ale,Se_mai,1730,Vinci,M,1,6,106,A,Poro,Male,Male lover 1,Rome,Italy
-0641,Ale,Se_mai,1730,Vinci,M,1,7,107,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
-0642,Ale,Se_possono,1730,Vinci,M,1,8,108,Da capo,Poro,Male,Male lover 1,Rome,Italy
-0643,Ale,Compagni nell,1730,Vinci,M,1,9,109,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0644,Ale,Voi_che,1730,Vinci,M,1,10,110,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
-0645,Ale,Se_amore,1730,Vinci,M,1,15,115,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0646,Ale,Se_mai,1730,Vinci,M,1,16,116,Da capo,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Rome,Italy
-0647,Ale,Non_sarei,1730,Vinci,M,2,3,203,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0648,Ale,Senza_procelle,1730,Vinci,M,2,4,204,Al segno,Poro,Male,Male lover 1,Rome,Italy
-0649,Ale,Dun_barbaro,1730,Vinci,M,2,8,208,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0650,Ale,Digli_che,1730,Vinci,M,2,9,209,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
-0651,Ale,Destrier_che,1730,Vinci,M,2,10,210,Al segno,Poro,Male,Male lover 1,Rome,Italy
-0652,Ale,E_ver,1730,Vinci,M,2,11,211,Da capo,Timagene,Male,Antagonist,Rome,Italy
-0653,Ale,Se_e,1730,Vinci,M,2,13,213,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0654,Ale,Se_il,1730,Vinci,M,2,14,214,Da capo,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Rome,Italy
-0655,Ale,Se_viver,1730,Vinci,M,2,15,215,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
-0656,Ale,Di_rendermi,1730,Vinci,M,2,16,216,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0657,Ale,Risveglia_lo,1730,Vinci,M,3,1,301,Da capo,Poro,Male,Male lover 1,Rome,Italy
-0658,Ale,Se_troppo,1730,Vinci,M,3,4,304,Da capo,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Rome,Italy
-0659,Ale,Come_il,1730,Vinci,M,3,5,305,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0660,Ale,Serbati_a,1730,Vinci,M,3,6,306,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0661,Ale,Dove_si,1730,Vinci,M,3,9,309,Da capo,Poro,Male,Male lover 1,Rome,Italy
-0662,Ale,Mio_ben,1730,Vinci,M,3,10,310,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
-0663,Ale,Son_confusa,1730,Vinci,M,3,11,311,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0664,Ale,Ombra_dell,1730,Vinci,M,3,12,312,AA',Cleofide,Female,Female lover 1,Rome,Italy
-0665,Did,Veggio_la,,Galuppi,M,,,,Al segno,Selene,Female,Female lover 2,,
-0666,Did,A-trionfar,,Galuppi,M,,,,Al segno,Enea,Male,Male lover 1,,
-0667,Did,Diro_che,1764,Galuppi,M,1,3,103,Al segno,Selene,Female,Female lover 2,Venice,Italy
-0668,Ale,E_prezzo,1755,Galuppi,M,1,1,101,Da capo,Gandarte,Male,Male lover 3,Venice,Italy
-0669,Ale,Vedrai_con,1755,Galuppi,M,1,2,102,Da capo,Poro,Male,Male lover 1,Venice,Italy
-0670,Ale,Vil_trofeo,1755,Galuppi,M,1,3,103,Al segno,Alessandro,Male,Male lover 2,Venice,Italy
-0671,Ale,Chi_vive,1755,Galuppi,M,1,4,104,Al segno,Erissena,Female,Female lover 2,Venice,Italy
-0672,Ale,O_sugli,1755,Galuppi,M,1,5,105,Al segno,Timagene,Male,Antagonist,Venice,Italy
-0673,Ale,Se_mai,1755,Galuppi,M,1,6,106,A,Poro,Male,Male lover 1,Venice,Italy
-0674,Ale,Se_mai,1755,Galuppi,M,1,7,107,Al segno,Cleofide,Female,Female lover 1,Venice,Italy
-0675,Ale,Se_possono,1755,Galuppi,M,1,9,109,Al segno,Poro,Male,Male lover 1,Venice,Italy
-0676,Ale,Non_va,1755,Galuppi,X,1,11,111,Al segno,Gandarte,Male,Male lover 3,Venice,Italy
-0677,Ale,Se_amore,1755,Galuppi,M,1,15,115,Al segno,Alessandro,Male,Male lover 2,Venice,Italy
-0678,Ale,Se_mai,1755,Galuppi,M,1,16,116,ABA,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Venice,Italy
-0679,Ale,Frangi_la,1755,Galuppi,X,2,2,202,Al segno,Gandarte,Male,Male lover 3,Venice,Italy
-0680,Ale,Non_sarei,1755,Galuppi,M,2,4,204,Al segno,Erissena,Female,Female lover 2,Venice,Italy
-0681,Ale,Se_vuol,1755,Galuppi,X,2,8,208,Al segno,Alessandro,Male,Male lover 2,Venice,Italy
-0682,Ale,Digli_che,1755,Galuppi,M,2,9,209,AA',Cleofide,Female,Female lover 1,Venice,Italy
-0683,Ale,Destrier_che,1755,Galuppi,M,2,10,210,Al segno,Poro,Male,Male lover 1,Venice,Italy
-0684,Did,Tu_mi_scorgi,1764,Galuppi,M,1,6,106,ABA,Osmida,Male,Antagonist,Venice,Italy
-0685,Did,Fra_lo,1764,Galuppi,M,1,7,107,Al segno,Iarba,Male,Male lover 2,Venice,Italy
-0686,Did,Se_dalle,1764,Galuppi,M,1,8,108,Al segno,Araspe,Male,Male lover 3,Venice,Italy
-0687,Did,Tu_mi_disarmi,1764,Galuppi,M,1,16,116,ABA,Iarba,Male,Male lover 2,Venice,Italy
-0688,Did,Pensa_che,1764,Galuppi,M,2,1,201,ABA,Osmida,Male,Antagonist,Venice,Italy
-0689,Did,Nel_duol,1764,Galuppi,M,3,6,306,ABA,Selene,Female,Female lover 2,Venice,Italy
+AriaId,AriaOpera,AriaName,Year,Composer,Act,Scene,ActAndScene,Form,Character,Gender,RoleType,City,Territory
+0001,Did,Son_regina,1724,Sarro,1,5,105,Al segno,Didone,Female,Female lover 1,Naples,Italy
+0002,Did,Non_ha,1770,Piccinni,1,18,118,Al segno,Didone,Female,Female lover 1,Rome,Italy
+0003,Did,Non_ha,1724,Sarro,1,17,117,Da capo,Didone,Female,Female lover 1,Naples,Italy
+0004,Did,Dovrei_ma,1730,Sarro,1,2,102,recit,Enea,Male,Male lover 1,Naples,Italy
+0005,Did,Diro_che,1730,Sarro,1,3,103,Al segno,Selene,Female,Female lover 2,Naples,Italy
+0006,Did,Son_regina,1730,Sarro,1,5,105,Al segno,Didone,Female,Female lover 1,Naples,Italy
+0007,Did,Non_ha,1730,Sarro,1,17,117,Al segno,Didone,Female,Female lover 1,Naples,Italy
+0008,Did,Son_regina,1739,Lampugnani,1,5,105,Al segno,Didone,Female,Female lover 1,Padova,Italy
+0009,Did,Ah_non_lasciarmi,1739,Lampugnani,2,7,207,Da capo,Didone,Female,Female lover 1,Padova,Italy
+0010,Did,Son_regina,1760,Bernasconi,1,5,105,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0011,Did,Ah_non_lasciarmi,1760,Bernasconi,2,7,207,Da capo,Didone,Female,Female lover 1,Venice,Italy
+0012,Did,Son_regina,1742,Hasse,1,5,105,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
+0013,Did,Non_ha,1742,Hasse,1,18,118,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
+0014,Did,Non_ha,1747,Jommelli,1,17,117,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0015,Did,Son_regina,1747,Jommelli,1,5,105,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0016,Did,Son_regina,1749,Jommelli,1,5,105,Al segno,Didone,Female,Female lover 1,Vienna,Empire
+0017,Did,Non_ha,1753,Perez,1,17,117,Al segno,Didone,Female,Female lover 1,Genova,Italy
+0018,Did,Non_ha,1762,Sarti,1,15,115,ABA,Didone,Female,Female lover 1,Copenhagen,Denmark
+0019,Did,Non_ha,1763,Jommelli,1,17,117,Al segno,Didone,Female,Female lover 1,Stuttgart,Empire
+0020,Did,Non_ha,1764,Galuppi,1,17,117,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0021,Did,Non_ha,1775,Anfossi,1,11,111,AB,Didone,Female,Female lover 1,Venice,Italy
+0022,Did,Ah_non_lasciarmi,1742,Hasse,2,6,206,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
+0023,Did,Diro_che,1724,Sarro,1,3,103,Da capo,Selene,Female,Female lover 2,Naples,Italy
+0024,Did,Se_dalle,1724,Sarro,1,8,108,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0025,Did,Dovrei_ma,1739,Lampugnani,1,2,102,recit,Enea,Male,Male lover 1,Padova,Italy
+0026,Did,Tu_mi_scorgi,1739,Lampugnani,1,6,106,Al segno,Osmida,Male,Antagonist,Padova,Italy
+0027,Did,Fra_lo,1739,Lampugnani,1,7,107,Al segno,Iarba,Male,Male lover 2,Padova,Italy
+0028,Did,Quando_saprai,1739,Lampugnani,1,9,109,Al segno,Enea,Male,Male lover 1,Padova,Italy
+0029,Did,Dovrei_ma,1760,Bernasconi,1,2,102,recit,Enea,Male,Male lover 1,Venice,Italy
+0030,Did,Diro_che,1760,Bernasconi,1,3,103,Al segno,Selene,Female,Female lover 2,Venice,Italy
+0031,Did,Ah_non_lasciarmi,1747,Jommelli,2,2,202,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0032,Did,Non_ha,1749,Jommelli,1,17,117,Da capo,Didone,Female,Female lover 1,Vienna,Italy
+0033,Did,Son_regina,1753,Perez,1,5,105,Al segno,Didone,Female,Female lover 1,Genova,Italy
+0034,Did,Ah_non_lasciarmi,1753,Perez,2,6,206,Al segno,Didone,Female,Female lover 1,Genova,Italy
+0035,Did,Ah_non_lasciarmi,1763,Traetta,2,4,204,Da capo,Didone,Female,Female lover 1,Venice,Italy
+0036,Did,Ah_non_lasciarmi,1762,Sarti,2,4,204,ABA,Didone,Female,Female lover 1,Copenhagen,Denmark
+0037,Did,Ah_non_lasciarmi,1764,Galuppi,2,7,207,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0038,Did,Son_regina,1768,Boroni,1,5,105,Al segno,Didone,Female,Female lover 1,Prague,Empire
+0039,Did,Ah_non_lasciarmi,1768,Boroni,2,5,205,Al segno,Didone,Female,Female lover 1,Prague,Empire
+0040,Did,Son_regina,1769,Majo,1,6,106,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0041,Did,Son_regina,1770,Piccinni,1,5,105,Al segno,Didone,Female,Female lover 1,Rome,Italy
+0042,Did,Ah_non_lasciarmi,1770,Piccinni,2,2,202,Al segno,Didone,Female,Female lover 1,Rome,Italy
+0043,Did,Son_regina,1775,Anfossi,1,4,104,ABA,Didone,Female,Female lover 1,Venice,Italy
+0044,Did,Ah_non_lasciarmi,1775,Anfossi,2,4,204,ABA,Didone,Female,Female lover 1,Venice,Italy
+0045,Did,Ah_non_lasciarmi,1769,Majo,2,3,203,AB,Didone,Female,Female lover 1,Venice,Italy
+0046,Did,Infelice_e,1724,Sarro,1,13,113,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0047,Did,Son_regina,1776,Schuster,1,5,105,ABA,Didone,Female,Female lover 1,Naples,Italy
+0048,Did,Ah_non_lasciarmi,1749,Jommelli,2,4,204,Al segno,Didone,Female,Female lover 1,Vienna,Empire
+0049,Did,Son_regina,1762,Sarti,1,5,105,Da capo,Didone,Female,Female lover 1,Copenhagen,Denmark
+0050,Did,Ah_non_lasciarmi,1763,Jommelli,2,3,203,Al segno,Didone,Female,Female lover 1,Stuttgart,Empire
+0051,Did,Son_regina,1763,Jommelli,1,5,105,Al segno,Didone,Female,Female lover 1,Stuttgart,Empire
+0052,Did,Ah_non_lasciarmi,1776,Schuster,2,7,207,ABA,Didone,Female,Female lover 1,Naples,Italy
+0053,Did,Son_regina,1763,Traetta,1,5,105,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0054,Did,Aura_con,1739,Lampugnani,1,10,110,Al segno,Selene,Female,Female lover 2,Padova,Italy
+0055,Did,Tu_mi_scorgi,1724,Sarro,1,6,106,Al segno,Osmida,Male,Antagonist,Naples,Italy
+0056,Did,Fra_lo,1724,Sarro,1,7,107,Da capo,Iarba,Male,Male lover 2,Naples,Italy
+0057,Did,Quando_saprai,1724,Sarro,1,10,110,Al segno,Enea,Male,Male lover 1,Naples,Italy
+0058,Did,Ogni_amator,1724,Sarro,1,11,111,Da capo,Selene,Female,Female lover 2,Naples,Italy
+0059,Did,Son_quel,1724,Sarro,1,12,112,Al segno,Iarba,Male,Male lover 2,Naples,Italy
+0060,Did,Tu_mi_disarmi,1724,Sarro,1,16,116,Da capo,Iarba,Male,Male lover 2,Naples,Italy
+0061,Did,Se_resto,1724,Sarro,1,18,118,Al segno,Enea,Male,Male lover 1,Naples,Italy
+0062,Did,Tu_mi_scorgi,1730,Sarro,1,6,106,Al segno,Osmida,Male,Antagonist,Naples,Italy
+0063,Did,Fra_lo,1730,Sarro,1,7,107,Al segno,Iarba,Male,Male lover 2,Naples,Italy
+0064,Did,Se_dalle,1730,Sarro,1,8,108,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0065,Did,Quando_saprai,1730,Sarro,1,10,110,Al segno,Enea,Male,Male lover 1,Naples,Italy
+0066,Did,Ogni_amator,1730,Sarro,1,11,111,Da capo,Selene,Female,Female lover 2,Naples,Italy
+0067,Did,Son_quel,1730,Sarro,1,12,112,Al segno,Iarba,Male,Male lover 2,Naples,Italy
+0068,Did,Infelice_e,1730,Sarro,1,13,113,Al segno,Araspe,Male,Male lover 3,Naples,Italy
+0069,Did,Pensa_che,1730,Sarro,2,1,201,Al segno,Osmida,Male,Antagonist,Naples,Italy
+0070,Did,Leon_che,1739,Lampugnani,2,2,202,AB,Iarba,Male,Male lover 2,Padova,Italy
+0071,Did,L_augelletto,1739,Lampugnani,2,4,204,Al segno,Araspe,Male,Male lover 3,Padova,Italy
+0072,Did,Vedi_nel,1739,Lampugnani,2,8,208,Da capo,Enea,Male,Male lover 1,Padova,Italy
+0073,Did,Sono_tanti,1739,Lampugnani,2,10,210,Al segno,Osmida,Male,Antagonist,Padova,Italy
+0074,Did,Tormento_il,1739,Lampugnani,2,13,213,Al segno,Enea,Male,Male lover 1,Padova,Italy
+0075,Did,Tu_mi_scorgi,1760,Bernasconi,1,6,106,Al segno,Osmida,Male,Antagonist,Venice,Italy
+0076,Did,Se_dalle,1760,Bernasconi,1,8,108,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0077,Did,Quando_saprai,1760,Bernasconi,1,10,110,Da capo,Enea,Male,Male lover 1,Venice,Italy
+0078,Did,Son_quel,1760,Bernasconi,1,13,113,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0079,Did,Son_regina,1794,Paisiello,1,5,105,ABAB,Didone,Female,Female lover 1,Naples,Italy
+0080,Dem,Misero_pargoletto,1735,Leo,3,4,304,Al segno,Timante,Male,Male lover 1,Naples,Italy
+0081,Dem,Misero_pargoletto,1743,Jommelli,3,5,305,Da capo,Timante,Male,Male lover 1,Padova,Italy
+0082,Dem,Misero_pargoletto,1766,Bernasconi,3,5,305,Al segno,Timante,Male,Male lover 1,Munich,Italy
+0083,Dem,Misero_pargoletto,1748,Hasse,3,5,305,Al segno,Timante,Male,Male lover 1,Dresden,Empire
+0086,Dem,Se_tutti,1735,Leo,2,6,206,Da capo,Dircea,Female,Female lover 1,Naples,Italy
+0087,Dem,Misero_pargoletto,1758,Ferradini,3,4,304,Al segno,Timante,Male,Male lover 1,Milan,Italy
+0088,Dem,Misero_pargoletto,1754,Manna,3,5,305,Da capo,Timante,Male,Male lover 1,Turin,Italy
+0089,Dem,Misero_pargoletto,1758,Galuppi,3,5,305,Al segno,Timante,Male,Male lover 1,Padova,Italy
+0090,Dem,Misero_pargoletto,1764,Jommelli,3,5,305,Al segno,Timante,Male,Male lover 1,Stuttgart,Empire
+0091,Dem,Se_tutti,1743,Jommelli,2,6,306,Da capo,Dircea,Female,Female lover 1,Padova,Italy
+0092,Did,Se_resto,1730,Sarro,1,18,218,Al segno,Enea,Male,Male lover 1,Naples,Italy
+0093,Dem,Misero_pargoletto,1752,Perez,3,5,305,Al segno,Timante,Male,Male lover 1,Lisbon,Portugal
+0094,Dem,Misero_pargoletto,1753,Jommelli,3,5,305,Da capo,Timante,Male,Male lover 1,Milan,Italy
+0095,Dem,Misero_pargoletto,1775,Myslivecek,3,5,305,ABAB,Timante,Male,Male lover 1,Naples,Italy
+0096,Dem,Misero_pargoletto,1758,Hasse,3,5,305,Al segno,Timante,Male,Male lover 1,Naples,Italy
+0097,Dem,Misero_pargoletto,1761,Piccinni,3,5,305,Al segno,Timante,Male,Male lover 1,Reggio Emilia,Italy
+0098,Dem,Misero_pargoletto,1790,Errichelli,3,,,Da capo,Timante,Male,Male lover 1,,
+0099,Dem,Misero_pargoletto,1771,Sarti,3,5,305,Al segno,Timante,Male,Male lover 1,Copenhagen,Denmark
+0100,Dem,Misero_pargoletto,1746,Graun,3,5,305,Al segno,Timante,Male,Male lover 1,Berlin,Empire
+0101,Did,Se_resto,1742,Hasse,1,19,119,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
+0102,Dem,Misero_pargoletto,1776,Monza,3,5,305,AA,Timante,Male,Male lover 1,Alessandria,Italy
+0103,Did,Se_resto,1747,Jommelli,1,18,118,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0104,Did,Se_resto,1776,Schuster,2,15,215,ABAB,Enea,Male,Male lover 1,Naples,Italy
+0105,Did,Se_resto,1753,Perez,1,18,118,Al segno,Enea,Male,Male lover 1,Genova,Italy
+0106,Did,Se_resto,1775,Anfossi,2,7,207,ABA,Enea,Male,Male lover 1,Venice,Italy
+0107,Did,Se_resto,1763,Traetta,1,18,118,Da capo,Enea,Male,Male lover 1,Venice,Italy
+0108,Did,Se_resto,1749,Jommelli,2,18,217,Al segno,Enea,Male,Male lover 1,Rome,Italy
+0109,Did,Se_resto,1764,Galuppi,1,18,118,Al segno,Enea,Male,Male lover 1,Venice,Italy
+0110,Dem,Se_tutti,1758,Galuppi,2,6,206,Al segno,Dircea,Female,Female lover 1,Padova,Italy
+0111,Dem,Se_tutti,1758,Ferradini,2,6,206,Da capo,Dircea,Female,Female lover 1,Milan,Italy
+0112,Did,Se_resto,1770,Piccinni,1,19,119,Al segno,Enea,Male,Male lover 1,Rome,Italy
+0113,Dem,Se_tutti,1748,Hasse,2,6,206,Al segno,Dircea,Female,Female lover 1,Dresden,Empire
+0114,Dem,Se_tutti,1754,Manna,2,7,207,Da capo,Dircea,Female,Female lover 1,Turin,Italy
+0115,Dem,Se_tutti,1752,Perez,2,6,206,Al segno,Dircea,Female,Female lover 1,Lisbon,Portugal
+0116,Dem,Se_tutti,1753,Jommelli,2,6,206,Da capo,Dircea,Female,Female lover 1,Milan,Italy
+0117,Dem,Se_tutti,1749,Galuppi,2,6,206,Da capo,Dircea,Female,Female lover 1,Madrid,Spain
+0118,Dem,Se_tutti,1758,Hasse,2,6,206,Al segno,Dircea,Female,Female lover 1,Naples,Italy
+0119,Dem,Se_tutti,1764,Jommelli,2,6,206,Da capo,Dircea,Female,Female lover 1,Stuttgart,Empire
+0120,Dem,Se_tutti,1770,Jommelli,2,7,207,Al segno,Dircea,Female,Female lover 1,Naples,Italy
+0121,Did,Cadra_fra,,Wagenseil,3,,,Al segno,Iarba,Male,Male lover 2,,
+0122,Dem,Se_tutti,1775,Myslivecek,2,6,206,ABA,Dircea,Female,Female lover 1,Naples,Italy
+0123,Did,Cadra_fra,1742,Hasse,3,19,319,Da capo,Iarba,Male,Male lover 2,Wermsdorf,Empire
+0124,Did,Cadra_fra,1747,Jommelli,3,19,319,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0125,Did,Cadra_fra,1768,Boroni,3,14,314,ABA,Iarba,Male,Male lover 2,Prague,Empire
+0126,Did,Cadra_fra,1770,Piccinni,3,19,319,Al segno,Iarba,Male,Male lover 2,Rome,Italy
+0127,Did,Cadra_fra,1769,Majo,3,12,312,ABA,Iarba,Male,Male lover 2,Venice,Italy
+0128,Did,Cadra_fra,1762,Sarti,3,15,315,AB,Iarba,Male,Male lover 2,Copenhagen,Denmark
+0129,Did,Cadra_fra,1753,Perez,3,18,318,recit,Iarba,Male,Male lover 2,Genova,Italy
+0130,Did,Cadra_fra,1764,Galuppi,3,16,316,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0131,Did,Cadra_fra,1730,Sarro,3,16,316,Da capo,Iarba,Male,Male lover 2,Naples,Italy
+0132,Did,Cadra_fra,1776,Schuster,3,16,316,AA,Iarba,Male,Male lover 2,Naples,Italy
+0133,Did,Cadra_fra,1763,Traetta,3,18,318,Da capo,Iarba,Male,Male lover 2,Venice,Italy
+0134,Did,Son_regina,1764,Galuppi,1,5,105,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0135,Did,Cadra_fra,1763,Jommelli,3,17,317,Al segno,Iarba,Male,Male lover 2,Stuttgart,Empire
+0136,Did,Ah_non_lasciarmi,1794,Paisiello,2,6,206,ABA,Didone,Female,Female lover 1,Naples,Italy
+0137,Did,Cadra_fra,1775,Anfossi,3,14,314,ABA,Iarba,Male,Male lover 2,Venice,Italy
+0138,Did,Cara_lavverso,1739,Lampugnani,1,17,117,Al segno,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Padova,Italy
+0139,Did,Dovrei_ma,1724,Sarro,1,2,102,recit,Enea,Male,Male lover 1,Naples,Italy
+0140,Did,Infelice_e,1739,Lampugnani,1,13,113,Al segno,Araspe,Male,Male lover 3,Padova,Italy
+0141,Did,Vedi_nel,1730,Sarro,2,8,208,Da capo,Enea,Male,Male lover 1,Naples,Italy
+0142,Did,Leon_che,1730,Sarro,2,3,203,Al segno,Iarba,Male,Male lover 2,Naples,Italy
+0143,Did,L_augelletto,1730,Sarro,2,5,205,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0144,Did,Se_vuoi,1730,Sarro,2,7,207,Da capo,Didone,Female,Female lover 1,Naples,Italy
+0145,Did,Ardi_per,1730,Sarro,2,4,204,Al segno,Selene,Female,Female lover 2,Naples,Italy
+0146,Did,Ah_non_lasciarmi,1810,Paer,2,2,202,ABA,Didone,Female,Female lover 1,Paris,France
+0147,Did,Tu_mi_disarmi,1742,Hasse,1,17,117,Al segno,Iarba,Male,Male lover 2,Wermsdorf,Empire
+0148,Did,Ogni_amator,1742,Hasse,1,11,111,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
+0149,Did,Quando_saprai,1749,Jommelli,1,4,104,Da capo,Enea,Male,Male lover 1,Vienna,Empire
+0150,Did,Tu_mi_scorgi,1749,Jommelli,1,3,103,Da capo,Osmida,Male,Antagonist,Vienna,Empire
+0151,Did,Quando_saprai,1742,Hasse,1,10,110,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
+0152,Did,Ogni_amator,1749,Jommelli,1,7,107,Da capo,Selene,Female,Female lover 2,Vienna,Empire
+0153,Did,Vedi_nel,1749,Jommelli,2,10,210,Da capo,Enea,Male,Male lover 1,Vienna,Empire
+0154,Did,Fosca_nube,1730,Sarro,2,9,209,Al segno,Iarba,Male,Male lover 2,Naples,Italy
+0155,Did,Tacero_se,1730,Sarro,2,11,211,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0156,Did,Non_cede,1730,Sarro,2,12,212,Da capo,Enea,Male,Male lover 1,Naples,Italy
+0157,Did,Veggio_la,1730,Sarro,2,13,213,Al segno,Selene,Female,Female lover 2,Naples,Italy
+0158,Did,Chiamami_pur,1730,Sarro,2,16,216,Da capo,Iarba,Male,Male lover 2,Naples,Italy
+0159,Did,Va_lusingando,1730,Sarro,2,17,217,Da capo,Didone,Female,Female lover 1,Naples,Italy
+0160,Did,Vivi_superbo,1730,Sarro,3,2,302,Da capo,Enea,Male,Male lover 1,Naples,Italy
+0161,Did,Agitata_e,1730,Sarro,3,4,304,Da capo,Osmida,Male,Antagonist,Naples,Italy
+0162,Did,Se_ti,1730,Sarro,3,5,305,Al segno,Araspe,Male,Male lover 3,Naples,Italy
+0163,Did,Sorge_cosi,1730,Sarro,3,6,306,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0164,Did,Va_crescendo,1730,Sarro,3,7,307,A,Didone,Female,Female lover 1,Naples,Italy
+0165,Did,Gia_si,1730,Sarro,3,13,313,Da capo,Araspe,Male,Male lover 3,Naples,Italy
+0166,Did,Vado_ma,1730,Sarro,3,18,318,AB,Didone,Female,Female lover 1,Naples,Italy
+0167,Did,Veggio_la,1739,Lampugnani,2,14,214,Al segno,Enea,Male,Male lover 1,Padova,Italy
+0168,Did,Chiamami_pur,1739,Lampugnani,2,17,217,Da capo,Iarba,Male,Male lover 2,Padova,Italy
+0169,Did,Parto_bell,1760,Bernasconi,1,18,118,Al segno,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Venice,Italy
+0170,Did,Pensa_che,1760,Bernasconi,2,1,201,Al segno,Osmida,Male,Antagonist,Venice,Italy
+0171,Did,Leon_che,1741,Bernasconi,2,3,203,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0172,Did,Ardi_per,1760,Bernasconi,2,4,204,Al segno,Selene,Female,Female lover 2,Venice,Italy
+0173,Did,Vedi_nel,1760,Bernasconi,2,8,208,Al segno,Enea,Male,Male lover 1,Venice,Italy
+0174,Did,Tacero_se,1760,Bernasconi,2,11,211,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0175,Did,Ah_non_sai,1760,Bernasconi,2,12,212,Al segno,Enea,Male,Male lover 1,Venice,Italy
+0176,Did,Cosi_fra,1760,Bernasconi,2,13,213,Al segno,Selene,Female,Female lover 2,Venice,Italy
+0177,Did,Chiamami_pur,1760,Bernasconi,2,16,216,Da capo,Iarba,Male,Male lover 2,Venice,Italy
+0178,Did,Io_veggo,1760,Bernasconi,2,17,217,Al segno,Didone,Female,Female lover 1,Venice,Italy
+0179,Did,Quando_londa,1760,Bernasconi,3,7,307,Al segno,Osmida,Male,Antagonist,Venice,Italy
+0180,Did,A_trionfar,1760,Bernasconi,3,8,308,Al segno,Enea,Male,Male lover 1,Venice,Italy
+0181,Did,Nel_duol,1760,Bernasconi,3,9,309,Al segno,Selene,Female,Female lover 2,Venice,Italy
+0182,Did,Va_crescendo,1760,Bernasconi,3,10,310,A,Didone,Female,Female lover 1,Venice,Italy
+0183,Did,Cadra_fra,1760,Bernasconi,3,19,319,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0184,Did,Vado_ma,1760,Bernasconi,3,21,321,recit,Didone,Female,Female lover 1,Venice,Italy
+0185,Did,Dovrei_ma,1742,Hasse,1,2,102,recit,Enea,Male,Male lover 1,Wermsdorf,Empire
+0186,Did,Diro_che,1742,Hasse,1,3,103,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
+0187,Did,Tu_mi_scorgi,1742,Hasse,1,6,106,Da capo,Osmida,Male,Antagonist,Wermsdorf,Empire
+0188,Did,Fra_lo,1742,Hasse,1,7,107,Al segno,Iarba,Male,Male lover 2,Wermsdorf,Empire
+0189,Did,Se_dalle,1742,Hasse,1,8,108,Al segno,Araspe,Male,Male lover 3,Wermsdorf,Empire
+0190,Did,Leon_che,1742,Hasse,2,2,202,Al segno,Iarba,Male,Male lover 2,Wermsdorf,Empire
+0191,Did,L_augelletto,1742,Hasse,2,4,204,Al segno,Araspe,Male,Male lover 3,Wermsdorf,Empire
+0192,Did,Vedi_nel,1742,Hasse,2,7,207,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
+0193,Did,Tacero_se,1742,Hasse,2,10,210,Da capo,Araspe,Male,Male lover 3,Wermsdorf,Empire
+0194,Did,Veggio_la,1742,Hasse,2,12,212,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
+0195,Did,Chiamami_pur,1742,Hasse,2,15,215,Da capo,Iarba,Male,Male lover 2,Wermsdorf,Empire
+0196,Did,Va_lusingando,1742,Hasse,2,16,216,Al segno,Didone,Female,Female lover 1,Wermsdorf,Empire
+0197,Did,Vivi_superbo,1742,Hasse,3,2,302,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
+0198,Did,Dovrei_ma,1747,Jommelli,1,2,102,recit,Enea,Male,Male lover 1,Rome,Italy
+0199,Did,Diro_che,1747,Jommelli,1,3,103,Al segno,Selene,Female,Female lover 2,Rome,Italy
+0200,Did,Tu_mi_scorgi,1747,Jommelli,1,6,106,Da capo,Osmida,Male,Antagonist,Rome,Italy
+0201,Did,Fra_lo,1747,Jommelli,1,7,107,Al segno,Iarba,Male,Male lover 2,Rome,Italy
+0202,Did,Diro_che,1749,Jommelli,1,3,103,Da capo,Selene,Female,Female lover 2,Vienna,Empire
+0203,Did,Se_dalle,1749,Jommelli,1,8,108,Al segno,Araspe,Male,Male lover 3,Vienna,Empire
+0204,Did,Tacero_se,1749,Jommelli,2,8,208,Da capo,Araspe,Male,Male lover 3,Vienna,Empire
+0205,Did,Va_lusingando,1749,Jommelli,2,14,214,Al segno,Didone,Female,Female lover 1,Vienna,Empire
+0206,Did,Ardi_per,1749,Jommelli,2,1,201,Da capo,Selene,Female,Female lover 2,Vienna,Empire
+0207,Did,Son_quel,1749,Jommelli,1,13,113,Al segno,Iarba,Male,Male lover 2,Vienna,Empire
+0208,Did,Tormento_il,1749,Jommelli,2,9,209,Da capo,Enea,Male,Male lover 1,Vienna,Empire
+0209,Did,Quando_londa,1749,Jommelli,3,6,306,Da capo,Osmida,Male,Antagonist,Vienna,Empire
+0210,Did,A_trionfar,1749,Jommelli,3,7,307,Al segno,Enea,Male,Male lover 1,Vienna,Empire
+0211,Did,Gia_si,1760,Bernasconi,3,16,316,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0212,Did,Quando_londa,1742,Hasse,3,7,307,Al segno,Osmida,Male,Antagonist,Wermsdorf,Empire
+0213,Did,A_trionfar,1742,Hasse,3,8,308,Al segno,Enea,Male,Male lover 1,Wermsdorf,Empire
+0214,Did,Quando_saprai,1747,Jommelli,1,9,109,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0215,Did,Infelice_e,1747,Jommelli,1,13,113,Da capo,Araspe,Male,Male lover 3,Rome,Italy
+0216,Did,Tu_mi_disarmi,1747,Jommelli,1,16,116,Al segno,Iarba,Male,Male lover 2,Rome,Italy
+0217,Did,Nel_duol,1749,Jommelli,3,8,308,Da capo,Selene,Female,Female lover 2,Vienna,Empire
+0218,Did,Gia_si,1749,Jommelli,3,15,315,Da capo,Araspe,Male,Male lover 3,Vienna,Empire
+0219,Did,Fosca_nube,1749,Jommelli,3,6,306,Al segno,Iarba,Male,Male lover 2,Vienna,Empire
+0220,Did,Lungi_dal,1747,Jommelli,2,1,201,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0221,Did,Vedi_nel,1747,Jommelli,2,3,203,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0222,Did,Vivi_superbo,1747,Jommelli,3,2,302,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0223,Did,Quando_londa,1747,Jommelli,3,7,307,Da capo,Osmida,Male,Antagonist,Rome,Italy
+0224,Did,A_trionfar,1747,Jommelli,3,8,308,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0225,Did,Nel_duol,1747,Jommelli,3,9,309,Da capo,Selene,Female,Female lover 2,Rome,Italy
+0226,Did,Va_crescendo,1747,Jommelli,3,10,310,AA,Didone,Female,Female lover 1,Rome,Italy
+0227,Did,Gia_si,1747,Jommelli,3,16,316,Da capo,Araspe,Male,Male lover 3,Rome,Italy
+0228,Did,Vado_ma,1747,Jommelli,3,21,321,recit,Didone,Female,Female lover 1,Rome,Italy
+0229,Did,Nel_duol,1742,Hasse,3,9,309,Al segno,Selene,Female,Female lover 2,Wermsdorf,Empire
+0230,Did,Dovrei_ma,1753,Perez,1,2,102,Al segno,Enea,Male,Male lover 1,Genova,Italy
+0231,Did,Gia_si,1742,Hasse,3,16,316,Da capo,Araspe,Male,Male lover 3,Wermsdorf,Empire
+0232,Did,Ombra_cara,1742,Hasse,3,18,318,Da capo,Didone,Female,Female lover 1,Wermsdorf,Empire
+0233,Did,Diro_che,1753,Perez,1,3,103,Al segno,Selene,Female,Female lover 2,Genova,Italy
+0234,Did,Vado_ma,1742,Hasse,3,21,321,AB,Didone,Female,Female lover 1,Wermsdorf,Empire
+0235,Did,Tu_mi_scorgi,1753,Perez,1,6,106,Al segno,Osmida,Male,Antagonist,Genova,Italy
+0236,Did,Fra_lo,1753,Perez,1,7,107,Al segno,Iarba,Male,Male lover 2,Genova,Italy
+0237,Did,Tacero_se,1747,Jommelli,2,6,206,Da capo,Araspe,Male,Male lover 3,Rome,Italy
+0238,Did,Ah_le,1747,Jommelli,2,7,207,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0239,Did,Quando_saprai,1753,Perez,1,9,109,Al segno,Enea,Male,Male lover 1,Genova,Italy
+0240,Did,Veggio_la,1747,Jommelli,2,8,208,Da capo,Selene,Female,Female lover 2,Rome,Italy
+0241,Did,Son_quel,1753,Perez,1,2,112,Al segno,Iarba,Male,Male lover 2,Genova,Italy
+0242,Did,Dovrei_ma,1763,Traetta,1,2,102,ABAB,Enea,Male,Male lover 1,Venice,Italy
+0243,Did,Diro_che,1763,Traetta,1,3,103,Da capo,Selene,Female,Female lover 2,Venice,Italy
+0244,Did,Se_dalle,1753,Perez,1,13,113,Al segno,Araspe,Male,Male lover 3,Genova,Italy
+0245,Did,Tu_mi_disarmi,1753,Perez,1,16,116,Al segno,Iarba,Male,Male lover 2,Genova,Italy
+0246,Did,Fra_lo,1763,Traetta,1,7,107,Da capo,Iarba,Male,Male lover 2,Venice,Italy
+0247,Did,Sho_la,1753,Perez,2,1,201,Al segno,Selene,Female,Female lover 2,Genova,Italy
+0248,Did,Pace_non,1763,Traetta,1,8,108,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0249,Did,Non_so,1753,Perez,2,4,204,Al segno,Araspe,Male,Male lover 3,Genova,Italy
+0250,Did,Vedi_nel,1753,Perez,2,7,207,Al segno,Enea,Male,Male lover 1,Genova,Italy
+0251,Did,Quando_saprai,1763,Traetta,1,10,110,Da capo,Enea,Male,Male lover 1,Venice,Italy
+0252,Did,Fosca_nube,1753,Perez,2,8,208,Da capo,Iarba,Male,Male lover 2,Genova,Italy
+0253,Did,Nell_affano,1753,Perez,2,11,211,Al segno,Enea,Male,Male lover 1,Genova,Italy
+0254,Did,Io_veggo,1739,Lampugnani,2,18,218,Al segno,Didone,Female,Female lover 1,Padova,Italy
+0255,Did,Fra_tutte,1753,Perez,2,12,212,Al segno,Selene,Female,Female lover 2,Genova,Italy
+0256,Did,Chiamami_pur,1753,Perez,2,15,215,Al segno,Iarba,Male,Male lover 2,Genova,Italy
+0257,Did,Dovrei_ma,1762,Sarti,1,2,102,recit,Enea,Male,Male lover 1,Copenhagen,Denmark
+0258,Did,Infelice_abbandonata,1753,Perez,2,16,216,Al segno,Didone,Female,Female lover 1,Genova,Italy
+0259,Did,Tu_mi_scorgi,1762,Sarti,1,6,106,Al segno,Osmida,Male,Antagonist,Copenhagen,Denmark
+0260,Did,Son_quel,1762,Sarti,1,12,112,Da capo,Iarba,Male,Male lover 2,Copenhagen,Denmark
+0261,Did,Teneri_affetti,1753,Perez,3,7,307,Al segno,Enea,Male,Male lover 1,Genova,Italy
+0262,Did,Se_dalle,1762,Sarti,1,7,107,Da capo,Araspe,Male,Male lover 3,Copenhagen,Denmark
+0263,Did,Chel_nocchier,1753,Perez,3,3,303,Al segno,Araspe,Male,Male lover 3,Genova,Italy
+0264,Did,Ardi_per,1762,Sarti,2,1,201,Da capo,Selene,Female,Female lover 2,Copenhagen,Denmark
+0265,Did,Non_cede,1762,Sarti,1,16,116,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
+0266,Did,Vado_ma,1753,Perez,3,20,320,recit,Didone,Female,Female lover 1,Genova,Italy
+0267,Did,Va_crescendo,1753,Perez,3,9,309,AA,Didone,Female,Female lover 1,Genova,Italy
+0268,Did,Nel_duol,1753,Perez,3,8,308,Al segno,Selene,Female,Female lover 2,1751,Perez
+0269,Did,La_caduta,1762,Sarti,3,2,302,A,Iarba,Male,Male lover 2,Copenhagen,Denmark
+0270,Did,Fosca_nube,1762,Sarti,2,5,205,Da capo,Iarba,Male,Male lover 2,Copenhagen,Denmark
+0271,Did,Quando_saprai,1762,Sarti,1,9,109,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
+0272,Did,Quando_londa,1762,Sarti,3,4,304,Da capo,Osmida,Male,Antagonist,Copenhagen,Denmark
+0273,Did,Vado_ma,1762,Sarti,3,18,318,recit,Didone,Female,Female lover 1,Copenhagen,Denmark
+0274,Did,A_trionfar,1762,Sarti,3,5,305,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
+0275,Did,Io_damor,1762,Sarti,3,6,306,Al segno,Selene,Female,Female lover 2,Copenhagen,Denmark
+0276,Did,Va_crescendo,1762,Sarti,3,6,306,A,Didone,Female,Female lover 1,Copenhagen,Denmark
+0277,Did,Tormento_il,1762,Sarti,2,8,208,Al segno,Enea,Male,Male lover 1,Copenhagen,Denmark
+0278,Did,Chiamami_pur,1762,Sarti,2,14,214,AA,Iarba,Male,Male lover 2,Copenhagen,Denmark
+0279,Did,Vado_ma,1768,Boroni,3,15,315,recit,Didone,Female,Female lover 1,Prague,Empire
+0280,Did,Dovrei_ma,1768,Boroni,1,2,102,AA,Enea,Male,Male lover 1,Prague,Empire
+0281,Did,Tu_mi_scorgi,1768,Boroni,1,6,106,Al segno,Osmida,Male,Antagonist,Prague,Empire
+0282,Did,Fra_lo,1768,Boroni,1,7,107,Al segno,Iarba,Male,Male lover 2,Prague,Empire
+0283,Did,Quando_saprai,1768,Boroni,1,10,110,Al segno,Enea,Male,Male lover 1,Prague,Empire
+0284,Did,Infelice_e,1768,Boroni,1,13,113,Al segno,Araspe,Male,Male lover 3,Prague,Empire
+0285,Did,Dovrei_ma,1769,Majo,1,3,103,AA,Enea,Male,Male lover 1,Venice,Italy
+0286,Did,Tacero_se,1762,Sarti,2,7,207,Al segno,Araspe,Male,Male lover 3,Copenhagen,Denmark
+0287,Did,Tu_mi_disarmi,1768,Boroni,1,13,113,Al segno,Iarba,Male,Male lover 2,Prague,Empire
+0288,Did,Pensa_che,1768,Boroni,2,1,201,AAA,Osmida,Male,Antagonist,Prague,Empire
+0289,Did,Ogni_amator,1762,Sarti,2,9,209,Al segno,Selene,Female,Female lover 2,Copenhagen,Denmark
+0290,Did,Tacero_se,1768,Boroni,2,9,209,ABABA,Araspe,Male,Male lover 3,Prague,Empire
+0291,Did,Diro_che,1769,Majo,1,4,104,Al segno,Selene,Female,Female lover 2,Venice,Italy
+0292,Did,Dovrei_ma,1810,Paer,1,2,102,AA,Enea,Male,Male lover 1,Paris,France
+0293,Did,Fra_lo,1769,Majo,1,8,108,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0294,Did,Ah_non_sai,1768,Boroni,2,10,210,Al segno,Enea,Male,Male lover 1,Prague,Empire
+0295,Did,Povero_cor,1810,Paer,1,4,104,ABC,Didone,Female,Female lover 1,Paris,France
+0296,Did,Veggio_la,1768,Boroni,2,11,211,Al segno,Selene,Female,Female lover 2,Prague,Empire
+0297,Did,Quando_saprai,1769,Majo,1,10,110,AA,Enea,Male,Male lover 1,Venice,Italy
+0298,Did,A_trionfar,1768,Boroni,3,6,306,AA,Enea,Male,Male lover 1,Prague,Empire
+0299,Did,Rupe_esposta,1769,Majo,1,12,112,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0300,Did,Nel_duol,1768,Boroni,3,7,307,AAA,Selene,Female,Female lover 2,Prague,Empire
+0301,Did,Va_crescendo,1768,Boroni,3,7,307,AA,Didone,Female,Female lover 1,Prague,Empire
+0302,Did,Gia_si,1768,Boroni,3,11,311,AA,Araspe,Male,Male lover 3,Prague,Empire
+0303,Did,Tu_mi_disarmi,1810,Paer,1,9,109,ABCB,Iarba,Male,Male lover 2,Paris,France
+0304,Did,Tu_mi_disarmi,1769,Majo,1,14,114,ABA,Iarba,Male,Male lover 2,Venice,Italy
+0305,Did,Quanto_per,1769,Majo,1,15,115,AA,Didone,Female,Female lover 1,Venice,Italy
+0306,Did,Fosca_nube,1768,Boroni,2,7,207,Al segno,Iarba,Male,Male lover 2,Prague,Empire
+0307,Did,Diro_che,1768,Boroni,1,3,103,Al segno,Selene,Female,Female lover 2,Prague,Empire
+0308,Did,No_non_parti,1768,Boroni,2,13,213,ABA,"Didone,Enea,Iarba","Female,Male,Male","Female lover 1,Male lover 1,Male lover 2",Prague,Empire
+0309,Did,Accoglio_regina,1810,Paer,1,5,105,AB,"Didone,Iarba","Female,Male","Female lover 1,Male lover 2",Paris,France
+0310,Did,Placa_il,1768,Boroni,1,7,107,ABAB,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Prague,Empire
+0311,Did,Dovrei_ma,1794,Paisiello,1,2,102,recit,Enea,Male,Male lover 1,Naples,Italy
+0312,Did,Passagier_che,1769,Majo,1,16,116,Al segno,Enea,Male,Male lover 1,Venice,Italy
+0313,Did,Se_resto,1794,Paisiello,2,13,213,ABA,Enea,Male,Male lover 1,Naples,Italy
+0314,Did,Diro_che,1794,Paisiello,1,3,113,AA,Selene,Female,Female lover 2,Naples,Italy
+0315,Did,Se_dalle,1794,Paisiello,1,7,107,ABCB,Araspe,Male,Male lover 3,Naples,Italy
+0316,Did,Cadra_fra,1794,Paisiello,2,15,215,ABA,Iarba,Male,Male lover 2,Naples,Italy
+0317,Did,Tu_mi_disarmi,1794,Paisiello,1,15,115,ABA,Iarba,Male,Male lover 2,Naples,Italy
+0318,Did,Pensa_che,1794,Paisiello,2,1,201,AB,Osmida,Male,Antagonist,Naples,Italy
+0319,Did,Son_regina,1744,Scalabrini,1,1,101,Da capo,Didone,Female,Female lover 1,Hamburg,Empire
+0320,Did,Quando_saprai,1794,Paisiello,1,9,109,ABC,Enea,Male,Male lover 1,Naples,Italy
+0321,Did,So_che,1794,Paisiello,2,4,204,ABA,Araspe,Male,Male lover 3,Naples,Italy
+0322,Did,Fra_lo,1744,Scalabrini,1,3,103,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
+0323,Did,Fra_tutte,1794,Paisiello,C-1,10,210,AAA,Selene,Female,Female lover 2,Naples,Italy
+0324,Did,A_trionfar,1763,Jommelli,3,6,306,Da capo,Enea,Male,Male lover 1,Stuttgart,Empire
+0325,Did,Vado_ma,1794,Paisiello,3,16,316,AAAB,Didone,Female,Female lover 1,Naples,Italy
+0326,Did,Cadra_fra,1744,Scalabrini,3,8,308,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
+0327,Did,Ah_non_lasciarmi,1750,Viotti,,,,Da capo,Didone,Female,Female lover 1,,
+0328,Did,Diro_che,1763,Jommelli,1,3,103,Al segno,Selene,Female,Female lover 2,Stuttgart,Empire
+0329,Did,La_caduta,1763,Jommelli,3,2,302,A,Iarba,Male,Male lover 2,Stuttgart,Empire
+0330,Did,Chiamami_pur,1747,Jommelli,2,11,211,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0331,Did,Morire_oh,1794,Paisiello,1,16,116,AB,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Naples,Italy
+0332,Did,Non_so,1769,Majo,2,1,201,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0333,Did,Nel_mirar,1769,Majo,2,2,202,Al segno,Osmida,Male,Antagonist,Venice,Italy
+0334,Did,Quando_saprai,1744,Scalabrini,1,4,104,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
+0335,Did,Va_crescendo,1744,Scalabrini,3,3,303,AB,Selene,Female,Female lover 2,Hamburg,Empire
+0336,Did,L_augelletto,1744,Scalabrini,3,4,304,Al segno,Araspe,Male,Male lover 3,Hamburg,Empire
+0337,Did,Diro_che,1776,Schuster,1,3,103,ABA,Selene,Female,Female lover 2,Naples,Italy
+0338,Did,Son_quel,1776,Schuster,1,7,107,ABAB,Iarba,Male,Male lover 2,Naples,Italy
+0339,Did,Se_il,1747,Jommelli,2,12,212,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0340,Did,Veggio_la,1769,Majo,2,9,209,ABA,Selene,Female,Female lover 2,Venice,Italy
+0341,Did,Fosca_nube,1769,Majo,2,5,205,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0342,Did,Se_dalle,1776,Schuster,1,8,108,ABA,Araspe,Male,Male lover 3,Naples,Italy
+0343,Did,Quando_saprai,1776,Schuster,1,10,110,ABA,Enea,Male,Male lover 1,Naples,Italy
+0344,Did,Tu_mi_scorgi,1763,Jommelli,1,6,106,Al segno,Osmida,Male,Antagonist,Stuttgart,Empire
+0345,Did,Per_pieta,1769,Majo,2,8,208,Al segno,Enea,Male,Male lover 1,Venice,Italy
+0346,Did,Va_crescendo,1769,Majo,3,4,304,AA,Didone,Female,Female lover 1,Venice,Italy
+0347,Did,Tu_mi_disarmi,1776,Schuster,1,16,116,AA,Iarba,Male,Male lover 2,Naples,Italy
+0348,Did,Se_dalle,1763,Jommelli,1,8,108,Al segno,Araspe,Male,Male lover 3,Stuttgart,Empire
+0349,Did,Quando_saprai,1763,Jommelli,1,10,110,Al segno,Enea,Male,Male lover 1,Stuttgart,Empire
+0350,Did,Non_partir,1769,Majo,2,11,211,AB,"Didone,Enea,Iarba","Female,Male,Male","Female lover 1,Male lover 1,Male lover 2",Venice,Italy
+0351,Did,Son_regina,1726,Vinci,1,5,105,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0352,Did,Pensa_che,1776,Schuster,2,1,201,AA,Osmida,Male,Antagonist,Naples,Italy
+0353,Did,Chiamami_pur,1776,Schuster,2,13,213,AA,Iarba,Male,Male lover 2,Naples,Italy
+0354,Did,Se_un,1776,Schuster,2,11,211,AA,Selene,Female,Female lover 2,Naples,Italy
+0355,Did,Voglio_che,1776,Schuster,2,14,214,ABA,Didone,Female,Female lover 1,Naples,Italy
+0356,Did,Son_quel,1747,Jommelli,2,4,204,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0357,Did,Son_quel,1763,Jommelli,1,13,113,Al segno,Iarba,Male,Male lover 2,Stuttgart,Empire
+0358,Did,Datre_nubi,1763,Jommelli,2,1,201,Al segno,Araspe,Male,Male lover 3,Stuttgart,Empire
+0359,Did,L_augelletto,1776,Schuster,2,5,205,ABA,Araspe,Male,Male lover 3,Naples,Italy
+0360,Did,Vorrei_disciogliere,1776,Schuster,3,4,304,Al segno,Araspe,Male,Male lover 3,Naples,Italy
+0361,Did,Non_ha,1726,Vinci,1,18,118,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0362,Did,Se_resto,1726,Vinci,1,19,119,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0363,Did,Son_regina,1780,Astarita,1,5,105,ABA,Didone,Female,Female lover 1,Bratislava,Empire
+0364,Did,Ah_non_lasciarmi,1780,Astarita,2,6,206,AAA,Didone,Female,Female lover 1,Bratislava,Empire
+0365,Did,Se_resto,1780,Astarita,2,15,215,ABAB,Enea,Male,Male lover 1,Bratislava,Empire
+0366,Did,Fosca_nube,1763,Jommelli,2,5,205,Al segno,Iarba,Male,Male lover 2,Stuttgart,Empire
+0367,Did,Ombra_cara,1776,Schuster,3,17,317,AA,Didone,Female,Female lover 1,Naples,Italy
+0368,Did,Quando_freme,1743,Terradellas,2,13,213,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0369,Did,Ah_non_sai,1763,Jommelli,2,8,208,Al segno,Enea,Male,Male lover 1,Stuttgart,Empire
+0370,Did,Ah_non_lasciarmi_ingrato,1776,Schuster,1,17,117,ABCA,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Naples,Italy
+0371,Did,Cadra_fra,1780,Astarita,3,9,309,ABA,Iarba,Male,Male lover 2,Bratislava,Empire
+0372,Did,Ogni_amator,1763,Jommelli,2,9,209,Al segno,Selene,Female,Female lover 2,Stuttgart,Empire
+0373,Did,Va_crescendo,1763,Jommelli,3,8,308,AAA,Didone,Female,Female lover 1,Stuttgart,Empire
+0374,Did,Vivi_superbo,1744,Scalabrini,3,1,301,Al segno,Enea,Male,Male lover 1,Hamburg,Empire
+0375,Did,Ah_non_lasciarmi,1788,Andreozzi,,,,AB,Didone,Female,Female lover 1,,
+0376,Did,Diro_che,1780,Astarita,1,3,103,ABA,Selene,Female,Female lover 2,Bratislava,Empire
+0377,Did,Dovrei_ma,1780,Astarita,1,2,102,ABB,Enea,Male,Male lover 1,Bratislava,Empire
+0378,Did,Son_quel,1780,Astarita,1,7,107,ABA,Iarba,Male,Male lover 2,Bratislava,Empire
+0379,Did,Sdegno_ingegno,1744,Scalabrini,1,2,102,Da capo,Osmida,Male,Antagonist,Hamburg,Empire
+0380,Did,Se_resto,1744,Scalabrini,1,10,110,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
+0381,Did,Scherza_il,1744,Scalabrini,2,5,205,Al segno,Osmida,Male,Antagonist,Hamburg,Empire
+0382,Did,Infidel_ti,1763,Jommelli,2,11,211,ABC,"Didone,Enea,Iarba","Female,Male,Male","Female lover 1,Male lover 1,Male lover 2",Stuttgart,Empire
+0383,Dem,Se_tutti,1733,Caldara,2,6,206,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
+0384,Did,Diro_che,1726,Vinci,1,3,103,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0385,Did,Se_dalle,1780,Astarita,1,8,108,ABA,Araspe,Male,Male lover 3,Bratislava,Empire
+0386,Dem,Misero_pargoletto,1733,Caldara,3,5,305,Da capo,Timante,Male,Male lover 1,Vienna,Empire
+0387,Did,Nel_tuo,1744,Scalabrini,1,5,105,Da capo,Selene,Female,Female lover 2,Hamburg,Empire
+0388,Did,Grato_rende,1726,Vinci,1,6,106,Da capo,Osmida,Male,Antagonist,Rome,Italy
+0389,Dem,Non_dura,1733,Caldara,3,8,308,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
+0390,Dem,Che_mai,1733,Caldara,3,7,307,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
+0391,Dem,Odo_il,1733,Caldara,3,6,306,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
+0392,Did,Tu_mi_guardi,1744,Scalabrini,2,3,203,Da capo,Didone,Female,Female lover 1,Hamburg,Empire
+0393,Did,Fra_lo,1726,Vinci,1,7,107,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0394,Did,Se_dalle,1726,Vinci,1,8,108,Da capo,Araspe,Male,Male lover 3,Rome,Italy
+0395,Did,Quando_saprai,1726,Vinci,1,10,110,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0396,Did,Costanza_mio,1744,Scalabrini,1,6,106,Da capo,Araspe,Male,Male lover 3,Hamburg,Empire
+0397,Did,Chiamami_pur,1744,Scalabrini,2,12,,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
+0398,Did,Quando_saprai,1780,Astarita,1,10,110,ABA,Enea,Male,Male lover 1,Bratislava,Empire
+0399,Dem,La_destra,1733,Caldara,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Vienna,Empire
+0400,Dem,Non_odi,1733,Caldara,3,1,301,Da capo,Adrasto,Male,Confidant,Vienna,Empire
+0401,Dem,Nel_tuo,1733,Caldara,3,2,302,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
+0402,Dem,Ah_che,1733,Caldara,3,3,303,Da capo,Matusio,Male,Antagonist,Vienna,Empire
+0403,Dem,Felice_eta,1733,Caldara,2,8,208,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
+0404,Dem,Perfidi_gia,1733,Caldara,2,10,210,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
+0405,Did,Di_quest_alma,1744,Scalabrini,2,9,209,Da capo,Selene,Female,Female lover 2,Hamburg,Empire
+0406,Did,Ogni_amator,1726,Vinci,1,11,111,Da capo,Selene,Female,Female lover 2,Rome,Italy
+0407,Dem,No_non,1733,Caldara,2,7,207,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
+0408,Dem,Se_ardire,1733,Caldara,1,13,113,Da capo,Timante,Male,Male lover 1,Vienna,Empire
+0409,Dem,Tu_sai,1733,Caldara,2,1,201,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
+0410,Dem,Il_suo,1733,Caldara,1,8,108,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
+0411,Dem,Padre_perdona,1733,Caldara,1,12,112,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
+0412,Dem,Prudente_mi,1733,Caldara,2,2,202,Da capo,Timante,Male,Male lover 1,Vienna,Empire
+0413,Dem,Se_tronca,1733,Caldara,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
+0414,Did,Bel_labbro,1744,Scalabrini,2,7,207,Da capo,Araspe,Male,Male lover 3,Hamburg,Empire
+0415,Did,Son_quel,1726,Vinci,1,13,113,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0416,Did,Tu_mi_disarmi,1780,Astarita,1,16,116,ABAB,Iarba,Male,Male lover 2,Bratislava,Empire
+0417,Dem,In_te,1733,Caldara,1,2,102,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
+0418,Dem,Per_lei,1733,Caldara,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Vienna,Empire
+0419,Dem,Sperai_vicino,1733,Caldara,1,4,104,Da capo,Timante,Male,Male lover 1,Vienna,Empire
+0420,Dem,O_piu,1733,Caldara,1,1,101,Da capo,Matusio,Male,Antagonist,Vienna,Empire
+0421,Dem,Tintendo_ingrata,1733,Caldara,1,5,105,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
+0422,Dem,Non_curo,1733,Caldara,1,7,107,Da capo,Creusa,Female,Female lover 2,Vienna,Empire
+0423,Did,Su_la,1726,Vinci,1,14,114,Da capo,Araspe,Male,Male lover 3,Rome,Italy
+0424,Did,Leon_che,1726,Vinci,1,14,114,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0425,Did,Ardi_per,1726,Vinci,2,3,203,Da capo,Selene,Female,Female lover 2,Rome,Italy
+0426,Did,Se_vuoi,1726,Vinci,2,7,207,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0427,Did,Vedi_nel,1726,Vinci,2,8,208,Da capo,Enea,Male,Male lover 1,Rome,Italy
+0428,Did,Pensa_che,1780,Astarita,2,1,201,AA,Osmida,Male,Antagonist,Bratislava,Empire
+0429,Did,Ah_non_sai,1780,Astarita,2,11,211,AA',Enea,Male,Male lover 1,Bratislava,Empire
+0430,Dem,O_piu,1735,Leo,1,1,101,Da capo,Matusio,Male,Antagonist,Naples,Italy
+0431,Dem,In_te,1735,Sarro,1,2,102,Al segno,Dircea,Female,Female lover 1,Naples,Italy
+0432,Dem,Per_lei,1735,Mancini,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
+0433,Dem,Sperai_vicino,1735,Leo,1,4,104,Da capo,Timante,Male,Male lover 1,Naples,Italy
+0434,Dem,Non_curo,1735,Sarro,1,7,107,Al segno,Creusa,Female,Female lover 2,Naples,Italy
+0435,Did,Son_questidoli,1726,Vinci,2,10,210,Da capo,Osmida,Male,Antagonist,Rome,Italy
+0436,Did,Va_crescendo,1780,Astarita,2,13,213,AA,Didone,Female,Female lover 1,Bratislava,Empire
+0437,Did,Se_un,1780,Astarita,2,12,212,AA,Selene,Female,Female lover 2,Bratislava,Empire
+0438,Did,Chiamami_pur,1780,Astarita,2,14,214,ABCA,Iarba,Male,Male lover 2,Bratislava,Empire
+0439,Did,Sono_intrepido,1726,Vinci,2,12,212,Da capo,Araspe,Male,Male lover 3,Rome,Italy
+0440,Did,L_augelletto,1726,Vinci,2,14,214,Da capo,Selene,Female,Female lover 2,Rome,Italy
+0441,Did,Chiamami_pur,1726,Vinci,2,17,217,Da capo,Iarba,Male,Male lover 2,Rome,Italy
+0442,Did,Non_so,1780,Astarita,2,4,204,ABCA,Araspe,Male,Male lover 3,Bratislava,Empire
+0443,Dem,O_piu,1775,Myslivecek,1,1,101,ABA,Matusio,Male,Antagonist,Naples,Italy
+0444,Dem,In_te,1775,Myslivecek,1,2,102,ABA,Dircea,Female,Female lover 1,Naples,Italy
+0445,Dem,Per_lei,1775,Myslivecek,1,3,103,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
+0446,Dem,Sperai_vicino,1775,Myslivecek,1,4,104,ABA,Timante,Male,Male lover 1,Naples,Italy
+0447,Dem,Tintendo_ingrata,1775,Myslivecek,1,5,105,ABA,Cherinto,Male,Male lover 2,Naples,Italy
+0448,Dem,Non_curo,1775,Myslivecek,1,6,106,ABA,Creusa,Female,Female lover 2,Naples,Italy
+0449,Did,Ombra_cara,1780,Astarita,3,10,310,AB,Didone,Female,Female lover 1,Bratislava,Empire
+0450,Did,Prende_ardire,1726,Vinci,2,18,218,Da capo,Didone,Female,Female lover 1,Rome,Italy
+0451,Dem,Il_suo,1735,Leo,1,8,108,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
+0452,Dem,Se_ardire,1735,Sarro,1,9,109,Al segno,Timante,Male,Male lover 1,Naples,Italy
+0453,Dem,Cangi_per,1735,Sarro,2,1,201,Al segno,Creusa,Female,Female lover 2,Naples,Italy
+0454,Dem,Prudente_mi,1735,Mancini,2,2,202,Da capo,Timante,Male,Male lover 1,Naples,Italy
+0455,Did,Vanne_a,1780,Astarita,3,4,304,AB,Enea,Male,Male lover 1,Bratislava,Empire
+0456,Dem,Se_tronca,1735,Leo,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Naples,Italy
+0457,Dem,E_soccorso,1735,Mancini,2,4,204,Da capo,Matusio,Male,Antagonist,Naples,Italy
+0458,Dem,No_non,1735,Sarro,2,7,207,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
+0459,Dem,Felice_eta,1735,Mancini,2,8,208,Da capo,Creusa,Female,Female lover 2,Naples,Italy
+0460,Dem,La_destra,1735,Leo,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Naples,Italy
+0461,Dem,Nel_tuo,1735,Mancini,3,1,301,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
+0462,Dem,Del_Sole,1735,Sarro,3,2,302,Da capo,Matusio,Male,Antagonist,Naples,Italy
+0463,Dem,O_piu,1743,Jommelli,1,1,101,Da capo,Matusio,Male,Antagonist,Padova,Italy
+0464,Dem,In_te,1743,Jommelli,1,2,102,Da capo,Dircea,Female,Female lover 1,Padova,Italy
+0465,Dem,Per_lei,1743,Jommelli,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Padova,Italy
+0466,Dem,Padre_perdona,1775,Myslivecek,1,13,113,ABA,Dircea,Female,Female lover 1,Naples,Italy
+0467,Dem,Tu_sai,1775,Myslivecek,2,1,201,ABA,Creusa,Female,Female lover 2,Naples,Italy
+0468,Did,Parmi_dudir,1780,Astarita,3,5,305,ABCB,Osmida,Male,Antagonist,Bratislava,Empire
+0469,Did,Odo_il,1735,Mancini,3,5,305,Da capo,Demofoonte,Male,Senior ruler,Naples,Italy
+0470,Dem,Che_mai,1735,Sarro,3,6,306,Da capo,Dircea,Female,Female lover 1,Naples,Italy
+0471,Dem,Non_dura,1735,Leo,3,7,307,Da capo,Dircea,Female,Female lover 1,Naples,Italy
+0472,Did,Va_crescendo,1776,Schuster,3,6,306,AA',Didone,Female,Female lover 1,Naples,Italy
+0473,Did,Vedi_nel,1744,Scalabrini,2,4,204,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
+0474,Did,Non_ha,1744,Scalabrini,1,9,109,Da capo,Dircea,Female,Female lover 1,Hamburg,Empire
+0475,Dem,Sperai_vicino,1743,Jommelli,1,4,104,Da capo,Timante,Male,Male lover 1,Padova,Italy
+0476,Dem,Non_curo,1743,Jommelli,1,7,107,Da capo,Creusa,Female,Female lover 2,Padova,Italy
+0477,Dem,Il_suo,1743,Jommelli,1,8,108,Da capo,Cherinto,Male,Male lover 2,Padova,Italy
+0478,Dem,O_piu,1734,Schiassi,1,1,101,Al segno,Matusio,Male,Antagonist,Venice,Italy
+0479,Dem,In_te,1734,Schiassi,1,2,102,Al segno,Dircea,Female,Female lover 1,Venice,Italy
+0480,Dem,Io_non,1734,Schiassi,1,3,103,Al segno,Adrasto,Male,Confidant,Venice,Italy
+0481,Dem,Per_lei,1734,Schiassi,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Venice,Italy
+0482,Dem,Sperai_vicino,1734,Schiassi,1,4,104,Al segno,Timante,Male,Male lover 1,Venice,Italy
+0483,Dem,Alma_piu,1734,Schiassi,1,5,105,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
+0484,Did,Va_crudele,1780,Astarita,1,17,117,AB,"Didone,Enea","Female,Male","Female lover 1,Male lover 1",Bratislava,Empire
+0485,Did,Diro_che,,Galuppi,1,3,103,Al segno,Selene,Female,Female lover 2,,
+0486,Dem,Prudente_mi,1775,Myslivecek,2,2,202,ABA,Timante,Male,Male lover 1,Naples,Italy
+0487,Dem,E_soccorso,1775,Myslivecek,2,4,204,ABA,Matusio,Male,Antagonist,Naples,Italy
+0488,Did,Quando_saprai,,Galuppi,1,10,110,Al segno,Enea,Male,Male lover 1,,
+0489,Dem,No_non,1775,Myslivecek,2,7,207,ABA,Cherinto,Male,Male lover 2,Naples,Italy
+0490,Dem,Odo_il,1775,Myslivecek,3,6,306,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
+0491,Dem,Perfidi_gia,1775,Myslivecek,2,9,209,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
+0492,Dem,Che_mai,1775,Myslivecek,3,7,307,ABA,Dircea,Female,Female lover 1,Naples,Italy
+0493,Did,Ardi_per,,Galuppi,,,,Al segno,Selene,Female,Female lover 2,,
+0494,Dem,Non_curo,1734,Schiassi,1,7,107,Al segno,Creusa,Female,Female lover 2,Venice,Italy
+0495,Dem,Il_suo,1734,Schiassi,1,8,108,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
+0496,Dem,Padre_perdona,1734,Schiassi,1,12,112,Da capo,Dircea,Female,Female lover 1,Venice,Italy
+0497,Dem,Son_qual,1734,Schiassi,1,13,113,Al segno,Timante,Male,Male lover 1,Venice,Italy
+0498,Dem,Tu_sai,1734,Schiassi,2,1,201,Al segno,Creusa,Female,Female lover 2,Venice,Italy
+0499,Dem,Prudente_mi,1737,Schiassi,2,2,202,Al segno,Timante,Male,Male lover 1,Venice,Italy
+0500,Dem,Padre_perdona,1743,Jommelli,1,12,112,Da capo,Dircea,Female,Female lover 1,Padova,Italy
+0501,Dem,Se_ardire,1743,Jommelli,1,13,113,Da capo,Timante,Male,Male lover 1,Padova,Italy
+0502,Dem,Temo_in,1743,Jommelli,1,13,113,Da capo,Matusio,Male,Antagonist,Padova,Italy
+0503,Dem,Se_tronca,1734,Schiassi,2,3,203,Al segno,Demofoonte,Male,Senior ruler,Venice,Italy
+0504,Dem,E_soccorso,1734,Schiassi,2,4,204,Al segno,Matusio,Male,Antagonist,Venice,Italy
+0505,Dem,Se_ti,1775,Myslivecek,3,1,301,ABA,Adrasto,Male,Confidant,Naples,Italy
+0506,Did,Ah_non_lasciarmi,,Galuppi,,,,Al segno,Didone,Female,Female lover 1,,
+0507,Dem,Prudente_mi,1743,Jommelli,2,2,202,Da capo,Timante,Male,Male lover 1,Padova,Italy
+0508,Dem,Se_tronca,1743,Jommelli,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Padova,Italy
+0509,Dem,No_non,1743,Jommelli,2,7,207,Da capo,Cherinto,Male,Male lover 2,Padova,Italy
+0510,Dem,Se_ardire,1775,Myslivecek,1,14,114,ABAB,Timante,Male,Male lover 1,Naples,Italy
+0511,Dem,La_destra,1775,Myslivecek,2,10,210,ABC,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",,Italy
+0512,Dem,Lempia_mia,1734,Schiassi,2,6,206,Al segno,Dircea,Female,Female lover 1,Venice,Italy
+0513,Dem,No_non,1734,Schiassi,2,7,207,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
+0514,Dem,Felice_eta,1734,Schiassi,2,8,208,Al segno,Creusa,Female,Female lover 2,Venice,Italy
+0515,Did,Fosca_nube,,Galuppi,,,,Al segno,Iarba,Male,Male lover 2,,
+0516,Did,La_caduta,,Galuppi,,,,AA',Iarba,Male,Male lover 2,,
+0517,Dem,O_piu,1766,Bernasconi,1,1,101,Al segno,Matusio,Male,Antagonist,Munich,Empire
+0518,Dem,In_te,1766,Bernasconi,1,2,102,Al segno,Dircea,Female,Female lover 1,Munich,Empire
+0519,Dem,Per_lei,1766,Bernasconi,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Munich,Empire
+0520,Dem,Sperai_vicino,1766,Bernasconi,1,4,104,Al segno,Timante,Male,Male lover 1,Munich,Empire
+0521,Dem,Tintendo_ingrata,1766,Bernasconi,1,5,105,AA',Cherinto,Male,Male lover 2,Munich,Empire
+0522,Dem,Non_curo,1766,Bernasconi,1,6,106,Al segno,Creusa,Female,Female lover 2,Munich,Empire
+0523,Dem,Il_suo,1766,Bernasconi,1,8,108,Al segno,Cherinto,Male,Male lover 2,Munich,Empire
+0524,Dem,Padre_perdona,1766,Bernasconi,1,12,112,Da capo,Dircea,Female,Female lover 1,Munich,Empire
+0525,Dem,Se_ardire,1766,Bernasconi,1,13,113,Da capo,Timante,Male,Male lover 1,Munich,Empire
+0526,Dem,Tu_sai,1766,Bernasconi,2,1,201,Al segno,Creusa,Female,Female lover 2,Munich,Empire
+0527,Dem,Prudente_mi,1766,Bernasconi,2,2,202,Al segno,Timante,Male,Male lover 1,Munich,Empire
+0528,Dem,E_soccorso,1766,Bernasconi,2,4,204,Al segno,Matusio,Male,Antagonist,Munich,Empire
+0529,Dem,No_non,1766,Bernasconi,2,7,207,Al segno,Cherinto,Male,Male lover 2,Munich,Empire
+0530,Dem,Perfidi_gia,1766,Bernasconi,2,10,210,Al segno,Demofoonte,Male,Senior ruler,Munich,Empire
+0531,Dem,La_destra,1766,Bernasconi,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Munich,Empire
+0532,Dem,Non_odi,1766,Bernasconi,3,1,301,Al segno,Adrasto,Male,Confidant,Munich,Empire
+0533,Dem,Nel_tuo,1766,Bernasconi,3,2,302,Al segno,Cherinto,Male,Male lover 2,Munich,Empire
+0534,Dem,Ah_che,1766,Bernasconi,3,3,303,Al segno,Matusio,Male,Antagonist,Munich,Empire
+0535,Dem,Odo_il,1766,Bernasconi,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Munich,Empire
+0536,Dem,Che_mai,1766,Bernasconi,3,7,307,Da capo,Dircea,Female,Female lover 1,Munich,Empire
+0537,Dem,Non_dura,1766,Bernasconi,3,8,308,Al segno,Creusa,Female,Female lover 2,Munich,Empire
+0538,Dem,Felice_eta,1743,Jommelli,2,8,208,Da capo,Creusa,Female,Female lover 2,Padova,Italy
+0539,Dem,Perfidi_gia,1743,Jommelli,2,10,210,Da capo,Demofoonte,Male,Senior ruler,Padova,Italy
+0540,Dem,O_piu,1748,Hasse,1,1,101,Al segno,Matusio,Male,Antagonist,Dresden,Empire
+0541,Dem,In_te,1748,Hasse,1,2,102,Al segno,Dircea,Female,Female lover 1,Dresden,Empire
+0542,Dem,Prudente_mi,1748,Hasse,2,2,202,Al segno,Timante,Male,Male lover 1,Dresden,Empire
+0543,Dem,La_destra,1754,Manna,2,12,212,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Turin,Italy
+0544,Dem,Prudente_mi,1754,Manna,2,2,202,Da capo,Timante,Male,Male lover 1,Turin,Italy
+0545,Dem,Nel_tuo,1754,Manna,3,2,302,Da capo,Cherinto,Male,Male lover 2,Turin,Italy
+0546,Dem,Parto_oh_dio,1754,Manna,3,3,303,ABA,Matusio,Male,Antagonist,Turin,Italy
+0547,Dem,Odo_il,1754,Manna,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Turin,Italy
+0548,Dem,Che_mai,1754,Manna,3,7,307,Da capo,Dircea,Female,Female lover 1,Turin,Italy
+0549,Dem,Perfidi_gia,1734,Schiassi,2,10,210,Al segno,"Dircea,Timante,Demofoonte","Female,Male,Male","Female lover 1,Male lover 1,Senior ruler",Venice,Italy
+0550,Dem,Non_odi,1734,Schiassi,3,1,301,Al segno,Adrasto,Male,Confidant,Venice,Italy
+0551,Dem,Nel_tuo,1734,Schiassi,3,2,302,Al segno,Cherinto,Male,Male lover 2,Venice,Italy
+0552,Dem,Misero_pargoletto,1734,Schiassi,3,5,305,Al segno,Timante,Male,Male lover 1,Venice,Italy
+0553,Dem,Odo_il,1734,Schiassi,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Venice,Italy
+0554,Dem,Che_mai,1734,Schiassi,3,7,307,Al segno,Dircea,Female,Female lover 1,Venice,Italy
+0555,Dem,Non_dura,1734,Schiassi,3,8,308,Al segno,Creusa,Female,Female lover 2,Venice,Italy
+0556,Dem,Non_dura,1748,Hasse,3,8,308,Al segno,Creusa,Female,Female lover 2,Dresden,Empire
+0557,Dem,Per_lei,1754,Manna,1,4,104,Da capo,Demofoonte,Male,Senior ruler,Turin,Italy
+0558,Dem,Tu_sai,1754,Manna,2,1,201,Da capo,Creusa,Female,Female lover 2,Turin,Italy
+0559,Dem,Perfidi_gia,1754,Manna,2,10,210,Al segno,Demofoonte,Male,Senior ruler,Turin,Italy
+0560,Dem,Non_odi,1754,Manna,3,1,301,Da capo,Adrasto,Male,Confidant,Turin,Italy
+0561,Dem,O_piu,1758,Hasse,1,1,101,Al segno,Matusio,Male,Antagonist,Naples,Italy
+0562,Dem,In_te,1758,Hasse,1,2,102,Al segno,Dircea,Female,Female lover 1,Naples,Italy
+0563,Dem,Per_lei,1758,Hasse,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
+0564,Dem,Sperai_vicino,1758,Hasse,1,4,104,Al segno,Timante,Male,Male lover 1,Naples,Italy
+0565,Dem,Non_curo,1758,Hasse,1,7,107,Al segno,Creusa,Female,Female lover 2,Naples,Italy
+0566,Dem,Il_suo,1758,Hasse,1,8,108,Al segno,Cherinto,Male,Male lover 2,Naples,Italy
+0567,Dem,Padre_perdona,1758,Hasse,1,10,110,ABA,Dircea,Female,Female lover 1,Naples,Italy
+0568,Dem,Per_lei_mi,1758,Hasse,1,11,111,Al segno,Timante,Male,Male lover 1,Naples,Italy
+0569,Dem,Tu_sai,1758,Hasse,2,1,201,Al segno,Creusa,Female,Female lover 2,Naples,Italy
+0570,Dem,Prudente_mi,1758,Hasse,2,2,202,Al segno,Timante,Male,Male lover 1,Naples,Italy
+0571,Dem,Se_tronca,1758,Hasse,2,3,203,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
+0572,Dem,No_non,1758,Hasse,2,7,207,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
+0573,Dem,Felice_eta,1758,Hasse,2,8,208,Al segno,Creusa,Female,Female lover 2,Naples,Italy
+0574,Dem,Perfidi_gia,1758,Hasse,2,10,210,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
+0575,Dem,La_destra,1758,Hasse,2,11,211,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Naples,Italy
+0576,Dem,Non_odi,1758,Hasse,3,1,301,Da capo,Adrasto,Male,Confidant,Naples,Italy
+0577,Dem,Nel_tuo,1758,Hasse,3,2,302,,Cherinto,Male,Male lover 2,Naples,Italy
+0578,Dem,Odo_il,1758,Hasse,3,6,306,Al segno,Demofoonte,Male,Senior ruler,Naples,Italy
+0579,Dem,Che_mai,1758,Hasse,3,7,307,Da capo,Dircea,Female,Female lover 1,Naples,Italy
+0580,Dem,Il_suo,1771,Sarti,1,8,108,Al segno,Cherinto,Male,Male lover 2,Copenhagen,Denmark
+0581,Dem,E_soccorso,1771,Sarti,2,4,204,Al segno,Matusio,Male,Antagonist,Copenhagen,Denmark
+0582,Dem,No_non,1771,Sarti,2,7,207,Al segno,Cherinto,Male,Male lover 2,Copenhagen,Denmark
+0583,Dem,O_piu,1743,Gluck,1,1,101,Al segno,Matusio,Male,Antagonist,Milan,Italy
+0584,Dem,In_te,1743,Gluck,1,2,102,Al segno,Dircea,Female,Female lover 1,Milan,Italy
+0585,Dem,Per_lei,1743,Gluck,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
+0586,Dem,Sperai_vicino,1743,Gluck,1,4,104,Da capo,Timante,Male,Male lover 1,Milan,Italy
+0587,Dem,Tintendo_ingrata,1743,Gluck,1,5,105,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
+0588,Dem,Non_curo,1743,Gluck,1,6,106,Al segno,Creusa,Female,Female lover 2,Milan,Italy
+0589,Dem,Il_suo,1743,Gluck,1,8,108,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
+0590,Dem,Padre_perdona,1743,Gluck,1,12,112,Al segno,Dircea,Female,Female lover 1,Milan,Italy
+0591,Dem,Tu_sai,1743,Gluck,2,1,201,Da capo,Creusa,Female,Female lover 2,Milan,Italy
+0592,Dem,Prudente_mi,1743,Gluck,2,3,203,Da capo,Timante,Male,Male lover 1,Milan,Italy
+0593,Dem,Se_tronca,1743,Gluck,2,4,204,Al segno,Demofoonte,Male,Senior ruler,Milan,Italy
+0594,Dem,E_soccorso,1743,Gluck,2,5,205,Da capo,Matusio,Male,Antagonist,Milan,Italy
+0595,Dem,Se_tutti,1743,Gluck,2,7,207,Da capo,Dircea,Female,Female lover 1,Milan,Italy
+0596,Dem,No_non,1743,Gluck,2,8,208,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
+0597,Dem,Felice_eta,1743,Gluck,2,9,209,Da capo,Creusa,Female,Female lover 2,Milan,Italy
+0598,Dem,Ah_che,1743,Gluck,3,3,303,Da capo,Matusio,Male,Antagonist,Milan,Italy
+0599,Dem,Misero_pargoletto,1743,Gluck,3,5,305,Al segno,Timante,Male,Male lover 1,Milan,Italy
+0600,Dem,Che_mai,1743,Gluck,3,7,307,Da capo,Dircea,Female,Female lover 1,Milan,Italy
+0601,Dem,Nel_tuo,1743,Gluck,3,2,302,Al segno,Cherinto,Male,Male lover 2,Milan,Italy
+0602,Dem,Non_dura,1743,Gluck,3,8,308,Da capo,Creusa,Female,Female lover 2,Milan,Italy
+0603,Dem,Non_odi,1743,Gluck,3,1,301,Da capo,Adrasto,Male,Confidant,Milan,Italy
+0604,Dem,Odo_il,1743,Gluck,3,6,306,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
+0605,Dem,Gemo_in,1743,Gluck,1,13,113,Al segno,Timante,Male,Male lover 1,Milan,Italy
+0606,Dem,La_destra,1743,Gluck,2,12,212,Da capo,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Milan,Italy
+0607,Dem,Non_e_ver,1743,Gluck,2,2,202,Da capo,Adrasto,Male,Confidant,Milan,Italy
+0608,Dem,Per_lei,1748,Hasse,1,3,103,Al segno,Demofoonte,Male,Senior ruler,Dresden,Empire
+0609,Dem,Che_mai,1748,Hasse,3,7,307,Da capo,Dircea,Female,Female lover 1,Dresden,Empire
+0610,Dem,Non_curo,1748,Hasse,1,7,107,Al segno,Creusa,Female,Female lover 2,Dresden,Empire
+0611,Dem,No_non,1754,Manna,2,8,208,Da capo,Cherinto,Male,Male lover 2,Turin,Italy
+0612,Dem,Se_tronca,1754,Manna,2,3,203,Da capo,Demofoonte,Male,Senior ruler,Turin,Italy
+0613,Dem,O_piu,1761,Piccinni,1,1,101,Al segno,Matusio,Male,Antagonist,Reggio Emilia,Italy
+0614,Dem,In_te,1761,Piccinni,1,2,102,Al segno,Dircea,Female,Female lover 1,Reggio Emilia,Italy
+0615,Dem,Per_lei,1761,Piccinni,1,3,103,Da capo,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
+0616,Dem,Sperai_vicino,1761,Piccinni,1,4,104,Al segno,Timante,Male,Male lover 1,Reggio Emilia,Italy
+0617,Dem,Parto_crudel,1761,Piccinni,1,5,105,Al segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
+0618,Dem,Piu_non,1761,Piccinni,1,7,107,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
+0619,Dem,Di_quel,1761,Piccinni,1,8,108,Da capo,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
+0620,Dem,Se_ardire,1761,Piccinni,1,13,113,Da capo,Timante,Male,Male lover 1,Reggio Emilia,Italy
+0621,Dem,Padre_perdona,1761,Piccinni,1,12,112,Da capo,Dircea,Female,Female lover 1,Reggio Emilia,Italy
+0622,Dem,Prudente_mi,1761,Piccinni,2,2,202,Da capo,Timante,Male,Male lover 1,Reggio Emilia,Italy
+0623,Dem,Del_genitor,1761,Piccinni,2,4,204,Al segno,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
+0624,Dem,E_soccorso,1761,Piccinni,2,5,205,Al segno,Matusio,Male,Antagonist,Reggio Emilia,Italy
+0625,Dem,La_destra,1761,Piccinni,2,12,212,Al segno,"Dircea,Timante","Female,Male","Female lover 1,Male lover 1",Reggio Emilia,Italy
+0626,Dem,Se_potesse,1761,Piccinni,2,7,207,ABA,Dircea,Female,Female lover 1,Reggio Emilia,Italy
+0627,Dem,No_non,1761,Piccinni,2,8,208,Al segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
+0628a,Dem,Si_tintendo,1761,Piccinni,2,9,209,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
+0628b,Dem,Non_temer,1761,Piccinni,2,9,209,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
+0629,Dem,Perfidi_gia,1761,Piccinni,2,11,211,Da capo,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
+0630,Dem,Non_odi,1761,Piccinni,3,1,301,Da capo,Adrasto,Male,Confidant,Reggio Emilia,Italy
+0631,Dem,Di_speme,1761,Piccinni,3,2,302,Al segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
+0632,Dem,E_cessato,1761,Piccinni,3,3,303,AA',Matusio,Male,Antagonist,Reggio Emilia,Italy
+0633,Dem,Non_dura,1761,Piccinni,3,7,307,Al segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
+0634,Dem,Perche_perche,1761,Piccinni,3,8,308,Da capo,Dircea,Female,Female lover 1,Reggio Emilia,Italy
+0635,Ale,E_prezzo,1730,Vinci,1,1,101,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
+0636,Ale,Vedrai_con,1730,Vinci,1,2,102,Al segno,Poro,Male,Male lover 1,Rome,Italy
+0637,Ale,Vil_trofeo,1730,Vinci,1,3,103,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
+0638,Ale,Chi_vive,1730,Vinci,1,4,104,Da capo,Erissena,Female,Female lover 2,Rome,Italy
+0639,Ale,O_sugli,1730,Vinci,1,5,105,Da capo,Timagene,Male,Antagonist,Rome,Italy
+0640,Ale,Se_mai,1730,Vinci,1,6,106,A,Poro,Male,Male lover 1,Rome,Italy
+0641,Ale,Se_mai,1730,Vinci,1,7,107,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
+0642,Ale,Se_possono,1730,Vinci,1,8,108,Da capo,Poro,Male,Male lover 1,Rome,Italy
+0643,Ale,Compagni nell,1730,Vinci,1,9,109,Da capo,Erissena,Female,Female lover 2,Rome,Italy
+0644,Ale,Voi_che,1730,Vinci,1,10,110,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
+0645,Ale,Se_amore,1730,Vinci,1,15,115,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
+0646,Ale,Se_mai,1730,Vinci,1,16,116,Da capo,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Rome,Italy
+0647,Ale,Non_sarei,1730,Vinci,2,3,203,Da capo,Erissena,Female,Female lover 2,Rome,Italy
+0648,Ale,Senza_procelle,1730,Vinci,2,4,204,Al segno,Poro,Male,Male lover 1,Rome,Italy
+0649,Ale,Dun_barbaro,1730,Vinci,2,8,208,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
+0650,Ale,Digli_che,1730,Vinci,2,9,209,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
+0651,Ale,Destrier_che,1730,Vinci,2,10,210,Al segno,Poro,Male,Male lover 1,Rome,Italy
+0652,Ale,E_ver,1730,Vinci,2,11,211,Da capo,Timagene,Male,Antagonist,Rome,Italy
+0653,Ale,Se_e,1730,Vinci,2,13,213,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
+0654,Ale,Se_il,1730,Vinci,2,14,214,Da capo,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Rome,Italy
+0655,Ale,Se_viver,1730,Vinci,2,15,215,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
+0656,Ale,Di_rendermi,1730,Vinci,2,16,216,Da capo,Erissena,Female,Female lover 2,Rome,Italy
+0657,Ale,Risveglia_lo,1730,Vinci,3,1,301,Da capo,Poro,Male,Male lover 1,Rome,Italy
+0658,Ale,Se_troppo,1730,Vinci,3,4,304,Da capo,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Rome,Italy
+0659,Ale,Come_il,1730,Vinci,3,5,305,Da capo,Erissena,Female,Female lover 2,Rome,Italy
+0660,Ale,Serbati_a,1730,Vinci,3,6,306,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
+0661,Ale,Dove_si,1730,Vinci,3,9,309,Da capo,Poro,Male,Male lover 1,Rome,Italy
+0662,Ale,Mio_ben,1730,Vinci,3,10,310,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
+0663,Ale,Son_confusa,1730,Vinci,3,11,311,Da capo,Erissena,Female,Female lover 2,Rome,Italy
+0664,Ale,Ombra_dell,1730,Vinci,3,12,312,AA',Cleofide,Female,Female lover 1,Rome,Italy
+0665,Did,Veggio_la,,Galuppi,,,,Al segno,Selene,Female,Female lover 2,,
+0666,Did,A-trionfar,,Galuppi,,,,Al segno,Enea,Male,Male lover 1,,
+0667,Did,Diro_che,1764,Galuppi,1,3,103,Al segno,Selene,Female,Female lover 2,Venice,Italy
+0668,Ale,E_prezzo,1755,Galuppi,1,1,101,Da capo,Gandarte,Male,Male lover 3,Venice,Italy
+0669,Ale,Vedrai_con,1755,Galuppi,1,2,102,Da capo,Poro,Male,Male lover 1,Venice,Italy
+0670,Ale,Vil_trofeo,1755,Galuppi,1,3,103,Al segno,Alessandro,Male,Male lover 2,Venice,Italy
+0671,Ale,Chi_vive,1755,Galuppi,1,4,104,Al segno,Erissena,Female,Female lover 2,Venice,Italy
+0672,Ale,O_sugli,1755,Galuppi,1,5,105,Al segno,Timagene,Male,Antagonist,Venice,Italy
+0673,Ale,Se_mai,1755,Galuppi,1,6,106,A,Poro,Male,Male lover 1,Venice,Italy
+0674,Ale,Se_mai,1755,Galuppi,1,7,107,Al segno,Cleofide,Female,Female lover 1,Venice,Italy
+0675,Ale,Se_possono,1755,Galuppi,1,9,109,Al segno,Poro,Male,Male lover 1,Venice,Italy
+0676,Ale,Non_va,1755,Galuppi,1,11,111,Al segno,Gandarte,Male,Male lover 3,Venice,Italy
+0677,Ale,Se_amore,1755,Galuppi,1,15,115,Al segno,Alessandro,Male,Male lover 2,Venice,Italy
+0678,Ale,Se_mai,1755,Galuppi,1,16,116,ABA,"Cleofide,Poro","Female,Male","Female lover 1,Male lover 1",Venice,Italy
+0679,Ale,Frangi_la,1755,Galuppi,2,2,202,Al segno,Gandarte,Male,Male lover 3,Venice,Italy
+0680,Ale,Non_sarei,1755,Galuppi,2,4,204,Al segno,Erissena,Female,Female lover 2,Venice,Italy
+0681,Ale,Se_vuol,1755,Galuppi,2,8,208,Al segno,Alessandro,Male,Male lover 2,Venice,Italy
+0682,Ale,Digli_che,1755,Galuppi,2,9,209,AA',Cleofide,Female,Female lover 1,Venice,Italy
+0683,Ale,Destrier_che,1755,Galuppi,2,10,210,Al segno,Poro,Male,Male lover 1,Venice,Italy
+0684,Did,Tu_mi_scorgi,1764,Galuppi,1,6,106,ABA,Osmida,Male,Antagonist,Venice,Italy
+0685,Did,Fra_lo,1764,Galuppi,1,7,107,Al segno,Iarba,Male,Male lover 2,Venice,Italy
+0686,Did,Se_dalle,1764,Galuppi,1,8,108,Al segno,Araspe,Male,Male lover 3,Venice,Italy
+0687,Did,Tu_mi_disarmi,1764,Galuppi,1,16,116,ABA,Iarba,Male,Male lover 2,Venice,Italy
+0688,Did,Pensa_che,1764,Galuppi,2,1,201,ABA,Osmida,Male,Antagonist,Venice,Italy
+0689,Did,Nel_duol,1764,Galuppi,3,6,306,ABA,Selene,Female,Female lover 2,Venice,Italy

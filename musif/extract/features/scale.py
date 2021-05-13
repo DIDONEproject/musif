@@ -2,8 +2,10 @@ from collections import Counter
 from typing import List
 
 from music21.note import Note
+from musif.extract.features.prefix import get_part_prefix
 
 from musif.config import Configuration
+from musif.extract.common import filter_parts_data
 from musif.musicxml import get_degrees_and_accidentals
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
@@ -14,6 +16,20 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     tonality = score_data["tonality"]
     notes_degrees = get_notes_degrees(tonality.capitalize(), notes)
     return Counter(notes_degrees)
+
+
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    if len(parts_data) == 0:
+        return {}
+
+    features = {}
+    for part_data, parts_features in zip(parts_data, parts_features):
+        part_prefix = get_part_prefix(part_data["abbreviation"])
+        for feature in parts_features:
+            if feature.startswith("Degree"):
+                features[f"{part_prefix}{feature}"] = parts_features[feature]
+    return features
+
 
 
 def get_notes_degrees(key: str, notes: List[Note], prefix: str = "") -> List[str]:
