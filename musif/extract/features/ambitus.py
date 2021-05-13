@@ -1,8 +1,8 @@
 from typing import List
 
-from musif.extract.features.prefix import get_part_prefix
-
 from musif.config import Configuration
+from musif.extract.common import filter_parts_data
+from musif.extract.features.prefix import get_part_prefix
 
 LOWEST_NOTE = "AmbitusLowestNote"
 HIGHEST_NOTE = "AmbitusHighestNote"
@@ -16,13 +16,16 @@ LARGEST_INTERVAL = "AmbitusLargestInterval"
 LARGEST_SEMITONES = "AmbitusLargestSemitones"
 SMALLEST_INTERVAL = "AmbitusSmallestInterval"
 SMALLEST_SEMITONES = "AmbitusSmallestSemitones"
-ABSOLUTE_INTERVAL = "AmbitusAbsoluteInterval"
-ABSOLUTE_SEMITONES = "AmbitusAbsoluteSemitones"
+LARGEST_ABSOLUTE_SEMITONES = "AmbitusLargestAbsoluteSemitones"
+SMALLEST_ABSOLUTE_SEMITONES = "AmbitusSmallestAbsoluteSemitones"
 MEAN_INTERVAL = "AmbitusMeanInterval"
 MEAN_SEMITONES = "AmbitusMeanSemitones"
+# MEAN_ABSOLUTE_INTERVAL = "AmbitusMeanAbsoluteInterval"
+# MEAN_ABSOLUTE_SEMITONES = "AmbitusMeanAbsoluteSemitones"
 
 ALL_FEATURES = [LOWEST_INDEX, LOWEST_NOTE, HIGHEST_INDEX, HIGHEST_NOTE, HIGHEST_MEAN_INDEX, HIGHEST_MEAN_NOTE, LOWEST_MEAN_INDEX, LOWEST_MEAN_NOTE,
-                LARGEST_INTERVAL, LARGEST_SEMITONES, SMALLEST_INTERVAL, SMALLEST_SEMITONES, ABSOLUTE_INTERVAL, ABSOLUTE_SEMITONES, MEAN_INTERVAL, MEAN_SEMITONES]
+                LARGEST_INTERVAL, LARGEST_SEMITONES, SMALLEST_INTERVAL, SMALLEST_SEMITONES, LARGEST_ABSOLUTE_SEMITONES,
+                SMALLEST_ABSOLUTE_SEMITONES, MEAN_INTERVAL, MEAN_SEMITONES]
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
     this_aria_ambitus = part_data["ambitus_solution"]
@@ -46,15 +49,18 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
         LARGEST_SEMITONES: this_aria_ambitus.semitones,
         SMALLEST_INTERVAL: this_aria_ambitus.name,
         SMALLEST_SEMITONES: this_aria_ambitus.semitones,
-        ABSOLUTE_INTERVAL: joined_notes,
-        ABSOLUTE_SEMITONES: joined_notes,
+        SMALLEST_ABSOLUTE_SEMITONES: joined_notes,
+        LARGEST_ABSOLUTE_SEMITONES: joined_notes,
         MEAN_INTERVAL: joined_notes,
         MEAN_SEMITONES: joined_notes,
     }
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+
+    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
         return {}
+
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])

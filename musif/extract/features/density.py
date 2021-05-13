@@ -4,6 +4,7 @@ from pandas import DataFrame
 
 from musif.common.sort import sort_dict
 from musif.config import Configuration
+from musif.extract.common import filter_parts_data
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.extract.features.scoring import NUMBER_OF_PARTS
 from musif.musicxml import Measure, Note, Part
@@ -34,8 +35,10 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
+    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_features) == 0:
         return {}
+
     features = {}
     df_parts = DataFrame(parts_features)
     df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})

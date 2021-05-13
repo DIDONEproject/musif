@@ -1,7 +1,5 @@
 from typing import List
 
-from pandas import DataFrame
-
 from musif.config import Configuration
 
 
@@ -19,8 +17,9 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             if item_features[cfg.metadata_id_col] != existing_metadata_id:
                 continue
             for key in item_features:
-                if (key in features) and (key != cfg.metadata_id_col):
+                if (key in score_features) and (key != cfg.metadata_id_col):
                     cfg.read_logger.warning(f"Column {key} exists both in metadata and in existing features")
+                    continue
                 features[key] = item_features[key]
     return features
 
