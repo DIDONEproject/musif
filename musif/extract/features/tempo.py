@@ -7,9 +7,11 @@ from music21.expressions import TextExpression
 from music21.stream import Measure
 
 from musif.config import Configuration
+from musif.extract.common import filter_parts_data
 from musif.extract.features.prefix import get_corpus_prefix
 
 TEMPO = "Tempo"
+NUMERIC_TEMPO = "NumericTempo"
 TIME_SIGNATURE = "TimeSignature"
 TIME_SIGNATURE_GROUPED = "TimeSignatureGrouped"
 TEMPO_GROUPED_1 = "TempoGrouped1"
@@ -24,6 +26,10 @@ class TempoGroup2(Enum):
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+
+    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
+    if len(parts_data) == 0:
+        return {}
 
     # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
     # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo
@@ -42,12 +48,13 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
                 if isinstance(element, TextExpression):
                     if get_tempo_grouped_1(element.content) != "ND":
                         tempo_mark = element.content
-                        break
+                        # break
             break  # only take into account the first bar!
     time_signature = ",".join(list(set(time_signatures)))
     time_signature_grouped = get_time_signature_type(time_signature)
     tg1 = get_tempo_grouped_1(tempo_mark)
     tg2 = get_tempo_grouped_2(tg1).value
+
 
     return {
         TEMPO: tempo_mark,
