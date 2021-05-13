@@ -7,6 +7,7 @@ from matplotlib.pyplot import axis
 import numpy as np
 import openpyxl
 import pandas as pd
+from pandas.core.frame import DataFrame
 from musif.common.sort import sort
 
 from .calculations import *
@@ -90,13 +91,22 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
 
         # Inizalizing new dataframes and defining those that don't depends on each part
         clefs_info=copy.deepcopy(common_columns_df)
+        density_df=copy.deepcopy(common_columns_df)
+        textures_df=copy.deepcopy(common_columns_df)
 
         common_columns_df.Clef2.replace('', np.nan, inplace=True)
         common_columns_df.Clef3.replace('', np.nan, inplace=True)
-        density_df = textures_df = intervals_info = melody_values = common_columns_df
+        intervals_info = melody_values = common_columns_df
 
-        textures_df = pd.concat(
-            [textures_df, all_info[[i for i in all_info.columns if i.endswith('Texture')]], all_info[list(notes_set)]], axis=1)
+        # common_columns_df.replace(np.nan, 0.0, inplace=True)
+        textures = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
+
+        if not textures.empty: #We want textures to be processed in case there are any (not for cases where we request only 1 instrument type)
+            textures_df = pd.concat(
+                [textures_df, textures, all_info[list(notes_set)]], axis=1)
+        else:
+            textures_df=pd.DataFrame()
+
         density_df = pd.concat(
             [density_df, all_info[list(density_set)],  all_info[list(notes_set)]], axis=1)
 
@@ -126,7 +136,7 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
             # List of columns for melody parameters
 
             melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
-                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+interval.ASCENDING_SEMITONES, catch+interval.ASCENDING_INTERVAL, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVAL, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.LOWEST_INDEX, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.ABSOLUTE_INTERVAL, catch + ambitus.ABSOLUTE_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
+                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+interval.ASCENDING_SEMITONES, catch+interval.ASCENDING_INTERVAL, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVAL, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_INDEX, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.ABSOLUTE_INTERVAL, catch + ambitus.ABSOLUTE_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
 
             if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_info.columns:
                 melody_values_list.append('Part'+instrument+lyrics.SYLLABIC_RATIO)
@@ -139,7 +149,7 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
             #Getting list of columns for intervals types
             intervals_types_list = [catch + 'RepeatedNotes', catch + 'LeapsAscending', catch+'LeapsDescending', catch+'LeapsAll', catch+'StepwiseMotionAscending', catch+'StepwiseMotionDescending',  catch+'StepwiseMotionAll']
             catch+='Intervals'
-            intervals_types_list = intervals_types_list + [catch + 'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll', catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', catch +'MinorDescending', catch +'MinorAll', catch +'AugmentedAscending', catch +'AugmentedDescending', catch +'AugmentedAll', catch +'DiminishedAscending', catch +'DiminishedDescending', catch +'DiminishedAll']
+            intervals_types_list = intervals_types_list + [catch + 'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll', catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', catch +'MinorDescending', catch +'MinorAll', catch +'AugmentedAscending', catch +'AugmentedDescending', catch +'AugmentedAll', catch +'DiminishedAscending', catch +'DiminishedDescending', catch +'DiminishedAll'] #añadir double
 
             # Joining common info and part info, renaming columns for excel writing
             
@@ -159,13 +169,8 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
 
             emphasised_scale_degrees_info_B = common_columns_df
 
-            # Dropping nans
-            # melody_values.replace('', np.nan, inplace=True)
-            # intervals_types.replace('', np.nan, inplace=True)
-            # emphasised_scale_degrees_info_A.replace('', np.nan, inplace=True)
-            # emphasised_scale_degrees_info_B.replace('', np.nan, inplace=True)
-            # intervals_info.replace('', np.nan, inplace=True)
 
+            # Dropping nans
             melody_values = melody_values.dropna(how='all', axis=1)
             intervals_info.dropna(how='all', axis=1,inplace=True)
             intervals_types.dropna(
@@ -178,8 +183,8 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
             absolute_intervals = make_intervals_absolute(intervals_info)
 
             # 2. Get the additional_info dictionary (special case if there're no factors)
-            additional_info = {"AriaLabel": ["AriaTitle"],
-                               "AriaTitle": ["AriaLabel"]}  # solo agrupa aria
+            additional_info = {ARIA_LABEL: [TITLE],
+                                TITLE: [ARIA_LABEL]}  # solo agrupa aria
             if factor == 0:
                 rows_groups = {"AriaId": ([], "Alphabetic")}
                 rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
@@ -232,7 +237,7 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
                 # group_execution(groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals,
                 #                       Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info)
                 group_execution(
-                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, absolute_intervals=absolute_intervals)
+                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B = emphasised_scale_degrees_info_B, absolute_intervals=absolute_intervals)
                 rows_groups = rg
                 not_used_cols = nuc
             # else: # from 2 factors
@@ -245,9 +250,8 @@ def factor_execution(all_info, factor, parts_list, main_results_path, sorting_li
 #####################################################################
     # Function that generates the needed information for each grouping  #
     #####################################################################
-    #group_execution(self, groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals, Intervals_types, emphasised_scale_degrees_info_A, emphasised_scale_degrees_info_B, clefs_info):
 
-def group_execution(groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(),intervals_info=pd.DataFrame(),intervals_types=pd.DataFrame(), clefs_info=pd.DataFrame(), absolute_intervals=None):
+def group_execution(groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=pd.DataFrame(), density_df=pd.DataFrame(), textures_df=pd.DataFrame(),intervals_info=pd.DataFrame(),intervals_types=pd.DataFrame(), clefs_info=pd.DataFrame(), emphasised_scale_degrees_info_A=pd.DataFrame(), emphasised_scale_degrees_info_B=pd.DataFrame(), absolute_intervals=None):
     visualiser_lock = True
     if groups:
         # if sequential:
@@ -269,7 +273,7 @@ def group_execution(groups, results_path_factorx, additional_info, factor, sorti
         if not melody_values.empty:
             #     # futures.append(executor.submit(melody_values, melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
             #     #                visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
-            iValues(melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
+            iValues(melody_values, results_path, '-'.join(groups) + "_Values.xlsx", sorting_lists,
                     visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None )
         if not density_df.empty:
             densities(density_df, results_path, '-'.join(groups) + "_Densities.xlsx",
@@ -278,20 +282,20 @@ def group_execution(groups, results_path_factorx, additional_info, factor, sorti
             textures(textures_df, results_path, '-'.join(groups) + "_Textures.xlsx",
                         sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
         if not intervals_info.empty:
-            iiaIntervals(intervals_info, '-'.join(groups) + "_2aIntervals.xlsx",
+            iiaIntervals(intervals_info, '-'.join(groups) + "_Intervals.xlsx",
                                sorting_lists["Intervals"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
-            iiaIntervals(absolute_intervals, '-'.join(groups) + "_2bIntervals_absolute.xlsx",
+            iiaIntervals(absolute_intervals, '-'.join(groups) + "_Intervals_absolute.xlsx",
                             sorting_lists["Intervals_absolute"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
         if not intervals_types.empty:
-            iiiIntervals_types(intervals_types, results_path, '-'.join(groups) + "_3Interval_types.xlsx", sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
-            # if not emphasised_scale_degrees_info_A.empty:
-            #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_A, sorting_lists["ScaleDegrees"], '-'.join(
-            #         groups) + "_4aScale_degrees.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
-            # if not emphasised_scale_degrees_info_B.empty:
-            #     futures.append(executor.submit(emphasised_scale_degrees, emphasised_scale_degrees_info_B, sorting_lists["ScaleDegrees"], '-'.join(
-            #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info))
+            iiiIntervals_types(intervals_types, results_path, '-'.join(groups) + "_Interval_types.xlsx", sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+        if not emphasised_scale_degrees_info_A.empty:
+            emphasised_scale_degrees(emphasised_scale_degrees_info_A, sorting_lists["ScaleDegrees"], '-'.join(
+                groups) + "_4aScale_degrees.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+        if not emphasised_scale_degrees_info_B.empty:
+            emphasised_scale_degrees( emphasised_scale_degrees_info_B, sorting_lists["ScaleDegrees"], '-'.join(
+                groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
         if not clefs_info.empty:
-            iiaIntervals(clefs_info, '-'.join(groups) + "_5Clefs.xlsx",
+            iiaIntervals(clefs_info, '-'.join(groups) + "_Clefs.xlsx",
                             sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
             # wait for all
             # if sequential:
@@ -405,18 +409,16 @@ def write_columns_titles_variable_length(hoja, row, column, column_names, fill):
 def split_voices(data):
     data = data.reset_index(drop=True)
     for ind in data.index:
-        # if '&' in data['Role'][ind]:
-        names = [i for i in data['Role'].tolist()]
+        names = [i for i in data[ROLE].tolist()]
         if '&' in str(names[ind]):
-            voices = data['Role'][ind].split('&')
+            voices = data[ROLE][ind].split('&')
             pre_data = data.iloc[:ind]
             post_data = data.iloc[ind+1:]
             for i, _ in enumerate(voices):
                 line = data.iloc[[ind]]
-                line['Role'] = voices[i]
-                line['Id'] = str(line['Id'].item()) + \
-                    alfa[i] if str(line['Id'].item()) != '' else ''
-                # line['Id']=str(line['Id'].item()) + alfa[i] if str(line['Id'].item()) != '' else ''
+                line[ROLE] = voices[i]
+                line[ARIA_ID] = str(line[ARIA_ID].item()) + \
+                    alfa[i] if str(line[ARIA_ID].item()) != '' else ''
                 line['Total analysed'] = 1/len(voices)
                 line.iloc[:, line.columns.get_loc(
                     "Total analysed")+1:] = line.iloc[:, line.columns.get_loc("Total analysed")+1:].div(len(voices), axis=1)
@@ -520,6 +522,7 @@ def print_groups(hoja, grouped, row_number, column_number, columns, third_column
                 value = compute_value(notes, column_computation, total_analysed_row,
                                       not_grouped_information, ponderate, extra_info=notes_next) 
             else:
+
                 value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":
@@ -662,7 +665,7 @@ def row_iteration(hoja, columns, row_number, column_number, data, third_columns,
                         _, _ = print_groups(hoja, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
                 else:  # has subgroups, ex: row = Date, subgroups: Year
-                    if rows_groups[row][0] == ['Character', 'Role', 'Gender']:
+                    if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
                         data_joint = data.copy()
                         data = split_voices(data)
                     for i, subrows in enumerate(rows_groups[row][0]):
@@ -694,7 +697,7 @@ def row_iteration(hoja, columns, row_number, column_number, data, third_columns,
                                                     second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
 
                             row_number += 1
-                    if rows_groups[row][0] == ['Role', 'RoleType', 'Gender']:
+                    if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
                         data = copy.deepcopy(data_joint)
                 row_number += 1
     return row_number
@@ -942,29 +945,29 @@ def iiiIntervals_types(data, results_path, name, sorting_lists, visualiser_lock,
             workbook.remove_sheet(std)
         workbook.save(os.path.join(results_path, name))
 
-        with visualiser_lock:
-            # VISUALISATIONS
-            if groups:
-                data_grouped = data.groupby(list(groups))
-                for g, datag in data_grouped:
-                    result_visualisations = path.join(
-                        results_path, 'visualisations', g)
-                    if not os.path.exists(result_visualisations):
-                        os.mkdir(result_visualisations)
+        # with visualiser_lock:
+        # VISUALISATIONS
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                result_visualisations = path.join(
+                    results_path, 'visualisations', g)
+                if not os.path.exists(result_visualisations):
+                    os.mkdir(result_visualisations)
 
-                    name1 = path.join(result_visualisations,
-                                      name.replace('.xlsx',  '') + '_AD.png')
-                    pie_plot(name1, datag, second_title=str(g))
-                    name2 = path.join(result_visualisations,
-                                      name.replace('.xlsx',  '.png'))
-                    double_bar_plot(name2, data, second_title=str(g))
-            else:
-                name1 = path.join(results_path, 'visualisations',
-                                  name.replace('.xlsx', '') + '_AD.png')
-                pie_plot(name1, data)
-                name2 = path.join(results_path, 'visualisations',
-                                  name.replace('.xlsx',  '.png'))
-                double_bar_plot(name2, data)
+                name1 = path.join(result_visualisations,
+                                    name.replace('.xlsx',  '') + '_AD.png')
+                pie_plot(name1, datag, second_title=str(g))
+                name2 = path.join(result_visualisations,
+                                    name.replace('.xlsx',  '.png'))
+                double_bar_plot(name2, data, second_title=str(g))
+        else:
+            name1 = path.join(results_path, 'visualisations',
+                                name.replace('.xlsx', '') + '_AD.png')
+            pie_plot(name1, data)
+            name2 = path.join(results_path, 'visualisations',
+                                name.replace('.xlsx',  '.png'))
+            double_bar_plot(name2, data)
     # except Exception as e:
     #     logger.error('3Interval_types  Problem found:', exc_info=True)
 ########################################################################################################
@@ -1130,9 +1133,9 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
                 bar_plot_extended(name_bar, datag, columns, 'Density',
                                   'Density', title, second_title=str(g))
 
-        elif len(not_used_cols) == 4:  # 1 Factor. TODO: Try a different condition?
+        elif len(not_used_cols) == 5:  # 1 Factor. TODO: Try a different criteria
             groups = [i for i in rows_groups]
-            exceptions_list = ['Role', 'KeySignature', 'Tempo']
+            exceptions_list = [ROLE, KEYSIGNATURE, TEMPO]
             for row in rows_groups:
                 plot_name = name.replace(
                     '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
@@ -1140,8 +1143,9 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
                 if row not in not_used_cols:
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
-                        line_plot_extended(
-                            name_bar, data_grouped, columns, 'Density', 'Density', title, second_title='Per ' + str(row))
+                        if data_grouped:
+                            line_plot_extended(
+                            name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title='Per ' + str(row))
                     else:
                         for i, subrow in enumerate(rows_groups[row][0]):
                             if subrow not in exceptions_list:
@@ -1150,7 +1154,7 @@ def densities(data, results_path, name, sorting_lists, visualiser_lock, groups=N
                                 name_bar = results_path + '\\visualisations\\' + plot_name
                                 data_grouped = data.groupby(subrow)
                                 line_plot_extended(
-                                    name_bar, data_grouped, columns, 'Density', 'Density', title, second_title='Per ' + str(subrow))
+                                    name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title= 'Per ' + str(subrow))
         else:
             name_bar = results_path + '\\visualisations\\' + \
                 name.replace('.xlsx', '.png')
@@ -1166,11 +1170,11 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
         workbook = openpyxl.Workbook()
         # Splitting the dataframes to reorder them
         data_general = data[metadata_columns + ['Total analysed']].copy()
+        data_general = data_general.dropna(how='all', axis=1)
         notes_df = data[[i for i in data.columns if i.endswith('Notes') or i.endswith('Mean')]]
         
         textures_df = data[[c for c in data.columns if c.endswith('Texture')]]
 
-        data_general = data_general.dropna(how='all', axis=1)
         third_columns_names = []
         # Pre-treating data columns
         notes_df.columns = [i.replace('_', '').replace('Sound','').replace('Family','').replace('Part','').replace('Mean', '') for i in notes_df.columns]
@@ -1226,7 +1230,7 @@ def textures(data, results_path, name, sorting_lists, visualiser_lock, groups=No
                     '\\' + name.replace('.xlsx', '.png')
                 bar_plot_extended(
                     name_bar, datag, columns, 'Instrumental Textures', title, second_title=str(g))
-        elif len(not_used_cols) == 4:  # 1 Factor. Try a different condition?
+        elif len(not_used_cols) == 5:  # 1 Factor. Try a different condition?
             groups = [i for i in rows_groups]
             exceptions_list = ['Role', 'KeySignature', 'Tempo']
             for row in rows_groups:

@@ -33,7 +33,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             notes[parts_features[f]['FamilyAbbreviation'].capitalize()] = int(
                     df_score['Family'+parts_features[f]['FamilyAbbreviation'].capitalize()+'_NotesMean'])
         else:
-            if not parts_features[f]['PartAbbreviation'].endswith('II'):
+            # if not parts_features[f]['PartAbbreviation'].endswith('II'):
                 notes[parts_features[f]['SoundAbbreviation'].capitalize()] = int(
                     df_score['Sound'+parts_features[f]['SoundAbbreviation'].capitalize()+'_NotesMean'])
 
