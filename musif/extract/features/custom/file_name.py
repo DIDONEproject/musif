@@ -16,7 +16,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     label = file_name.split("-", 2)[0]
     aria_id = file_name.split("[")[-1].split("]")[0]
     aria_title = file_name.split("-", 2)[1]
-    composer = file_name.split("-", -1)[-1].split("[", 2)[0]
     year = file_name.split("-", -2)[-2]
     decade = str(int(year) // 100) + str(int(year[-2:]) // 10) + "0s"
     act = file_name.split("[", 1)[-1].split(".", 1)[0]
@@ -27,7 +26,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         "AriaLabel": label,
         "AriaId": aria_id,
         "AriaName": aria_title,
-        "Composer": composer,
         "Year": year,
         "Decade": decade,
         "Act": act,

@@ -1,13 +1,12 @@
-from typing import List, Tuple
+from typing import List
 
+import numpy as np
 from pandas import DataFrame
 
-from musif.common.sort import sort_dict
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
-from musif.musicxml import Measure, Note, Part
-import numpy as np
+from musif.extract.common import filter_parts_data
+from musif.extract.features.prefix import get_part_prefix
 
 NOTES = "Notes"
 TEXTURE = "Texture"
@@ -15,6 +14,7 @@ TEXTURE = "Texture"
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
 
+    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
         return {}
     features = {}

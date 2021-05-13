@@ -1,6 +1,6 @@
 from glob import glob
 from os import path
-from typing import List, Generator
+from typing import Generator, List
 
 from musif.config import Configuration
 from musif.extract.features import custom

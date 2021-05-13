@@ -10,19 +10,8 @@ from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
-from musif.extract.features import (
-    ambitus,
-    custom,
-    density,
-    interval,
-    key,
-    lyrics,
-    metadata,
-    scale,
-    scoring,
-    texture,
-    tempo,
-)
+from musif.extract.common import filter_parts_data
+from musif.extract.features import (ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, tempo, text, texture)
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, to_abbreviation
@@ -163,8 +152,8 @@ class FeaturesExtractor:
     def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict], dict, List[dict]]:
         self._logger.info(f"Processing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file, parts_filter)
-        parts_data = [self._get_part_data(score_data, part) for part in score_data["parts"]]
-        parts_features = [self._extract_part_features(score_data, part_data) for part_data in parts_data]
+        parts_data = [self._get_part_data(score_data, part) for part in score_data["score"].parts]
+        parts_features = [self._extract_part_features(score_data, part_data) for part_data in filter_parts_data(parts_data, score_data["parts_filter"])]
         score_features = self._extract_score_features(score_data, parts_data, parts_features)
         return score_data, parts_data, score_features, parts_features
 
@@ -256,6 +245,7 @@ class FeaturesExtractor:
         self._logger.debug(f"Extracting all score \"{score_data['file']}\" features.")
         score_features = {"FileName": path.basename(score_data["file"])}
         score_features.update(self._extract_score_module_features(custom, score_data, parts_data, parts_features, score_features))
+        score_features.update(self._extract_score_module_features(text, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(metadata, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(key, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(tempo, score_data, parts_data, parts_features, score_features))
@@ -263,6 +253,7 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(lyrics, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(interval, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(ambitus, score_data, parts_data, parts_features, score_features))
+        score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
         self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
