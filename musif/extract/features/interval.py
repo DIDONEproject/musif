@@ -165,6 +165,8 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     absolute_trim_ratio = absolute_trim_diff / absolute_interval_mean if absolute_interval_mean != 0 else 0
     ascending_intervals = len([interval for interval in numeric_intervals if interval > 0])
     descending_intervals = len([interval for interval in numeric_intervals if interval < 0])
+    ascending_semitones = sum([interval for interval in numeric_intervals if interval > 0])
+    descending_semitones = sum([interval for interval in numeric_intervals if interval < 0])
     ascending_intervals_percentage = ascending_intervals / len(numeric_intervals)
     descending_intervals_percentage = descending_intervals / len(numeric_intervals)
 
@@ -183,6 +185,8 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": absolute_trim_ratio,
         f"{prefix}{ASCENDING_INTERVALS}": ascending_intervals,
         f"{prefix}{DESCENDING_INTERVALS}": descending_intervals,
+        f"{prefix}{ASCENDING_SEMITONES}": ascending_semitones,
+        f"{prefix}{DESCENDING_SEMITONES}": descending_semitones,
         f"{prefix}{ASCENDING_INTERVALS_PERCENTAGE}": ascending_intervals_percentage,
         f"{prefix}{DESCENDING_INTERVALS_PERCENTAGE}": descending_intervals_percentage,
     }
