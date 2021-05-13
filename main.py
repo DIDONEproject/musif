@@ -2,7 +2,7 @@ from musif import FeaturesExtractor
 
 if __name__ == "__main__":
 
-    df_scores = FeaturesExtractor("config.yml").from_file("arias/xml/Dem02M-In_te-1733-Caldara[1.02][0417].xml", parts_filter=["va"])
+    df_scores = FeaturesExtractor("config.yml").from_dir("arias/xml", parts_filter=["obI"])
     df_scores.to_csv("myfeatures.csv", index=False)
 
     # df1 = FeaturesExtractor({"split": True, "data_dir": "data"}).from_file("arias/xml/Dem01M-O_piu-1735-Leo[1.01][0430].xml", ["obI", "obII"])
