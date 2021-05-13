@@ -44,7 +44,7 @@ def box_plot(name, data, second_title=None):
             plt.title(second_title)
         else:
             plt.title('Ambitus')
-        i = 0
+        i = 0 # ????
         try:
             for j, info in enumerate(columns_box):
                 info_data = [data[x].tolist() for x in info]
@@ -53,9 +53,10 @@ def box_plot(name, data, second_title=None):
                 # change the axis from midi index to note name
                 plt.draw()
                 labels = [x.get_text() for x in ax[i].get_yticklabels()]
+                labels=[l.replace('−','-') for l in labels]
                 if i == 0:
                     labels_names = [pitch.Pitch(
-                        int(x)).unicodeNameWithOctave for x in labels]
+                        int(float(x))).unicodeNameWithOctave for x in labels]
                     ax[i].set_ylabel('Note')
                 else:
                     labels_names = [interval.Interval(
@@ -253,7 +254,6 @@ def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_
 
 
 def line_plot_extended(name, data, column_names, x_label, y_label, title, second_title=None):
-    from matplotlib.lines import Line2D
     size = len(column_names)
     fig = plt.figure(figsize=(size if len(column_names) >
                               6 else 10, size if len(column_names) > 6 else 10))
@@ -273,6 +273,7 @@ def line_plot_extended(name, data, column_names, x_label, y_label, title, second
         if second_title is not None:
             plt.suptitle('.')
         plt.ylabel(y_label)
+        plt.xlabel(x_label)
         plt.suptitle(
             title + ('\n' + second_title if second_title is not None else ''))
     else:

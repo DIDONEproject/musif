@@ -1,4 +1,4 @@
-from musif.extract.features.time import TEMPO_GROUPED_1, TEMPO_GROUPED_2
+from musif.extract.features.tempo import TEMPO_GROUPED_1, TEMPO_GROUPED_2
 from musif.extract.features.scoring import FAMILY_SCORING, SCORING
 import openpyxl
 import musif.extract.features.interval as interval
@@ -17,7 +17,8 @@ NAME = 'FileName'
 LIBRETTIST = 'Librettist'
 FORM = 'Form'
 CHARACTER = 'Character'
-ROLE = 'Role'
+ROLE = 'RoleType'
+GENDER ='Gender'
 CITY = 'City'
 TERRITORY = 'Territory'
 CLEF1 = 'Clef1'
@@ -25,7 +26,7 @@ CLEF2 = 'Clef2'
 CLEF3 = 'Clef3'
 KEY = 'Key'
 KEYSIGNATURE = 'KeySignature'
-KEYSIGNATUREGROUPED = 'KeySignatureGrouped'
+KEY_SIGNATURE_TYPE = 'KeySignatureType'
 MODE = 'Mode'
 TEMPO = 'Tempo'
 TIMESIGNATURE = 'TimeSignature'
@@ -34,8 +35,7 @@ DATE = 'Date'
 YEAR = 'Year'
 DECADE = "Decade"
 CITY = "City"
-metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEYSIGNATUREGROUPED, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
-#ROLE
+metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
                TITLE: ([], "Alphabetic"),
@@ -56,10 +56,9 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                ], ["Alphabetic", "Alphabetic", "Alphabetic"]),
                CHARACTER: ([
                    CHARACTER,
-                   "Role",
-                   "RoleType"
-                   "Gender"
-               ], ["CharacterSorting", "Alphabetic", "Alphabetic", "Alphabetic"]),
+                   ROLE,
+                   GENDER
+               ], ["CharacterSorting", "Alphabetic", "Alphabetic"]),
                "Form": ([], "FormSorting"),
                "Clef1": ([], "Alphabetic"),
                "Clef2": ([], "Alphabetic"),
@@ -69,7 +68,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    "Key",
                    "Mode",
                    "KeySignature",
-                   "KeySignatureGrouped"], ["KeySorting", "Alphabetic", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
+                   "KeySignatureType"], ["KeySorting", "Alphabetic", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
                "Metre": ([
                    TIMESIGNATURE,
                    TIMESIGNATUREGROUPED
@@ -85,13 +84,14 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                ], ["ScoringSorting", "ScoringFamilySorting"])
                }
 
-not_used_cols = [ARIA_ID, 'RealScoring', 'Total analysed', 'OldClef']
+not_used_cols = [ARIA_ID, SCORING, 'Total analysed', CLEF2, CLEF3]
 
+alfa = "abcdefghijklmnopqrstuvwxyz"
 
 # Some combinations are not needed when using more than one factor
 forbiden_groups = {OPERA: [OPERA],
                    ARIA_LABEL: [OPERA, ARIA_LABEL],
-                   TITLE: ['Aria', OPERA],
+                   TITLE: [TITLE, OPERA],
                    "Composer": ['Composer'],
                    YEAR: [YEAR, DECADE],
                    DECADE: [DECADE],
@@ -100,18 +100,18 @@ forbiden_groups = {OPERA: [OPERA],
                    ACT: [ACT, ACTANDSCENE],
                    SCENE: [SCENE, ACTANDSCENE],
                    ACTANDSCENE: [ACT, SCENE, ACTANDSCENE],
-                   ROLE: ["Role", "RoleType", "Gender"],
-                   'RoleType': ["RoleType", "Gender"],
-                   'Gender': ["Gender"],
+                   ROLE: [ROLE, GENDER],
+                #    'RoleType': ["RoleType", "Gender"],
+                   GENDER: [GENDER],
                    FORM: [FORM],
                    CLEF1: [CLEF1],
                    CLEF2: [CLEF2],
                    CLEF3: [CLEF3],
-                   KEY: ['Form', 'Mode', 'Final', 'KeySignature', 'KeySignatureGrouped'],
+                   KEY: ['Form', 'Mode', 'Final', 'KeySignature', KEY_SIGNATURE_TYPE],
                    MODE: ['Mode', 'Final'],
                    'Final': ['Final', 'Key', 'KeySignature'],
-                   KEYSIGNATURE: ['Key', 'Final', 'KeySignature', 'KeySignatureGrouped'],
-                   KEYSIGNATUREGROUPED: ['KeySignatureGrouped'],
+                   KEYSIGNATURE: ['Key', 'Final', 'KeySignature', KEY_SIGNATURE_TYPE],
+                   KEY_SIGNATURE_TYPE: [KEY_SIGNATURE_TYPE],
                    TIMESIGNATURE: [TIMESIGNATURE, TIMESIGNATUREGROUPED],
                    TIMESIGNATUREGROUPED: [TIMESIGNATUREGROUPED],
                    TEMPO: [TEMPO, "TempoGrouped1", "TempoGrouped2"],
