@@ -158,7 +158,6 @@ def compute_average(dic_data, computation):
 # This function transforms the interval into absolute values, adding the ascending and descending#
 ##################################################################################################
 
-
 def make_intervals_absolute(intervals_info):
     intervals_info_columns = intervals_info.columns
     columns_to_merge = [

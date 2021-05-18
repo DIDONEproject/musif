@@ -38,33 +38,33 @@ def box_plot(name, data, second_title=None):
                        ['AmbitusLargestSemitones']]
         columns_names = [['Lowest Notes', 'Highest Notes'], ['Ambitus']]
         subplot_titles = ['Notes', 'Ambitus']
+        plt.title(subplot_titles[0])
+        plt.title(subplot_titles[1])
         fig, ax = plt.subplots(ncols=2)
         if second_title is not None:
             plt.suptitle('Ambitus')
-            plt.title(second_title)
+            plt.suptitle(second_title)
         else:
-            plt.title('Ambitus')
-        i = 0 # ????
+            plt.suptitle('Ambitus')
         try:
             for j, info in enumerate(columns_box):
-                info_data = [data[x].tolist() for x in info]
-                ax[i].boxplot(info_data, labels=info)
-                ax[i].set_xticklabels(columns_names[i])
+                # info_data = [data[x].tolist() for x in info]
+                info_data = [[i for i in data[x] if str(i) != 'nan'] for x in info]
+                ax[j].boxplot(info_data, labels=info)
+                ax[j].set_xticklabels(columns_names[j])
                 # change the axis from midi index to note name
                 plt.draw()
-                labels = [x.get_text() for x in ax[i].get_yticklabels()]
-                labels=[l.replace('−','-') for l in labels]
-                if i == 0:
+                labels = [x.get_text().replace('−','-') for x in ax[j].get_yticklabels()]
+                if j == 0:
                     labels_names = [pitch.Pitch(
                         int(float(x))).unicodeNameWithOctave for x in labels]
-                    ax[i].set_ylabel('Note')
+                    ax[j].set_ylabel('Note')
                 else:
                     labels_names = [interval.Interval(
-                        float(x)).directedName for x in labels]
-                    ax[i].set_ylabel('Interval')
-                ax[i].set_yticklabels(labels_names)
+                        float(x)).directedName if float(x) >=0 else 'Unknown' for x in labels]
+                    ax[j].set_ylabel('Interval')
+                ax[j].set_yticklabels(labels_names)
 
-                i += 1
         except Exception as e:
             print(e)
 
