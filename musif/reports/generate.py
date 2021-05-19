@@ -29,7 +29,7 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 from .constants import not_used_cols, rows_groups, metadata_columns, forbiden_groups
-from .tasks import group_execution, factor_execution
+from .tasks import group_execution, _factor_execution
 
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.interval as interval
@@ -58,5 +58,5 @@ class FeaturesGenerator:
     def _write(self, all_info: List[DataFrame]):
         # 2. Start the factor generation
         for factor in range(0, self.num_factors_max + 1):
-            factor_execution(
+            _factor_execution(
                 all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists)
