@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import List
+from typing import List, Dict, Union
 
 from music21.note import Note
 from musif.extract.features.prefix import get_part_prefix
@@ -10,15 +10,24 @@ from musif.musicxml import get_degrees_and_accidentals
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 
+DEGREE_COUNT = "{prefix}Degree{key}_Count"
+DEGREE_PER = "{prefix}Degree{key}_Per"
+
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
     notes = part_data["notes"]
     tonality = score_data["tonality"]
-    notes_degrees = get_notes_degrees(tonality.capitalize(), notes)
-    return Counter(notes_degrees)
+    notes_per_degree = get_notes_per_degree(tonality.capitalize(), notes)
+    all_degrees = sum(value for value in notes_per_degree.values())
+    features = {}
+    for key, value in notes_per_degree.items():
+        features[DEGREE_COUNT.format(key=key, prefix="")] = value
+        features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees
+    return features
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
         return {}
 
@@ -26,15 +35,26 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     for part_data, parts_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
         for feature in parts_features:
-            if feature.startswith("Degree"):
+            if "Degree" in feature:
                 features[f"{part_prefix}{feature}"] = parts_features[feature]
     return features
 
 
+def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
+    notes_per_degree = {
+        to_full_degree(degree, accidental): 0
+        for accidental in ["", "sharp", "flat"]
+        for degree in [1, 2, 3, 4, 5, 6, 7]
+    }
+    all_degrees = 0
+    for degree, accidental in get_degrees_and_accidentals(key, notes):
+        if to_full_degree(degree, accidental) not in notes_per_degree:
+            continue
+        notes_per_degree[to_full_degree(degree, accidental)] += 1
+        all_degrees += 1
+    return notes_per_degree
 
-def get_notes_degrees(key: str, notes: List[Note], prefix: str = "") -> List[str]:
-    degrees_and_accidentals = get_degrees_and_accidentals(key, notes)
-    note_degrees = [f"{prefix}Degree{accidental_abbreviation[accidental]}{degree}Frequency" for degree, accidental in degrees_and_accidentals]
-    return note_degrees
 
+def to_full_degree(degree: Union[int, str], accidental: str) -> str:
+    return f"{accidental_abbreviation[accidental]}{degree}"
 
