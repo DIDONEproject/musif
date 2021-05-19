@@ -154,6 +154,9 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
                     emphasised_A_list.append(col)
 
             #Getting list of columns for intervals types
+            # interval.INTERVALS_PERFECT_ASCENDING
+            #TODO: add doble augmented
+            
             intervals_types_list = [catch + 'RepeatedNotes', catch + 'LeapsAscending', catch+'LeapsDescending', catch+'LeapsAll', catch+'StepwiseMotionAscending', catch+'StepwiseMotionDescending',  catch+'StepwiseMotionAll']
             catch+='Intervals'
             intervals_types_list = intervals_types_list + [catch + 'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll', catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', 
