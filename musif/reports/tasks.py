@@ -150,16 +150,17 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
             for col in all_info.columns:
                 if col.startswith(catch+'Interval_'+'Count'):
                     intervals_list.append(col)
-                elif col.startswith(catch+'Degree'):
+                elif col.startswith(catch+'Degree') and col.endswith('Count'):
                     emphasised_A_list.append(col)
 
             #Getting list of columns for intervals types
             # interval.INTERVALS_PERFECT_ASCENDING
             #TODO: add doble augmented
             
-            intervals_types_list = [catch + 'RepeatedNotes', catch + 'LeapsAscending', catch+'LeapsDescending', catch+'LeapsAll', catch+'StepwiseMotionAscending', catch+'StepwiseMotionDescending',  catch+'StepwiseMotionAll']
+            intervals_types_list = [catch + interval.REPEATED_NOTES,catch + interval.LEAPS_ASCENDING, catch+ interval.LEAPS_DESCENDING, catch+interval.LEAPS_ALL, catch+ interval.STEPWISE_MOTION_ASCENDING, catch+ interval.STEPWISE_MOTION_DESCENDING, 
+            catch+ interval.STEPWISE_MOTION_ALL]
             catch+='Intervals'
-            intervals_types_list = intervals_types_list + [catch + 'PerfectAscending',  catch+'PerfectDescending',  catch+'PerfectAll', catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', 
+            intervals_types_list = intervals_types_list + [catch + interval.INTERVALS_PERFECT_ASCENDING,  catch+ interval.INTERVALS_PERFECT_DESCENDING,  catch+ interval.INTERVALS_PERFECT_ALL, catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', 
             catch +'MinorDescending', catch +'MinorAll', catch +'AugmentedAscending', catch +'AugmentedDescending', catch +'AugmentedAll', catch +'DiminishedAscending', catch +'DiminishedDescending', catch +'DiminishedAll',
             catch +'DoubleAugmentedAscending', catch +'DoubleAugmentedDescending', catch +'DoubleAugmentedAll',
             catch +'DoubleDiminishedAscending', catch +'DoubleDiminishedDescending', catch +'DoubleDiminishedAll']
