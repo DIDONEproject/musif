@@ -1,7 +1,8 @@
-from musif.extract.features.tempo import TEMPO_GROUPED_1, TEMPO_GROUPED_2
-from musif.extract.features.scoring import FAMILY_SCORING, SCORING
-import openpyxl
 import musif.extract.features.interval as interval
+import openpyxl
+from musif.extract.features.scoring import FAMILY_SCORING, SCORING
+from musif.extract.features.tempo import TEMPO_GROUPED_1, TEMPO_GROUPED_2
+
 # The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
 
 ARIA_LABEL = 'AriaLabel'
@@ -120,9 +121,6 @@ forbiden_groups = {OPERA: [OPERA],
                    "AbrScoring": ["AbrScoring", "RealScoringGrouped"],
                    "RealScoringGrouped": ["RealScoringGrouped"]
                    }
-
-intervals_list = [interval.REPEATED_NOTES, interval.LEAPS_ASCENDING, interval.LEAPS_DESCENDING, interval.LEAPS_ALL, interval.STEPWISE_MOTION_ALL, interval.STEPWISE_MOTION_ASCENDING, interval.STEPWISE_MOTION_DESCENDING, interval.INTERVALS_PERFECT_ASCENDING, interval.INTERVALS_PERFECT_DESCENDING, interval.INTERVALS_PERFECT_ALL, interval.INTERVALS_MAJOR_ALL,
-                  interval.INTERVALS_MAJOR_ASCENDING, interval.INTERVALS_MAJOR_DESCENDING, interval.INTERVALS_MINOR_ALL, interval.INTERVALS_MINOR_ASCENDING, interval.INTERVALS_MINOR_DESCENDING, interval.INTERVALS_AUGMENTED_ALL, interval.INTERVALS_AUGMENTED_ASCENDING, interval.INTERVALS_AUGMENTED_DESCENDING, interval.INTERVALS_DIMINISHED_ALL, interval.INTERVALS_DIMINISHED_ASCENDING, interval.INTERVALS_DIMINISHED_DESCENDING]
 
 yellowFill = openpyxl.styles.PatternFill(
     start_color='F9E220', end_color='F9E220', fill_type='solid')
