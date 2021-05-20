@@ -140,7 +140,8 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
             # List of columns for melody parameters
 
             melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
-                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+ ambitus.LARGEST_SEMITONES, catch+ interval.ASCENDING_INTERVALS_COUNT, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVALS_COUNT, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, 
+                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+ interval.LARGEST_ASC_INTERVAL_SEMITONES, catch+ interval.LARGEST_ASC_INTERVAL, catch+interval.LARGEST_DESC_INTERVAL_SEMITONES, catch+ interval.LARGEST_DESC_INTERVAL, 
+                             catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, 
                              catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_INDEX, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
 
             if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_info.columns:
@@ -711,10 +712,13 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
         # HOJA 3: LARGEST_LEAPS
         second_column_names = [("", 1), ("Ascending", 2), ("Descending", 2)]
         third_columns_names = ["Total analysed",
-                               "Semitones", "Intervals", "Semitones", "Intervals"]
+                               "Semitones", "Interval", "Semitones", "Interval"]
         columns = columns_alike_our_data(
             third_columns_names, second_column_names)
         computations = ["sum", "max", "maxInterval", "min", "minInterval"]
+
+        data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
+        # data.columns = [c.replace('Asc', 'Ascending').replace('Desc','Descending').replace('Largest', '') for c in data.columns]
 
         excel_sheet(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
                      sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
@@ -932,7 +936,7 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
 ########################################################################
 
 
-def Emphasised_scale_degrees(datadata: DataFrame, sorting_list: list, name: str, results_path: str, sorting_lists: list, visualiser_lock: Lock, groups: list=None, additional_info=[]):
+def Emphasised_scale_degrees(data: DataFrame, sorting_list: list, name: str, results_path: str, sorting_lists: list, visualiser_lock: Lock, groups: list=None, additional_info=[]):
     try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()

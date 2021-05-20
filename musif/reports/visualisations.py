@@ -15,7 +15,8 @@ matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
 
 
-COLOR = "rgbcmyk"
+COLOR = "rgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmyk"
+
 '''
         b: blue
         g: green
