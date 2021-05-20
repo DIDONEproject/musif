@@ -1,29 +1,29 @@
 import copy
 import logging
-from multiprocessing import Lock
 import os
-from os import path
-from typing import Dict, List
-from matplotlib.pyplot import axis
-
-import numpy as np
-import openpyxl
-from openpyxl.writer.excel import ExcelWriter
-import pandas as pd
-from pandas.core.frame import DataFrame
-from musif.common.sort import sort
-
-from .calculations import *
-from .constants import *
-from .visualisations import *
-from .utils import *
 import sys
 from itertools import combinations, permutations
-from musif.common.sort import sort_dataframe
-import musif.extract.features.interval as interval
+from multiprocessing import Lock
+from os import path
+from typing import Dict, List
+
 import musif.extract.features.ambitus as ambitus
+import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
+import numpy as np
+import openpyxl
+import pandas as pd
+from matplotlib.pyplot import axis
 from musif.common.constants import VOICE_FAMILY
+from musif.common.sort import sort, sort_dataframe
+from openpyxl.writer.excel import ExcelWriter
+from pandas.core.frame import DataFrame
+
+from .calculations import (compute_average, compute_value,
+                           make_intervals_absolute)
+from .constants import *
+from .utils import get_groups_add_info, columns_alike_our_data, write_columns_titles, print_averages_total, print_averages_total_column, write_columns_titles_variable_length, split_voices
+from .visualisations import box_plot, ivalues_bar_plot, bar_plot, double_bar_plot, pie_plot, customized_plot, bar_plot_extended, line_plot_extended
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
@@ -59,7 +59,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
         density_set = set([])
         notes_set=set([])
         intervals_list = []
-        Intervals_types_list = []
+        intervals_types_list = []
         instruments = set([])
         emphasised_A_list = []
 
@@ -140,43 +140,46 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
             # List of columns for melody parameters
 
             melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
-                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+interval.ASCENDING_SEMITONES, catch+interval.ASCENDING_INTERVALS, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVALS, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, 
+                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+ ambitus.LARGEST_SEMITONES, catch+ interval.ASCENDING_INTERVALS_COUNT, catch+interval.DESCENDING_SEMITONES, catch+interval.DESCENDING_INTERVALS_COUNT, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, 
                              catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_INDEX, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
 
             if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_info.columns:
                 melody_values_list.append('Part'+instrument+lyrics.SYLLABIC_RATIO)
 
             #Getting list of columns for intervals and scale degrees
-            for col in all_info.columns:
-                if col.startswith(catch+'Interval_'+'Count'):
-                    intervals_list.append(col)
-                elif col.startswith(catch+'Degree') and col.endswith('Count'):
-                    emphasised_A_list.append(col)
-
             #Getting list of columns for intervals types
-            # interval.INTERVALS_PERFECT_ASCENDING
-            #TODO: add doble augmented
+            for col in all_info.columns:
+                if col.startswith(catch+'Interval_'):
+                    intervals_list.append(col)
+                elif col.startswith(catch+'Degree') and col.endswith('_Count'):
+                    emphasised_A_list.append(col)
+                elif (col.startswith(catch+'Intervals') or col.startswith(catch+'Leaps') or col.startswith(catch+'Stepwise')) and col.endswith('_Count'):
+                    intervals_types_list.append(col)
+            intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
+            # if any(c in intervals_types_list for c in (catch+interval.INTERVALS_SKEWNESS, catch + interval.INTERVALS_KURTOSIS)):
+            #     i=0
+            #     pass
+            #AVERIGUAR SI REPEATED NOTES ES NECESARIO EN ALGUN LAO
             
-            intervals_types_list = [catch + interval.REPEATED_NOTES,catch + interval.LEAPS_ASCENDING, catch+ interval.LEAPS_DESCENDING, catch+interval.LEAPS_ALL, catch+ interval.STEPWISE_MOTION_ASCENDING, catch+ interval.STEPWISE_MOTION_DESCENDING, 
-            catch+ interval.STEPWISE_MOTION_ALL]
-            catch+='Intervals'
-            intervals_types_list = intervals_types_list + [catch + interval.INTERVALS_PERFECT_ASCENDING,  catch+ interval.INTERVALS_PERFECT_DESCENDING,  catch+ interval.INTERVALS_PERFECT_ALL, catch +'MajorAscending', catch +'MajorDescending', catch +'MajorAll', catch +'MinorAscending', 
-            catch +'MinorDescending', catch +'MinorAll', catch +'AugmentedAscending', catch +'AugmentedDescending', catch +'AugmentedAll', catch +'DiminishedAscending', catch +'DiminishedDescending', catch +'DiminishedAll',
-            catch +'DoubleAugmentedAscending', catch +'DoubleAugmentedDescending', catch +'DoubleAugmentedAll',
-            catch +'DoubleDiminishedAscending', catch +'DoubleDiminishedDescending', catch +'DoubleDiminishedAll']
+            # intervals_types_list2 = [catch +interval.LEAPS_ASC_COUNT, catch+ interval.LEAPS_DESC_COUNT, catch + interval.STEPWISE_MOTION_ALL_COUNT, catch+ interval.STEPWISE_MOTION_ASC_COUNT, catch+ interval.STEPWISE_MOTION_DESC_COUNT]
+            # # catch+='Intervals'
+            # intervals_types_list2 = intervals_types_list2 + [catch + interval.INTERVALS_PERFECT_ASC_COUNT,  catch+interval.INTERVALS_PERFECT_DESC_COUNT,  catch+ interval.INTERVALS_PERFECT_ALL_COUNT, catch + interval.INTERVALS_MAJOR_ASC_COUNT , catch + interval.INTERVALS_MAJOR_DESC_COUNT, catch +interval.INTERVALS_MAJOR_ALL_COUNT, catch + interval.INTERVALS_MINOR_ASC_COUNT, 
+            # catch + interval.INTERVALS_MINOR_DESC_COUNT, catch + interval.INTERVALS_MINOR_ALL_COUNT, catch +interval.INTERVALS_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_AUGMENTED_DESC_COUNT, catch +interval.INTERVALS_AUGMENTED_ALL_COUNT, catch + interval.INTERVALS_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DIMINISHED_DESC_COUNT, catch + interval.INTERVALS_DIMINISHED_ALL_COUNT,
+            # catch + interval.INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT,
+            # catch + interval.INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT]
             
             # Joining common info and part info, renaming columns for excel writing
             
-            Melody_values = pd.concat(
+            melody_values = pd.concat(
                 [common_columns_df, all_info[melody_values_list]], axis=1)
-            Melody_values.columns = [c.replace('Part'+instrument+'_', '')
-                                for c in Melody_values.columns]
+            melody_values.columns = [c.replace('Part'+instrument+'_', '').replace('_Count', '')
+                                for c in melody_values.columns]
             intervals_info = pd.concat(
                 [common_columns_df, all_info[intervals_list]], axis=1)
-            intervals_info.columns = [c.replace('Part'+instrument+'_'+'Interval_', '')
+            intervals_info.columns = [c.replace('Part'+instrument+'_'+'Interval_', '').replace('_Count', '')
                                 for c in intervals_info.columns]
             intervals_types = pd.concat([common_columns_df, all_info[intervals_types_list]], axis=1)
-            intervals_types.columns = [c.replace('Part'+instrument+'_', '').replace('Intervals', '')
+            intervals_types.columns = [c.replace('Part'+instrument+'_', '').replace('Intervals', '').replace('_Count', '')
                                 for c in intervals_types.columns]
             Emphasised_scale_degrees_info_A = pd.concat(
                 [common_columns_df, all_info[emphasised_A_list]], axis=1)
@@ -187,7 +190,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
 
 
             # Dropping nans
-            Melody_values = Melody_values.dropna(how='all', axis=1)
+            melody_values = melody_values.dropna(how='all', axis=1)
             intervals_info.dropna(how='all', axis=1,inplace=True)
             intervals_types.dropna(
                 how='all', axis=1,inplace=True)
@@ -251,10 +254,10 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
             for groups in rg_groups:
-                # group_execution(groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals,
+                # group_execution(groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals,
                 #                       Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info)
                 group_execution(
-                    groups, results_path_factorx, additional_info, factor, sorting_lists, Melody_values=Melody_values, intervals_info=intervals_info, intervals_types=intervals_types, Emphasised_scale_degrees_info_A = Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B = Emphasised_scale_degrees_info_B, absolute_intervals=absolute_intervals)
+                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, Emphasised_scale_degrees_info_A = Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B = Emphasised_scale_degrees_info_B, absolute_intervals=absolute_intervals)
                 rows_groups = rg
                 not_used_cols = nuc
             # else: # from 2 factors
@@ -269,7 +272,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
 # Function that generates the needed information for each grouping  #
 #####################################################################
 
-def group_execution(groups: list, results_path_factorx: str, additional_info, factor: int, sorting_lists: Dict, Melody_values: DataFrame =pd.DataFrame(), density_df: DataFrame =pd.DataFrame(), textures_df: DataFrame =pd.DataFrame(),intervals_info: DataFrame =pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), Emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(), Emphasised_scale_degrees_info_B: DataFrame =pd.DataFrame(), absolute_intervals: DataFrame =None):
+def group_execution(groups: list, results_path_factorx: str, additional_info, factor: int, sorting_lists: Dict, melody_values: DataFrame =pd.DataFrame(), density_df: DataFrame =pd.DataFrame(), textures_df: DataFrame =pd.DataFrame(),intervals_info: DataFrame =pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), Emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(), Emphasised_scale_degrees_info_B: DataFrame =pd.DataFrame(), absolute_intervals: DataFrame =None):
     visualiser_lock = True #remve with threads
 
     if groups:
@@ -289,10 +292,10 @@ def group_execution(groups: list, results_path_factorx: str, additional_info, fa
         # executor = concurrent.futures.ThreadPoolExecutor()
         # visualiser_lock = threading.Lock()
         # futures = []
-        if not Melody_values.empty:
+        if not melody_values.empty:
             #     # futures.append(executor.submit(Melody_values, Melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
             #     #                visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
-            Melody_values(Melody_values, results_path, '-'.join(groups) + "_MelodyValues.xlsx", sorting_lists,
+            Melody_values(melody_values, results_path, '-'.join(groups) + "_MelodyValues.xlsx", sorting_lists,
                     visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None )
         if not density_df.empty:
             Densities(density_df, results_path, '-'.join(groups) + "_Densities.xlsx",
@@ -843,8 +846,8 @@ def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str,
 
 def Intervals_types(data: DataFrame, results_path: str, name: str, sorting_lists: list, visualiser_lock: Lock, groups=None, additional_info: list=[]):
     # try:
+        data.columns=[c.replace('Desc', 'Descending').replace('Asc', 'Ascending') for c in data.columns]
         workbook = openpyxl.Workbook()
-
         second_column_names = [("", 2), ("Leaps", 3), ("StepwiseMotion", 3)]
         second_column_names2 = [('', 1), ("Perfect", 3), ("Major", 3),
                                 ("Minor", 3), ("Augmented", 3), ("Diminished", 3)]

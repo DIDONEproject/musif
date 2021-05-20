@@ -1,13 +1,14 @@
 import copy
-import os
-import numpy as np
-import pandas as pd
 import math
-from music21 import pitch, interval, note
-from .constants import not_used_cols, rows_groups
+import os
+
+import numpy as np
 import openpyxl
+import pandas as pd
+from music21 import interval, note, pitch
 from musif.common.sort import sort
-from .visualisations import *
+
+from .constants import not_used_cols, rows_groups
 
 
 def note_mean(pitch_ps, round_mean=False):
