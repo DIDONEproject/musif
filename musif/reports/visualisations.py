@@ -110,7 +110,7 @@ def bar_plot(name, data, column_names, x_label, title, second_title=None):
     size = len(more_than_2)
     fig, ax = plt.subplots(
         figsize=(size if size > 6 else 6, size if size > 6 else 6))
-    plt.bar(x=range(0, size, 1), height=valid_results, color='w', edgecolor='k')
+    plt.bar(x=range(0, size, 1), height=valid_results, color=COLOR[j], edgecolor='k')
     plt.draw()
     labels = [x.get_text() for x in ax.get_yticklabels()]
     ax.set_yticklabels([l + '%' for l in labels])
@@ -130,9 +130,9 @@ def double_bar_plot(name, data, second_title=None):
     for i, plot in enumerate(plots):
         list_sum = data[plot].sum(axis=0, skipna=True)
         results = list((list_sum / sum(list_sum)) * 100)
-        ax[i].bar(x=range(len(plot)), height=results, color='w', edgecolor='k')
+        ax[i].bar(x=range(len(plot)), height=results, color=COLOR[i], edgecolor='k')
         ax[i].set_xticks(range(len(plot)))
-        plt.draw()
+        plt.draw()  
         labels = [x.get_text() for x in ax[i].get_yticklabels()]
         ax[i].set_yticklabels([l + '%' for l in labels])
         ax[i].set_ylabel('Percentage')
