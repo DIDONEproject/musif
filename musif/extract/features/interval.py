@@ -86,6 +86,15 @@ INTERVALS_DOUBLE_DIMINISHED_DESC_PER = "IntervalsDoubleDiminishedDesc_Per"
 INTERVALS_DOUBLE_DIMINISHED_ALL_PER = "IntervalsDoubleDiminishedAll_Per"
 INTERVALS_SKEWNESS = "IntervalsSkewness"
 INTERVALS_KURTOSIS = "IntervalsKurtosis"
+LARGEST_ASC_INTERVAL = "LargestAscInterval"
+LARGEST_ASC_INTERVAL_SEMITONES = "LargestAscIntervalSemitones"
+LARGEST_DESC_INTERVAL = "LargestDescInterval"
+LARGEST_DESC_INTERVAL_SEMITONES = "LargestDescIntervalSemitones"
+SMALLEST_ASC_INTERVAL = "SmallestAscInterval"
+SMALLEST_ASC_INTERVAL_SEMITONES = "SmallestAscIntervalSemitones"
+SMALLEST_DESC_INTERVAL = "SmallestDescInterval"
+SMALLEST_DESC_INTERVAL_SEMITONES = "SmallestDescIntervalSemitones"
+
 
 ALL_FEATURES = [
     INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD,
@@ -100,6 +109,8 @@ ALL_FEATURES = [
     INTERVALS_DIMINISHED_ASC_COUNT, INTERVALS_DIMINISHED_DESC_COUNT, INTERVALS_DIMINISHED_ALL_COUNT, INTERVALS_DIMINISHED_ASC_PER, INTERVALS_DIMINISHED_DESC_PER, INTERVALS_DIMINISHED_ALL_PER,
     INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT, INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT, INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, INTERVALS_DOUBLE_AUGMENTED_ALL_PER, INTERVALS_DOUBLE_AUGMENTED_ASC_PER, INTERVALS_DOUBLE_AUGMENTED_DESC_PER,
     INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT, INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, INTERVALS_DOUBLE_DIMINISHED_DESC_COUNT, INTERVALS_DOUBLE_DIMINISHED_ALL_PER, INTERVALS_DOUBLE_DIMINISHED_ASC_PER, INTERVALS_DOUBLE_DIMINISHED_DESC_PER,
+    LARGEST_ASC_INTERVAL, LARGEST_ASC_INTERVAL_SEMITONES, LARGEST_DESC_INTERVAL, LARGEST_DESC_INTERVAL_SEMITONES,
+    SMALLEST_ASC_INTERVAL, SMALLEST_ASC_INTERVAL_SEMITONES, SMALLEST_DESC_INTERVAL, SMALLEST_DESC_INTERVAL_SEMITONES,
 ]
 
 
@@ -199,6 +210,14 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     descending_intervals = len([interval for interval in numeric_intervals if interval < 0])
     ascending_semitones = sum([interval for interval in numeric_intervals if interval > 0])
     descending_semitones = sum([interval for interval in numeric_intervals if interval < 0])
+    largest_ascending_semitones = max([interval for interval in numeric_intervals if interval > 0])
+    largest_ascending = Interval(largest_ascending_semitones).directedName
+    largest_descending_semitones = max([interval for interval in numeric_intervals if interval < 0])
+    largest_descending = Interval(largest_descending_semitones).directedName
+    smallest_ascending_semitones = min([interval for interval in numeric_intervals if interval > 0])
+    smallest_ascending = Interval(smallest_ascending_semitones).directedName
+    smallest_descending_semitones = min([interval for interval in numeric_intervals if interval < 0])
+    smallest_descending = Interval(smallest_descending_semitones).directedName
     ascending_intervals_percentage = ascending_intervals / len(numeric_intervals)
     descending_intervals_percentage = descending_intervals / len(numeric_intervals)
 
@@ -221,8 +240,15 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{DESCENDING_SEMITONES}": descending_semitones,
         f"{prefix}{ASCENDING_INTERVALS_PER}": ascending_intervals_percentage,
         f"{prefix}{DESCENDING_INTERVALS_PER}": descending_intervals_percentage,
+        f"{prefix}{LARGEST_ASC_INTERVAL}": largest_ascending,
+        f"{prefix}{LARGEST_ASC_INTERVAL_SEMITONES}": largest_ascending_semitones,
+        f"{prefix}{LARGEST_DESC_INTERVAL}": largest_descending,
+        f"{prefix}{LARGEST_DESC_INTERVAL_SEMITONES}": largest_descending_semitones,
+        f"{prefix}{SMALLEST_ASC_INTERVAL}": smallest_ascending,
+        f"{prefix}{SMALLEST_ASC_INTERVAL_SEMITONES}": smallest_ascending_semitones,
+        f"{prefix}{SMALLEST_DESC_INTERVAL}": smallest_descending,
+        f"{prefix}{SMALLEST_DESC_INTERVAL_SEMITONES}": smallest_descending_semitones,
     }
-
     return features
 
 
