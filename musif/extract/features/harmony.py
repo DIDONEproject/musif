@@ -1,13 +1,14 @@
 #%%
-import ms3
 import glob
-from music21 import *
-from collections import OrderedDict, defaultdict, Counter
-import pandas as pd
 import os
-from pandas import DataFrame
+from collections import Counter, OrderedDict, defaultdict
 from typing import List, Tuple
+
+import ms3
+import pandas as pd
+from music21 import *
 from musif.extract.features.prefix import get_score_prefix
+from pandas import DataFrame
 
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
@@ -221,7 +222,7 @@ if __name__=='__main__':
         harmonic_analysis = msc3_score.expanded
     except Exception as e:
         has_table = False
-
+    xml_file=xml_name+'.xml'
     score = converter.parse(xml_file) #EN ESTE CASO NO NECESITAMOS EXPANDIR LAS REPETICIONES
     
     repeat_elements = get_repeat_elements(score, v = False)
@@ -261,7 +262,7 @@ if __name__=='__main__':
         # df_parts = DataFrame(parts_features)
         # df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
         # df_family = df_parts.groupby("FamilyAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-        df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+        # df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
 
         score_prefix = get_score_prefix()
 

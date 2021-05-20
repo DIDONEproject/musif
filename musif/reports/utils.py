@@ -1,7 +1,10 @@
-from pandas.core.frame import DataFrame
 from typing import Dict, List
+
 from openpyxl.writer.excel import ExcelWriter
+from pandas.core.frame import DataFrame
+
 from .constants import *
+
 
 def get_groups_add_info(data: DataFrame, row: int, additional_info):
     if type(additional_info) == list:
