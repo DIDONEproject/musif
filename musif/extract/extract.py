@@ -204,7 +204,6 @@ class FeaturesExtractor:
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part, score_data["parts"], self._cfg)
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = self._cfg.family_to_abbreviation[family]
-        family = self._cfg.sound_to_family[sound]
         data = {
             "part": part,
             "part_number": part_number,
