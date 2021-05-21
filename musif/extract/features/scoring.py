@@ -5,7 +5,7 @@ from music21 import text
 from music21.stream import Part
 from roman import fromRoman, toRoman
 
-from musif.common.constants import VOICE_FAMILY
+from musif.common.constants import VOICE_FAMILY, GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
 from musif.config import Configuration
@@ -58,13 +58,15 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     instrumental_family_abbreviations = []
     count_by_sound = {}
     count_by_family = {}
-    for features in parts_features:
-        part_abbreviation = features[PART_ABBREVIATION]
-        sound = features[SOUND]
-        sound_abbreviation = features[SOUND_ABBREVIATION]
-        family = features[FAMILY]
-        family_abbreviation = features[FAMILY_ABBREVIATION]
+    score = score_data["score"]
+    for part in score.parts:
+        sound = extract_sound(part, cfg)
+        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
+            sound, part, score_data["parts"], cfg)
+        family = cfg.sound_to_family.get(sound, GENERAL_FAMILY)
+        family_abbreviation = cfg.family_to_abbreviation[family]
         abbreviated_parts.append(part_abbreviation)
+        instrumental = family != VOICE_FAMILY
         if sound_abbreviation not in count_by_sound:
             count_by_sound[sound_abbreviation] = 0
         count_by_sound[sound_abbreviation] += 1
@@ -74,14 +76,14 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         if sound not in sounds:
             sounds.append(sound)
             sound_abbreviations.append(sound_abbreviation)
-            if features[INSTRUMENTAL]:
+            if instrumental:
                 instrument_abbreviations.append(sound_abbreviation)
             else:
                 voice_abbreviations.append(sound_abbreviation)
         if family not in families:
             families.append(family)
             family_abbreviations.append(family_abbreviation)
-            if features[INSTRUMENTAL]:
+            if instrumental:
                 instrumental_family_abbreviations.append(family_abbreviation)
 
     abbreviated_parts_scoring_order = [instr + num
