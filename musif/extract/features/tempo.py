@@ -171,7 +171,10 @@ def get_tempo_grouped_1(tempo):
     return 'ND'
 
 
-def get_tempo_grouped_2(TempoGrouped1) -> TempoGroup2:
+def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
+
+    if tempo_grouped_1 is None or tempo_grouped_1.lower() == 'nd':
+        return TempoGroup2.ND
     possible_terminations = ['ino', 'etto', 'ietto', 'ssimo', 'issimo', 'hetto']
     slow_basis = ['Adagio', 'Affettuoso', 'Grave', 'Sostenuto', 'Largo', 'Lento', 'Sostenuto']
     slow = slow_basis + [w[:-1] + t for w in slow_basis for t in possible_terminations]
@@ -181,13 +184,13 @@ def get_tempo_grouped_2(TempoGrouped1) -> TempoGroup2:
     fast_basis = ['Agitato', 'Allegro', 'Con brio', 'Spiritoso', 'Fiero', 'Presto', 'Risoluto', 'Vivace']
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
-    if TempoGrouped1 in ['A tempo', 'Giusto']:
+    if tempo_grouped_1 in ['A tempo', 'Giusto']:
         return TempoGroup2.ND
-    elif TempoGrouped1 in slow:
+    elif tempo_grouped_1 in slow:
         return TempoGroup2.SLOW
-    elif TempoGrouped1 in moderate:
+    elif tempo_grouped_1 in moderate:
         return TempoGroup2.MODERATE
-    elif TempoGrouped1 in fast:
+    elif tempo_grouped_1 in fast:
         return TempoGroup2.FAST
 
 

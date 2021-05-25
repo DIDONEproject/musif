@@ -228,6 +228,7 @@ class FeaturesExtractor:
         self._logger.debug(f"Extracting all part \"{part_data['abbreviation']}\" features.")
         part_features = {}
         part_features.update(self._extract_part_module_features(scoring, score_data, part_data, part_features))
+        part_features.update(self._extract_part_module_features(tempo, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(lyrics, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(interval, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(ambitus, score_data, part_data, part_features))
