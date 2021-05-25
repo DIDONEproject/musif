@@ -7,6 +7,7 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.extract.features.scoring import NUMBER_OF_PARTS
+from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.musicxml import Measure, Note, Part
 
 NOTES = "Notes"
@@ -23,12 +24,13 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     notes = part_data["notes"]
     sounding_measures = part_data["sounding_measures"]
     measures = part_data["measures"]
+    number_of_beats = part_features[NUMBER_OF_BEATS]
     features = {
         NOTES: len(notes),
         SOUNDING_MEASURES: len(sounding_measures),
         MEASURES: len(measures),
-        SOUNDING_DENSITY: len(notes) / len(sounding_measures) if len(sounding_measures) > 0 else 0,
-        DENSITY: len(notes) / len(measures) if len(measures) > 0 else 0,
+        SOUNDING_DENSITY: len(notes) / number_of_beats / len(sounding_measures) if len(sounding_measures) > 0 else 0,
+        DENSITY: len(notes) / number_of_beats / len(measures) if len(measures) > 0 else 0,
     }
     return features
 
@@ -44,6 +46,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
     df_family = df_parts.groupby("FamilyAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
     df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    number_of_beats = score_features[NUMBER_OF_BEATS]
     for part_features in parts_features:
         part_prefix = get_part_prefix(part_features['PartAbbreviation'])
         features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
@@ -66,8 +69,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         features[f"{sound_prefix}{SOUNDING_MEASURES_MEAN}"] = sounding_measures_mean
         features[f"{sound_prefix}{MEASURES}"] = measures
         features[f"{sound_prefix}{MEASURES_MEAN}"] = measures_mean
-        features[f"{sound_prefix}{SOUNDING_DENSITY}"] = notes_mean / sounding_measures_mean if sounding_measures_mean != 0 else 0
-        features[f"{sound_prefix}{DENSITY}"] = notes_mean / measures_mean if measures_mean != 0 else 0
+        features[f"{sound_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
+        features[f"{sound_prefix}{DENSITY}"] = notes_mean / number_of_beats / measures_mean if measures_mean != 0 else 0
     for family in df_family.index:
         family_prefix = get_family_prefix(family)
         notes = df_family.loc[family, NOTES].tolist()
@@ -83,8 +86,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         features[f"{family_prefix}{SOUNDING_MEASURES_MEAN}"] = sounding_measures_mean
         features[f"{family_prefix}{MEASURES}"] = measures
         features[f"{family_prefix}{MEASURES_MEAN}"] = measures_mean
-        features[f"{family_prefix}{SOUNDING_DENSITY}"] = notes_mean / sounding_measures_mean if sounding_measures_mean != 0 else 0
-        features[f"{family_prefix}{DENSITY}"] = notes_mean / measures_mean if measures_mean != 0 else 0
+        features[f"{family_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
+        features[f"{family_prefix}{DENSITY}"] = notes_mean / number_of_beats / measures_mean if measures_mean != 0 else 0
     score_prefix = get_score_prefix()
     notes = df_score[NOTES].tolist()
     notes_mean = notes / len(parts_data)
@@ -98,8 +101,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     features[f"{score_prefix}{SOUNDING_MEASURES_MEAN}"] = sounding_measures_mean
     features[f"{score_prefix}{MEASURES}"] = measures
     features[f"{score_prefix}{MEASURES_MEAN}"] = measures_mean
-    features[f"{score_prefix}{SOUNDING_DENSITY}"] = notes_mean / sounding_measures_mean if sounding_measures_mean != 0 else 0
-    features[f"{score_prefix}{DENSITY}"] = notes_mean / measures_mean if measures_mean != 0 else 0
+    features[f"{score_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
+    features[f"{score_prefix}{DENSITY}"] = notes_mean / number_of_beats / measures_mean if measures_mean != 0 else 0
 
     return features
 

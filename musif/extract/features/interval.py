@@ -84,6 +84,18 @@ INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT = "IntervalsDoubleDiminishedAll_Count"
 INTERVALS_DOUBLE_DIMINISHED_ASC_PER = "IntervalsDoubleDiminishedAsc_Per"
 INTERVALS_DOUBLE_DIMINISHED_DESC_PER = "IntervalsDoubleDiminishedDesc_Per"
 INTERVALS_DOUBLE_DIMINISHED_ALL_PER = "IntervalsDoubleDiminishedAll_Per"
+INTERVALS_WITHIN_OCTAVE_ASC_COUNT = "IntervalsWithinOctaveAsc_Count"
+INTERVALS_WITHIN_OCTAVE_DESC_COUNT = "IntervalsWithinOctaveDesc_Count"
+INTERVALS_WITHIN_OCTAVE_ALL_COUNT = "IntervalsWithinOctaveAll_Count"
+INTERVALS_WITHIN_OCTAVE_ASC_PER = "IntervalsWithinOctaveAsc_Per"
+INTERVALS_WITHIN_OCTAVE_DESC_PER = "IntervalsWithinOctaveDesc_Per"
+INTERVALS_WITHIN_OCTAVE_ALL_PER = "IntervalsWithinOctaveAll_Per"
+INTERVALS_BEYOND_OCTAVE_ASC_COUNT = "IntervalsBeyondOctaveAsc_Count"
+INTERVALS_BEYOND_OCTAVE_DESC_COUNT = "IntervalsBeyondOctaveDesc_Count"
+INTERVALS_BEYOND_OCTAVE_ALL_COUNT = "IntervalsBeyondOctaveAll_Count"
+INTERVALS_BEYOND_OCTAVE_ASC_PER = "IntervalsBeyondOctaveAsc_Per"
+INTERVALS_BEYOND_OCTAVE_DESC_PER = "IntervalsBeyondOctaveDesc_Per"
+INTERVALS_BEYOND_OCTAVE_ALL_PER = "IntervalsBeyondOctaveAll_Per"
 INTERVALS_SKEWNESS = "IntervalsSkewness"
 INTERVALS_KURTOSIS = "IntervalsKurtosis"
 LARGEST_ASC_INTERVAL = "LargestAscInterval"
@@ -109,6 +121,8 @@ ALL_FEATURES = [
     INTERVALS_DIMINISHED_ASC_COUNT, INTERVALS_DIMINISHED_DESC_COUNT, INTERVALS_DIMINISHED_ALL_COUNT, INTERVALS_DIMINISHED_ASC_PER, INTERVALS_DIMINISHED_DESC_PER, INTERVALS_DIMINISHED_ALL_PER,
     INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT, INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT, INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, INTERVALS_DOUBLE_AUGMENTED_ALL_PER, INTERVALS_DOUBLE_AUGMENTED_ASC_PER, INTERVALS_DOUBLE_AUGMENTED_DESC_PER,
     INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT, INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, INTERVALS_DOUBLE_DIMINISHED_DESC_COUNT, INTERVALS_DOUBLE_DIMINISHED_ALL_PER, INTERVALS_DOUBLE_DIMINISHED_ASC_PER, INTERVALS_DOUBLE_DIMINISHED_DESC_PER,
+    INTERVALS_WITHIN_OCTAVE_ALL_COUNT, INTERVALS_WITHIN_OCTAVE_ALL_PER, INTERVALS_WITHIN_OCTAVE_ASC_COUNT, INTERVALS_WITHIN_OCTAVE_ASC_PER, INTERVALS_WITHIN_OCTAVE_DESC_COUNT, INTERVALS_WITHIN_OCTAVE_DESC_PER,
+    INTERVALS_BEYOND_OCTAVE_ALL_COUNT, INTERVALS_BEYOND_OCTAVE_ALL_PER, INTERVALS_BEYOND_OCTAVE_ASC_COUNT, INTERVALS_BEYOND_OCTAVE_ASC_PER, INTERVALS_BEYOND_OCTAVE_DESC_COUNT, INTERVALS_BEYOND_OCTAVE_DESC_PER,
     LARGEST_ASC_INTERVAL, LARGEST_ASC_INTERVAL_SEMITONES, LARGEST_DESC_INTERVAL, LARGEST_DESC_INTERVAL_SEMITONES,
     SMALLEST_ASC_INTERVAL, SMALLEST_ASC_INTERVAL_SEMITONES, SMALLEST_DESC_INTERVAL, SMALLEST_DESC_INTERVAL_SEMITONES,
 ]
@@ -270,6 +284,8 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""
 
     leaps = []
     stepwise = []
+    within_octave = []
+    beyond_octave = []
     perfect = []
     major = []
     minor = []
@@ -283,6 +299,11 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""
             stepwise.append(iname)
         elif abs(Interval(iname).semitones) >= 3:
             leaps.append(iname)
+
+        if abs(Interval(iname).semitones) <= 12:
+            within_octave.append(iname)
+        else:
+            beyond_octave.append(iname)
 
         if iname.startswith('AA'):
             double_augmented.append(iname)
@@ -310,6 +331,8 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""
     ascending_minor, descending_minor = get_ascending_descending(intervals_count, minor)
     ascending_double_diminished, descending_double_diminished = get_ascending_descending(intervals_count, double_diminished)
     ascending_diminished, descending_diminished = get_ascending_descending(intervals_count, diminished)
+    ascending_within_octave, descending_within_octave = get_ascending_descending(intervals_count, within_octave)
+    ascending_beyond_octave, descending_beyond_octave = get_ascending_descending(intervals_count, beyond_octave)
 
     return {
         f"{prefix}{REPEATED_NOTES_COUNT}": no_semitones_data,
@@ -368,6 +391,18 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ASC_PER}": ascending_double_diminished / all_intervals,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_DESC_PER}": descending_double_diminished / all_intervals,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ALL_PER}": (ascending_double_diminished + descending_double_diminished) / all_intervals,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_COUNT}": ascending_within_octave,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_COUNT}": descending_within_octave,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_COUNT}": ascending_within_octave + descending_within_octave,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_PER}": ascending_within_octave / all_intervals,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_PER}": descending_within_octave / all_intervals,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_PER}": (ascending_within_octave + descending_within_octave) / all_intervals,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_COUNT}": ascending_beyond_octave,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_COUNT}": descending_beyond_octave,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_COUNT}": ascending_beyond_octave + descending_beyond_octave,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_PER}": ascending_beyond_octave / all_intervals,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_PER}": descending_beyond_octave / all_intervals,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_PER}": (ascending_beyond_octave + descending_beyond_octave) / all_intervals,
     }
 
 
