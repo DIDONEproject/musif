@@ -1,5 +1,5 @@
 import itertools
-
+import os
 import music21 as m21
 
 file_names = []
@@ -255,3 +255,11 @@ def expand_score_repetitions(score, repeat_elements):
     else:
         final_score = score
     return final_score
+
+def remove_folder_contents(path: str):
+    for filename in os.listdir(path):
+        file_path = os.path.join(path, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+        elif os.path.isdir(file_path):
+            remove_folder_contents(file_path)

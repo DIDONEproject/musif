@@ -1,9 +1,9 @@
 import copy
 import math
 import os
+from typing import Dict
 
 import numpy as np
-import openpyxl
 import pandas as pd
 from music21 import interval, note, pitch
 from musif.common.sort import sort
@@ -11,7 +11,7 @@ from musif.common.sort import sort
 from .constants import not_used_cols, rows_groups
 
 
-def note_mean(pitch_ps, round_mean=False):
+def note_mean(pitch_ps: list, round_mean: bool =False) -> str:
     mean_pitch = np.nansum(pitch_ps) / len(pitch_ps)
     mean_pitch = mean_pitch if not round_mean else round(mean_pitch)
     if type(mean_pitch) == int or mean_pitch.is_integer():
@@ -28,8 +28,8 @@ def note_mean(pitch_ps, round_mean=False):
     return value
 
 
-def interval_mean(interval_semitones):
-    mean_semitones = sum(interval_semitones) / len(interval_semitones)
+def interval_mean(interval_semitones: list) -> str:
+    mean_semitones = np.nansum(interval_semitones) / len(interval_semitones)
     if mean_semitones.is_integer():
         i = interval.convertSemitoneToSpecifierGeneric(mean_semitones)
         value = str(i[0]) + str(i[1])
@@ -119,6 +119,7 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
                 value = np.nan
         elif computation == "sum":
             value = np.nansum(column_data)
+
             # PONDERATE WITHT THE TOTAL ANALYSED IN THAT ROW
             if ponderate and value != 0 and column_data.name != "Total analysed":
                 values = []
@@ -132,6 +133,7 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
 
                 value = np.nansum(values) / sum(ponderate_data)
                 value = round(value * 100, 3)
+
     except ValueError:
         value=np.nan
     if isinstance(value, (int, float)):
@@ -144,14 +146,30 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
 #####################################################################################
 
 
-def compute_average(dic_data, computation):
+def compute_average(dic_data: Dict, computation: str):
     value = 0
-    computation = computation.replace('_density', '')
-    computation = computation.replace('_texture', '')
-    if computation in ["mean", "min", "sum", "max", "absolute", "meanSemitones"]:
-        # value = round(sum(dic_data) / len(dic_data), 3)
-        value = round(np.nansum(dic_data) / (len(dic_data) -
-                                             len([z for z in dic_data if z == 0])), 3)
+    if computation in ["mean", "min", "sum", "max", "absolute","meanSemitones"]:
+        value = round(sum(dic_data) / len(dic_data), 3)
+    elif computation in ["minNote", "maxNote"]:
+        pitch_ps = [pitch.Pitch(n).ps for n in dic_data]
+        value = note_mean(pitch_ps)
+    elif computation in ["meanNote"]:
+        mean_dic_data = []
+        for data in dic_data:
+            pitches = [pitch.Pitch(n).ps for n in data.split('-')]
+            mean_dic_data.append(sum(pitches) / len(pitches))
+        value = note_mean(mean_dic_data)
+    elif computation in ["minInterval", "maxInterval", "absoluteInterval"]:
+        interval_semitones = [interval.Interval(n).semitones for n in dic_data]
+        value = interval_mean(interval_semitones)
+    elif computation == "meanInterval":
+        mean_dic_data = []
+        for data in dic_data:
+            semitones = [interval.Interval(n).semitones for n in data.split('-')]
+            mean_dic_data.append(sum(semitones) / len(semitones))
+        value = interval_mean(mean_dic_data)
+        
+        # value = round(np.nansum(dic_data) / (len(dic_data) - len([z for z in dic_data if z == 0])), 3)
 
     return value
 
