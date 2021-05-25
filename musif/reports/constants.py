@@ -1,3 +1,4 @@
+from openpyxl.styles.fonts import Font
 import musif.extract.features.interval as interval
 import openpyxl
 from musif.extract.features.scoring import FAMILY_SCORING, SCORING
@@ -122,7 +123,7 @@ forbiden_groups = {OPERA: [OPERA],
                    "RealScoringGrouped": ["RealScoringGrouped"]
                    }
 
-yellowFill = openpyxl.styles.PatternFill(
+YELLOWFILL = openpyxl.styles.PatternFill(
     start_color='F9E220', end_color='F9E220', fill_type='solid')
 greenFill = openpyxl.styles.PatternFill(
     start_color='98E891', end_color='98E891', fill_type='solid')
@@ -141,5 +142,6 @@ factors_Fill = [openpyxl.styles.PatternFill(start_color='06CAFF', end_color='06C
                     start_color='1B94B4', end_color='1B94B4', fill_type='solid'),
                 openpyxl.styles.PatternFill(start_color='11718A', end_color='11718A', fill_type='solid')]
 
-bold = openpyxl.styles.Font(bold=True)
+BOLD = Font(size = 12, bold=True)
 center = openpyxl.styles.Alignment(horizontal='center')
+FONT= Font(size=12)

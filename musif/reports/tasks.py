@@ -6,7 +6,10 @@ from itertools import combinations, permutations
 from multiprocessing import Lock
 from os import path
 from typing import Dict, List
+import warnings
 
+from openpyxl.styles.fonts import Font
+from tqdm import tqdm
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
@@ -22,7 +25,9 @@ from pandas.core.frame import DataFrame
 from .calculations import (compute_average, compute_value,
                            make_intervals_absolute)
 from .constants import *
-from .utils import get_groups_add_info, columns_alike_our_data, write_columns_titles, print_averages_total, print_averages_total_column, write_columns_titles_variable_length, split_voices
+from .utils import (get_groups_add_info, columns_alike_our_data, 
+write_columns_titles, print_averages_total, print_averages_total_column, 
+write_columns_titles_variable_length, split_voices, adjust_width_height, remove_folder_contents, prepare_data_emphasised_scale_degrees_second)
 from .visualisations import box_plot, ivalues_bar_plot, bar_plot, double_bar_plot, pie_plot, customized_plot, bar_plot_extended, line_plot_extended
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
@@ -34,240 +39,242 @@ fh.setLevel(logging.ERROR)
 logger = logging.getLogger("generation")
 logger.addHandler(fh)
 
-def _remove_folder_contents(path: str):
-    for filename in os.listdir(path):
-        file_path = os.path.join(path, filename)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
-        elif os.path.isdir(file_path):
-            _remove_folder_contents(file_path)
+
 
 def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_results_path: str, sorting_lists: dict):
-        global rows_groups
-        global not_used_cols
+    global rows_groups
+    global not_used_cols
 
-        main_results_path = os.path.join(main_results_path, 'results')
-        rg = copy.deepcopy(rows_groups)
-        nuc = copy.deepcopy(not_used_cols)
+    main_results_path = os.path.join(main_results_path, 'results')
+    rg = copy.deepcopy(rows_groups)
+    nuc = copy.deepcopy(not_used_cols)
 
-        # 1. Split all the dataframes to work individually
-        common_columns_df = all_info[metadata_columns]
+    # 1. Split all the dataframes to work individually
+    common_columns_df = all_info[metadata_columns]
 
-        common_columns_df['Total analysed'] = 1.0
+    common_columns_df['Total analysed'] = 1.0
 
-        textures_list = []
-        density_set = set([])
-        notes_set=set([])
+    textures_list = []
+    density_set = set([])
+    notes_set=set([])
+    instruments = set([])
+
+
+    if parts_list:
+        instruments = parts_list
+    else:
+        for aria in all_info['Scoring']:
+            for a in aria.split(','):
+                instruments.add(a)
+
+    instruments = [instrument[0].upper()+instrument[1:]
+                    for instrument in instruments]
+
+    # Getting general data that requires all info but is ran once
+
+    for instrument in instruments:
+        if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
+            catch = 'Part'
+            notes_set.add(catch + instrument + '_Notes')
+        elif instrument.lower() in all_info.Voices[0]:
+            catch='Family'
+            instrument=VOICE_FAMILY.capitalize()
+            notes_set.add(catch + instrument + '_NotesMean')
+        else:
+            catch = 'Sound'
+            if instrument.endswith('II'):
+                continue
+            instrument = instrument.replace('I', '')
+            notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
+
+        density_set.add(
+            catch + instrument + '_SoundingDensity')
+        density_set.add(
+            catch + instrument + '_SoundingMeasures')
+
+    # Inizalizing new dataframes and defining those that don't depends on each part
+    
+    clefs_info=copy.deepcopy(common_columns_df)
+    density_df=copy.deepcopy(common_columns_df)
+    textures_df=copy.deepcopy(common_columns_df)
+
+    common_columns_df.Clef2.replace('', np.nan, inplace=True)
+    common_columns_df.Clef3.replace('', np.nan, inplace=True)
+    # intervals_info = Melody_values = common_columns_df
+
+    textures = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
+
+    if not textures.empty: #We want textures to be processed in case there are any (not for cases where we request only 1 instrument type)
+        textures_df = pd.concat(
+            [textures_df, textures, all_info[list(notes_set)]], axis=1)
+    else:
+        textures_df=pd.DataFrame()
+
+    density_df = pd.concat(
+        [density_df, all_info[list(density_set)],  all_info[list(notes_set)]], axis=1)
+
+    clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
+    
+    for clef in clefs_set:
+        clefs_info[clef] = 0
+        for r, j in enumerate(clefs_info.iterrows()):
+            clefs_info[clef].iloc[r] = float(len([i for i in clefs_info[['Clef1','Clef2','Clef3']].iloc[r] if i == clef]))
+    clefs_info.replace('', np.nan, inplace=True)
+    clefs_info.dropna(how='all', axis=1, inplace=True)
+
+    flag=True #Flag to run common tasks only once
+    
+    print(str(factor) + " factor")
+
+    # Running some processes that differ in each part
+
+    for instrument in tqdm(list(instruments), desc='Progress'):
+        print('\nInstrument: ', instrument)
         intervals_list = []
         intervals_types_list = []
-        instruments = set([])
         emphasised_A_list = []
-
-        if parts_list:
-            instruments = parts_list
-        else:
-            for aria in all_info['Scoring']:
-                for a in aria.split(','):
-                    instruments.add(a)
-
-        instruments = [instrument[0].upper()+instrument[1:]
-                       for instrument in instruments]
-
-        # Getting general data that requires all info but is ran once
-
-        for instrument in instruments:
-            if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
-                catch = 'Part'
-                notes_set.add(catch + instrument + '_Notes')
-            elif instrument.lower() in all_info.Voices[0]:
-                catch='Family'
-                instrument=VOICE_FAMILY.capitalize()
-                notes_set.add(catch + instrument + '_NotesMean')
-            else:
-                catch = 'Sound'
-                if instrument.endswith('II'):
-                    continue
-                instrument = instrument.replace('I', '')
-                notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
-
-            density_set.add(
-                catch + instrument + '_SoundingDensity')
-            density_set.add(
-                catch + instrument + '_SoundingMeasures')
-
-        # Inizalizing new dataframes and defining those that don't depends on each part
-        clefs_info=copy.deepcopy(common_columns_df)
-        density_df=copy.deepcopy(common_columns_df)
-        textures_df=copy.deepcopy(common_columns_df)
-
-        common_columns_df.Clef2.replace('', np.nan, inplace=True)
-        common_columns_df.Clef3.replace('', np.nan, inplace=True)
-        intervals_info = Melody_values = common_columns_df
-
-        textures = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
-
-        if not textures.empty: #We want textures to be processed in case there are any (not for cases where we request only 1 instrument type)
-            textures_df = pd.concat(
-                [textures_df, textures, all_info[list(notes_set)]], axis=1)
-        else:
-            textures_df=pd.DataFrame()
-
-        density_df = pd.concat(
-            [density_df, all_info[list(density_set)],  all_info[list(notes_set)]], axis=1)
-
-        clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
         
-        for clef in clefs_set:
-            clefs_info[clef] = 0
-            for r, j in enumerate(clefs_info.iterrows()):
-                clefs_info[clef].iloc[r] = float(len([i for i in clefs_info[['Clef1','Clef2','Clef3']].iloc[r] if i == clef]))
-        clefs_info.replace('', np.nan, inplace=True)
-        clefs_info.dropna(how='all', axis=1, inplace=True)
+        results_folder = os.path.join(main_results_path, instrument)
+        if not os.path.exists(results_folder):
+            os.makedirs(results_folder)
+                
+        # CAPTURING FEATURES that depend total or partially on each part
+        # elif instrument.lower() in all_info.Voices[0]:
+        #     catch='Family'+ 'Voice' + '_'
+        # else:
 
-        flag=True #Flag to run common calculations only once
+        catch = 'Part' + instrument + '_'
+        # List of columns for melody parameters
+
+        melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
+                        catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+ interval.LARGEST_ASC_INTERVAL_SEMITONES, catch+ interval.LARGEST_ASC_INTERVAL,
+                        catch+interval.LARGEST_DESC_INTERVAL_SEMITONES, catch+ interval.LARGEST_DESC_INTERVAL, catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, 
+                        catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_INDEX, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES,
+                        catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
+
+        if catch +lyrics.SYLLABIC_RATIO in all_info.columns:
+            melody_values_list.append(catch + lyrics.SYLLABIC_RATIO)
+
+        #Getting list of columns for intervals and scale degrees
+        #Getting list of columns for intervals types
+        for col in all_info.columns:
+            if col.startswith(catch+'Interval_'):
+                intervals_list.append(col)
+            elif col.startswith(catch+'Degree') and col.endswith('_Count'):
+                emphasised_A_list.append(col)
+            elif (col.startswith(catch+'Intervals') or col.startswith(catch+'Leaps') or col.startswith(catch+'Stepwise')) and col.endswith('_Count'):
+                intervals_types_list.append(col)
+        intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
+        # if any(c in intervals_types_list for c in (catch+interval.INTERVALS_SKEWNESS, catch + interval.INTERVALS_KURTOSIS)):
+        #     i=0
+        #     pass
+        #AVERIGUAR SI REPEATED NOTES ES NECESARIO EN ALGUN LAO
         
-        print(str(factor) + " factor")
+        # intervals_types_list2 = [catch +interval.LEAPS_ASC_COUNT, catch+ interval.LEAPS_DESC_COUNT, catch + interval.STEPWISE_MOTION_ALL_COUNT, catch+ interval.STEPWISE_MOTION_ASC_COUNT, catch+ interval.STEPWISE_MOTION_DESC_COUNT]
+        # # catch+='Intervals'
+        # intervals_types_list2 = intervals_types_list2 + [catch + interval.INTERVALS_PERFECT_ASC_COUNT,  catch+interval.INTERVALS_PERFECT_DESC_COUNT,  catch+ interval.INTERVALS_PERFECT_ALL_COUNT, catch + interval.INTERVALS_MAJOR_ASC_COUNT , catch + interval.INTERVALS_MAJOR_DESC_COUNT, catch +interval.INTERVALS_MAJOR_ALL_COUNT, catch + interval.INTERVALS_MINOR_ASC_COUNT, 
+        # catch + interval.INTERVALS_MINOR_DESC_COUNT, catch + interval.INTERVALS_MINOR_ALL_COUNT, catch +interval.INTERVALS_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_AUGMENTED_DESC_COUNT, catch +interval.INTERVALS_AUGMENTED_ALL_COUNT, catch + interval.INTERVALS_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DIMINISHED_DESC_COUNT, catch + interval.INTERVALS_DIMINISHED_ALL_COUNT,
+        # catch + interval.INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT,
+        # catch + interval.INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT]
+        
+        # Joining common info and part info, renaming columns for excel writing
+        
+        melody_values = pd.concat(
+            [common_columns_df, all_info[melody_values_list]], axis=1)
+        melody_values.columns = [c.replace(catch, '').replace('_Count', '')
+                            for c in melody_values.columns]
+        intervals_info = pd.concat(
+            [common_columns_df, all_info[intervals_list]], axis=1)
+        intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
+                            for c in intervals_info.columns]
+        intervals_types = pd.concat([common_columns_df, all_info[intervals_types_list]], axis=1)
+        intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
+                            for c in intervals_types.columns]
+        Emphasised_scale_degrees_info_A = pd.concat(
+            [common_columns_df, all_info[emphasised_A_list]], axis=1)
+
+        Emphasised_scale_degrees_info_A.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '')
+            for c in Emphasised_scale_degrees_info_A.columns]
+
+        Emphasised_scale_degrees_info_B = common_columns_df
 
 
-        # Running some processes that differ in each part
-        for instrument in list(instruments):
-            results_folder = os.path.join(main_results_path, instrument)
-            if not os.path.exists(results_folder):
-                os.makedirs(results_folder)
-                 
-            # CAPTURING FEATURES that depend total or partially on each part
-            catch = 'Part' + instrument + '_'
-            # List of columns for melody parameters
+        # Dropping nans
+        melody_values = melody_values.dropna(how='all', axis=1)
+        intervals_info.dropna(how='all', axis=1,inplace=True)
+        intervals_types.dropna(
+            how='all', axis=1,inplace=True)
+        Emphasised_scale_degrees_info_A.dropna(
+            how='all', axis=1,inplace=True)
+        Emphasised_scale_degrees_info_B.dropna(
+            how='all', axis=1,inplace=True)
 
-            melody_values_list = [catch+interval.INTERVALLIC_MEAN, catch+interval.INTERVALLIC_STD, catch+interval.ABSOLUTE_INTERVALLIC_MEAN, catch+interval.ABSOLUTE_INTERVALLIC_STD, catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN,catch+interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_STD,catch+interval.TRIMMED_INTERVALLIC_MEAN,
-                             catch+interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch+interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch+ interval.LARGEST_ASC_INTERVAL_SEMITONES, catch+ interval.LARGEST_ASC_INTERVAL, catch+interval.LARGEST_DESC_INTERVAL_SEMITONES, catch+ interval.LARGEST_DESC_INTERVAL, 
-                             catch + ambitus.HIGHEST_INDEX, catch + ambitus.LOWEST_NOTE, catch + ambitus.LOWEST_MEAN_NOTE, 
-                             catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_INDEX, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES, catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
+        absolute_intervals = make_intervals_absolute(intervals_info)
 
-            if 'Part'+instrument+lyrics.SYLLABIC_RATIO in all_info.columns:
-                melody_values_list.append('Part'+instrument+lyrics.SYLLABIC_RATIO)
+        # Get the additional_info dictionary (special case if there're no factors)
+        additional_info = {ARIA_LABEL: [TITLE],
+                            TITLE: [ARIA_LABEL]}  # ONLY GROUP BY ARIA
 
-            #Getting list of columns for intervals and scale degrees
-            #Getting list of columns for intervals types
-            for col in all_info.columns:
-                if col.startswith(catch+'Interval_'):
-                    intervals_list.append(col)
-                elif col.startswith(catch+'Degree') and col.endswith('_Count'):
-                    emphasised_A_list.append(col)
-                elif (col.startswith(catch+'Intervals') or col.startswith(catch+'Leaps') or col.startswith(catch+'Stepwise')) and col.endswith('_Count'):
-                    intervals_types_list.append(col)
-            intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
-            # if any(c in intervals_types_list for c in (catch+interval.INTERVALS_SKEWNESS, catch + interval.INTERVALS_KURTOSIS)):
-            #     i=0
-            #     pass
-            #AVERIGUAR SI REPEATED NOTES ES NECESARIO EN ALGUN LAO
-            
-            # intervals_types_list2 = [catch +interval.LEAPS_ASC_COUNT, catch+ interval.LEAPS_DESC_COUNT, catch + interval.STEPWISE_MOTION_ALL_COUNT, catch+ interval.STEPWISE_MOTION_ASC_COUNT, catch+ interval.STEPWISE_MOTION_DESC_COUNT]
-            # # catch+='Intervals'
-            # intervals_types_list2 = intervals_types_list2 + [catch + interval.INTERVALS_PERFECT_ASC_COUNT,  catch+interval.INTERVALS_PERFECT_DESC_COUNT,  catch+ interval.INTERVALS_PERFECT_ALL_COUNT, catch + interval.INTERVALS_MAJOR_ASC_COUNT , catch + interval.INTERVALS_MAJOR_DESC_COUNT, catch +interval.INTERVALS_MAJOR_ALL_COUNT, catch + interval.INTERVALS_MINOR_ASC_COUNT, 
-            # catch + interval.INTERVALS_MINOR_DESC_COUNT, catch + interval.INTERVALS_MINOR_ALL_COUNT, catch +interval.INTERVALS_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_AUGMENTED_DESC_COUNT, catch +interval.INTERVALS_AUGMENTED_ALL_COUNT, catch + interval.INTERVALS_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DIMINISHED_DESC_COUNT, catch + interval.INTERVALS_DIMINISHED_ALL_COUNT,
-            # catch + interval.INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT,
-            # catch + interval.INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT]
-            
-            # Joining common info and part info, renaming columns for excel writing
-            
-            melody_values = pd.concat(
-                [common_columns_df, all_info[melody_values_list]], axis=1)
-            melody_values.columns = [c.replace('Part'+instrument+'_', '').replace('_Count', '')
-                                for c in melody_values.columns]
-            intervals_info = pd.concat(
-                [common_columns_df, all_info[intervals_list]], axis=1)
-            intervals_info.columns = [c.replace('Part'+instrument+'_'+'Interval_', '').replace('_Count', '')
-                                for c in intervals_info.columns]
-            intervals_types = pd.concat([common_columns_df, all_info[intervals_types_list]], axis=1)
-            intervals_types.columns = [c.replace('Part'+instrument+'_', '').replace('Intervals', '').replace('_Count', '')
-                                for c in intervals_types.columns]
-            Emphasised_scale_degrees_info_A = pd.concat(
-                [common_columns_df, all_info[emphasised_A_list]], axis=1)
-            Emphasised_scale_degrees_info_A.columns = [c.replace('Part'+instrument+'_', '').replace('Degree', '').replace('Frequency', '')
-                for c in Emphasised_scale_degrees_info_A.columns]
+        if factor == 0:
+            rows_groups = {ARIA_ID: ([], "Alphabetic")}
+            rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
+            for r in rg_keys:
+                if type(r) == list:
+                    not_used_cols += r
+                else:
+                    not_used_cols.append(r)
+            # It a list, so it is applicable to all grouppings
+            additional_info = [ARIA_LABEL, TITLE, COMPOSER, YEAR]
 
-            Emphasised_scale_degrees_info_B = common_columns_df
+        rg_groups = [[]]
+        if factor >= 2:  # 2 factors or more
+            rg_groups = list(permutations(
+                list(forbiden_groups.keys()), factor - 1))[4:]
 
+            if factor > 2:
+                prohibidas = [COMPOSER, OPERA]
+                for g in rg_groups:
+                    if ARIA_ID in g:
+                        g_rest = g[g.index(ARIA_ID):]
+                        if any(p in g_rest for p in prohibidas):
+                            rg_groups.remove(g)
+                    elif ARIA_LABEL in g:
+                        g_rest = g[g.index(ARIA_LABEL):]
+                        if any(p in g_rest for p in prohibidas):
+                            rg_groups.remove(g)
+            rg_groups = [r for r in rg_groups if r[0]
+                            in list(metadata_columns)]  # ???
 
-            # Dropping nans
-            melody_values = melody_values.dropna(how='all', axis=1)
-            intervals_info.dropna(how='all', axis=1,inplace=True)
-            intervals_types.dropna(
-                how='all', axis=1,inplace=True)
-            Emphasised_scale_degrees_info_A.dropna(
-                how='all', axis=1,inplace=True)
-            Emphasised_scale_degrees_info_B.dropna(
-                how='all', axis=1,inplace=True)
+        results_path_factorx = path.join(main_results_path, instrument, str(
+            factor) + " factor") if factor > 0 else path.join(main_results_path, instrument, "Data")
+        if not os.path.exists(results_path_factorx):
+            os.makedirs(results_path_factorx)
 
-            absolute_intervals = make_intervals_absolute(intervals_info)
+        common_data_path = path.join(main_results_path, 'Common', str(
+            factor) + " factor") if factor > 0 else path.join(main_results_path, 'Common', "Data")
 
-            # Get the additional_info dictionary (special case if there're no factors)
-            additional_info = {ARIA_LABEL: [TITLE],
-                                TITLE: [ARIA_LABEL]}  # ONLY GROUP BY ARIA
-
-            if factor == 0:
-                rows_groups = {"AriaId": ([], "Alphabetic")}
-                rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
-                for r in rg_keys:
-                    if type(r) == list:
-                        not_used_cols += r
-                    else:
-                        not_used_cols.append(r)
-                # It a list, so it is applicable to all grouppings
-                additional_info = [ARIA_LABEL, ARIA_ID, COMPOSER, YEAR]
-
-            rg_groups = [[]]
-            if factor >= 2:  # 2 factors or more
-                rg_groups = list(permutations(
-                    list(forbiden_groups.keys()), factor - 1))[4:]
-
-                if factor > 2:
-                    prohibidas = [COMPOSER, OPERA]
-                    for g in rg_groups:
-                        if ARIA_ID in g:
-                            g_rest = g[g.index(ARIA_ID):]
-                            if any(p in g_rest for p in prohibidas):
-                                rg_groups.remove(g)
-                        elif ARIA_LABEL in g:
-                            g_rest = g[g.index(ARIA_LABEL):]
-                            if any(p in g_rest for p in prohibidas):
-                                rg_groups.remove(g)
-                rg_groups = [r for r in rg_groups if r[0]
-                             in list(metadata_columns)]  # ???
-
-            results_path_factorx = path.join(main_results_path, instrument, str(
-                factor) + " factor") if factor > 0 else path.join(main_results_path, instrument, "Data")
-            if not os.path.exists(results_path_factorx):
-                os.makedirs(results_path_factorx)
-
-            common_data_path = path.join(main_results_path, 'Common', str(
-                factor) + " factor") if factor > 0 else path.join(main_results_path, 'Common', "Data")
-
-            if not os.path.exists(common_data_path):
-                os.makedirs(common_data_path)
-            if flag:
-                for groups in rg_groups:
-                    group_execution(
-                        groups, common_data_path, additional_info, factor, sorting_lists, density_df=density_df, textures_df=textures_df, clefs_info=clefs_info)
-                flag=False #FLAG guarantees this is processed only once (all common files)
-
-            # # MULTIPROCESSING (one process per group (year, decade, city, country...))
-            # if sequential: # 0 and 1 factors
+        if not os.path.exists(common_data_path):
+            os.makedirs(common_data_path)
+        if flag:
             for groups in rg_groups:
-                # group_execution(groups, results_path_factorx, additional_info, i, sorting_lists, melody_values, intervals_info, absolute_intervals,
-                #                       Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info)
                 group_execution(
-                    groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, Emphasised_scale_degrees_info_A = Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B = Emphasised_scale_degrees_info_B, absolute_intervals=absolute_intervals)
-                rows_groups = rg
-                not_used_cols = nuc
-            # else: # from 2 factors
-            #     # process_executor = concurrent.futures.ProcessPoolExecutor()
-            #     futures = [process_executor.submit(group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals, Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
-            #     kwargs = {'total': len(futures),'unit': 'it','unit_scale': True,'leave': True}
-            #     for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
-            #         rows_groups = rg
-            #         not_used_cols = nuc
+                    groups, common_data_path, additional_info, factor, sorting_lists, density_df=density_df, textures_df=textures_df, clefs_info=clefs_info)
+            flag=False #FLAG guarantees this is processed only once (all common files)
+
+        # # MULTIPROCESSING (one process per group (year, decade, city, country...))
+        # if sequential: # 0 and 1 factors
+        for groups in rg_groups:
+            group_execution(
+                groups, results_path_factorx, additional_info, factor, sorting_lists, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, Emphasised_scale_degrees_info_A = Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B = Emphasised_scale_degrees_info_B, absolute_intervals=absolute_intervals)
+            rows_groups = rg
+            not_used_cols = nuc
+        # else: # from 2 factors
+        #     # process_executor = concurrent.futures.ProcessPoolExecutor()
+        #     futures = [process_executor.submit(group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals, Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
+        #     kwargs = {'total': len(futures),'unit': 'it','unit_scale': True,'leave': True}
+        #     for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
+        #         rows_groups = rg
+        #         not_used_cols = nuc
 
 #####################################################################
 # Function that generates the needed information for each grouping  #
@@ -284,7 +291,7 @@ def group_execution(groups: list, results_path_factorx: str, additional_info, fa
     else:
         results_path = results_path_factorx
     if os.path.exists(path.join(results_path, 'visualisations')):
-        _remove_folder_contents(
+        remove_folder_contents(
             path.join(results_path, 'visualisations'))
     else:
         os.makedirs(path.join(results_path, 'visualisations'))
@@ -331,8 +338,6 @@ def group_execution(groups: list, results_path_factorx: str, additional_info, fa
             #         pass
     except KeyboardInterrupt:
         sys.exit(2)
-    # except Exception as e:
-    #     pass
 
 ###########################################################################################################################################################
 # Function is in charge of printing each group: 'Per Opera', 'Per City'...
@@ -380,7 +385,7 @@ def print_groups(sheet: ExcelWriter, grouped:list, row_number: int, column_numbe
     cnumber = column_number
     # PRINT EACH ROW
     # store each result in case of need of calculating the percentage (per = True)
-    valores_columnas = {c: [] for c in columns}
+    columns_values = {c: [] for c in columns}
 
     # Subgroup: ex: Berlin when groupping by Territory
     for s, subgroup in enumerate(grouped):
@@ -390,9 +395,12 @@ def print_groups(sheet: ExcelWriter, grouped:list, row_number: int, column_numbe
         if type(subgroup[0]) != tuple:  # It has no additional information
             # could be a tuple if we have grouped by more than one element
             sheet.cell(row_number, column_number).value = subgroup[0]
+            sheet.cell(row_number, column_number).font =  FONT
+
         else:
             for g in subgroup[0]:
                 sheet.cell(row_number, cnumber).value = g
+                sheet.cell(row_number, cnumber).font =  FONT
                 cnumber += 1
 
         subgroup_data = subgroup[1]
@@ -429,101 +437,108 @@ def print_groups(sheet: ExcelWriter, grouped:list, row_number: int, column_numbe
                 value = compute_value(notes, column_computation, total_analysed_row,
                                       not_grouped_information, ponderate, extra_info=notes_next) 
             else:
-
                 value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":
                 total_analysed_row = subgroup_data[c].tolist()
                 sheet.cell(row_number, cnumber).value = value
+                sheet.cell(row_number, cnumber).font =  FONT
 
             if c == interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO:  # EXCEPTION
-                #TODO: wht is this ?????
                 sheet.cell(row_number, cnumber).value = str(
                     round(value * 100, 1)) + '%'
+                sheet.cell(row_number, cnumber).font =  FONT
                 cnumber += 1
                 exception = i - 1
             elif not per:
                 sheet.cell(row_number, cnumber).value = str(
                     value) + '%' if ponderate and column_computation == "sum" and c != "Total analysed" else str(value).replace(',', '.')
+                sheet.cell(row_number, cnumber).font =  FONT
                 cnumber += 1
-
             # store each value in case of needing to print the percentage
-            valores_columnas[c].append(value)
+            columns_values[c].append(value)
         row_number += 1
 
     if total_analysed_column:  # We don't need Total analysed from this point
-        del valores_columnas['Total analysed']
+        del columns_values['Total analysed']
         computations_columns = computations_columns[1:]
 
     last_used_row = row_number
-    if per or last_column:  # This are the two conditions in which we need to transpose valores_columnas
+    if per or last_column:  # These are the two conditions in which we need to transpose valores_columnas
         # Transpose valores_columnas to valores_filas (change perspective from column to rows)
-        listas_columnas = list(valores_columnas.values())
-        keys_columnas = list(valores_columnas.keys())
-        valores_filas = []
-        len_lists = len(listas_columnas[0])
+        columns_list = list(columns_values.values())
+        keys_columnas = list(columns_values.keys())
+        rows_values = []
+        len_lists = len(columns_list[0])
         for i in range(len_lists):
-            valores_filas.append(round(sum([lc[i] for x, lc in enumerate(
-                listas_columnas) if "All" not in keys_columnas[x]]), 3))
+            rows_values.append(round(sum([lc[i] for x, lc in enumerate(
+                columns_list) if "All" not in keys_columnas[x]]), 3))
 
     # PRINT EACH CELL IF PER IS TRUE, now that we have all the information
     if per:
         cn = column_number + len_add_info + \
             2 if total_analysed_column else column_number + len_add_info + 1
-        for i in range(len(listas_columnas)):  # Traverse each column's information
+        for i in range(len(columns_list)):  # Traverse each column's information
             row_number = starting_row
-            sum_column = sum(listas_columnas[i]) if sum(
-                listas_columnas[i]) != 0 else 1
-            for j in range(len(listas_columnas[i])):
+            sum_column = sum(columns_list[i]) if sum(
+                columns_list[i]) != 0 else 1
+            for j in range(len(columns_list[i])):
                 row_number += 1
                 # COMPUTE THE HORIZONTAL OR VERTICAL AVERAGE (average within the present column or row)
                 if average:
                     value = round(
-                        (listas_columnas[i][j]/valores_filas[j])*100, 3)
+                        (columns_list[i][j]/rows_values[j])*100, 3)
                 else:
-                    value = round((listas_columnas[i][j]/sum_column)*100, 3)
-                valores_columnas[keys_columnas[i]][j] = value if str(
+                    value = round((columns_list[i][j]/sum_column)*100, 3)
+                columns_values[keys_columnas[i]][j] = value if str(
                     value) != "nan" else 0  # update the value
                 sheet.cell(row_number, cn).value = str(
                     value) + "%"  # print the value
+                sheet.cell(row_number, cn).font =  FONT
             cn += 1
 
         cnumber = cn
 
     # RECALCULATE VALORES_FILAS AGAIN TO GET THE MOST UPDATED DATA
-    listas_columnas = list(valores_columnas.values()
+    columns_list = list(columns_values.values()
                            )  # Get the updated version
     if per:  # Compute valores_filas again
-        valores_filas = []
+        rows_values = []
         for i in range(len_lists):
-            valores_filas.append(round(sum([lc[i] for x, lc in enumerate(
-                listas_columnas) if "All" not in keys_columnas[x]]), 3))
+            rows_values.append(round(sum([lc[i] for x, lc in enumerate(
+                columns_list) if "All" not in keys_columnas[x]]), 3))
 
     # PRINT THE LAST COLUMN (AVERAGE OR TOTAL)
     if last_column:
         if last_column_average:  # TODO: para qué?
-            valores_filas = [round(vf / (len(listas_columnas) - len(
-                [c for c in keys_columnas if "All" in c])), 3) for vf in valores_filas]
+            rows_values = [round(vf / (len(columns_list) - len(
+                [c for c in keys_columnas if "All" in c])), 3) for vf in rows_values]
         # PRINT THE LAST COLUMN, CONTAINING THE TOTAL OR THE AVERAGE OF THE DATA
-        print_averages_total_column(sheet, starting_row, cnumber, valores_filas, average=last_column_average,
+        print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
                                     per=per or ponderate and all(c == "sum" for c in computations_columns))
 
     # PRINT LAST ROW (TOTAL OR AVERAGE)
-    for i, c in enumerate(valores_columnas):
-        if average:
-            valores_columnas[c] = compute_average(
-                valores_columnas[c], computations_columns[i])
-        else:  # total
-            valores_columnas[c] = round(sum(valores_columnas[c]), 3)
+    values=np.asarray(list(columns_values.values()))
+    for i, c in enumerate(columns_values):
+        #In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calcuulations
+        for row in range(0,values.shape[1]):
+            if all([str(e)=='0.0' for e in values[:,row]]):
+                del columns_values[c][row] 
 
-    final_values = list(valores_columnas.values())
+        if average:  
+            columns_values[c] = compute_average(
+                columns_values[c], computations_columns[i])
+        else:  # total
+            columns_values[c] = round(sum(columns_values[c]), 3)
+
+    final_values = list(columns_values.values())
     # Take the last value computed for the last column (average or total)
     if last_column:
         if average:
             final_values.append(
-                round(sum(valores_filas) / len(valores_filas), 3))
+                round(sum(rows_values) / len(rows_values), 3))
         else:
-            final_values.append(round(sum(valores_filas), 3))
+            final_values.append(round(sum(rows_values), 3))
     data_column = column_number + len_add_info + \
         2 if total_analysed_column else column_number + len_add_info + 1
     print_averages_total(sheet, last_used_row, final_values, column_number, data_column, average=average,
@@ -549,9 +564,11 @@ def row_iteration(sheet: ExcelWriter, columns: list, row_number: int, column_num
                             for i in range(len(group))]
                 forbiden = [item for sublist in forbiden for item in sublist]
             if group == None or row not in forbiden:
+
                 # 1. Write the Title in Yellow
-                sheet.cell(row_number, column_number).value = "Per " + row
-                sheet.cell(row_number, column_number).fill = yellowFill
+                sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
+                sheet.cell(row_number, column_number).font =  FONT
+                sheet.cell(row_number, column_number).fill = YELLOWFILL
                 row_number += 1
                 sorting = rows_groups[row][1]
                 # 2. Write the information depending on the subgroups (ex: Geography -> City, Country)
@@ -572,6 +589,8 @@ def row_iteration(sheet: ExcelWriter, columns: list, row_number: int, column_num
                         _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
                 else:  # has subgroups, ex: row = Date, subgroups: Year
+                    
+
                     if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
                         data_joint = data.copy()
                         data = split_voices(data)
@@ -585,6 +604,7 @@ def row_iteration(sheet: ExcelWriter, columns: list, row_number: int, column_num
                                 row_number, column_number).value = subrows
                             sheet.cell(
                                 row_number, column_number).fill = greenFill
+                            sheet.cell(row_number, column_number).font =  FONT
                             data = sort_dataframe(
                                 data, subrows, sorting_lists, sort_method)
 
@@ -630,7 +650,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
                 if last_printed[i][0] != g:
                     sheet.cell(row_number, cnumber).value = g
                     sheet.cell(row_number, cnumber).fill = factors_Fill[i]
-                    sheet.cell(row_number, cnumber).font = bold
+                    sheet.cell(row, column_number).font =  BOLD
                     counter_g = data[groups[i]].tolist().count(g)
                     sheet.cell(row_number, cnumber + 1).value = counter_g
                     if last_printed[i][0] != '':
@@ -671,7 +691,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
 ########################################################################
 
 def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: list, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
-    # try:
+    try:
         workbook = openpyxl.Workbook()
         data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
                              interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
@@ -683,7 +703,7 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
                         "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std"]
 
         if lyrics.SYLLABIC_RATIO in data.columns:
-            data.rename(columns={lyrics.SYLLABIC_RATIO: 'Syllabic ratio'})
+            data.rename(columns={lyrics.SYLLABIC_RATIO: 'Syllabic ratio'}, inplace=True)
             column_names.append('Syllabic ratio')
 
         # HAREMOS LA MEDIA DE TODAS LAS COLUMNAS
@@ -715,10 +735,10 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
                                "Semitones", "Interval", "Semitones", "Interval"]
         columns = columns_alike_our_data(
             third_columns_names, second_column_names)
+
         computations = ["sum", "max", "maxInterval", "min", "minInterval"]
 
         data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
-        # data.columns = [c.replace('Asc', 'Ascending').replace('Desc','Descending').replace('Largest', '') for c in data.columns]
 
         excel_sheet(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
                      sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
@@ -726,6 +746,9 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
         if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
+
+        adjust_width_height(workbook)
+
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
@@ -747,6 +770,7 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
                 name_box = path.join(
                     result_visualisations, 'Ambitus' + name.replace('.xlsx', '.png'))
                 box_plot(name_box, datag, second_title=str(g))
+
         elif len(not_used_cols) == 5:  # 1 Factor. TODO: Try a different criteria
             groups = [i for i in rows_groups]
             exceptions_list = [ROLE, KEYSIGNATURE, TEMPO, YEAR, CITY, SCENE]
@@ -762,7 +786,6 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
                             name_box = path.join(results_path,'visualisations', 'Ambitus'+'Per ' + str(row.upper())+name.replace('.xlsx', '.png'))
                             box_plot(name_box, data, second_title='Per '+ str(row.replace('Aria','').upper()))
                     else: #subgroups
-                            i=0
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in exceptions_list:
                                     plot_name = name.replace(
@@ -779,12 +802,13 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
             name_box = path.join(
                 results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
             box_plot(name_box, data)
-    # except Exception as e:
-    #     logger.error('{}   Problem found:'.format(name), exc_info=True)
+    except Exception as e:
+        warnings.warn('{}   Problem found:'.format(e))
+        logger.error('{}   Problem found:'.format(e), exc_info=True)
 
 
 def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str, sorting_lists: list, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
-    # try:
+    try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
@@ -813,6 +837,8 @@ def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str,
         if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
+        adjust_width_height(workbook)
+            
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
@@ -841,8 +867,8 @@ def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str,
                 results_path, 'visualisations', name.replace('.xlsx', '.png'))
             bar_plot(name_bar, data, third_columns_names_origin,
                         'Intervals' if 'Clef' not in name else 'Clefs', title)
-    # except Exception as e:
-    #     logger.error('{}  Problem found:'.format(name), exc_info=True)
+    except Exception as e:
+        logger.error('{}  Problem found:'.format(name), exc_info=True)
 
 #########################################################
 # Function to generate the file Intervals_types.xlsx  #
@@ -877,6 +903,7 @@ def Intervals_types(data: DataFrame, results_path: str, name: str, sorting_lists
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
+        adjust_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
@@ -904,32 +931,6 @@ def Intervals_types(data: DataFrame, results_path: str, name: str, sorting_lists
             double_bar_plot(name2, data)
     # except Exception as e:
     #     logger.error('3Interval_types  Problem found:', exc_info=True)
-########################################################################################################
-# This function returns the second group of data that we need to show, regarding third_columns_names2  #
-########################################################################################################
-
-def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_names: List[str], third_columns_names2: List[str]):
-    data2 = {}
-    rest_data = set(third_columns_names) - set(third_columns_names2 + ['#7'])
-
-    for name in third_columns_names2:
-        column_data = []
-        if name == '7':  # sumamos las columnas 7 y #7
-            seven=[]
-            if '7' in data.columns:
-                seven = data[name]
-            if '#7' in data.columns:
-                hastagseven = data["#7"]
-                column_data = [np.nansum([seven.tolist()[i], hastagseven.tolist()[
-                                         i]]) for i in range(len(seven))]
-            else:
-                column_data = seven.tolist()
-        elif name == "Others":  # sumamos todas las columnas de data menos 1, 4, 5, 7, #7
-            column_data = data[rest_data].sum(axis=1).tolist()
-        else:
-            column_data = data[name].tolist()
-        data2[name] = pd.Series(column_data)
-    return data2
 
 ########################################################################
 # Function to generate the files 4xEmphasised_scale_degrees.xlsx
@@ -976,6 +977,7 @@ def Emphasised_scale_degrees(data: DataFrame, sorting_list: list, name: str, res
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
+        adjust_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
@@ -1051,6 +1053,7 @@ def Densities(data: DataFrame, results_path: str, name: str, sorting_lists: list
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
+        adjust_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
@@ -1149,6 +1152,8 @@ def Textures(data: DataFrame, results_path: str, name: str, sorting_lists: list,
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
+            
+        adjust_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
