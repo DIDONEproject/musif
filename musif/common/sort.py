@@ -44,7 +44,7 @@ def sort_dataframe(data, column, sorting_lists, key_to_sort):
                     'FormSorting', 'CharacterSorting'] else i.strip().lower()
                 try:
                     index = form_list.index(value)
-                except:
+                except ValueError:
                     index = 999
                     warnings.warn('We do not have the value {} in the sorting list {}'.format(
                         value, key_to_sort))
