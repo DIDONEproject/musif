@@ -2,14 +2,12 @@ import copy
 import logging
 import os
 import sys
+import warnings
 from itertools import combinations, permutations
 from multiprocessing import Lock
 from os import path
 from typing import Dict, List
-import warnings
 
-from openpyxl.styles.fonts import Font
-from tqdm import tqdm
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
@@ -19,16 +17,23 @@ import pandas as pd
 from matplotlib.pyplot import axis
 from musif.common.constants import VOICE_FAMILY
 from musif.common.sort import sort, sort_dataframe
+from openpyxl.styles.fonts import Font
 from openpyxl.writer.excel import ExcelWriter
 from pandas.core.frame import DataFrame
+from tqdm import tqdm
 
 from .calculations import (compute_average, compute_value,
                            make_intervals_absolute)
 from .constants import *
-from .utils import (get_groups_add_info, columns_alike_our_data, 
-write_columns_titles, print_averages_total, print_averages_total_column, 
-write_columns_titles_variable_length, split_voices, adjust_width_height, remove_folder_contents, prepare_data_emphasised_scale_degrees_second)
-from .visualisations import box_plot, ivalues_bar_plot, bar_plot, double_bar_plot, pie_plot, customized_plot, bar_plot_extended, line_plot_extended
+from .utils import (adjust_excl_width_height, columns_alike_our_data,
+                    get_groups_add_info,
+                    prepare_data_emphasised_scale_degrees_second,
+                    print_averages_total, print_averages_total_column,
+                    remove_folder_contents, split_voices, write_columns_titles,
+                    write_columns_titles_variable_length)
+from .visualisations import (bar_plot, bar_plot_extended, box_plot,
+                             customized_plot, double_bar_plot,
+                             line_plot_extended, melody_bar_plot, pie_plot)
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
@@ -558,12 +563,12 @@ def row_iteration(sheet: ExcelWriter, columns: list, row_number: int, column_num
     all_columns = list(data.columns)
     for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
         if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):
-            forbiden = []
+            forbiden = [NAME]
             if group != None:
                 forbiden = [forbiden_groups[group[i]]
                             for i in range(len(group))]
                 forbiden = [item for sublist in forbiden for item in sublist]
-            if group == None or row not in forbiden:
+            if group == None and row not in forbiden: #it was 'or' and not 'and' before, but change considered neccessary  
 
                 # 1. Write the Title in Yellow
                 sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
@@ -691,7 +696,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
 ########################################################################
 
 def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: list, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
-    try:
+    # try:
         workbook = openpyxl.Workbook()
         data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
                              interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
@@ -747,14 +752,14 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
 
-        adjust_width_height(workbook)
+        adjust_excel_width_height(workbook)
 
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
         # VISUALISATIONS
         columns_visualisation = [
-            'Intervallic ratio', 'Trimmed intervallic ratio', 'Std']
+            'Intervallic ratio', 'Trimmed intervallic ratio',  'Std', "Absolute intervallic ratio","Absolute Std"]
         if groups:
             data_grouped = data.groupby(list(groups))
             for g, datag in data_grouped:
@@ -765,7 +770,7 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
 
                 name_bar = path.join(
                     result_visualisations, name.replace('.xlsx', '.png'))
-                ivalues_bar_plot(
+                melody_bar_plot(
                     name_bar, datag, columns_visualisation, second_title=str(g))
                 name_box = path.join(
                     result_visualisations, 'Ambitus' + name.replace('.xlsx', '.png'))
@@ -782,9 +787,10 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
                         if data_grouped:
-                            ivalues_bar_plot(name_bar, data, columns_visualisation, second_title='_Per_' + str(row.replace('Aria','').upper()))
-                            name_box = path.join(results_path,'visualisations', 'Ambitus'+'Per ' + str(row.upper())+name.replace('.xlsx', '.png'))
-                            box_plot(name_box, data, second_title='Per '+ str(row.replace('Aria','').upper()))
+                            melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(row.replace('Aria','').upper()))
+                            name_box = path.join(results_path,'visualisations', 'Ambitus'+'Per_' + str(row.upper())+name.replace('.xlsx', '.png'))
+                            if row == CLEF1: #Exception for boxplots
+                                box_plot(name_box, data_grouped, second_title='Per '+ str(row.replace('Aria','').upper()))
                     else: #subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in exceptions_list:
@@ -792,23 +798,25 @@ def Melody_values(data: DataFrame, results_path: str, name: str, sorting_lists: 
                                         '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
                                     name_bar = results_path + '\\visualisations\\' + plot_name
                                     data_grouped = data.groupby(subrow)
-                                    ivalues_bar_plot(name_bar, data, columns_visualisation)
+                                    melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(subrow.replace('Aria','').upper()))
                                     name_box = path.join(
                                     results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
-                                    box_plot(name_box, data)
+                                    
+                                    if subrow == ROLE:
+                                        box_plot(name_box, data_grouped, second_title='Per '+ str(subrow.replace('Aria','').upper()))
         else:                   
             name_bar = path.join(results_path,path.join('visualisations', name.replace('.xlsx', '.png')))
-            ivalues_bar_plot(name_bar, data, columns_visualisation)
+            melody_bar_plot(name_bar, data, columns_visualisation)
             name_box = path.join(
                 results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
             box_plot(name_box, data)
-    except Exception as e:
-        warnings.warn('{}   Problem found:'.format(e))
-        logger.error('{}   Problem found:'.format(e), exc_info=True)
+    # except Exception as e:
+    #     warnings.warn('{}   Problem found:'.format(e))
+    #     logger.error('{}   Problem found:'.format(e), exc_info=True)
 
 
 def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str, sorting_lists: list, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
-    try:
+    # try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
@@ -837,7 +845,7 @@ def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str,
         if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
-        adjust_width_height(workbook)
+        adjust_excel_width_height(workbook)
             
         workbook.save(os.path.join(results_path, name))
 
@@ -867,8 +875,8 @@ def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str,
                 results_path, 'visualisations', name.replace('.xlsx', '.png'))
             bar_plot(name_bar, data, third_columns_names_origin,
                         'Intervals' if 'Clef' not in name else 'Clefs', title)
-    except Exception as e:
-        logger.error('{}  Problem found:'.format(name), exc_info=True)
+    # except Exception as e:
+    #     logger.error('{}  Problem found:'.format(name), exc_info=True)
 
 #########################################################
 # Function to generate the file Intervals_types.xlsx  #
@@ -903,7 +911,7 @@ def Intervals_types(data: DataFrame, results_path: str, name: str, sorting_lists
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
-        adjust_width_height(workbook)
+        adjust_excel_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
@@ -977,7 +985,7 @@ def Emphasised_scale_degrees(data: DataFrame, sorting_list: list, name: str, res
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
-        adjust_width_height(workbook)
+        adjust_excel_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:
@@ -1053,7 +1061,7 @@ def Densities(data: DataFrame, results_path: str, name: str, sorting_lists: list
         if "Sheet" in workbook.get_sheet_names():
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
-        adjust_width_height(workbook)
+        adjust_excel_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
@@ -1153,7 +1161,7 @@ def Textures(data: DataFrame, results_path: str, name: str, sorting_lists: list,
             std = workbook.get_sheet_by_name('Sheet')
             workbook.remove_sheet(std)
             
-        adjust_width_height(workbook)
+        adjust_excel_width_height(workbook)
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock:

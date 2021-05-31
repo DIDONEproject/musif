@@ -3,12 +3,13 @@ import os
 from openpyxl.writer.excel import ExcelWriter
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
-
+import numpy as np
+import pandas as pd
 from pandas.core.frame import DataFrame
 
 from .constants import *
 
-def adjust_width_height(workbook: ExcelWriter):
+def adjust_excel_width_height(workbook: ExcelWriter):
             #Adjust columns width
         for sheet in workbook.worksheets:
             col_range = sheet[sheet.min_column : sheet.max_column]
@@ -79,9 +80,9 @@ def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column
 
     for i, v in enumerate(values):
         if exception and i == exception:  # unicamente ocurre en % Trimmed en Melody_values
-            sheet.cell(row, values_column).value = str(round(v * 100, 3)) + '%'
+            sheet.cell(row, values_column).value = str(round(v * 100, 3)).replace(',','.') + '%'
         else:
-            sheet.cell(row, values_column).value = v if not per else str(v) + "%"
+            sheet.cell(row, values_column).value = str(v).replace(',','.') if not per else str(v).replace(',','.') + "%"
         values_column += 1
 
 
@@ -91,7 +92,7 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
     sheet.cell(row, column).fill = orangeFill
     row += 1
     for v in values:
-        sheet.cell(row, column).value = v if not per else str(v) + "%"
+        sheet.cell(row, column).value = str(v).replace(',','.') if not per else str(v).replace(',','.') + "%"
         row += 1
 
 ################################################################################################################

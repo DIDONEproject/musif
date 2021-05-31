@@ -43,7 +43,8 @@ def sort_dataframe(data, column, sorting_lists, key_to_sort):
                 value = i.strip() if key_to_sort not in [
                     'FormSorting', 'CharacterSorting'] else i.strip().lower()
                 try:
-                    index = form_list.index(value)
+                    # index = form_list.index(value)
+                    index = form_list.index(value) if value in form_list else 999
                 except ValueError:
                     index = 999
                     warnings.warn('We do not have the value {} in the sorting list {}'.format(
