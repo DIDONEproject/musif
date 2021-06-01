@@ -14,3 +14,4 @@ split_keywords:
   - woodwind
   - brass
   - wind
+require_harmonic_analysis: true

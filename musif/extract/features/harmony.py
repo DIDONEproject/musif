@@ -1,4 +1,3 @@
-#%%
 import glob
 
 from ms3.score import MSCX
@@ -10,13 +9,14 @@ from typing import List, Tuple
 import ms3
 import pandas as pd
 from music21 import *
+import itertools
+
 from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
-#%%
 ###############################################################################
 # This function generates a dataframe with the measures and the local key     #
 # present in each one of them based on the 'modulations' atribute in the json #
@@ -43,6 +43,18 @@ def compute_modulations(partVoice, partVoice_expanded, modulations):
     except:
         print('Please, review the format of the modulation\'s indications in the JSON file. It needs to have the following format: [(<local key>, <starting measure>), ... ]')
         return None
+#########################################################################
+# Como sections tiene una indicación por compás, pero a lo largo del script
+# trabajamos con la tabla harmonic_analysis, que tiene tantas entradas por 
+# compás como anotaciones harmónicas, repetimos las secciones según el número
+#########################################################################
+def continued_sections(sections, mc):
+    extended_sections = []
+    repeated_measures = Counter(mc)
+    for i, c in enumerate(repeated_measures):
+        extended_sections.append([sections[i]] * repeated_measures[c])
+    # Flat list
+    return list(itertools.chain(*extended_sections))
 
 def get_harmonic_rhythm(tabla_lausanne, sections):
     compases = tabla_lausanne.mc.dropna().tolist()
@@ -218,6 +230,7 @@ def get_harmony_data(general_variables, harmonic_analysis, sections):
 
 
 def parse_score(mscx_file: str):
+    harmonic_analysis = None
     msc3_score = ms3.score.MSCX(mscx_file, level = 'c')
     has_table = True
     try:
@@ -225,26 +238,76 @@ def parse_score(mscx_file: str):
     except Exception as e:
         has_table = False
 
-    # score = converter.parse(xml_file)
-
-    return msc3_score
+    return harmonic_analysis, has_table
 
 def get_score_features(score_data, parts_data, _cfg, parts_features, score_features) -> dict:
+    path=score_data['mscx_path']
+    _cfg.read_logger.info('')
+    
+    #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
+    # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
+    
+    
+    #
+    # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
+    
+
     if 'mscx_path' in score_data:
-        path=score_data['mscx_path']
-        _cfg.read_logger.info('')
+            try:                
+                # This takes a while!!
+                harmonic_analysis, has_table = parse_score(path)
 
-        msc3_score = parse_score(path)
+                has_table = True
 
+            except:
+                has_table = False
 
+    # elif modulations is not None: # The user may have written only the not-expanded version
+    #     has_table = True
+
+    #     if modulations is not None and harmonic_analysis is None:
+    #         # harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
+    #         pass
+        
+        # score = converter.parse(xml_file) #EN ESTE CASO NO NECESITAMOS EXPANDIR LAS REPETICIONES
+        # repeat_elements = get_repeat_elements(score, v = False)
+        # score_expanded = expand_score_repetitions(score, repeat_elements)
+        # Obtain score sections:
+        # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
+        
+        # Get the array based on harmonic_analysis.mc
+        # sections = continued_sections(sections, harmonic_analysis.mc)
+
+        ################
+        # HARMONY DATA #
+        ################
+        
+        # TODO: Mirar que es exactamente lo que necesitamos para suplantar a la variable gv
+
+        final_dictionary_all_info = get_harmony_data(score_data, harmonic_analysis, sections)
+        
+        #############
+        # KEY AREAS #
+        #############
+        keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
+        final_dictionary_keyAreas = dict(gv, **keyareas)
+
+        #############
+        #  CHORDS   #
+        #############
+        chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
+        final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
+
+            # df_score_harmony = msc3_score
+        else:
         features = {} 
-        # df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-
+            return list(OrderedDict.fromkeys(sections))
+        # features[f"{score_prefix}{NOTES}"] = notes
         score_prefix = get_score_prefix()
-    # else:
-    #     features = {} 
-    # features[f"{score_prefix}{NOTES}"] = notes
-    return features
+    else:
+        features = {} 
+
+    return features, df_score_harmony
 
 if __name__=='__main__':
     musescore_folder =r'../../../arias/mscx'
