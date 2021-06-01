@@ -1,34 +1,26 @@
-import multiprocessing as mp
 import glob
-from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
+from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-from tqdm import tqdm
 from music21.converter import parse
 from music21.stream import Part, Score
 from pandas import DataFrame
+from tqdm import tqdm
 
 from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.features import (ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, tempo,
-                                    text, texture)
+from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, tempo, \
+    text, texture
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
     to_abbreviation
-from musif.musicxml import (
-    MUSICXML_FILE_EXTENSION,
-    analysis,
-    expand_part,
-    get_intervals,
-    get_notes_lyrics,
-    get_repetition_elements,
-    split_layers,
-)
+from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, analysis, expand_part, get_intervals,
+                            get_notes_lyrics, get_repetition_elements, split_layers)
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -99,14 +91,14 @@ class FeaturesExtractor:
             return self.from_files(obj, parts_filter)
         raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
 
-    def from_dir(self, musicxml_scores_dir: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        musicxml_files = glob.glob(path.join(musicxml_scores_dir, f"*.{MUSICXML_FILE_EXTENSION}"))
+    def from_dir(self, scores_dir: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
+        musicxml_files = glob.glob(path.join(scores_dir, f"*.{MUSICXML_FILE_EXTENSION}"))
         corpus_df, score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
-    def from_files(self, musicxml_score_files: List[str], parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        parts_df, score_df, corpus_df = self._process_corpora(musicxml_score_files, parts_filter)
-        return score_df
+    # def from_files(self, musicxml_score_files: List[str], parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
+    #     parts_df, score_df, corpus_df = self._process_corpora(musicxml_score_files, parts_filter)
+    #     return score_df
 
     def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
         parts_df, score_df, corpus_df = self._process_corpora([musicxml_file], parts_filter)
@@ -196,6 +188,8 @@ class FeaturesExtractor:
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = self._parse_score(musicxml_file)
         repetition_elements = get_repetition_elements(score)
+        # if self._cfg.require_harmonic_analysis:
+        #     mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
         ambitus = analysis.discrete.Ambitus()
         parts = self._filter_parts(score, parts_filter)
@@ -212,7 +206,17 @@ class FeaturesExtractor:
             "parts": parts,
             "parts_filter": parts_filter,
         }
+        # if self._cfg.require_harmonic_analysis:
+        #     data["mscx_path"] = mscx_name
         return data
+    
+    def _find_mscx_file(self, musicxml_file: str) -> Path:
+        try:
+            mscx_path=musicxml_file.replace(MUSICXML_FILE_EXTENSION, MUSESCORE_FILE_EXTENSION)
+        except FileNotFoundError:
+            self._cfg.read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
+            mscx_path=None
+        return mscx_path
 
     def _parse_score(self, musicxml_file: str) -> Score:
         score = _cache.get(musicxml_file)
@@ -292,6 +296,7 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
+        # score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
         self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
