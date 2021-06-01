@@ -1,5 +1,8 @@
 #%%
 import glob
+
+from ms3.score import MSCX
+from musif.config import Configuration
 import os
 from collections import Counter, OrderedDict, defaultdict
 from typing import List, Tuple
@@ -9,6 +12,7 @@ import pandas as pd
 from music21 import *
 from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
+from musif.extract.features.tempo import NUMBER_OF_BEATS
 
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
@@ -212,6 +216,36 @@ def get_harmony_data(general_variables, harmonic_analysis, sections):
 
     return dict(general_variables, **harmonic_rhythm, **modulations, **numerals, **chord_types, **additions)
 
+
+def parse_score(mscx_file: str):
+    msc3_score = ms3.score.MSCX(mscx_file, level = 'c')
+    has_table = True
+    try:
+        harmonic_analysis = msc3_score.expanded
+    except Exception as e:
+        has_table = False
+
+    # score = converter.parse(xml_file)
+
+    return msc3_score
+
+def get_score_features(score_data, parts_data, _cfg, parts_features, score_features) -> dict:
+    if 'mscx_path' in score_data:
+        path=score_data['mscx_path']
+        _cfg.read_logger.info('')
+
+        msc3_score = parse_score(path)
+
+
+        features = {} 
+        # df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+
+        score_prefix = get_score_prefix()
+    # else:
+    #     features = {} 
+    # features[f"{score_prefix}{NOTES}"] = notes
+    return features
+
 if __name__=='__main__':
     musescore_folder =r'../../../arias/mscx'
     xml_name = r'Dem01M-O_piu-1735-Leo[1.01][0430]'
@@ -251,20 +285,5 @@ if __name__=='__main__':
     #############
     chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
     final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
+    
 
-    def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
-
-        # parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
-        if len(parts_features) == 0:
-            return {}
-
-        features = {}
-        # df_parts = DataFrame(parts_features)
-        # df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-        # df_family = df_parts.groupby("FamilyAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-        # df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-
-        score_prefix = get_score_prefix()
-
-        # features[f"{score_prefix}{NOTES}"] = notes
-        return features

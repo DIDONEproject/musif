@@ -25,7 +25,7 @@ from tqdm import tqdm
 from .calculations import (compute_average, compute_value,
                            make_intervals_absolute)
 from .constants import *
-from .utils import (adjust_excl_width_height, columns_alike_our_data,
+from .utils import (adjust_excel_width_height, columns_alike_our_data,
                     get_groups_add_info,
                     prepare_data_emphasised_scale_degrees_second,
                     print_averages_total, print_averages_total_column,

@@ -57,6 +57,6 @@ class FeaturesGenerator:
 
     def _write(self, all_info: List[DataFrame]):
         # 2. Start the factor generation
-        for factor in range(1, self.num_factors_max + 1):
+        for factor in range(0, self.num_factors_max + 1):
             _factor_execution(
                 all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists)
