@@ -27,6 +27,7 @@ _CONFIG_FALLBACK = {
 }
 
 class Configuration:
+
     def __init__(self, *args, **kwargs):
         config_data = {}
         if isinstance(args[0], str):
@@ -47,7 +48,7 @@ class Configuration:
         self.split_keywords = config_data.get("split_keywords", _CONFIG_FALLBACK["split_keywords"])
         self.level = Level(config_data.get("level", _CONFIG_FALLBACK["level"]))
         self.merge_voices = config_data.get("merge_voices", _CONFIG_FALLBACK["merge_voices"])
-        # self.require_harmonic_analysis = config_data.get("require_harmonic_analysis", _CONFIG_FALLBACK["require_harmonic_analysis"])
+        self.require_harmonic_analysis = config_data.get("require_harmonic_analysis", _CONFIG_FALLBACK["require_harmonic_analysis"])
 
         self.scores_metadata = {
             path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))

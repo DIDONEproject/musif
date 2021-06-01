@@ -13,8 +13,8 @@ from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, tempo, \
-    text, texture
+from musif.extract.features import ambitus, custom, density, harmony, interval, key, lyrics, metadata, scale, scoring, \
+    tempo, text, texture
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
@@ -188,8 +188,8 @@ class FeaturesExtractor:
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = self._parse_score(musicxml_file)
         repetition_elements = get_repetition_elements(score)
-        # if self._cfg.require_harmonic_analysis:
-        #     mscx_name = self._find_mscx_file(musicxml_file)
+        if self._cfg.require_harmonic_analysis:
+            mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
         ambitus = analysis.discrete.Ambitus()
         parts = self._filter_parts(score, parts_filter)
@@ -206,8 +206,8 @@ class FeaturesExtractor:
             "parts": parts,
             "parts_filter": parts_filter,
         }
-        # if self._cfg.require_harmonic_analysis:
-        #     data["mscx_path"] = mscx_name
+        if self._cfg.require_harmonic_analysis:
+            data["mscx_path"] = mscx_name
         return data
     
     def _find_mscx_file(self, musicxml_file: str) -> Path:
@@ -296,7 +296,7 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        # score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
+        score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
         self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
