@@ -243,7 +243,9 @@ def parse_score(mscx_file: str):
 def get_score_features(score_data, parts_data, _cfg, parts_features, score_features) -> dict:
     path=score_data['mscx_path']
     _cfg.read_logger.info('')
-    
+
+    #erohnvoerbhotbobhsdvav
+
     #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
     # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
     
@@ -251,7 +253,6 @@ def get_score_features(score_data, parts_data, _cfg, parts_features, score_featu
     #
     # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
     
-
     if 'mscx_path' in score_data:
             try:                
                 # This takes a while!!
@@ -266,17 +267,20 @@ def get_score_features(score_data, parts_data, _cfg, parts_features, score_featu
     #     has_table = True
 
     #     if modulations is not None and harmonic_analysis is None:
-    #         # harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
-    #         pass
+    #         harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
+    # #         pass
         
-        # score = converter.parse(xml_file) #EN ESTE CASO NO NECESITAMOS EXPANDIR LAS REPETICIONES
-        # repeat_elements = get_repeat_elements(score, v = False)
+    #     score = score_data['score']
+    repeat_elements= score_data['repetition_elements']
+#     repeat_elements = get_repeat_elements(score, v = False)
+
+    #     #!
         # score_expanded = expand_score_repetitions(score, repeat_elements)
-        # Obtain score sections:
-        # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
+    #     # Obtain score sections:
+    #     sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
         
-        # Get the array based on harmonic_analysis.mc
-        # sections = continued_sections(sections, harmonic_analysis.mc)
+    #     Get the array based on harmonic_analysis.mc
+    #     sections = continued_sections(sections, harmonic_analysis.mc)
 
         ################
         # HARMONY DATA #
@@ -284,30 +288,30 @@ def get_score_features(score_data, parts_data, _cfg, parts_features, score_featu
         
         # TODO: Mirar que es exactamente lo que necesitamos para suplantar a la variable gv
 
-        final_dictionary_all_info = get_harmony_data(score_data, harmonic_analysis, sections)
+        # final_dictionary_all_info = get_harmony_data(score_data, harmonic_analysis, sections)
         
-        #############
-        # KEY AREAS #
-        #############
-        keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
-        final_dictionary_keyAreas = dict(gv, **keyareas)
+        # #############
+        # # KEY AREAS #
+        # #############
+        # keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
+        # final_dictionary_keyAreas = dict(gv, **keyareas)
 
-        #############
-        #  CHORDS   #
-        #############
-        chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
-        final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
+        # #############
+        # #  CHORDS   #
+        # #############
+        # chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
+        # final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
 
-            # df_score_harmony = msc3_score
-        else:
-        features = {} 
-            return list(OrderedDict.fromkeys(sections))
+        #     # df_score_harmony = msc3_score
+        # else:
+        # features = {} 
+        #     return list(OrderedDict.fromkeys(sections))
         # features[f"{score_prefix}{NOTES}"] = notes
-        score_prefix = get_score_prefix()
-    else:
-        features = {} 
+    #     score_prefix = get_score_prefix()
+    # else:
+    #     features = {} 
 
-    return features, df_score_harmony
+    # return features#, df_score_harmony
 
 if __name__=='__main__':
     musescore_folder =r'../../../arias/mscx'

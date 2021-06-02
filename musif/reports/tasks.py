@@ -75,12 +75,22 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
     instruments = [instrument[0].upper()+instrument[1:]
                     for instrument in instruments]
 
-    # Getting general data that requires all info but is ran once
+    # Inizalizing new dataframes and defining those that don't depends on each part
+    
+    clefs_info=copy.deepcopy(common_columns_df)
+    density_df=copy.deepcopy(common_columns_df)
+    textures_df=copy.deepcopy(common_columns_df)
+
+    common_columns_df.Clef2.replace('', np.nan, inplace=True)
+    common_columns_df.Clef3.replace('', np.nan, inplace=True)
+
+    # Getting general data that requires all info but is ran only once
 
     for instrument in instruments:
         if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
             catch = 'Part'
             notes_set.add(catch + instrument + '_Notes')
+
         elif instrument.lower() in all_info.Voices[0]:
             catch='Family'
             instrument=VOICE_FAMILY.capitalize()
@@ -96,17 +106,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
             catch + instrument + '_SoundingDensity')
         density_set.add(
             catch + instrument + '_SoundingMeasures')
-
-    # Inizalizing new dataframes and defining those that don't depends on each part
     
-    clefs_info=copy.deepcopy(common_columns_df)
-    density_df=copy.deepcopy(common_columns_df)
-    textures_df=copy.deepcopy(common_columns_df)
-
-    common_columns_df.Clef2.replace('', np.nan, inplace=True)
-    common_columns_df.Clef3.replace('', np.nan, inplace=True)
-    # intervals_info = Melody_values = common_columns_df
-
     textures = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
 
     if not textures.empty: #We want textures to be processed in case there are any (not for cases where we request only 1 instrument type)
@@ -139,7 +139,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
         intervals_types_list = []
         emphasised_A_list = []
         
-        results_folder = os.path.join(main_results_path, instrument)
+        results_folder = os.path.join(main_results_path, 'Melody_', instrument)
         if not os.path.exists(results_folder):
             os.makedirs(results_folder)
                 
@@ -170,18 +170,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
             elif (col.startswith(catch+'Intervals') or col.startswith(catch+'Leaps') or col.startswith(catch+'Stepwise')) and col.endswith('_Count'):
                 intervals_types_list.append(col)
         intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
-        # if any(c in intervals_types_list for c in (catch+interval.INTERVALS_SKEWNESS, catch + interval.INTERVALS_KURTOSIS)):
-        #     i=0
-        #     pass
-        #AVERIGUAR SI REPEATED NOTES ES NECESARIO EN ALGUN LAO
-        
-        # intervals_types_list2 = [catch +interval.LEAPS_ASC_COUNT, catch+ interval.LEAPS_DESC_COUNT, catch + interval.STEPWISE_MOTION_ALL_COUNT, catch+ interval.STEPWISE_MOTION_ASC_COUNT, catch+ interval.STEPWISE_MOTION_DESC_COUNT]
-        # # catch+='Intervals'
-        # intervals_types_list2 = intervals_types_list2 + [catch + interval.INTERVALS_PERFECT_ASC_COUNT,  catch+interval.INTERVALS_PERFECT_DESC_COUNT,  catch+ interval.INTERVALS_PERFECT_ALL_COUNT, catch + interval.INTERVALS_MAJOR_ASC_COUNT , catch + interval.INTERVALS_MAJOR_DESC_COUNT, catch +interval.INTERVALS_MAJOR_ALL_COUNT, catch + interval.INTERVALS_MINOR_ASC_COUNT, 
-        # catch + interval.INTERVALS_MINOR_DESC_COUNT, catch + interval.INTERVALS_MINOR_ALL_COUNT, catch +interval.INTERVALS_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_AUGMENTED_DESC_COUNT, catch +interval.INTERVALS_AUGMENTED_ALL_COUNT, catch + interval.INTERVALS_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DIMINISHED_DESC_COUNT, catch + interval.INTERVALS_DIMINISHED_ALL_COUNT,
-        # catch + interval.INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT,
-        # catch + interval.INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, catch + interval.INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT, catch + interval.INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT]
-        
+
         # Joining common info and part info, renaming columns for excel writing
         
         melody_values = pd.concat(
@@ -255,8 +244,8 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
         if not os.path.exists(results_path_factorx):
             os.makedirs(results_path_factorx)
 
-        common_data_path = path.join(main_results_path, 'Common', str(
-            factor) + " factor") if factor > 0 else path.join(main_results_path, 'Common', "Data")
+        common_data_path = path.join(main_results_path, 'Texture&Density', str(
+            factor) + " factor") if factor > 0 else path.join(main_results_path, 'Density', "Data")
 
         if not os.path.exists(common_data_path):
             os.makedirs(common_data_path)
@@ -852,7 +841,7 @@ def Intervals(data: DataFrame, name: str, sorting_list: list, results_path: str,
         # with visualiser_lock:
         # VISUALISATIONS
         if 'Clefs' in name:
-            title = 'Use of clefs'
+            title = 'Use of clefs in the vocal part'
         elif 'Intervals_absolute' in name:
             title = 'Presence of intervals (direction dismissed)'
         else:
