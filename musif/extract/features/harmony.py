@@ -4,7 +4,7 @@ from ms3.score import MSCX
 from musif.config import Configuration
 import os
 from collections import Counter, OrderedDict, defaultdict
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import ms3
 import pandas as pd
@@ -15,8 +15,10 @@ from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 
-ALPHA = "abcdefghijklmnopqrstuvwxyz"
+from .harmony_utils import get_beatspertsig, compute_number_of_compasses, continued_sections
 
+ALPHA = "abcdefghijklmnopqrstuvwxyz"
+logger=None
 ###############################################################################
 # This function generates a dataframe with the measures and the local key     #
 # present in each one of them based on the 'modulations' atribute in the json #
@@ -43,32 +45,51 @@ def compute_modulations(partVoice, partVoice_expanded, modulations):
     except:
         print('Please, review the format of the modulation\'s indications in the JSON file. It needs to have the following format: [(<local key>, <starting measure>), ... ]')
         return None
-#########################################################################
-# Como sections tiene una indicación por compás, pero a lo largo del script
-# trabajamos con la tabla harmonic_analysis, que tiene tantas entradas por 
-# compás como anotaciones harmónicas, repetimos las secciones según el número
-#########################################################################
-def continued_sections(sections, mc):
-    extended_sections = []
-    repeated_measures = Counter(mc)
-    for i, c in enumerate(repeated_measures):
-        extended_sections.append([sections[i]] * repeated_measures[c])
-    # Flat list
-    return list(itertools.chain(*extended_sections))
 
-def get_harmonic_rhythm(tabla_lausanne, sections):
-    compases = tabla_lausanne.mc.dropna().tolist()
-    beats = tabla_lausanne.mc_onset.dropna().tolist()
-    voice = ['N' if str(v) == 'nan' else v for v in tabla_lausanne.voice.tolist()]
-    time_signatures = tabla_lausanne.timesig.tolist()
-    compases_voz = get_compases_per_possibility(list(set(voice)), compases, voice, beats, time_signatures)
-    annotations_voz = {'Voice': voice.count(1), 'No_voice': voice.count(0)}
-    compases_voz['Voice'] = compases_voz.pop(1) if 1 in compases_voz else 0
-    compases_voz['No_voice'] = compases_voz.pop(0) if 0 in compases_voz else 0
-    compases_section = get_compases_per_possibility(list(set(sections)), compases, sections, beats, time_signatures)
-    annotations_sections = {k:sections.count(k) for k in compases_section}
-    everything = dict(compases_voz, **compases_section)
-    list_annotations = dict(annotations_voz, **annotations_sections)
+
+def get_compases_per_possibility(possibilities, measures, possibilities_list, beats, time_signatures):
+    # possibilities=list(set(possibilities))
+    voice_measures = {p: 0 for p in possibilities}
+    last_voice = 0
+    done = 0
+    starting_measure = 0
+    numberofmeasures = len(measures)
+    for i, v in enumerate(possibilities_list):
+        if v != last_voice and i < numberofmeasures:
+            #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
+            n_beats = get_beatspertsig(time_signatures[i - 1])
+            if last_voice in voice_measures :
+                num_compasses, done = compute_number_of_compasses(done, starting_measure, measures[i - 1], measures[i], beats[i - 1], n_beats)
+                voice_measures[last_voice] += num_compasses
+            last_voice = v
+            starting_measure = measures[i] - 1
+    
+    #último!
+    num_compasses, _ = compute_number_of_compasses(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, beats[numberofmeasures - 1], n_beats)
+    voice_measures[last_voice] += num_compasses
+
+    #comprobar que tiene sentido:
+    # if (compases[0] != 0 and round(sum(list(compases_voz.values()))) != compases[i]) or (compases[0] == 0 and round(sum(list(compases_voz.values()))) != compases[i] + 1):
+    #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
+
+    return voice_measures
+
+def get_harmonic_rhythm(ms3_table, sections)-> dict:
+    
+    measures = ms3_table.mc.dropna().tolist()
+    beats = ms3_table.mc_onset.dropna().tolist()
+    voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
+    time_signatures = ms3_table.timesig.tolist()
+    ## sacar possibilities
+    voice_measures = get_compases_per_possibility(list(set(voice)), measures, voice, beats, time_signatures)
+    annotations_voice = {'Voice': voice.count(1), 'No_voice': voice.count(0)}
+    voice_measures['Voice'] = voice_measures.pop(1) if 1 in voice_measures else 0
+    voice_measures['No_voice'] = voice_measures.pop(0) if 0 in voice_measures else 0
+
+    # measures_section = get_compases_per_possibility(sections, measures, sections, beats, time_signatures)
+    # annotations_sections = {k:sections.count(k) for k in measures_section}
+    everything = dict(voice_measures)#, **measures_section)
+    list_annotations = dict(annotations_voice)#, **annotations_sections)
     for k in everything:
         everything[k] = round(everything[k]/list_annotations[k] if list_annotations[k] != 0 else 0, 2)
     
@@ -209,12 +230,12 @@ def get_additions(tabla_lausanne):
             ad['Additions'+str(a)] = str(round((additions_counter[a] / sum(list(additions_counter.values())))*100, 2)) + '%'
     return ad
 
-def get_harmony_data(general_variables, harmonic_analysis, sections):
+def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: list = None) -> dict:
     hr = get_harmonic_rhythm(harmonic_analysis, sections)
     #le añadimos harmonic_rhythm delante de cada key
     harmonic_rhythm = {'Harmonic rhythm'+k: hr[k] for k in hr}
     # 2. Modulations TODO: revvisar
-    modulations = get_modulations(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
+    modulations = get_modulations(harmonic_analysis, sections, major = score_data['Mode'] == 'major')
     # 3. Numerals
     numerals = get_numerals(harmonic_analysis)
     # 4. Chord_types
@@ -222,12 +243,121 @@ def get_harmony_data(general_variables, harmonic_analysis, sections):
     # 5. Additions
     additions = get_additions(harmonic_analysis)
 
-    key_name = general_variables['Key'].split(" ")[0].strip().replace('-','b') #coger solo la string de antes del espacio? y así quitar major y minor
-    key_name = key_name if general_variables['Mode'] == 'major' else key_name.lower()
-    general_variables['Key'] = key_name
+    key_name = score_data['Key'].split(" ")[0].strip().replace('-','b') #coger solo la string de antes del espacio? y así quitar major y minor
+    key_name = key_name if score_data['Mode'] == 'major' else key_name.lower()
+    score_data['Key'] = key_name
 
-    return dict(general_variables, **harmonic_rhythm, **modulations, **numerals, **chord_types, **additions)
+    return dict(score_data, **harmonic_rhythm, **modulations, **numerals, **chord_types, **additions)
+def expand_repeat_bars(score):
+    final_score = m21.stream.Score()
+    final_score.metadata = score.metadata
+    exist_repetition_bars = False
+    #find repeat bars and expand
+    for instr in score.parts:
+        part_measures = get_instrument_elements(instr.elements) #returns the measures with repetitions
+        last_measure = part_measures[-1].measureNumber
+        part_measures_expanded = []
+        startsin0 = part_measures[0].measureNumber == 0 #Everything should be -1
+        repetition_bars = []
 
+        #Find all repetitions in that instrument
+        for elem in instr.elements:
+            if isinstance(elem, m21.stream.Measure):
+                for e in elem:
+                    if isinstance(e, m21.bar.Repeat):
+                        exist_repetition_bars = True
+                        if e.direction == "start":
+                            repetition_bars.append((e.measureNumber, "start"))
+                        elif e.direction == "end":
+                            repetition_bars.append((e.measureNumber, "end"))
+                        index = elem.elements.index(e)
+                        elem.elements = elem.elements[:index] + elem.elements[index + 1:]
+            elif isinstance(elem, m21.spanner.RepeatBracket):
+                string_e = str(elem)
+                index = string_e.find("music21.stream.Measure")
+                measure = string_e[index:].replace("music21.stream.Measure", '')[1:3].strip()
+                repetition_bars.append((int(measure), elem.number))
+                index = instr.elements.index(elem)
+                elem.elements = instr.elements[:index] + instr.elements[index + 1:]
+        repetition_bars = sorted(list(repetition_bars), key=lambda tup:tup[0])
+
+        start = 0 if startsin0 else 1
+        if exist_repetition_bars:
+            p = m21.stream.Part()
+            p.id = instr.id
+            p.partName = instr.partName
+            for rb in repetition_bars:
+                compass = measure_ranges(part_measures, rb[0], rb[0])[0].quarterLength
+                if rb[1] == "start":
+                    if len(part_measures_expanded) > 0:
+                        offset = part_measures_expanded[-1][-1].offset
+                    else:
+                        offset = 0
+                    start_measures = measure_ranges(part_measures, start, rb[0] - 1, offset = offset + compass) #TODO works if the score doesn't start in 0?
+                    if len(start_measures) > 0:
+                        part_measures_expanded.append(start_measures)
+                    start = rb[0]
+                elif rb[1] == "end":
+                    if len(part_measures_expanded) > 0:
+                        offset = part_measures_expanded[-1][-1].offset
+                    else:
+                        offset = 0
+                    casilla_1 = True if any(re[1] == '1' and re[0] <= rb[0] for re in repetition_bars) else False
+                    casilla_2 = None
+                    if casilla_1:
+                        casilla_2 = [re for re in repetition_bars if re[1] == '2' and re[0] > rb[0]]
+                        casilla_2 = None if len(casilla_2) == 0 else casilla_2[0] 
+                    part_measures_expanded.append(measure_ranges(part_measures, init = start, end = rb[0], offset = offset+ compass, remove_repetition_marks=True)) # This should erase the repetition marks
+                    if casilla_2 is not None:
+                        part_measures_expanded.append(measure_ranges(part_measures, start, casilla_2[0], iteration = 2, offset = part_measures_expanded[-1][-1].offset+ compass))
+                        start = casilla_2[0] + 1
+                    else:
+                        part_measures_expanded.append(measure_ranges(part_measures, init = start, end = rb[0], offset = part_measures_expanded[-1][-1].offset + compass))
+                        start = rb[0] + 1
+            if start < last_measure:
+                compass = measure_ranges(part_measures, start, start + 1)[0].quarterLength
+                offset = part_measures_expanded[-1][-1].offset
+                part_measures_expanded.append(measure_ranges(part_measures, start, last_measure + 1, offset = offset+ compass)) #TODO works when it's close to the end?
+
+            p.elements = list(itertools.chain(*tuple(part_measures_expanded)))
+            final_score.insert(0, p)
+        
+    return final_score if exist_repetition_bars else score
+
+def expand_part(part, repeat_elements):
+    part_measures = get_instrument_elements(part.elements) #returns the measures with repetitions
+    p = m21.stream.Part()
+    p.id = part.id
+    p.partName = part.partName
+    
+    part_measures_expanded = get_measure_list(part_measures, repeat_elements) #returns the measures expanded
+    part_measures_expanded = list(itertools.chain(*part_measures_expanded))
+    #part_measures_expanded = sorted(tuple(part_measures_expanded), key =lambda x: x.offset)
+    # Assign a new continuous compass number to every measure
+    measure_number = 0 if part_measures_expanded[0].measureNumber == 0 else 1
+    for i, e in enumerate(part_measures_expanded):
+        m = m21.stream.Measure(number = measure_number)
+        m.elements = e.elements
+        m.offset  = e.offset
+        m.quarterLength = e.quarterLength
+        part_measures_expanded[i] = m
+        measure_number += 1
+    p.elements = part_measures_expanded
+    return p
+
+def expand_score_repetitions(score, repeat_elements):
+    score = expand_repeat_bars(score) # FIRST EXPAND REPEAT BARS
+    final_score = stream.Score()
+    final_score.metadata = score.metadata
+    
+    if len(repeat_elements) > 0:
+        for part in score.parts:
+            p = expand_part(part, repeat_elements)
+
+            final_score.insert(0, p)
+    else:
+        final_score = score
+    return final_score
 
 def parse_score(mscx_file: str):
     harmonic_analysis = None
@@ -238,31 +368,28 @@ def parse_score(mscx_file: str):
     except Exception as e:
         has_table = False
 
-    return harmonic_analysis, has_table
+    return msc3_score, harmonic_analysis, has_table
 
-def get_score_features(score_data, parts_data, _cfg, parts_features, score_features) -> dict:
-    path=score_data['mscx_path']
-    _cfg.read_logger.info('')
-
-    #erohnvoerbhotbobhsdvav
+def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+    global logger
+    logger = cfg.read_logger
 
     #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
     # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
-    
-    
-    #
     # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
-    
     if 'mscx_path' in score_data:
             try:                
+                path=score_data['mscx_path']
+
                 # This takes a while!!
-                harmonic_analysis, has_table = parse_score(path)
+                msc3_score, harmonic_analysis, has_table = parse_score(path)
 
                 has_table = True
 
             except:
                 has_table = False
-
+    else:
+        pass
     # elif modulations is not None: # The user may have written only the not-expanded version
     #     has_table = True
 
@@ -270,17 +397,15 @@ def get_score_features(score_data, parts_data, _cfg, parts_features, score_featu
     #         harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
     # #         pass
         
-    #     score = score_data['score']
+    score = score_data['score']
     repeat_elements= score_data['repetition_elements']
 #     repeat_elements = get_repeat_elements(score, v = False)
-
-    #     #!
-        # score_expanded = expand_score_repetitions(score, repeat_elements)
-    #     # Obtain score sections:
-    #     sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
-        
+    #     
+        # Obtain score sections:
+        # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
+    sections=[]
     #     Get the array based on harmonic_analysis.mc
-    #     sections = continued_sections(sections, harmonic_analysis.mc)
+    # sections = continued_sections(sections, harmonic_analysis.mc)
 
         ################
         # HARMONY DATA #
@@ -288,7 +413,7 @@ def get_score_features(score_data, parts_data, _cfg, parts_features, score_featu
         
         # TODO: Mirar que es exactamente lo que necesitamos para suplantar a la variable gv
 
-        # final_dictionary_all_info = get_harmony_data(score_data, harmonic_analysis, sections)
+    all__harmonic_info = get_harmony_data(score_data, harmonic_analysis, sections)
         
         # #############
         # # KEY AREAS #
@@ -311,46 +436,46 @@ def get_score_features(score_data, parts_data, _cfg, parts_features, score_featu
     # else:
     #     features = {} 
 
-    # return features#, df_score_harmony
+    return features#, df_score_ha<rmony
 
-if __name__=='__main__':
-    musescore_folder =r'../../../arias/mscx'
-    xml_name = r'Dem01M-O_piu-1735-Leo[1.01][0430]'
-    mscx_file = [f for f in list(glob.glob(os.path.join(musescore_folder, '*.mscx'))) if xml_name in f][0]
-    msc3_score = ms3.score.MSCX(mscx_file, level = 'c')
-    has_table = True
-    try:
-        harmonic_analysis = msc3_score.expanded
-    except Exception as e:
-        has_table = False
-    xml_file=xml_name+'.xml'
-    score = converter.parse(xml_file) #EN ESTE CASO NO NECESITAMOS EXPANDIR LAS REPETICIONES
+# if __name__=='__main__':
+#     musescore_folder =r'../../../arias/mscx'
+#     xml_name = r'Dem01M-O_piu-1735-Leo[1.01][0430]'
+#     mscx_file = [f for f in list(glob.glob(os.path.join(musescore_folder, '*.mscx'))) if xml_name in f][0]
+#     msc3_score = ms3.score.MSCX(mscx_file, level = 'c')
+#     has_table = True
+#     try:
+#         harmonic_analysis = msc3_score.expanded
+#     except Exception as e:
+#         has_table = False
+#     xml_file=xml_name+'.xml'
+#     # score = converter.parse(xml_file) #EN ESTE CASO NO NECESITAMOS EXPANDIR LAS REPETICIONES
     
-    repeat_elements = get_repeat_elements(score, v = False)
-    score_expanded = expand_score_repetitions(score, repeat_elements)
-    # Obtain score sections:
-    sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
-    # Get the array based on harmonic_analysis.mc
-    sections = continued_sections(sections, harmonic_analysis.mc)
+#     # repeat_elements = get_repeat_elements(score, v = False)
+#     # score_expanded = expand_score_repetitions(score, repeat_elements)
+#     # # Obtain score sections:
+#     # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
+#     # # Get the array based on harmonic_analysis.mc
+#     # sections = continued_sections(sections, harmonic_analysis.mc)
 
-    #data already processed in the extractor
-    gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
+#     #data already processed in the extractor
+#     gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
 
-    ################
-    # HARMONY DATA #
-    ################
-    final_dictionary_all_info = get_harmony_data(gv, harmonic_analysis, sections)
+#     ################
+#     # HARMONY DATA #
+#     ################
+#     final_dictionary_all_info = get_harmony_data(gv, harmonic_analysis, sections)
 
-    #############
-    # KEY AREAS #
-    #############
-    keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
-    final_dictionary_keyAreas = dict(gv, **keyareas)
+#     #############
+#     # KEY AREAS #
+#     #############
+#     keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
+#     final_dictionary_keyAreas = dict(gv, **keyareas)
 
-    #############
-    #  CHORDS   #
-    #############
-    chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
-    final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
+#     #############
+#     #  CHORDS   #
+#     #############
+#     chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
+#     final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
     
 

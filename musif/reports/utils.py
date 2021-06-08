@@ -68,14 +68,14 @@ def columns_alike_our_data(third_columns_names: List[str], second_column_names: 
 def write_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names: List[str]):
     for c in column_names:
         sheet.cell(row, column).value = c
-        sheet.cell(row, column).font =  Font(size = 12, bold = True, name='Garamond')
+        sheet.cell(row, column).font =  FONT_TITLE
         sheet.cell(row, column).fill = titles3Fill
         column += 1
 
 
 def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column: int, values_column: list, average: bool=False, per: bool=False, exception: int=None):
     sheet.cell(row, lable_column).value = "Average" if average else "Total"
-    sheet.cell(row, lable_column).font =  Font(size = 12, bold = True, name='Garamond')
+    sheet.cell(row, lable_column).font =  FONT_TITLE
     sheet.cell(row, lable_column).fill = orangeFill
 
     for i, v in enumerate(values):
@@ -88,7 +88,7 @@ def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column
 
 def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, values:List, average: bool=False, per: bool=False):
     sheet.cell(row, column).value = "Average" if average else "Total"
-    sheet.cell(row, column).font =  Font(size = 12, bold = True, name='Garamond')
+    sheet.cell(row, column).font =  FONT_TITLE
     sheet.cell(row, column).fill = orangeFill
     row += 1
     for v in values:
@@ -103,7 +103,7 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
 def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[str], fill:int):
     for c in column_names:
         sheet.cell(row, column).value = c[0]
-        sheet.cell(row, column).font = BOLD
+        sheet.cell(row, column).font = FONT_TITLE
         if c[0] != '':
             sheet.cell(row, column).fill = fill
         sheet.cell(row, column).alignment = center

@@ -14,6 +14,7 @@ import warnings
 import numpy as np
 from music21 import pitch, interval
 import matplotlib
+from pandas.core.frame import DataFrame
 matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
 
@@ -269,7 +270,7 @@ def customized_plot(name, data, column_names, subtitile, second_title=None):
     plt.close(fig)
 
 
-def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_title=None):
+def bar_plot_extended(name: str, data: DataFrame, column_names: list, x_label: str, y_label: str, title: str, second_title: str=None, instr: str = None):
     size = len(column_names)
     fig = plt.figure(figsize=(size if len(column_names) >
                               6 else 10, size if len(column_names) > 6 else 10))
@@ -278,7 +279,7 @@ def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_
         X = np.arange(size)
         counter = 0
         for i, group in data[column_names]:
-            plt.bar(x=X, width=barWidth, height=list(group[column_names].mean(
+            plt.bar(x=X, width=barWidth, height=list(group[instr].mean(
                 axis=0, skipna=True)), color=COLOR[counter], edgecolor='k', label=str(i))
             X = [x + barWidth for x in X]
             counter += 1
@@ -292,9 +293,8 @@ def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_
         plt.suptitle(
             title + ('\n' + second_title if second_title is not None else ''))
     else:
-        plt.bar(x=range(0, size, 1), height=list(data[column_names].mean(
-            axis=0, skipna=True)), color=COLOR[np.random.randint(len(COLOR))], edgecolor='k')
-        plt.xticks(ticks=range(0, size, 1), labels=column_names)
+        plt.bar(x=range(0, size, 1), height=list(data[instr]), color=COLOR[np.random.randint(len(COLOR))], edgecolor='k')
+        plt.xticks(ticks=range(0, size), labels=column_names)
         plt.tick_params(labelsize='large')
         if second_title is not None:
             plt.suptitle('.')
