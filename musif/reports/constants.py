@@ -70,7 +70,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    "Key",
                    "Mode",
                    "KeySignature",
-                   "KeySignatureType"], ["KeySorting", "Alphabetic", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
+                   "KeySignatureType"], ["KeySorting", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
                "Metre": ([
                    TIMESIGNATURE,
                    TIMESIGNATUREGROUPED
@@ -87,6 +87,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                }
 
 not_used_cols = [ARIA_ID, SCORING, 'Total analysed', CLEF2, CLEF3]
+EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, CITY, SCENE]
 
 alfa = "abcdefghijklmnopqrstuvwxyz"
 
@@ -142,6 +143,7 @@ factors_Fill = [openpyxl.styles.PatternFill(start_color='06CAFF', end_color='06C
                     start_color='1B94B4', end_color='1B94B4', fill_type='solid'),
                 openpyxl.styles.PatternFill(start_color='11718A', end_color='11718A', fill_type='solid')]
 
-BOLD = Font(size = 12, bold=True)
 center = openpyxl.styles.Alignment(horizontal='center')
+BOLD = Font(size = 12, bold=True)
 FONT= Font(size=12)
+FONT_TITLE= Font(size = 12, bold = True, name='Garamond')

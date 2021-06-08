@@ -4,7 +4,7 @@ from musif import FeaturesExtractor, config
 from musif.reports.generate import FeaturesGenerator
 import pandas as pd
 if __name__ == "__main__":
-    parts = ["vnI"] #"obI"]
+    parts = ["vnI", "obI"]
     # parts = None
 
     arias_path="./arias/"

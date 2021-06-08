@@ -19,8 +19,9 @@ from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
     to_abbreviation
-from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, analysis, expand_part, get_intervals,
-                            get_notes_lyrics, get_repetition_elements, split_layers)
+from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, analysis, expand_part,
+                            expand_score_repetitions, get_intervals, get_notes_lyrics, get_repetition_elements,
+                            split_layers)
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -188,6 +189,7 @@ class FeaturesExtractor:
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = self._parse_score(musicxml_file)
         repetition_elements = get_repetition_elements(score)
+        score_expanded = expand_score_repetitions(score, repetition_elements)
         if self._cfg.require_harmonic_analysis:
             mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
@@ -199,6 +201,7 @@ class FeaturesExtractor:
             "score": score,
             "file": musicxml_file,
             "repetition_elements": repetition_elements,
+            "score_expanded": score_expanded, ## es util??
             "key": score_key,
             "tonality": tonality,
             "mode": mode,

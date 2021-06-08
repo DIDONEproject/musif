@@ -48,15 +48,11 @@ class FeaturesGenerator:
         self.global_features = df
         self.num_factors_max = num_factors
         self.main_results_path = main_results_path
-        self.sorting_lists = self._read_sorting_lists()
-        self._write(self.global_features)
+        self.sorting_lists = self._cfg.sorting_lists
+        self._write(self.global_features, self._cfg)
 
-    def _read_sorting_lists(self):
-        return self._cfg.sorting_lists
-
-
-    def _write(self, all_info: List[DataFrame]):
+    def _write(self, all_info: List[DataFrame], _cfg):
         # 2. Start the factor generation
         for factor in range(0, self.num_factors_max + 1):
             _factor_execution(
-                all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists)
+                all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists, _cfg)
