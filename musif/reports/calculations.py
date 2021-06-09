@@ -63,6 +63,7 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
                 value = round(s / sum(ponderate_data), 3)
         elif computation == "mean_density" or computation == "mean_texture":
             value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
+            
         elif computation == "min":
             value = min(column_data)
         elif computation == "max":
@@ -148,6 +149,8 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
 
 def compute_average(dic_data: Dict, computation: str):
     value = 0
+    computation = computation.replace('_density', '').replace('_texture', '') #In case we have averages for densities or textures we compute normal average 
+
     if computation in ["mean", "min", "sum", "max", "absolute","meanSemitones"]:
         value = round(sum(dic_data) / len(dic_data), 3)
     elif computation in ["minNote", "maxNote"]:
