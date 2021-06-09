@@ -30,10 +30,11 @@ class Configuration:
 
     def __init__(self, *args, **kwargs):
         config_data = {}
-        if isinstance(args[0], str):
-            config_data = read_object_from_yaml_file(args[0])
-        elif isinstance(args[0], dict):
-            config_data = args[0]
+        if len(args) > 0:
+            if isinstance(args[0], str):
+                config_data = read_object_from_yaml_file(args[0])
+            elif isinstance(args[0], dict):
+                config_data = args[0]
         config_data.update(kwargs)
         self.data_dir = config_data.get("data_dir", _CONFIG_FALLBACK["data_dir"])
         self.metadata_dir = config_data.get("metadata_dir", _CONFIG_FALLBACK["metadata_dir"])
