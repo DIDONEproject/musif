@@ -22,7 +22,7 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     features = {}
     for key, value in notes_per_degree.items():
         features[DEGREE_COUNT.format(key=key, prefix="")] = value
-        features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees
+        features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
     return features
 
 

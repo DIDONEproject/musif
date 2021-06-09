@@ -1,4 +1,5 @@
 import copy
+import traceback
 from typing import List, Tuple, Union
 
 from music21 import *
@@ -7,6 +8,7 @@ from music21.stream import Part, Score
 from roman import toRoman
 
 from musif.common import group
+from musif.config import Configuration
 
 MUSICXML_FILE_EXTENSION = "xml"
 
@@ -130,6 +132,12 @@ def contains_text(part: Part) -> bool:
 
 
 def get_notes_lyrics(notes: List[Note]) -> List[str]:
-    return [note.lyric for note in notes if note.lyrics and note.lyrics[0].text is not None]
+    lyrics = []
+    for note in notes:
+        if note.lyrics is None or len(note.lyrics) == 0:
+            continue
+        note_lyrics = [syllable.text for syllable in note.lyrics if syllable.text is not None]
+        lyrics.append(" ".join(note_lyrics))
+    return lyrics
 
 
