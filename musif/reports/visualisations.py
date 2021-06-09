@@ -5,17 +5,22 @@
 # module. Each function generates a different visualisation
 ########################################################################
 
+import collections
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
+
+
 import warnings
 import numpy as np
 from music21 import pitch, interval
 import matplotlib
+from pandas.core.frame import DataFrame
 matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
 
+plt.style.use('seaborn')
 
-COLOR = "rgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmyk"
+COLOR = "rgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmyk"
 
 '''
         b: blue
@@ -34,28 +39,35 @@ LINESTYLES = [i for i in Line2D.lineStyles.keys() if str(i) not in [
 
 
 def box_plot(name, data, second_title=None):
-    try:
+    # try:
         columns_box = [['LowestIndex', 'HighestIndex'],
                        ['AmbitusLargestSemitones']]
-        columns_names = [['Lowest Notes', 'Highest Notes'], ['Ambitus']]
+        column_names = [['Lowest Notes', 'Highest Notes'], ['Ambitus']]
         subplot_titles = ['Notes', 'Ambitus']
-        plt.title(subplot_titles[0])
-        plt.title(subplot_titles[1])
+
         fig, ax = plt.subplots(ncols=2)
+        
         if second_title is not None:
-            plt.suptitle('Ambitus')
-            plt.suptitle(second_title)
+            plt.suptitle('Ambitus\n' + second_title)
+
         else:
             plt.suptitle('Ambitus')
-        try:
+        if hasattr(data, 'groups'):
+            counter = 0
+            boxes=[]
             for j, info in enumerate(columns_box):
-                # info_data = [data[x].tolist() for x in info]
-                info_data = [[i for i in data[x] if str(i) != 'nan'] for x in info]
-                ax[j].boxplot(info_data, labels=info)
-                ax[j].set_xticklabels(columns_names[j])
+                ax[j].set_title(subplot_titles[j])
+
+                # ax[j].set_xticklabels(column_names[j])
+                for i, group in data[info]:
+                    info_data = [[i for i in group[x] if str(i) != 'nan'] for x in info]
+                    # labels=info
+                    boxes.append(ax[j].boxplot(info_data, labels=column_names[j], notch=False,patch_artist=True, boxprops=dict(color=COLOR[counter])))
+                    # plt.setp([box["boxes"] for box in boxes], facecolor=COLOR[counter])
+                    counter+=1
                 # change the axis from midi index to note name
                 plt.draw()
-                labels = [x.get_text().replace('−','-') for x in ax[j].get_yticklabels()]
+                labels = [x.get_text() for x in ax[j].get_yticklabels()]
                 if j == 0:
                     labels_names = [pitch.Pitch(
                         int(float(x))).unicodeNameWithOctave for x in labels]
@@ -64,26 +76,67 @@ def box_plot(name, data, second_title=None):
                     labels_names = [interval.Interval(
                         float(x)).directedName if float(x) >=0 else 'Unknown' for x in labels]
                     ax[j].set_ylabel('Interval')
+                
                 ax[j].set_yticklabels(labels_names)
+            
+            for i, box in enumerate(boxes):
+                # for box in boxes[i]['boxes']:
+                    # box.set(facecolor='red')
+                    #     # change outline color 
+                    # box.set(color='black', linewidth=2)
+                    for _, line_list in box.items():
+                        for line in line_list:
+                            line.set_color(COLOR[i%2])
 
-        except Exception as e:
-            print(e)
+            ax[j].legend([box["boxes"][0] for box in boxes], [i[0] for i in data[info]])
+
+        else:
+                for j, info in enumerate(columns_box):
+                    info_data = [[i for i in data[x] if str(i) != 'nan'] for x in info]
+                    ax[j].boxplot(info_data, labels=info)
+                    ax[j].set_xticklabels(column_names[j])
+                    # change the axis from midi index to note name
+                    plt.draw()
+                    labels = [x.get_text() for x in ax[j].get_yticklabels()]
+                    if j == 0:
+                        labels_names = [pitch.Pitch(
+                            int(float(x))).unicodeNameWithOctave for x in labels]
+                        ax[j].set_ylabel('Note')
+
+                    else:
+                        labels_names = [interval.Interval(
+                            float(x)).directedName if float(x) >=0 else 'Unknown' for x in labels]
+                        ax[j].set_ylabel('Interval')
+                    ax[j].set_yticklabels(labels_names)
 
         fig.tight_layout()
         fig.subplots_adjust(top=0.88)
-        plt.savefig(name)
+        fig.savefig(name)
         plt.close(fig)
-    except:
-        pass
+    # except:
+    #     pass
 
 
-def ivalues_bar_plot(name, data, column_names, second_title=None):
+def melody_bar_plot(name, data, column_names, second_title=None):
     size = len(column_names)
-    list_sum = data[column_names].sum(axis=0, skipna=True)
     fig = plt.figure(figsize=(size if len(column_names) >
                               6 else 10, size if len(column_names) > 6 else 10))
-    plt.bar(x=range(0, size, 1), height=list(
-        list_sum / len(data[column_names])), color='w', edgecolor='k')
+    if hasattr(data, 'groups'):
+        counter = 0
+        for i, group in data[column_names]:
+            # list_sum =group[column_names].sum(axis=0, skipna=True)
+            list_sum =group[column_names].mean(axis=0, skipna=True)
+            plt.plot(range(0, size, 1), list_sum, color=COLOR[counter], linestyle=LINESTYLES[np.random.randint(
+                len(LINESTYLES))], marker=MARKERS[np.random.randint(len(MARKERS))], label=str(i), markersize=15)
+
+            plt.legend(loc="upper right")
+    
+            counter += 1
+    else:
+        list_sum = data[column_names].sum(axis=0, skipna=True)
+        plt.bar(x=range(0, size, 1), height=list(
+            list_sum / len(data[column_names])), color='b', edgecolor='k')
+    
     plt.xticks(ticks=range(0, size, 1), labels=column_names)
     plt.tick_params(labelsize='large')
     if second_title is not None:
@@ -91,7 +144,7 @@ def ivalues_bar_plot(name, data, column_names, second_title=None):
         plt.title(second_title)
     else:
         plt.title('Intervallic variation measurements')
-    plt.ylabel('Number of Semitones')
+    plt.ylabel('Ratio')
     plt.tight_layout()
     plt.savefig(name)
     plt.close(fig)
@@ -217,7 +270,7 @@ def customized_plot(name, data, column_names, subtitile, second_title=None):
     plt.close(fig)
 
 
-def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_title=None):
+def bar_plot_extended(name: str, data: DataFrame, column_names: list, x_label: str, y_label: str, title: str, second_title: str=None, instr: str = None):
     size = len(column_names)
     fig = plt.figure(figsize=(size if len(column_names) >
                               6 else 10, size if len(column_names) > 6 else 10))
@@ -226,7 +279,7 @@ def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_
         X = np.arange(size)
         counter = 0
         for i, group in data[column_names]:
-            plt.bar(x=X, width=barWidth, height=list(group[column_names].mean(
+            plt.bar(x=X, width=barWidth, height=list(group[instr].mean(
                 axis=0, skipna=True)), color=COLOR[counter], edgecolor='k', label=str(i))
             X = [x + barWidth for x in X]
             counter += 1
@@ -240,9 +293,8 @@ def bar_plot_extended(name, data, column_names, x_label, y_label, title, second_
         plt.suptitle(
             title + ('\n' + second_title if second_title is not None else ''))
     else:
-        plt.bar(x=range(0, size, 1), height=list(data[column_names].mean(
-            axis=0, skipna=True)), color=COLOR[np.random.randint(len(COLOR))], edgecolor='k')
-        plt.xticks(ticks=range(0, size, 1), labels=column_names)
+        plt.bar(x=range(0, size, 1), height=list(data[instr]), color=COLOR[np.random.randint(len(COLOR))], edgecolor='k')
+        plt.xticks(ticks=range(0, size), labels=column_names)
         plt.tick_params(labelsize='large')
         if second_title is not None:
             plt.suptitle('.')
