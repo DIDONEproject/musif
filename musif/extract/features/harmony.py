@@ -235,19 +235,19 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     #le añadimos harmonic_rhythm delante de cada key
     harmonic_rhythm = {'Harmonic rhythm'+k: hr[k] for k in hr}
     # 2. Modulations TODO: revvisar
-    modulations = get_modulations(harmonic_analysis, sections, major = score_data['Mode'] == 'major')
+    # modulations = get_modulations(harmonic_analysis, sections, major = score_data['mode'] == 'major')
     # 3. Numerals
-    numerals = get_numerals(harmonic_analysis)
+    # numerals = get_numerals(harmonic_analysis)
     # 4. Chord_types
-    chord_types = get_chord_types(harmonic_analysis) 
+    # chord_types = get_chord_types(harmonic_analysis) 
     # 5. Additions
-    additions = get_additions(harmonic_analysis)
+    # additions = get_additions(harmonic_analysis)
 
-    key_name = score_data['Key'].split(" ")[0].strip().replace('-','b') #coger solo la string de antes del espacio? y así quitar major y minor
-    key_name = key_name if score_data['Mode'] == 'major' else key_name.lower()
-    score_data['Key'] = key_name
+    # key_name = score_data['key'].split(" ")[0].strip().replace('-','b') #coger solo la string de antes del espacio? y así quitar major y minor
+    # key_name = key_name if score_data['mode'] == 'major' else key_name.lower()
+    # score_data['key'] = key_name
 
-    return dict(score_data, **harmonic_rhythm, **modulations, **numerals, **chord_types, **additions)
+    return dict(score_data, **harmonic_rhythm)#, **modulations, **numerals, **chord_types, **additions)
 def expand_repeat_bars(score):
     final_score = m21.stream.Score()
     final_score.metadata = score.metadata
@@ -373,68 +373,73 @@ def parse_score(mscx_file: str):
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     global logger
     logger = cfg.read_logger
+    features={}
+    
+    try:
+        #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
+        # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
+        # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
+        if 'mscx_path' in score_data:
+                try:                
+                    path=score_data['mscx_path']
 
-    #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
-    # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
-    # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
-    if 'mscx_path' in score_data:
-            try:                
-                path=score_data['mscx_path']
+                    # This takes a while!!
+                    msc3_score, harmonic_analysis, has_table = parse_score(path)
 
-                # This takes a while!!
-                msc3_score, harmonic_analysis, has_table = parse_score(path)
+                    has_table = True
 
-                has_table = True
+                except:
+                    has_table = False
+        else:
+            pass
+        # elif modulations is not None: # The user may have written only the not-expanded version
+        #     has_table = True
 
-            except:
-                has_table = False
-    else:
-        pass
-    # elif modulations is not None: # The user may have written only the not-expanded version
-    #     has_table = True
+        #     if modulations is not None and harmonic_analysis is None:
+        #         harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
+        # #         pass
+            
+        score = score_data['score']
+        repeat_elements= score_data['repetition_elements']
+    #     repeat_elements = get_repeat_elements(score, v = False)
+        #     
+            # Obtain score sections:
+            # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
+        sections=[]
+        #     Get the array based on harmonic_analysis.mc
+        # sections = continued_sections(sections, harmonic_analysis.mc)
 
-    #     if modulations is not None and harmonic_analysis is None:
-    #         harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
-    # #         pass
-        
-    score = score_data['score']
-    repeat_elements= score_data['repetition_elements']
-#     repeat_elements = get_repeat_elements(score, v = False)
-    #     
-        # Obtain score sections:
-        # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
-    sections=[]
-    #     Get the array based on harmonic_analysis.mc
-    # sections = continued_sections(sections, harmonic_analysis.mc)
+            ################
+            # HARMONY DATA #
+            ################
+            
+            # TODO: Mirar que es exactamente lo que necesitamos para suplantar a la variable gv
 
-        ################
-        # HARMONY DATA #
-        ################
-        
-        # TODO: Mirar que es exactamente lo que necesitamos para suplantar a la variable gv
+        all__harmonic_info = get_harmony_data(score_data, harmonic_analysis, sections)
+            
+            # #############
+            # # KEY AREAS #
+            # #############
+            # keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
+            # final_dictionary_keyAreas = dict(gv, **keyareas)
 
-    all__harmonic_info = get_harmony_data(score_data, harmonic_analysis, sections)
-        
-        # #############
-        # # KEY AREAS #
-        # #############
-        # keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
-        # final_dictionary_keyAreas = dict(gv, **keyareas)
+            # #############
+            # #  CHORDS   #
+            # #############
+            # chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
+            # final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
 
-        # #############
-        # #  CHORDS   #
-        # #############
-        # chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
-        # final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
-
-        #     # df_score_harmony = msc3_score
+            #     # df_score_harmony = msc3_score
+            # else:
+            # features = {} 
+            #     return list(OrderedDict.fromkeys(sections))
+            # features[f"{score_prefix}{NOTES}"] = notes
+        #     score_prefix = get_score_prefix()
         # else:
-        # features = {} 
-        #     return list(OrderedDict.fromkeys(sections))
-        # features[f"{score_prefix}{NOTES}"] = notes
-    #     score_prefix = get_score_prefix()
-    # else:
-    #     features = {} 
+        #     features = {} 
+    except Exception as e:
+            logger.error('Harmony problem found: ', exc_info=True)
+            features={}
 
     return features#, df_score_ha<rmony
 
