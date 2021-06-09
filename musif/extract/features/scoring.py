@@ -9,6 +9,7 @@ from musif.common.constants import VOICE_FAMILY, GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
 from musif.config import Configuration
+from musif.extract.common import part_matches_filter
 from musif.extract.features.prefix import get_corpus_prefix, get_family_prefix, get_sound_prefix
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
@@ -22,6 +23,7 @@ FAMILY = "Family"
 FAMILY_ABBREVIATION = "FamilyAbbreviation"
 INSTRUMENTAL = "Instrumental"
 NUMBER_OF_PARTS = "NumberOfParts"
+NUMBER_OF_FILTERED_PARTS = "NumberOfFilteredParts"
 NUMBER_OF_PARTS_MEAN = "NumberOfPartsMean"
 NUMBER_OF_PARTS_STD = "NumberOfPartsStd"
 SCORING = "Scoring"
@@ -58,21 +60,28 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     instrumental_family_abbreviations = []
     count_by_sound = {}
     count_by_family = {}
+    filtered_count_by_sound = {}
+    filtered_count_by_family = {}
     score = score_data["score"]
     for part in score.parts:
         sound = extract_sound(part, cfg)
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
             sound, part, score_data["parts"], cfg)
+        is_matching_part = part_matches_filter(part_abbreviation, score_data["parts_filter"])
         family = cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = cfg.family_to_abbreviation[family]
         abbreviated_parts.append(part_abbreviation)
         instrumental = family != VOICE_FAMILY
         if sound_abbreviation not in count_by_sound:
             count_by_sound[sound_abbreviation] = 0
+            filtered_count_by_sound[sound_abbreviation] = 0
         count_by_sound[sound_abbreviation] += 1
+        filtered_count_by_sound[sound_abbreviation] += 1 if is_matching_part else 0
         if family_abbreviation not in count_by_family:
             count_by_family[family_abbreviation] = 0
+            filtered_count_by_family[family_abbreviation] = 0
         count_by_family[family_abbreviation] += 1
+        filtered_count_by_family[family_abbreviation] += 1 if is_matching_part else 0
         if sound not in sounds:
             sounds.append(sound)
             sound_abbreviations.append(sound_abbreviation)
@@ -100,9 +109,11 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     for sound_abbreviation in sound_abbreviations:
         sound_prefix = get_sound_prefix(sound_abbreviation)
         features[f"{sound_prefix}{NUMBER_OF_PARTS}"] = count_by_sound[sound_abbreviation]
+        features[f"{sound_prefix}{NUMBER_OF_FILTERED_PARTS}"] = filtered_count_by_sound[sound_abbreviation]
     for family_abbreviation in family_abbreviations:
         family_prefix = get_family_prefix(family_abbreviation)
         features[f"{family_prefix}{NUMBER_OF_PARTS}"] = count_by_family[family_abbreviation]
+        features[f"{family_prefix}{NUMBER_OF_FILTERED_PARTS}"] = filtered_count_by_family[family_abbreviation]
 
     return features
 
@@ -145,7 +156,7 @@ def extract_sound(part: Part, config: Configuration) -> str:
         if sound_name not in config.sound_to_abbreviation:
             sound_name = translate_word(
                 sound_name, translations_cache=config.translations_cache)
-            sound_name = replace_naming_exceptions(sound_name, part.partName)
+            sound_name = replace_naming_exceptions(sound_name, part)
             sound_name = sound_name if sound_name[-1] != 's' else sound_name[:-1]
     else:
         for instrument in instrument.instrumentSound.split('.')[::-1]:
@@ -154,7 +165,7 @@ def extract_sound(part: Part, config: Configuration) -> str:
                 break
     if sound_name:
         sound_name = sound_name.replace('-', ' ').lower()
-        sound_name = replace_naming_exceptions(sound_name, part.partName)
+        sound_name = replace_naming_exceptions(sound_name, part)
     return sound_name
 
 
@@ -190,16 +201,16 @@ def extract_part_roman_number_by_position(part: Part, parts: List[Part]) -> Opti
     return None
 
 
-def replace_naming_exceptions(sound: str, part: str) -> str:
+def replace_naming_exceptions(sound: str, part: Part) -> str:
     if 'da caccia' in sound:
         sound = sound.replace('da caccia', '')
         if 'tromba' in sound:
             sound = 'horn'
     if 'bass' == sound:  # determines if voice or string instrument
-        if not text.assembleLyrics(part):
+        if len(part.lyrics()) == 0:
             sound = 'basso continuo'
     if 'french' in sound and 'horn' in sound:
         sound = 'horn'
-    if 'cello' in sound and 'bass' in part.lower():
+    if 'cello' in sound and 'bass' in part.partName.lower():
         sound = 'basso continuo'
     return sound

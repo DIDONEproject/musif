@@ -220,20 +220,22 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     trim_ratio = trim_diff / interval_mean if interval_mean != 0 else 0
     absolute_trim_diff = absolute_interval_mean - trimmed_absolute_interval_mean
     absolute_trim_ratio = absolute_trim_diff / absolute_interval_mean if absolute_interval_mean != 0 else 0
-    ascending_intervals = len([interval for interval in numeric_intervals if interval > 0])
-    descending_intervals = len([interval for interval in numeric_intervals if interval < 0])
-    ascending_semitones = sum([interval for interval in numeric_intervals if interval > 0])
-    descending_semitones = sum([interval for interval in numeric_intervals if interval < 0])
-    largest_ascending_semitones = max([interval for interval in numeric_intervals if interval > 0])
-    largest_ascending = Interval(largest_ascending_semitones).directedName
-    largest_descending_semitones = min([interval for interval in numeric_intervals if interval < 0])
-    largest_descending = Interval(largest_descending_semitones).directedName
-    smallest_ascending_semitones = min([interval for interval in numeric_intervals if interval > 0])
-    smallest_ascending = Interval(smallest_ascending_semitones).directedName
-    smallest_descending_semitones = max([interval for interval in numeric_intervals if interval < 0])
-    smallest_descending = Interval(smallest_descending_semitones).directedName
-    ascending_intervals_percentage = ascending_intervals / len(numeric_intervals)
-    descending_intervals_percentage = descending_intervals / len(numeric_intervals)
+    ascending_intervals = [interval for interval in numeric_intervals if interval > 0]
+    descending_intervals = [interval for interval in numeric_intervals if interval < 0]
+    num_ascending_intervals = len(ascending_intervals) if len(ascending_intervals) > 0 else 0
+    num_descending_intervals = len(descending_intervals) if len(descending_intervals) > 0 else 0
+    num_ascending_semitones = sum(ascending_intervals) if len(ascending_intervals) > 0 else 0
+    num_descending_semitones = sum(descending_intervals) if len(descending_intervals) > 0 else 0
+    largest_ascending_semitones = max(ascending_intervals) if len(ascending_intervals) > 0 else None
+    largest_ascending = Interval(largest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
+    largest_descending_semitones = min(descending_intervals) if len(descending_intervals) > 0 else None
+    largest_descending = Interval(largest_descending_semitones).directedName if len(descending_intervals) > 0 else None
+    smallest_ascending_semitones = min(ascending_intervals) if len(ascending_intervals) > 0 else None
+    smallest_ascending = Interval(smallest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
+    smallest_descending_semitones = max(descending_intervals) if len(descending_intervals) > 0 else None
+    smallest_descending = Interval(smallest_descending_semitones).directedName if len(descending_intervals) > 0 else None
+    ascending_intervals_percentage = num_ascending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    descending_intervals_percentage = num_descending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
 
     features = {
         f"{prefix}{INTERVALLIC_MEAN}": interval_mean,
@@ -248,10 +250,10 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{INTERVALLIC_TRIM_RATIO}": trim_ratio,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": absolute_trim_diff,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": absolute_trim_ratio,
-        f"{prefix}{ASCENDING_INTERVALS_COUNT}": ascending_intervals,
-        f"{prefix}{DESCENDING_INTERVALS_COUNT}": descending_intervals,
-        f"{prefix}{ASCENDING_SEMITONES}": ascending_semitones,
-        f"{prefix}{DESCENDING_SEMITONES}": descending_semitones,
+        f"{prefix}{ASCENDING_INTERVALS_COUNT}": num_ascending_intervals,
+        f"{prefix}{DESCENDING_INTERVALS_COUNT}": num_descending_intervals,
+        f"{prefix}{ASCENDING_SEMITONES}": num_ascending_semitones,
+        f"{prefix}{DESCENDING_SEMITONES}": num_descending_semitones,
         f"{prefix}{ASCENDING_INTERVALS_PER}": ascending_intervals_percentage,
         f"{prefix}{DESCENDING_INTERVALS_PER}": descending_intervals_percentage,
         f"{prefix}{LARGEST_ASC_INTERVAL}": largest_ascending,
@@ -336,73 +338,73 @@ def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""
 
     return {
         f"{prefix}{REPEATED_NOTES_COUNT}": no_semitones_data,
-        f"{prefix}{REPEATED_NOTES_PER}": no_semitones_data / all_intervals,
+        f"{prefix}{REPEATED_NOTES_PER}": no_semitones_data / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{LEAPS_ASC_COUNT}": ascending_leaps,
         f"{prefix}{LEAPS_DESC_COUNT}": descending_leaps,
         f"{prefix}{LEAPS_ALL_COUNT}": ascending_leaps + descending_leaps,
-        f"{prefix}{LEAPS_ASC_PER}": ascending_leaps / all_intervals,
-        f"{prefix}{LEAPS_DESC_PER}": descending_leaps / all_intervals,
-        f"{prefix}{LEAPS_ALL_PER}": (ascending_leaps + descending_leaps) / all_intervals,
+        f"{prefix}{LEAPS_ASC_PER}": ascending_leaps / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{LEAPS_DESC_PER}": descending_leaps / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{LEAPS_ALL_PER}": (ascending_leaps + descending_leaps) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{STEPWISE_MOTION_ASC_COUNT}": ascending_stepwise,
         f"{prefix}{STEPWISE_MOTION_DESC_COUNT}": descending_stepwise,
         f"{prefix}{STEPWISE_MOTION_ALL_COUNT}": ascending_stepwise + descending_stepwise,
-        f"{prefix}{STEPWISE_MOTION_ASC_PER}": ascending_stepwise / all_intervals,
-        f"{prefix}{STEPWISE_MOTION_DESC_PER}": descending_stepwise / all_intervals,
-        f"{prefix}{STEPWISE_MOTION_ALL_PER}": (ascending_stepwise + descending_stepwise) / all_intervals,
+        f"{prefix}{STEPWISE_MOTION_ASC_PER}": ascending_stepwise / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{STEPWISE_MOTION_DESC_PER}": descending_stepwise / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{STEPWISE_MOTION_ALL_PER}": (ascending_stepwise + descending_stepwise) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_PERFECT_ASC_COUNT}": ascending_perfect,
         f"{prefix}{INTERVALS_PERFECT_DESC_COUNT}": descending_perfect,
         f"{prefix}{INTERVALS_PERFECT_ALL_COUNT}": ascending_perfect + descending_perfect,
-        f"{prefix}{INTERVALS_PERFECT_ASC_PER}": ascending_perfect / all_intervals,
-        f"{prefix}{INTERVALS_PERFECT_DESC_PER}": descending_perfect / all_intervals,
-        f"{prefix}{INTERVALS_PERFECT_ALL_PER}": (ascending_perfect + descending_perfect) / all_intervals,
+        f"{prefix}{INTERVALS_PERFECT_ASC_PER}": ascending_perfect / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_PERFECT_DESC_PER}": descending_perfect / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_PERFECT_ALL_PER}": (ascending_perfect + descending_perfect) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_MAJOR_ASC_COUNT}": ascending_major,
         f"{prefix}{INTERVALS_MAJOR_DESC_COUNT}": descending_major,
         f"{prefix}{INTERVALS_MAJOR_ALL_COUNT}": ascending_major + descending_major,
-        f"{prefix}{INTERVALS_MAJOR_ASC_PER}": ascending_major / all_intervals,
-        f"{prefix}{INTERVALS_MAJOR_DESC_PER}": descending_major / all_intervals,
-        f"{prefix}{INTERVALS_MAJOR_ALL_PER}": (ascending_major + descending_major) / all_intervals,
+        f"{prefix}{INTERVALS_MAJOR_ASC_PER}": ascending_major / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_MAJOR_DESC_PER}": descending_major / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_MAJOR_ALL_PER}": (ascending_major + descending_major) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_MINOR_ASC_COUNT}": ascending_minor,
         f"{prefix}{INTERVALS_MINOR_DESC_COUNT}": descending_minor,
         f"{prefix}{INTERVALS_MINOR_ALL_COUNT}": ascending_minor + descending_minor,
-        f"{prefix}{INTERVALS_MINOR_ASC_PER}": ascending_minor / all_intervals,
-        f"{prefix}{INTERVALS_MINOR_DESC_PER}": descending_minor / all_intervals,
-        f"{prefix}{INTERVALS_MINOR_ALL_PER}": (ascending_minor + descending_minor) / all_intervals,
+        f"{prefix}{INTERVALS_MINOR_ASC_PER}": ascending_minor / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_MINOR_DESC_PER}": descending_minor / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_MINOR_ALL_PER}": (ascending_minor + descending_minor) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_AUGMENTED_ASC_COUNT}": ascending_augmented,
         f"{prefix}{INTERVALS_AUGMENTED_DESC_COUNT}": descending_augmented,
         f"{prefix}{INTERVALS_AUGMENTED_ALL_COUNT}": ascending_augmented + descending_augmented,
-        f"{prefix}{INTERVALS_AUGMENTED_ASC_PER}": ascending_augmented / all_intervals,
-        f"{prefix}{INTERVALS_AUGMENTED_DESC_PER}": descending_augmented / all_intervals,
-        f"{prefix}{INTERVALS_AUGMENTED_ALL_PER}": (ascending_augmented + descending_augmented) / all_intervals,
+        f"{prefix}{INTERVALS_AUGMENTED_ASC_PER}": ascending_augmented / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_AUGMENTED_DESC_PER}": descending_augmented / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_AUGMENTED_ALL_PER}": (ascending_augmented + descending_augmented) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_DIMINISHED_ASC_COUNT}": ascending_diminished,
         f"{prefix}{INTERVALS_DIMINISHED_DESC_COUNT}": descending_diminished,
         f"{prefix}{INTERVALS_DIMINISHED_ALL_COUNT}": ascending_diminished + descending_diminished,
-        f"{prefix}{INTERVALS_DIMINISHED_ASC_PER}": ascending_diminished / all_intervals,
-        f"{prefix}{INTERVALS_DIMINISHED_DESC_PER}": descending_diminished / all_intervals,
-        f"{prefix}{INTERVALS_DIMINISHED_ALL_PER}": (ascending_diminished + descending_diminished) / all_intervals,
+        f"{prefix}{INTERVALS_DIMINISHED_ASC_PER}": ascending_diminished / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_DIMINISHED_DESC_PER}": descending_diminished / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_DIMINISHED_ALL_PER}": (ascending_diminished + descending_diminished) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT}": ascending_double_augmented,
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT}": descending_double_augmented,
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT}": ascending_double_augmented + descending_double_augmented,
-        f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ASC_PER}": ascending_double_augmented / all_intervals,
-        f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_DESC_PER}": descending_double_augmented / all_intervals,
-        f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ALL_PER}": (ascending_double_augmented + descending_double_augmented) / all_intervals,
+        f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ASC_PER}": ascending_double_augmented / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_DESC_PER}": descending_double_augmented / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ALL_PER}": (ascending_double_augmented + descending_double_augmented) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT}": ascending_double_diminished,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_DESC_COUNT}": descending_double_diminished,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT}": ascending_double_diminished + descending_double_diminished,
-        f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ASC_PER}": ascending_double_diminished / all_intervals,
-        f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_DESC_PER}": descending_double_diminished / all_intervals,
-        f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ALL_PER}": (ascending_double_diminished + descending_double_diminished) / all_intervals,
+        f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ASC_PER}": ascending_double_diminished / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_DESC_PER}": descending_double_diminished / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ALL_PER}": (ascending_double_diminished + descending_double_diminished) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_COUNT}": ascending_within_octave,
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_COUNT}": descending_within_octave,
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_COUNT}": ascending_within_octave + descending_within_octave,
-        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_PER}": ascending_within_octave / all_intervals,
-        f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_PER}": descending_within_octave / all_intervals,
-        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_PER}": (ascending_within_octave + descending_within_octave) / all_intervals,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_PER}": ascending_within_octave / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_PER}": descending_within_octave / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_PER}": (ascending_within_octave + descending_within_octave) / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_COUNT}": ascending_beyond_octave,
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_COUNT}": descending_beyond_octave,
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_COUNT}": ascending_beyond_octave + descending_beyond_octave,
-        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_PER}": ascending_beyond_octave / all_intervals,
-        f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_PER}": descending_beyond_octave / all_intervals,
-        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_PER}": (ascending_beyond_octave + descending_beyond_octave) / all_intervals,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_PER}": ascending_beyond_octave / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_PER}": descending_beyond_octave / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_PER}": (ascending_beyond_octave + descending_beyond_octave) / all_intervals if all_intervals != 0 else 0,
     }
 
 

@@ -1,7 +1,10 @@
+import multiprocessing as mp
 import glob
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Tuple, Union
 
+from tqdm import tqdm
 from music21.converter import parse
 from music21.stream import Part, Score
 from pandas import DataFrame
@@ -11,10 +14,12 @@ from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.features import (ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, tempo, text, texture)
+from musif.extract.features import (ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, tempo,
+                                    text, texture)
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
-from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, to_abbreviation
+from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
+    to_abbreviation
 from musif.musicxml import (
     MUSICXML_FILE_EXTENSION,
     analysis,
@@ -137,16 +142,47 @@ class FeaturesExtractor:
         return corpus_by_dir
 
     def _process_corpus(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[List[dict], List[dict], List[dict], List[dict]]:
+        if self._cfg.parallel:
+            return self._process_corpus_in_parallel(musicxml_files, parts_filter)
+        return self._process_corpus_sequentially(musicxml_files, parts_filter)
+
+    def _process_corpus_sequentially(
+        self,
+        musicxml_files: List[str],
+        parts_filter: List[str] = None
+    ) -> Tuple[List[dict], List[dict], List[dict], List[dict]]:
         corpus_scores_data = []
         corpus_parts_data = []
         scores_features = []
         parts_features = []
-        for musicxml_file in musicxml_files:
+        for musicxml_file in tqdm(musicxml_files):
             score_data, parts_data, score_features, score_parts_features = self._process_score(musicxml_file, parts_filter)
             corpus_scores_data.append(score_data)
             corpus_parts_data.extend(parts_data)
             scores_features.append(score_features)
             parts_features.extend(score_parts_features)
+        return corpus_scores_data, corpus_parts_data, scores_features, parts_features
+
+    def _process_corpus_in_parallel(
+        self,
+        musicxml_files: List[str],
+        parts_filter: List[str] = None
+    ) -> Tuple[List[dict], List[dict], List[dict], List[dict]]:
+        corpus_scores_data = []
+        corpus_parts_data = []
+        scores_features = []
+        parts_features = []
+
+        # with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
+        #     futures = [executor.submit(process_score, (self, musicxml_file, parts_filter)) for musicxml_file in musicxml_files]
+        #     for _ in tqdm(as_completed(futures), total=len(futures)):
+        #         pass
+        #     for future in futures:
+        # score_data, parts_data, score_features, score_parts_features = future.result()
+        # corpus_scores_data.append(score_data)
+        # corpus_parts_data.extend(parts_data)
+        # scores_features.append(score_features)
+        # parts_features.extend(score_parts_features)
         return corpus_scores_data, corpus_parts_data, scores_features, parts_features
 
     def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict], dict, List[dict]]:

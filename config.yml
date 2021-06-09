@@ -5,6 +5,7 @@ intermediate_files_dir: intermediate
 logs_dir: logs
 log_level: DEBUG
 sequential: false
+max_processes: 5
 features:
   - melodic
 #  - harmonic
