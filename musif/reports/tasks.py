@@ -131,7 +131,7 @@ def _factor_execution(all_info: DataFrame, factor: int, parts_list: list, main_r
     # Running some processes that differ for each part
 
     for instrument in tqdm(list(instruments), desc='Progress'):
-        print('\nInstrument: ', instrument)
+        print('\nInstrument: ', instrument, end='\n\n')
         intervals_list = []
         intervals_types_list = []
         emphasised_A_list = []
@@ -349,7 +349,7 @@ def group_execution(_cfg: Configuration, groups: list, results_path_factorx: str
 #
 ###########################################################################################################################################################
 
-def print_groups(sheet: ExcelWriter, grouped:list, row_number: int, column_number: int, columns: list, third_columns: list, computations_columns: list,
+def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_number: int, columns: list, third_columns: list, computations_columns: list,
                  first_columns: list = None, second_columns: List=None, per: bool=False, average:bool=False, last_column: bool=False,
                  last_column_average: bool=False, additional_info: DataFrame=None, ponderate: bool=False, not_grouped_df:DataFrame=None):
     len_add_info = 0  # Space for the possible column of additional information
@@ -431,7 +431,7 @@ def print_groups(sheet: ExcelWriter, grouped:list, row_number: int, column_numbe
                 value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":
-                total_analysed_row = subgroup_data[c].tolist()
+                total_analysed_row = subgroup_data[c].to_list()
                 sheet.cell(row_number, cnumber).value = value
                 sheet.cell(row_number, cnumber).font =  FONT
 
@@ -521,7 +521,6 @@ def print_groups(sheet: ExcelWriter, grouped:list, row_number: int, column_numbe
             if all([str(e)=='0.0' for e in values[:,row]]):
                 del columns_values[c][0]
                 #Antes del columns_values[c][row] 
-
         if average:  
             columns_values[c] = compute_average(
                 columns_values[c], computations_columns[i])
@@ -688,7 +687,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
 ########################################################################
 
 def Melody_values(_cfg: Configuration, data: DataFrame, results_path: str, name: str, sorting_lists: list, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
-    # try:
+    try:
         workbook = openpyxl.Workbook()
         data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
                              interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
@@ -802,8 +801,8 @@ def Melody_values(_cfg: Configuration, data: DataFrame, results_path: str, name:
             name_box = path.join(
                 results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
             box_plot(name_box, data)
-    # except Exception as e:
-    #     _cfg.read_logger.info('{}  Problem found: {}'.format(name, e))
+    except Exception as e:
+        _cfg.read_logger.info('{}  Problem found: {}'.format(name, e))
 
 
 def Intervals(_cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, sorting_lists: list, visualiser_lock: Lock, additional_info: list=[], groups: list=None):

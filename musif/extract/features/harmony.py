@@ -15,10 +15,20 @@ from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 
-from .harmony_utils import get_beatspertsig, compute_number_of_compasses, continued_sections
-
+from .harmony_utils import get_beatspertsig, compute_number_of_compasses, continued_sections, get_keys_functions, get_numerals_function, make_type_col, get_chords_functions, get_chordtype_functions, get_compases_per_possibility, get_keyareas
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
-logger=None
+
+
+HARMONIC_RHYTHM_VOICE = "Harmonic rhythm Voice"
+HARMONIC_RHYTHM_NOVOICE = "Harmonic rhythm No Voice"
+HARMONIC_RHYTHM_AVERAGE = "Harmonic rhythm Average"
+NUMERALS_T='Numerals_T'
+NUMERALS_D='Numerals_D'
+NUMERALS_SD='Numerals_SD'
+NUMERALS_sharp_LN='Numerals_#LN'
+NUMERALS='Numerals'
+
+logger = None
 ###############################################################################
 # This function generates a dataframe with the measures and the local key     #
 # present in each one of them based on the 'modulations' atribute in the json #
@@ -46,33 +56,6 @@ def compute_modulations(partVoice, partVoice_expanded, modulations):
         print('Please, review the format of the modulation\'s indications in the JSON file. It needs to have the following format: [(<local key>, <starting measure>), ... ]')
         return None
 
-
-def get_compases_per_possibility(possibilities, measures, possibilities_list, beats, time_signatures):
-    # possibilities=list(set(possibilities))
-    voice_measures = {p: 0 for p in possibilities}
-    last_voice = 0
-    done = 0
-    starting_measure = 0
-    numberofmeasures = len(measures)
-    for i, v in enumerate(possibilities_list):
-        if v != last_voice and i < numberofmeasures:
-            #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
-            n_beats = get_beatspertsig(time_signatures[i - 1])
-            if last_voice in voice_measures :
-                num_compasses, done = compute_number_of_compasses(done, starting_measure, measures[i - 1], measures[i], beats[i - 1], n_beats)
-                voice_measures[last_voice] += num_compasses
-            last_voice = v
-            starting_measure = measures[i] - 1
-    
-    #último!
-    num_compasses, _ = compute_number_of_compasses(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, beats[numberofmeasures - 1], n_beats)
-    voice_measures[last_voice] += num_compasses
-
-    #comprobar que tiene sentido:
-    # if (compases[0] != 0 and round(sum(list(compases_voz.values()))) != compases[i]) or (compases[0] == 0 and round(sum(list(compases_voz.values()))) != compases[i] + 1):
-    #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
-
-    return voice_measures
 
 def get_harmonic_rhythm(ms3_table, sections)-> dict:
     
@@ -102,7 +85,7 @@ def get_chords(tabla_lausanne):
     relativeroots = tabla_lausanne.relativeroot.tolist() 
     keys = tabla_lausanne.localkey.dropna().tolist() # TODO: comprobar en el 'enunciado' que en Chords hay que obtener la local key y no la global
 
-    cg1, cg2 = harmony_groupings.get_chords_functions(chords, relativeroots, keys)
+    cg1, cg2 = get_chords_functions(chords, relativeroots, keys)
     c_c = Counter(chords)
     cg1 = Counter(cg1)
     cg2 = Counter(cg2)
@@ -128,10 +111,10 @@ def get_chord_types(tabla_lausanne):
     #los que son nan hay que cambiarlos en función de una serie de reglas
     figbass = tabla_lausanne.figbass.tolist()
     numerals = tabla_lausanne.numeral.tolist()
-    form_l = lausanne_sorting_script.make_type_col(tabla_lausanne)
+    form_l = make_type_col(tabla_lausanne)
         
     #convert the list of forms in their groups
-    grouped_forms = harmony_groupings.get_chordtype_functions(form_l)
+    grouped_forms = get_chordtype_functions(form_l)
 
     form_counter = Counter(grouped_forms)
     fc = {}
@@ -141,7 +124,6 @@ def get_chord_types(tabla_lausanne):
 
 def get_numerals(tabla_lausanne):
     numerals = tabla_lausanne.numeral.dropna().tolist()
-    #numerals_defined = harmonic_analysis.Numerals_firstLetter.dropna().tolist()
     keys = tabla_lausanne.globalkey.dropna().tolist()
     relativeroots = tabla_lausanne.relativeroot.tolist()
     """
@@ -164,7 +146,7 @@ def get_numerals(tabla_lausanne):
         except:
             print('Falta el numeral: ', i) """
 
-    _, ng2 = harmony_groupings.get_numerals_function(numerals, relativeroots, keys)
+    _, ng2 = get_numerals_function(numerals, relativeroots, keys)
     numerals_counter = Counter(ng2)
     
     nc = {}
@@ -174,26 +156,26 @@ def get_numerals(tabla_lausanne):
 
 def get_modulations(tabla_lausanne, sections, major = True):
     keys = tabla_lausanne.localkey.dropna().tolist()
-    grouping, _ = harmony_groupings.get_keys_functions(keys, mode = 'M' if major else 'm')
+    grouping, _ = get_keys_functions(keys, mode = 'M' if major else 'm')
     modulations_sections = {g:[] for g in grouping}
     # Count the number of sections in each key
     last_key = ''
     for i, k in enumerate(keys):
-        if (k != 'I' and k != 'i') and k != last_key: #premisa
-            section = sections[i]
+        if (k.lower() != 'i') and k != last_key: #premisa
+            # section = sections[i] #??? NON comprendo
             last_key = k
             modulation = grouping[i]
-            modulations_sections[modulation].append(section)
-        if last_key == k and sections[i] != section:
-            section = sections[i]
-            modulations_sections[modulation].append(section)
+            # modulations_sections[modulation].append(section)
+        # if last_key == k and sections[i] != section:
+        #     section = sections[i]
+        #     modulations_sections[modulation].append(section)
     
     #borramos las modulaciones con listas vacías y dejamos un counter en vez de una lista
     ms = {}
-    for m in modulations_sections:
-        if len(modulations_sections[m]) != 0:
-            ms['Modulations'+str(m)] = len(list(set(modulations_sections[m])))
-    return ms
+    # for m in modulations_sections:
+    #     if len(modulations_sections[m]) != 0:
+    #         ms['Modulations'+str(m)] = len(list(set(modulations_sections[m])))
+    # return ms
 
 def get_additions(tabla_lausanne):
     additions = tabla_lausanne.changes.tolist()
@@ -232,14 +214,16 @@ def get_additions(tabla_lausanne):
 
 def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: list = None) -> dict:
     hr = get_harmonic_rhythm(harmonic_analysis, sections)
-    #le añadimos harmonic_rhythm delante de cada key
-    harmonic_rhythm = {'Harmonic rhythm'+k: hr[k] for k in hr}
-    # 2. Modulations TODO: revvisar
-    # modulations = get_modulations(harmonic_analysis, sections, major = score_data['mode'] == 'major')
+    harmonic_rhythm = {'Harmonic rhythm_'+k: hr[k] for k in hr}
+
+    # 2. Modulations TODO: revisar 
+    ### DEPENDE DE SECTIONS Y NO TENEMOS YET
+    modulations = get_modulations(harmonic_analysis, sections, major = score_data['mode'] == 'major')
+    
     # 3. Numerals
-    # numerals = get_numerals(harmonic_analysis)
+    numerals = get_numerals(harmonic_analysis)
     # 4. Chord_types
-    # chord_types = get_chord_types(harmonic_analysis) 
+    chord_types = get_chord_types(harmonic_analysis) 
     # 5. Additions
     # additions = get_additions(harmonic_analysis)
 
@@ -247,7 +231,7 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     # key_name = key_name if score_data['mode'] == 'major' else key_name.lower()
     # score_data['key'] = key_name
 
-    return dict(score_data, **harmonic_rhythm)#, **modulations, **numerals, **chord_types, **additions)
+    return dict(score_data, **harmonic_rhythm, **numerals)#, **modulations, , **chord_types, **additions)
 def expand_repeat_bars(score):
     final_score = m21.stream.Score()
     final_score.metadata = score.metadata
@@ -373,8 +357,7 @@ def parse_score(mscx_file: str):
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     global logger
     logger = cfg.read_logger
-    features={}
-    
+    features={}    
     try:
         #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
         # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
@@ -401,8 +384,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             
         score = score_data['score']
         repeat_elements= score_data['repetition_elements']
-    #     repeat_elements = get_repeat_elements(score, v = False)
-        #     
+        score_prefix = get_score_prefix()
             # Obtain score sections:
             # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
         sections=[]
@@ -412,16 +394,14 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             ################
             # HARMONY DATA #
             ################
-            
-            # TODO: Mirar que es exactamente lo que necesitamos para suplantar a la variable gv
-
+        
         all__harmonic_info = get_harmony_data(score_data, harmonic_analysis, sections)
-            
+        
             # #############
             # # KEY AREAS #
             # #############
-            # keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
-            # final_dictionary_keyAreas = dict(gv, **keyareas)
+
+        keyareas = get_keyareas(harmonic_analysis, sections, major = score_data['mode'] == 'major')
 
             # #############
             # #  CHORDS   #
@@ -435,52 +415,24 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             #     return list(OrderedDict.fromkeys(sections))
             # features[f"{score_prefix}{NOTES}"] = notes
         #     score_prefix = get_score_prefix()
-        # else:
-        #     features = {} 
+
+        #Harmonic Rhythm
+        features[f"{score_prefix}{HARMONIC_RHYTHM_VOICE}"] = all__harmonic_info['Harmonic rhythm_Voice']
+        features[f"{score_prefix}{HARMONIC_RHYTHM_NOVOICE}"] = all__harmonic_info['Harmonic rhythm_No_voice']
+        features[f"{score_prefix}{HARMONIC_RHYTHM_AVERAGE}"] = all__harmonic_info['Harmonic rhythm_Average']
+        
+        #NUMERALS
+        features[f"{score_prefix}{NUMERALS_T}"] = all__harmonic_info['NumeralsT']
+        features[f"{score_prefix}{NUMERALS_D}"] = all__harmonic_info['NumeralsD']
+        features[f"{score_prefix}{NUMERALS_SD}"] = all__harmonic_info['NumeralsSD']
+        features[f"{score_prefix}{NUMERALS_sharp_LN}"] = all__harmonic_info['Numerals#LN']
+        features[f"{score_prefix}{NUMERALS}"] = all__harmonic_info['Numerals']
+        
+        #KEY AREAS
+        features.update({k:v for (k, v) in keyareas.items()})
+        
     except Exception as e:
             logger.error('Harmony problem found: ', exc_info=True)
             features={}
 
-    return features#, df_score_ha<rmony
-
-# if __name__=='__main__':
-#     musescore_folder =r'../../../arias/mscx'
-#     xml_name = r'Dem01M-O_piu-1735-Leo[1.01][0430]'
-#     mscx_file = [f for f in list(glob.glob(os.path.join(musescore_folder, '*.mscx'))) if xml_name in f][0]
-#     msc3_score = ms3.score.MSCX(mscx_file, level = 'c')
-#     has_table = True
-#     try:
-#         harmonic_analysis = msc3_score.expanded
-#     except Exception as e:
-#         has_table = False
-#     xml_file=xml_name+'.xml'
-#     # score = converter.parse(xml_file) #EN ESTE CASO NO NECESITAMOS EXPANDIR LAS REPETICIONES
-    
-#     # repeat_elements = get_repeat_elements(score, v = False)
-#     # score_expanded = expand_score_repetitions(score, repeat_elements)
-#     # # Obtain score sections:
-#     # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
-#     # # Get the array based on harmonic_analysis.mc
-#     # sections = continued_sections(sections, harmonic_analysis.mc)
-
-#     #data already processed in the extractor
-#     gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
-
-#     ################
-#     # HARMONY DATA #
-#     ################
-#     final_dictionary_all_info = get_harmony_data(gv, harmonic_analysis, sections)
-
-#     #############
-#     # KEY AREAS #
-#     #############
-#     keyareas = get_keyareas(harmonic_analysis, sections, major = general_variables['Mode'] == 'major')
-#     final_dictionary_keyAreas = dict(gv, **keyareas)
-
-#     #############
-#     #  CHORDS   #
-#     #############
-#     chords, chords_g1, chords_g2 = get_chords(harmonic_analysis)
-#     final_dictionary_chords = dict(gv, **chords, **chords_g1, **chords_g2)
-    
-
+    return features

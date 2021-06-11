@@ -29,17 +29,20 @@ def note_mean(pitch_ps: list, round_mean: bool =False) -> str:
 
 
 def interval_mean(interval_semitones: list) -> str:
-    mean_semitones = np.nansum(interval_semitones) / len(interval_semitones)
-    if mean_semitones.is_integer():
-        i = interval.convertSemitoneToSpecifierGeneric(mean_semitones)
-        value = str(i[0]) + str(i[1])
+    if interval_semitones:
+        mean_semitones = np.nansum(interval_semitones) / len(interval_semitones)
+        if mean_semitones.is_integer():
+            i = interval.convertSemitoneToSpecifierGeneric(mean_semitones)
+            value = str(i[0]) + str(i[1])
+        else:
+            i_up = math.ceil(mean_semitones)
+            i_down = math.floor(mean_semitones)
+            nup = interval.convertSemitoneToSpecifierGeneric(i_up)
+            ndown = interval.convertSemitoneToSpecifierGeneric(i_down)
+            value = "-".join([str(nup[0]) + str(nup[1]),
+                            str(ndown[0]) + str(ndown[1])])
     else:
-        i_up = math.ceil(mean_semitones)
-        i_down = math.floor(mean_semitones)
-        nup = interval.convertSemitoneToSpecifierGeneric(i_up)
-        ndown = interval.convertSemitoneToSpecifierGeneric(i_down)
-        value = "-".join([str(nup[0]) + str(nup[1]),
-                          str(ndown[0]) + str(ndown[1])])
+        value=0.0
     return value
 
 ###############################################################################################
@@ -59,6 +62,8 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             else:
                 s = 0
                 for v, w in zip(column_data, ponderate_data):
+                    if str(v)=='nan':
+                        v=0.0
                     s += v * w
                 value = round(s / sum(ponderate_data), 3)
         elif computation == "mean_density" or computation == "mean_texture":
@@ -150,30 +155,31 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
 def compute_average(dic_data: Dict, computation: str):
     value = 0
     computation = computation.replace('_density', '').replace('_texture', '') #In case we have averages for densities or textures we compute normal average 
-
-    if computation in ["mean", "min", "sum", "max", "absolute","meanSemitones"]:
-        value = round(sum(dic_data) / len(dic_data), 3)
-    elif computation in ["minNote", "maxNote"]:
-        pitch_ps = [pitch.Pitch(n).ps for n in dic_data]
-        value = note_mean(pitch_ps)
-    elif computation in ["meanNote"]:
-        mean_dic_data = []
-        for data in dic_data:
-            pitches = [pitch.Pitch(n).ps for n in data.split('-')]
-            mean_dic_data.append(sum(pitches) / len(pitches))
-        value = note_mean(mean_dic_data)
-    elif computation in ["minInterval", "maxInterval", "absoluteInterval"]:
-        interval_semitones = [interval.Interval(n).semitones for n in dic_data]
-        value = interval_mean(interval_semitones)
-    elif computation == "meanInterval":
-        mean_dic_data = []
-        for data in dic_data:
-            semitones = [interval.Interval(n).semitones for n in data.split('-')]
-            mean_dic_data.append(sum(semitones) / len(semitones))
-        value = interval_mean(mean_dic_data)
+    try:
+        if computation in ["mean", "min", "sum", "max", "absolute","meanSemitones"]:
+            value = round(sum(dic_data) / len(dic_data), 3)
+        elif computation in ["minNote", "maxNote"]:
+            pitch_ps = [pitch.Pitch(n).ps for n in dic_data]
+            value = note_mean(pitch_ps)
+        elif computation in ["meanNote"]:
+            mean_dic_data = []
+            for data in dic_data:
+                pitches = [pitch.Pitch(n).ps for n in data.split('-')]
+                mean_dic_data.append(sum(pitches) / len(pitches))
+            value = note_mean(mean_dic_data)
+        elif computation in ["minInterval", "maxInterval", "absoluteInterval"]:
+            interval_semitones = [interval.Interval(n).semitones for n in dic_data]
+            value = interval_mean(interval_semitones)
+        elif computation == "meanInterval":
+            mean_dic_data = []
+            for data in dic_data:
+                semitones = [interval.Interval(n).semitones for n in data.split('-')]
+                mean_dic_data.append(sum(semitones) / len(semitones))
+            value = interval_mean(mean_dic_data)
         
         # value = round(np.nansum(dic_data) / (len(dic_data) - len([z for z in dic_data if z == 0])), 3)
-
+    except ZeroDivisionError or ValueError:
+        value= 0.0
     return value
 
 ##################################################################################################
