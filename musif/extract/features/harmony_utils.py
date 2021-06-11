@@ -1,3 +1,5 @@
+from collections import Counter
+import pandas as pd
 ####################
 # METRICAL ANALYSIS
 ####################    
@@ -200,52 +202,220 @@ def get_localkey_function1(localkey, mode):
 # Function to return function2 based on function1. It
 # disregards the mode. #
 #############################################################
-def get_localkey_function2(function1):
-    if function1 in ['T', 't']:
+def get_localkey_function2(chord):
+    if chord in ['T', 't']:
         return 'T'
-    elif function1 in ['rm', 'rj']:
+    elif chord in ['rm', 'rj']:
         return 'rel'
-    elif function1 in ['D', 'd']:
+    elif chord in ['D', 'd']:
         return 'D'
-    elif function1 in ['SD', 'sd']:
+    elif chord in ['SD', 'sd']:
         return 'SD'
-    elif function1 in ['NAP']:
+    elif chord in ['NAP']:
         return 'NAP'
-    elif function1 in ['M', 'm']:
+    elif chord in ['M', 'm']:
         return 'M'
-    elif function1 in ['ST', 'st', 'LN']:
+    elif chord in ['ST', 'st', 'LN']:
         return 'ST'
-    elif function1 in ['bT', 'bt']:
+    elif chord in ['bT', 'bt']:
         return 'bT'
-    elif function1 in ['#T', '#t']:
+    elif chord in ['#T', '#t']:
         return '#T'
-    elif function1 in ['bSD', 'bsd']:
+    elif chord in ['bSD', 'bsd']:
         return 'bSD'
-    elif function1 in ['#SD', '#sd']:
+    elif chord in ['#SD', '#sd']:
         return '#SD'
-    elif function1 in ['bD', 'bd']:
+    elif chord in ['bD', 'bd']:
         return 'bD'
-    elif function1 in ['#D', '#d']:
+    elif chord in ['#D', '#d']:
         return '#D'
-    elif function1 in ['bM', 'bm']:
+    elif chord in ['bM', 'bm']:
         return 'bM'
-    elif function1 in ['#M', '#m']:
+    elif chord in ['#M', '#m']:
         return '#M'
-    elif function1 in ['bST', 'bst']:
+    elif chord in ['bST', 'bst']:
         return 'bST'
     else:
-        print('Error in get_key_function2 with', function1)
+        print('Error in get_key_function2 with', chord)
 
 ##############################################################
 # Function to return harmonic functions (1 and 2) based on a list of keys #
 ##############################################################
+
+
 def get_keys_functions(list_keys, mode):
     result_dict = {t: get_localkey_function1(t, mode) for t in set(list_keys)}
     function1 = [result_dict[t] for t in list_keys]
     function2 = [get_localkey_function2(g1) for g1 in function1]
     return function1, function2
 
-####################
+def get_compases_per_possibility(possibilities, measures, possibilities_list, beats, time_signatures):
+    # possibilities=list(set(possibilities))
+    voice_measures = {p: 0 for p in possibilities}
+    last_voice = 0
+    done = 0
+    starting_measure = 0
+    numberofmeasures = len(measures)
+    for i, v in enumerate(possibilities_list):
+        if v != last_voice and i < numberofmeasures:
+            #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
+            n_beats = get_beatspertsig(time_signatures[i - 1])
+            if last_voice in voice_measures :
+                num_compasses, done = compute_number_of_compasses(done, starting_measure, measures[i - 1], measures[i], beats[i - 1], n_beats)
+                voice_measures[last_voice] += num_compasses
+            last_voice = v
+            starting_measure = measures[i] - 1
+    
+    #último!
+    num_compasses, _ = compute_number_of_compasses(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, beats[numberofmeasures - 1], n_beats)
+    voice_measures[last_voice] += num_compasses
+
+    #comprobar que tiene sentido:
+    # if (compases[0] != 0 and round(sum(list(compases_voz.values()))) != compases[i]) or (compases[0] == 0 and round(sum(list(compases_voz.values()))) != compases[i] + 1):
+    #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
+
+    return voice_measures
+
+###################
+# KEYAREAS
+###################
+
+def get_keyareas_lists(keys, g1, g2):
+    # key areas
+    key_areas = []
+    key_areas_g1 = []
+    key_areas_g2 = []
+    last_key = ''
+    for i, k in enumerate(keys):
+        if k != last_key:
+            key_areas.append(k)
+            key_areas_g1.append(g1[i])
+            key_areas_g2.append(g2[i])
+            last_key = k
+    return key_areas, key_areas_g1, key_areas_g2
+
+def get_keyareas(tabla_lausanne, sections, major = True):
+    # indexes_A = [i for i, s in enumerate(sections) if s == "A"]
+    # indexes_B = [i for i, s in enumerate(sections) if s == "B"]
+
+    """possible_keys = harmonic_analysis.Chords.dropna().tolist()
+    grouping1 = harmonic_analysis['GC1M' if major else 'GC1m'].dropna().tolist()
+    grouping2 = harmonic_analysis['GC2M' if major else 'GC2m'].dropna().tolist()
+    
+    g1 = [grouping1[possible_keys.index(c)] for c in keys]
+    g2 = [grouping2[possible_keys.index(c)] for c in keys]"""
+
+    keys = tabla_lausanne.localkey.dropna().tolist()
+    g1, g2 = get_keys_functions(keys, 'M' if major else 'm')
+
+    key_areas, key_areas_g1, key_areas_g2 = get_keyareas_lists(keys, g1, g2)
+    counter_keys = Counter(key_areas)
+    counter_grouping1 = Counter(key_areas_g1)
+    counter_grouping2 = Counter(key_areas_g2)
+    
+    # A_Keys = [keys[i] for i in indexes_A]
+    # g1_A = [g1[i] for i in indexes_A]
+    # g2_A = [g2[i] for i in indexes_A]
+    # key_area_A, key_areas_g1_A, key_areas_g2_A = get_keyareas_lists(A_Keys, g1_A, g2_A)
+    # counter_keys_A = Counter(key_area_A)
+    # counter_grouping1_A  = Counter(key_areas_g1_A)
+    # counter_grouping2_A  = Counter(key_areas_g2_A)
+    
+    # B_Keys = [keys[i] for i in indexes_B]
+    # g1_B = [g1[i] for i in indexes_B]
+    # # g2_B = [g2[i] for i in indexes_B]
+    # key_areas_B, key_areas_g1_B, key_areas_g2_B = get_keyareas_lists(B_Keys, g1_B, g2_B)
+    # counter_keys_B = Counter(key_areas_B)
+    # counter_grouping1_B  = Counter(key_areas_g1_B)
+    # counter_grouping2_B  = Counter(key_areas_g2_B)
+
+    #Keys based on the number of measures
+    measures = tabla_lausanne.mc.dropna().tolist()
+    beats = tabla_lausanne.mc_onset.dropna().tolist()
+    time_signatures = tabla_lausanne.timesig.tolist()
+    """xml_ts = harmonic_analysis['TimeSignature'].dropna().tolist()
+    xml_beats = harmonic_analysis['NoBeats'].dropna().tolist()
+    relationship_timesignature_beats = {ts: xml_beats[i] for i, ts in enumerate(xml_ts)}"""
+    key_compasses = get_compases_per_possibility(list(set(keys)), measures, keys, beats, time_signatures)
+    total_compasses = sum(list(key_compasses.values()))
+    key_compasses = {kc:key_compasses[kc]/total_compasses for kc in key_compasses}
+    keyGroupping1_compasses = get_compases_per_possibility(list(set(g1)), measures, g1, beats, time_signatures)
+    keyGroupping1_compasses = {kc:keyGroupping1_compasses[kc]/sum(list(keyGroupping1_compasses.values())) for kc in keyGroupping1_compasses}
+    keyGroupping2_compasses = get_compases_per_possibility(list(set(g2)), measures, g2, beats, time_signatures)
+    keyGroupping2_compasses = {kc:keyGroupping2_compasses[kc]/sum(list(keyGroupping2_compasses.values())) for kc in keyGroupping2_compasses}
+    # SECTION A
+    # measures_A = [measures[i] for i in indexes_A]
+    # beats_A = [beats[i] for i in indexes_A]
+    # time_signatures_A = [time_signatures[i] for i in indexes_A]
+    # key_compasses_A = get_compases_per_possibility(list(set(A_Keys)), measures_A, A_Keys, beats_A, time_signatures_A)
+    # total_compasses_A = sum(list(key_compasses_A.values()))
+    # key_compasses_A = {kc:key_compasses_A[kc]/total_compasses_A for kc in key_compasses_A}
+    # keyGroupping1_compasses_A = get_compases_per_possibility(list(set(g1_A)), measures_A, g1_A, beats_A, time_signatures_A)
+    # keyGroupping1_compasses_A = {kc:keyGroupping1_compasses_A[kc]/sum(list(keyGroupping1_compasses_A.values())) for kc in keyGroupping1_compasses_A}
+    # keyGroupping2_compasses_A = get_compases_per_possibility(list(set(g2_A)), measures_A, g2_A, beats_A, time_signatures_A)
+    # keyGroupping2_compasses_A = {kc:keyGroupping2_compasses_A[kc]/sum(list(keyGroupping2_compasses_A.values())) for kc in keyGroupping2_compasses_A}
+    # # SECTION B
+    # measures_B = [measures[i] for i in indexes_B]
+    # beats_B = [beats[i] for i in indexes_B]
+    # time_signatures_B = [time_signatures[i] for i in indexes_B]
+    # key_compasses_B = get_compases_per_possibility(list(set(B_Keys)), measures_B, B_Keys, beats_B, time_signatures_B)
+    # total_compasses_B = sum(list(key_compasses_B.values()))
+    # key_compasses_B = {kc:key_compasses_B[kc]/total_compasses_B for kc in key_compasses_B}
+    # keyGroupping1_compasses_B = get_compases_per_possibility(list(set(g1_B)), measures_B, g1_B, beats_B, time_signatures_B)
+    # keyGroupping1_compasses_B = {kc:keyGroupping1_compasses_B[kc]/sum(list(keyGroupping1_compasses_B.values())) for kc in keyGroupping1_compasses_B}
+    # keyGroupping2_compasses_B = get_compases_per_possibility(list(set(g2_B)), measures_B, g2_B, beats_B, time_signatures_B)
+    # keyGroupping2_compasses_B = {kc:keyGroupping2_compasses_B[kc]/sum(list(keyGroupping2_compasses_B.values())) for kc in keyGroupping2_compasses_B}
+
+    # final dictionary
+    keyareas = {'TotalNumberKeyAreas': len(counter_keys)}
+    total_key_areas = sum(counter_keys.values())
+    total_g1_areas = sum(counter_grouping1.values())
+    total_g2_areas = sum(counter_grouping2.values())
+    # total_key_areas_A = sum(counter_keys_A.values())
+    # total_g1_areas_A = sum(counter_grouping1_A.values())
+    # total_g2_areas_A = sum(counter_grouping2_A.values())
+    # total_key_areas_B = sum(counter_keys_B.values())
+    # total_g1_areas_B = sum(counter_grouping1_B.values())
+    # total_g2_areas_B = sum(counter_grouping2_B.values())
+
+    for ck in counter_keys:
+        keyareas['Key'+ck] = counter_keys[ck]
+        keyareas['KeyCompasses'+ck] = key_compasses[ck]
+        keyareas['KeyModulatory'+ck] = counter_keys[ck]/total_key_areas
+        keyareas['KeyModComp'+ck] = (keyareas['KeyCompasses'+ck] + keyareas['KeyModulatory'+ck]) / 2
+    for cg in counter_grouping1:
+        keyareas['KeyGroupping1'+cg] = counter_grouping1[cg]
+        keyareas['KeyGroupping1Compasses'+cg] = keyGroupping1_compasses[cg]
+        keyareas['KeyGroupping1Modulatory'+cg] = counter_grouping1[cg]/total_g1_areas
+        keyareas['KeyGroupping1ModComp'+cg] = (keyareas['KeyGroupping1Compasses'+cg] + keyareas['KeyGroupping1Modulatory'+cg]) / 2
+    for cg in counter_grouping2:
+        keyareas['KeyGroupping2'+cg] = counter_grouping2[cg]
+        keyareas['KeyGroupping2Compasses'+cg] = keyGroupping2_compasses[cg]
+        keyareas['KeyGroupping2Modulatory'+cg] = counter_grouping2[cg]/total_g2_areas
+        keyareas['KeyGroupping2ModComp'+cg] = (keyareas['KeyGroupping2Compasses'+cg] + keyareas['KeyGroupping2Modulatory'+cg]) / 2
+
+    # for ck in counter_keys_A:
+    #     keyareas['KeySectionA'+ck] = counter_keys_A[ck]
+    #     keyareas['KeyModCompSectionA'+ck] = (key_compasses_A[ck] + (counter_keys_A[ck]/total_key_areas_A)) / 2
+    # for cg in counter_grouping1_A:
+    #     keyareas['KeyGroupping1SectionA'+cg] = counter_grouping1_A[cg]
+    #     keyareas['KeyGroupping1ModCompSectionA'+cg] = (keyGroupping1_compasses_A[cg] + (counter_grouping1_A[cg]/total_g1_areas_A)) / 2
+    # for cg in counter_grouping2_A:
+    #     keyareas['KeyGroupping2SectionA'+cg] = counter_grouping2_A[cg]
+    #     keyareas['KeyGroupping2ModCompSectionA'+cg] = (keyGroupping2_compasses_A[cg] + (counter_grouping2_A[cg]/total_g2_areas_A)) / 2
+    
+    # for ck in counter_keys_B:
+    #     keyareas['KeySectionB'+ck] = counter_keys_B[ck]
+    #     keyareas['KeyModCompSectionB'+ck] = (key_compasses_B[ck] + (counter_keys_B[ck]/total_key_areas_B)) / 2
+    # for cg in counter_grouping1_B:
+    #     keyareas['KeyGroupping1SectionB'+cg] = counter_grouping1_B[cg]
+    #     keyareas['KeyGroupping1ModCompSectionB'+cg] = (keyGroupping1_compasses_B[cg] + (counter_grouping1_B[cg]/total_g1_areas_B)) / 2
+    # for cg in counter_grouping2_B:
+    #     keyareas['KeyGroupping2SectionB'+cg] = counter_grouping2_B[cg]
+    #     keyareas['KeyGroupping2ModCompSectionB'+cg] = (keyGroupping2_compasses_B[cg] + (counter_grouping2_B[cg]/total_g2_areas_B)) / 2
+
+    return keyareas
+# ####################
 # DEGREES (for relative roots, numerals and chords)
 ####################
 
@@ -337,42 +507,61 @@ def get_degree_function1(element, mode):
 # Function to obtain the harmonic function2 of every relativeroot, chord, or numeral.
 ###########################################################################
 def get_degree_function2(element):
-    if element in ['T', 't']:
-        return 'T'
-    elif element in ['D', 'd']:
-        return 'D'
-    elif element in ['SD', 'sd']:
-        return 'SD'
-    elif element in ['NAP']:
-        return 'NAP'
-    elif element in ['M', 'm']:
-        return 'M'
-    elif element in ['ST', 'st', 'LN', 'ln']:
-        return 'ST'
-    elif element in ['bT', 'bt']:
-        return 'bT'
-    elif element in ['#T', '#t']:
-        return '#T'
-    elif element in ['bSD', 'bsd']:
-        return 'bSD'
-    elif element in ['#SD', '#sd']:
-        return '#SD'
-    elif element in ['bD', 'bd']:
-        return 'bD'
-    elif element in ['#D', '#d']:
-        return '#D'
-    elif element in ['bM', 'sm']:
-        return 'SM'
-    elif element in ['#M', '#m']:
-        return '#M'
-    elif element in ['bST', 'bst']:
-        return 'bST'
-    elif element in ['#ST', '#ST','#LN', '#ln']:
-        return '#ST'
-    else:
-        print("Error, grouping1 ", element, " is not considered")
-    return ''
+    # if element.lower() == 't':
+    #     return 'T'
+    # elif element in ['D', 'd']:
+    #     return 'D'
+    # elif element in ['SD', 'sd']:
+    #     return 'SD'
+    # elif element in ['NAP']:
+    #     return 'NAP'
+    # elif element in ['M', 'm']:
+    #     return 'M'
+    # elif element in ['ST', 'st', 'LN', 'ln']:
+    #     return 'ST'
+    # elif element in ['bT', 'bt']:
+    #     return 'bT'
+    # elif element in ['#T', '#t']:
+    #     return '#T'
+    # elif element in ['bSD', 'bsd']:
+    #     return 'bSD'
+    # elif element in ['#SD', '#sd']:
+    #     return '#SD'
+    # elif element in ['bD', 'bd']:
+    #     return 'bD'
+    # elif element in ['#D', '#d']:
+    #     return '#D'
+    # elif element in ['bM', 'sm']:
+    #     return 'SM'
+    # elif element in ['#M', '#m']:
+    #     return '#M'
+    # elif element in ['bST', 'bst']:
+    #     return 'bST'
+    # elif element in ['#ST', '#ST','#LN', '#ln']:
+    #     return '#ST'
+    # else:
+    #     print("Error, grouping1 ", element, " is not considered")
+    # return ''
+    return element.upper().replace('B','b')
 
+####################
+# NUMERALS
+####################
+def get_numeral_function1(numeral, relativeroot, local_key):
+    if str(relativeroot) != 'nan':
+        return get_degree_function1(numeral, 'M' if relativeroot.isupper() else 'm')
+    else:
+        return get_degree_function1(numeral, 'M' if local_key.isupper() else 'm')
+
+def get_numeral_function2(grouping1):
+    return get_degree_function2(grouping1)
+
+def get_numerals_function(list_numerals, list_relativeroots, list_local_keys):
+    tuples = list(zip(list_numerals, list_relativeroots, list_local_keys))
+    result_dict = {t: get_numeral_function1(*t) for t in set(tuples)}
+    function1 = [result_dict[t] for t in tuples]
+    function2 = [get_numeral_function2(g1) for g1 in function1]
+    return function1, function2
 ####################
 # CHORDS
 ####################
@@ -403,6 +592,35 @@ def parse_chord(chord):
             chars.append(c)
 
     return ''.join(chars)
+
+####################
+# CHORD FORM
+####################
+
+#############################################
+# Function that returns the chord_type grouping
+#############################################
+def get_chordtype_function(chord_type):
+    if chord_type.lower()=='m':
+        return 'triad'
+    elif chord_type in ['7', 'mm7', 'Mm7', 'MM7', 'mM7']:
+        return '7th'
+    elif chord_type in ['o', 'o7', '%', '%7']:
+        return 'dim'
+    elif chord_type in ['+', '+M7', '+m7']:
+        return 'aug'
+    elif chord_type == 'nan':
+        return 'nan'
+    else:
+        print("chordtype ", str(chord_type), 'not observed')
+        return ''
+
+#############################################
+# Function that returns the chord_type grouping
+#############################################
+def get_chordtype_functions(chordtype_list):
+    return [get_chordtype_function(chord_type) for chord_type in chordtype_list]
+
 
 ##################################################################
 # Function to return the first grouping for any chord
@@ -449,3 +667,51 @@ def get_chords_functions(list_chords, list_relativeroots, list_local_keys):
     tuples = list(zip(function1, list_relativeroots, list_local_keys))
     function2 = [get_chord_function2(*g1) for g1 in tuples]
     return function1, function2
+
+def features2type(numeral, form=None, figbass=None):
+    """ Turns a combination of the three chord features into a chord type.
+
+    Returns
+    -------
+    'M':    Major triad
+    'm':    Minor triad
+    'o':    Diminished triad
+    '+':    Augmented triad
+    'mm7':  Minor seventh chord
+    'Mm7':  Dominant seventh chord
+    'MM7':  Major seventh chord
+    'mM7':  Minor major seventh chord
+    'o7':   Diminished seventh chord
+    '%7':   Half-diminished seventh chord
+    '+7':   Augmented (minor) seventh chord
+    '+M7':  Augmented major seventh chord
+    """
+    if pd.isnull(numeral):
+        return numeral
+    form, figbass = tuple('' if pd.isnull(val) else val for val in (form, figbass))
+    if type(figbass) is float:
+        figbass = str(int(figbass))
+    #triads
+    if figbass in ['', '6', '64']:
+        if form in ['o', '+']:
+            return form
+        if form in ['%', 'M']:
+            if figbass == '':
+                return f"{form}7"
+            print(f"{form} is a seventh chord and cannot have figbass '{figbass}'")
+            return None
+        return 'm' if numeral.islower() else 'M'
+    # seventh chords
+    if form in ['o', '%', '+', '+M']:
+        return f"{form}7"
+    triad = 'm' if numeral.islower() else 'M'
+    seventh = 'M' if form == 'M' else 'm'
+    return f"{triad}{seventh}7"
+
+def make_type_col(df, num_col='numeral', form_col='form', fig_col='figbass'):
+    """ Create a new Series with the chord type for every row of `df`.
+        Uses: features2type()
+    """
+    param_tuples = list(df[[num_col, form_col, fig_col]].itertuples(index=False, name=None))
+    result_dict = {t: features2type(*t) for t in set(param_tuples)}
+    return pd.Series([result_dict[t] for t in param_tuples], index=df.index, name='chordtype')
