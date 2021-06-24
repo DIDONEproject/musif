@@ -82,27 +82,15 @@ class FeaturesExtractor:
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.read_logger
 
-    def extract(self, obj, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        if isinstance(obj, str):
-            if path.isdir(obj):
-                return self.from_dir(obj, parts_filter)
-            else:
-                return self.from_file(obj, parts_filter)
+    def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
+        if not (isinstance(obj, list) or isinstance(obj, str)):
+            raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
+        musicxml_files = []
         if isinstance(obj, list):
-            return self.from_files(obj, parts_filter)
-        raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
-
-    def from_dir(self, scores_dir: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        musicxml_files = glob.glob(path.join(scores_dir, f"*.{MUSICXML_FILE_EXTENSION}"))
-        corpus_df, score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
-        return score_df
-
-    # def from_files(self, musicxml_score_files: List[str], parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-    #     parts_df, score_df, corpus_df = self._process_corpora(musicxml_score_files, parts_filter)
-    #     return score_df
-
-    def from_file(self, musicxml_file: str, parts_filter: List[str] = None) -> Union[DataFrame, List[DataFrame]]:
-        parts_df, score_df, corpus_df = self._process_corpora([musicxml_file], parts_filter)
+            musicxml_files = list(obj)
+        if isinstance(obj, str):
+            musicxml_files = glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj]
+        parts_df, score_df, corpus_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
     def _process_corpora(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[DataFrame, DataFrame, DataFrame]:
@@ -299,7 +287,7 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
+        # score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
         self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
