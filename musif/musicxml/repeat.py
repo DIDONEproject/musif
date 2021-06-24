@@ -40,7 +40,7 @@ def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, 
                     o += compass
 
                 measures.append(m)
-                if instrument_measures[i].measureNumber is not 0.0 and instrument_measures[i].offset != 0:
+                if instrument_measures[i].measureNumber != 0.0 and instrument_measures[i].offset != 0:
                     last_offset = instrument_measures[i].offset + compass
             twoCompasses = False
 
@@ -48,7 +48,7 @@ def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, 
         measures = measures[:-1]
     elif iteration is 2:
         measures = measures[:-2] + [measures[-1]]"""
-    if iteration is 2:
+    if iteration == 2:
         last_measure = instrument_measures[i + 1]
         last_measure.offset = measures[-1].offset
         measures = measures[:-1] + [last_measure]
@@ -64,7 +64,7 @@ def expand_repeat_bars(score):
         part_measures = get_measures_with_repetitions(instr.elements)  # returns the measures with repetitions
         last_measure = part_measures[-1].measureNumber
         part_measures_expanded = []
-        startsin0 = part_measures[0].measureNumber is 0  # Everything should be -1
+        startsin0 = part_measures[0].measureNumber == 0  # Everything should be -1
         repetition_bars = []
 
         # Find all repetitions in that instrument
@@ -113,7 +113,7 @@ def expand_repeat_bars(score):
                     casilla_2 = None
                     if casilla_1:
                         casilla_2 = [re for re in repetition_bars if re[1] == '2' and re[0] > rb[0]]
-                        casilla_2 = None if len(casilla_2) is 0 else casilla_2[0]
+                        casilla_2 = None if len(casilla_2) == 0 else casilla_2[0]
                     part_measures_expanded.append(measure_ranges(part_measures, init=start, end=rb[0], offset=offset + compass,
                                                                  remove_repetition_marks=True))  # This should erase the repetition marks
                     if casilla_2 is not None:
@@ -182,7 +182,7 @@ def expand_score_repetitions(score, repeat_elements):
 def get_expanded_measures(part_measures, repeat_elements):
     repeat_bracket = sum([1 if 'repeat bracket' in item[1] else 0 for item in repeat_elements]) > 0
     measures_list = []
-    startsin0 = part_measures[0].measureNumber is 0  # Everything should be -1
+    startsin0 = part_measures[0].measureNumber == 0  # Everything should be -1
 
     there_is_fine = False
     there_is_segno = False
