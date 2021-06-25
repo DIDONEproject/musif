@@ -1,10 +1,7 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="3.1">
-  <!--This work is provided under the terms of Creative Commons CC BY-NC-ND license. 
- ICCMU - ERC Didone project (788986) 
- contacto@iccmu.es, didone@iccmu.es
---><movement-title>O più tremar non voglio</movement-title>
+  <movement-title>O più tremar non voglio</movement-title>
   <identification>
     <creator type="composer">Leonardo Leo</creator>
     <encoding>

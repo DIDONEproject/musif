@@ -21,10 +21,13 @@ def note_mean(pitch_ps: list, round_mean: bool =False) -> str:
     else:
         pitch_up = pitch.Pitch()
         pitch_down = pitch.Pitch()
-        pitch_up.ps = math.ceil(mean_pitch)
-        pitch_down.ps = math.floor(mean_pitch)
-        value = "-".join([pitch_up.nameWithOctave.replace('-', 'b'),
-                          pitch_down.nameWithOctave.replace('-', 'b')])
+        if str(mean_pitch) !='nan':
+            pitch_up.ps = math.ceil(mean_pitch)
+            pitch_down.ps = math.floor(mean_pitch)
+            value = "-".join([pitch_up.nameWithOctave.replace('-', 'b'),
+                            pitch_down.nameWithOctave.replace('-', 'b')])
+        else:
+            value=0.0
     return value
 
 
@@ -66,9 +69,8 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
                         v=0.0
                     s += v * w
                 value = round(s / sum(ponderate_data), 3)
-        elif computation == "mean_density" or computation == "mean_texture":
+        elif computation in ["mean_density","mean_texture"]:
             value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
-            
         elif computation == "min":
             value = min(column_data)
         elif computation == "max":
@@ -151,13 +153,12 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
 # Function to compute the average in every kind of variable, based on a computation #
 #####################################################################################
 
-
 def compute_average(dic_data: Dict, computation: str):
     value = 0
     computation = computation.replace('_density', '').replace('_texture', '') #In case we have averages for densities or textures we compute normal average 
     try:
         if computation in ["mean", "min", "sum", "max", "absolute","meanSemitones"]:
-            value = round(sum(dic_data) / len(dic_data), 3)
+            value = round(np.nansum(dic_data) / len(dic_data), 3)
         elif computation in ["minNote", "maxNote"]:
             pitch_ps = [pitch.Pitch(n).ps for n in dic_data]
             value = note_mean(pitch_ps)
@@ -179,7 +180,7 @@ def compute_average(dic_data: Dict, computation: str):
         
         # value = round(np.nansum(dic_data) / (len(dic_data) - len([z for z in dic_data if z == 0])), 3)
     except ZeroDivisionError or ValueError:
-        value= 0.0
+        value = 0.0
     return value
 
 ##################################################################################################
