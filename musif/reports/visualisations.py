@@ -208,16 +208,21 @@ def pie_plot(name, data, second_title=None):
     fig, ax = plt.subplots(nrows=3, ncols=3)
     i = 0
     resta = 0
-    for j, info in enumerate(plots):
-        if j in [2, 5]:
-            i += 1
-            resta = j
-        ax[i][j - resta].set_title(info)
-        sum_augmented = np.nansum(data[info + main_division[0]])
-        sum_descending = np.nansum(data[info + main_division[1]])
-        ax[i][j - resta].pie([sum_augmented, sum_descending],
-                             autopct='%1.0f%%')
-        ax[i][j - resta].axis('equal')
+    if hasattr(data, 'groups'):
+        for i, group in data:
+            print(data)
+            pass
+    else:
+        for j, info in enumerate(plots):
+            if j in [2, 5]:
+                i += 1
+                resta = j
+            ax[i][j - resta].set_title(info)
+            sum_augmented = np.nansum(data[info + main_division[0]])
+            sum_descending = np.nansum(data[info + main_division[1]])
+            ax[i][j - resta].pie([sum_augmented, sum_descending],
+                                autopct='%1.0f%%')
+            ax[i][j - resta].axis('equal')
 
     fig.delaxes(ax[0, 2])
     fig.delaxes(ax[2, 2])

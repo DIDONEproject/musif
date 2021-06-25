@@ -1,8 +1,44 @@
+import itertools
+import re
 from collections import Counter
+from urllib.request import urlopen
+
+import numpy as np
 import pandas as pd
+from ms3.expand_dcml import features2type
+from pandas.core.frame import DataFrame
+
+REGEX = {}
+
 ####################
 # METRICAL ANALYSIS
 ####################    
+def get_compases_per_possibility(possibilities, measures, possibilities_list, beats, time_signatures):
+    # possibilities=list(set(possibilities))
+    voice_measures = {p: 0 for p in possibilities}
+    last_voice = 0
+    done = 0
+    starting_measure = 0
+    numberofmeasures = len(measures)
+    for i, v in enumerate(possibilities_list):
+        if v != last_voice and i < numberofmeasures:
+            #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
+            n_beats = get_beatspertsig(time_signatures[i - 1])
+            if last_voice in voice_measures :
+                num_compasses, done = compute_number_of_compasses(done, starting_measure, measures[i - 1], measures[i], beats[i - 1], n_beats)
+                voice_measures[last_voice] += num_compasses
+            last_voice = v
+            starting_measure = measures[i] - 1
+    
+    #último!
+    num_compasses, _ = compute_number_of_compasses(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, beats[numberofmeasures - 1], n_beats)
+    voice_measures[last_voice] += num_compasses
+
+    #comprobar que tiene sentido:
+    # if (compases[0] != 0 and round(sum(list(compases_voz.values()))) != compases[i]) or (compases[0] == 0 and round(sum(list(compases_voz.values()))) != compases[i] + 1):
+    #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
+
+    return voice_measures
 
 ###########################################################################
 # Function that returns the number of beats depending on the time signature
@@ -52,7 +88,7 @@ def compute_number_of_compasses(done, starting_measure, end_measure, next_end_me
 # Como sections tiene una indicación por compás, pero a lo largo del script
 # trabajamos con la tabla harmonic_analysis, que tiene tantas entradas por 
 # compás como anotaciones harmónicas, repetimos las secciones según el número
-#########################################################################
+
 def continued_sections(sections, mc):
     extended_sections = []
     repeated_measures = Counter(mc)
@@ -61,8 +97,6 @@ def continued_sections(sections, mc):
 
     # Flat list
     return list(itertools.chain(*extended_sections))
-
-
 
 ####################
 # LOCAL KEY
@@ -75,206 +109,81 @@ def continued_sections(sections, mc):
 # in the minor, III = relative major (rj).
 # Lowered degrees are indicated with 'b', raised with '#' (bII = Neapolitan key).
 # Leading notes are abrreviated as LN.
-################################################################################
-def get_localkey_function1(localkey, mode):
-    if mode == 'M':
-        if localkey in ['I']:
-            return 'T'
-        elif localkey in ['i']:
-            return 't'
-        elif localkey in ['vi']:
-            return 'rm'
-        elif localkey in ['V', 'vii']:
-            return 'D'
-        elif localkey in ['v']:
-            return 'd'
-        elif localkey in ['II', 'IV', 'VI']:
-            return 'SD'
-        elif localkey in ['ii', 'iv']:
-            return 'sd'
-        elif localkey in ['bII']:
-            return 'NAP'
-        elif localkey in ['bVII']:
-            return 'ST'
-        elif localkey in ['III']:
-            return 'M'
-        elif localkey in ['iii']:
-            return 'm'
-        elif localkey in ['bI']:
-            return 'bT'
-        elif localkey in ['bi']:
-            return 'bt'
-        elif localkey in ['#I']:
-            return '#T'
-        elif localkey in ['#i']:
-            return '#t'
-        elif localkey in ['#V']:
-            return '#D'
-        elif localkey in ['#v']:
-            return '#d'
-        elif localkey in ['bIV', 'bVI']:
-            return 'bSD'
-        elif localkey in ['bii', 'biv', 'bvi']:
-            return 'bsd'
-        elif localkey in ['#II', '#IV', '#vi']:
-            return '#SD'
-        elif localkey in ['#ii', '#iv', '#vi']:
-            return '#sd'
-        elif localkey in ['bIII']:
-            return 'bM'
-        elif localkey in ['biii']:
-            return 'bm'
-        elif localkey in ['#III']:
-            return '#M'
-        elif localkey in ['#iii']:
-            return '#m'
-        elif localkey in ['bvii']:
-            return 'st'
-        elif localkey in ['VII']:
-            return 'LN'
-        elif localkey in ['#VII']:
-            return '#LN'
-        elif localkey in ['#vii']:
-            return '#ln'
-        else:
-            print('Error in get_localkey_function1 with localkey', localkey)
-    else: #minor mode
-        if localkey in ['I']:
-            return 'T'
-        elif localkey in ['i']:
-            return 't'
-        elif localkey in ['III']:
-            return 'rj'
-        elif localkey in ['V', '#vii']:
-            return 'D'
-        elif localkey in ['v']:
-            return 'd'
-        elif localkey in ['II', 'IV', 'VI']:
-            return 'SD'
-        elif localkey in ['ii', 'iv', 'vi']:
-            return 'sd'
-        elif localkey in ['bII']:
-            return 'NAP'
-        elif localkey in ['iii']:
-            return 'm'
-        elif localkey in ['VII']:
-            return 'ST'
-        elif localkey in ['bI']:
-            return 'bT'
-        elif localkey in ['bi']:
-            return 'bt'
-        elif localkey in ['#I']:
-            return '#T'
-        elif localkey in ['#i']:
-            return '#t'
-        elif localkey in ['#V']:
-            return '#D'
-        elif localkey in ['#v']:
-            return '#d'
-        elif localkey in ['bIV', 'bVI']:
-            return 'bSD'
-        elif localkey in ['bii', 'biv', 'bvi']:
-            return 'bsd'
-        elif localkey in ['#II', '#IV', '#vi']:
-            return '#SD'
-        elif localkey in ['#ii', '#iv', '#vi']:
-            return '#sd'
-        elif localkey in ['bIII']:
-            return 'bM'
-        elif localkey in ['biii']:
-            return 'bm'
-        elif localkey in ['#III']:
-            return '#M'
-        elif localkey in ['#iii']:
-            return '#m'
-        elif localkey in ['bVII']:
-            return 'bST'
-        elif localkey in ['bvii']:
-            return 'bst'
-        elif localkey in ['#VII']:
-            return '#LN'
-        elif localkey in ['vii']:
-            return 'st'
-        else:
-            print('Error in get_localkey_function1 with localkey', localkey)
+
+# def get_localkey_1(localkey, mode):
+#     if localkey in ['VII']:
+#             return 'LN'
+#     elif localkey in ['#VII']:
+#         return '#LN'
+#     elif localkey in ['#vii']:
+#         return '#ln'
+
+#     localkey=localkey.replace('b','-')
+
+#     #TODO: mirar bemol napolitano
+
+#     reference={'T':['i'], 'D':['v'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']
+#     }
+#     for key, value in reference.items():
+#         if localkey.replace('#','').replace('-','').lower() in value:
+#             output=key.lower() if localkey.islower() else key
+#             if '-' in localkey:
+#                 output='-'+ output
+#             elif '#' in localkey:
+#                 output='#'+ output
+#             return output.replace('-','b')
+#     if mode == 'M':
+#         # elements specific of the major mode
+#         if localkey=='vii':
+#             return 'D'
+#         elif  localkey == '#vii':
+#             return '#ln'
+#         elif localkey=='bVII':
+#             return 'ST'
+#         elif localkey=='bvii':
+#             return 'st'
+#         elif  localkey== 'VII':
+#             return '#ST'
+#         else:
+#             print(localkey, 'not available')
+#     else:
+#         # localkeys specific of the minor mode
+#         if localkey=='#vii':
+#             return 'D'
+#         elif  localkey == 'VII':
+#             return 'ST'
+#         elif  localkey=='bVII':
+#             return 'bST'
+#         elif  localkey=='bvii':
+#             return 'bst'
+#         elif  localkey=='#VII':
+#             return 'LN'
+#         elif localkey=='vii':
+#             return 'st'
+#         else:
+#             print(localkey, ' is not available!')
 
 #############################################################
 # Function to return function2 based on function1. It
 # disregards the mode. #
-#############################################################
-def get_localkey_function2(chord):
-    if chord in ['T', 't']:
-        return 'T'
-    elif chord in ['rm', 'rj']:
-        return 'rel'
-    elif chord in ['D', 'd']:
-        return 'D'
-    elif chord in ['SD', 'sd']:
-        return 'SD'
-    elif chord in ['NAP']:
-        return 'NAP'
-    elif chord in ['M', 'm']:
-        return 'M'
-    elif chord in ['ST', 'st', 'LN']:
-        return 'ST'
-    elif chord in ['bT', 'bt']:
-        return 'bT'
-    elif chord in ['#T', '#t']:
-        return '#T'
-    elif chord in ['bSD', 'bsd']:
-        return 'bSD'
-    elif chord in ['#SD', '#sd']:
-        return '#SD'
-    elif chord in ['bD', 'bd']:
-        return 'bD'
-    elif chord in ['#D', '#d']:
-        return '#D'
-    elif chord in ['bM', 'bm']:
-        return 'bM'
-    elif chord in ['#M', '#m']:
-        return '#M'
-    elif chord in ['bST', 'bst']:
-        return 'bST'
-    else:
-        print('Error in get_key_function2 with', chord)
-
-##############################################################
-# Function to return harmonic functions (1 and 2) based on a list of keys #
-##############################################################
-
-
-def get_keys_functions(list_keys, mode):
-    result_dict = {t: get_localkey_function1(t, mode) for t in set(list_keys)}
-    function1 = [result_dict[t] for t in list_keys]
-    function2 = [get_localkey_function2(g1) for g1 in function1]
-    return function1, function2
-
-def get_compases_per_possibility(possibilities, measures, possibilities_list, beats, time_signatures):
-    # possibilities=list(set(possibilities))
-    voice_measures = {p: 0 for p in possibilities}
-    last_voice = 0
-    done = 0
-    starting_measure = 0
-    numberofmeasures = len(measures)
-    for i, v in enumerate(possibilities_list):
-        if v != last_voice and i < numberofmeasures:
-            #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
-            n_beats = get_beatspertsig(time_signatures[i - 1])
-            if last_voice in voice_measures :
-                num_compasses, done = compute_number_of_compasses(done, starting_measure, measures[i - 1], measures[i], beats[i - 1], n_beats)
-                voice_measures[last_voice] += num_compasses
-            last_voice = v
-            starting_measure = measures[i] - 1
+# def get_localkey_2(chord):
+#     chord=chord.replace('b','-') #to be able to convert to upper without affecting flats
     
-    #último!
-    num_compasses, _ = compute_number_of_compasses(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, beats[numberofmeasures - 1], n_beats)
-    voice_measures[last_voice] += num_compasses
+#     if chord in ['rm', 'rj']:
+#         return 'rel'
+#     elif chord.upper() in ['ST', 'LN']:
+#         return 'ST'
+#     else:
+#         return chord.upper().replace('-','b')
 
-    #comprobar que tiene sentido:
-    # if (compases[0] != 0 and round(sum(list(compases_voz.values()))) != compases[i]) or (compases[0] == 0 and round(sum(list(compases_voz.values()))) != compases[i] + 1):
-    #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
-
-    return voice_measures
+# Function to return harmonic functions (1 and 2) based on a list of keys #
+def get_keys(list_keys, mode):
+    result_dict = {t: get_degree_1(t, mode) for t in set(list_keys)}
+    # result_dict = {t: get_localkey_1(t, mode) for t in set(list_keys)}
+    function1 = [result_dict[t] for t in list_keys]
+    function2 = [get_degree_2(g1) for g1 in function1]
+    # function2 = [get_localkey_2(g1) for g1 in function1]
+    return function1, function2
 
 ###################
 # KEYAREAS
@@ -294,7 +203,7 @@ def get_keyareas_lists(keys, g1, g2):
             last_key = k
     return key_areas, key_areas_g1, key_areas_g2
 
-def get_keyareas(tabla_lausanne, sections, major = True):
+def get_keyareas(lausanne_table, major = True):
     # indexes_A = [i for i, s in enumerate(sections) if s == "A"]
     # indexes_B = [i for i, s in enumerate(sections) if s == "B"]
 
@@ -305,8 +214,8 @@ def get_keyareas(tabla_lausanne, sections, major = True):
     g1 = [grouping1[possible_keys.index(c)] for c in keys]
     g2 = [grouping2[possible_keys.index(c)] for c in keys]"""
 
-    keys = tabla_lausanne.localkey.dropna().tolist()
-    g1, g2 = get_keys_functions(keys, 'M' if major else 'm')
+    keys = lausanne_table.localkey.dropna().tolist()
+    g1, g2 = get_keys(keys, 'M' if major else 'm')
 
     key_areas, key_areas_g1, key_areas_g2 = get_keyareas_lists(keys, g1, g2)
     counter_keys = Counter(key_areas)
@@ -330,9 +239,9 @@ def get_keyareas(tabla_lausanne, sections, major = True):
     # counter_grouping2_B  = Counter(key_areas_g2_B)
 
     #Keys based on the number of measures
-    measures = tabla_lausanne.mc.dropna().tolist()
-    beats = tabla_lausanne.mc_onset.dropna().tolist()
-    time_signatures = tabla_lausanne.timesig.tolist()
+    measures = lausanne_table.mc.dropna().tolist()
+    beats = lausanne_table.mc_onset.dropna().tolist()
+    time_signatures = lausanne_table.timesig.tolist()
     """xml_ts = harmonic_analysis['TimeSignature'].dropna().tolist()
     xml_beats = harmonic_analysis['NoBeats'].dropna().tolist()
     relationship_timesignature_beats = {ts: xml_beats[i] for i, ts in enumerate(xml_ts)}"""
@@ -415,6 +324,7 @@ def get_keyareas(tabla_lausanne, sections, major = True):
     #     keyareas['KeyGroupping2ModCompSectionB'+cg] = (keyGroupping2_compasses_B[cg] + (counter_grouping2_B[cg]/total_g2_areas_B)) / 2
 
     return keyareas
+
 # ####################
 # DEGREES (for relative roots, numerals and chords)
 ####################
@@ -423,155 +333,143 @@ def get_keyareas(tabla_lausanne, sections, major = True):
 # Function to obtain the harmonic function1 of every relativeroot, chord, or numeral#
 # harmonic_analysis: columnas AG-AK
 ###########################################################################
-def get_degree_function1(element, mode):
-    # elements common to major and minor modes
-    if element in ['I']:
-        return 'T'
-    elif element in ['i']:
-        return 't'
-    elif element in ['v']:
-        return 'd'
-    elif element in ['II', 'IV', 'VI']:
-        return 'SD'
-    elif element in ['ii', 'iv', 'vi']:
-        return 'sd'
-    elif element in ['bII']:
+def get_degree_1(element, mode):
+    #Exception
+    if element.lower()=='bii':
         return 'NAP'
-    elif element in ['III']:
-        return 'S'
-    elif element in ['iii']:
-        return 's'
-    elif element in ['bI']:
-        return 'bT'
-    elif element in ['bi']:
-        return 'bt'
-    elif element in ['#I']:
-        return '#T'
-    elif element in ['#i']:
-        return '#t'
-    elif element in ['#V']:
-        return '#D'
-    elif element in ['#v']:
-        return '#d'
-    elif element in ['bIV', 'bVI']:
-        return 'bSD'
-    elif element in ['bii', 'biv', 'bvi']:
-        return 'bsd'
-    elif element in ['#II', '#IV']:
-        return '#SD'
-    elif element in ['#ii', '#iv', '#vi']:
-        return '#sd'
-    elif element in ['bIII']:
-        return 'bM'
-    elif element in ['biii']:
-        return 'bm'
-    elif element in ['#III']:
-        return '#M'
-    elif element in ['#iii']:
-        return '#m'
-    elif element in ['It', 'Ger', 'Fr']:
-        return 'D'
-
+    #It6/V -> viio(-3)
+    # '-' represents flats
+    element=element.replace('b','-')
+    
+    reference={'T':['i'], 'D':['v'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']
+    }
+    for key, value in reference.items():
+        if element.replace('#','').replace('-','').lower() in value:
+            output=key.lower() if element.islower() else key
+            if '-' in element:
+                output='-'+ output
+            elif '#' in element:
+                output='#'+ output
+            return output.replace('-','b')
+    #revisar funcionalidad
+    # if ['It','Ger', 'Fr'] in element:
+    #     return 'V'
     if mode == 'M':
-        # elements specific of the major mode
-        if element in ['V', 'vii']:
+        if element=='vii':
             return 'D'
-        elif element in ['bVII']:
-            return 'ST'
-        elif element in ['bvii']:
-            return 'st'
-        elif element in ['VII']:
-            return '#ST'
-        elif element in ['#vii']:
+        elif  element == '#vii':
             return '#ln'
+        elif element=='bVII':
+            return 'ST'
+        elif element=='bvii':
+            return 'st'
+        elif  element== 'VII':
+            return 'LN'
         else:
             print(element, 'not available')
     else:
-        # elements specific of the minor mode
-        if element in ['V', '#vii']:
+        if element=='#vii':
             return 'D'
-        elif element in ['VII']:
+        elif  element == 'VII':
             return 'ST'
-        elif element in ['bVII']:
+        elif  element=='bVII':
             return 'bST'
-        elif element in ['bvii']:
+        elif  element=='bvii':
             return 'bst'
-        elif element in ['#VII']:
+        elif  element=='#VII':
             return 'LN'
-        elif element in ['vii']:
+        elif element=='vii':
             return 'st'
         else:
-            print(element, 'not available')
+            print(element, ' is not available!')
     return ''
+
 ###########################################################################
 # Function to obtain the harmonic function2 of every relativeroot, chord, or numeral.
 ###########################################################################
-def get_degree_function2(element):
-    # if element.lower() == 't':
-    #     return 'T'
-    # elif element in ['D', 'd']:
-    #     return 'D'
-    # elif element in ['SD', 'sd']:
-    #     return 'SD'
-    # elif element in ['NAP']:
-    #     return 'NAP'
-    # elif element in ['M', 'm']:
-    #     return 'M'
-    # elif element in ['ST', 'st', 'LN', 'ln']:
-    #     return 'ST'
-    # elif element in ['bT', 'bt']:
-    #     return 'bT'
-    # elif element in ['#T', '#t']:
-    #     return '#T'
-    # elif element in ['bSD', 'bsd']:
-    #     return 'bSD'
-    # elif element in ['#SD', '#sd']:
-    #     return '#SD'
-    # elif element in ['bD', 'bd']:
-    #     return 'bD'
-    # elif element in ['#D', '#d']:
-    #     return '#D'
-    # elif element in ['bM', 'sm']:
-    #     return 'SM'
-    # elif element in ['#M', '#m']:
-    #     return '#M'
-    # elif element in ['bST', 'bst']:
-    #     return 'bST'
-    # elif element in ['#ST', '#ST','#LN', '#ln']:
-    #     return '#ST'
-    # else:
-    #     print("Error, grouping1 ", element, " is not considered")
-    # return ''
-    return element.upper().replace('B','b')
+def get_degree_2(element):
+    element=element.replace('b','-') #to be able to convert to CAPS without affecting flats
+    if element.lower() == '#ln':
+        return '#ST'
+    elif element in ['rm', 'rj']:
+        return 'rel'
+    elif element.upper() in ['ST', 'LN']:
+        return 'ST'
+    else:
+        return element.upper().replace('-','b')
 
 ####################
 # NUMERALS
 ####################
-def get_numeral_function1(numeral, relativeroot, local_key):
+
+def get_numeral_1(numeral, relativeroot, local_key):
+    # We use relative root column to discriminate if there is a relatuive numeral or not
     if str(relativeroot) != 'nan':
-        return get_degree_function1(numeral, 'M' if relativeroot.isupper() else 'm')
+        return get_degree_1(numeral, 'M' if relativeroot.isupper() else 'm')
     else:
-        return get_degree_function1(numeral, 'M' if local_key.isupper() else 'm')
+        return get_degree_1(numeral, 'M' if local_key.isupper() else 'm')
 
-def get_numeral_function2(grouping1):
-    return get_degree_function2(grouping1)
-
-def get_numerals_function(list_numerals, list_relativeroots, list_local_keys):
+def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     tuples = list(zip(list_numerals, list_relativeroots, list_local_keys))
-    result_dict = {t: get_numeral_function1(*t) for t in set(tuples)}
+    result_dict = {t: get_numeral_1(*t) for t in set(tuples)}
     function1 = [result_dict[t] for t in tuples]
-    function2 = [get_numeral_function2(g1) for g1 in function1]
+    function2 = [get_degree_2(g1) for g1 in function1]
     return function1, function2
+
 ####################
 # CHORDS
 ####################
 
+def get_chord_types(lausanne_table):
+    # form = lausanne_table.form.tolist()
+    # #los que son nan hay que cambiarlos en función de una serie de reglas
+    # figbass = lausanne_table.figbass.tolist()
+    # numerals = lausanne_table.numeral.tolist()
+    form_l = make_type_col(lausanne_table)
+        
+    #convert the list of forms in their groups
+    grouped_forms = get_chordtypes(form_l)
+
+    form_counter = Counter(grouped_forms)
+    features_chords= {}
+    for f in form_counter:
+        features_chords['Chord_types_' + str(f)] = str(round((form_counter[f] / sum(list(form_counter.values()))) * 100, 3)) + '%'
+    return features_chords
+
+def get_chords(lausanne_table):
+    relativeroots = lausanne_table.relativeroot.tolist()
+
+    keys = lausanne_table.localkey.dropna().tolist() 
+
+    # Coger columna numeral que hace una pre-separción ?()?)?)
+    # chords = lausanne_table.chord.dropna().tolist()
+    chords = lausanne_table.numeral.dropna().tolist()
+
+    chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
+    chords_numbers = Counter(chords)
+    chords_functionalities1 = Counter(chords_functionalities1)
+    chords_functionalities2 = Counter(chords_functionalities2)
+
+    #chords
+    chords = {}
+    for degree in chords_numbers:
+        chords['Chords_'+degree] = chords_numbers[degree]
+
+    #chords group 1
+    chords_g1 = {}
+    for degree in chords_functionalities1:
+        chords_g1['Chords_Groupping1'+ degree] = chords_functionalities1[degree]
+    
+    #chords group 2
+    chords_group2 = {}
+    for degree in chords_functionalities2:
+        chords_group2['Chords_Groupping2' + degree] = chords_functionalities2[degree]
+    return chords, chords_g1, chords_group2
+
 #################################################################
 # This function takes the first characters in the chord to 
 # obtain its grouping
-#################################################################
-def parse_chord(chord):
-    first_char = chord
+def parse_chord(first_char):
     if '(' in first_char:
         first_char = first_char.split('(')[0]
     if 'o' in first_char:
@@ -582,14 +480,15 @@ def parse_chord(chord):
         first_char = first_char.split('%')[0]
     if 'M' in first_char:
         first_char = first_char.split('M')[0]
+        
     # look for a number
     chars = []
-    for c in first_char:
-        try:
-            c_int = int(c)
+    for character in first_char:
+        if not character.isdigit():
+            chars.append(character)
+        else:
+            # c_int = int(character)
             break
-        except:
-            chars.append(c)
 
     return ''.join(chars)
 
@@ -599,8 +498,8 @@ def parse_chord(chord):
 
 #############################################
 # Function that returns the chord_type grouping
-#############################################
-def get_chordtype_function(chord_type):
+def get_chordtype(chord_type):
+    chord_type=str(chord_type)
     if chord_type.lower()=='m':
         return 'triad'
     elif chord_type in ['7', 'mm7', 'Mm7', 'MM7', 'mM7']:
@@ -612,101 +511,88 @@ def get_chordtype_function(chord_type):
     elif chord_type == 'nan':
         return 'nan'
     else:
-        print("chordtype ", str(chord_type), 'not observed')
+        print("Chord type ", str(chord_type), 'not observed')
         return ''
 
 #############################################
 # Function that returns the chord_type grouping
+
+def get_chordtypes(chordtype_list):
+    return [get_chordtype(chord_type) for chord_type in chordtype_list]
+
 #############################################
-def get_chordtype_functions(chordtype_list):
-    return [get_chordtype_function(chord_type) for chord_type in chordtype_list]
-
-
-##################################################################
 # Function to return the first grouping for any chord
 # in any given local key.
-##################################################################
-def get_chord_function1(chord, local_key):
+def get_chord_1(chord, local_key):
+
+    #persegui It6/V. Coger columna numeral paraparsear acordes
+
     mode = 'M' if local_key else 'm'
     if '/' not in chord:
-        return get_degree_function1(parse_chord(chord), mode)
+        return get_degree_1(parse_chord(chord), mode)
     else: # the chord has '/' 
         parts = chord.split('/')
-        grado = get_degree_function1(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
+        degree = get_degree_1(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
         if len(parts) == 2:
-            acorde = get_degree_function1(parts[1], mode)
-            return '/'.join([grado, acorde])
+            chord = get_degree_1(parts[1], mode)
+            return '/'.join([degree, chord])
         elif len(parts) == 3:
-            acorde1 = get_degree_function1(parts[1], 'M' if parts[2].isupper() else 'm')
-            acorde2 = get_degree_function1(parts[2], mode)
-            return '/'.join([grado, acorde1, acorde2])
+            chord1 = get_degree_1(parts[1], 'M' if parts[2].isupper() else 'm')
+            chord2 = get_degree_1(parts[2], mode)
+            return '/'.join([degree, chord1, chord2])
 
-##################################################################
 # Function to return the second grouping for any chord in any given local key,
-##################################################################
-def get_chord_function2(grouping1, relativeroot, local_key):
+def get_chord_2(grouping1, relativeroot, local_key):
     mode = 'M' if local_key else 'm'
     if str(relativeroot) != 'nan':
         mode = 'M' if relativeroot.isupper() else 'm'
     parts = grouping1.split('/')
-    grado = get_degree_function2(parts[0])
+    degree = get_degree_2(parts[0])
     if len(parts) == 2:
-        acorde = get_degree_function2(parts[1])
-        return '/'.join([grado, acorde])
+        chords = get_degree_2(parts[1])
+        return '/'.join([degree, chords])
     elif len(parts) == 3:
-        acorde1 = get_degree_function2(parts[1], 'M' if parts[2].isupper() else 'm')
-        acorde2 = get_degree_function2(parts[2])
-        return '/'.join([grado, acorde1, acorde2])
-    return grado
+        chord_1 = get_degree_2(parts[1], 'M' if parts[2].isupper() else 'm')
+        chord_2 = get_degree_2(parts[2])
+        return '/'.join([degree, chord_1, chord_2])
+    return degree
 
 def get_chords_functions(list_chords, list_relativeroots, list_local_keys):
-    #TODO: review that the order is not changed
-    tuples = list(zip(list_chords, list_local_keys))
-    result_dict = {t: get_chord_function1(*t) for t in set(tuples)}
-    function1 = [result_dict[t] for t in tuples]
-    tuples = list(zip(function1, list_relativeroots, list_local_keys))
-    function2 = [get_chord_function2(*g1) for g1 in tuples]
-    return function1, function2
 
-def features2type(numeral, form=None, figbass=None):
-    """ Turns a combination of the three chord features into a chord type.
+    #TODO: review that the order is not changed.
 
-    Returns
-    -------
-    'M':    Major triad
-    'm':    Minor triad
-    'o':    Diminished triad
-    '+':    Augmented triad
-    'mm7':  Minor seventh chord
-    'Mm7':  Dominant seventh chord
-    'MM7':  Major seventh chord
-    'mM7':  Minor major seventh chord
-    'o7':   Diminished seventh chord
-    '%7':   Half-diminished seventh chord
-    '+7':   Augmented (minor) seventh chord
-    '+M7':  Augmented major seventh chord
-    """
-    if pd.isnull(numeral):
-        return numeral
-    form, figbass = tuple('' if pd.isnull(val) else val for val in (form, figbass))
-    if type(figbass) is float:
-        figbass = str(int(figbass))
-    #triads
-    if figbass in ['', '6', '64']:
-        if form in ['o', '+']:
-            return form
-        if form in ['%', 'M']:
-            if figbass == '':
-                return f"{form}7"
-            print(f"{form} is a seventh chord and cannot have figbass '{figbass}'")
-            return None
-        return 'm' if numeral.islower() else 'M'
-    # seventh chords
-    if form in ['o', '%', '+', '+M']:
-        return f"{form}7"
-    triad = 'm' if numeral.islower() else 'M'
-    seventh = 'M' if form == 'M' else 'm'
-    return f"{triad}{seventh}7"
+    chords_localkeys = list(zip(list_chords, list_local_keys))
+    functionalities_dict = {t: get_chord_1(*t) for t in set(chords_localkeys)}
+    function_1 = [functionalities_dict[t] for t in chords_localkeys]
+    chords_localkeys = list(zip(function_1, list_relativeroots, list_local_keys))
+    function_2 = [get_chord_2(*g1) for g1 in chords_localkeys]
+    return function_1, function_2
+
+# ### MODULATIONS ###
+# def get_modulations(lausanne_table: DataFrame, sections, major = True):
+#     keys = lausanne_table.localkey.dropna().tolist()
+#     grouping, _ = get_keys_functions(keys, mode = 'M' if major else 'm')
+#     modulations_sections = {g:[] for g in grouping}
+
+#     # Count the number of sections in each key
+#     last_key = ''
+#     for i, k in enumerate(keys):
+#         if (k.lower() != 'i') and k != last_key: #premisa
+#             # section = sections[i] #??? NON comprendo
+#             last_key = k
+#             modulation = grouping[i]
+#             # modulations_sections[modulation].append(section)
+#         # if last_key == k and sections[i] != section:
+#         #     section = sections[i]
+#         #     modulations_sections[modulation].append(section)
+    
+#     #borramos las modulaciones con listas vacías y dejamos un counter en vez de una lista
+#     ms = {}
+#     # for m in modulations_sections:
+#     #     if len(modulations_sections[m]) != 0:
+#     #         ms['Modulations'+str(m)] = len(list(set(modulations_sections[m])))
+#     # return ms
+
 
 def make_type_col(df, num_col='numeral', form_col='form', fig_col='figbass'):
     """ Create a new Series with the chord type for every row of `df`.
@@ -715,3 +601,120 @@ def make_type_col(df, num_col='numeral', form_col='form', fig_col='figbass'):
     param_tuples = list(df[[num_col, form_col, fig_col]].itertuples(index=False, name=None))
     result_dict = {t: features2type(*t) for t in set(param_tuples)}
     return pd.Series([result_dict[t] for t in param_tuples], index=df.index, name='chordtype')
+
+
+
+def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True, **kwargs):
+    """ Sort a list of DCML labels following custom criteria.
+        Uses: split_labels()
+    Parameters
+    ----------
+    labels : :obj:`collection` or :obj:`pandas.Series`
+        The labels you want to sort.
+    git_branch : :obj:`str`, optional
+        The branch of the DCMLab/standards repo from which you want to use the regEx.
+    drop_duplicates : :obj:`bool`, optional
+        By default, the function returns an ordered list of unique labels. Set to
+        False in order to keep duplicate labels. Note that where the ordered features
+        are identical, labels appear in the order of their occurrence.
+    verbose : .obj:`bool`, optional
+        By default, values that are missing from custom orderings are printed out.
+        Pass False to prevent that.
+    kwargs : {'values', 'occurrences', 'rvalues', 'roccurrences'}, :obj:`dict`, :obj:`list` or callable
+        Pass one argument for every feature that you want to sort in the order
+        in which features should be used for sorting. The arguments will be mapped
+        on the respective columns which should yield alpha-numeric values to be sorted.
+        globalkey
+        localkey
+        pedal
+        chord
+        numeral
+        form
+        figbass
+        changes
+        relativeroot
+        pedalend
+        phraseend
+        chordtype
+    Examples
+    --------
+    .. highlight:: python
+        # Sort numerals by occurrences (descending), the figbass by occurrences (ascending), and
+        # the form column by the given order
+        sort_labels(labels, numeral='occurrences', figbass='roccurrences', form=['', '+', 'o', '%', 'M'])
+        # Sort numerals by custom ordering and each numeral by the (globally) most frequent chord types.
+        sort_labels(labels, numeral=['I', 'V', 'IV'], chordtype='occurrences')
+        # Sort relativeroots alphabetically and the numerals by a custom ordering which
+        # is equivalent to ['V', 'vii', '#vii']
+        sort_labels(labels, relativeroot='rvalues', numeral={'vii': 5, 'V': 0,  '#vii': 10})
+        # Sort chord types by occurrences starting with the least frequent and sort their inversions
+        # following the given custom order
+        sort_labels(labels, chordtype='roccurrences', figbass=['2', '43', '65', '7'])
+    """
+    if len(kwargs) == 0:
+        raise ValueError("Pass at least one keyword argument for sorting...")
+    if not isinstance(labels, pd.core.series.Series):
+        if isinstance(labels, pd.core.frame.DataFrame):
+            raise TypeError("Pass only one column of your DataFrame.")
+        labels = pd.Series(labels)
+    if drop_duplicates:
+        labels = labels.drop_duplicates()
+    features = split_labels(labels, git_branch)
+
+    def make_keys(col, order):
+
+        def make_order_dict(it):
+            missing = [v for v in col.unique() if v not in it]
+            if len(missing) > 0 and verbose:
+                print(f"The following values were missing in the custom ordering for column {col.name}:\n{missing}")
+            return {v: i for i, v in enumerate(list(it) + missing)}
+
+        if order in ['values', 'rvalues']:
+            keys = sorted(set(col)) if order == 'values' else reversed(sorted(set(col)))
+            order_dict = make_order_dict(keys)
+        elif order in ['occurrences', 'roccurrences']:
+            keys = col.value_counts(dropna=False).index if order == 'occurrences' else col.value_counts(dropna=False, ascending=True).index
+            order_dict = make_order_dict(keys)
+        elif order.__class__ is not dict:
+            try:
+                order_dict = make_order_dict(order)
+            except:
+                # order is expected to be a callable:
+                return np.vectorize(order)(col)
+        else:
+            order_dict = order
+
+        return np.vectorize(order_dict.get)(col)
+
+    if 'chordtype' in kwargs:
+        features['chordtype'] = make_type_col(features)
+    key_cols = {col: make_keys(features[col], order) for col, order in kwargs.items() if col in features.columns}
+    df = pd.DataFrame(key_cols, index=features.index)
+    ordered_ix = df.sort_values(by=df.columns.to_list()).index
+    return labels.loc[ordered_ix]
+
+    
+def split_labels(labels, git_branch='master', dropna=True):
+    """ Split DCML harmony labels into their respective features using the regEx
+        from the indicated branch of the DCMLab/standards repository.
+    Parameters
+    ----------
+    labels : :obj:`pandas.Series`
+        Harmony labels to be split.
+    git_branch : :obj:`str`, optional
+        The branch of the DCMLab/standards repo from which you want to use the regEx.
+    dropna : :obj:`bool`, optional
+        Drop rows where the regEx didn't match.
+    """
+    global REGEX
+    if git_branch not in REGEX:
+        url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
+        glo, loc = {}, {}
+        exec(urlopen(url).read(), glo, loc)
+        REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
+    regex = REGEX[git_branch]
+    cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
+    res = labels.str.extract(regex, expand=True)[cols]
+    if dropna:
+        return res.dropna(how='all').fillna('')
+    return res.fillna('')
