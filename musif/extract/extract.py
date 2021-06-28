@@ -26,35 +26,28 @@ from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, a
 _cache = Cache(10000)  # To cache scanned scores
 
 
-class PartsExtractor:
+class FilesExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
 
     def extract(self, obj) -> List[str]:
-        if isinstance(obj, str):
-            if path.isdir(obj):
-                return self.from_dir(obj)
-            else:
-                return self.from_file(obj)
+        if not (isinstance(obj, list) or isinstance(obj, str)):
+            raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
+        musicxml_files = []
         if isinstance(obj, list):
-            return self.from_files(obj)
-        raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
+            musicxml_files = list(obj)
+        if isinstance(obj, str):
+            musicxml_files = glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj]
+        return musicxml_files
 
-    def from_dir(self, musicxml_scores_dir: str) -> List[str]:
-        musicxml_files = glob.glob(path.join(musicxml_scores_dir, f"*.{MUSICXML_FILE_EXTENSION}"))
-        parts = self._process_corpora(musicxml_files)
-        return parts
 
-    def from_files(self, musicxml_score_files: List[str]) -> List[str]:
-        return self._process_corpora(musicxml_score_files)
+class PartsExtractor:
+    def __init__(self, *args, **kwargs):
+        self._cfg = Configuration(*args, **kwargs)
+        self._files_extractor = FilesExtractor(*args, **kwargs)
 
-    def from_file(self, musicxml_file: str) -> List[str]:
-        return self._process_corpora([musicxml_file])
-
-    def _process_corpora(self, musicxml_files: List[str]) -> List[str]:
-        return self._process_corpus(musicxml_files)
-
-    def _process_corpus(self, musicxml_files: List[str]) -> List[str]:
+    def extract(self, obj) -> List[str]:
+        musicxml_files = self._files_extractor.extract(obj)
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
@@ -77,19 +70,30 @@ class PartsExtractor:
         return part_abbreviation
 
 
+class FilesValidator:
+    def __init__(self, *args, **kwargs):
+        self._cfg = Configuration(*args, **kwargs)
+        self._files_extractor = FilesExtractor(*args, **kwargs)
+
+    def validate(self, obj) -> None:
+        musicxml_files = self._files_extractor.extract(obj)
+        for musicxml_file in tqdm(musicxml_files):
+            print(f"Validating file: {musicxml_file}")
+            score = _cache.get(musicxml_file)
+            if score is None:
+                score = parse(musicxml_file)
+                split_layers(score, self._cfg.split_keywords)
+                _cache.put(musicxml_file, score)
+
+
 class FeaturesExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
+        self._files_extractor = FilesExtractor(*args, **kwargs)
         self._logger = self._cfg.read_logger
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
-        if not (isinstance(obj, list) or isinstance(obj, str)):
-            raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
-        musicxml_files = []
-        if isinstance(obj, list):
-            musicxml_files = list(obj)
-        if isinstance(obj, str):
-            musicxml_files = glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj]
+        musicxml_files = self._files_extractor.extract(obj)
         parts_df, score_df, corpus_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
@@ -170,7 +174,8 @@ class FeaturesExtractor:
         self._logger.info(f"Processing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file, parts_filter)
         parts_data = [self._get_part_data(score_data, part) for part in score_data["score"].parts]
-        parts_features = [self._extract_part_features(score_data, part_data) for part_data in filter_parts_data(parts_data, score_data["parts_filter"])]
+        parts_features = [self._extract_part_features(score_data, part_data)
+                          for part_data in filter_parts_data(parts_data, score_data["parts_filter"])]
         score_features = self._extract_score_features(score_data, parts_data, parts_features)
         return score_data, parts_data, score_features, parts_features
 
