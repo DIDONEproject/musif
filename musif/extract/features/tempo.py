@@ -7,7 +7,7 @@ from music21.expressions import TextExpression
 from music21.stream import Measure
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_corpus_prefix, get_part_prefix
+from musif.extract.features.prefix import get_corpus_prefix
 
 TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"
@@ -46,6 +46,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     # indica el tipo de instrumento y por ultimo el nombre. voice.soprano, strings.violin o strings.viola
 
     score = score_data["score"]
+    numeric_tempo = score_data["numeric_tempo"]
     time_signatures = []
     for part in score.parts:
         m = list(part.getTimeSignatures())
@@ -69,6 +70,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
     return {
         TEMPO: tempo_mark,
+        NUMERIC_TEMPO: numeric_tempo,
         TIME_SIGNATURE: time_signature,
         TIME_SIGNATURE_GROUPED: time_signature_grouped,
         TEMPO_GROUPED_1: tg1,

@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
 from musif.extract.features.custom.file_name import ARIA_DECADE, ARIA_YEAR
@@ -8,8 +7,7 @@ from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_
     ABSOLUTE_INTERVALS_KURTOSIS, \
     ABSOLUTE_INTERVALS_SKEWNESS, INTERVALLIC_MEAN, \
     INTERVALLIC_STD, \
-    INTERVALS_AUGMENTED_ALL_PER, INTERVALS_DIMINISHED_ALL_PER, INTERVALS_DOUBLE_AUGMENTED_ALL_PER, \
-    INTERVALS_DOUBLE_DIMINISHED_ALL_PER, INTERVALS_KURTOSIS, \
+    INTERVALS_AUGMENTED_ALL_PER, INTERVALS_DIMINISHED_ALL_PER, INTERVALS_KURTOSIS, \
     INTERVALS_MAJOR_ALL_PER, \
     INTERVALS_MINOR_ALL_PER, \
     INTERVALS_PERFECT_ALL_PER, INTERVALS_SKEWNESS, LEAPS_ALL_PER, REPEATED_NOTES_PER, STEPWISE_MOTION_ALL_PER
@@ -17,7 +15,8 @@ from musif.extract.features.key import KEY, KEY_SIGNATURE_TYPE, MODE
 from musif.extract.features.lyrics import SYLLABIC_RATIO
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scoring import FAMILY_INSTRUMENTATION, INSTRUMENTATION, NUMBER_OF_PARTS, VOICES
-from musif.extract.features.tempo import TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2, TIME_SIGNATURE, TIME_SIGNATURE_GROUPED
+from musif.extract.features.tempo import NUMERIC_TEMPO, TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2, TIME_SIGNATURE, \
+    TIME_SIGNATURE_GROUPED
 
 if __name__ == "__main__":
 
@@ -39,6 +38,7 @@ if __name__ == "__main__":
             "FamilyInstrumentation": row[FAMILY_INSTRUMENTATION],
             "Instrumentation": row[INSTRUMENTATION],
             "Tempo": row[TEMPO],
+            "TempoNumeric": row[NUMERIC_TEMPO],
             "TempoGrouped1": row[TEMPO_GROUPED_1],
             "TempoGrouped2": row[TEMPO_GROUPED_2],
             "TimeSignature": row[TIME_SIGNATURE],
