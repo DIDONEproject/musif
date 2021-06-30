@@ -104,7 +104,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
         FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
         FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        NUMBER_OF_PARTS: len(parts_features),
+        NUMBER_OF_PARTS: len(abbreviated_parts),
     }
     for sound_abbreviation in sound_abbreviations:
         sound_prefix = get_sound_prefix(sound_abbreviation)
