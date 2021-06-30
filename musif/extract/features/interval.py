@@ -98,6 +98,8 @@ INTERVALS_BEYOND_OCTAVE_DESC_PER = "IntervalsBeyondOctaveDesc_Per"
 INTERVALS_BEYOND_OCTAVE_ALL_PER = "IntervalsBeyondOctaveAll_Per"
 INTERVALS_SKEWNESS = "IntervalsSkewness"
 INTERVALS_KURTOSIS = "IntervalsKurtosis"
+ABSOLUTE_INTERVALS_SKEWNESS = "AbsoluteIntervalsSkewness"
+ABSOLUTE_INTERVALS_KURTOSIS = "AbsoluteIntervalsKurtosis"
 LARGEST_ASC_INTERVAL = "LargestAscInterval"
 LARGEST_ASC_INTERVAL_SEMITONES = "LargestAscIntervalSemitones"
 LARGEST_DESC_INTERVAL = "LargestDescInterval"
@@ -125,6 +127,7 @@ ALL_FEATURES = [
     INTERVALS_BEYOND_OCTAVE_ALL_COUNT, INTERVALS_BEYOND_OCTAVE_ALL_PER, INTERVALS_BEYOND_OCTAVE_ASC_COUNT, INTERVALS_BEYOND_OCTAVE_ASC_PER, INTERVALS_BEYOND_OCTAVE_DESC_COUNT, INTERVALS_BEYOND_OCTAVE_DESC_PER,
     LARGEST_ASC_INTERVAL, LARGEST_ASC_INTERVAL_SEMITONES, LARGEST_DESC_INTERVAL, LARGEST_DESC_INTERVAL_SEMITONES,
     SMALLEST_ASC_INTERVAL, SMALLEST_ASC_INTERVAL_SEMITONES, SMALLEST_DESC_INTERVAL, SMALLEST_DESC_INTERVAL_SEMITONES,
+    INTERVALS_SKEWNESS, INTERVALS_KURTOSIS, ABSOLUTE_INTERVALS_SKEWNESS, ABSOLUTE_INTERVALS_KURTOSIS
 ]
 
 
@@ -416,14 +419,22 @@ def get_ascending_descending(intervals_count: Dict[str, int], names: List[str]) 
 
 def get_interval_stats_features(intervals_count: Dict[str, int], prefix: str = ""):
     intervals = []
+    absolute_intervals = []
     for interval, frequency in intervals_count.items():
         interval_semitones = Interval(interval).semitones
+        absolute_interval_semitones = abs(interval_semitones)
         for i in range(frequency):
             intervals.append(interval_semitones)
+            absolute_intervals.append(absolute_interval_semitones)
     intervals = np.array(intervals)
+    absolute_intervals = np.array(absolute_intervals)
     intervals_skewness = skew(intervals)
     intervals_kurtosis = kurtosis(intervals)
+    absolute_intervals_skewness = skew(absolute_intervals)
+    absolute_intervals_kurtosis = kurtosis(absolute_intervals)
     return {
         f"{prefix}{INTERVALS_SKEWNESS}": intervals_skewness,
         f"{prefix}{INTERVALS_KURTOSIS}": intervals_kurtosis,
+        f"{prefix}{ABSOLUTE_INTERVALS_SKEWNESS}": absolute_intervals_skewness,
+        f"{prefix}{ABSOLUTE_INTERVALS_KURTOSIS}": absolute_intervals_kurtosis,
     }

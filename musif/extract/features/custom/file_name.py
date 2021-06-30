@@ -3,6 +3,16 @@ from typing import List
 
 from musif.config import Configuration
 
+ARIA_OPERA = "AriaOpera"
+ARIA_LABEL = "AriaLabel"
+ARIA_ID = "AriaId"
+ARIA_NAME = "AriaName"
+ARIA_YEAR = "Year"
+ARIA_DECADE = "Decade"
+ARIA_ACT = "Act"
+ARIA_SCENE = "Scene"
+ARIA_ACT_AND_SCENE = "ActAndScene"
+
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
     """
@@ -22,15 +32,15 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     scene = file_name.split(".", 1)[-1].split("]", 1)[0]
 
     return {
-        "AriaOpera": opera_title,
-        "AriaLabel": label,
-        "AriaId": aria_id,
-        "AriaName": aria_title,
-        "Year": year,
-        "Decade": decade,
-        "Act": act,
-        "Scene": scene,
-        "ActAndScene": act + scene,
+        ARIA_OPERA: opera_title,
+        ARIA_LABEL: label,
+        ARIA_ID: aria_id,
+        ARIA_NAME: aria_title,
+        ARIA_YEAR: year,
+        ARIA_DECADE: decade,
+        ARIA_ACT: act,
+        ARIA_SCENE: scene,
+        ARIA_ACT_AND_SCENE: act + scene,
     }
 
 
