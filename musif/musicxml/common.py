@@ -1,6 +1,6 @@
 import copy
-import traceback
-from typing import List, Tuple, Union
+import xml.etree.ElementTree as ET
+from typing import List, Optional, Tuple, Union
 
 from music21 import *
 from music21.note import Note
@@ -79,6 +79,14 @@ def split_layers(score: Score, split_keywords: List[str]):
         except:
             pass  # already inserted
 
+def extract_numeric_tempo(file_path: str) -> Optional[int]:
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+    try:
+        tempo = int(root.find("part").find("measure").find("direction").find("sound").get("tempo"))
+    except:
+        tempo = None
+    return tempo
 
 def get_part_clef(part):
     # the clef is in measure 1

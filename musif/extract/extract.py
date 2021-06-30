@@ -20,7 +20,8 @@ from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
     to_abbreviation
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, analysis, expand_part,
-                            expand_score_repetitions, get_intervals, get_notes_lyrics, get_repetition_elements,
+                            expand_score_repetitions, extract_numeric_tempo, get_intervals, get_notes_lyrics,
+                            get_repetition_elements,
                             split_layers)
 
 _cache = Cache(10000)  # To cache scanned scores
@@ -84,7 +85,7 @@ class FilesValidator:
         musicxml_files = self._files_extractor.extract(obj)
         for musicxml_file in tqdm(musicxml_files):
             print(f"Validating file: {musicxml_file}")
-            score = parse_file(musicxml_file, self._cfg.split_keywords)
+            parse_file(musicxml_file, self._cfg.split_keywords)
 
 
 class FeaturesExtractor:
@@ -184,6 +185,7 @@ class FeaturesExtractor:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
         repetition_elements = get_repetition_elements(score)
         score_expanded = expand_score_repetitions(score, repetition_elements)
+        tempo = extract_numeric_tempo(musicxml_file)
         if self._cfg.require_harmonic_analysis:
             mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
@@ -194,6 +196,7 @@ class FeaturesExtractor:
         data = {
             "score": score,
             "file": musicxml_file,
+            "numeric_tempo": tempo,
             "repetition_elements": repetition_elements,
             "score_expanded": score_expanded, ## es util??
             "key": score_key,
@@ -206,7 +209,7 @@ class FeaturesExtractor:
         if self._cfg.require_harmonic_analysis:
             data["mscx_path"] = mscx_name
         return data
-    
+
     def _find_mscx_file(self, musicxml_file: str) -> Path:
         try:
             mscx_path=musicxml_file.replace(MUSICXML_FILE_EXTENSION, MUSESCORE_FILE_EXTENSION)
