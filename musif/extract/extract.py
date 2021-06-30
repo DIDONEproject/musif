@@ -1,7 +1,7 @@
 import glob
 from os import path
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple
 
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -24,6 +24,15 @@ from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, a
                             split_layers)
 
 _cache = Cache(10000)  # To cache scanned scores
+
+
+def parse_file(file_path: str, split_keywords) -> Score:
+    score = _cache.get(file_path)
+    if score is None:
+        score = parse(file_path)
+        split_layers(score, split_keywords)
+        _cache.put(file_path, score)
+    return score
 
 
 class FilesExtractor:
@@ -55,11 +64,7 @@ class PartsExtractor:
         return sort(parts, abbreviated_parts_scoring_order)
 
     def _process_score(self, musicxml_file: str) -> List[str]:
-        score = _cache.get(musicxml_file)
-        if score is None:
-            score = parse(musicxml_file)
-            split_layers(score, self._cfg.split_keywords)
-            _cache.put(musicxml_file, score)
+        score = parse_file(musicxml_file, self._cfg.split_keywords)
         parts = list(score.parts)
         parts_abbreviations = [self._get_part(part, parts) for part in parts]
         return parts_abbreviations
@@ -79,11 +84,7 @@ class FilesValidator:
         musicxml_files = self._files_extractor.extract(obj)
         for musicxml_file in tqdm(musicxml_files):
             print(f"Validating file: {musicxml_file}")
-            score = _cache.get(musicxml_file)
-            if score is None:
-                score = parse(musicxml_file)
-                split_layers(score, self._cfg.split_keywords)
-                _cache.put(musicxml_file, score)
+            score = parse_file(musicxml_file, self._cfg.split_keywords)
 
 
 class FeaturesExtractor:
@@ -180,7 +181,7 @@ class FeaturesExtractor:
         return score_data, parts_data, score_features, parts_features
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
-        score = self._parse_score(musicxml_file)
+        score = parse_file(musicxml_file, self._cfg.split_keywords)
         repetition_elements = get_repetition_elements(score)
         score_expanded = expand_score_repetitions(score, repetition_elements)
         if self._cfg.require_harmonic_analysis:
@@ -213,14 +214,6 @@ class FeaturesExtractor:
             self._cfg.read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
             mscx_path=None
         return mscx_path
-
-    def _parse_score(self, musicxml_file: str) -> Score:
-        score = _cache.get(musicxml_file)
-        if score is None:
-            score = parse(musicxml_file)
-            split_layers(score, self._cfg.split_keywords)
-            _cache.put(musicxml_file, score)
-        return score
 
     def _filter_parts(self, score: Score, parts_filter: List[str] = None) -> List[Part]:
         if parts_filter is None:
