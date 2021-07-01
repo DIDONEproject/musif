@@ -45,7 +45,7 @@ from musif.extract import FeaturesExtractor
 
 if __name__ == "__main__":
 
-    features_df = FeaturesExtractor().from_dir("scores/xml", "scores/mscx", ["obI", "obII"])
+    features_df = FeaturesExtractor().extract("scores/xml")
 
 ```
 
@@ -57,9 +57,8 @@ from musif.extract import FeaturesExtractor
 if __name__ == "__main__":
 
     xml_files = ["scores/xml/score1.xml", "others/score3.xml"]
-    mscx_files = ["scores/mscx/score1.mscx", "others/score3.mscx"]
 
-    features_df = FeaturesExtractor().from_files(xml_files, mscx_files, ["obI", "obII"])
+    features_df = FeaturesExtractor().extract(xml_files, ["obI", "obII"])
 
 ```
 
@@ -70,7 +69,7 @@ from musif.extract import FeaturesExtractor
 
 if __name__ == "__main__":
 
-    features_df = FeaturesExtractor().from_file("scores/xml/score1.xml", "scores/xml/score1.mscx", ["obI", "obII"])
+    features_df = FeaturesExtractor().extract("scores/xml/score1.xml", ["obI", "obII"])
 
 ```
 
@@ -81,11 +80,11 @@ from musif.extract import FeaturesExtractor
 
 if __name__ == "__main__":
 
-    features1 = FeaturesExtractor().from_file("myfile.xml", ["obI", "obII"])
-    features2 = FeaturesExtractor({"split": True, "data_dir": "data"}).from_file("myfile.xml", ["obI", "obII"])
-    features3 = FeaturesExtractor(split=True, data_dir="data").from_file("myfile.xml", ["obI", "obII"])
-    features4 = FeaturesExtractor("/home/daniel/clients/didone/projects/musiF/config.yml").from_file("myfile.xml", ["obI", "obII"])
-    features5 = FeaturesExtractor("config.yml").from_file("myfile.xml", ["obI", "obII"])
+    features1 = FeaturesExtractor().extract("myfile.xml", ["obI", "obII"])
+    features2 = FeaturesExtractor({"split": True, "data_dir": "data"}).extract("myfile.xml", ["obI", "obII"])
+    features3 = FeaturesExtractor(split=True, data_dir="data").extract("myfile.xml", ["obI", "obII"])
+    features4 = FeaturesExtractor("/home/daniel/clients/didone/projects/musiF/config.yml").extract("myfile.xml", ["obI", "obII"])
+    features5 = FeaturesExtractor("config.yml").extract("myfile.xml", ["obI", "obII"])
 
 ```
 
