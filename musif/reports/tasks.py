@@ -48,7 +48,7 @@ if not os.path.exists(path.join(os.getcwd(), 'logs')):
 #####################################################################
 def _tasks_execution(rg: dict, nuc:list, _cfg: Configuration, groups: list, results_path_factorx: str, additional_info, factor: int, common_columns_df: DataFrame, 
 notes_df: DataFrame = pd.DataFrame(), melody_values: DataFrame = pd.DataFrame(), density_df: DataFrame =pd.DataFrame(), textures_df: DataFrame =pd.DataFrame(),
-intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(),harmony_df: DataFrame = pd.DataFrame(), key_areas: DataFrame = pd.DataFrame()):
+intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(),harmony_df: DataFrame = pd.DataFrame(), key_areas: DataFrame = pd.DataFrame(), chords: DataFrame = pd.DataFrame()):
     global rows_groups
     global not_used_cols
     rows_groups=rg
@@ -77,23 +77,23 @@ intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFr
             #     # futures.append(executor.submit(Melody_values, Melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
             #     #                visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
             melody_values = pd.concat([common_columns_df, melody_values], axis=1)
-            Melody_values(factor, _cfg, melody_values, results_path, '-'.join(groups) + str(factor) + '_factor'+ "_MelodyValues.xlsx",
+            Melody_values(factor, _cfg, melody_values, results_path, '-'.join(groups) + str(factor) + '_factor_'+ "_MelodyValues.xlsx",
                     visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None)
         if not density_df.empty:
             density_df = pd.concat(
                 [common_columns_df, density_df,notes_df], axis=1)
-            Densities(factor, _cfg, density_df, results_path, '-'.join(groups) + str(factor) + '_factor'+  "_Densities.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            Densities(factor, _cfg, density_df, results_path, '-'.join(groups) + str(factor) + '_factor_'+  "_Densities.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
         if not textures_df.empty:
             textures_df = pd.concat(
             [common_columns_df, textures_df,notes_df], axis=1)
-            Textures(factor, _cfg, textures_df, results_path, '-'.join(groups) + str(factor) + '_factor'+ "_Textures.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            Textures(factor, _cfg, textures_df, results_path, '-'.join(groups) + str(factor) + '_factor_'+ "_Textures.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
         if not intervals_info.empty:
             intervals_info=pd.concat([common_columns_df, intervals_info], axis=1)
-            Intervals(factor, _cfg, intervals_info, '-'.join(groups) + str(factor) + '_factor'+ "_Intervals.xlsx",
+            Intervals(factor, _cfg, intervals_info, '-'.join(groups) + str(factor) + '_factor_'+ "Intervals.xlsx",
                                 _cfg.sorting_lists["Intervals"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             
             absolute_intervals=make_intervals_absolute(intervals_info)
-            Intervals(factor, _cfg, absolute_intervals, '-'.join(groups) + str(factor) + '_factor'+ "_Intervals_absolute.xlsx",
+            Intervals(factor, _cfg, absolute_intervals, '-'.join(groups) + str(factor) + '_factor_'+ "Intervals_absolute.xlsx",
                              _cfg.sorting_lists["Intervals_absolute"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
         if not intervals_types.empty:
             intervals_types = pd.concat([common_columns_df, intervals_types], axis=1)
@@ -108,12 +108,15 @@ intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFr
         #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
         if not clefs_info.empty:
             # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
-            Intervals(factor, _cfg, clefs_info, '-'.join(groups) + str(factor) + '_factor'+  "_Clefs_in_voice.xlsx",
+            Intervals(factor, _cfg, clefs_info, '-'.join(groups) + str(factor) + '_factor_'+  "_Clefs_in_voice.xlsx",
                              _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
         # if not harmony_df.empty:
         #     harmony_df= pd.concat([common_columns_df,harmony_df], axis=1)
         #     # Harmonic_data(cfg, harmony_df, '-'.join(groups) + "Harmonic_rythm.xlsx",
         #     #                 sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
+        if not chords.empty:
+            chords = pd.concat([common_columns_df, chords], axis=1)
+            Chords(factor, _cfg, chords, results_path, '-'.join(groups) + str(factor) + '_factor_'+  "Chords.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
         # if not key_areas.empty:
         #     key_areas= pd.concat([common_columns_df,key_areas], axis=1)
         #     # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
@@ -324,11 +327,11 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     # PRINT LAST ROW (TOTAL OR AVERAGE)
     values=np.asarray(list(columns_values.values()))
     for i, c in enumerate(columns_values):
-        #In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
+        # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
         for row in range(0,values.shape[1]):
             if all([str(e)=='0.0' for e in values[:,row]]):
                 del columns_values[c][0]
-                #Antes del columns_values[c][row] 
+
         if average:  
             columns_values[c] = compute_average(
                 columns_values[c], computations_columns[i])
@@ -354,7 +357,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 ##########################################################################################################
 # Function in charge of printting the data, the arguments are the same as the explained in excel_sheet  #
 ##########################################################################################################
-
 
 def row_iteration(sheet: ExcelWriter, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                   columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool =False):
@@ -663,11 +665,33 @@ def Intervals(factor, _cfg: Configuration, data: DataFrame, name: str, sorting_l
                     results_path, 'visualisations', g)
                 if not os.path.exists(result_visualisations):
                     os.mkdir(result_visualisations)
-
                 name_bar = path.join(
                     result_visualisations, name.replace('.xlsx', '.png'))
                 bar_plot(name_bar, datag, third_columns_names_origin,
                             'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
+        elif factor == 1:
+            groups = [i for i in rows_groups]
+            for row in rows_groups:
+                if row not in not_used_cols:
+                    name_bar = path.join(results_path, 'visualisations',
+                                    name.replace('.xlsx',  '').replace('{0}_factor_'.format(str(factor)),'') + '_Per_' + str(row.replace('Aria','').upper()) + '.png')
+                    if len(rows_groups[row][0]) == 0:  # no sub-groups
+                        data_grouped = data.groupby(row, sort=True)
+                        if data_grouped:
+                            bar_plot(name_bar, data_grouped, third_columns_names_origin,
+                                        'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
+                    else: #subgroups
+                        for i, subrow in enumerate(rows_groups[row][0]):
+                            if subrow not in EXCEPTIONS:
+                                name_bar = path.join(results_path, 'visualisations',
+                                    name.replace('.xlsx',  '').replace('{0}_factor_'.format(str(factor)),'') + '_Per_' + str(subrow.replace('Aria','').upper()) + '.png')
+                                data_grouped = data.groupby(subrow)
+                                bar_plot(name_bar, data_grouped, third_columns_names_origin,
+                                        'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
+                                # melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(subrow.replace('Aria','').upper()))
+                                name_box = path.join(
+                                results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
+
         else:
             name_bar = path.join(
                 results_path, 'visualisations', name.replace('.xlsx', '.png'))
@@ -736,9 +760,9 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
             groups = [i for i in rows_groups]
             for row in rows_groups:
                 name_cakes = path.join(results_path, 'visualisations',
-                                name.replace('.xlsx', '') + 'Per ' + str(row.replace('Aria','').upper()) + '_AD.png')
+                                name.replace('.xlsx', '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper()) + '_AD.png')
                 name_bars = path.join(results_path, 'visualisations',
-                                name.replace('.xlsx',  '') + 'Per ' + str(row.replace('Aria','').upper()) + '.png')
+                                name.replace('.xlsx',  '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper()) + '.png')
                 if row not in not_used_cols:
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
@@ -747,9 +771,7 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
 
                             pie_plot(name_cakes, data_grouped, second_title='Per ' + str(row.replace('Aria','').upper()))
                             double_bar_plot(name_bars, data_grouped, 'Per ' + str(row.replace('Aria','').upper()))
-                            # if row == CLEF1: #Exception for boxplots
-                            #     box_plot(name_box, data_grouped, second_title='Per '+ str(row.replace('Aria','').upper()))
-                    
+
                     else: #subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in EXCEPTIONS:
@@ -757,12 +779,11 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
                                     name.replace('.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '_AD.png')
                                     name_bars = path.join(results_path, 'visualisations',
                                     name.replace('.xlsx',  '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png')
+
                                     data_grouped = data.groupby(subrow)
                                     pie_plot(name_cakes, data_grouped, second_title='Per ' + str(row.replace('Aria','').upper()))
                                     double_bar_plot(name_bars, data_grouped, 'Per ' + str(row.replace('Aria','').upper()))
-                                    # if subrow == ROLE:
-                                    #     box_plot(name_box, data_grouped, second_title='Per '+ str(subrow.replace('Aria','').upper()))
-        
+
         else:
             name_cakes = path.join(results_path, 'visualisations',
                                 name.replace('.xlsx', '') + '_AD.png')
@@ -771,7 +792,7 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
                                 name.replace('.xlsx',  '.png'))
             double_bar_plot(name_bars, data)
     except Exception as e:
-        _cfg.write_logger.info('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
 
 ########################################################################
 # Function to generate the reports files Emphasised_scale_degrees.xlsx
@@ -1321,65 +1342,146 @@ def Keyareas_weighted(_cfg: Configuration, data: DataFrame, results_path: str, n
         workbook.remove_sheet(std)
     workbook.save(os.path.join(results_path, "Ib.Keyareas_weighted.xlsx"))
 
-########################################################################
-# Function in charge of generating Ia.keyareas
-########################################################################
+def Chords(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+    try:
+        workbook = openpyxl.Workbook()
+        # Splitting the dataframes to reorder them
+        data_general = data[metadata_columns + ['Total analysed']].copy()
+        data = data[set(data.columns).difference(metadata_columns)]
+        data_general = data_general.dropna(how='all', axis=1)
+        data = data.dropna(how='all', axis=1)
+        data.columns = [i.replace('_','') for i in data.columns]
+        data.columns=[i.replace('Chords', '') for i in data.columns]
+        
+        cols = sort(data.columns.tolist(), [
+                    i for i in _cfg.sorting_lists['NumeralsSorting']])
+        
+        data = data[cols]
+        third_columns_names = data.columns.to_list()
 
+        second_column_names = [("", 1), ("Chords", len(third_columns_names))]
+        third_columns_names.insert(0, 'Total analysed')
+        data = pd.concat([data_general, data], axis=1)
+        # data_total = pd.concat([data_general, notes_and_measures], axis=1)
 
-def Chords(chords, results_path, name, sorting, keyword=''):
-    additional_info = {"Label":["Aria"], "Aria":['Label']}
-    workbook = openpyxl.Workbook()
+        computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
+        # computations2 = ["sum"] + ["mean_density"] * \
+        #     (len(third_columns_names)-1)
+        columns = third_columns_names
+        excel_sheet(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True,
+                     last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
+        # if factor >=1:
+        #     excel_sheet(workbook.create_sheet("Horizontal"), columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
+        #              second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
+
+        # Deleting default sheet
+        if "Sheet" in workbook.get_sheet_names():
+            std = workbook.get_sheet_by_name('Sheet')
+            workbook.remove_sheet(std)
+        adjust_excel_width_height(workbook)
+        workbook.save(os.path.join(results_path, name))
+
+        # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
+        columns.remove('Total analysed')
+        title = 'Instrumental densities'
+        # VISUALISATIONS
+        # if groups:
+        #     data_grouped = data.groupby(list(groups))
+        #     for g, datag in data_grouped:
+        #         result_visualisations = results_path + \
+        #             '\\visualisations\\' + str(g.replace('/', '_'))
+        #         if not os.path.exists(result_visualisations):
+        #             os.mkdir(result_visualisations)
+        #         name_bar = result_visualisations + \
+        #             '\\' + name.replace('.xlsx', '.png')
+        #         bar_plot_extended(name_bar, datag, columns, 'Density',
+        #                           'Density', title, second_title=str(g))
+
+        # elif factor == 1:  # 
+        #     groups = [i for i in rows_groups]
+        #     for row in rows_groups:
+        #         plot_name = name.replace(
+        #             '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
+        #         name_bar = results_path + '\\visualisations\\' + plot_name
+        #         if row not in not_used_cols:
+        #             if len(rows_groups[row][0]) == 0:  # no sub-groups
+        #                 data_grouped = data.groupby(row, sort=True)
+        #                 if data_grouped:
+        #                     line_plot_extended(
+        #                     name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title='Per ' + str(row))
+        #             else:
+        #                 for i, subrow in enumerate(rows_groups[row][0]):
+        #                     if subrow not in EXCEPTIONS:
+        #                         plot_name = name.replace(
+        #                             '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
+        #                         name_bar = results_path + '\\visualisations\\' + plot_name
+        #                         data_grouped = data.groupby(subrow)
+        #                         line_plot_extended(
+        #                             name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title= 'Per ' + str(subrow))
+        # else:
+        #     for instr in third_columns_names:
+        #         columns=data['AriaName']
+        #         name_bar = results_path + '\\visualisations\\' + instr + \
+        #             name.replace('.xlsx', '.png')
+        #         bar_plot_extended(name_bar, data, columns,
+        #                         'Density', 'Density', title + ' ' + instr, instr=instr)
+    except Exception as e:
+        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
+# def Chords(chords, results_path, name, sorting, keyword=''):
+#     additional_info = {"Label":["Aria"], "Aria":['Label']}
+#     workbook = openpyxl.Workbook()
     
-    all_columns = chords.columns.tolist()
-    #general_cols = ['Id', 'RealScoring']
-    general_cols = copy.deepcopy(not_used_cols)
-    for row in rows_groups:
-        if len(rows_groups[row][0]) == 0:
-            general_cols.append(row)
-        else:
-            general_cols += rows_groups[row][0]
-    first_group_columns = {'data': chords,
-                            'first_columns': None,
-                            'second_columns': None,
-                            'third_columns': None,
-                            'computations_columns': None,
-                            'columns': None}
-    third_columns_names = list(set(all_columns) - set(general_cols))
-    # we pre-estimate the columns to use (based on the need of showing section data or not)
-    if keyword != '':
-        third_columns_names = [c.replace(keyword, '') for c in third_columns_names if keyword in c]
-    else:
-        third_columns_names = [c for c in third_columns_names if 'Groupping' not in c] #all the possibilities without keywords
-    cleaned_third_columns_names = [tcn.replace('Chords', '').strip() for tcn in third_columns_names if 'Chord' in tcn]
-    #third_columns_names = sort(cleaned_third_columns_names, sorting_lists[sorting])
-    relative_root_sorting = harmony_sorting.get_relativeroot_sorting()
-    numerals_sorting = harmony_sorting.get_degrees_sorting()
-    form_sorting = harmony_sorting.get_chordform_sorting()
-    figbass_sorting = harmony_sorting.get_inversions_sorting()
-    if sorting == "ChordSorting":
-        third_columns_names = list(lausanne_sorting_script.sort_labels(cleaned_third_columns_names, relativeroot=relative_root_sorting, numeral=numerals_sorting, form=form_sorting, figbass=figbass_sorting, changes='occurrences'))
-    else:
-        third_columns_names = sort(cleaned_third_columns_names, sorting_lists[sorting])
+#     all_columns = chords.columns.tolist()
+#     #general_cols = ['Id', 'RealScoring']
+#     general_cols = copy.deepcopy(not_used_cols)
+#     for row in rows_groups:
+#         if len(rows_groups[row][0]) == 0:
+#             general_cols.append(row)
+#         else:
+#             general_cols += rows_groups[row][0]
+#     first_group_columns = {'data': chords,
+#                             'first_columns': None,
+#                             'second_columns': None,
+#                             'third_columns': None,
+#                             'computations_columns': None,
+#                             'columns': None}
+#     third_columns_names = list(set(all_columns) - set(general_cols))
+#     # we pre-estimate the columns to use (based on the need of showing section data or not)
+#     if keyword != '':
+#         third_columns_names = [c.replace(keyword, '') for c in third_columns_names if keyword in c]
+#     else:
+#         third_columns_names = [c for c in third_columns_names if 'Groupping' not in c] #all the possibilities without keywords
+#     cleaned_third_columns_names = [tcn.replace('Chords', '').strip() for tcn in third_columns_names if 'Chord' in tcn]
+#     #third_columns_names = sort(cleaned_third_columns_names, sorting_lists[sorting])
+#     relative_root_sorting = harmony_sorting.get_relativeroot_sorting()
+#     numerals_sorting = harmony_sorting.get_degrees_sorting()
+#     form_sorting = harmony_sorting.get_chordform_sorting()
+#     figbass_sorting = harmony_sorting.get_inversions_sorting()
+#     if sorting == "ChordSorting":
+#         third_columns_names = list(lausanne_sorting_script.sort_labels(cleaned_third_columns_names, relativeroot=relative_root_sorting, numeral=numerals_sorting, form=form_sorting, figbass=figbass_sorting, changes='occurrences'))
+#     else:
+#         third_columns_names = sort(cleaned_third_columns_names, sorting_lists[sorting])
 
-    computations_list = ['sum']*len(cleaned_third_columns_names) # esta hoja va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
-    first_group_columns['second_column_names'] = [('', 1), ('Chords', len(cleaned_third_columns_names))]
-    if keyword != '':
-        column_names =  columns_alike_our_data(third_columns_names, [(keyword, len(third_columns_names))], [('Chords', len(third_columns_names))])
-    else:
-        column_names =  columns_alike_our_data(third_columns_names, [('Chords', len(third_columns_names))])
-    first_group_columns['third_columns_names'] = ['Total analysed'] + third_columns_names
-    first_group_columns['column_names'] = ['Total analysed'] + column_names
-    first_group_columns['computations_columns'] = ['sum'] + computations_list
+#     computations_list = ['sum']*len(cleaned_third_columns_names) # esta hoja va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
+#     first_group_columns['second_column_names'] = [('', 1), ('Chords', len(cleaned_third_columns_names))]
+#     if keyword != '':
+#         column_names =  columns_alike_our_data(third_columns_names, [(keyword, len(third_columns_names))], [('Chords', len(third_columns_names))])
+#     else:
+#         column_names =  columns_alike_our_data(third_columns_names, [('Chords', len(third_columns_names))])
+#     first_group_columns['third_columns_names'] = ['Total analysed'] + third_columns_names
+#     first_group_columns['column_names'] = ['Total analysed'] + column_names
+#     first_group_columns['computations_columns'] = ['sum'] + computations_list
 
-    print('\t\t H_total')
-    excel_sheet(workbook.create_sheet("H_total"), first_group_columns['column_names'], chords, first_group_columns['third_columns_names'], first_group_columns['computations_columns'], 
-                second_columns=first_group_columns['second_column_names'], per = True, average=True, last_column=True, last_column_average = False, additional_info=additional_info)
+#     print('\t\t H_total')
+#     excel_sheet(workbook.create_sheet("H_total"), first_group_columns['column_names'], chords, first_group_columns['third_columns_names'], first_group_columns['computations_columns'], 
+#                 second_columns=first_group_columns['second_column_names'], per = True, average=True, last_column=True, last_column_average = False, additional_info=additional_info)
 
-    #borramos la hoja por defecto
-    if "Sheet" in workbook.get_sheet_names():
-        std=workbook.get_sheet_by_name('Sheet')
-        workbook.remove_sheet(std)
-    workbook.save(os.path.join(results_path, name))
+#     #borramos la hoja por defecto
+#     if "Sheet" in workbook.get_sheet_names():
+#         std=workbook.get_sheet_by_name('Sheet')
+#         workbook.remove_sheet(std)
+#     workbook.save(os.path.join(results_path, name))
+
 
 def get_sorting_lists():
     RoleSorting = general_sorting.get_role_sorting() # Only valid for DIDONE corpus, any other roles will be sorted alphabetically
@@ -1424,11 +1526,4 @@ def get_sorting_lists():
             "ChordTypeGrouppingSorting": chordTypesG,
             }
 
-def factor1(keyareas, chords):
 
-    print("II.Chords")
-    Chords(chords, results_path, "II1.Chords.xlsx", 'ChordSorting')
-    print("II.Chords_g1")
-    Chords(chords, results_path, "II1.Chords_g1.xlsx", "ChordGroupping1Sorting", keyword='Groupping1')
-    print("II.Chords_g2")
-    Chords(chords, results_path, "II1.Chords_g2.xlsx", "ChordGroupping2Sorting", keyword='Groupping2')
