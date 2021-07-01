@@ -126,8 +126,15 @@ class FeaturesGenerator:
         if cfg.require_harmonic_analysis:
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
-            numerals_df=all_info[[i for i in all_info.columns if 'numerals' in i.lower()]]
-            chord_types_df=all_info[[i for i in all_info.columns if 'chord' in i.lower()]]
+
+            #esto son las funciones armonmicas (agrupaciones del resto de cosas) -> Segunda mita (parte B y C) del excel de numerals
+            # functions_dfs = all_info[[i for i in all_info.columns if 'Chords_Grouping' in i]] -> No excel
+            chords_df = all_info[[i for i in all_info.columns if 'chords' in i.lower() and not 'grouping' in i.lower()]]
+
+            #Not used by now:
+
+            chords_types = all_info[[i for i in all_info.columns if 'Chord_types' in i]]
+
 
         if clefs:
             clefs_info=copy.deepcopy(common_columns_df)
@@ -139,7 +146,7 @@ class FeaturesGenerator:
             clefs_info.replace('', np.nan, inplace=True)
             clefs_info.dropna(how='all', axis=1, inplace=True)
 
-        FLAG=True #Flag to run common tasks (Density and Texture) only once
+        FLAG=True #Flag to run common tasks only once
         
         print('\n' + str(factor) + " factor")
 
@@ -259,7 +266,7 @@ class FeaturesGenerator:
             if FLAG:
                 for groups in rg_groups:
                     _tasks_execution(rows_groups, not_used_cols, cfg,
-                        groups, common_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas)
+                        groups, common_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                 FLAG=False #FLAG guarantees this is processed only once (all common files)
 
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
@@ -279,6 +286,6 @@ class FeaturesGenerator:
 
     def _write(self, all_info: DataFrame):
         # 2. Start the factor generation
-        for factor in range(1, self.num_factors_max + 1):
+        for factor in range(0, self.num_factors_max + 1):
             self._factor_execution(
                 all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists, self._cfg)

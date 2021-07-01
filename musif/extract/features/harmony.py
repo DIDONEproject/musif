@@ -16,7 +16,7 @@ from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 
-from .harmony_utils import get_numerals_lists, get_chord_types, get_compases_per_possibility, get_keyareas, get_chords
+from .harmony_utils import get_numerals_lists, get_chord_types, get_measures_per_possibility, get_keyareas, get_chords
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
 
@@ -61,15 +61,19 @@ def compute_modulations(partVoice, partVoice_expanded, modulations):
 def get_harmonic_rhythm(ms3_table, sections)-> dict:
     
     measures = ms3_table.mc.dropna().tolist()
+    #TODO: Calculate measures length 
+    # Tener en cuenta cambios de compás para cada measure
+
     beats = ms3_table.mc_onset.dropna().tolist()
     voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
     time_signatures = ms3_table.timesig.tolist()
     ## sacar possibilities
-    voice_measures = get_compases_per_possibility(list(set(voice)), measures, voice, beats, time_signatures)
+    voice_measures = get_measures_per_possibility(list(set(voice)), measures, voice, beats, time_signatures)
     annotations_voice = {'Voice': voice.count(1), 'No_voice': voice.count(0)}
     voice_measures['Voice'] = voice_measures.pop(1) if 1 in voice_measures else 0
     voice_measures['No_voice'] = voice_measures.pop(0) if 0 in voice_measures else 0
 
+## ESTAS lineas estaban comentadas
     # measures_section = get_compases_per_possibility(sections, measures, sections, beats, time_signatures)
     # annotations_sections = {k:sections.count(k) for k in measures_section}
     everything = dict(voice_measures)#, **measures_section)
@@ -234,7 +238,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             # HARMONY DATA #
             ################
         
-        all__harmonic_info = get_harmony_data(score_data, harmonic_analysis, sections)
+        all_harmonic_info = get_harmony_data(score_data, harmonic_analysis, sections)
         
             # #############
             # # KEY AREAS #
@@ -251,18 +255,18 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         ## COLLECTING FEATURES 
 
         #Harmonic Rhythm
-        features[f"{score_prefix}{HARMONIC_RHYTHM_VOICE}"] = all__harmonic_info['Harmonic rhythm_Voice']
-        features[f"{score_prefix}{HARMONIC_RHYTHM_NOVOICE}"] = all__harmonic_info['Harmonic rhythm_No_voice']
-        features[f"{score_prefix}{HARMONIC_RHYTHM_AVERAGE}"] = all__harmonic_info['Harmonic rhythm_Average']
+        features[f"{score_prefix}{HARMONIC_RHYTHM_VOICE}"] = all_harmonic_info['Harmonic rhythm_Voice']
+        features[f"{score_prefix}{HARMONIC_RHYTHM_NOVOICE}"] = all_harmonic_info['Harmonic rhythm_No_voice']
+        features[f"{score_prefix}{HARMONIC_RHYTHM_AVERAGE}"] = all_harmonic_info['Harmonic rhythm_Average']
         
         #NUMERALS
-        features.update({k:v for (k, v) in all__harmonic_info.items() if k.startswith('Numerals')})
+        features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('Numerals')})
         
         # KEY AREAS
         features.update({k:v for (k, v) in keyareas.items()})
         
         # CHORD TYPES
-        features.update({k:v for (k, v) in all__harmonic_info.items() if k.startswith('Chord_types_')})
+        features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('Chord_types_')})
         
         #CHORDS
         features.update({k:v for (k, v) in chords.items() if k.startswith('Chords_')})
@@ -270,7 +274,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         features.update({k:v for (k, v) in chords_g2.items() if k.startswith('Chords_')})
 
         # ADDITIONS
-        features.update({k:v for (k, v) in all__harmonic_info.items() if k.startswith('Additions_')})
+        features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('Additions_')})
         
         
     except Exception as e:
