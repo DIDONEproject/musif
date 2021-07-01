@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.5.2</programVersion>
-  <programRevision>465e7b6</programRevision>
+<museScore version="3.02">
+  <programVersion>3.6.2</programVersion>
+  <programRevision>3224f34</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -19,56 +19,94 @@
       <pageTwosided>0</pageTwosided>
       <staffDistance>8</staffDistance>
       <minSystemDistance>23</minSystemDistance>
-      <lyricsOddFontFace>TimesFinLyric</lyricsOddFontFace>
-      <lyricsOddFontSize>8.7</lyricsOddFontSize>
-      <lyricsEvenFontFace>TimesFinLyric</lyricsEvenFontFace>
-      <lyricsEvenFontSize>8.7</lyricsEvenFontSize>
-      <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
-      <chordSymbolAFontSize>7</chordSymbolAFontSize>
-      <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
-      <chordSymbolBFontSize>7</chordSymbolBFontSize>
-      <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <lyricsMinDistance>0.25</lyricsMinDistance>
+      <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+      <lyricsOddFontFace>Edwin</lyricsOddFontFace>
+      <lyricsOddFontSize>10</lyricsOddFontSize>
+      <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
+      <lyricsEvenFontSize>10</lyricsEvenFontSize>
+      <barWidth>0.18</barWidth>
+      <doubleBarWidth>0.18</doubleBarWidth>
+      <endBarWidth>0.55</endBarWidth>
+      <doubleBarDistance>0.55</doubleBarDistance>
+      <endBarDistance>0.7</endBarDistance>
+      <repeatBarlineDotSeparation>0.7</repeatBarlineDotSeparation>
+      <bracketWidth>0.44</bracketWidth>
+      <stemWidth>0.11</stemWidth>
+      <staffLineWidth>0.11</staffLineWidth>
+      <ledgerLineLength>0.35</ledgerLineLength>
+      <hairpinWidth>0.12</hairpinWidth>
+      <hairpinFontFace>Edwin</hairpinFontFace>
+      <hairpinFontSize>10</hairpinFontSize>
+      <pedalLineWidth>0.11</pedalLineWidth>
+      <pedalFontFace>Edwin</pedalFontFace>
+      <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
+      <chordSymbolAFontSize>11</chordSymbolAFontSize>
+      <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
+      <chordSymbolBFontSize>11</chordSymbolBFontSize>
+      <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>7</nashvilleNumberFontSize>
-      <tupletFontFace>Times New Roman</tupletFontFace>
-      <tupletFontSize>7</tupletFontSize>
-      <fingeringFontFace>Times New Roman</fingeringFontFace>
+      <slurMidWidth>0.21</slurMidWidth>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
+      <voltaLineWidth>0.11</voltaLineWidth>
+      <ottavaLineWidth>0.11</ottavaLineWidth>
+      <ottavaFontFace>Edwin</ottavaFontFace>
+      <tupletFontFace>Edwin</tupletFontFace>
+      <tupletFontSize>9</tupletFontSize>
+      <defaultFontFace>Edwin</defaultFontFace>
+      <titleFontFace>Edwin</titleFontFace>
+      <titleFontSize>22</titleFontSize>
+      <subTitleFontFace>Edwin</subTitleFontFace>
+      <subTitleFontSize>16</subTitleFontSize>
+      <composerFontFace>Edwin</composerFontFace>
+      <composerFontSize>10</composerFontSize>
+      <lyricistFontFace>Edwin</lyricistFontFace>
+      <lyricistFontSize>10</lyricistFontSize>
+      <fingeringFontFace>Edwin</fingeringFontFace>
       <fingeringFontSize>7</fingeringFontSize>
-      <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
+      <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
       <lhGuitarFingeringFontSize>7</lhGuitarFingeringFontSize>
-      <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>7</rhGuitarFingeringFontSize>
-      <stringNumberFontFace>Times New Roman</stringNumberFontFace>
+      <rhGuitarFingeringFontStyle>2</rhGuitarFingeringFontStyle>
+      <stringNumberFontFace>Edwin</stringNumberFontFace>
       <stringNumberFontSize>7</stringNumberFontSize>
-      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
-      <longInstrumentFontSize>7</longInstrumentFontSize>
-      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
-      <shortInstrumentFontSize>7</shortInstrumentFontSize>
-      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
-      <partInstrumentFontSize>7</partInstrumentFontSize>
-      <dynamicsFontFace>Times New Roman</dynamicsFontFace>
-      <dynamicsFontSize>7</dynamicsFontSize>
-      <expressionFontFace>Times New Roman</expressionFontFace>
-      <expressionFontSize>7</expressionFontSize>
-      <tempoFontFace>Times New Roman</tempoFontFace>
+      <longInstrumentFontFace>Edwin</longInstrumentFontFace>
+      <longInstrumentFontSize>10</longInstrumentFontSize>
+      <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
+      <shortInstrumentFontSize>10</shortInstrumentFontSize>
+      <partInstrumentFontFace>Edwin</partInstrumentFontFace>
+      <partInstrumentFontSize>14</partInstrumentFontSize>
+      <dynamicsFontFace>Edwin</dynamicsFontFace>
+      <dynamicsFontSize>11</dynamicsFontSize>
+      <expressionFontFace>Edwin</expressionFontFace>
+      <expressionFontSize>10</expressionFontSize>
+      <tempoFontFace>Edwin</tempoFontFace>
       <tempoFontSize>7</tempoFontSize>
-      <metronomeFontFace>Times New Roman</metronomeFontFace>
+      <metronomeFontFace>Edwin</metronomeFontFace>
       <metronomeFontSize>7</metronomeFontSize>
-      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
+      <metronomeFontStyle>0</metronomeFontStyle>
+      <measureNumberFontFace>Edwin</measureNumberFontFace>
       <measureNumberFontSize>7</measureNumberFontSize>
-      <translatorFontFace>Times New Roman</translatorFontFace>
-      <translatorFontSize>7</translatorFontSize>
-      <systemFontFace>Times New Roman</systemFontFace>
+      <measureNumberFontSpatiumDependent>0</measureNumberFontSpatiumDependent>
+      <measureNumberFontStyle>2</measureNumberFontStyle>
+      <translatorFontFace>Edwin</translatorFontFace>
+      <translatorFontSize>10</translatorFontSize>
+      <systemFontFace>Edwin</systemFontFace>
       <systemFontSize>7</systemFontSize>
-      <staffFontFace>Times New Roman</staffFontFace>
+      <staffFontFace>Edwin</staffFontFace>
       <staffFontSize>7</staffFontSize>
-      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>7</rehearsalMarkFontSize>
-      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
-      <repeatLeftFontSize>7</repeatLeftFontSize>
-      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
-      <repeatRightFontSize>7</repeatRightFontSize>
-      <frameFontFace>Times New Roman</frameFontFace>
-      <frameFontSize>7</frameFontSize>
+      <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
+      <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
+      <repeatLeftFontFace>Edwin</repeatLeftFontFace>
+      <repeatLeftFontSize>18</repeatLeftFontSize>
+      <repeatRightFontFace>Edwin</repeatRightFontFace>
+      <repeatRightFontSize>11</repeatRightFontSize>
+      <frameFontFace>Edwin</frameFontFace>
+      <frameFontSize>10</frameFontSize>
       <glissandoFontFace>Times New Roman</glissandoFontFace>
       <glissandoFontSize>7</glissandoFontSize>
       <bendFontFace>Times New Roman</bendFontFace>
@@ -105,6 +143,8 @@
       <user11FontSize>7</user11FontSize>
       <user12FontFace>Times New Roman</user12FontFace>
       <user12FontSize>7</user12FontSize>
+      <usePre_3_6_defaults>1</usePre_3_6_defaults>
+      <defaultsVersion>301</defaultsVersion>
       <Spatium>1.22768</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -124,6 +164,7 @@
     <metaTag name="lyricist">Pietro Metastasio</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle">O più tremar non voglio</metaTag>
+    <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="opera">Demofoonte</metaTag>
     <metaTag name="originalFormat">xml</metaTag>
     <metaTag name="platform">Microsoft Windows</metaTag>
@@ -140,7 +181,7 @@
           </StaffType>
         </Staff>
       <trackName>Oboi</trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboi</longName>
         <shortName>Ob.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -190,6 +231,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="68"/>
           <controller ctrl="7" value="101"/>
@@ -199,6 +241,7 @@
           <midiChannel>1</midiChannel>
           </Channel>
         <Channel name="harmony">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="0"/>
           <controller ctrl="7" value="101"/>
@@ -216,7 +259,7 @@
           </StaffType>
         </Staff>
       <trackName>Corni in Sol</trackName>
-      <Instrument>
+      <Instrument id="horn">
         <longName>Corni in Sol</longName>
         <shortName>Cor. (Sol)</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -268,6 +311,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
           <controller ctrl="7" value="101"/>
@@ -277,6 +321,7 @@
           <midiChannel>4</midiChannel>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
           <synti>Fluid</synti>
@@ -292,7 +337,7 @@
           </StaffType>
         </Staff>
       <trackName>MATUSIO</trackName>
-      <Instrument>
+      <Instrument id="tenor">
         <longName>MATUSIO</longName>
         <shortName>MAT.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -343,6 +388,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
           <controller ctrl="7" value="101"/>
@@ -358,12 +404,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="2" span="2" col="0"/>
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>4</barLineSpan>
         </Staff>
       <trackName>Violino I</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violino I</longName>
         <shortName>Vn. I</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -413,6 +458,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="40"/>
           <controller ctrl="7" value="101"/>
@@ -428,6 +474,7 @@
           <midiChannel>2</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -443,7 +490,7 @@
           </StaffType>
         </Staff>
       <trackName>Violino II</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violino II</longName>
         <shortName>Vn. II</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -493,6 +540,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="40"/>
           <controller ctrl="7" value="101"/>
@@ -508,6 +556,7 @@
           <midiChannel>5</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -523,7 +572,7 @@
           </StaffType>
         </Staff>
       <trackName>Viola</trackName>
-      <Instrument>
+      <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Va.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -574,6 +623,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="41"/>
           <controller ctrl="7" value="101"/>
@@ -589,6 +639,7 @@
           <midiChannel>11</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -604,7 +655,7 @@
           </StaffType>
         </Staff>
       <trackName>Basso</trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Basso</longName>
         <shortName>Bs.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -655,6 +706,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="42"/>
           <controller ctrl="7" value="101"/>
@@ -670,6 +722,7 @@
           <midiChannel>13</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -681,16 +734,19 @@
     <Staff id="1">
       <VBox>
         <height>24.576</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text><font size="22"/>O più tremar non voglio
-<font size="14"/>Matusio
+          <size>24</size>
+          <text><font size="22"></font>O più tremar non voglio
+<font size="14"></font>Matusio
 <i>Demofoonte</i> (1735) 
-<font size="12"/>Atto I - Scena 1. Aria</text>
+<font size="12"></font>Atto I - Scena 1. Aria</text>
           </Text>
         <Text>
           <style>Composer</style>
-          <text><font size="10"/>Music: Leonardo Leo (1694-1744)
+          <size>12</size>
+          <text><font size="10"></font>Music: Leonardo Leo (1694-1744)
 Text: Pietro Metastasio (1689-1782)</text>
           </Text>
         </VBox>
@@ -712,7 +768,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <text><font size="11.9"/><b>Allegro</b></text>
+            <text><font size="11.9"></font><b>Allegro</b></text>
             </Tempo>
           <Dynamic>
             <subtype>f</subtype>
@@ -859,7 +915,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>76</pitch>
@@ -869,7 +925,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>78</pitch>
@@ -1482,10 +1538,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>3/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -2333,9 +2386,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -2387,7 +2437,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.70185" y="3.50966"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -2415,10 +2465,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/2</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>5/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -2596,10 +2643,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/2</fractions>
-            </location>
-          <location>
-            <fractions>1/4</fractions>
+            <fractions>3/4</fractions>
             </location>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2656,9 +2700,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>21</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -2822,10 +2863,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/2</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>5/8</fractions>
             </location>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3312,10 +3350,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>3/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -3479,10 +3514,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>3/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>7/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -3526,9 +3558,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -3883,7 +3912,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.62731" y="3.74102"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -3939,10 +3968,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>3/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -4185,7 +4211,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>76</pitch>
@@ -4195,7 +4221,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>78</pitch>
@@ -4577,7 +4603,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>I\\</name>
+            <name>I}</name>
             </Harmony>
           <Spanner type="Volta">
             <Volta>
@@ -4599,9 +4625,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Harmony>
-            <name>}</name>
-            </Harmony>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
@@ -4615,7 +4638,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           <Spanner type="Volta">
             <prev>
@@ -4647,9 +4670,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -4668,7 +4688,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <name>I\\</name>
+            <name>I}</name>
             </Harmony>
           <Spanner type="Volta">
             <prev>
@@ -4697,9 +4717,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Harmony>
-            <name>}</name>
-            </Harmony>
           <Rest>
             <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
@@ -5741,10 +5758,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>3/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -5906,10 +5920,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/2</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>5/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -6009,9 +6020,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc2>14</tpc2>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -6045,10 +6053,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>3/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>7/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -6297,7 +6302,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <velocity>88</velocity>
             </Dynamic>
           <StaffText>
-            <text><font size="8.1"/>a2</text>
+            <text><font size="8.1"></font>a2</text>
             </StaffText>
           <Chord>
             <durationType>whole</durationType>
@@ -6599,10 +6604,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/2</fractions>
-            </location>
-          <location>
-            <fractions>3/8</fractions>
+            <fractions>7/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -6643,9 +6645,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc2>15</tpc2>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -6734,7 +6733,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <velocity>49</velocity>
             </Dynamic>
           <StaffText>
-            <text><font size="8.1"/>a2</text>
+            <text><font size="8.1"></font>a2</text>
             </StaffText>
           <Chord>
             <durationType>whole</durationType>
@@ -6846,9 +6845,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc2>14</tpc2>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -7119,7 +7115,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.16458" y="2.35283"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -7275,10 +7271,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>3/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -7329,10 +7322,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         <voice>
           <location>
-            <fractions>1/2</fractions>
-            </location>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>5/8</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -7561,7 +7551,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           </voice>
         <voice>
@@ -7574,9 +7564,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc2>18</tpc2>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           </voice>
         </Measure>
       <Measure>
@@ -10155,7 +10142,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           </voice>
         </Measure>
@@ -12859,7 +12846,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-2.33202" y="3.84293"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -13718,7 +13705,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.08103" y="3.98869"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -15842,7 +15829,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.85867" y="3.74102"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -16488,7 +16475,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           </voice>
         </Measure>
@@ -19089,7 +19076,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-2.62352" y="3.98869"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -19911,7 +19898,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.22678" y="3.40568"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -21904,7 +21891,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.39594" y="3.74102"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -22550,7 +22537,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           </voice>
         </Measure>
@@ -24228,7 +24215,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.08103" y="3.84293"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -24541,7 +24528,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.78953" y="3.69718"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -25562,7 +25549,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-4.16458" y="3.74102"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -26060,7 +26047,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           </voice>
         </Measure>
@@ -27948,7 +27935,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-1.60326" y="3.55143"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -28421,7 +28408,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-1.54051</minDistance>
             <offset x="-3.35227" y="3.55143"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -29774,7 +29761,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.93321" y="3.74102"/>
-            <text><font size="8.1"/><i>poco </i></text>
+            <text><font size="8.1"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -30186,7 +30173,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>-999</minDistance>
             <offset x="1.61956" y="-1.59004"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="13.9"></font>[  ]</text>
             </StaffText>
           </voice>
         </Measure>

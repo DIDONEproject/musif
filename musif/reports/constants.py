@@ -1,42 +1,48 @@
-from openpyxl.styles.fonts import Font
 import musif.extract.features.interval as interval
 import openpyxl
 from musif.extract.features.scoring import FAMILY_SCORING, SCORING
 from musif.extract.features.tempo import TEMPO_GROUPED_1, TEMPO_GROUPED_2
+from openpyxl.styles.fonts import Font
 
 # The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
 
-ARIA_LABEL = 'AriaLabel'
-OPERA = 'AriaOpera'
-ARIA_ID = 'AriaId'
-TITLE = 'AriaName'
-COMPOSER = 'Composer'
-DECADE = 'Decade'
 ACT = 'Act'
-SCENE = 'Scene'
 ACTANDSCENE = 'ActAndScene'
-NAME = 'FileName'
-LIBRETTIST = 'Librettist'
-FORM = 'Form'
+ARIA_ID = 'AriaId'
+ARIA_LABEL = 'AriaLabel'
 CHARACTER = 'Character'
-ROLE = 'RoleType'
-GENDER ='Gender'
 CITY = 'City'
-TERRITORY = 'Territory'
+CITY = "City"
 CLEF1 = 'Clef1'
 CLEF2 = 'Clef2'
 CLEF3 = 'Clef3'
-KEY = 'Key'
-KEYSIGNATURE = 'KeySignature'
-KEY_SIGNATURE_TYPE = 'KeySignatureType'
-MODE = 'Mode'
-TEMPO = 'Tempo'
-TIMESIGNATURE = 'TimeSignature'
-TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
+COMPOSER = 'Composer'
 DATE = 'Date'
-YEAR = 'Year'
+GEOGRAPHY='Geography'
+DECADE = 'Decade'
+DRAMA='Drama'
 DECADE = "Decade"
-CITY = "City"
+FINAL='Final'
+FORM = 'Form'
+GENDER ='Gender'
+KEY = 'Key'
+KEY_SIGNATURE_TYPE = 'KeySignatureType'
+KEYSIGNATURE = 'KeySignature'
+LIBRETTIST = 'Librettist'
+METRE='Metre'
+MODE = 'Mode'
+NAME = 'FileName'
+OPERA = 'AriaOpera'
+ROLE = 'RoleType'
+SCENE = 'Scene'
+TEMPO = 'Tempo'
+TERRITORY = 'Territory'
+TIMESIGNATURE = 'TimeSignature'
+TOTAL_ANALYSED='Total analysed'
+TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
+TITLE = 'AriaName'
+YEAR = 'Year'
+
 metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
@@ -47,13 +53,13 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    YEAR,
                    DECADE,
                ], ["Alphabetic", "Alphabetic"]),
-               "Geography": ([
+               GEOGRAPHY: ([
                    CITY,
-                   "Territory"
+                   TERRITORY
                ], ["Alphabetic", "Alphabetic"]),
-               "Drama": ([
-                   "Act",
-                   "Scene",
+               DRAMA: ([
+                   ACT,
+                   SCENE,
                    ACTANDSCENE
                ], ["Alphabetic", "Alphabetic", "Alphabetic"]),
                CHARACTER: ([
@@ -61,33 +67,35 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    ROLE,
                    GENDER
                ], ["CharacterSorting", "Alphabetic", "Alphabetic"]),
-               "Form": ([], "FormSorting"),
-               "Clef1": ([], "Alphabetic"),
-               "Clef2": ([], "Alphabetic"),
-               "Clef3": ([], "Alphabetic"),
-               "Librettist": ([], "Alphabetic"),
-               "Key": ([
-                   "Key",
-                   "Mode",
-                   "KeySignature",
-                   "KeySignatureType"], ["KeySorting", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
-               "Metre": ([
+               FORM: ([], "FormSorting"),
+               CLEF1: ([], "Alphabetic"),
+            #    "Clef2": ([], "Alphabetic"),
+            #    "Clef3": ([], "Alphabetic"),
+               LIBRETTIST: ([], "Alphabetic"),
+               KEY: ([
+                   KEY,
+                   MODE,
+                   KEYSIGNATURE,
+                   KEY_SIGNATURE_TYPE], ["KeySorting", "Alphabetic", "KeySignatureSorting", "KeySignatureGroupedSorted"]),
+               METRE: ([
                    TIMESIGNATURE,
                    TIMESIGNATUREGROUPED
                ], ["TimeSignatureSorting", "Alphabetic"]),
-               "Tempo": ([
-                   "Tempo",
-                   "TempoGrouped1",
-                   "TempoGrouped2"
+               TEMPO: ([
+                   TEMPO,
+                   TEMPO_GROUPED_1,
+                   TEMPO_GROUPED_2
                ], ["TempoSorting", "TempoGroupedSorting1", "TempoGroupedSorting2"]),
                SCORING: ([
                    SCORING,
                    FAMILY_SCORING
-               ], ["ScoringSorting", "ScoringFamilySorting"])
+                   #Antes Scoring Sorting
+               ], ["InstrumentSorting", "ScoringFamilySorting"])
                }
 
-not_used_cols = [ARIA_ID, SCORING, 'Total analysed', CLEF2, CLEF3]
-EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, CITY, SCENE]
+not_used_cols = [ARIA_ID, SCORING, TOTAL_ANALYSED , CLEF2, CLEF3]
+
+EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, CITY, SCENE, NAME]
 
 alfa = "abcdefghijklmnopqrstuvwxyz"
 
@@ -110,16 +118,16 @@ forbiden_groups = {OPERA: [OPERA],
                    CLEF1: [CLEF1],
                    CLEF2: [CLEF2],
                    CLEF3: [CLEF3],
-                   KEY: ['Form', 'Mode', 'Final', 'KeySignature', KEY_SIGNATURE_TYPE],
-                   MODE: ['Mode', 'Final'],
-                   'Final': ['Final', 'Key', 'KeySignature'],
-                   KEYSIGNATURE: ['Key', 'Final', 'KeySignature', KEY_SIGNATURE_TYPE],
+                   KEY: [FORM, MODE, FINAL, KEYSIGNATURE, KEY_SIGNATURE_TYPE],
+                   MODE: [MODE, FINAL],
+                   FINAL: [FINAL, KEY, KEYSIGNATURE],
+                   KEYSIGNATURE: [KEY, FINAL, KEYSIGNATURE, KEY_SIGNATURE_TYPE],
                    KEY_SIGNATURE_TYPE: [KEY_SIGNATURE_TYPE],
                    TIMESIGNATURE: [TIMESIGNATURE, TIMESIGNATUREGROUPED],
                    TIMESIGNATUREGROUPED: [TIMESIGNATUREGROUPED],
-                   TEMPO: [TEMPO, "TempoGrouped1", "TempoGrouped2"],
-                   'TempoGrouped1': ['TempoGrouped1', "TempoGrouped2"],
-                   'TempoGrouped2': ['TempoGrouped2'],
+                   TEMPO: [TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2],
+                   TEMPO_GROUPED_1: [TEMPO_GROUPED_1, TEMPO_GROUPED_2],
+                   TEMPO_GROUPED_2: [TEMPO_GROUPED_2],
                    "AbrScoring": ["AbrScoring", "RealScoringGrouped"],
                    "RealScoringGrouped": ["RealScoringGrouped"]
                    }
