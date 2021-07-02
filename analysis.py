@@ -1,5 +1,6 @@
 import pandas as pd
 
+from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
 from musif.extract.features.custom.file_name import ARIA_DECADE, ARIA_YEAR
 from musif.extract.features.density import DENSITY, MEASURES, MEASURES_MEAN, SOUNDING_DENSITY
@@ -21,6 +22,22 @@ from musif.extract.features.tempo import NUMERIC_TEMPO, TEMPO, TEMPO_GROUPED_1, 
 if __name__ == "__main__":
 
     df = pd.read_csv("myfeatures.csv", low_memory=False)
+    passions = read_dicts_from_csv("passions.csv")
+    data_by_aria_label = {label_data["Label"]: label_data for label_data in passions}
+    label_by_col = {
+        "Basic_passion": "Label_BasicPassion",
+        "Passion": "Label_Passions",
+        "Value": "Label_Sentiment",
+        "Time": "Label_Time",
+    }
+    for col, label in label_by_col.items():
+        values = []
+        for index, row in df.iterrows():
+            data_by_aria = data_by_aria_label.get(row["AriaLabel"])
+            label_value = data_by_aria[col] if data_by_aria else None
+            values.append(label_value)
+        df[label] = values
+
     df = df[~df["Label_Sentiment"].isnull()]
     df = df[df["FamilyVoice_NumberOfParts"] == 1]
     data_list = []
