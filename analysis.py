@@ -37,12 +37,15 @@ if __name__ == "__main__":
             label_value = data_by_aria[col] if data_by_aria else None
             values.append(label_value)
         df[label] = values
-
     df = df[~df["Label_Sentiment"].isnull()]
-    df = df[df["FamilyVoice_NumberOfParts"] == 1]
     data_list = []
     for index, row in df.iterrows():
         voice = row[VOICES]
+        if pd.isnull(voice):
+            print(row["FileName"])
+            continue
+        if "," in voice:
+            voice = voice.split(",")[0]
         input_parts = [voice, "vnI", "vnII", "va", "bs"]
         output_parts = ["Voice", "vnI", "vnII", "va", "bs"]
         input_parts_prefixes = [get_part_prefix(part_prefix) for part_prefix in input_parts]
