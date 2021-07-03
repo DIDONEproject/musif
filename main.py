@@ -3,7 +3,7 @@ from musif.extract.extract import FilesValidator
 
 if __name__ == "__main__":
 
-    didone_filter = ["vnI", "vnII", "va", "bs", "sop", "ten", "alt", "bas"]
+    didone_filter = ["vnI", "vnII", "va", "bs", "sop", "ten", "alt", "bar", "bass", "bbar"]
     test_filter = ["obI"]
 
     # FilesValidator("config.yml").validate("../Corpus/xml")
