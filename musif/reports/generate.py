@@ -7,35 +7,25 @@
 # Writes the final report files as well as generates the visualisations
 ########################################################################
 import copy
-from genericpath import exists
-import glob
-from itertools import permutations
-import json
-import math
 import os
-import shutil
-import sys
 import threading  # for the lock used for visualising, as matplotlib is not thread safe
-from copy import deepcopy
+from itertools import permutations
 from os import path
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
+import musif.extract.features.ambitus as ambitus
+import musif.extract.features.interval as interval
+import musif.extract.features.lyrics as lyrics
 import numpy as np
-import openpyxl
 import pandas as pd
-from music21 import interval, note, pitch
-from musif.common.utils import read_object_from_yaml_file
+from music21 import interval
+from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 
 from .constants import *
 from .tasks import _tasks_execution
-from musif.common.constants import VOICE_FAMILY
-
-import musif.extract.features.ambitus as ambitus
-import musif.extract.features.interval as interval
-import musif.extract.features.lyrics as lyrics
 
 
 class FeaturesGenerator:
@@ -128,14 +118,15 @@ class FeaturesGenerator:
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
             #esto son las funciones armonmicas (agrupaciones del resto de cosas) -> Segunda mita (parte B y C) del excel de numerals
-            # functions_dfs = all_info[[i for i in all_info.columns if 'Chords_Grouping' in i]] -> No excel
+            functions_dfs = all_info[[i for i in all_info.columns if 'Numerals' in i] + [i for i in all_info.columns if 'Chords_Grouping' in i]]
+            
             chords_df = all_info[[i for i in all_info.columns if 'chords' in i.lower() and not 'grouping' in i.lower()]]
-
+            
             #Not used by now:
-
             chords_types = all_info[[i for i in all_info.columns if 'Chord_types' in i]]
 
-
+        # Getting Voice Clefs info
+        
         if clefs:
             clefs_info=copy.deepcopy(common_columns_df)
             clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
@@ -258,15 +249,25 @@ class FeaturesGenerator:
             if not os.path.exists(results_path_factorx):
                 os.makedirs(results_path_factorx)
 
-            common_data_path = path.join(main_results_path, 'Texture&Density', str(
+            if FLAG:
+                textures_densities_data_path = path.join(main_results_path, 'Texture&Density', str(
                 factor) + " factor") if factor > 0 else path.join(main_results_path, 'Texture&Density', "Data")
 
-            if not os.path.exists(common_data_path):
-                os.makedirs(common_data_path)
-            if FLAG:
+                if not os.path.exists(textures_densities_data_path):
+                    os.makedirs(textures_densities_data_path)
+
                 for groups in rg_groups:
                     _tasks_execution(rows_groups, not_used_cols, cfg,
-                        groups, common_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
+                        groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
+                    
+                    if cfg.require_harmonic_analysis:
+                        harmony_data_path = path.join(main_results_path, 'Harmony', str(
+                            factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
+                        if not os.path.exists(harmony_data_path):
+                             os.makedirs(harmony_data_path)
+                        
+                        _tasks_execution(rows_groups, not_used_cols, cfg,
+                            groups, harmony_data_path, additional_info, factor, common_columns_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df, functions=functions_dfs)
                 FLAG=False #FLAG guarantees this is processed only once (all common files)
 
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
@@ -283,6 +284,8 @@ class FeaturesGenerator:
                 # for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
                 #     rows_groups = rg
                 #     not_used_cols = nuc
+
+
 
     def _write(self, all_info: DataFrame):
         # 2. Start the factor generation
