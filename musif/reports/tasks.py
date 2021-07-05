@@ -3,8 +3,6 @@ from musif.extract.features import key
 from musif.config import Configuration
 import os
 import sys
-import warnings
-from itertools import combinations, permutations
 from multiprocessing import Lock
 from os import path
 from typing import Dict, List
@@ -15,7 +13,6 @@ import musif.extract.features.lyrics as lyrics
 import numpy as np
 import openpyxl
 import pandas as pd
-from matplotlib.pyplot import axis
 from musif.common.sort import sort, sort_dataframe
 from openpyxl.styles.fonts import Font
 from openpyxl.writer.excel import ExcelWriter
@@ -31,7 +28,7 @@ from .utils import (adjust_excel_width_height, columns_alike_our_data,
                     get_groups_add_info,
                     prepare_data_emphasised_scale_degrees_second,
                     print_averages_total, print_averages_total_column,
-                    remove_folder_contents, split_voices, write_columns_titles,
+                    remove_folder_contents, row_iteration, split_voices, write_columns_titles,
                     write_columns_titles_variable_length)
 from .visualisations import (bar_plot, bar_plot_extended, box_plot,
                              customized_plot, double_bar_plot,
@@ -44,11 +41,12 @@ not_used_cols={}
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
 
-
 #####################################################################
+
 def _tasks_execution(rg: dict, nuc:list, _cfg: Configuration, groups: list, results_path_factorx: str, additional_info, factor: int, common_columns_df: DataFrame, 
 notes_df: DataFrame = pd.DataFrame(), melody_values: DataFrame = pd.DataFrame(), density_df: DataFrame =pd.DataFrame(), textures_df: DataFrame =pd.DataFrame(),
-intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(),harmony_df: DataFrame = pd.DataFrame(), key_areas: DataFrame = pd.DataFrame(), chords: DataFrame = pd.DataFrame()):
+intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(),
+harmony_df: DataFrame = pd.DataFrame(), key_areas: DataFrame = pd.DataFrame(), chords: DataFrame = pd.DataFrame(), functions: DataFrame = pd.DataFrame()):
     global rows_groups
     global not_used_cols
     rows_groups=rg
@@ -73,50 +71,54 @@ intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFr
         # executor = concurrent.futures.ThreadPoolExecutor()
         # visualiser_lock = threading.Lock()
         # futures = []
+        pre_string='-'.join(groups) + str(factor) + '_factor_'
         if not melody_values.empty:
             #     # futures.append(executor.submit(Melody_values, Melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
             #     #                visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
             melody_values = pd.concat([common_columns_df, melody_values], axis=1)
-            Melody_values(factor, _cfg, melody_values, results_path, '-'.join(groups) + str(factor) + '_factor_'+ "_MelodyValues.xlsx",
+            Melody_values(factor, _cfg, melody_values, results_path, pre_string + "Melody_Values.xlsx",
                     visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None)
         if not density_df.empty:
             density_df = pd.concat(
                 [common_columns_df, density_df,notes_df], axis=1)
-            Densities(factor, _cfg, density_df, results_path, '-'.join(groups) + str(factor) + '_factor_'+  "_Densities.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            Densities(factor, _cfg, density_df, results_path, pre_string+  "Densities.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
         if not textures_df.empty:
             textures_df = pd.concat(
             [common_columns_df, textures_df,notes_df], axis=1)
-            Textures(factor, _cfg, textures_df, results_path, '-'.join(groups) + str(factor) + '_factor_'+ "_Textures.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            Textures(factor, _cfg, textures_df, results_path, pre_string + "Textures.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
         if not intervals_info.empty:
             intervals_info=pd.concat([common_columns_df, intervals_info], axis=1)
-            Intervals(factor, _cfg, intervals_info, '-'.join(groups) + str(factor) + '_factor_'+ "Intervals.xlsx",
+            Intervals(factor, _cfg, intervals_info, pre_string+ "Intervals.xlsx",
                                 _cfg.sorting_lists["Intervals"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             
             absolute_intervals=make_intervals_absolute(intervals_info)
-            Intervals(factor, _cfg, absolute_intervals, '-'.join(groups) + str(factor) + '_factor_'+ "Intervals_absolute.xlsx",
-                             _cfg.sorting_lists["Intervals_absolute"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+            Intervals(factor, _cfg, absolute_intervals, pre_string + "Intervals_absolute.xlsx",
+                            _cfg.sorting_lists["Intervals_absolute"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
         if not intervals_types.empty:
             intervals_types = pd.concat([common_columns_df, intervals_types], axis=1)
-            Intervals_types(factor, _cfg, intervals_types, results_path, '-'.join(groups) + str(factor) + '_factor'+ "_Interval_types.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            Intervals_types(factor, _cfg, intervals_types, results_path, pre_string + "Interval_types.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
         
         if not emphasised_scale_degrees_info_A.empty:
             emphasised_scale_degrees_info_A = pd.concat([common_columns_df,emphasised_scale_degrees_info_A], axis=1)
-            Emphasised_scale_degrees(factor, _cfg, emphasised_scale_degrees_info_A,  _cfg.sorting_lists["ScaleDegrees"], '-'.join(
-                groups) + str(factor) + '_factor'+  "_Scale_degrees.xlsx", results_path, visualiser_lock, groups if groups != [] else None, additional_info)
+            Emphasised_scale_degrees(factor, _cfg, emphasised_scale_degrees_info_A,  _cfg.sorting_lists["ScaleDegrees"], pre_string +  "Scale_degrees.xlsx", results_path, visualiser_lock, groups if groups != [] else None, additional_info)
         # if not Emphasised_scale_degrees_info_B.empty:
         #     Emphasised_scale_degrees( Emphasised_scale_degrees_info_B, sorting_lists["ScaleDegrees"], '-'.join(
         #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
         if not clefs_info.empty:
             # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
-            Intervals(factor, _cfg, clefs_info, '-'.join(groups) + str(factor) + '_factor_'+  "_Clefs_in_voice.xlsx",
-                             _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+            Intervals(factor, _cfg, clefs_info, pre_string+  "Clefs_in_voice.xlsx",
+                            _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
         # if not harmony_df.empty:
         #     harmony_df= pd.concat([common_columns_df,harmony_df], axis=1)
         #     # Harmonic_data(cfg, harmony_df, '-'.join(groups) + "Harmonic_rythm.xlsx",
         #     #                 sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
         if not chords.empty:
             chords = pd.concat([common_columns_df, chords], axis=1)
-            Chords(factor, _cfg, chords, results_path, '-'.join(groups) + str(factor) + '_factor_'+  "Chords.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            Chords(factor, _cfg, chords, results_path, pre_string+  "Chords.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+        if not functions.empty:
+            functions = pd.concat([common_columns_df, functions], axis=1)
+            Harmonic_functions(factor, _cfg, functions, results_path, pre_string+  "Harmonic_functions.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+       
         # if not key_areas.empty:
         #     key_areas= pd.concat([common_columns_df,key_areas], axis=1)
         #     # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
@@ -138,300 +140,6 @@ intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFr
         _cfg.write_logger.error('\033[93mAn error ocurred during the report generation process. \033[37m')
         sys.exit(2)
 
-###########################################################################################################################################################
-# Function is in charge of printing each group: 'Per Opera', 'Per City'...
-#
-#   sheet: the openpyxl object in which we will write
-#   grouped: dataframe already grouped by the main factor and the additional information that it may show
-#   row_number, column_number: row and column in which we will start to write the information
-#   columns: list of the dataframe (grouped) column names that we need to access (as it doesn't necessarily correspond to the names that we want to print)
-#   third_columns: list of the names of the columns that we need to print
-#   computations_columns: information about the matematical computation that has to be done to each column (sum, mean...)
-#   ----------------
-#   first_columns: list of column names to print in first place, along with the number of columns that each has to embrace
-#   second_columns: list of column names to print in second place, along with the number of columns that each has to embrace
-#   per: boolean value to indicate if we need to compute the excel in absolute values or percentage (by default it is absolute)
-#   average: boolean value to indicate if we want the average row at the last group's row
-#   last_column: boolean value to indicate if we want a summarize on the last column
-#   last_column_average: boolean to indicate if we want the last column to have each row's average (otherwise, the total is writen)
-#   additional_info: number of extra columns containing additional info
-#   ponderate: boolean to indicate if we want to ponderate the data printed or not
-#   not_grouped_df: tuple containing the additional information columns and the dataframe without applying groupBy
-#
-###########################################################################################################################################################
-
-def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_number: int, columns: list, third_columns: list, computations_columns: list,
-                 first_columns: list = None, second_columns: List=None, per: bool=False, average:bool=False, last_column: bool=False,
-                 last_column_average: bool=False, additional_info: DataFrame=None, ponderate: bool=False, not_grouped_df:DataFrame=None):
-    len_add_info = 0  # Space for the possible column of additional information
-    if additional_info:
-        len_add_info = additional_info
-    # WRITE THE COLUMN NAMES (<first>, <second> and third)
-    if first_columns:
-        write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, first_columns, titles1Fill)
-        row_number += 1
-    if second_columns:
-        write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, second_columns, titles2Fill)
-        row_number += 1
-    starting_row = row_number
-    write_columns_titles(sheet, row_number, column_number +
-                         1 + len_add_info, third_columns)
-    row_number += 1
-    exception = -1
-    total_analysed_column = "Total analysed" in columns
-    cnumber = column_number
-    # PRINT EACH ROW
-    # store each result in case of need of calculating the percentage (per = True)
-    columns_values = {c: [] for c in columns}
-
-    # Subgroup: ex: Berlin when groupping by Territory
-    for s, subgroup in enumerate(grouped):
-
-        cnumber = column_number  
-        # Print row name
-        if type(subgroup[0]) != tuple:  # It has no additional information
-            # could be a tuple if we have grouped by more than one element
-            sheet.cell(row_number, column_number).value = subgroup[0]
-            sheet.cell(row_number, column_number).font =  FONT
-
-        else:
-            for g in subgroup[0]:
-                sheet.cell(row_number, cnumber).value = g
-                sheet.cell(row_number, cnumber).font =  FONT
-                cnumber += 1
-
-        subgroup_data = subgroup[1]
-        cnumber = column_number + 1 + len_add_info
-
-        total_analysed_row = [1]
-        if not_grouped_df is not None:
-            if type(subgroup[0]) != tuple:
-                cond = not_grouped_df[1][not_grouped_df[0][0]] == subgroup[0]
-                not_grouped_information = not_grouped_df[1][cond].drop(
-                    not_grouped_df[0] + ['Total analysed'], axis=1)
-            else:
-                for sb in range(len(subgroup[0])):
-                    cond = not_grouped_df[1][not_grouped_df[0]
-                                             [sb]] == subgroup[0][sb]
-                    not_grouped_information = not_grouped_df[1][cond]
-                not_grouped_information = not_grouped_information.drop(
-                    not_grouped_df[0] + ['Total analysed'], axis=1)
-        else:
-            not_grouped_information = None
-
-        # compute each column's value for the present row (subgroup) and print it
-        for i, c in enumerate(columns):
-            column_computation = computations_columns[i]
-            extra_info = []
-            if column_computation == 'mean_density':
-                extra_info = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
-                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate, extra_info=extra_info)
-                                      
-            elif column_computation == 'mean_texture':
-                if not subgroup_data[c].isnull().all():
-                    notes = subgroup_data[c.split('/')[0]+'Notes']
-                    notes_next = subgroup_data[c.split('/')[1]+'Notes']
-                    value = compute_value(notes, column_computation, total_analysed_row,
-                                        not_grouped_information, ponderate, extra_info=notes_next)
-                else:
-                    value=0.0
-            else:
-                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate)  # absolute value
-            if c == "Total analysed":
-                total_analysed_row = subgroup_data[c].to_list()
-                sheet.cell(row_number, cnumber).value = value
-                sheet.cell(row_number, cnumber).font =  FONT
-
-            if c == interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO:  # EXCEPTION
-                sheet.cell(row_number, cnumber).value = str(
-                    round(value * 100, 1)) + '%'
-                sheet.cell(row_number, cnumber).font =  FONT
-                cnumber += 1
-                exception = i - 1
-            elif not per:
-                sheet.cell(row_number, cnumber).value = str(
-                    value) + '%' if ponderate and column_computation == "sum" and c != "Total analysed" else str(value).replace(',', '.')
-                sheet.cell(row_number, cnumber).font =  FONT
-                cnumber += 1
-            # store each value in case of needing to print the percentage
-            columns_values[c].append(value)
-        row_number += 1
-
-    if total_analysed_column:  # We don't need Total analysed from this point
-        del columns_values['Total analysed']
-        computations_columns = computations_columns[1:]
-
-    last_used_row = row_number
-    if per or last_column:  # These are the two conditions in which we need to transpose valores_columnas
-        # Transpose valores_columnas to valores_filas (change perspective from column to rows)
-        columns_list = list(columns_values.values())
-        keys_columnas = list(columns_values.keys())
-        rows_values = []
-        len_lists = len(columns_list[0])
-        for i in range(len_lists):
-            rows_values.append(round(sum([lc[i] for x, lc in enumerate(
-                columns_list) if "All" not in keys_columnas[x]]), 3))
-
-    # PRINT EACH CELL IF PER IS TRUE, now that we have all the information
-    if per:
-        cn = column_number + len_add_info + \
-            2 if total_analysed_column else column_number + len_add_info + 1
-        for i in range(len(columns_list)):  # Traverse each column's information
-            row_number = starting_row
-            sum_column = sum(columns_list[i]) if sum(
-                columns_list[i]) != 0 else 1
-            for j in range(len(columns_list[i])):
-                row_number += 1
-                # COMPUTE THE HORIZONTAL AVERAGE (average within the present column or row)
-                if average:
-                    value = round(
-                        (columns_list[i][j]/rows_values[j])*100, 3)
-                else:
-                    value = round((columns_list[i][j]/sum_column)*100, 3)
-                columns_values[keys_columnas[i]][j] = value if str(
-                    value) != "nan" else 0  # update the value
-                sheet.cell(row_number, cn).value = str(
-                    value) + "%"  # print the value
-                sheet.cell(row_number, cn).font =  FONT
-            cn += 1
-
-        cnumber = cn
-
-    # RECALCULATE VALORES_FILAS AGAIN TO GET THE MOST UPDATED DATA
-    columns_list = list(columns_values.values()
-                           )  # Get the updated version
-    if per:  # Compute valores_filas again
-        rows_values = []
-        for i in range(len_lists):
-            rows_values.append(round(sum([lc[i] for x, lc in enumerate(
-                columns_list) if "All" not in keys_columnas[x]]), 3))
-
-    # PRINT THE LAST COLUMN (AVERAGE OR TOTAL)
-    if last_column:
-        if last_column_average:
-            for j, vf in enumerate(rows_values):
-                try:
-                    rows_values[j]=round(vf / (len(columns_list) - len(
-                [c for c in keys_columnas if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0])), 3)
-                except ZeroDivisionError:
-                    rows_values[j]= 0.0
-     
-        # PRINT THE LAST COLUMN, CONTAINING THE TOTAL OR THE AVERAGE OF THE DATA
-        print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
-                                    per=per or ponderate and all(c == "sum" for c in computations_columns))
-
-    # PRINT LAST ROW (TOTAL OR AVERAGE)
-    values=np.asarray(list(columns_values.values()))
-    for i, c in enumerate(columns_values):
-        # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
-        for row in range(0,values.shape[1]):
-            if all([str(e)=='0.0' for e in values[:,row]]):
-                del columns_values[c][0]
-
-        if average:  
-            columns_values[c] = compute_average(
-                columns_values[c], computations_columns[i])
-        else:  # total
-            columns_values[c] = round(sum(columns_values[c]), 3)
-
-    final_values = list(columns_values.values())
-    # Take the last value computed for the last column (average or total)
-    if last_column:
-        if average:
-            final_values.append(
-                round(sum(rows_values) / len(rows_values), 3))
-        else:
-            final_values.append(round(sum(rows_values), 3))
-    data_column = column_number + len_add_info + \
-        2 if total_analysed_column else column_number + len_add_info + 1
-    print_averages_total(sheet, last_used_row, final_values, column_number, data_column, average=average,
-                         per=per or ponderate and all(c == "sum" for c in computations_columns), exception=exception)
-    ###
-
-    return last_used_row + 1, cnumber + 1
-
-##########################################################################################################
-# Function in charge of printting the data, the arguments are the same as the explained in excel_sheet  #
-##########################################################################################################
-
-def row_iteration(sheet: ExcelWriter, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
-                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool =False):
-    all_columns = list(data.columns)
-    for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
-        if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):
-            forbiden = [NAME]
-            if group != None:
-                forbiden = [forbiden_groups[group[i]]
-                            for i in range(len(group))]
-                forbiden = [item for sublist in forbiden for item in sublist]
-            if group == None and row not in forbiden: #it was 'or' and not 'and' before, but change considered neccessary  
-
-                # 1. Write the Title in Yellow
-                sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
-                sheet.cell(row_number, column_number).font =  FONT
-                sheet.cell(row_number, column_number).fill = YELLOWFILL
-                row_number += 1
-                sorting = rows_groups[row][1]
-                # 2. Write the information depending on the subgroups (ex: Geography -> City, Country)
-                if len(rows_groups[row][0]) == 0:  # No subgroups
-                    starting_row = row_number
-                    # Sort the dataframe based on the json sorting_lists in Json_extra
-                    data = sort_dataframe(data, row, sorting_lists, sorting)
-                    groups_add_info, add_info = get_groups_add_info(
-                        data, row, additional_info)
-                    row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False), row_number, column_number, columns, third_columns, computations_columns, first_columns, second_columns, per=per,
-                                                                average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
-                    if columns2 != None:  # Second subgroup
-                        groups_add_info, add_info = get_groups_add_info(
-                            data, row, additional_info)
-                        if data2 is not None:
-                            data2 = sort_dataframe(
-                                data2, row, sorting_lists, sorting)
-                        _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
-                                            second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
-                else:  # has subgroups, ex: row = Date, subgroups: Year
-                    if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
-                        data_joint = data.copy()
-                        data = split_voices(data)
-                    for i, subrows in enumerate(rows_groups[row][0]):
-                        if (subrows == None or subrows not in forbiden) and subrows in all_columns:
-                            if "Tempo" in subrows:
-                                data[subrows] = data[subrows].fillna('')
-                            starting_row = row_number
-                            sort_method = sorting[i]
-                            sheet.cell(
-                                row_number, column_number).value = subrows
-                            sheet.cell(
-                                row_number, column_number).fill = greenFill
-                            sheet.cell(row_number, column_number).font =  FONT
-                            data = sort_dataframe(
-                                data, subrows, sorting_lists, sort_method)
-
-                            groups_add_info, add_info = get_groups_add_info(
-                                data, subrows, additional_info)
-                            row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False), row_number, column_number, columns, third_columns, computations_columns, first_columns, second_columns, per=per,
-                                                                        average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
-                            if columns2 != None:  # Second subgroup
-                                if "Tempo" in subrows and data2 is not None:
-                                    data2[subrows] = data2[subrows].fillna('')
-                                if data2 is not None:
-                                    data2 = sort_dataframe(
-                                        data2, subrows, sorting_lists, sort_method)
-                                groups_add_info, add_info = get_groups_add_info(
-                                    data, subrows, additional_info)
-                                _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
-                                                    second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
-
-                            row_number += 1
-                    if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
-                        data = copy.deepcopy(data_joint)
-                row_number += 1
-    return row_number
-
 
 def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool=False):
@@ -441,7 +149,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
     row_number = 1  # we start writing in row 1
     column_number = 1
     if groups == None:
-        row_iteration(sheet, columns, row_number, column_number, data, third_columns, computations_columns, sorting_lists, first_columns=first_columns, second_columns=second_columns, per=per,
+        row_iteration(sheet, rows_groups, columns, row_number, column_number, data, third_columns, computations_columns, sorting_lists, first_columns=first_columns, second_columns=second_columns, per=per,
                       average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
     else:
         # we may be grouping by more than 2 factors
@@ -472,7 +180,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
             if data2 is not None:
                 data2_grouped = data2.groupby(list(groups)).get_group(
                     group if len(group) > 1 else group[0])
-            rn = row_iteration(sheet, columns, row_number, cnumber, group_data, third_columns, computations_columns, sorting_lists, group=groups, first_columns=first_columns, second_columns=second_columns, per=per,
+            rn = row_iteration(sheet,rows_groups, columns, row_number, cnumber, group_data, third_columns, computations_columns, sorting_lists, group=groups, first_columns=first_columns, second_columns=second_columns, per=per,
                                average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2_grouped, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
             row_number = rn
         # merge last cells
@@ -1345,14 +1053,16 @@ def Keyareas_weighted(_cfg: Configuration, data: DataFrame, results_path: str, n
 def Chords(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
+
         # Splitting the dataframes to reorder them
-        data_general = data[metadata_columns + ['Total analysed']].copy()
-        data = data[set(data.columns).difference(metadata_columns)]
+        data_general = data[metadata_columns+ ['Total analysed']].copy()
+        data = data[set(data.columns).difference(list(data_general.columns))]
         data_general = data_general.dropna(how='all', axis=1)
         data = data.dropna(how='all', axis=1)
         data.columns = [i.replace('_','') for i in data.columns]
         data.columns=[i.replace('Chords', '') for i in data.columns]
         
+        #TODO: fix this sorting with johannes's function
         cols = sort(data.columns.tolist(), [
                     i for i in _cfg.sorting_lists['NumeralsSorting']])
         
@@ -1364,15 +1074,17 @@ def Chords(factor, _cfg: Configuration, data: DataFrame, results_path: str, name
         data = pd.concat([data_general, data], axis=1)
         # data_total = pd.concat([data_general, notes_and_measures], axis=1)
 
-        computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
+        # computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
         # computations2 = ["sum"] + ["mean_density"] * \
         #     (len(third_columns_names)-1)
-        columns = third_columns_names
-        excel_sheet(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True,
-                     last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
-        # if factor >=1:
-        #     excel_sheet(workbook.create_sheet("Horizontal"), columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
-        #              second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
+
+        computations = ["sum"]*len(third_columns_names)
+
+        excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+                     groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
+        if factor>=1:
+            excel_sheet(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+                        groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         # Deleting default sheet
         if "Sheet" in workbook.get_sheet_names():
@@ -1382,8 +1094,8 @@ def Chords(factor, _cfg: Configuration, data: DataFrame, results_path: str, name
         workbook.save(os.path.join(results_path, name))
 
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
-        columns.remove('Total analysed')
-        title = 'Instrumental densities'
+        third_columns_names.remove('Total analysed')
+        title = 'Chords'
         # VISUALISATIONS
         # if groups:
         #     data_grouped = data.groupby(list(groups))
@@ -1427,62 +1139,114 @@ def Chords(factor, _cfg: Configuration, data: DataFrame, results_path: str, name
         #                         'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
         _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
-# def Chords(chords, results_path, name, sorting, keyword=''):
-#     additional_info = {"Label":["Aria"], "Aria":['Label']}
-#     workbook = openpyxl.Workbook()
-    
-#     all_columns = chords.columns.tolist()
-#     #general_cols = ['Id', 'RealScoring']
-#     general_cols = copy.deepcopy(not_used_cols)
-#     for row in rows_groups:
-#         if len(rows_groups[row][0]) == 0:
-#             general_cols.append(row)
-#         else:
-#             general_cols += rows_groups[row][0]
-#     first_group_columns = {'data': chords,
-#                             'first_columns': None,
-#                             'second_columns': None,
-#                             'third_columns': None,
-#                             'computations_columns': None,
-#                             'columns': None}
-#     third_columns_names = list(set(all_columns) - set(general_cols))
-#     # we pre-estimate the columns to use (based on the need of showing section data or not)
-#     if keyword != '':
-#         third_columns_names = [c.replace(keyword, '') for c in third_columns_names if keyword in c]
-#     else:
-#         third_columns_names = [c for c in third_columns_names if 'Groupping' not in c] #all the possibilities without keywords
-#     cleaned_third_columns_names = [tcn.replace('Chords', '').strip() for tcn in third_columns_names if 'Chord' in tcn]
-#     #third_columns_names = sort(cleaned_third_columns_names, sorting_lists[sorting])
-#     relative_root_sorting = harmony_sorting.get_relativeroot_sorting()
-#     numerals_sorting = harmony_sorting.get_degrees_sorting()
-#     form_sorting = harmony_sorting.get_chordform_sorting()
-#     figbass_sorting = harmony_sorting.get_inversions_sorting()
-#     if sorting == "ChordSorting":
-#         third_columns_names = list(lausanne_sorting_script.sort_labels(cleaned_third_columns_names, relativeroot=relative_root_sorting, numeral=numerals_sorting, form=form_sorting, figbass=figbass_sorting, changes='occurrences'))
-#     else:
-#         third_columns_names = sort(cleaned_third_columns_names, sorting_lists[sorting])
 
-#     computations_list = ['sum']*len(cleaned_third_columns_names) # esta hoja va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
-#     first_group_columns['second_column_names'] = [('', 1), ('Chords', len(cleaned_third_columns_names))]
-#     if keyword != '':
-#         column_names =  columns_alike_our_data(third_columns_names, [(keyword, len(third_columns_names))], [('Chords', len(third_columns_names))])
-#     else:
-#         column_names =  columns_alike_our_data(third_columns_names, [('Chords', len(third_columns_names))])
-#     first_group_columns['third_columns_names'] = ['Total analysed'] + third_columns_names
-#     first_group_columns['column_names'] = ['Total analysed'] + column_names
-#     first_group_columns['computations_columns'] = ['sum'] + computations_list
+def Harmonic_functions(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+    try:
+        workbook = openpyxl.Workbook()
+        # Splitting the dataframes to reorder them
+        data_general = data[metadata_columns+ ['Total analysed']].copy()
+        data = data[set(data.columns).difference(list(data_general.columns))]
+        data_general = data_general.dropna(how='all', axis=1)
+        
+        data = data.dropna(how='all', axis=1)
 
-#     print('\t\t H_total')
-#     excel_sheet(workbook.create_sheet("H_total"), first_group_columns['column_names'], chords, first_group_columns['third_columns_names'], first_group_columns['computations_columns'], 
-#                 second_columns=first_group_columns['second_column_names'], per = True, average=True, last_column=True, last_column_average = False, additional_info=additional_info)
+        #Separate 3 dataframmes for 3 sections
+        data1 = data[[i for i in data.columns if 'Numerals' in i]]
+        data1.columns = [i.replace('Numerals','') for i in data1.columns]
+        
+        data2 = data[[i for i in data.columns if 'Chords_Grouping1' in i]]
+        data2.columns = [i.replace('Chords_Grouping1','') for i in data2.columns]
 
-#     #borramos la hoja por defecto
-#     if "Sheet" in workbook.get_sheet_names():
-#         std=workbook.get_sheet_by_name('Sheet')
-#         workbook.remove_sheet(std)
-#     workbook.save(os.path.join(results_path, name))
+        data3 = data[[i for i in data.columns if 'Chords_Grouping2' in i]]
+        data3.columns = [i.replace('Chords_Grouping2','') for i in data3.columns]
 
+        #TODO: change with 'sort dataframe'?
+        cols = sort(data1.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG1Sorting']])
+        data1=data1[cols]
 
+        # sort_dataframe
+        
+        cols = sort(data2.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG2Sorting']])
+        data2=data2[cols]
+        
+        third_columns_names=list(data1.columns)
+        third_columns_names2=['Total analysed']+ list(data2.columns)
+
+        # third_columns_names = [i.replace('Numerals','') for i in data.columns if 'Numerals' in i]
+        second_column_names = [("", 1), ("Numerals", len(third_columns_names))]
+        second_column_names2 = [('', 1), ("Chords Grouping",  len(third_columns_names2))]
+        
+        computations = ["sum"]*len(third_columns_names)
+        computations2 = ['sum']*len(third_columns_names2)
+        # columns = columns_alike_our_data(
+        #     third_columns_names, second_column_names)
+        columns=third_columns_names
+        # columns2 = columns_alike_our_data(
+        #     third_columns_names2, second_column_names2)
+
+        excel_sheet(workbook.create_sheet("Weighted"),
+         columns, data, third_columns_names,
+          computations, _cfg.sorting_lists, groups=groups, 
+          last_column=True, last_column_average=False, second_columns=second_column_names,
+           average=True, additional_info=additional_info, ponderate=True)
+                    #  columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
+        # if factor>=1:
+            # excel_sheet(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
+            #          columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
+
+        # borramos la sheet por defecto
+        if "Sheet" in workbook.get_sheet_names():
+            std = workbook.get_sheet_by_name('Sheet')
+            workbook.remove_sheet(std)
+        adjust_excel_width_height(workbook)
+        workbook.save(os.path.join(results_path, name))
+        
+        # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
+        third_columns_names.remove('Total analysed')
+        title = 'Functions'
+        # VISUALISATIONS
+        # if groups:
+        #     data_grouped = data.groupby(list(groups))
+        #     for g, datag in data_grouped:
+        #         result_visualisations = results_path + \
+        #             '\\visualisations\\' + str(g.replace('/', '_'))
+        #         if not os.path.exists(result_visualisations):
+        #             os.mkdir(result_visualisations)
+        #         name_bar = result_visualisations + \
+        #             '\\' + name.replace('.xlsx', '.png')
+        #         bar_plot_extended(name_bar, datag, columns, 'Density',
+        #                           'Density', title, second_title=str(g))
+
+        # elif factor == 1:  # 
+        #     groups = [i for i in rows_groups]
+        #     for row in rows_groups:
+        #         plot_name = name.replace(
+        #             '.xlsx', '') + '_Per_' + str(row.upper()) + '.png'
+        #         name_bar = results_path + '\\visualisations\\' + plot_name
+        #         if row not in not_used_cols:
+        #             if len(rows_groups[row][0]) == 0:  # no sub-groups
+        #                 data_grouped = data.groupby(row, sort=True)
+        #                 if data_grouped:
+        #                     line_plot_extended(
+        #                     name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title='Per ' + str(row))
+        #             else:
+        #                 for i, subrow in enumerate(rows_groups[row][0]):
+        #                     if subrow not in EXCEPTIONS:
+        #                         plot_name = name.replace(
+        #                             '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '.png'
+        #                         name_bar = results_path + '\\visualisations\\' + plot_name
+        #                         data_grouped = data.groupby(subrow)
+        #                         line_plot_extended(
+        #                             name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title= 'Per ' + str(subrow))
+        # else:
+        #     for instr in third_columns_names:
+        #         columns=data['AriaName']
+        #         name_bar = results_path + '\\visualisations\\' + instr + \
+        #             name.replace('.xlsx', '.png')
+        #         bar_plot_extended(name_bar, data, columns,
+        #                         'Density', 'Density', title + ' ' + instr, instr=instr)
+    except Exception as e:
+        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
 def get_sorting_lists():
     RoleSorting = general_sorting.get_role_sorting() # Only valid for DIDONE corpus, any other roles will be sorted alphabetically
     FormSorting = general_sorting.get_form_sorting()

@@ -11,7 +11,7 @@ if __name__ == "__main__":
     arias_path="./arias/"
     # arias_path="./arias/10arias"
 
-    df = FeaturesExtractor("config.yml").from_dir(arias_path, parts)
+    df = FeaturesExtractor("config.yml").extract(arias_path, parts)
     path = './'
 
     FeaturesGenerator("config.yml").generate_reports(df, 1, path, parts) 

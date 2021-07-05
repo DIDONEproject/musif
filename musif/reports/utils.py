@@ -1,13 +1,16 @@
-from typing import Dict, List
+import copy
+from musif.reports.calculations import compute_average
+from musif.common.sort import sort_dataframe
+from typing import List
 import os
 from openpyxl.writer.excel import ExcelWriter
-from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
 
 from .constants import *
+from .calculations import compute_value
 
 def adjust_excel_width_height(workbook: ExcelWriter):
             #Adjust columns width
@@ -167,3 +170,302 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
             column_data = data[name].tolist()
         data2[name] = pd.Series(column_data)
     return data2
+
+
+
+###########################################################################################################################################################
+# Function is in charge of printing each group: 'Per Opera', 'Per City'...
+#
+#   sheet: the openpyxl object in which we will write
+#   grouped: dataframe already grouped by the main factor and the additional information that it may show
+#   row_number, column_number: row and column in which we will start to write the information
+#   columns: list of the dataframe (grouped) column names that we need to access (as it doesn't necessarily correspond to the names that we want to print)
+#   third_columns: list of the names of the columns that we need to print
+#   computations_columns: information about the matematical computation that has to be done to each column (sum, mean...)
+#   ----------------
+#   first_columns: list of column names to print in first place, along with the number of columns that each has to embrace
+#   second_columns: list of column names to print in second place, along with the number of columns that each has to embrace
+#   per: boolean value to indicate if we need to compute the excel in absolute values or percentage (by default it is absolute)
+#   average: boolean value to indicate if we want the average row at the last group's row
+#   last_column: boolean value to indicate if we want a summarize on the last column
+#   last_column_average: boolean to indicate if we want the last column to have each row's average (otherwise, the total is writen)
+#   additional_info: number of extra columns containing additional info
+#   ponderate: boolean to indicate if we want to ponderate the data printed or not
+#   not_grouped_df: tuple containing the additional information columns and the dataframe without applying groupBy
+#
+
+
+###########################################################################################################################################################
+
+def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_number: int, columns: list, third_columns: list, computations_columns: list,
+                 first_columns: list = None, second_columns: List=None, per: bool=False, average:bool=False, last_column: bool=False,
+                 last_column_average: bool=False, additional_info: DataFrame=None, ponderate: bool=False, not_grouped_df:DataFrame=None):
+    len_add_info = 0  # Space for the possible column of additional information
+    if additional_info:
+        len_add_info = additional_info
+    # WRITE THE COLUMN NAMES (<first>, <second> and third)
+    if first_columns:
+        write_columns_titles_variable_length(
+            sheet, row_number, column_number + 1 + len_add_info, first_columns, titles1Fill)
+        row_number += 1
+    if second_columns:
+        write_columns_titles_variable_length(
+            sheet, row_number, column_number + 1 + len_add_info, second_columns, titles2Fill)
+        row_number += 1
+    starting_row = row_number
+    write_columns_titles(sheet, row_number, column_number +
+                         1 + len_add_info, third_columns)
+    row_number += 1
+    exception = -1
+    total_analysed_column = "Total analysed" in columns
+    cnumber = column_number
+    # PRINT EACH ROW
+    # store each result in case of need of calculating the percentage (per = True)
+    columns_values = {c: [] for c in columns}
+
+    # Subgroup: ex: Berlin when groupping by Territory
+    for s, subgroup in enumerate(grouped):
+
+        cnumber = column_number  
+        # Print row name
+        if type(subgroup[0]) != tuple:  # It has no additional information
+            # could be a tuple if we have grouped by more than one element
+            sheet.cell(row_number, column_number).value = subgroup[0]
+            sheet.cell(row_number, column_number).font =  FONT
+
+        else:
+            for g in subgroup[0]:
+                sheet.cell(row_number, cnumber).value = g
+                sheet.cell(row_number, cnumber).font =  FONT
+                cnumber += 1
+
+        subgroup_data = subgroup[1]
+        cnumber = column_number + 1 + len_add_info
+
+        total_analysed_row = [1]
+        if not_grouped_df is not None:
+            if type(subgroup[0]) != tuple:
+                cond = not_grouped_df[1][not_grouped_df[0][0]] == subgroup[0]
+                not_grouped_information = not_grouped_df[1][cond].drop(
+                    not_grouped_df[0] + ['Total analysed'], axis=1)
+            else:
+                for sb in range(len(subgroup[0])):
+                    cond = not_grouped_df[1][not_grouped_df[0]
+                                             [sb]] == subgroup[0][sb]
+                    not_grouped_information = not_grouped_df[1][cond]
+                not_grouped_information = not_grouped_information.drop(
+                    not_grouped_df[0] + ['Total analysed'], axis=1)
+        else:
+            not_grouped_information = None
+
+        # compute each column's value for the present row (subgroup) and print it
+        for i, c in enumerate(columns):
+            column_computation = computations_columns[i]
+            extra_info = []
+            if column_computation == 'mean_density':
+                extra_info = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
+                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate, extra_info=extra_info)
+                                      
+            elif column_computation == 'mean_texture':
+                if not subgroup_data[c].isnull().all():
+                    notes = subgroup_data[c.split('/')[0]+'Notes']
+                    notes_next = subgroup_data[c.split('/')[1]+'Notes']
+                    value = compute_value(notes, column_computation, total_analysed_row,
+                                        not_grouped_information, ponderate, extra_info=notes_next)
+                else:
+                    value=0.0
+            else:
+                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                                      not_grouped_information, ponderate)  # absolute value
+            if c == "Total analysed":
+                sheet.cell(row_number, cnumber).value = value
+                total_analysed_row = subgroup_data[c].to_list()
+                sheet.cell(row_number, cnumber).font =  FONT
+
+            if c == interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO:  # EXCEPTION
+                sheet.cell(row_number, cnumber).value = str(
+                    round(value * 100, 1)) + '%'
+                sheet.cell(row_number, cnumber).font =  FONT
+                cnumber += 1
+                exception = i - 1
+            elif not per:
+                sheet.cell(row_number, cnumber).value = str(
+                    value) + '%' if ponderate and column_computation == "sum" and c != "Total analysed" else str(value).replace(',', '.')
+                sheet.cell(row_number, cnumber).font =  FONT
+                cnumber += 1
+            # store each value in case of needing to print the percentage
+            columns_values[c].append(value)
+        row_number += 1
+
+    if total_analysed_column:  # We don't need Total analysed from this point
+        del columns_values['Total analysed']
+        computations_columns = computations_columns[1:]
+
+    last_used_row = row_number
+    if per or last_column:  # These are the two conditions in which we need to transpose valores_columnas
+        # Transpose valores_columnas to valores_filas (change perspective from column to rows)
+        columns_list = list(columns_values.values())
+        keys_columnas = list(columns_values.keys())
+        rows_values = []
+        len_lists = len(columns_list[0])
+        for i in range(len_lists):
+            rows_values.append(round(sum([lc[i] for x, lc in enumerate(
+                columns_list) if "All" not in keys_columnas[x]]), 3))
+
+    # PRINT EACH CELL IF PER IS TRUE, now that we have all the information
+    if per:
+        cn = column_number + len_add_info + \
+            2 if total_analysed_column else column_number + len_add_info + 1
+        for i in range(len(columns_list)):  # Traverse each column's information
+            row_number = starting_row
+            sum_column = sum(columns_list[i]) if sum(
+                columns_list[i]) != 0 else 1
+            for j in range(len(columns_list[i])):
+                row_number += 1
+                # COMPUTE THE HORIZONTAL AVERAGE (average within the present column or row)
+                if average:
+                    value = round(
+                        (columns_list[i][j]/rows_values[j])*100, 3)
+                else:
+                    value = round((columns_list[i][j]/sum_column)*100, 3)
+                columns_values[keys_columnas[i]][j] = value if str(
+                    value) != "nan" else 0  # update the value
+                sheet.cell(row_number, cn).value = str(
+                    value) + "%"  # print the value
+                sheet.cell(row_number, cn).font =  FONT
+            cn += 1
+
+        cnumber = cn
+
+    # RECALCULATE VALORES_FILAS AGAIN TO GET THE MOST UPDATED DATA
+    columns_list = list(columns_values.values()
+                           )  # Get the updated version
+    if per:  # Compute valores_filas again
+        rows_values = []
+        for i in range(len_lists):
+            rows_values.append(round(sum([lc[i] for x, lc in enumerate(
+                columns_list) if "All" not in keys_columnas[x]]), 3))
+
+    # PRINT THE LAST COLUMN (AVERAGE OR TOTAL)
+    if last_column:
+        if last_column_average:
+            for j, vf in enumerate(rows_values):
+                try:
+                    rows_values[j]=round(vf / (len(columns_list) - len(
+                [c for c in keys_columnas if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0])), 3)
+                except ZeroDivisionError:
+                    rows_values[j]= 0.0
+     
+        # PRINT THE LAST COLUMN, CONTAINING THE TOTAL OR THE AVERAGE OF THE DATA
+        print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
+                                    per=per or ponderate and all(c == "sum" for c in computations_columns))
+
+    # PRINT LAST ROW (TOTAL OR AVERAGE)
+    values=np.asarray(list(columns_values.values()))
+    for i, c in enumerate(columns_values):
+        # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
+        for row in range(0,values.shape[1]):
+            if all([str(e)=='0.0' for e in values[:,row]]):
+                del columns_values[c][0]
+
+        if average:  
+            columns_values[c] = compute_average(
+                columns_values[c], computations_columns[i])
+        else:  # total
+            columns_values[c] = round(sum(columns_values[c]), 3)
+
+    final_values = list(columns_values.values())
+    # Take the last value computed for the last column (average or total)
+    if last_column:
+        if average:
+            final_values.append(
+                round(sum(rows_values) / len(rows_values), 3))
+        else:
+            final_values.append(round(sum(rows_values), 3))
+    data_column = column_number + len_add_info + \
+        2 if total_analysed_column else column_number + len_add_info + 1
+    print_averages_total(sheet, last_used_row, final_values, column_number, data_column, average=average,
+                         per=per or ponderate and all(c == "sum" for c in computations_columns), exception=exception)
+    ###
+
+    return last_used_row + 1, cnumber + 1
+
+    
+##########################################################################################################
+# Function in charge of printting the data, the arguments are the same as the explained in excel_sheet  #
+##########################################################################################################
+
+def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
+                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool =False):
+    all_columns = list(data.columns)
+    for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
+        if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):
+            forbiden = [NAME]
+            if group != None:
+                forbiden = [forbiden_groups[group[i]]
+                            for i in range(len(group))]
+                forbiden = [item for sublist in forbiden for item in sublist]
+            if group == None and row not in forbiden: #it was 'or' and not 'and' before, but change considered neccessary  
+
+                # 1. Write the Title in Yellow
+                sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
+                sheet.cell(row_number, column_number).font =  FONT
+                sheet.cell(row_number, column_number).fill = YELLOWFILL
+                row_number += 1
+                sorting = rows_groups[row][1]
+                # 2. Write the information depending on the subgroups (ex: Geography -> City, Country)
+                if len(rows_groups[row][0]) == 0:  # No subgroups
+                    starting_row = row_number
+                    # Sort the dataframe based on the json sorting_lists in Json_extra
+                    data = sort_dataframe(data, row, sorting_lists, sorting)
+                    groups_add_info, add_info = get_groups_add_info(
+                        data, row, additional_info)
+                    row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False), row_number, column_number, columns, third_columns, computations_columns, first_columns, second_columns, per=per,
+                                                                average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+                    if columns2 != None:  # Second subgroup
+                        groups_add_info, add_info = get_groups_add_info(
+                            data, row, additional_info)
+                        if data2 is not None:
+                            data2 = sort_dataframe(
+                                data2, row, sorting_lists, sorting)
+                        _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
+                                            second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+                else:  # has subgroups, ex: row = Date, subgroups: Year
+                    if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
+                        data_joint = data.copy()
+                        data = split_voices(data)
+                    for i, subrows in enumerate(rows_groups[row][0]):
+                        if (subrows == None or subrows not in forbiden) and subrows in all_columns:
+                            if "Tempo" in subrows:
+                                data[subrows] = data[subrows].fillna('')
+                            starting_row = row_number
+                            sort_method = sorting[i]
+                            sheet.cell(
+                                row_number, column_number).value = subrows
+                            sheet.cell(
+                                row_number, column_number).fill = greenFill
+                            sheet.cell(row_number, column_number).font =  FONT
+                            data = sort_dataframe(
+                                data, subrows, sorting_lists, sort_method)
+
+                            groups_add_info, add_info = get_groups_add_info(
+                                data, subrows, additional_info)
+                            row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False), row_number, column_number, columns, third_columns, computations_columns, first_columns, second_columns, per=per,
+                                                                        average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+                            if columns2 != None:  # Second subgroup
+                                if "Tempo" in subrows and data2 is not None:
+                                    data2[subrows] = data2[subrows].fillna('')
+                                if data2 is not None:
+                                    data2 = sort_dataframe(
+                                        data2, subrows, sorting_lists, sort_method)
+                                groups_add_info, add_info = get_groups_add_info(
+                                    data, subrows, additional_info)
+                                _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
+                                                    second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+
+                            row_number += 1
+                    if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
+                        data = copy.deepcopy(data_joint)
+                row_number += 1
+    return row_number
