@@ -13,7 +13,8 @@ from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.features import ambitus, custom, density, harmony, interval, key, lyrics, metadata, scale, scoring, \
+from musif.extract.features.custom import harmony
+from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
     tempo, text, texture
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
@@ -288,7 +289,7 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        # score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
+        score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
         self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 

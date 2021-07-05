@@ -250,7 +250,7 @@ def get_keyareas(lausanne_table, major = True):
     total_compasses = sum(list(key_compasses.values()))
     key_compasses = {kc:key_compasses[kc]/total_compasses for kc in key_compasses}
     keyGrouping1_compasses = get_measures_per_possibility(list(set(g1)), measures, g1, beats, time_signatures)
-    keyGgrouping1_compasses = {kc:keyGgrouping1_compasses[kc]/sum(list(keyGgrouping1_compasses.values())) for kc in keyGgrouping1_compasses}
+    keyGrouping1_compasses = {kc:keyGrouping1_compasses[kc]/sum(list(keyGrouping1_compasses.values())) for kc in keyGrouping1_compasses}
     keyGgrouping2_compasses = get_measures_per_possibility(list(set(g2)), measures, g2, beats, time_signatures)
     keyGgrouping2_compasses = {kc:keyGgrouping2_compasses[kc]/sum(list(keyGgrouping2_compasses.values())) for kc in keyGgrouping2_compasses}
     # SECTION A
@@ -260,8 +260,8 @@ def get_keyareas(lausanne_table, major = True):
     # key_compasses_A = get_compases_per_possibility(list(set(A_Keys)), measures_A, A_Keys, beats_A, time_signatures_A)
     # total_compasses_A = sum(list(key_compasses_A.values()))
     # key_compasses_A = {kc:key_compasses_A[kc]/total_compasses_A for kc in key_compasses_A}
-    # keyGgrouping1_compasses_A = get_compases_per_possibility(list(set(g1_A)), measures_A, g1_A, beats_A, time_signatures_A)
-    # keyGgrouping1_compasses_A = {kc:keyGgrouping1_compasses_A[kc]/sum(list(keyGgrouping1_compasses_A.values())) for kc in keyGgrouping1_compasses_A}
+    # keyGrouping1_compasses_A = get_compases_per_possibility(list(set(g1_A)), measures_A, g1_A, beats_A, time_signatures_A)
+    # keyGrouping1_compasses_A = {kc:keyGrouping1_compasses_A[kc]/sum(list(keyGrouping1_compasses_A.values())) for kc in keyGrouping1_compasses_A}
     # keyGgrouping2_compasses_A = get_compases_per_possibility(list(set(g2_A)), measures_A, g2_A, beats_A, time_signatures_A)
     # keyGgrouping2_compasses_A = {kc:keyGgrouping2_compasses_A[kc]/sum(list(keyGgrouping2_compasses_A.values())) for kc in keyGgrouping2_compasses_A}
     # # SECTION B
@@ -271,8 +271,8 @@ def get_keyareas(lausanne_table, major = True):
     # key_compasses_B = get_compases_per_possibility(list(set(B_Keys)), measures_B, B_Keys, beats_B, time_signatures_B)
     # total_compasses_B = sum(list(key_compasses_B.values()))
     # key_compasses_B = {kc:key_compasses_B[kc]/total_compasses_B for kc in key_compasses_B}
-    # keyGgrouping1_compasses_B = get_compases_per_possibility(list(set(g1_B)), measures_B, g1_B, beats_B, time_signatures_B)
-    # keyGgrouping1_compasses_B = {kc:keyGgrouping1_compasses_B[kc]/sum(list(keyGgrouping1_compasses_B.values())) for kc in keyGgrouping1_compasses_B}
+    # keyGrouping1_compasses_B = get_compases_per_possibility(list(set(g1_B)), measures_B, g1_B, beats_B, time_signatures_B)
+    # keyGrouping1_compasses_B = {kc:keyGrouping1_compasses_B[kc]/sum(list(keyGrouping1_compasses_B.values())) for kc in keyGrouping1_compasses_B}
     # keyGgrouping2_compasses_B = get_compases_per_possibility(list(set(g2_B)), measures_B, g2_B, beats_B, time_signatures_B)
     # keyGgrouping2_compasses_B = {kc:keyGgrouping2_compasses_B[kc]/sum(list(keyGgrouping2_compasses_B.values())) for kc in keyGgrouping2_compasses_B}
 
@@ -295,7 +295,7 @@ def get_keyareas(lausanne_table, major = True):
         keyareas['KeyModComp'+ck] = (keyareas['KeyCompasses'+ck] + keyareas['KeyModulatory'+ck]) / 2
     for cg in counter_grouping1:
         keyareas['KeyGgrouping1'+cg] = counter_grouping1[cg]
-        keyareas['KeyGgrouping1Compasses'+cg] = keyGgrouping1_compasses[cg]
+        keyareas['KeyGgrouping1Compasses'+cg] = keyGrouping1_compasses[cg]
         keyareas['KeyGgrouping1Modulatory'+cg] = counter_grouping1[cg]/total_g1_areas
         keyareas['KeyGgrouping1ModComp'+cg] = (keyareas['KeyGgrouping1Compasses'+cg] + keyareas['KeyGgrouping1Modulatory'+cg]) / 2
     for cg in counter_grouping2:
@@ -309,7 +309,7 @@ def get_keyareas(lausanne_table, major = True):
     #     keyareas['KeyModCompSectionA'+ck] = (key_compasses_A[ck] + (counter_keys_A[ck]/total_key_areas_A)) / 2
     # for cg in counter_grouping1_A:
     #     keyareas['KeyGgrouping1SectionA'+cg] = counter_grouping1_A[cg]
-    #     keyareas['KeyGgrouping1ModCompSectionA'+cg] = (keyGgrouping1_compasses_A[cg] + (counter_grouping1_A[cg]/total_g1_areas_A)) / 2
+    #     keyareas['KeyGgrouping1ModCompSectionA'+cg] = (keyGrouping1_compasses_A[cg] + (counter_grouping1_A[cg]/total_g1_areas_A)) / 2
     # for cg in counter_grouping2_A:
     #     keyareas['KeyGgrouping2SectionA'+cg] = counter_grouping2_A[cg]
     #     keyareas['KeyGgrouping2ModCompSectionA'+cg] = (keyGgrouping2_compasses_A[cg] + (counter_grouping2_A[cg]/total_g2_areas_A)) / 2
@@ -319,7 +319,7 @@ def get_keyareas(lausanne_table, major = True):
     #     keyareas['KeyModCompSectionB'+ck] = (key_compasses_B[ck] + (counter_keys_B[ck]/total_key_areas_B)) / 2
     # for cg in counter_grouping1_B:
     #     keyareas['KeyGgrouping1SectionB'+cg] = counter_grouping1_B[cg]
-    #     keyareas['KeyGgrouping1ModCompSectionB'+cg] = (keyGgrouping1_compasses_B[cg] + (counter_grouping1_B[cg]/total_g1_areas_B)) / 2
+    #     keyareas['KeyGgrouping1ModCompSectionB'+cg] = (keyGrouping1_compasses_B[cg] + (counter_grouping1_B[cg]/total_g1_areas_B)) / 2
     # for cg in counter_grouping2_B:
     #     keyareas['KeyGgrouping2SectionB'+cg] = counter_grouping2_B[cg]
     #     keyareas['KeyGgrouping2ModCompSectionB'+cg] = (keyGgrouping2_compasses_B[cg] + (counter_grouping2_B[cg]/total_g2_areas_B)) / 2

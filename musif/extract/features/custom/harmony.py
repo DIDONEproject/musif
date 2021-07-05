@@ -16,7 +16,7 @@ from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 
-from .harmony_utils import get_numerals_lists, get_chord_types, get_measures_per_possibility, get_keyareas, get_chords
+from .__harmony_utils import get_numerals_lists, get_chord_types, get_measures_per_possibility, get_keyareas, get_chords
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
 
@@ -212,14 +212,14 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             harmonic_analysis, has_table = parse_score(path)
             has_table = True
 
-    # elif modulations is not None: # The user may have written only the not-expanded version
-    #     has_table = True
+        # elif modulations is not None: # The user may have written only the not-expanded version
+        #     has_table = True
 
-    #     if modulations is not None and harmonic_analysis is None:
-    #         harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
-    # #         pass
-                # Obtain score sections:
-                # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
+        #     if modulations is not None and harmonic_analysis is None:
+        #         harmonic_analysis = compute_modulations(partVoice, partVoice_expanded, modulations) #TODO: Ver qué pasa con par voice y como se puede hacer con la info que tenemos
+        # #         pass
+                    # Obtain score sections:
+                    # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
             
             score = score_data['score']
             repeat_elements= score_data['repetition_elements']
@@ -275,10 +275,20 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
         # ADDITIONS
         features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('Additions_')})
-        
-        
+        return features
+
     except Exception as e:
             logger.error('Harmony problem found: ', e)
             return features
+
+def get_corpus_features(
+        scores_data: List[dict],
+        parts_data: List[dict],
+        cfg: Configuration,
+        scores_features: List[dict],
+        corpus_features: dict
+) -> dict:
+
+    features = {}
 
     return features
