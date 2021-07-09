@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # parts = None
 
     arias_path="./arias/"
-    # arias_path="./arias/10arias"
+    arias_path="../Corpus/subcorpus"
 
     df = FeaturesExtractor("config.yml").extract(arias_path, parts)
     path = './'

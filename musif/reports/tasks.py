@@ -106,7 +106,7 @@ harmony_df: DataFrame = pd.DataFrame(), key_areas: DataFrame = pd.DataFrame(), c
         #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
         if not clefs_info.empty:
             # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
-            Intervals(factor, _cfg, clefs_info, pre_string+  "Clefs_in_voice.xlsx",
+            Intervals(factor, _cfg, clefs_info, pre_string +  "Clefs_in_voice.xlsx",
                             _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
         # if not harmony_df.empty:
         #     harmony_df= pd.concat([common_columns_df,harmony_df], axis=1)
@@ -287,18 +287,21 @@ def Melody_values(factor, _cfg: Configuration, data: DataFrame, results_path: st
                 box_plot(name_box, datag, second_title=str(g))
 
         elif factor == 1:
-            groups = [i for i in rows_groups]
+            # groups = [i for i in rows_groups]
             for row in rows_groups:
                 plot_name = name.replace(
-                    '.xlsx', '') + 'Per ' + str(row.replace('Aria','').upper()) + '.png'
-                name_bar =path.join(results_path,'visualisations', plot_name)
+                    '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper()) + '.png'
+                name_bar =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+                if not os.path.exists(name_bar):
+                    os.makedirs(name_bar)
+                name_bar=path.join(name_bar,plot_name)
                 if row not in not_used_cols:
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
                         if data_grouped:
                             melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(row.replace('Aria','').upper()))
-                            name_box = path.join(results_path,'visualisations', 'Ambitus'+'Per_' + str(row.upper())+name.replace('.xlsx', '.png'))
                             if row == CLEF1: #Exception for boxplots
+                                name_box = name_bar.replace('Melody_Values', 'Ambitus')
                                 box_plot(name_box, data_grouped, second_title='Per '+ str(row.replace('Aria','').upper()))
                     else: #subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
@@ -378,11 +381,17 @@ def Intervals(factor, _cfg: Configuration, data: DataFrame, name: str, sorting_l
                 bar_plot(name_bar, datag, third_columns_names_origin,
                             'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
         elif factor == 1:
-            groups = [i for i in rows_groups]
+            # groups = [i for i in rows_groups]
             for row in rows_groups:
                 if row not in not_used_cols:
-                    name_bar = path.join(results_path, 'visualisations',
-                                    name.replace('.xlsx',  '').replace('{0}_factor_'.format(str(factor)),'') + '_Per_' + str(row.replace('Aria','').upper()) + '.png')
+                    plot_name = name.replace(
+                            '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper()) + '.png'
+                    name_bar =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+                    if not os.path.exists(name_bar):
+                        os.makedirs(name_bar)
+
+                    name_bar=path.join(name_bar,plot_name)
+
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
                         if data_grouped:
@@ -391,14 +400,12 @@ def Intervals(factor, _cfg: Configuration, data: DataFrame, name: str, sorting_l
                     else: #subgroups
                         for i, subrow in enumerate(rows_groups[row][0]):
                             if subrow not in EXCEPTIONS:
-                                name_bar = path.join(results_path, 'visualisations',
-                                    name.replace('.xlsx',  '').replace('{0}_factor_'.format(str(factor)),'') + '_Per_' + str(subrow.replace('Aria','').upper()) + '.png')
+                                # name_bar = path.join(results_path, 'visualisations',
+                                #     name.replace('.xlsx',  '').replace('{0}_factor_'.format(str(factor)),'') + '_Per_' + str(subrow.replace('Aria','').upper()) + '.png')
                                 data_grouped = data.groupby(subrow)
                                 bar_plot(name_bar, data_grouped, third_columns_names_origin,
                                         'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
-                                # melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(subrow.replace('Aria','').upper()))
-                                name_box = path.join(
-                                results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
+
 
         else:
             name_bar = path.join(
@@ -467,10 +474,20 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
         elif factor == 1:
             groups = [i for i in rows_groups]
             for row in rows_groups:
-                name_cakes = path.join(results_path, 'visualisations',
-                                name.replace('.xlsx', '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper()) + '_AD.png')
+                name_folder =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+
+                name_cakes = name.replace(
+                            '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper())  + '_AD.png'
                 name_bars = path.join(results_path, 'visualisations',
                                 name.replace('.xlsx',  '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper()) + '.png')
+              
+                if not os.path.exists(name_folder):
+                    os.makedirs(name_folder)
+
+                name_cakes=path.join(name_folder,name_cakes)
+                name_bars=path.join(name_folder,name_bars)
+
+                
                 if row not in not_used_cols:
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
@@ -1151,26 +1168,26 @@ def Harmonic_functions(factor, _cfg: Configuration, data: DataFrame, results_pat
         data = data.dropna(how='all', axis=1)
 
         #Separate 3 dataframmes for 3 sections
-        data1 = data[[i for i in data.columns if 'Numerals' in i]]
-        data1.columns = [i.replace('Numerals','') for i in data1.columns]
+        data1 = data[[i for i in data.columns if 'numerals' in i]]
+        data1.columns = [i.replace('numerals','') for i in data1.columns]
         
-        data2 = data[[i for i in data.columns if 'Chords_Grouping1' in i]]
-        data2.columns = [i.replace('Chords_Grouping1','') for i in data2.columns]
+        data2 = data[[i for i in data.columns if 'chords_Grouping1' in i]]
+        data2.columns = [i.replace('chords_Grouping1','') for i in data2.columns]
 
-        data3 = data[[i for i in data.columns if 'Chords_Grouping2' in i]]
-        data3.columns = [i.replace('Chords_Grouping2','') for i in data3.columns]
+        data3 = data[[i for i in data.columns if 'chords_Grouping2' in i]]
+        data3.columns = [i.replace('chords_Grouping2','') for i in data3.columns]
 
         #TODO: change with 'sort dataframe'?
         cols = sort(data1.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG1Sorting']])
         data1=data1[cols]
-
-        # sort_dataframe
-        
+        # sort_dataframe??
         cols = sort(data2.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG2Sorting']])
         data2=data2[cols]
         
         third_columns_names=list(data1.columns)
-        third_columns_names2=['Total analysed']+ list(data2.columns)
+        third_columns_names.insert(0, 'Total analysed')
+
+        third_columns_names2=['Total analysed'] + list(data2.columns)
 
         # third_columns_names = [i.replace('Numerals','') for i in data.columns if 'Numerals' in i]
         second_column_names = [("", 1), ("Numerals", len(third_columns_names))]
@@ -1181,15 +1198,19 @@ def Harmonic_functions(factor, _cfg: Configuration, data: DataFrame, results_pat
         # columns = columns_alike_our_data(
         #     third_columns_names, second_column_names)
         columns=third_columns_names
+        columns2=third_columns_names2
+
         # columns2 = columns_alike_our_data(
         #     third_columns_names2, second_column_names2)
+        data1 = pd.concat([data_general, data1], axis=1)
+        data2 = pd.concat([data_general, data2], axis=1)
+        data3 = pd.concat([data_general, data3], axis=1)
 
         excel_sheet(workbook.create_sheet("Weighted"),
-         columns, data, third_columns_names,
-          computations, _cfg.sorting_lists, groups=groups, 
+         columns, data1, third_columns_names,
+          computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
-           average=True, additional_info=additional_info, ponderate=True)
-                    #  columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
+                     columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=False)
         # if factor>=1:
             # excel_sheet(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
             #          columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
@@ -1202,7 +1223,7 @@ def Harmonic_functions(factor, _cfg: Configuration, data: DataFrame, results_pat
         workbook.save(os.path.join(results_path, name))
         
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
-        third_columns_names.remove('Total analysed')
+        # third_columns_names.remove('Total analysed')
         title = 'Functions'
         # VISUALISATIONS
         # if groups:
