@@ -127,14 +127,13 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
                 value = np.nan
         elif computation == "sum":
             value = np.nansum(column_data)
-
-            # PONDERATE WITHT THE TOTAL ANALYSED IN THAT ROW
+            # PONDERATE WITH THE TOTAL ANALYSED IN THAT ROW
             if ponderate and value != 0 and column_data.name != "Total analysed":
                 values = []
                 # not_grouped_information needed for adding all the elements in total
                 for i in range(len(column_data.tolist())):
                     all_columns = not_grouped_information.columns.tolist()
-                    total_intervals = np.nansum([not_grouped_information.iloc[i, c] for c in range(len(all_columns)) if 'All' not in all_columns[c]])
+                    total_intervals = np.nansum([float(not_grouped_information.iloc[i, c]) for c in range(len(all_columns)) if 'All' not in all_columns[c]])
                     intervals = column_data.tolist()[i]
                     values.append(
                         (intervals * ponderate_data[i]) / total_intervals)

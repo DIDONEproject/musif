@@ -251,8 +251,8 @@ def get_keyareas(lausanne_table, major = True):
     key_compasses = {kc:key_compasses[kc]/total_compasses for kc in key_compasses}
     keyGrouping1_compasses = get_measures_per_possibility(list(set(g1)), measures, g1, beats, time_signatures)
     keyGrouping1_compasses = {kc:keyGrouping1_compasses[kc]/sum(list(keyGrouping1_compasses.values())) for kc in keyGrouping1_compasses}
-    keyGgrouping2_compasses = get_measures_per_possibility(list(set(g2)), measures, g2, beats, time_signatures)
-    keyGgrouping2_compasses = {kc:keyGgrouping2_compasses[kc]/sum(list(keyGgrouping2_compasses.values())) for kc in keyGgrouping2_compasses}
+    keyGrouping2_compasses = get_measures_per_possibility(list(set(g2)), measures, g2, beats, time_signatures)
+    keyGrouping2_compasses = {kc:keyGrouping2_compasses[kc]/sum(list(keyGrouping2_compasses.values())) for kc in keyGrouping2_compasses}
     # SECTION A
     # measures_A = [measures[i] for i in indexes_A]
     # beats_A = [beats[i] for i in indexes_A]
@@ -294,15 +294,15 @@ def get_keyareas(lausanne_table, major = True):
         keyareas['KeyModulatory'+ck] = counter_keys[ck]/total_key_areas
         keyareas['KeyModComp'+ck] = (keyareas['KeyCompasses'+ck] + keyareas['KeyModulatory'+ck]) / 2
     for cg in counter_grouping1:
-        keyareas['KeyGgrouping1'+cg] = counter_grouping1[cg]
-        keyareas['KeyGgrouping1Compasses'+cg] = keyGrouping1_compasses[cg]
-        keyareas['KeyGgrouping1Modulatory'+cg] = counter_grouping1[cg]/total_g1_areas
-        keyareas['KeyGgrouping1ModComp'+cg] = (keyareas['KeyGgrouping1Compasses'+cg] + keyareas['KeyGgrouping1Modulatory'+cg]) / 2
+        keyareas['KeyGrouping1'+cg] = counter_grouping1[cg]
+        keyareas['KeyGrouping1Compasses'+cg] = keyGrouping1_compasses[cg]
+        keyareas['KeyGrouping1Modulatory'+cg] = counter_grouping1[cg]/total_g1_areas
+        keyareas['KeyGrouping1ModComp'+cg] = (keyareas['KeyGrouping1Compasses'+cg] + keyareas['KeyGrouping1Modulatory'+cg]) / 2
     for cg in counter_grouping2:
-        keyareas['KeyGgrouping2'+cg] = counter_grouping2[cg]
-        keyareas['KeyGgrouping2Compasses'+cg] = keyGgrouping2_compasses[cg]
-        keyareas['KeyGgrouping2Modulatory'+cg] = counter_grouping2[cg]/total_g2_areas
-        keyareas['KeyGgrouping2ModComp'+cg] = (keyareas['KeyGgrouping2Compasses'+cg] + keyareas['KeyGgrouping2Modulatory'+cg]) / 2
+        keyareas['KeyGrouping2'+cg] = counter_grouping2[cg]
+        keyareas['KeyGrouping2Compasses'+cg] = keyGrouping2_compasses[cg]
+        keyareas['KeyGrouping2Modulatory'+cg] = counter_grouping2[cg]/total_g2_areas
+        keyareas['KeyGrouping2ModComp'+cg] = (keyareas['KeyGrouping2Compasses'+cg] + keyareas['KeyGrouping2Modulatory'+cg]) / 2
 
     # for ck in counter_keys_A:
     #     keyareas['KeySectionA'+ck] = counter_keys_A[ck]
@@ -335,7 +335,6 @@ def get_keyareas(lausanne_table, major = True):
 # harmonic_analysis: columnas AG-AK
 ###########################################################################
 def get_degree_1(element, mode):
-    #Exception
     if element.lower()=='bii':
         return 'NAP'
     #It6/V -> viio(-3)
@@ -352,9 +351,12 @@ def get_degree_1(element, mode):
             elif '#' in element:
                 output='#'+ output
             return output.replace('-','b')
-    #revisar funcionalidad
-    # if ['It','Ger', 'Fr'] in element:
-    #     return 'V'
+    
+    #Check spetial chords
+
+    if any([i for i in ('It','Ger', 'Fr') if i in element]):
+        return 'V'
+
     if mode == 'M':
         if element=='vii':
             return 'D'
@@ -367,7 +369,7 @@ def get_degree_1(element, mode):
         elif  element== 'VII':
             return 'LN'
         else:
-            print(element, 'not available')
+            print(f'Element: {element} not available')
     else:
         if element=='#vii':
             return 'D'
@@ -434,7 +436,7 @@ def get_chord_types(lausanne_table):
     form_counter = Counter(grouped_forms)
     features_chords= {}
     for f in form_counter:
-        features_chords['Chord_types_' + str(f)] = str(round((form_counter[f] / sum(list(form_counter.values()))) * 100, 3)) + '%'
+        features_chords['chords_' + str(f)] = form_counter[f] / sum(list(form_counter.values()))
     return features_chords
 
 def get_chords(lausanne_table):
@@ -453,20 +455,26 @@ def get_chords(lausanne_table):
     chords_functionalities1 = Counter(chords_functionalities1)
     chords_functionalities2 = Counter(chords_functionalities2)
 
+    total_chords=sum(Counter(chords).values())
+    
     #chords
     chords = {}
     for degree in chords_numbers:
-        chords['Chords_'+degree] = chords_numbers[degree]
+        chords['chords_'+degree] = chords_numbers[degree]/total_chords
 
     #chords group 1
     chords_g1 = {}
+    total_chords_g1=sum(Counter(chords_functionalities1).values())
+
     for degree in chords_functionalities1:
-        chords_g1['Chords_Grouping1'+ degree] = chords_functionalities1[degree]
+        chords_g1['chords_Grouping1'+ degree] = chords_functionalities1[degree]/total_chords_g1
     
     #chords group 2
     chords_group2 = {}
+    total_chords_g2=sum(Counter(chords_functionalities2).values())
+
     for degree in chords_functionalities2:
-        chords_group2['Chords_Grouping2' + degree] = chords_functionalities2[degree]
+        chords_group2['chords_Grouping2' + degree] = chords_functionalities2[degree]/total_chords_g2
     return chords, chords_g1, chords_group2
 
 #################################################################
@@ -490,7 +498,6 @@ def parse_chord(first_char):
         if not character.isdigit():
             chars.append(character)
         else:
-            # c_int = int(character)
             break
 
     return ''.join(chars)
@@ -533,7 +540,7 @@ def get_chord_1(chord, local_key):
     mode = 'M' if local_key else 'm'
     if '/' not in chord:
         return get_degree_1(parse_chord(chord), mode)
-    else: # the chord has '/' 
+    else: 
         parts = chord.split('/')
         degree = get_degree_1(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
         if len(parts) == 2:

@@ -36,6 +36,7 @@ class FeaturesGenerator:
         
 
     def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
+        print('\n---Starting reports generation ---\n')
         self.parts_list = [] if parts_list is None else parts_list
         self.global_features = df
         self.num_factors_max = num_factors
@@ -289,6 +290,6 @@ class FeaturesGenerator:
 
     def _write(self, all_info: DataFrame):
         # 2. Start the factor generation
-        for factor in range(0, self.num_factors_max + 1):
+        for factor in range(1, self.num_factors_max + 1):
             self._factor_execution(
                 all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists, self._cfg)
