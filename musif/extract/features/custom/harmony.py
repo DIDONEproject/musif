@@ -17,6 +17,8 @@ from pandas import DataFrame
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 
 from .__harmony_utils import get_numerals_lists, get_chord_types, get_measures_per_possibility, get_keyareas, get_chords
+from musif.common.constants import RESET_SEQ, get_color
+
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
 
@@ -213,6 +215,7 @@ def parse_score(mscx_file: str):
     # annotations=msc3_score.annotations
     has_table = True
     try:
+        logger.info(get_color('INFO')+'Getting harmonic analysis...'+ RESET_SEQ)
         msc3_score = ms3.score.Score(mscx_file)
         harmonic_analysis = msc3_score.mscx.expanded
         mn=ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
@@ -220,7 +223,7 @@ def parse_score(mscx_file: str):
         harmonic_analysis=ms3.parse.unfold_repeats(harmonic_analysis,mn)
     
     except Exception as e:
-        logger.error('An error occurred parsing the score: '.format(mscx_file,e))
+        logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
         with open('failed_files.txt', 'a') as file:  # Use file to refer to the file object
             file.write(mscx_file + '\n')
 
@@ -260,7 +263,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         else:
             has_table = False
             harmonic_analysis = None
-            logger.warn('No Musescore file was found.')
+            logger.warn(get_color('WARNING')+'No Musescore file was found.'+ RESET_SEQ)
             return {}
 
         #     Get the array based on harmonic_analysis.mc
