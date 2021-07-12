@@ -8,6 +8,7 @@ import pandas as pd
 from ms3.expand_dcml import features2type
 from pandas.core.frame import DataFrame
 
+
 REGEX = {}
 
 ####################
@@ -562,7 +563,8 @@ def get_chord_2(grouping1, relativeroot, local_key):
         chords = get_degree_2(parts[1])
         return '/'.join([degree, chords])
     elif len(parts) == 3:
-        chord_1 = get_degree_2(parts[1], 'M' if parts[2].isupper() else 'm')
+        # chord_1 = get_degree_2(parts[1], 'M' if parts[2].isupper() else 'm')
+        chord_1 = get_degree_2(parts[1])
         chord_2 = get_degree_2(parts[2])
         return '/'.join([degree, chord_1, chord_2])
     return degree

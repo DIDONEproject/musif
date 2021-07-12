@@ -20,6 +20,7 @@ from pandas.core.frame import DataFrame
 from tqdm import tqdm
 
 from .harmony_sorting import * #TODO: REVIEW
+from musif.common.constants import RESET_SEQ, get_color
 
 from .calculations import (compute_average, compute_value,
                            make_intervals_absolute)
@@ -323,7 +324,7 @@ def Melody_values(factor, _cfg: Configuration, data: DataFrame, results_path: st
                 results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', '.png'))
             box_plot(name_box, data)
     except Exception as e:
-        _cfg.write_logger.info('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 
 def Intervals(factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
@@ -413,7 +414,8 @@ def Intervals(factor, _cfg: Configuration, data: DataFrame, name: str, sorting_l
             bar_plot(name_bar, data, third_columns_names_origin,
                         'Intervals' if 'Clef' not in name else 'Clefs', title)
     except Exception as e:
-        _cfg.write_logger.info('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
 
 #########################################################
 # Function to generate the reports file Intervals_types.xlsx  #
@@ -472,7 +474,7 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
                 double_bar_plot(name_bars, data, second_title=str(g))
 
         elif factor == 1:
-            groups = [i for i in rows_groups]
+            # groups = [i for i in rows_groups]
             for row in rows_groups:
                 name_folder =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
 
@@ -517,7 +519,8 @@ def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: 
                                 name.replace('.xlsx',  '.png'))
             double_bar_plot(name_bars, data)
     except Exception as e:
-        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
 
 ########################################################################
 # Function to generate the reports files Emphasised_scale_degrees.xlsx
@@ -686,7 +689,8 @@ def Densities(factor, _cfg: Configuration, data: DataFrame, results_path: str, n
                 bar_plot_extended(name_bar, data, columns,
                                 'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
-        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
 
 ### Function that prints textures report task ###
 
@@ -1155,7 +1159,8 @@ def Chords(factor, _cfg: Configuration, data: DataFrame, results_path: str, name
         #         bar_plot_extended(name_bar, data, columns,
         #                         'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
-        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
 
 def Harmonic_functions(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
@@ -1267,7 +1272,8 @@ def Harmonic_functions(factor, _cfg: Configuration, data: DataFrame, results_pat
         #         bar_plot_extended(name_bar, data, columns,
         #                         'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
-        _cfg.write_logger.error('{}  Problem found: {}'.format(name, e))
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
 def get_sorting_lists():
     RoleSorting = general_sorting.get_role_sorting() # Only valid for DIDONE corpus, any other roles will be sorted alphabetically
     FormSorting = general_sorting.get_form_sorting()
