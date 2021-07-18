@@ -63,8 +63,6 @@ if __name__ == "__main__":
             "TempoGrouped2": row[TEMPO_GROUPED_2],
             "TimeSignature": row[TIME_SIGNATURE],
             "TimeSignatureGrouped": row[TIME_SIGNATURE_GROUPED],
-            "Year": row[ARIA_YEAR],
-            "Decade": row[ARIA_DECADE],
             f"{get_part_prefix('Voice')}SyllabicRatio": row[f"{get_part_prefix(voice)}{SYLLABIC_RATIO}"],
             "Score_Density": row[f"Score_{DENSITY}"],
             "Score_SoundingDensity": row[f"Score_{SOUNDING_DENSITY}"],

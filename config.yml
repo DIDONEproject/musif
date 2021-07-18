@@ -2,16 +2,23 @@ data_dir: data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
-logs_dir: logs
-log_level: DEBUG
 sequential: false
 max_processes: 5
 features:
-  - melodic
-#  - harmonic
-#  - texture
+  - file_name
+  - metadata
+  - ambitus
+  - density
+  - interval
+  - key
+  - lyrics
+  - metadata
+  - prefix
+  - scale
+  - scoring
+  - tempo
+  - text
 split_keywords:
   - woodwind
   - brass
   - wind
-require_harmonic_analysis: true
