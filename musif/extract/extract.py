@@ -1,4 +1,5 @@
 import glob
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from pathlib import Path
 from typing import Dict, Generator, List, Optional, Tuple
@@ -13,9 +14,9 @@ from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration, read_logger
 from musif.extract.common import filter_parts_data
-from musif.extract.features.custom import harmony
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
     tempo, text, texture
+from musif.extract.features.custom import harmony
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
 from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
@@ -145,14 +146,15 @@ class FeaturesExtractor:
         scores_features = []
         parts_features = []
 
-        # with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
-        #     futures = [executor.submit(process_score, (self, musicxml_file, parts_filter)) for musicxml_file in musicxml_files]
-        #     for _ in tqdm(as_completed(futures), total=len(futures)):
-        #         pass
-        #     for future in futures:
-        # score_data, parts_data, score_features, score_parts_features = future.result()
-        # scores_features.append(score_features)
-        # parts_features.extend(score_parts_features)
+        with tqdm(total=len(musicxml_files)) as pbar:
+            with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
+                futures = [executor.submit(self._process_score, musicxml_file, parts_filter)
+                           for musicxml_file in musicxml_files]
+                for future in tqdm(as_completed(futures)):
+                    score_features, score_parts_features = future.result()
+                    scores_features.append(score_features)
+                    parts_features.extend(score_parts_features)
+                    pbar.update(1)
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict]]:
