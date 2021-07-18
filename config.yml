@@ -3,7 +3,7 @@ metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
 sequential: false
-max_processes: 5
+max_processes: 10
 features:
   - file_name
   - metadata
