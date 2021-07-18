@@ -1,7 +1,7 @@
 import glob
 from os import path
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, Generator, List, Optional, Tuple
 
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -11,7 +11,7 @@ from tqdm import tqdm
 from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
-from musif.config import Configuration
+from musif.config import Configuration, read_logger
 from musif.extract.common import filter_parts_data
 from musif.extract.features.custom import harmony
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
@@ -93,31 +93,25 @@ class FeaturesExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
         self._files_extractor = FilesExtractor(*args, **kwargs)
-        self._logger = self._cfg.read_logger
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
         musicxml_files = self._files_extractor.extract(obj)
-        parts_df, score_df, corpus_df = self._process_corpora(musicxml_files, parts_filter)
+        score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
-    def _process_corpora(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[DataFrame, DataFrame, DataFrame]:
+    def _process_corpora(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
-        all_corpus_features = []
         all_scores_features = []
         all_parts_features = []
         for corpus_dir, files in corpus_by_dir.items():
-            scores_data, parts_data, scores_features, parts_features = self._process_corpus(files, parts_filter)
-            corpus_features = self._extract_corpus_features(corpus_dir, scores_data, parts_data, scores_features)
-            all_corpus_features.append(corpus_features)
+            scores_features, parts_features = self._process_corpus(files, parts_filter)
             all_scores_features.extend(scores_features)
             all_parts_features.extend(parts_features)
-        df_corpus = DataFrame(all_corpus_features)
-        df_corpus = df_corpus.reindex(sorted(df_corpus.columns), axis=1)
         df_scores = DataFrame(all_scores_features)
         df_scores = df_scores.reindex(sorted(df_scores.columns), axis=1)
         df_parts = DataFrame(all_parts_features)
         df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
-        return df_corpus, df_scores, df_parts
+        return df_scores, df_parts
 
     @staticmethod
     def _group_by_dir(files: List[str]) -> Dict[str, List[str]]:
@@ -129,35 +123,25 @@ class FeaturesExtractor:
             corpus_by_dir[corpus_dir].append(file)
         return corpus_by_dir
 
-    def _process_corpus(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[List[dict], List[dict], List[dict], List[dict]]:
+    def _process_corpus(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[List[dict], List[dict]]:
         if self._cfg.parallel:
             return self._process_corpus_in_parallel(musicxml_files, parts_filter)
         return self._process_corpus_sequentially(musicxml_files, parts_filter)
 
     def _process_corpus_sequentially(
-        self,
-        musicxml_files: List[str],
-        parts_filter: List[str] = None
-    ) -> Tuple[List[dict], List[dict], List[dict], List[dict]]:
-        corpus_scores_data = []
-        corpus_parts_data = []
+        self, musicxml_files: List[str], parts_filter: List[str] = None
+    ) -> Tuple[List[dict], List[dict]]:
         scores_features = []
         parts_features = []
         for musicxml_file in tqdm(musicxml_files):
-            score_data, parts_data, score_features, score_parts_features = self._process_score(musicxml_file, parts_filter)
-            corpus_scores_data.append(score_data)
-            corpus_parts_data.extend(parts_data)
+            score_features, score_parts_features = self._process_score(musicxml_file, parts_filter)
             scores_features.append(score_features)
             parts_features.extend(score_parts_features)
-        return corpus_scores_data, corpus_parts_data, scores_features, parts_features
+        return scores_features, parts_features
 
     def _process_corpus_in_parallel(
-        self,
-        musicxml_files: List[str],
-        parts_filter: List[str] = None
-    ) -> Tuple[List[dict], List[dict], List[dict], List[dict]]:
-        corpus_scores_data = []
-        corpus_parts_data = []
+        self, musicxml_files: List[str], parts_filter: List[str] = None
+    ) -> Tuple[List[dict], List[dict]]:
         scores_features = []
         parts_features = []
 
@@ -167,33 +151,31 @@ class FeaturesExtractor:
         #         pass
         #     for future in futures:
         # score_data, parts_data, score_features, score_parts_features = future.result()
-        # corpus_scores_data.append(score_data)
-        # corpus_parts_data.extend(parts_data)
         # scores_features.append(score_features)
         # parts_features.extend(score_parts_features)
-        return corpus_scores_data, corpus_parts_data, scores_features, parts_features
+        return scores_features, parts_features
 
-    def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict], dict, List[dict]]:
-        self._logger.info(f"Processing score {musicxml_file}")
+    def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict]]:
+        read_logger.info(f"Processing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file, parts_filter)
         parts_data = [self._get_part_data(score_data, part) for part in score_data["score"].parts]
         parts_features = [self._extract_part_features(score_data, part_data)
                           for part_data in filter_parts_data(parts_data, score_data["parts_filter"])]
         score_features = self._extract_score_features(score_data, parts_data, parts_features)
-        return score_data, parts_data, score_features, parts_features
+        return score_features, parts_features
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
         repetition_elements = get_repetition_elements(score)
         score_expanded = expand_score_repetitions(score, repetition_elements)
         tempo = extract_numeric_tempo(musicxml_file)
-        if self._cfg.require_harmonic_analysis:
+        if self._module_passes_filter(harmony):
             mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
         ambitus = analysis.discrete.Ambitus()
         parts = self._filter_parts(score, parts_filter)
         if len(parts) == 0:
-            self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
+            read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
         data = {
             "score": score,
             "file": musicxml_file,
@@ -207,15 +189,15 @@ class FeaturesExtractor:
             "parts": parts,
             "parts_filter": parts_filter,
         }
-        if self._cfg.require_harmonic_analysis:
+        if self._module_passes_filter(harmony):
             data["mscx_path"] = mscx_name
         return data
 
-    def _find_mscx_file(self, musicxml_file: str) -> Path:
+    def _find_mscx_file(self, musicxml_file: str) -> Optional[Path]:
         try:
             mscx_path=musicxml_file.replace(MUSICXML_FILE_EXTENSION, MUSESCORE_FILE_EXTENSION)
         except FileNotFoundError:
-            self._cfg.read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
+            read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
             mscx_path=None
         return mscx_path
 
@@ -258,7 +240,7 @@ class FeaturesExtractor:
         return data
 
     def _extract_part_features(self, score_data: dict, part_data: dict) -> dict:
-        self._logger.debug(f"Extracting all part \"{part_data['abbreviation']}\" features.")
+        read_logger.debug(f"Extracting all part \"{part_data['abbreviation']}\" features.")
         part_features = {}
         part_features.update(self._extract_part_module_features(scoring, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(tempo, score_data, part_data, part_features))
@@ -267,17 +249,20 @@ class FeaturesExtractor:
         part_features.update(self._extract_part_module_features(ambitus, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(scale, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(density, score_data, part_data, part_features))
-        self._logger.debug(f"Finished extraction of all part \"{part_data['abbreviation']}\" features.")
+        read_logger.debug(f"Finished extraction of all part \"{part_data['abbreviation']}\" features.")
         return part_features
 
     def _extract_part_module_features(self, module, score_data: dict, part_data: dict, part_features: dict) -> dict:
-        self._logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
+        if not self._module_passes_filter(module):
+            return {}
+        read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
         return module.get_part_features(score_data, part_data, self._cfg, part_features)
 
     def _extract_score_features(self, score_data: dict, parts_data: List[dict], parts_features: List[dict]) -> dict:
-        self._logger.debug(f"Extracting all score \"{score_data['file']}\" features.")
+        read_logger.debug(f"Extracting all score \"{score_data['file']}\" features.")
         score_features = {"FileName": path.basename(score_data["file"])}
-        score_features.update(self._extract_score_module_features(custom, score_data, parts_data, parts_features, score_features))
+        for module in self._get_custom_modules():
+            score_features.update(self._extract_score_module_features(module, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(text, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(metadata, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(key, score_data, parts_data, parts_features, score_features))
@@ -289,28 +274,29 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(harmony,  score_data, parts_data, parts_features, score_features))
-        self._logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
+        score_features.update(self._extract_score_module_features(harmony, score_data, parts_data, parts_features, score_features))
+        read_logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
     def _extract_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict) -> dict:
-        self._logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
+        if not self._module_passes_filter(module):
+            return {}
+        read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
         return module.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
 
-    def _extract_corpus_features(self, corpus_dir: str, scores_data: List[dict], parts_data: List[dict], scores_features: List[dict]) -> dict:
-        self._logger.debug(f"Extracting all corpus \"{corpus_dir}\" features.")
-        corpus_features = {"Corpus": corpus_dir}
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, custom, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, key, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, tempo, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, scoring, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, lyrics, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, interval, scores_data, parts_data, scores_features, corpus_features))
-        corpus_features.update(self._extract_corpus_module_features(corpus_dir, density, scores_data, parts_data, scores_features, corpus_features))
-        self._logger.debug(f"Finished extraction of all corpus \"{corpus_dir}\" features.")
-        return corpus_features
+    def _module_passes_filter(self, module) -> bool:
+        if self._cfg.features is None:
+            return True
+        features = {feature.lower() for feature in self._cfg.features}
+        module_feature = module.__name__[module.__name__.rindex(".") + 1:].lower()
+        return module_feature in features
 
-    def _extract_corpus_module_features(self, corpus_dir: str, module, scores_data: List[dict], parts_data: List[dict], scores_features: List[dict], corpus_features: dict) -> dict:
-        self._logger.debug(f"Extracting corpus \"{corpus_dir}\" {module.__name__} features.")
-        return module.get_corpus_features(scores_data, parts_data, self._cfg, scores_features, corpus_features)
-
+    def _get_custom_modules(self) -> Generator:
+        custom_package_path = custom.__path__[0]
+        custom_module_files = [path.basename(file)
+                               for file in glob.glob(path.join(custom_package_path, "*"))
+                               if not path.basename(file).startswith('__') and path.basename(file).endswith('.py')]
+        module_names = ["musif.extract.features.custom." + path.splitext(file)[0]
+                        for file in custom_module_files]
+        for module_name in module_names:
+            yield __import__(module_name, fromlist=[''])

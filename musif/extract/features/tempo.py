@@ -79,24 +79,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     }
 
 
-def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
-    features = {}
-    corpus_prefix = get_corpus_prefix()
-    tempo_grouped_2_counter = Counter([score_features[TEMPO_GROUPED_2] for score_features in scores_features])
-    time_signature_counter = Counter([score_features[TIME_SIGNATURE] for score_features in scores_features])
-    time_signature_grouped_counter = Counter([score_features[TIME_SIGNATURE_GROUPED] for score_features in scores_features])
-    for group in TempoGroup2:
-        count = tempo_grouped_2_counter.get(group.value, 0)
-        features[f"{corpus_prefix}{TEMPO_GROUPED_2}_{group.value}"] = count
-    for group, count in time_signature_counter.items():
-        formatted_group = group if group else 'nd'
-        features[f"{corpus_prefix}{TIME_SIGNATURE}_{formatted_group}"] = count
-    for group, count in time_signature_grouped_counter.items():
-        formatted_group = ''.join([word.capitalize() for word in group.split(" ")])
-        features[f"{corpus_prefix}{TIME_SIGNATURE_GROUPED}_{formatted_group}"] = count
-    return features
-
-
 def get_time_signature_type(timesignature):
     # this function classifies time signatures
     if timesignature in ['1/2', '1/4', '1/8', '1/16', '2/2', '2/4', '2/8', '2/16', '4/4', 'C', '4/2', '4/8', '4/16', '8/2', '8/4', '8/8', '8/16']:

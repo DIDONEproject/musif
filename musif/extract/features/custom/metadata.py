@@ -25,10 +25,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     }
 
 
-def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
-    return {}
-
-
 def _extract_name(text: str) -> str:
     chars = [char for char in text if char.isalpha() or char == " "]
     name = "".join(chars).strip()
