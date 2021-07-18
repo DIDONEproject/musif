@@ -3,7 +3,7 @@ from typing import List, Tuple
 from pandas import DataFrame
 
 from musif.common.sort import sort_dict
-from musif.config import Configuration
+from musif.config import Configuration, read_logger
 from musif.extract.common import filter_parts_data, part_matches_filter
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS
@@ -108,52 +108,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
     return features
 
-def get_corpus_features(
-        scores_data: List[dict],
-        parts_data: List[dict],
-        cfg: Configuration,
-        scores_features: List[dict],
-        corpus_features: dict
-) -> dict:
-
-    features = {}
-    # all_parts_data = [part_data for part_data in parts_data]
-    # df_parts = DataFrame(parts_features)
-    # df_agg_part = df_parts.groupby("Abbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    # df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    # df_family = df_parts.groupby("FamilyAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    # df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    # for sound in df_sound.index:
-    #     sound_prefix = get_sound_prefix(sound)
-    #     features[f"{sound_prefix}{NOTES}"] = df_sound.loc[sound, NOTES].tolist()
-    #     features[f"{sound_prefix}{SOUNDING_MEASURES}"] = df_sound.loc[sound, SOUNDING_MEASURES].tolist()
-    #     features[f"{sound_prefix}{MEASURES}"] = df_sound.loc[sound, MEASURES].tolist()
-    #     features[f"{sound_prefix}{SOUNDING_DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / features[f"{sound_prefix}{SOUNDING_MEASURES}"]
-    #     features[f"{sound_prefix}{DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / features[f"{sound_prefix}{MEASURES}"]
-    # for sound in df_sound.index:
-    #     sound_prefix = get_sound_prefix(sound)
-    #     features[f"{sound_prefix}{NOTES}"] = df_sound.loc[sound, NOTES].tolist()
-    #     features[f"{sound_prefix}{SOUNDING_MEASURES}"] = df_sound.loc[sound, SOUNDING_MEASURES].tolist()
-    #     features[f"{sound_prefix}{MEASURES}"] = df_sound.loc[sound, MEASURES].tolist()
-    #     features[f"{sound_prefix}{SOUNDING_DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / features[f"{sound_prefix}{SOUNDING_MEASURES}"]
-    #     features[f"{sound_prefix}{DENSITY}"] = features[f"{sound_prefix}{NOTES}"] / features[f"{sound_prefix}{MEASURES}"]
-    # for family in df_family.index:
-    #     family_prefix = get_family_prefix(family)
-    #     features[f"{family_prefix}{NOTES}"] = df_family.loc[family, NOTES].tolist()
-    #     features[f"{family_prefix}{SOUNDING_MEASURES}"] = df_family.loc[family, SOUNDING_MEASURES].tolist()
-    #     features[f"{family_prefix}{MEASURES}"] = df_family.loc[family, MEASURES].tolist()
-    #     features[f"{family_prefix}{SOUNDING_DENSITY}"] = features[f"{family_prefix}{NOTES}"] / features[f"{family_prefix}{SOUNDING_MEASURES}"]
-    #     features[f"{family_prefix}{DENSITY}"] = features[f"{family_prefix}{NOTES}"] / features[f"{family_prefix}{MEASURES}"]
-    # score_prefix = get_score_prefix()
-    # features[f"{score_prefix}{NOTES}"] = df_score[NOTES].tolist()
-    # features[f"{score_prefix}{SOUNDING_MEASURES}"] = df_score[SOUNDING_MEASURES].tolist()
-    # features[f"{score_prefix}{MEASURES}"] = df_score[MEASURES].tolist()
-    # features[f"{score_prefix}{SOUNDING_DENSITY}"] = features[f"{score_prefix}{NOTES}"] / features[f"{score_prefix}{SOUNDING_MEASURES}"]
-    # features[f"{score_prefix}{DENSITY}"] = features[f"{score_prefix}{NOTES}"] / features[f"{score_prefix}{MEASURES}"]
-
-    return features
-
-
 def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Measure], List[Measure]]:
     notes = []
     measures = list(part.measures(0, None))
@@ -201,5 +155,5 @@ def calculate_densities(notes_list, measures_list, names_list, cfg: Configuratio
         density_dict = sort_dict(density_dict, density_sorting, cfg)
         return density_dict
     except:
-        cfg.read_logger.error('Densities problem found: ', exc_info=True)
+        read_logger.error('Densities problem found: ', exc_info=True)
         return {}

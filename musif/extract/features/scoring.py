@@ -118,31 +118,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     return features
 
 
-def get_corpus_features(scores_data: List[dict], parts_data: List[dict], cfg: Configuration, scores_features: List[dict], corpus_features: dict) -> dict:
-
-    abbreviated_parts = list({part for score_features in scores_features for part in score_features[SCORING].split(',')})
-    abbreviated_parts_scoring_order = [instr + num for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
-    sound_abbreviations = list({sound for score_features in scores_features for sound in score_features[SOUND_SCORING].split(',')})
-    instrument_abbreviations = list({instrument for score_features in scores_features for instrument in score_features[INSTRUMENTATION].split(',')})
-    voice_abbreviations = list({voice for score_features in scores_features for voice in score_features[VOICES].split(',')})
-    family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_SCORING].split(',')})
-    instrumental_family_abbreviations = list({family for score_features in scores_features for family in score_features[FAMILY_INSTRUMENTATION].split(',')})
-    scoring_count_mean = mean([score_features[NUMBER_OF_PARTS] for score_features in scores_features])
-    scoring_count_std = stdev([score_features[NUMBER_OF_PARTS] for score_features in scores_features]) if len(scores_features) > 1 else 0
-    corpus_prefix = get_corpus_prefix()
-    features = {
-        f"{corpus_prefix}{SCORING}": ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
-        f"{corpus_prefix}{SOUND_SCORING}": ','.join(sort(sound_abbreviations, cfg.scoring_order)),
-        f"{corpus_prefix}{INSTRUMENTATION}": ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
-        f"{corpus_prefix}{VOICES}": ','.join(sort(voice_abbreviations, cfg.scoring_order)),
-        f"{corpus_prefix}{FAMILY_SCORING}": ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
-        f"{corpus_prefix}{FAMILY_INSTRUMENTATION}": ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
-        f"{corpus_prefix}{NUMBER_OF_PARTS_MEAN}": scoring_count_mean,
-        f"{corpus_prefix}{NUMBER_OF_PARTS_STD}": scoring_count_std,
-    }
-    return features
-
-
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
     sound = extract_sound(part, cfg)
     return list(extract_abbreviated_part(sound, part, parts, cfg))[0]

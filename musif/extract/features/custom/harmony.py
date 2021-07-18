@@ -2,7 +2,7 @@ import glob
 from ms3 import parse
 
 from ms3.score import MSCX
-from musif.config import Configuration
+from musif.config import Configuration, read_logger
 import os
 from collections import Counter, OrderedDict, defaultdict
 from typing import Dict, List, Tuple
@@ -197,9 +197,8 @@ def parse_score(mscx_file: str):
     return harmonic_analysis, has_table
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
-    global logger
-    logger = cfg.read_logger
-    features={}    
+    logger = read_logger
+    features={}
     sections=[]
     try:
         #### GET FILE FROM LAUSSANE OR FROM MODULATIONS IN THE JSON_DATA ####
@@ -280,15 +279,3 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     except Exception as e:
             logger.error('Harmony problem found: ', e)
             return features
-
-def get_corpus_features(
-        scores_data: List[dict],
-        parts_data: List[dict],
-        cfg: Configuration,
-        scores_features: List[dict],
-        corpus_features: dict
-) -> dict:
-
-    features = {}
-
-    return features
