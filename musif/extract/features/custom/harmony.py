@@ -36,7 +36,6 @@ ADDITIONS_9='+9'
 OTHERS_NO_AUG='others_no_+'
 OTHERS_AUG='others_+'
 
-logger = None
 ###############################################################################
 # This function generates a dataframe with the measures and the local key     #
 # present in each one of them based on the 'modulations' atribute in the json #
@@ -215,7 +214,7 @@ def parse_score(mscx_file: str):
     # annotations=msc3_score.annotations
     has_table = True
     try:
-        logger.info(get_color('INFO')+'Getting harmonic analysis...'+ RESET_SEQ)
+        read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
         msc3_score = ms3.score.Score(mscx_file)
         harmonic_analysis = msc3_score.mscx.expanded
         mn=ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
@@ -223,7 +222,7 @@ def parse_score(mscx_file: str):
         harmonic_analysis=ms3.parse.unfold_repeats(harmonic_analysis,mn)
     
     except Exception as e:
-        logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
+        read_logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
         with open('failed_files.txt', 'a') as file:  # Use file to refer to the file object
             file.write(mscx_file + '\n')
 
@@ -233,7 +232,6 @@ def parse_score(mscx_file: str):
     return harmonic_analysis, has_table
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
-    logger = read_logger
     features={}
     sections=[]
     try:
@@ -263,7 +261,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         else:
             has_table = False
             harmonic_analysis = None
-            logger.warn(get_color('WARNING')+'No Musescore file was found.'+ RESET_SEQ)
+            read_logger.warn(get_color('WARNING')+'No Musescore file was found.'+ RESET_SEQ)
             return {}
 
         #     Get the array based on harmonic_analysis.mc
@@ -312,5 +310,5 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         return features
 
     except Exception as e:
-            logger.error('Harmony problem found: ', e)
-            return features
+        read_logger.error('Harmony problem found: ', e)
+        return features

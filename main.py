@@ -7,5 +7,5 @@ if __name__ == "__main__":
     test_filter = ["obI"]
 
     # FilesValidator("config.yml").validate("arias/xml")
-    df_scores = FeaturesExtractor("config.yml", parallel=True).extract("../Corpus/xml", parts_filter=didone_filter)
+    df_scores = FeaturesExtractor("config.yml", parallel=True).extract("arias", parts_filter=didone_filter)
     df_scores.to_csv("myfeatures.csv", index=False)
