@@ -7,7 +7,9 @@ from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, 
 from musif.extract.model import Level
 
 READ_LOGGER_NAME = "read"
+READ_LOG_FILE_NAME = "read.log"
 WRITE_LOGGER_NAME = "write"
+WRITE_LOG_FILE_NAME = "write.log"
 LOGS_DIR = "logs"
 LOG_LEVEL = "DEBUG"
 
@@ -58,7 +60,15 @@ class Configuration:
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
 
+    def is_required_module(self, module) -> bool:
+        if self.features is None:
+            return True
+        module_name = module.__name__
+        features = {feature.lower() for feature in self.features}
+        module_feature = module_name[module_name.rindex(".") + 1:].lower()
+        return module_feature in features
+
 
 config = Configuration("config.yml")
-read_logger = get_logger(READ_LOGGER_NAME, "read.log", LOGS_DIR, LOG_LEVEL)
-write_logger = get_logger(WRITE_LOGGER_NAME, "write.log", LOGS_DIR, LOG_LEVEL)
+read_logger = get_logger(READ_LOGGER_NAME, READ_LOG_FILE_NAME, LOGS_DIR, LOG_LEVEL)
+write_logger = get_logger(WRITE_LOGGER_NAME, WRITE_LOG_FILE_NAME, LOGS_DIR, LOG_LEVEL)

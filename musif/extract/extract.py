@@ -171,7 +171,7 @@ class FeaturesExtractor:
         repetition_elements = get_repetition_elements(score)
         score_expanded = expand_score_repetitions(score, repetition_elements)
         tempo = extract_numeric_tempo(musicxml_file)
-        if self._module_passes_filter(harmony):
+        if self._cfg.is_required_module(harmony):
             mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
         ambitus = analysis.discrete.Ambitus()
@@ -191,7 +191,7 @@ class FeaturesExtractor:
             "parts": parts,
             "parts_filter": parts_filter,
         }
-        if self._module_passes_filter(harmony):
+        if self._cfg.is_required_module(harmony):
             data["mscx_path"] = mscx_name
         return data
 
@@ -255,7 +255,7 @@ class FeaturesExtractor:
         return part_features
 
     def _extract_part_module_features(self, module, score_data: dict, part_data: dict, part_features: dict) -> dict:
-        if not self._module_passes_filter(module):
+        if not self._cfg.is_required_module(module):
             return {}
         read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
         return module.get_part_features(score_data, part_data, self._cfg, part_features)
@@ -281,17 +281,10 @@ class FeaturesExtractor:
         return score_features
 
     def _extract_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict) -> dict:
-        if not self._module_passes_filter(module):
+        if not self._cfg.is_required_module(module):
             return {}
         read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
         return module.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
-
-    def _module_passes_filter(self, module) -> bool:
-        if self._cfg.features is None:
-            return True
-        features = {feature.lower() for feature in self._cfg.features}
-        module_feature = module.__name__[module.__name__.rindex(".") + 1:].lower()
-        return module_feature in features
 
     def _get_custom_modules(self) -> Generator:
         custom_package_path = custom.__path__[0]

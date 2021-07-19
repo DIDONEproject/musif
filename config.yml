@@ -2,11 +2,12 @@ data_dir: data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
-sequential: false
+parallel: false
 max_processes: 10
 features:
   - file_name
   - metadata
+  - harmony
   - ambitus
   - density
   - interval

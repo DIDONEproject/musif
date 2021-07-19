@@ -16,6 +16,7 @@ from typing import List, Optional, Tuple
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
+from musif.extract.features.custom import harmony
 import numpy as np
 import pandas as pd
 from music21 import interval
@@ -114,7 +115,7 @@ class FeaturesGenerator:
         
         # Getting harmonic features
 
-        if cfg.require_harmonic_analysis:
+        if cfg.is_required_module(harmony):
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
@@ -261,7 +262,7 @@ class FeaturesGenerator:
                     _tasks_execution(rows_groups, not_used_cols, cfg,
                         groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                     
-                    if cfg.require_harmonic_analysis:
+                    if cfg.is_required_module(harmony):
                         harmony_data_path = path.join(main_results_path, 'Harmony', str(
                             factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
                         if not os.path.exists(harmony_data_path):
