@@ -19,7 +19,7 @@ features:
   - scoring
   - tempo
   - text
-split_keywords:
+split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
