@@ -67,7 +67,7 @@ class Configuration:
             return True
         module_name = module.__name__
         features = {feature.lower() for feature in self.features}
-        module_feature = module_name[module_name.rindex(".") + 1:].lower()
+        module_feature = module_name[module_name.rindex(".") + 1:].lower()  ## also module_name.split('.')[-1]
         return module_feature in features
 
 
