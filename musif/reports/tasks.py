@@ -1,36 +1,24 @@
-import copy
-from musif.extract.features import key
-from musif.config import Configuration
-import os
+from config import Configuration
 import sys
 from multiprocessing import Lock
 from os import path
-from typing import Dict, List
 
 import musif.extract.features.ambitus as ambitus
-import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
 import numpy as np
-import openpyxl
 import pandas as pd
-from musif.common.sort import sort, sort_dataframe
-from openpyxl.styles.fonts import Font
+from musif.common.sort import sort
 from openpyxl.writer.excel import ExcelWriter
 from pandas.core.frame import DataFrame
-from tqdm import tqdm
 
 from .harmony_sorting import * #TODO: REVIEW
 from musif.common.constants import RESET_SEQ, get_color
 
-from .calculations import (compute_average, compute_value,
-                           make_intervals_absolute)
+from .calculations import (make_intervals_absolute)
 from .constants import *
 from .utils import (adjust_excel_width_height, columns_alike_our_data,
-                    get_groups_add_info,
                     prepare_data_emphasised_scale_degrees_second,
-                    print_averages_total, print_averages_total_column,
-                    remove_folder_contents, row_iteration, split_voices, write_columns_titles,
-                    write_columns_titles_variable_length)
+                    remove_folder_contents, row_iteration)
 from .visualisations import (bar_plot, bar_plot_extended, box_plot,
                              customized_plot, double_bar_plot,
                              line_plot_extended, melody_bar_plot, pie_plot)

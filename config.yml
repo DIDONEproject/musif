@@ -4,6 +4,8 @@ metadata_id_col: AriaId
 intermediate_files_dir: intermediate
 parallel: false
 max_processes: 10
+logs_dir: logs
+log_level: ERROR
 features:
   - file_name
   - metadata
@@ -18,7 +20,7 @@ features:
   - scale
   - scoring
   - tempo
-  - text
+  - composer
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass

@@ -8,7 +8,7 @@ def get_logger(logger_name: str, log_file_name: str, logs_dir: str = None, log_l
     logger = logging.getLogger(logger_name)
     if not logger.hasHandlers():
         logger.propagate = False
-        logger.setLevel(logging.getLevelName(logging.DEBUG))
+        logger.setLevel(log_level)
         if not path.exists(logs_dir):
             mkdir(logs_dir)
         log_formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")

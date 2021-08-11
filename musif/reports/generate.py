@@ -8,20 +8,18 @@
 ########################################################################
 import copy
 import os
-import threading  # for the lock used for visualising, as matplotlib is not thread safe
 from itertools import permutations
 from os import path
 from typing import List, Optional, Tuple
 
 import musif.extract.features.ambitus as ambitus
-import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
 from musif.extract.features.custom import harmony
 import numpy as np
 import pandas as pd
 from music21 import interval
 from musif.common.constants import VOICE_FAMILY
-from musif.config import Configuration
+from config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 

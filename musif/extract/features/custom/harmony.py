@@ -1,22 +1,14 @@
-import glob
-from ms3 import parse
-
-from ms3.score import MSCX
-from musif.config import Configuration, read_logger
-import os
-from collections import Counter, OrderedDict, defaultdict
-from typing import Dict, List, Tuple
+from config import Configuration, read_logger
+from collections import Counter
+from typing import List
 
 import ms3
 import pandas as pd
-from music21 import *
-import itertools
 
 from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
-from musif.extract.features.tempo import NUMBER_OF_BEATS
 
-from .__harmony_utils import get_numerals_lists, get_chord_types, get_measures_per_possibility, get_keyareas, get_chords
+from .__harmony_utils import get_numerals_lists, get_chord_types, get_keyareas, get_chords
 from musif.common.constants import RESET_SEQ, get_color
 
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
