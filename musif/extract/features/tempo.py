@@ -1,13 +1,11 @@
 import re
-from collections import Counter
 from enum import Enum
 from typing import List
 
 from music21.expressions import TextExpression
 from music21.stream import Measure
 
-from musif.config import Configuration
-from musif.extract.features.prefix import get_corpus_prefix
+from config import Configuration
 
 TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"

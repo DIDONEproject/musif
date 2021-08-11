@@ -6,9 +6,9 @@ import numpy as np
 from music21.interval import Interval
 from scipy.stats import kurtosis, skew
 
-from musif.config import Configuration
+from config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.features.prefix import get_corpus_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
 
 INTERVALLIC_MEAN = "IntervallicMean"
 INTERVALLIC_STD = "IntervallicStd"

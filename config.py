@@ -10,10 +10,10 @@ READ_LOGGER_NAME = "read"
 READ_LOG_FILE_NAME = "read.log"
 WRITE_LOGGER_NAME = "write"
 WRITE_LOG_FILE_NAME = "write.log"
-LOGS_DIR = "logs"
-LOG_LEVEL = "DEBUG"
 
 _CONFIG_FALLBACK = {
+    "logs_dir": "logs",
+    "log_level": "DEBUG",
     "data_dir": "data",
     "metadata_dir": "metadata",
     "metadata_id_col": "FileName",
@@ -35,6 +35,8 @@ class Configuration:
             elif isinstance(args[0], dict):
                 config_data = args[0]
         config_data.update(kwargs)
+        self.logs_dir = config_data.get("logs_dir", _CONFIG_FALLBACK["logs_dir"])
+        self.log_level = config_data.get("log_level", _CONFIG_FALLBACK["log_level"])
         self.data_dir = config_data.get("data_dir", _CONFIG_FALLBACK["data_dir"])
         self.metadata_dir = config_data.get("metadata_dir", _CONFIG_FALLBACK["metadata_dir"])
         self.metadata_id_col = config_data.get("metadata_id_col", _CONFIG_FALLBACK["metadata_id_col"])
@@ -70,5 +72,5 @@ class Configuration:
 
 
 config = Configuration("config.yml")
-read_logger = get_logger(READ_LOGGER_NAME, READ_LOG_FILE_NAME, LOGS_DIR, LOG_LEVEL)
-write_logger = get_logger(WRITE_LOGGER_NAME, WRITE_LOG_FILE_NAME, LOGS_DIR, LOG_LEVEL)
+read_logger = get_logger(READ_LOGGER_NAME, READ_LOG_FILE_NAME, config.logs_dir, config.log_level)
+write_logger = get_logger(WRITE_LOGGER_NAME, WRITE_LOG_FILE_NAME, config.logs_dir, config.log_level)

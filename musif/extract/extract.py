@@ -12,10 +12,10 @@ from tqdm import tqdm
 from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
-from musif.config import Configuration, read_logger
+from config import Configuration, read_logger
 from musif.extract.common import filter_parts_data
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
-    tempo, text, texture
+    tempo, composer, texture
 from musif.extract.features.custom import harmony
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
@@ -265,8 +265,8 @@ class FeaturesExtractor:
         score_features = {"FileName": path.basename(score_data["file"])}
         for module in self._get_custom_modules():
             score_features.update(self._extract_score_module_features(module, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(text, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(metadata, score_data, parts_data, parts_features, score_features))
+        metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
+        score_features.update(self._extract_score_module_features(composer, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(key, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(tempo, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(scoring, score_data, parts_data, parts_features, score_features))
