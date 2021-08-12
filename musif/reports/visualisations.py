@@ -43,7 +43,7 @@ LINESTYLES = [i for i in Line2D.lineStyles.keys() if str(i) not in [
 
 
 def box_plot(name, data, second_title=None):
-    # try:
+
         columns_box = [['LowestIndex', 'HighestIndex'],
                        ['AmbitusLargestSemitones']]
         column_names = [['Lowest Notes', 'Highest Notes'], ['Ambitus']]
@@ -69,7 +69,6 @@ def box_plot(name, data, second_title=None):
                     boxes.append(ax[j].boxplot(info_data, labels=column_names[j], notch=False,patch_artist=True, boxprops=dict(color=COLORS[counter])))
                     # plt.setp([box["boxes"] for box in boxes], facecolor=COLOR[counter])
                     counter+=1
-                # change the axis from midi index to note name
                 plt.draw()
                 labels = [x.get_text() for x in ax[j].get_yticklabels()]
                 if j == 0:

@@ -1,11 +1,9 @@
-from collections import Counter
 from typing import List, Tuple
 
 from music21.key import Key
 from music21.stream import Score
 
-from musif.config import Configuration
-from musif.extract.features.prefix import get_corpus_prefix
+from config import Configuration
 
 KEY = "Key"
 KEY_SIGNATURE = "KeySignature"

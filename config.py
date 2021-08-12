@@ -7,11 +7,13 @@ from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, 
 from musif.extract.model import Level
 
 READ_LOGGER_NAME = "read"
+READ_LOG_FILE_NAME = "read.log"
 WRITE_LOGGER_NAME = "write"
-LOGS_DIR = "logs"
-LOG_LEVEL = "DEBUG"
+WRITE_LOG_FILE_NAME = "write.log"
 
 _CONFIG_FALLBACK = {
+    "logs_dir": "logs",
+    "log_level": "DEBUG",
     "data_dir": "data",
     "metadata_dir": "metadata",
     "metadata_id_col": "FileName",
@@ -33,6 +35,8 @@ class Configuration:
             elif isinstance(args[0], dict):
                 config_data = args[0]
         config_data.update(kwargs)
+        self.logs_dir = config_data.get("logs_dir", _CONFIG_FALLBACK["logs_dir"])
+        self.log_level = config_data.get("log_level", _CONFIG_FALLBACK["log_level"])
         self.data_dir = config_data.get("data_dir", _CONFIG_FALLBACK["data_dir"])
         self.metadata_dir = config_data.get("metadata_dir", _CONFIG_FALLBACK["metadata_dir"])
         self.metadata_id_col = config_data.get("metadata_id_col", _CONFIG_FALLBACK["metadata_id_col"])
@@ -58,7 +62,15 @@ class Configuration:
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
 
+    def is_required_module(self, module) -> bool:
+        if self.features is None:
+            return True
+        module_name = module.__name__
+        features = {feature.lower() for feature in self.features}
+        module_feature = module_name[module_name.rindex(".") + 1:].lower()
+        return module_feature in features
+
 
 config = Configuration("config.yml")
-read_logger = get_logger(READ_LOGGER_NAME, "read.log", LOGS_DIR, LOG_LEVEL)
-write_logger = get_logger(WRITE_LOGGER_NAME, "write.log", LOGS_DIR, LOG_LEVEL)
+read_logger = get_logger(READ_LOGGER_NAME, READ_LOG_FILE_NAME, config.logs_dir, config.log_level)
+write_logger = get_logger(WRITE_LOGGER_NAME, WRITE_LOG_FILE_NAME, config.logs_dir, config.log_level)
