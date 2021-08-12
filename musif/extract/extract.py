@@ -12,10 +12,10 @@ from tqdm import tqdm
 from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
-from musif.config import Configuration, read_logger
+from config import Configuration, read_logger
 from musif.extract.common import filter_parts_data
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
-    tempo, text, texture
+    tempo, composer, texture
 from musif.extract.features.custom import harmony
 from musif.extract.features.density import get_notes_and_measures
 from musif.extract.features.key import get_key_and_mode
@@ -171,7 +171,7 @@ class FeaturesExtractor:
         repetition_elements = get_repetition_elements(score)
         score_expanded = expand_score_repetitions(score, repetition_elements)
         tempo = extract_numeric_tempo(musicxml_file)
-        if self._module_passes_filter(harmony):
+        if self._cfg.is_required_module(harmony):
             mscx_name = self._find_mscx_file(musicxml_file)
         score_key, tonality, mode = get_key_and_mode(score)
         ambitus = analysis.discrete.Ambitus()
@@ -191,7 +191,7 @@ class FeaturesExtractor:
             "parts": parts,
             "parts_filter": parts_filter,
         }
-        if self._module_passes_filter(harmony):
+        if self._cfg.is_required_module(harmony):
             data["mscx_path"] = mscx_name
         return data
 
@@ -255,7 +255,7 @@ class FeaturesExtractor:
         return part_features
 
     def _extract_part_module_features(self, module, score_data: dict, part_data: dict, part_features: dict) -> dict:
-        if not self._module_passes_filter(module):
+        if not self._cfg.is_required_module(module):
             return {}
         read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
         return module.get_part_features(score_data, part_data, self._cfg, part_features)
@@ -265,8 +265,8 @@ class FeaturesExtractor:
         score_features = {"FileName": path.basename(score_data["file"])}
         for module in self._get_custom_modules():
             score_features.update(self._extract_score_module_features(module, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(text, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(metadata, score_data, parts_data, parts_features, score_features))
+        metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
+        score_features.update(self._extract_score_module_features(composer, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(key, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(tempo, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(scoring, score_data, parts_data, parts_features, score_features))
@@ -281,17 +281,10 @@ class FeaturesExtractor:
         return score_features
 
     def _extract_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict) -> dict:
-        if not self._module_passes_filter(module):
+        if not self._cfg.is_required_module(module):
             return {}
         read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
         return module.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
-
-    def _module_passes_filter(self, module) -> bool:
-        if self._cfg.features is None:
-            return True
-        features = {feature.lower() for feature in self._cfg.features}
-        module_feature = module.__name__[module.__name__.rindex(".") + 1:].lower()
-        return module_feature in features
 
     def _get_custom_modules(self) -> Generator:
         custom_package_path = custom.__path__[0]

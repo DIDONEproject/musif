@@ -1,7 +1,7 @@
 from ntpath import basename
 from typing import List
 
-from musif.config import Configuration
+from config import Configuration
 
 ARIA_OPERA = "AriaOpera"
 ARIA_LABEL = "AriaLabel"

@@ -8,7 +8,6 @@ from music21.stream import Part, Score
 from roman import toRoman
 
 from musif.common import group
-from musif.config import Configuration
 
 MUSICXML_FILE_EXTENSION = "xml"
 

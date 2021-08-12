@@ -8,19 +8,18 @@
 ########################################################################
 import copy
 import os
-import threading  # for the lock used for visualising, as matplotlib is not thread safe
 from itertools import permutations
 from os import path
 from typing import List, Optional, Tuple
 
 import musif.extract.features.ambitus as ambitus
-import musif.extract.features.interval as interval
 import musif.extract.features.lyrics as lyrics
+from musif.extract.features.custom import harmony
 import numpy as np
 import pandas as pd
 from music21 import interval
 from musif.common.constants import VOICE_FAMILY
-from musif.config import Configuration
+from config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 
@@ -36,6 +35,7 @@ class FeaturesGenerator:
         
 
     def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
+        print('\n---Starting reports generation ---\n')
         self.parts_list = [] if parts_list is None else parts_list
         self.global_features = df
         self.num_factors_max = num_factors
@@ -113,7 +113,7 @@ class FeaturesGenerator:
         
         # Getting harmonic features
 
-        if cfg.require_harmonic_analysis:
+        if cfg.is_required_module(harmony):
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
@@ -260,7 +260,7 @@ class FeaturesGenerator:
                     _tasks_execution(rows_groups, not_used_cols, cfg,
                         groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                     
-                    if cfg.require_harmonic_analysis:
+                    if cfg.is_required_module(harmony):
                         harmony_data_path = path.join(main_results_path, 'Harmony', str(
                             factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
                         if not os.path.exists(harmony_data_path):
@@ -289,6 +289,6 @@ class FeaturesGenerator:
 
     def _write(self, all_info: DataFrame):
         # 2. Start the factor generation
-        for factor in range(0, self.num_factors_max + 1):
+        for factor in range(1, self.num_factors_max + 1):
             self._factor_execution(
                 all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists, self._cfg)

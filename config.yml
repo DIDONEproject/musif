@@ -2,11 +2,14 @@ data_dir: data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
-sequential: false
+parallel: false
 max_processes: 10
+logs_dir: logs
+log_level: ERROR
 features:
   - file_name
   - metadata
+  - harmony
   - ambitus
   - density
   - interval
@@ -17,8 +20,8 @@ features:
   - scale
   - scoring
   - tempo
-  - text
-split_keywords:
+  - composer
+split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind

@@ -1,16 +1,14 @@
-from statistics import mean, stdev
 from typing import List, Optional, Tuple
 
-from music21 import text
 from music21.stream import Part
 from roman import fromRoman, toRoman
 
 from musif.common.constants import VOICE_FAMILY, GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
-from musif.config import Configuration
+from config import Configuration
 from musif.extract.common import part_matches_filter
-from musif.extract.features.prefix import get_corpus_prefix, get_family_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 

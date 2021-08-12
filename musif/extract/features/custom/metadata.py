@@ -2,7 +2,7 @@ from typing import List
 
 from music21.text import TextBox
 
-from musif.config import Configuration
+from config import Configuration
 
 LIBRETTIST = "Librettist"
 
