@@ -12,14 +12,18 @@ from itertools import permutations
 from os import path
 from typing import List, Optional, Tuple
 
-import musif.extract.features.ambitus as ambitus
-import musif.extract.features.lyrics as lyrics
+# import musif.extract.features.ambitus as ambitus
+# import musif.extract.features.interval as interval
+# import musif.extract.features.lyrics as lyrics
+# from music21 import interval
+
+from musif.extract.features import ambitus, density, interval, key, lyrics, metadata, texture
 from musif.extract.features.custom import harmony
+
 import numpy as np
 import pandas as pd
-from music21 import interval
 from musif.common.constants import VOICE_FAMILY
-from config import Configuration
+from config import Configuration, write_logger
 from pandas import DataFrame
 from tqdm import tqdm
 
@@ -31,7 +35,7 @@ class FeaturesGenerator:
 
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._logger = self._cfg.write_logger
+        self._logger = write_logger
         
 
     def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
@@ -53,7 +57,9 @@ class FeaturesGenerator:
         nuc = copy.deepcopy(not_used_cols)
 
         # 1. Split all the dataframes to work individually
-        common_columns_df = all_info[metadata_columns]
+        common_columns_df = all_info[metadata_columns] #
+        
+        # Las featues requeridas están en self._cfg.features
 
         common_columns_df['Total analysed'] = 1.0
 
@@ -61,10 +67,9 @@ class FeaturesGenerator:
         density_set = set([])
         notes_set=set([])
         instruments = set([])
-
         clefs_info=pd.DataFrame()
         textures_df=pd.DataFrame()
-
+        melody_values=pd.DataFrame()
         if parts_list:
             instruments = parts_list
         else:
@@ -76,7 +81,6 @@ class FeaturesGenerator:
                         for instrument in instruments]
 
         # Inizalizing new dataframes and defining those that don't depends on each part
-        # density_df=copy.deepcopy(common_columns_df)
         if ('Clef2' and 'Clef3') in common_columns_df.columns:
             common_columns_df.Clef2.replace('', np.nan, inplace=True)
             common_columns_df.Clef3.replace('', np.nan, inplace=True)
@@ -91,7 +95,7 @@ class FeaturesGenerator:
             elif instrument.lower() in all_info.Voices[0]:
                 catch='Family'
                 instrument=VOICE_FAMILY.capitalize()
-                clefs=True #We want clefs only when voice is required
+                clefs=True # We want clefs only when voice is required
                 notes_set.add(catch + instrument + '_NotesMean')
 
             else:
@@ -101,18 +105,23 @@ class FeaturesGenerator:
                 instrument = instrument.replace('I', '')
                 notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
 
+        if cfg.is_required_module(density) or cfg.is_required_module(texture):
+            notes_df=all_info[list(notes_set)]
+        
+        # Getting different features
+        if cfg.is_required_module(density):
             density_set.add(
                 catch + instrument + '_SoundingDensity')
             density_set.add(
                 catch + instrument + '_SoundingMeasures')
             density_set.add('NumberOfBeats')
-        
-        textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
-        density_df = all_info[list(density_set)]
-        notes_df=all_info[list(notes_set)]
-        
-        # Getting harmonic features
+            density_df = all_info[list(density_set)]
 
+        if cfg.is_required_module(texture):
+            textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
+        
+
+        # Getting harmonic features
         if cfg.is_required_module(harmony):
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
@@ -125,8 +134,8 @@ class FeaturesGenerator:
             #Not used by now:
             chords_types = all_info[[i for i in all_info.columns if 'Chord_types' in i]]
 
-        # Getting Voice Clefs info
         
+        # Getting Voice Clefs info
         if clefs:
             clefs_info=copy.deepcopy(common_columns_df)
             clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
@@ -141,18 +150,13 @@ class FeaturesGenerator:
         
         print('\n' + str(factor) + " factor")
 
-        # Running some processes that differ for each part
-
+        # CAPTURING FEATURES that depend total or partially on each part
         for instrument in tqdm(list(instruments), desc='Progress'):
             print('\nInstrument: ', instrument, end='\n\n')
             intervals_list = []
             intervals_types_list = []
             emphasised_A_list = []
                     
-            # CAPTURING FEATURES that depend total or partially on each part
-            # if instrument.lower() in all_info.Voices[0]:
-            #     catch='Family'+ 'Voice' + '_'
-            # else:
 
             catch = 'Part' + instrument + '_'
             # List of columns for melody parameters
@@ -163,7 +167,7 @@ class FeaturesGenerator:
                             catch + ambitus.LOWEST_MEAN_INDEX, catch + ambitus.HIGHEST_MEAN_NOTE, catch + ambitus.HIGHEST_NOTE, catch + ambitus.LOWEST_INDEX, catch + ambitus.HIGHEST_MEAN_INDEX, catch + ambitus.LARGEST_INTERVAL, catch + ambitus.LARGEST_SEMITONES,
                             catch + ambitus.SMALLEST_INTERVAL, catch + ambitus.SMALLEST_SEMITONES, catch + ambitus.MEAN_INTERVAL, catch + ambitus.MEAN_SEMITONES]
 
-            if catch +lyrics.SYLLABIC_RATIO in all_info.columns:
+            if catch + lyrics.SYLLABIC_RATIO in all_info.columns:
                 melody_values_list.append(catch + lyrics.SYLLABIC_RATIO)
 
             #Getting list of columns for intervals and scale degrees
@@ -174,31 +178,29 @@ class FeaturesGenerator:
                     emphasised_A_list.append(col)
                 elif (col.startswith(catch+'Intervals') or col.startswith(catch+'Leaps') or col.startswith(catch+'Stepwise')) and col.endswith('_Count'):
                     intervals_types_list.append(col)
-            intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
-
+            
             # Joining common info and part info, renaming columns for excel writing
-            melody_values=all_info[melody_values_list]
-            # melody_values = pd.concat([common_columns_df, all_info[melody_values_list]], axis=1)
-            melody_values.columns = [c.replace(catch, '').replace('_Count', '')
+            
+            # INTERVALS
+            if cfg.is_required_module(interval):            
+                intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
+                intervals_info=all_info[intervals_list]
+                intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
+                                    for c in intervals_info.columns]
+                intervals_types=all_info[intervals_types_list]
+                intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
+                                    for c in intervals_types.columns]
+            # MELODY
+            if cfg.is_required_module(ambitus):            
+                melody_values=all_info[melody_values_list]  
+                melody_values.columns = [c.replace(catch, '').replace('_Count', '')
                                 for c in melody_values.columns]
-
-            intervals_info=all_info[intervals_list]
-            # intervals_info = pd.concat(
-            #     [common_columns_df, all_info[intervals_list]], axis=1)
-            intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
-                                for c in intervals_info.columns]
-            # intervals_types = pd.concat([common_columns_df, all_info[intervals_types_list]], axis=1)
-            intervals_types=all_info[intervals_types_list]
-            intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
-                                for c in intervals_types.columns]
-
-            emphasised_scale_degrees_info_A=all_info[emphasised_A_list]
-            # Emphasised_scale_degrees_info_A = pd.concat(
-            #     [common_columns_df, all_info[emphasised_A_list]], axis=1)
-            emphasised_scale_degrees_info_A.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '')
-                for c in emphasised_scale_degrees_info_A.columns]
-
-            emphasised_scale_degrees_info_B = copy.deepcopy(common_columns_df)
+            # KEYS
+            if cfg.is_required_module(key):            
+                emphasised_scale_degrees_info_A=all_info[emphasised_A_list]
+                emphasised_scale_degrees_info_A.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '')
+                    for c in emphasised_scale_degrees_info_A.columns]
+                emphasised_scale_degrees_info_B = copy.deepcopy(common_columns_df)
 
             # Dropping nans
             melody_values = melody_values.dropna(how='all', axis=1)
@@ -248,7 +250,8 @@ class FeaturesGenerator:
                 factor) + " factor") if factor > 0 else path.join(main_results_path,'Melody_'+ instrument, "Data")
             if not os.path.exists(results_path_factorx):
                 os.makedirs(results_path_factorx)
-
+                
+            # FLAG ensures this part is only run once, not for every instrument. This executes common tasks for any instrument
             if FLAG:
                 textures_densities_data_path = path.join(main_results_path, 'Texture&Density', str(
                 factor) + " factor") if factor > 0 else path.join(main_results_path, 'Texture&Density', "Data")
@@ -285,10 +288,8 @@ class FeaturesGenerator:
                 #     rows_groups = rg
                 #     not_used_cols = nuc
 
-
-
     def _write(self, all_info: DataFrame):
-        # 2. Start the factor generation
+        # Start factor generation
         for factor in range(1, self.num_factors_max + 1):
             self._factor_execution(
                 all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists, self._cfg)

@@ -10,17 +10,12 @@ features:
   - file_name
   - metadata
   - harmony
-  - ambitus
-  - density
-  - interval
-  - key
-  - lyrics
-  - prefix
-  - scale
-  - scoring
   - tempo
-  - composer
-split_keywords:  # Used to split the possible layers present depending on the instrument name
+  - key
+  - scoring
+  - prefix
+  - text
+split_keywords:
   - woodwind
   - brass
   - wind
