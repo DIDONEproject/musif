@@ -14,13 +14,13 @@ features:
   - file_name
   - librettist
   - harmony
-  - ambitus
-  - density
-  - interval
-  - key
+  # - ambitus
+  # - density
+  # - interval
+  # - key
   - lyrics
   - prefix
-  - scale
+  # - scale
   - scoring
   - tempo
   - composer

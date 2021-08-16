@@ -1,5 +1,6 @@
 from musif import FeaturesExtractor
 from musif.reports.generate import FeaturesGenerator
+import os
 
 if __name__ == "__main__":
     parts = ["vnI","obI"]
@@ -7,7 +8,8 @@ if __name__ == "__main__":
 
     arias_path="subcorpus"
     # arias_path="../Corpus/subcorpus"
-    # os.remove("failed_files.txt")
+    if os.path.exists("failed_files.txt"):
+        os.remove("failed_files.txt")
     df = FeaturesExtractor("myconfig.yml").extract(arias_path, parts)
     path = './'
     FeaturesGenerator("myconfig.yml").generate_reports(df, 1, path, parts) 

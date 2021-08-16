@@ -14,11 +14,16 @@ features:
   - file_name
   - librettist
   - harmony
-  - tempo
+  # - ambitus
+  # - density
+  - interval
   - key
-  - scoring
+  - lyrics
   - prefix
-  - text
+  # - scale
+  - scoring
+  - tempo
+  - composer
 split_keywords:
   - woodwind
   - brass
