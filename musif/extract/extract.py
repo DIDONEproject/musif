@@ -265,7 +265,7 @@ class FeaturesExtractor:
         score_features = {"FileName": path.basename(score_data["file"])}
         for module in self._get_custom_modules():
             score_features.update(self._extract_score_module_features(module, score_data, parts_data, parts_features, score_features))
-        metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
+        score_features.update(metadata.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features))
         score_features.update(self._extract_score_module_features(composer, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(key, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(tempo, score_data, parts_data, parts_features, score_features))
