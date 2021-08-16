@@ -370,7 +370,6 @@ def Intervals(factor, _cfg: Configuration, data: DataFrame, name: str, sorting_l
                 bar_plot(name_bar, datag, third_columns_names_origin,
                             'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
         elif factor == 1:
-            # groups = [i for i in rows_groups]
             for row in rows_groups:
                 if row not in not_used_cols:
                     plot_name = name.replace(

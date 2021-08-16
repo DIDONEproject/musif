@@ -12,12 +12,7 @@ from itertools import permutations
 from os import path
 from typing import List, Optional, Tuple
 
-# import musif.extract.features.ambitus as ambitus
-# import musif.extract.features.interval as interval
-# import musif.extract.features.lyrics as lyrics
-# from music21 import interval
-
-from musif.extract.features import ambitus, density, interval, key, lyrics, metadata, texture
+from musif.extract.features import ambitus, density, interval, key, scale, lyrics, metadata, texture
 from musif.extract.features.custom import harmony
 
 import numpy as np
@@ -50,16 +45,14 @@ class FeaturesGenerator:
     def _factor_execution(self, all_info: DataFrame, factor: int, parts_list: list, main_results_path: str, sorting_lists: dict, _cfg: Configuration):
         global rows_groups
         global not_used_cols
-        global cfg
-        cfg = _cfg
+        # global cfg
+        # cfg = _cfg
         main_results_path = os.path.join(main_results_path, 'results')
         rg = copy.deepcopy(rows_groups)
         nuc = copy.deepcopy(not_used_cols)
 
         # 1. Split all the dataframes to work individually
-        common_columns_df = all_info[metadata_columns] #
-        
-        # Las featues requeridas están en self._cfg.features
+        common_columns_df = all_info[metadata_columns]
 
         common_columns_df['Total analysed'] = 1.0
 
@@ -105,11 +98,11 @@ class FeaturesGenerator:
                 instrument = instrument.replace('I', '')
                 notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
 
-        if cfg.is_required_module(density) or cfg.is_required_module(texture):
+        if self._cfg.is_required_module(density) or self._cfg.is_required_module(texture):
             notes_df=all_info[list(notes_set)]
         
         # Getting different features
-        if cfg.is_required_module(density):
+        if self._cfg.is_required_module(density):
             density_set.add(
                 catch + instrument + '_SoundingDensity')
             density_set.add(
@@ -117,12 +110,12 @@ class FeaturesGenerator:
             density_set.add('NumberOfBeats')
             density_df = all_info[list(density_set)]
 
-        if cfg.is_required_module(texture):
+        if self._cfg.is_required_module(texture):
             textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
         
 
         # Getting harmonic features
-        if cfg.is_required_module(harmony):
+        if self._cfg.is_required_module(harmony):
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
@@ -135,7 +128,7 @@ class FeaturesGenerator:
             chords_types = all_info[[i for i in all_info.columns if 'Chord_types' in i]]
 
         
-        # Getting Voice Clefs info
+        # Getting Voice Clefs info in case Voices are required
         if clefs:
             clefs_info=copy.deepcopy(common_columns_df)
             clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
@@ -182,7 +175,7 @@ class FeaturesGenerator:
             # Joining common info and part info, renaming columns for excel writing
             
             # INTERVALS
-            if cfg.is_required_module(interval):            
+            if self._cfg.is_required_module(interval):            
                 intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
                 intervals_info=all_info[intervals_list]
                 intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
@@ -191,12 +184,12 @@ class FeaturesGenerator:
                 intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
                                     for c in intervals_types.columns]
             # MELODY
-            if cfg.is_required_module(ambitus):            
+            if self._cfg.is_required_module(ambitus):            
                 melody_values=all_info[melody_values_list]  
                 melody_values.columns = [c.replace(catch, '').replace('_Count', '')
                                 for c in melody_values.columns]
             # KEYS
-            if cfg.is_required_module(key):            
+            if self._cfg.is_required_module(scale):            
                 emphasised_scale_degrees_info_A=all_info[emphasised_A_list]
                 emphasised_scale_degrees_info_A.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '')
                     for c in emphasised_scale_degrees_info_A.columns]
@@ -263,20 +256,20 @@ class FeaturesGenerator:
                     _tasks_execution(rows_groups, not_used_cols, cfg,
                         groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                     
-                    if cfg.is_required_module(harmony):
+                    if self._cfg.is_required_module(harmony):
                         harmony_data_path = path.join(main_results_path, 'Harmony', str(
                             factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
                         if not os.path.exists(harmony_data_path):
                              os.makedirs(harmony_data_path)
                         
-                        _tasks_execution(rows_groups, not_used_cols, cfg,
+                        _tasks_execution(rows_groups, not_used_cols, self._cfg,
                             groups, harmony_data_path, additional_info, factor, common_columns_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df, functions=functions_dfs)
                 FLAG=False #FLAG guarantees this is processed only once (all common files)
 
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
             for groups in rg_groups:
-                _tasks_execution(rows_groups, not_used_cols, cfg, 
+                _tasks_execution(rows_groups, not_used_cols, self._cfg, 
                     groups, results_path_factorx, additional_info, factor, common_columns_df, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, clefs_info=clefs_info,emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A, key_areas=key_areas)
                 rows_groups = rg
                 not_used_cols = nuc
