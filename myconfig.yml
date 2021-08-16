@@ -8,7 +8,7 @@ logs_dir: logs
 log_level: ERROR
 features:
   - file_name
-  - metadata
+  - librettist
   - harmony
   - tempo
   - key
