@@ -13,10 +13,10 @@ write_log:
 features:
   - file_name
   - librettist
-  - harmony
-  # - ambitus
+  # - harmony
+  - ambitus
   # - density
-  - interval
+  - interval # to extract Melody_values task, both ambitus and interval are needed
   - key
   - lyrics
   - prefix

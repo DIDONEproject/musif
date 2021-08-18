@@ -125,7 +125,8 @@ def melody_bar_plot(name, data, column_names, second_title=None):
         for i, group in data[column_names]:
             # list_sum =group[column_names].sum(axis=0, skipna=True)
             list_sum =group[column_names].mean(axis=0, skipna=True)
-            plt.plot(range(0, size, 1), list_sum, color=COLORS[color_counter], linestyle=LINESTYLES[np.random.randint(
+            plt.plot(range(
+                0, size, 1), list_sum, color=COLORS[color_counter], linestyle=LINESTYLES[np.random.randint(
                 len(LINESTYLES))], marker=MARKERS[np.random.randint(len(MARKERS))], label=str(i), markersize=15)
             plt.legend(loc="upper right")
             color_counter += 1
@@ -149,6 +150,9 @@ def melody_bar_plot(name, data, column_names, second_title=None):
 
 def bar_plot(name, data, column_names, x_label, title, second_title=None):
     if hasattr(data, 'groups'):
+        size = len([i for i in column_names])
+        fig = plt.figure(figsize=(size if len(column_names) >
+                                6 else 10, size if len(column_names) > 6 else 10))
         color_counter = 0
         for i, group in data[column_names]:
             valid_results = []
@@ -160,17 +164,19 @@ def bar_plot(name, data, column_names, x_label, title, second_title=None):
                     more_than_2.append(column_names[j])
                     valid_results.append(k)
             size = len(more_than_2)
-            fig, ax = plt.subplots(
-            figsize=(size if size > 6 else 6, size if size > 6 else 6))
+            # fig = plt.figure(figsize=(size if len(column_names) >
+            #                   6 else 10, size if len(column_names) > 6 else 10))
+            # fig, ax = plt.subplots(figsize=(size if size > 6 else 6, size if size > 6 else 6))
+            # fig = plt.figure(figsize=(size if size > 6 else 6, size if size > 6 else 6))
             plt.plot(range(0, size, 1), valid_results, color=COLORS[color_counter], linestyle=LINESTYLES[np.random.randint(
                 len(LINESTYLES))], marker=MARKERS[np.random.randint(len(MARKERS))], label=str(i), markersize=15)
-            plt.legend(loc="upper right")
-            plt.draw()
-            labels = [x.get_text() for x in ax.get_yticklabels()]
-            ax.set_yticklabels([l + '%' for l in labels])
-            plt.xticks(ticks=range(0, size, 1), labels=more_than_2)
-            plt.xlabel(x_label)
             color_counter += 1
+        plt.legend(loc="upper right")
+        plt.draw()
+        # labels = [x.get_text() for x in ax.get_yticklabels()]
+        # ax.set_yticklabels([l + '%' for l in labels])
+        plt.xticks(ticks=range(0, size, 1), labels=more_than_2)
+        plt.xlabel(x_label)
     else:
         list_sum = data[column_names].sum(axis=0, skipna=True)
         results = list((list_sum / sum(list_sum)) * 100)
@@ -181,8 +187,10 @@ def bar_plot(name, data, column_names, x_label, title, second_title=None):
                 more_than_2.append(column_names[j])
                 valid_results.append(i)
         size = len(more_than_2)
-        fig, ax = plt.subplots(
-            figsize=(size if size > 6 else 6, size if size > 6 else 6))
+        fig, ax = plt.subplots(figsize=(size if size > 6 else 6, size if size > 6 else 6))
+        # fig = plt.figure(figsize=(size if len(column_names) >
+        #                   6 else 10, size if len(column_names) > 6 else 10))
+        # fig = plt.figure(figsize=(size if size > 6 else 6, size if size > 6 else 6))
         plt.bar(x=range(0, size, 1), height=valid_results, color=CSS_COLORS[np.random.randint(len(CSS_COLORS))], edgecolor='k')
         plt.draw()
         labels = [x.get_text() for x in ax.get_yticklabels()]
@@ -191,6 +199,7 @@ def bar_plot(name, data, column_names, x_label, title, second_title=None):
         plt.xlabel(x_label)
         
     plt.ylabel('Percentage')
+    plt.tight_layout()
     plt.suptitle(
         title + ('\n' + second_title if second_title is not None else ''))
     plt.savefig(name)

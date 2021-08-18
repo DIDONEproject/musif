@@ -22,8 +22,8 @@ from config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 
-from .constants import *
-from .tasks import _tasks_execution
+from musif.reports.constants import *
+from musif.reports.report_generation import _tasks_execution
 
 
 class FeaturesGenerator:
@@ -45,8 +45,6 @@ class FeaturesGenerator:
     def _factor_execution(self, all_info: DataFrame, factor: int, parts_list: list, main_results_path: str, sorting_lists: dict, _cfg: Configuration):
         global rows_groups
         global not_used_cols
-        # global cfg
-        # cfg = _cfg
         main_results_path = os.path.join(main_results_path, 'results')
         rg = copy.deepcopy(rows_groups)
         nuc = copy.deepcopy(not_used_cols)
@@ -60,9 +58,19 @@ class FeaturesGenerator:
         density_set = set([])
         notes_set=set([])
         instruments = set([])
+        
+        #Initialize all empty dataframes
         clefs_info=pd.DataFrame()
         textures_df=pd.DataFrame()
+        notes_df=pd.DataFrame()
+        density_df=pd.DataFrame()
         melody_values=pd.DataFrame()
+        harmony_df=pd.DataFrame()
+        key_areas=pd.DataFrame()
+        chords_df=pd.DataFrame()
+        emphasised_scale_degrees_info_A=pd.DataFrame()
+        emphasised_scale_degrees_info_B=pd.DataFrame()
+
         if parts_list:
             instruments = parts_list
         else:
@@ -253,7 +261,7 @@ class FeaturesGenerator:
                     os.makedirs(textures_densities_data_path)
 
                 for groups in rg_groups:
-                    _tasks_execution(rows_groups, not_used_cols, cfg,
+                    _tasks_execution(rows_groups, not_used_cols, self._cfg,
                         groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                     
                     if self._cfg.is_required_module(harmony):

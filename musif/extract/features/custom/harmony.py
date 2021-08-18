@@ -207,7 +207,7 @@ def parse_score(mscx_file: str, cfg: Configuration):
     has_table = True
     try:
         cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
-        msc3_score = ms3.score.Score(mscx_file)
+        msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level':'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
         mn=ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
         mn = pd.Series(mn, name='mc_playthrough')
