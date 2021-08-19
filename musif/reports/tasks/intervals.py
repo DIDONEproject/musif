@@ -14,7 +14,7 @@ from musif.reports.utils import (adjust_excel_width_height,
                                  columns_alike_our_data)
 from musif.reports.visualisations import bar_plot, box_plot, double_bar_plot, melody_bar_plot, pie_plot
 from pandas.core.frame import DataFrame
-from musif.reports.report_generation import excel_sheet
+from musif.reports.utils import excel_sheet
 
 def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:

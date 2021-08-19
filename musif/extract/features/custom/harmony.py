@@ -209,14 +209,14 @@ def parse_score(mscx_file: str, cfg: Configuration):
         cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
         msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level':'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
-        mn=ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
+        mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
         mn = pd.Series(mn, name='mc_playthrough')
-        harmonic_analysis=ms3.parse.unfold_repeats(harmonic_analysis,mn)
+        harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis,mn)
     
     except Exception as e:
         cfg.read_logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
         with open('failed_files.txt', 'a') as file:  # Use file to refer to the file object
-            file.write(mscx_file + '\n')
+            file.write(str(mscx_file) + '\n')
 
         harmonic_analysis_expanded = None
         has_table = False

@@ -12,7 +12,6 @@ from ..harmony_sorting import *  # TODO: REVIEW
 import openpyxl
 from config import Configuration
 from musif.reports.constants import *
-from musif.reports.report_generation import excel_sheet
 from musif.reports.utils import adjust_excel_width_height
 from pandas.core.frame import DataFrame
 

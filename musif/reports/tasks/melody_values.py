@@ -27,7 +27,7 @@ from musif.reports.utils import (adjust_excel_width_height,
                                  columns_alike_our_data)
 from musif.reports.visualisations import box_plot, melody_bar_plot
 from pandas.core.frame import DataFrame
-from musif.reports.report_generation import excel_sheet
+from musif.reports.utils import excel_sheet
 
 def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:
