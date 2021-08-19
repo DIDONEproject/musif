@@ -14,7 +14,7 @@ import openpyxl
 from config import Configuration
 from music21 import interval
 from musif.reports.constants import *
-from musif.reports.report_generation import excel_sheet
+from musif.reports.utils import excel_sheet
 from musif.reports.utils import adjust_excel_width_height, prepare_data_emphasised_scale_degrees_second
 from pandas.core.frame import DataFrame
 

@@ -15,15 +15,14 @@ import openpyxl
 from config import Configuration
 from music21 import interval
 from musif.reports.constants import *
-from musif.reports.report_generation import excel_sheet
-from musif.reports.utils import adjust_excel_width_height
+from musif.reports.utils import adjust_excel_width_height, excel_sheet
 from pandas.core.frame import DataFrame
 
 ### COMMON INSTRUMENTS tasks ###
 
 ### Function that prints densities report task ###
 
-def Densities(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
 
@@ -118,7 +117,7 @@ def Densities(factor, _cfg: Configuration, data: DataFrame, results_path: str, n
 
 ### Function that prints textures report task ###
 
-def Textures(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
         # Splitting the dataframes to reorder them
