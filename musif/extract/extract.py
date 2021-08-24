@@ -12,7 +12,7 @@ from tqdm import tqdm
 from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
-from config import Configuration, read_logger
+from config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
     tempo, composer, texture
@@ -158,7 +158,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict]]:
-        read_logger.info(f"Processing score {musicxml_file}")
+        self._cfg.read_logger.info(f"Processing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file, parts_filter)
         parts_data = [self._get_part_data(score_data, part) for part in score_data["score"].parts]
         parts_features = [self._extract_part_features(score_data, part_data)
@@ -177,7 +177,7 @@ class FeaturesExtractor:
         ambitus = analysis.discrete.Ambitus()
         parts = self._filter_parts(score, parts_filter)
         if len(parts) == 0:
-            read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
+            self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
         data = {
             "score": score,
             "file": musicxml_file,
@@ -199,7 +199,7 @@ class FeaturesExtractor:
         try:
             mscx_path=musicxml_file.replace(MUSICXML_FILE_EXTENSION, MUSESCORE_FILE_EXTENSION)
         except FileNotFoundError:
-            read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
+            self._cfg.read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
             mscx_path=None
         return mscx_path
 
@@ -242,7 +242,7 @@ class FeaturesExtractor:
         return data
 
     def _extract_part_features(self, score_data: dict, part_data: dict) -> dict:
-        read_logger.debug(f"Extracting all part \"{part_data['abbreviation']}\" features.")
+        self._cfg.read_logger.debug(f"Extracting all part \"{part_data['abbreviation']}\" features.")
         part_features = {}
         part_features.update(self._extract_part_module_features(scoring, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(tempo, score_data, part_data, part_features))
@@ -251,17 +251,17 @@ class FeaturesExtractor:
         part_features.update(self._extract_part_module_features(ambitus, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(scale, score_data, part_data, part_features))
         part_features.update(self._extract_part_module_features(density, score_data, part_data, part_features))
-        read_logger.debug(f"Finished extraction of all part \"{part_data['abbreviation']}\" features.")
+        self._cfg.read_logger.debug(f"Finished extraction of all part \"{part_data['abbreviation']}\" features.")
         return part_features
 
     def _extract_part_module_features(self, module, score_data: dict, part_data: dict, part_features: dict) -> dict:
         if not self._cfg.is_required_module(module):
             return {}
-        read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
+        self._cfg.read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
         return module.get_part_features(score_data, part_data, self._cfg, part_features)
 
     def _extract_score_features(self, score_data: dict, parts_data: List[dict], parts_features: List[dict]) -> dict:
-        read_logger.debug(f"Extracting all score \"{score_data['file']}\" features.")
+        self._cfg.read_logger.debug(f"Extracting all score \"{score_data['file']}\" features.")
         score_features = {"FileName": path.basename(score_data["file"])}
         for module in self._get_custom_modules():
             score_features.update(self._extract_score_module_features(module, score_data, parts_data, parts_features, score_features))
@@ -277,13 +277,13 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(harmony, score_data, parts_data, parts_features, score_features))
-        read_logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
+        self._cfg.read_logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
     def _extract_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict) -> dict:
         if not self._cfg.is_required_module(module):
             return {}
-        read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
+        self._cfg.read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
         return module.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
 
     def _get_custom_modules(self) -> Generator:

@@ -1,4 +1,4 @@
-from config import Configuration, read_logger
+from config import Configuration
 from collections import Counter
 from typing import List
 
@@ -201,12 +201,12 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
 
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
-def parse_score(mscx_file: str):
+def parse_score(mscx_file: str, cfg: Configuration):
     harmonic_analysis = None
     # annotations=msc3_score.annotations
     has_table = True
     try:
-        read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
+        cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
         msc3_score = ms3.score.Score(mscx_file)
         harmonic_analysis = msc3_score.mscx.expanded
         mn=ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
@@ -214,7 +214,7 @@ def parse_score(mscx_file: str):
         harmonic_analysis=ms3.parse.unfold_repeats(harmonic_analysis,mn)
     
     except Exception as e:
-        read_logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
+        cfg.read_logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
         with open('failed_files.txt', 'a') as file:  # Use file to refer to the file object
             file.write(mscx_file + '\n')
 
@@ -234,7 +234,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             
             path=score_data['mscx_path']
             # This takes a while!!
-            harmonic_analysis, has_table = parse_score(path)
+            harmonic_analysis, has_table = parse_score(path, cfg)
             has_table = True
 
         # elif modulations is not None: # The user may have written only the not-expanded version
@@ -253,7 +253,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         else:
             has_table = False
             harmonic_analysis = None
-            read_logger.warn(get_color('WARNING')+'No Musescore file was found.'+ RESET_SEQ)
+            cfg.read_logger.warn(get_color('WARNING')+'No Musescore file was found.'+ RESET_SEQ)
             return {}
 
         #     Get the array based on harmonic_analysis.mc
@@ -302,5 +302,5 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         return features
 
     except Exception as e:
-        read_logger.error('Harmony problem found: ', e)
+        cfg.read_logger.error('Harmony problem found: ', e)
         return features
