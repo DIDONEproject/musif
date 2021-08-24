@@ -1,15 +1,14 @@
-from config import Configuration
 from collections import Counter
 from typing import List
 
 import ms3
 import pandas as pd
-
-from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 
-from .__harmony_utils import get_numerals_lists, get_chord_types, get_keyareas, get_chords
+from config import Configuration
 from musif.common.constants import RESET_SEQ, get_color
+from musif.extract.features.prefix import get_score_prefix
+from .__harmony_utils import get_chord_types, get_chords, get_keyareas, get_numerals_lists
 
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
@@ -207,8 +206,12 @@ def parse_score(mscx_file: str, cfg: Configuration):
     has_table = True
     try:
         cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
-        msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level':'ERROR'})
+        msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
+
+        #AQI EMPIEZA LA FIESTA
+        if not harmonic_analysis:
+            raise Exception
         mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
         mn = pd.Series(mn, name='mc_playthrough')
         harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis,mn)

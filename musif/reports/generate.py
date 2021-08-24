@@ -40,7 +40,6 @@ not_used_cols={}
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
 class FeaturesGenerator:
-
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.write_logger
