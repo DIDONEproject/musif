@@ -1,4 +1,5 @@
 import multiprocessing
+from copy import deepcopy
 from glob import glob
 from os import path
 
@@ -6,14 +7,18 @@ from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.model import Level
 
-READ_LOGGER_NAME = "read"
-READ_LOG_FILE_NAME = "read.log"
-WRITE_LOGGER_NAME = "write"
-WRITE_LOG_FILE_NAME = "write.log"
+READ_LOGGER_NAME = "read_log"
+WRITE_LOGGER_NAME = "write_log"
 
 _CONFIG_FALLBACK = {
-    "logs_dir": "logs",
-    "log_level": "DEBUG",
+    "read_log": {
+        "file_path": "logs/read.log",
+        "level": "INFO",
+    },
+    "write_log": {
+        "file_path": "logs/write.log",
+        "level": "ERROR",
+    },
     "data_dir": "data",
     "metadata_dir": "metadata",
     "metadata_id_col": "FileName",
@@ -35,8 +40,10 @@ class Configuration:
             elif isinstance(args[0], dict):
                 config_data = args[0]
         config_data.update(kwargs)
-        self.logs_dir = config_data.get("logs_dir", _CONFIG_FALLBACK["logs_dir"])
-        self.log_level = config_data.get("log_level", _CONFIG_FALLBACK["log_level"])
+        log_config = config_data.get("read_log", _CONFIG_FALLBACK["read_log"])
+        self.read_logger = get_logger(READ_LOGGER_NAME, log_config["file_path"], log_config["level"])
+        log_config = config_data.get("write_log", _CONFIG_FALLBACK["write_log"])
+        self.write_logger = get_logger(WRITE_LOGGER_NAME, log_config["file_path"], log_config["level"])
         self.data_dir = config_data.get("data_dir", _CONFIG_FALLBACK["data_dir"])
         self.metadata_dir = config_data.get("metadata_dir", _CONFIG_FALLBACK["metadata_dir"])
         self.metadata_id_col = config_data.get("metadata_id_col", _CONFIG_FALLBACK["metadata_id_col"])
@@ -69,8 +76,3 @@ class Configuration:
         features = {feature.lower() for feature in self.features}
         module_feature = module_name[module_name.rindex(".") + 1:].lower()  ## also module_name.split('.')[-1]
         return module_feature in features
-
-
-config = Configuration("config.yml")
-read_logger = get_logger(READ_LOGGER_NAME, READ_LOG_FILE_NAME, config.logs_dir, config.log_level)
-write_logger = get_logger(WRITE_LOGGER_NAME, WRITE_LOG_FILE_NAME, config.logs_dir, config.log_level)
