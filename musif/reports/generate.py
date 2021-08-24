@@ -23,7 +23,7 @@ from musif.extract.features.custom import harmony
 import numpy as np
 import pandas as pd
 from musif.common.constants import VOICE_FAMILY
-from config import Configuration, write_logger
+from config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 
@@ -35,10 +35,10 @@ class FeaturesGenerator:
 
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._logger = write_logger
+        self._logger = self._cfg.write_logger
         
 
-    def generate_reports(self, df: Tuple[DataFrame, DataFrame], num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
+    def generate_reports(self, df: DataFrame, num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
         print('\n---Starting reports generation ---\n')
         self.parts_list = [] if parts_list is None else parts_list
         self.global_features = df
