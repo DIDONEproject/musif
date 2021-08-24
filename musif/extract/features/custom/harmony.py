@@ -210,8 +210,8 @@ def parse_score(mscx_file: str, cfg: Configuration):
         harmonic_analysis = msc3_score.mscx.expanded
 
         #AQI EMPIEZA LA FIESTA
-        if not harmonic_analysis:
-            raise Exception
+        if harmonic_analysis is None:
+            raise Exception('Not able to extract chords from the .mscx file!')
         mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
         mn = pd.Series(mn, name='mc_playthrough')
         harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis,mn)
@@ -234,7 +234,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
         # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
         if 'mscx_path' in score_data:
-            
             path=score_data['mscx_path']
             # This takes a while!!
             harmonic_analysis, has_table = parse_score(path, cfg)
