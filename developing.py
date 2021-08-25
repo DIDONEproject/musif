@@ -7,8 +7,8 @@ if __name__ == "__main__":
     # parts = None
 
     # arias_path="./arias/"
-    # arias_path="../Corpus/subcorpus"
-    arias_path="../Corpus/fallido"
+    arias_path="../Corpus/subcorpus"
+    # arias_path="../Corpus/fallido"
 
     if os.path.exists("failed_files.txt"):
         os.remove("failed_files.txt")

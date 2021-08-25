@@ -276,7 +276,6 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(harmony, score_data, parts_data, parts_features, score_features))
         self._cfg.read_logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
