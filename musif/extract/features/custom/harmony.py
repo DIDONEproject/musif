@@ -205,11 +205,11 @@ def parse_score(mscx_file: str, cfg: Configuration):
     # annotations=msc3_score.annotations
     has_table = True
     try:
-        cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
+        cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...{0}'.format(mscx_file) + RESET_SEQ)
         msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
 
-        #AQI EMPIEZA LA FIESTA
+        #AQUI EMPIEZA LA FIESTA
         if harmonic_analysis is None:
             raise Exception('Not able to extract chords from the .mscx file!')
         mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
