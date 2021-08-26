@@ -1,4 +1,5 @@
 import copy
+from musif.reports.visualisations import bar_plot
 import os
 from multiprocessing import Lock
 from os import path
@@ -12,7 +13,7 @@ from ..harmony_sorting import *  # TODO: REVIEW
 import openpyxl
 from config import Configuration
 from musif.reports.constants import *
-from musif.reports.utils import adjust_excel_width_height
+from musif.reports.utils import adjust_excel_width_height, excel_sheet
 from pandas.core.frame import DataFrame
 
 ### HARMONY ###
@@ -21,30 +22,116 @@ from pandas.core.frame import DataFrame
 
 # def Harmonic_data(data, total_sections):
 
-def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, sorting_lists: list, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
-    # name = "Harmonic_data.xlsx"
+def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
+    try:
+        workbook = openpyxl.Workbook()
+        all_columns = data.columns.tolist()
+        general_cols = copy.deepcopy(not_used_cols)
+        for row in rows_groups:
+            if len(rows_groups[row][0]) == 0:
+                general_cols.append(row)
+            else:
+                general_cols += rows_groups[row][0]
 
-    workbook = openpyxl.Workbook()
+        # nombres de todos los intervalos
+        third_columns_names_origin = set(all_columns) - set(general_cols)
+        # third_columns_names_origin = sort(
+        #     third_columns_names_origin, sorting_list)
+        third_columns_names = ['Total analysed'] + list(third_columns_names_origin)
 
-    num_chordTypes = sort([c.replace('Chord types', '') for c in data.columns if 'Chord types' in c], sorting_lists['ChordTypeGrouppingSorting'])
-    num_additions = [c.replace('Additions', '') for c in data.columns if 'Additions' in c]
-    second_column_names = [('Harmonic rhythm', 3 + len(total_sections)), ('Modulations', len(num_modulations)), ('Numerals', len(num_numerals)), ('Chord types', len(num_chordTypes)), ('Additions', len(num_additions))]
-    third_column_names = ['Average', 'Voice', 'No_voice'] + total_sections + num_modulations + num_numerals + num_chordTypes + num_additions
-    column_names = columns_alike_our_data(third_column_names, second_column_names)
-    second_column_names = [('', 1)] + second_column_names
-    third_column_names = ["Total analysed"] +third_column_names
-    column_names = ["Total analysed"] + column_names
-    computations = ['sum']*len(column_names)
+        # esta sheet va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
+        computations = ["sum"]*len(third_columns_names)
 
-    excel_sheet(workbook.create_sheet("Counts"), column_names, data, third_column_names, computations, second_columns=second_column_names,average=False, additional_info = additional_info, total = False, want_total_counts = False)
+        excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+                     groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
+        
+        if factor>=1:
+            excel_sheet(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+                     groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
+
+
+        if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
+            std = workbook.get_sheet_by_name('Sheet')
+            workbook.remove_sheet(std)
+        adjust_excel_width_height(workbook)
+            
+        workbook.save(os.path.join(results_path, name))
+
+        # with visualiser_lock:
+        # VISUALISATIONS
+        if 'Clefs' in name:
+            title = 'Use of clefs in the vocal part'
+        elif 'Intervals_absolute' in name:
+            title = 'Presence of intervals (direction dismissed)'
+        else:
+            title = 'Presence of intervals (ascending and descending)'
+
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                result_visualisations = path.join(
+                    results_path, 'visualisations', g)
+                if not os.path.exists(result_visualisations):
+                    os.mkdir(result_visualisations)
+                name_bar = path.join(
+                    result_visualisations, name.replace('.xlsx', IMAGE_EXTENSION))
+                bar_plot(name_bar, datag, third_columns_names_origin,
+                            'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
+        elif factor == 1:
+            for row in rows_groups:
+                if row not in not_used_cols:
+                    plot_name = name.replace(
+                            '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper())
+                    name_bar=path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+                    if not os.path.exists(name_bar):
+                        os.makedirs(name_bar)
+
+                    name_bar=path.join(name_bar,plot_name)
+
+                    if len(rows_groups[row][0]) == 0:  # no sub-groups
+                        data_grouped = data.groupby(row, sort=True)
+                        if data_grouped:
+                            bar_plot(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
+                                        'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
+                    else: #subgroups
+                        for i, subrow in enumerate(rows_groups[row][0]):
+                            if subrow not in EXCEPTIONS:
+                                data_grouped = data.groupby(subrow)
+                                bar_plot(name_bar+'_'+subrow + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
+                                        'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
+
+        else:
+            name_bar = path.join(
+                results_path, 'visualisations', name.replace('.xlsx', IMAGE_EXTENSION))
+            bar_plot(name_bar, data, third_columns_names_origin,
+                        'Intervals' if 'Clef' not in name else 'Clefs', title)
+    except Exception as e:
+        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
+
+    # # name = "Harmonic_data.xlsx"
+
+    # workbook = openpyxl.Workbook()
+
+    # num_chordTypes = sort([c.replace('Chord types', '') for c in data.columns if 'Chord types' in c], sorting_lists['ChordTypeGrouppingSorting'])
+    # num_additions = [c.replace('Additions', '') for c in data.columns if 'Additions' in c]
+    # second_column_names = [('Harmonic rhythm', 3 + len(total_sections)), ('Modulations', len(num_modulations)), ('Numerals', len(num_numerals)), ('Chord types', len(num_chordTypes)), ('Additions', len(num_additions))]
+    # third_column_names = ['Average', 'Voice', 'No_voice'] + total_sections + num_modulations + num_numerals + num_chordTypes + num_additions
+    # column_names = columns_alike_our_data(third_column_names, second_column_names)
+    # second_column_names = [('', 1)] + second_column_names
+    # third_column_names = ["Total analysed"] +third_column_names
+    # column_names = ["Total analysed"] + column_names
+    # computations = ['sum']*len(column_names)
+
+    # excel_sheet(workbook.create_sheet("Counts"), column_names, data, third_column_names, computations, second_columns=second_column_names,average=False, additional_info = additional_info, total = False, want_total_counts = False)
     
-    #borramos la hoja por defecto
-    if "Sheet" in workbook.get_sheet_names():
-        std=workbook.get_sheet_by_name('Sheet')
-        workbook.remove_sheet(std)
-    workbook.save(os.path.join(results_path, name))
-    # rows_groups = rg
-    # not_used_cols = nuc
+    # #borramos la hoja por defecto
+    # if "Sheet" in workbook.get_sheet_names():
+    #     std=workbook.get_sheet_by_name('Sheet')
+    #     workbook.remove_sheet(std)
+    # workbook.save(os.path.join(results_path, name))
+    # # rows_groups = rg
+    # # not_used_cols = nuc
 
 def Keyareas_columns(rows_groups: dict, not_used_cols: dict, keyareas, sorting_lists, mandatory_word = None, complementary_info = None, computations = 'sum', forbiden_word = ''):
     if mandatory_word != None and complementary_info != None:

@@ -201,6 +201,7 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
 def parse_score(mscx_file: str, cfg: Configuration):
+    # mscx_file=mscx_file.replace(' ', '')
     harmonic_analysis = None
     # annotations=msc3_score.annotations
     has_table = True

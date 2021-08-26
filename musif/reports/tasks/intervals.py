@@ -15,7 +15,6 @@ from musif.reports.utils import (adjust_excel_width_height,
 from musif.reports.visualisations import bar_plot, box_plot, double_bar_plot, melody_bar_plot, pie_plot
 from pandas.core.frame import DataFrame
 from musif.reports.utils import excel_sheet
-
 def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
@@ -106,7 +105,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
 # Function to generate the reports file Intervals_types.xlsx  #
 #########################################################
 
-def Intervals_types(factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups=None, additional_info: list=[]):
+def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name, visualiser_lock: Lock, groups=None, additional_info: list=[]):
     try:
         data.columns=[c.replace('Desc', 'Descending').replace('Asc', 'Ascending') for c in data.columns]
         workbook = openpyxl.Workbook()
