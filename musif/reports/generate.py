@@ -27,15 +27,14 @@ from musif.reports.utils import remove_folder_contents
 from .calculations import make_intervals_absolute
 from .constants import *
 from .tasks.common_tasks import Densities, Textures
-from .tasks.harmony import (Chords, Harmonic_functions)
+from .tasks.harmony import Chords, Harmonic_functions, Harmonic_data
 from .tasks.intervals import Intervals, Intervals_types
 from .tasks.melody_values import Melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
 
 #Initialize global config variable
-cgf=None
-rows_groups={}
-not_used_cols={}
+# rows_groups={}
+# not_used_cols={}
 
 if not os.path.exists(path.join(os.getcwd(), 'logs')):
     os.mkdir(path.join(os.getcwd(), 'logs'))
@@ -76,6 +75,8 @@ class FeaturesGenerator:
         textures_df=pd.DataFrame()
         notes_df=pd.DataFrame()
         density_df=pd.DataFrame()
+        intervals_info=pd.DataFrame()
+        intervals_types=pd.DataFrame()
         melody_values=pd.DataFrame()
         harmony_df=pd.DataFrame()
         key_areas=pd.DataFrame()
@@ -370,16 +371,17 @@ class FeaturesGenerator:
                 Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string +  "Clefs_in_voice.xlsx",
                                 _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             if not harmony_df.empty:
-                harmony_df= pd.concat([common_columns_df,harmony_df], axis=1)
-                # Harmonic_data(rows_groups, not_used_cols, factor, cfg, harmony_df, '-'.join(groups) + "Harmonic_rythm.xlsx",
-                #                 sorting_lists["Clefs"], results_path, sorting_lists, visualiser_lock, additional_info, groups if groups != [] else None)
+                harmony_df= pd.concat([common_columns_df , harmony_df], axis=1)
+
+                Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string+ "Harmonic_data.xlsx",
+                                    _cfg.sorting_lists["Modulation"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             if not chords.empty:
                 chords = pd.concat([common_columns_df, chords], axis=1)
                 Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string+  "Chords.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
             if not functions.empty:
                 functions = pd.concat([common_columns_df, functions], axis=1)
-                Harmonic_functions(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string+  "Harmonic_functions.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
-        
+                Harmonic_functions(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string +  "Harmonic_functions.xlsx",
+                                _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             # if not key_areas.empty:
             #     key_areas= pd.concat([common_columns_df,key_areas], axis=1)
             #     # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
