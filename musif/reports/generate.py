@@ -142,7 +142,7 @@ class FeaturesGenerator:
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
             #esto son las funciones armonmicas (agrupaciones del resto de cosas) -> Segunda mita (parte B y C) del excel de numerals
-            functions_dfs = all_info[[i for i in all_info.columns if 'Numerals' in i] + [i for i in all_info.columns if 'Chords_Grouping' in i]]
+            functions_dfs = all_info[[i for i in all_info.columns if 'Numerals' in i] + [i for i in all_info.columns if 'chords_grouping' in i.lower()]]
             
             chords_df = all_info[[i for i in all_info.columns if 'chords' in i.lower() and not 'grouping' in i.lower()]]
             

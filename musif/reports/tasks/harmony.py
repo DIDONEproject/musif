@@ -4,7 +4,7 @@ import os
 from multiprocessing import Lock
 from os import path
 import numpy as np
-from musif.common.constants import get_color
+from musif.common.constants import *
 
 import pandas as pd
 from musif.common.sort import sort
@@ -34,10 +34,10 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
                 general_cols += rows_groups[row][0]
 
         # nombres de todos los intervalos
-        third_columns_names_origin = set(all_columns) - set(general_cols)
+        third_columns_names_origin = list(set(all_columns) - set(general_cols))
         # third_columns_names_origin = sort(
         #     third_columns_names_origin, sorting_list)
-        third_columns_names = ['Total analysed'] + list(third_columns_names_origin)
+        third_columns_names = ['Total analysed'] + third_columns_names_origin
 
         # esta sheet va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
         computations = ["sum"]*len(third_columns_names)

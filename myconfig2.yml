@@ -20,7 +20,7 @@ features:
   - key
   - lyrics
   - prefix
-  # - scale
+  - scale
   - scoring
   - tempo
   - composer

@@ -49,7 +49,7 @@ class FilesExtractor:
         if isinstance(obj, list):
             musicxml_files = list(obj)
         if isinstance(obj, str):
-            musicxml_files = glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj]
+            musicxml_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj])
         return musicxml_files
 
 

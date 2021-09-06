@@ -12,6 +12,6 @@ if __name__ == "__main__":
 
     if os.path.exists("failed_files.txt"):
         os.remove("failed_files.txt")
-    df = FeaturesExtractor("myconfig.yml").extract(arias_path, parts)
+    df = FeaturesExtractor("myconfig2.yml").extract(arias_path, parts)
     path = './'
-    FeaturesGenerator("myconfig.yml").generate_reports(df, 1, path, parts) 
+    FeaturesGenerator("myconfig2.yml").generate_reports(df, 1, path, parts) 
