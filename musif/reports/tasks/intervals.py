@@ -3,18 +3,20 @@ from multiprocessing import Lock
 import os
 from os import path
 
-import musif.extract.features.ambitus as ambitus
-import musif.extract.features.lyrics as lyrics
+# import musif.extract.features.ambitus as ambitus
+# import musif.extract.features.lyrics as lyrics
 import openpyxl
 from config import Configuration
-from music21 import interval
-from musif.common.constants import get_color
+# from music21 import interval
+from musif.common.sort import sort
+from musif.common.constants import get_color, RESET_SEQ
 from musif.reports.constants import *
 from musif.reports.utils import (adjust_excel_width_height,
                                  columns_alike_our_data)
-from musif.reports.visualisations import bar_plot, box_plot, double_bar_plot, melody_bar_plot, pie_plot
+from musif.reports.visualisations import bar_plot, double_bar_plot, pie_plot
 from pandas.core.frame import DataFrame
 from musif.reports.utils import excel_sheet
+
 def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
@@ -160,12 +162,11 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
         elif factor == 1:
             # groups = [i for i in rows_groups]
             for row in rows_groups:
-                name_folder =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+                name_folder=path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
 
                 name_cakes = name.replace(
-                            '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper())  + '_AD.png'
-                name_bars = path.join(results_path, 'visualisations',
-                                name.replace('.xlsx',  '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION)
+                            '.xlsx', '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper())  + '_AD.png'
+                name_bars = name.replace('.xlsx',  '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
               
                 if not os.path.exists(name_folder):
                     os.makedirs(name_folder)

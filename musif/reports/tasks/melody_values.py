@@ -130,9 +130,7 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
                     else: #subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in EXCEPTIONS:
-                                    plot_name = name.replace(
-                                        '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION
-                                    name_bar = results_path + '\\visualisations\\' + plot_name
+                                    name_bar=name_bar.replace(IMAGE_EXTENSION,'')+'_'+subrow+IMAGE_EXTENSION
                                     data_grouped = data.groupby(subrow)
                                     melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(subrow.replace('Aria','').upper()))
                                     name_box = path.join(

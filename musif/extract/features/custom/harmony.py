@@ -90,20 +90,6 @@ def get_harmonic_rhythm(ms3_table, sections)-> dict:
     hr[HARMONIC_RHYTHM]=harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS]=harmonic_rhythm_beats
 
-    # voice_measures = get_measures_per_possibility(list(set(voice)), measures, voice, beats, time_signatures)
-    # annotations_voice = {'Voice': voice.count(1), 'No_voice': voice.count(0)}
-    # voice_measures['Voice'] = voice_measures.pop(1) if 1 in voice_measures else 0
-    # voice_measures['No_voice'] = voice_measures.pop(0) if 0 in voice_measures else 0
-
-    # everything = dict(voice_measures)#, **measures_section)
-    # list_annotations = dict(annotations_voice)#, **annotations_sections)
-    
-    # for k in everything:
-    #     everything[k] = round(everything[k]/list_annotations[k] if list_annotations[k] != 0 else 0, 2)
-    
-    # avg = sum(list(everything.values())) / (len(everything))
-    # return dict(everything, **{'Average': avg})
-
     return hr
 
 def get_numerals(lausanne_table):
@@ -287,7 +273,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             features[f"{HARMONIC_RHYTHM_BEATS}"] = all_harmonic_info[HARMONIC_RHYTHM_BEATS]
             
             #NUMERALS
-            features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('numerals')})
+            features.update({k:v for (k, v) in all_harmonic_info.items() if k.lower().startswith('numerals')})
             
             # KEY AREAS
             features.update({k:v for (k, v) in keyareas.items()})
