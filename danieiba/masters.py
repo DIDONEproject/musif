@@ -5,7 +5,7 @@ from musif.common.utils import read_dicts_from_csv, write_dicts_to_csv
 if __name__ == "__main__":
 
     arias_scoring = read_dicts_from_csv("myfeatures_400.csv")
-    labels = read_dicts_from_csv("metadata/score/labels.csv")
+    labels = read_dicts_from_csv("../metadata/score/labels.csv")
     labels2 = []
     data_by_label = {label_data["Label"]: label_data for label_data in labels}
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         labels2.append(label2)
     print
     labels_metadata = sorted(labels2, key=lambda aria: aria["AriaId"])
-    write_dicts_to_csv(labels_metadata, "metadata/score/labels.csv")
+    write_dicts_to_csv(labels_metadata, "../metadata/score/labels.csv")
     # arias_scoring = read_dicts_from_csv("data/arias_scoring.csv")
 
     # arias_metadata = [
