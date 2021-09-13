@@ -12,6 +12,55 @@ from pandas.core.frame import DataFrame
 from .constants import *
 from .calculations import compute_value
 
+def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
+                 columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool=False):
+                # second_subgroup = False, second_subgroup_info = {}, third_subgroup = False, third_subgroup_info = {}, fourth_subgroup = False, fourth_subgroup_info = {},fifth_subgroup=False, fifth_subgroup_info={}, six_subgroup=False, six_subgroup_info={},
+                # additional_info = [], ponderate = False, total = True, valores_filas = [], want_total_counts = False):
+    
+    row_number = 1  # we start writing in row 1
+    column_number = 1
+    if groups == None:
+        row_iteration(sheet, rows_groups, columns, row_number, column_number, data, third_columns, computations_columns, sorting_lists, first_columns=first_columns, second_columns=second_columns, per=per,
+                      average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
+    else:
+        # we may be grouping by more than 2 factors
+        data_grouped = data.groupby(list(groups))
+
+        last_printed = {i: ('', 0) for i in range(len(groups))}
+        for group, group_data in data_grouped:
+            cnumber = column_number
+            group = [group] if type(group) != tuple else group
+            for i, g in enumerate(group):
+                if last_printed[i][0] != g:
+                    sheet.cell(row_number, cnumber).value = g
+                    sheet.cell(row_number, cnumber).fill = factors_Fill[i]
+                    sheet.cell(row_number, column_number).font =  BOLD
+                    counter_g = data[groups[i]].tolist().count(g)
+                    sheet.cell(row_number, cnumber + 1).value = counter_g
+                    if last_printed[i][0] != '':
+                        sheet.merge_cells(
+                            start_row=last_printed[i][1], start_column=i + 1, end_row=row_number - 2, end_column=i + 1)
+                        sheet.cell(last_printed[i][1],
+                                  i + 1).fill = factors_Fill[i]
+
+                    last_printed[i] = (g, row_number + 1)
+
+                row_number += 1
+                cnumber += 1
+            data2_grouped = None
+            if data2 is not None:
+                data2_grouped = data2.groupby(list(groups)).get_group(
+                    group if len(group) > 1 else group[0])
+            rn = row_iteration(sheet,rows_groups, columns, row_number, cnumber, group_data, third_columns, computations_columns, sorting_lists, group=groups, first_columns=first_columns, second_columns=second_columns, per=per,
+                               average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2_grouped, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
+            row_number = rn
+        # merge last cells
+        for i, g in enumerate(group):
+            if last_printed[i][0] == g:
+                sheet.merge_cells(
+                    start_row=last_printed[i][1], start_column=i + 1, end_row=row_number - 2, end_column=i + 1)
+                sheet.cell(last_printed[i][1],  i + 1).fill = factors_Fill[i]
+
 def adjust_excel_width_height(workbook: ExcelWriter):
             #Adjust columns width
         for sheet in workbook.worksheets:

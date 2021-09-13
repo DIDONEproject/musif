@@ -8,31 +8,37 @@
 ########################################################################
 import copy
 import os
+import sys
 from itertools import permutations
 from os import path
-from typing import List, Optional, Tuple
-
-# import musif.extract.features.ambitus as ambitus
-# import musif.extract.features.interval as interval
-# import musif.extract.features.lyrics as lyrics
-# from music21 import interval
-
-from musif.extract.features import ambitus, density, interval, key, lyrics, metadata, texture
-from musif.extract.features.custom import harmony
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
-from musif.common.constants import VOICE_FAMILY
-from config import Configuration
 from pandas import DataFrame
 from tqdm import tqdm
 
+from config import Configuration
+from musif.common.constants import VOICE_FAMILY
+from musif.extract.features import (ambitus, density, lyrics,
+                                    scale, texture)
+from musif.extract.features.custom import harmony
+from musif.reports.utils import remove_folder_contents
+from .calculations import make_intervals_absolute
 from .constants import *
-from .tasks import _tasks_execution
+from .tasks.common_tasks import Densities, Textures
+from .tasks.harmony import Chords, Harmonic_functions, Harmonic_data
+from .tasks.intervals import Intervals, Intervals_types
+from .tasks.melody_values import Melody_values
+from .tasks.scale_degrees import Emphasised_scale_degrees
 
+#Initialize global config variable
+# rows_groups={}
+# not_used_cols={}
 
+if not os.path.exists(path.join(os.getcwd(), 'logs')):
+    os.mkdir(path.join(os.getcwd(), 'logs'))
 class FeaturesGenerator:
-
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.write_logger
@@ -50,16 +56,12 @@ class FeaturesGenerator:
     def _factor_execution(self, all_info: DataFrame, factor: int, parts_list: list, main_results_path: str, sorting_lists: dict, _cfg: Configuration):
         global rows_groups
         global not_used_cols
-        global cfg
-        cfg = _cfg
         main_results_path = os.path.join(main_results_path, 'results')
         rg = copy.deepcopy(rows_groups)
         nuc = copy.deepcopy(not_used_cols)
 
         # 1. Split all the dataframes to work individually
-        common_columns_df = all_info[metadata_columns] #
-        
-        # Las featues requeridas están en self._cfg.features
+        common_columns_df = all_info[metadata_columns]
 
         common_columns_df['Total analysed'] = 1.0
 
@@ -67,9 +69,22 @@ class FeaturesGenerator:
         density_set = set([])
         notes_set=set([])
         instruments = set([])
+        
+        #Initialize all empty dataframes
         clefs_info=pd.DataFrame()
         textures_df=pd.DataFrame()
+        notes_df=pd.DataFrame()
+        density_df=pd.DataFrame()
+        intervals_info=pd.DataFrame()
+        intervals_types=pd.DataFrame()
         melody_values=pd.DataFrame()
+        harmony_df=pd.DataFrame()
+        key_areas=pd.DataFrame()
+        chords_df=pd.DataFrame()
+        emphasised_scale_degrees_info_A=pd.DataFrame()
+        emphasised_scale_degrees_info_B=pd.DataFrame()
+        clefs = None
+
         if parts_list:
             instruments = parts_list
         else:
@@ -80,11 +95,11 @@ class FeaturesGenerator:
         instruments = [instrument[0].upper()+instrument[1:]
                         for instrument in instruments]
 
-        # Inizalizing new dataframes and defining those that don't depends on each part
+        # Inizalizing new dataframes and defining those that don't depend on each part
         if ('Clef2' and 'Clef3') in common_columns_df.columns:
             common_columns_df.Clef2.replace('', np.nan, inplace=True)
             common_columns_df.Clef3.replace('', np.nan, inplace=True)
-        clefs = None
+        
         # Getting general data that requires all info but is ran only once
 
         for instrument in instruments:
@@ -93,9 +108,9 @@ class FeaturesGenerator:
                 notes_set.add(catch + instrument + '_Notes')
 
             elif instrument.lower() in all_info.Voices[0]:
-                catch='Family'
+                catch = 'Family'
                 instrument=VOICE_FAMILY.capitalize()
-                clefs=True # We want clefs only when voice is required
+                clefs = True # We want clefs only when voice is required
                 notes_set.add(catch + instrument + '_NotesMean')
 
             else:
@@ -105,11 +120,11 @@ class FeaturesGenerator:
                 instrument = instrument.replace('I', '')
                 notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
 
-        if cfg.is_required_module(density) or cfg.is_required_module(texture):
+        if self._cfg.is_required_module(density) or self._cfg.is_required_module(texture):
             notes_df=all_info[list(notes_set)]
         
         # Getting different features
-        if cfg.is_required_module(density):
+        if self._cfg.is_required_module(density):
             density_set.add(
                 catch + instrument + '_SoundingDensity')
             density_set.add(
@@ -117,17 +132,17 @@ class FeaturesGenerator:
             density_set.add('NumberOfBeats')
             density_df = all_info[list(density_set)]
 
-        if cfg.is_required_module(texture):
+        if self._cfg.is_required_module(texture):
             textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
         
 
         # Getting harmonic features
-        if cfg.is_required_module(harmony):
+        if self._cfg.is_required_module(harmony):
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
             #esto son las funciones armonmicas (agrupaciones del resto de cosas) -> Segunda mita (parte B y C) del excel de numerals
-            functions_dfs = all_info[[i for i in all_info.columns if 'Numerals' in i] + [i for i in all_info.columns if 'Chords_Grouping' in i]]
+            functions_dfs = all_info[[i for i in all_info.columns if 'Numerals' in i] + [i for i in all_info.columns if 'chords_grouping' in i.lower()]]
             
             chords_df = all_info[[i for i in all_info.columns if 'chords' in i.lower() and not 'grouping' in i.lower()]]
             
@@ -135,7 +150,7 @@ class FeaturesGenerator:
             chords_types = all_info[[i for i in all_info.columns if 'Chord_types' in i]]
 
         
-        # Getting Voice Clefs info
+        # Getting Voice Clefs info in case Voices are required
         if clefs:
             clefs_info=copy.deepcopy(common_columns_df)
             clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
@@ -182,7 +197,7 @@ class FeaturesGenerator:
             # Joining common info and part info, renaming columns for excel writing
             
             # INTERVALS
-            if cfg.is_required_module(interval):            
+            if self._cfg.is_required_module(interval):            
                 intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
                 intervals_info=all_info[intervals_list]
                 intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
@@ -191,12 +206,12 @@ class FeaturesGenerator:
                 intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
                                     for c in intervals_types.columns]
             # MELODY
-            if cfg.is_required_module(ambitus):            
+            if self._cfg.is_required_module(ambitus):            
                 melody_values=all_info[melody_values_list]  
                 melody_values.columns = [c.replace(catch, '').replace('_Count', '')
                                 for c in melody_values.columns]
             # KEYS
-            if cfg.is_required_module(key):            
+            if self._cfg.is_required_module(scale):            
                 emphasised_scale_degrees_info_A=all_info[emphasised_A_list]
                 emphasised_scale_degrees_info_A.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '')
                     for c in emphasised_scale_degrees_info_A.columns]
@@ -260,23 +275,23 @@ class FeaturesGenerator:
                     os.makedirs(textures_densities_data_path)
 
                 for groups in rg_groups:
-                    _tasks_execution(rows_groups, not_used_cols, cfg,
+                    self._tasks_execution(rows_groups, not_used_cols, self._cfg,
                         groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                     
-                    if cfg.is_required_module(harmony):
+                    if self._cfg.is_required_module(harmony):
                         harmony_data_path = path.join(main_results_path, 'Harmony', str(
                             factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
                         if not os.path.exists(harmony_data_path):
                              os.makedirs(harmony_data_path)
                         
-                        _tasks_execution(rows_groups, not_used_cols, cfg,
+                        self._tasks_execution(rows_groups, not_used_cols, self._cfg,
                             groups, harmony_data_path, additional_info, factor, common_columns_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df, functions=functions_dfs)
                 FLAG=False #FLAG guarantees this is processed only once (all common files)
 
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
             for groups in rg_groups:
-                _tasks_execution(rows_groups, not_used_cols, cfg, 
+                self._tasks_execution(rows_groups, not_used_cols, self._cfg, 
                     groups, results_path_factorx, additional_info, factor, common_columns_df, melody_values=melody_values, intervals_info=intervals_info, intervals_types=intervals_types, clefs_info=clefs_info,emphasised_scale_degrees_info_A = emphasised_scale_degrees_info_A, key_areas=key_areas)
                 rows_groups = rg
                 not_used_cols = nuc
@@ -287,6 +302,107 @@ class FeaturesGenerator:
                 # for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
                 #     rows_groups = rg
                 #     not_used_cols = nuc
+        
+#####################################################################
+
+    def _tasks_execution(self, rg: dict, nuc:list, _cfg: Configuration, groups: list, results_path_factorx: str, additional_info, factor: int, common_columns_df: DataFrame, 
+    notes_df: DataFrame = pd.DataFrame(), melody_values: DataFrame = pd.DataFrame(), density_df: DataFrame =pd.DataFrame(), textures_df: DataFrame =pd.DataFrame(),
+    intervals_info: DataFrame = pd.DataFrame(),intervals_types: DataFrame =pd.DataFrame(), clefs_info: DataFrame =pd.DataFrame(), emphasised_scale_degrees_info_A: DataFrame =pd.DataFrame(),
+    harmony_df: DataFrame = pd.DataFrame(), key_areas: DataFrame = pd.DataFrame(), chords: DataFrame = pd.DataFrame(), functions: DataFrame = pd.DataFrame()):
+        global rows_groups
+        global not_used_cols
+        rows_groups=rg
+        not_used_cols=nuc
+
+        visualiser_lock = True #remve with threads
+
+        if groups:
+            # if sequential:
+            results_path = path.join(results_path_factorx, '_'.join(groups))
+            if not os.path.exists(results_path):
+                os.mkdir(results_path)
+        else:
+            results_path = results_path_factorx
+        if os.path.exists(path.join(results_path, 'visualisations')):
+            remove_folder_contents(
+                path.join(results_path, 'visualisations'))
+        else:
+            os.makedirs(path.join(results_path, 'visualisations'))
+        # MUTITHREADING
+        try:
+            # executor = concurrent.futures.ThreadPoolExecutor()
+            # visualiser_lock = threading.Lock()
+            # futures = []
+            pre_string='-'.join(groups) + str(factor) + '_factor_'
+            if not melody_values.empty:
+                #     # futures.append(executor.submit(Melody_values, Melody_values, results_path, '-'.join(groups) + "_1Values.xlsx", sorting_lists,
+                #     #                visualiser_lock, additional_info, True if i == 0 else False, groups if groups != [] else None))
+                melody_values = pd.concat([common_columns_df, melody_values], axis=1)
+                Melody_values(rows_groups, not_used_cols, factor, _cfg, melody_values, results_path, pre_string + "Melody_Values.xlsx",
+                        visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None)
+            if not density_df.empty:
+                density_df = pd.concat(
+                    [common_columns_df, density_df,notes_df], axis=1)
+                Densities(rows_groups, not_used_cols, factor, _cfg, density_df, results_path, pre_string+  "Densities.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            if not textures_df.empty:
+                textures_df = pd.concat(
+                [common_columns_df, textures_df,notes_df], axis=1)
+                Textures(rows_groups, not_used_cols, factor, _cfg, textures_df, results_path, pre_string + "Textures.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            if not intervals_info.empty:
+                intervals_info=pd.concat([common_columns_df, intervals_info], axis=1)
+                Intervals(rows_groups, not_used_cols, factor, _cfg, intervals_info, pre_string+ "Intervals.xlsx",
+                                    _cfg.sorting_lists["Intervals"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+                
+                absolute_intervals=make_intervals_absolute(intervals_info)
+                Intervals(rows_groups, not_used_cols, factor, _cfg, absolute_intervals, pre_string + "Intervals_absolute.xlsx",
+                                _cfg.sorting_lists["Intervals_absolute"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+            if not intervals_types.empty:
+                intervals_types = pd.concat([common_columns_df, intervals_types], axis=1)
+                Intervals_types(rows_groups, not_used_cols, factor, _cfg, intervals_types, results_path, pre_string + "Interval_types.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            
+            if not emphasised_scale_degrees_info_A.empty:
+                emphasised_scale_degrees_info_A = pd.concat([common_columns_df,emphasised_scale_degrees_info_A], axis=1)
+                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_A,  _cfg.sorting_lists["ScaleDegrees"], pre_string +  "Scale_degrees.xlsx", results_path, visualiser_lock, groups if groups != [] else None, additional_info)
+            # if not Emphasised_scale_degrees_info_B.empty:
+            #     Emphasised_scale_degrees( Emphasised_scale_degrees_info_B, sorting_lists["ScaleDegrees"], '-'.join(
+            #         groups) + "_4bScale_degrees_relative.xlsx", results_path, sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+            if not clefs_info.empty:
+                clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
+                Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string +  "Clefs_in_voice.xlsx",
+                                _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+            if not harmony_df.empty:
+                harmony_df= pd.concat([common_columns_df , harmony_df], axis=1)
+
+                Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string+ "Harmonic_data.xlsx",
+                                    _cfg.sorting_lists["Modulation"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+            if not chords.empty:
+                chords = pd.concat([common_columns_df, chords], axis=1)
+                Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string+  "Chords.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+            if not functions.empty:
+                functions = pd.concat([common_columns_df, functions], axis=1)
+                Harmonic_functions(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string +  "Harmonic_functions.xlsx",
+                                _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+            # if not key_areas.empty:
+            #     key_areas= pd.concat([common_columns_df,key_areas], axis=1)
+            #     # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
+            #     Keyareas(cfg, key_areas, results_path, '-'.join(groups) + "_Key_areas.xlsx",
+            #                 sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+            #     Keyareas_weigthed(cfg, key_areas, results_path, '-'.join(groups) + "_Key_areas.xlsx",
+            #                 sorting_lists, visualiser_lock, groups if groups != [] else None, additional_info)
+                
+                # wait for all
+                # if sequential:
+                # kwargs = {'total': len(futures), 'unit': 'it',
+                #             'unit_scale': True, 'leave': True}
+                # for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
+                #     pass
+                # else:
+                #     for f in concurrent.futures.as_completed(futures):
+                #         pass
+        except KeyboardInterrupt:
+            self._logger.error('\033[93mAn error ocurred during the report generation process. \033[37m')
+            sys.exit(2)
+
 
     def _write(self, all_info: DataFrame):
         # Start factor generation

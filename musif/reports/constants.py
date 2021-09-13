@@ -155,3 +155,4 @@ center = openpyxl.styles.Alignment(horizontal='center')
 BOLD = Font(size = 12, bold=True)
 FONT= Font(size=12)
 FONT_TITLE= Font(size = 12, bold = True, name='Garamond')
+IMAGE_EXTENSION='.png'

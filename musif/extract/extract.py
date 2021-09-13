@@ -49,7 +49,7 @@ class FilesExtractor:
         if isinstance(obj, list):
             musicxml_files = list(obj)
         if isinstance(obj, str):
-            musicxml_files = glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj]
+            musicxml_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj])
         return musicxml_files
 
 
@@ -85,9 +85,25 @@ class FilesValidator:
 
     def validate(self, obj) -> None:
         musicxml_files = self._files_extractor.extract(obj)
+        if self._cfg.parallel:
+            self._validate_in_parallel(musicxml_files)
+        else:
+            self._validate_sequentially(musicxml_files)
+
+    def _validate_sequentially(self, musicxml_files: List[str]):
         for musicxml_file in tqdm(musicxml_files):
-            print(f"Validating file: {musicxml_file}")
-            parse_file(musicxml_file, self._cfg.split_keywords)
+            self._validate_file(musicxml_file)
+
+    def _validate_in_parallel(self, musicxml_files: List[str]):
+        with tqdm(total=len(musicxml_files)) as pbar:
+            with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
+                futures = [executor.submit(self._validate_file, musicxml_file) for musicxml_file in musicxml_files]
+                for _ in tqdm(as_completed(futures)):
+                    pbar.update(1)
+
+    def _validate_file(self, musicxml_file: str):
+        print(f"Validating file: {musicxml_file}")
+        parse_file(musicxml_file, self._cfg.split_keywords)
 
 
 class FeaturesExtractor:
@@ -276,7 +292,6 @@ class FeaturesExtractor:
         score_features.update(self._extract_score_module_features(scale, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(density, score_data, parts_data, parts_features, score_features))
         score_features.update(self._extract_score_module_features(texture, score_data, parts_data, parts_features, score_features))
-        score_features.update(self._extract_score_module_features(harmony, score_data, parts_data, parts_features, score_features))
         self._cfg.read_logger.debug(f"Finished extraction of all score \"{score_data['file']}\" features.")
         return score_features
 
