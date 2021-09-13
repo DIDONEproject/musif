@@ -2,7 +2,7 @@ import pandas as pd
 
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
-from musif.extract.features.custom.file_name import ARIA_DECADE, ARIA_YEAR
+from musif.extract.features.custom.file_name import ARIA_DECADE, ARIA_ID, ARIA_YEAR
 from musif.extract.features.density import DENSITY, MEASURES, MEASURES_MEAN, SOUNDING_DENSITY
 from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, \
     ABSOLUTE_INTERVALS_KURTOSIS, \
@@ -51,6 +51,7 @@ if __name__ == "__main__":
         input_parts_prefixes = [get_part_prefix(part_prefix) for part_prefix in input_parts]
         output_parts_prefixes = [get_part_prefix(part_prefix) for part_prefix in output_parts]
         data_item = {
+            "AriaId": row[ARIA_ID],
             "Mode": row[MODE],
             "Key": row[KEY],
             "KeySignatureType": row[KEY_SIGNATURE_TYPE],
@@ -96,5 +97,5 @@ if __name__ == "__main__":
             data_item[f"{output_part}RepeatedNotes"] = row[f"{input_part}{REPEATED_NOTES_PER}"]
         data_list.append(data_item)
     df_analysis = pd.DataFrame(data_list)
-    df_analysis.to_csv("analysis.csv", index=False)
+    df_analysis.to_csv("analysis2.csv", index=False)
     print()

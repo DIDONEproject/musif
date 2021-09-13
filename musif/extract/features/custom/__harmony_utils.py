@@ -342,7 +342,7 @@ def get_degree_1(element, mode):
     # '-' represents flats
     element=element.replace('b','-')
     
-    reference={'T':['i'], 'D':['v'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']
+    reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']
     }
     for key, value in reference.items():
         if element.replace('#','').replace('-','').lower() in value:

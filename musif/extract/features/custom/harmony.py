@@ -1,15 +1,14 @@
-from config import Configuration
 from collections import Counter
 from typing import List
 
 import ms3
 import pandas as pd
-
-from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 
-from .__harmony_utils import get_numerals_lists, get_chord_types, get_keyareas, get_chords
+from config import Configuration
 from musif.common.constants import RESET_SEQ, get_color
+from musif.extract.features.prefix import get_score_prefix
+from .__harmony_utils import get_chord_types, get_chords, get_keyareas, get_numerals_lists
 
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 
@@ -90,20 +89,6 @@ def get_harmonic_rhythm(ms3_table, sections)-> dict:
 
     hr[HARMONIC_RHYTHM]=harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS]=harmonic_rhythm_beats
-
-    # voice_measures = get_measures_per_possibility(list(set(voice)), measures, voice, beats, time_signatures)
-    # annotations_voice = {'Voice': voice.count(1), 'No_voice': voice.count(0)}
-    # voice_measures['Voice'] = voice_measures.pop(1) if 1 in voice_measures else 0
-    # voice_measures['No_voice'] = voice_measures.pop(0) if 0 in voice_measures else 0
-
-    # everything = dict(voice_measures)#, **measures_section)
-    # list_annotations = dict(annotations_voice)#, **annotations_sections)
-    
-    # for k in everything:
-    #     everything[k] = round(everything[k]/list_annotations[k] if list_annotations[k] != 0 else 0, 2)
-    
-    # avg = sum(list(everything.values())) / (len(everything))
-    # return dict(everything, **{'Average': avg})
 
     return hr
 
@@ -202,21 +187,26 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
 def parse_score(mscx_file: str, cfg: Configuration):
+    # mscx_file=mscx_file.replace(' ', '')
     harmonic_analysis = None
     # annotations=msc3_score.annotations
     has_table = True
     try:
-        cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...' + RESET_SEQ)
-        msc3_score = ms3.score.Score(mscx_file)
+        cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...{0}'.format(mscx_file) + RESET_SEQ)
+        msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
-        mn=ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
+
+        #AQUI EMPIEZA LA FIESTA
+        if harmonic_analysis is None:
+            raise Exception('Not able to extract chords from the .mscx file!')
+        mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
         mn = pd.Series(mn, name='mc_playthrough')
-        harmonic_analysis=ms3.parse.unfold_repeats(harmonic_analysis,mn)
+        harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis,mn)
     
     except Exception as e:
         cfg.read_logger.error(get_color('ERROR')+'An error occurred parsing the score {}: {}{}'.format(mscx_file,e, RESET_SEQ))
         with open('failed_files.txt', 'a') as file:  # Use file to refer to the file object
-            file.write(mscx_file + '\n')
+            file.write(str(mscx_file) + '\n')
 
         harmonic_analysis_expanded = None
         has_table = False
@@ -231,7 +221,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         # modulations = json_data['Modulations'] if 'Modulations' in json_data and len(json_data['Modulations']) != 0 else None
         # gv = dict(name_variables, **excel_variables, **general_variables, **grouped_variables, **scoring_variables, **clef_dic, **total) 
         if 'mscx_path' in score_data:
-            
             path=score_data['mscx_path']
             # This takes a while!!
             harmonic_analysis, has_table = parse_score(path, cfg)
@@ -284,7 +273,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             features[f"{HARMONIC_RHYTHM_BEATS}"] = all_harmonic_info[HARMONIC_RHYTHM_BEATS]
             
             #NUMERALS
-            features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('numerals')})
+            features.update({k:v for (k, v) in all_harmonic_info.items() if k.lower().startswith('numerals')})
             
             # KEY AREAS
             features.update({k:v for (k, v) in keyareas.items()})
