@@ -2,7 +2,7 @@ data_dir: data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
-parallel: false
+parallel: true
 max_processes: 10
 read_log:
   file_path: logs/read.log
@@ -14,10 +14,10 @@ features:
   - file_name
   - librettist
   - harmony
-  - ambitus
-  - density
-  - interval # to extract Melody_values task, both ambitus and interval are needed
-  - key
+  # - ambitus
+  # - density
+  # - interval # to extract Melody_values task, both ambitus and interval are needed
+  # - key
   - lyrics
   - prefix
   # - scale
