@@ -1,17 +1,13 @@
-import copy
 from musif.reports.visualisations import bar_plot
-import os
 from multiprocessing import Lock
 from os import path
-import numpy as np
 from musif.common.constants import *
 
 import pandas as pd
 from musif.common.sort import sort
 from ..harmony_sorting import *  # TODO: REVIEW
 
-import openpyxl
-from config import Configuration
+from musif.config import Configuration
 from musif.reports.constants import *
 from musif.reports.utils import adjust_excel_width_height, excel_sheet
 from pandas.core.frame import DataFrame

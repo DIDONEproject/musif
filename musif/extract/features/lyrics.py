@@ -3,7 +3,7 @@ from typing import List
 from music21.note import Note
 
 from musif.common.constants import VOICE_FAMILY
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 

@@ -1,6 +1,6 @@
 from typing import List
 
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.features.prefix import get_part_prefix
 

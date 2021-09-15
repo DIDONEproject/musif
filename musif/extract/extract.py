@@ -12,7 +12,7 @@ from tqdm import tqdm
 from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.features import ambitus, custom, density, interval, key, lyrics, metadata, scale, scoring, \
     tempo, composer, texture

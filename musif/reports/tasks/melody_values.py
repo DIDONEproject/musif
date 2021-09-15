@@ -18,8 +18,7 @@ from os import path
 
 import musif.extract.features.ambitus as ambitus
 import musif.extract.features.lyrics as lyrics
-import openpyxl
-from config import Configuration
+from musif.config import Configuration
 from music21 import interval
 from musif.common.constants import get_color
 from musif.reports.constants import *

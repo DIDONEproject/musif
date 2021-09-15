@@ -5,7 +5,7 @@ from typing import List
 from music21.expressions import TextExpression
 from music21.stream import Measure
 
-from config import Configuration
+from musif.config import Configuration
 
 TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"

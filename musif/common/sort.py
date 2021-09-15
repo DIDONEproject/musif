@@ -1,6 +1,6 @@
 from typing import List
 
-from config import Configuration
+from musif.config import Configuration
 import warnings
 
 
