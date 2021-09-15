@@ -54,6 +54,47 @@ def get_harmonic_rhythm(ms3_table, sections)-> dict:
 
 KEY_COMPASSES='KeyCompasses_'
 KEY_MODULATORY='KeyModulatory_'
+
+####################
+# HARMONIC ANALYSIS
+####################   
+
+def get_harmonic_rhythm(ms3_table, sections)-> dict:
+    hr={}
+    measures = ms3_table.mc.dropna().tolist()
+    playthrough= ms3_table.playthrough.dropna().tolist()
+
+    measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
+    
+    chords = ms3_table.chord.dropna().tolist()
+    chords_length=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    # beats = ms3_table.mc_onset.dropna().tolist()
+    # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
+    time_signatures = ms3_table.timesig.tolist()
+    
+    harmonic_rhythm = chords_length/len(measures_compressed)
+    # Cases with no time signature changes
+    if len(Counter(time_signatures)) == 1:
+        harmonic_rhythm_beats = chords_length/int(time_signatures[0].split('/')[0])
+    else:
+        #create a timesignatures adapted to measures without repetitions. OR/AND just finde changes in TS and 
+        # correlate them with measures to find length of the different periods
+        periods_ts=[]
+        time_changes=[]
+        for t in range(1, len(time_signatures)):
+            if time_signatures[t] != time_signatures[t-1]:
+                #We find what measure in compressed list corresponds to the change in time signature
+                time_changes.append(time_signatures[t-1])
+
+                periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
+
+        #Calculating harmonuc rythom according to beasts periods
+        harmonic_rhythm_beats = chords_length/sum([period * int(time_changes[j].split('/')[0]) for j, period in enumerate(periods_ts)])
+
+    hr[HARMONIC_RHYTHM]=harmonic_rhythm
+    hr[HARMONIC_RHYTHM_BEATS]=harmonic_rhythm_beats
+
+    return hr
 ####################
 # METRICAL ANALYSIS
 ####################    

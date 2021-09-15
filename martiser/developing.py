@@ -1,15 +1,16 @@
 import os
 from musif import FeaturesExtractor
-from musif.extract.extract  import FeaturesExtractor
+# from musif.extract.extract  import FeaturesExtractor
 
 from musif import FeaturesGenerator
-# from musif.extract.
 
 if __name__ == "__main__":
     parts = ["vnI","obI"]
 
     arias_path="./arias/"
-    # arias_path="../Corpus/corpus_filtrado(15-09)/"
+    arias_path="../../Corpus/corpus_filtrado/corpus_filtrado(15-09)"
+    # arias_path="../Corpus/corpus_filtrado/fallos"
+    # arias_path="../Corpus/corpus_filtrado/fallos/wrong_chords"
     # arias_path="../Corpus/corpus_filtrado/fallos/check"
 
 
