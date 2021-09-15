@@ -11,8 +11,57 @@ from pandas.core.frame import DataFrame
 
 REGEX = {}
 
+HARMONIC_RHYTHM = "Harmonic_rhythm"
+HARMONIC_RHYTHM_BEATS= "Harmonic_rhythm_beats"
+
+ADDITIONS_4_6_64_74_94='4_6_64_74_94'
+ADDITIONS_9='+9'
+OTHERS_NO_AUG='others_no_+'
+OTHERS_AUG='others_+'
+
 KEY_COMPASSES='KeyCompasses_'
 KEY_MODULATORY='KeyModulatory_'
+
+####################
+# HARMONIC ANALYSIS
+####################   
+
+def get_harmonic_rhythm(ms3_table, sections)-> dict:
+    hr={}
+    measures = ms3_table.mc.dropna().tolist()
+    playthrough= ms3_table.playthrough.dropna().tolist()
+
+    measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
+    
+    chords = ms3_table.chord.dropna().tolist()
+    chords_length=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    # beats = ms3_table.mc_onset.dropna().tolist()
+    # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
+    time_signatures = ms3_table.timesig.tolist()
+    
+    harmonic_rhythm = chords_length/len(measures_compressed)
+    # Cases with no time signature changes
+    if len(Counter(time_signatures)) == 1:
+        harmonic_rhythm_beats = chords_length/int(time_signatures[0].split('/')[0])
+    else:
+        #create a timesignatures adapted to measures without repetitions. OR/AND just finde changes in TS and 
+        # correlate them with measures to find length of the different periods
+        periods_ts=[]
+        time_changes=[]
+        for t in range(1, len(time_signatures)):
+            if time_signatures[t] != time_signatures[t-1]:
+                #We find what measure in compressed list corresponds to the change in time signature
+                time_changes.append(time_signatures[t-1])
+
+                periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
+
+        #Calculating harmonuc rythom according to beasts periods
+        harmonic_rhythm_beats = chords_length/sum([period * int(time_changes[j].split('/')[0]) for j, period in enumerate(periods_ts)])
+
+    hr[HARMONIC_RHYTHM]=harmonic_rhythm
+    hr[HARMONIC_RHYTHM_BEATS]=harmonic_rhythm_beats
+
+    return hr
 ####################
 # METRICAL ANALYSIS
 ####################    
@@ -113,72 +162,6 @@ def continued_sections(sections, mc):
 # in the minor, III = relative major (rj).
 # Lowered degrees are indicated with 'b', raised with '#' (bII = Neapolitan key).
 # Leading notes are abrreviated as LN.
-
-# def get_localkey_1(localkey, mode):
-#     if localkey in ['VII']:
-#             return 'LN'
-#     elif localkey in ['#VII']:
-#         return '#LN'
-#     elif localkey in ['#vii']:
-#         return '#ln'
-
-#     localkey=localkey.replace('b','-')
-
-#     #TODO: mirar bemol napolitano
-
-#     reference={'T':['i'], 'D':['v'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']
-#     }
-#     for key, value in reference.items():
-#         if localkey.replace('#','').replace('-','').lower() in value:
-#             output=key.lower() if localkey.islower() else key
-#             if '-' in localkey:
-#                 output='-'+ output
-#             elif '#' in localkey:
-#                 output='#'+ output
-#             return output.replace('-','b')
-#     if mode == 'M':
-#         # elements specific of the major mode
-#         if localkey=='vii':
-#             return 'D'
-#         elif  localkey == '#vii':
-#             return '#ln'
-#         elif localkey=='bVII':
-#             return 'ST'
-#         elif localkey=='bvii':
-#             return 'st'
-#         elif  localkey== 'VII':
-#             return '#ST'
-#         else:
-#             print(localkey, 'not available')
-#     else:
-#         # localkeys specific of the minor mode
-#         if localkey=='#vii':
-#             return 'D'
-#         elif  localkey == 'VII':
-#             return 'ST'
-#         elif  localkey=='bVII':
-#             return 'bST'
-#         elif  localkey=='bvii':
-#             return 'bst'
-#         elif  localkey=='#VII':
-#             return 'LN'
-#         elif localkey=='vii':
-#             return 'st'
-#         else:
-#             print(localkey, ' is not available!')
-
-#############################################################
-# Function to return function2 based on function1. It
-# disregards the mode. #
-# def get_localkey_2(chord):
-#     chord=chord.replace('b','-') #to be able to convert to upper without affecting flats
-    
-#     if chord in ['rm', 'rj']:
-#         return 'rel'
-#     elif chord.upper() in ['ST', 'LN']:
-#         return 'ST'
-#     else:
-#         return chord.upper().replace('-','b')
 
 # Function to return harmonic functions (1 and 2) based on a list of keys #
 def get_keys(list_keys, mode):
@@ -407,6 +390,41 @@ def get_degree_2(element):
 ####################
 # NUMERALS
 ####################
+def get_numerals(lausanne_table):
+    numerals = lausanne_table.numeral.dropna().tolist()
+    keys = lausanne_table.globalkey.dropna().tolist()
+    relativeroots = lausanne_table.relativeroot.tolist()
+
+    """
+    list_grouppings = []
+    for x, i in enumerate(numerals):
+        #TODO cuando tengamos los chords de 3, ver cómo coger los grouppings
+        if str(relativeroot[x]) != 'nan': # or '/' in chord
+            major = relativeroot[x].isupper()
+        else: 
+            major = keys[x].isupper()
+        grouping = harmonic_analysis['NFLG2M' if major else 'NFLG2m'].tolist()
+        
+        try:
+            first_characters = parse_chord(i)
+            grado = numerals_defined.index(first_characters)
+            a = grouping[grado]    
+            if str(a) == 'nan':
+                print('nan numeral with ', i) #TODO: #vii sigue fallando, major no se coge bien. Repasar las condiciones
+            list_general_groupings.append(a)
+        except:
+            print('Falta el numeral: ', i) """
+
+    _, ng2 = get_numerals_lists(numerals, relativeroots, keys)
+    numerals_counter = Counter(ng2)
+    
+    nc = {}
+    for n in numerals_counter:
+        if str(n)=='':
+            print('some chords here are not parsed well')
+            raise Exception('some chords here are not parsed well')
+        nc['Numerals_'+str(n)] = round((numerals_counter[n]/sum(list(numerals_counter.values()))), 2)
+    return nc 
 
 def get_numeral_1(numeral, relativeroot, local_key):
     # We use relative root column to discriminate if there is a relatuive numeral or not
@@ -422,6 +440,42 @@ def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     function2 = [get_degree_2(g1) for g1 in function1]
     return function1, function2
 
+def get_additions(lausanne_table):
+    additions = lausanne_table.changes.tolist()
+    additions_cleaned = []
+    for i, a in enumerate(additions):
+        if isinstance(a, int):
+            # a_int = 
+            additions_cleaned.append(int(a))
+        else:
+            additions_cleaned.append(str(a))
+
+    a_c = Counter(additions_cleaned)
+
+
+    additions_counter = {ADDITIONS_4_6_64_74_94: 0, 
+                        ADDITIONS_9: 0,
+                        OTHERS_NO_AUG: 0, 
+                        OTHERS_AUG: 0}
+
+    for a in a_c:
+        c = a_c[a]
+        a = str(a)
+        
+        if a == '+9':
+            additions_counter[ADDITIONS_9] = c
+        elif a in ['4', '6', '64', '74', '94', '4.0', '6.0', '64.0', '74.0', '94.0']:
+            additions_counter[ADDITIONS_4_6_64_74_94] += c
+        elif '+' in a:
+            additions_counter[OTHERS_AUG] += c
+        else:
+            additions_counter[OTHERS_NO_AUG] += c
+
+    ad = {}
+    for a in additions_counter:
+        if additions_counter[a] != 0:
+            ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
+    return ad
 ####################
 # CHORDS
 ####################
