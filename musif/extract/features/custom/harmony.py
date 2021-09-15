@@ -1,4 +1,4 @@
-from functools import lru_cache
+from collections import Counter
 from typing import List
 
 import ms3
@@ -8,36 +8,157 @@ from pandas import DataFrame
 from musif.common.constants import RESET_SEQ, get_color
 from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
-from .__harmony_utils import (get_chord_types, get_chords, get_keyareas,
-                              get_numerals, get_harmonic_rhythm, get_additions, HARMONIC_RHYTHM, HARMONIC_RHYTHM_BEATS)
+from .__harmony_utils import get_chord_types, get_chords, get_keyareas, get_numerals_lists
+
+ALPHA = "abcdefghijklmnopqrstuvwxyz"
+
+
+HARMONIC_RHYTHM = "Harmonic_rhythm"
+HARMONIC_RHYTHM_BEATS= "Harmonic_rhythm_beats"
+
+ADDITIONS_4_6_64_74_94='4_6_64_74_94' 
+ADDITIONS_9='+9' 
+OTHERS_NO_AUG='others_no_+'
+OTHERS_AUG='others_+'
 
 from .__constants import *
 ###############################################################################
 # This function generates a dataframe with the measures and the local key     #
 # present in each one of them based on the 'modulations' atribute in the json #
-# ###############################################################################
-# def compute_modulations(partVoice, partVoice_expanded, modulations):
-#     try:
-#         measures = [m.measureNumber for m in partVoice]
-#         measures_expanded = [m.measureNumber for m in partVoice_expanded]
+###############################################################################
+def compute_modulations(partVoice, partVoice_expanded, modulations):
+    try:
+        measures = [m.measureNumber for m in partVoice]
+        measures_expanded = [m.measureNumber for m in partVoice_expanded]
         
-#         first_modulation = modulations[0]
-#         key = []
-#         for m in modulations[1:]:
-#             key += [first_modulation[0]] * measures.index(m[1] - first_modulation[1] + 1)
-#             first_modulation = m
-#         key += [first_modulation[0]] * (measures[-1] - first_modulation[1] + 1)
-#         if measures[-1] != measures_expanded[-1]: #there are repetitions TODO: test
-#             measures_expanded = measures_expanded[measures_expanded.index(measures[-1]):] #change the starting point
-#             first_modulation = modulations[0]
-#             for m in modulations[1:]:
-#                 if m[1] <= len(measures_expanded):
-#                     key += [first_modulation[0]] * measures_expanded.index(m[1] - first_modulation[1] + 1)
-#                     first_modulation = m
-#         return pd.DataFrame({'measures_continued': measures_expanded, 'key': key})
-#     except:
-#         print('Please, review the format of the modulation\'s indications in the JSON file. It needs to have the following format: [(<local key>, <starting measure>), ... ]')
-#         return None
+        first_modulation = modulations[0]
+        key = []
+        for m in modulations[1:]:
+            key += [first_modulation[0]] * measures.index(m[1] - first_modulation[1] + 1)
+            first_modulation = m
+        key += [first_modulation[0]] * (measures[-1] - first_modulation[1] + 1)
+        if measures[-1] != measures_expanded[-1]: #there are repetitions TODO: test
+            measures_expanded = measures_expanded[measures_expanded.index(measures[-1]):] #change the starting point
+            first_modulation = modulations[0]
+            for m in modulations[1:]:
+                if m[1] <= len(measures_expanded):
+                    key += [first_modulation[0]] * measures_expanded.index(m[1] - first_modulation[1] + 1)
+                    first_modulation = m
+        return pd.DataFrame({'measures_continued': measures_expanded, 'key': key})
+    except:
+        print('Please, review the format of the modulation\'s indications in the JSON file. It needs to have the following format: [(<local key>, <starting measure>), ... ]')
+        return None
+
+
+def get_harmonic_rhythm(ms3_table, sections)-> dict:
+    hr={}
+    measures = ms3_table.mc.dropna().tolist()
+    playthrough= ms3_table.playthrough.dropna().tolist()
+
+    measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
+    
+    chords = ms3_table.chord.dropna().tolist()
+    chords_length=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    # beats = ms3_table.mc_onset.dropna().tolist()
+    # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
+    time_signatures = ms3_table.timesig.tolist()
+    
+    harmonic_rhythm = chords_length/len(measures_compressed)
+    # Cases with no time signature changes
+    if len(Counter(time_signatures)) == 1:
+        harmonic_rhythm_beats = chords_length/int(time_signatures[0].split('/')[0])
+    else:
+        #create a timesignatures adapted to measures without repetitions. OR/AND just finde changes in TS and 
+        # correlate them with measures to find length of the different periods
+        periods_ts=[]
+        time_changes=[]
+        for t in range(1, len(time_signatures)):
+            if time_signatures[t] != time_signatures[t-1]:
+                #We find what measure in compressed list corresponds to the change in time signature
+                time_changes.append(time_signatures[t-1])
+
+                periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
+
+        #Calculating harmonuc rythom according to beasts periods
+        harmonic_rhythm_beats = chords_length/sum([period * int(time_changes[j].split('/')[0]) for j, period in enumerate(periods_ts)])
+
+    hr[HARMONIC_RHYTHM]=harmonic_rhythm
+    hr[HARMONIC_RHYTHM_BEATS]=harmonic_rhythm_beats
+
+    return hr
+
+def get_numerals(lausanne_table):
+    numerals = lausanne_table.numeral.dropna().tolist()
+    keys = lausanne_table.globalkey.dropna().tolist()
+    relativeroots = lausanne_table.relativeroot.tolist()
+
+    """
+    list_grouppings = []
+    for x, i in enumerate(numerals):
+        #TODO cuando tengamos los chords de 3, ver cómo coger los grouppings
+        if str(relativeroot[x]) != 'nan': # or '/' in chord
+            major = relativeroot[x].isupper()
+        else: 
+            major = keys[x].isupper()
+        grouping = harmonic_analysis['NFLG2M' if major else 'NFLG2m'].tolist()
+        
+        try:
+            first_characters = parse_chord(i)
+            grado = numerals_defined.index(first_characters)
+            a = grouping[grado]    
+            if str(a) == 'nan':
+                print('nan numeral with ', i) #TODO: #vii sigue fallando, major no se coge bien. Repasar las condiciones
+            list_general_groupings.append(a)
+        except:
+            print('Falta el numeral: ', i) """
+
+    _, ng2 = get_numerals_lists(numerals, relativeroots, keys)
+    numerals_counter = Counter(ng2)
+    
+    nc = {}
+    for n in numerals_counter:
+        if str(n)=='':
+            print('some chords here are not parsed well')
+            raise Exception('some chords here are not parsed well')
+        nc['Numerals_'+str(n)] = round((numerals_counter[n]/sum(list(numerals_counter.values()))), 2)
+    return nc 
+
+def get_additions(lausanne_table):
+    additions = lausanne_table.changes.tolist()
+    additions_cleaned = []
+    for i, a in enumerate(additions):
+        if isinstance(a, int):
+            # a_int = 
+            additions_cleaned.append(int(a))
+        else:
+            additions_cleaned.append(str(a))
+
+    a_c = Counter(additions_cleaned)
+
+
+    additions_counter = {ADDITIONS_4_6_64_74_94: 0, 
+                        ADDITIONS_9: 0,
+                        OTHERS_NO_AUG: 0, 
+                        OTHERS_AUG: 0}
+
+    for a in a_c:
+        c = a_c[a]
+        a = str(a)
+        
+        if a == '+9':
+            additions_counter[ADDITIONS_9] = c
+        elif a in ['4', '6', '64', '74', '94', '4.0', '6.0', '64.0', '74.0', '94.0']:
+            additions_counter[ADDITIONS_4_6_64_74_94] += c
+        elif '+' in a:
+            additions_counter[OTHERS_AUG] += c
+        else:
+            additions_counter[OTHERS_NO_AUG] += c
+
+    ad = {}
+    for a in additions_counter:
+        if additions_counter[a] != 0:
+            ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
+    return ad
 
 def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: list = None) -> dict:
     
@@ -64,15 +185,15 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
 
-@lru_cache(maxsize=None, typed=False)
+# @
 def parse_score(mscx_file: str, cfg: Configuration):
     # mscx_file=mscx_file.replace(' ', '')
     harmonic_analysis = None
     # annotations=msc3_score.annotations
     has_table = True
     try:
-        cfg.read_logger.info(get_color('INFO')+'\nGetting harmonic analysis...{0}'.format(mscx_file) + RESET_SEQ)
-        print('\nGetting harmonic analysis...{0}'.format(mscx_file))
+        cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...{0}'.format(mscx_file) + RESET_SEQ)
+        print('Getting harmonic analysis...{0}'.format(mscx_file))
         msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
 
@@ -174,9 +295,4 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     except Exception as e:
         cfg.read_logger.error('Harmony problem found: ', e)
-    finally:
-        score_features.update(features)
-
-
-def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    pass
+        return features
