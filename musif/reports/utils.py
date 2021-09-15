@@ -12,6 +12,8 @@ from pandas.core.frame import DataFrame
 from .constants import *
 from .calculations import compute_value
 
+WIDTH = 20
+HEIGHT = 20
 def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool=False):
                 # second_subgroup = False, second_subgroup_info = {}, third_subgroup = False, third_subgroup_info = {}, fourth_subgroup = False, fourth_subgroup_info = {},fifth_subgroup=False, fifth_subgroup_info={}, six_subgroup=False, six_subgroup_info={},
@@ -66,11 +68,11 @@ def adjust_excel_width_height(workbook: ExcelWriter):
         for sheet in workbook.worksheets:
             col_range = sheet[sheet.min_column : sheet.max_column]
             for col in range(1, len(col_range)):
-                sheet.column_dimensions[get_column_letter(col)].width = 18
+                sheet.column_dimensions[get_column_letter(col)].width = WIDTH
 
             row_range = sheet[sheet.min_row : sheet.max_row]
             for row in range(1, len(row_range)):
-                sheet.row_dimensions[row].height = 20
+                sheet.row_dimensions[row].height = HEIGHT
 
 def get_groups_add_info(data: DataFrame, row: int, additional_info):
     if type(additional_info) == list:

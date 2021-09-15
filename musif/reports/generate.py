@@ -45,7 +45,7 @@ class FeaturesGenerator:
         
 
     def generate_reports(self, df: DataFrame, num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
-        print('\n---Starting reports generation ---\n')
+        print('\n---Starting report generation ---\n')
         self.parts_list = [] if parts_list is None else parts_list
         self.global_features = df
         self.num_factors_max = num_factors
@@ -53,7 +53,7 @@ class FeaturesGenerator:
         self.sorting_lists = self._cfg.sorting_lists
         self._write(self.global_features)
             
-    def _factor_execution(self, all_info: DataFrame, factor: int, parts_list: list, main_results_path: str, sorting_lists: dict, _cfg: Configuration):
+    def _factor_execution(self, all_info: DataFrame, factor: int, parts_list: list, main_results_path: str, sorting_lists: dict):
         global rows_groups
         global not_used_cols
         main_results_path = os.path.join(main_results_path, 'results')
@@ -328,6 +328,7 @@ class FeaturesGenerator:
                 path.join(results_path, 'visualisations'))
         else:
             os.makedirs(path.join(results_path, 'visualisations'))
+
         # MUTITHREADING
         try:
             # executor = concurrent.futures.ThreadPoolExecutor()
@@ -372,7 +373,6 @@ class FeaturesGenerator:
                                 _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             if not harmony_df.empty:
                 harmony_df= pd.concat([common_columns_df , harmony_df], axis=1)
-
                 Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string+ "Harmonic_data.xlsx",
                                     _cfg.sorting_lists["Modulation"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             if not chords.empty:
@@ -380,8 +380,7 @@ class FeaturesGenerator:
                 Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string+  "Chords.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
             if not functions.empty:
                 functions = pd.concat([common_columns_df, functions], axis=1)
-                Harmonic_functions(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string +  "Harmonic_functions.xlsx",
-                                _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+                Harmonic_functions(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string +  "Harmonic_functions.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
             # if not key_areas.empty:
             #     key_areas= pd.concat([common_columns_df,key_areas], axis=1)
             #     # clefs_info= pd.concat([common_columns_df,clefs_info], axis=1)
@@ -399,13 +398,15 @@ class FeaturesGenerator:
                 # else:
                 #     for f in concurrent.futures.as_completed(futures):
                 #         pass
+
         except KeyboardInterrupt:
             self._logger.error('\033[93mAn error ocurred during the report generation process. \033[37m')
             sys.exit(2)
 
 
     def _write(self, all_info: DataFrame):
+
         # Start factor generation
         for factor in range(1, self.num_factors_max + 1):
             self._factor_execution(
-                all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists, self._cfg)
+                all_info, factor, self.parts_list, self.main_results_path, self.sorting_lists)
