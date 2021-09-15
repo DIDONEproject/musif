@@ -3,7 +3,7 @@ from typing import List, Tuple
 from music21.key import Key
 from music21.stream import Score
 
-from config import Configuration
+from musif.config import Configuration
 
 KEY = "Key"
 KEY_SIGNATURE = "KeySignature"

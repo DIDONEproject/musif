@@ -6,7 +6,7 @@ import numpy as np
 from music21.interval import Interval
 from scipy.stats import kurtosis, skew
 
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
 

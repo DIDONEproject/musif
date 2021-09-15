@@ -46,8 +46,8 @@ if __name__ == "__main__":
             continue
         if "," in voice:
             voice = voice.split(",")[0]
-        input_parts = [voice, "vnI", "vnII", "va", "bs"]
-        output_parts = ["Voice", "vnI", "vnII", "va", "bs"]
+        input_parts = [voice, "vnI", "bs"]
+        output_parts = ["Voice", "vnI", "bs"]
         input_parts_prefixes = [get_part_prefix(part_prefix) for part_prefix in input_parts]
         output_parts_prefixes = [get_part_prefix(part_prefix) for part_prefix in output_parts]
         data_item = {

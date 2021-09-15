@@ -8,11 +8,7 @@ import numpy as np
 import pandas as pd
 from musif.common.sort import sort
 
-import musif.extract.features.ambitus as ambitus
-import musif.extract.features.lyrics as lyrics
-import openpyxl
-from config import Configuration
-from music21 import interval
+from musif.config import Configuration
 from musif.reports.constants import *
 from musif.reports.utils import excel_sheet
 from musif.reports.utils import adjust_excel_width_height, prepare_data_emphasised_scale_degrees_second

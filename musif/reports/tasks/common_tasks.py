@@ -1,19 +1,13 @@
-import copy
 from musif.reports.visualisations import bar_plot_extended, line_plot_extended
 import os
 from multiprocessing import Lock
-from os import path
 import numpy as np
 from musif.common.constants import get_color
 
 import pandas as pd
 from musif.common.sort import sort
 
-import musif.extract.features.ambitus as ambitus
-import musif.extract.features.lyrics as lyrics
-import openpyxl
-from config import Configuration
-from music21 import interval
+from musif.config import Configuration
 from musif.reports.constants import *
 from musif.reports.utils import adjust_excel_width_height, excel_sheet
 from pandas.core.frame import DataFrame

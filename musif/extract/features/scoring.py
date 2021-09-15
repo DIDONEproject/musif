@@ -6,7 +6,7 @@ from roman import fromRoman, toRoman
 from musif.common.constants import VOICE_FAMILY, GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.common.translate import translate_word
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import part_matches_filter
 from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
 

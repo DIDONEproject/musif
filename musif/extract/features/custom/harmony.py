@@ -5,7 +5,7 @@ import ms3
 import pandas as pd
 from pandas import DataFrame
 
-from config import Configuration
+from musif.config import Configuration
 from musif.common.constants import RESET_SEQ, get_color
 from musif.extract.features.prefix import get_score_prefix
 from .__harmony_utils import get_chord_types, get_chords, get_keyareas, get_numerals_lists

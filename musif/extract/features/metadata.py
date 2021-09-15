@@ -1,6 +1,6 @@
 from typing import List
 
-from config import Configuration
+from musif.config import Configuration
 
 
 def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:

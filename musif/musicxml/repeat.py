@@ -10,7 +10,7 @@ from music21.repeat import RepeatMark
 from music21.spanner import RepeatBracket, Slur
 from music21.stream import Measure, Part, Score
 
-from config import READ_LOGGER_NAME
+from musif.config import READ_LOGGER_NAME
 
 
 def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks=False):

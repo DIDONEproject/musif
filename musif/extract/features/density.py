@@ -3,7 +3,7 @@ from typing import List, Tuple
 from pandas import DataFrame
 
 from musif.common.sort import sort_dict
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS

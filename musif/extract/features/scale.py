@@ -3,7 +3,7 @@ from typing import List, Dict, Union
 from music21.note import Note
 from musif.extract.features.prefix import get_part_prefix
 
-from config import Configuration
+from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.musicxml import get_degrees_and_accidentals
 
