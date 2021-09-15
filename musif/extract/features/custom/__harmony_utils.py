@@ -11,6 +11,8 @@ from pandas.core.frame import DataFrame
 
 REGEX = {}
 
+KEY_COMPASSES='KeyCompasses_'
+KEY_MODULATORY='KeyModulatory_'
 ####################
 # METRICAL ANALYSIS
 ####################    
@@ -290,20 +292,20 @@ def get_keyareas(lausanne_table, major = True):
     # total_g2_areas_B = sum(counter_grouping2_B.values())
 
     for ck in counter_keys:
-        keyareas['Key'+ck] = counter_keys[ck]
-        keyareas['KeyCompasses'+ck] = key_compasses[ck]
-        keyareas['KeyModulatory'+ck] = counter_keys[ck]/total_key_areas
-        keyareas['KeyModComp'+ck] = (keyareas['KeyCompasses'+ck] + keyareas['KeyModulatory'+ck]) / 2
+        keyareas['Key_'+ck] = counter_keys[ck]
+        keyareas[KEY_COMPASSES+ck] = float(key_compasses[ck])
+        keyareas[KEY_MODULATORY+ck] = counter_keys[ck]/total_key_areas
+        keyareas['KeyModComp_'+ck] = (keyareas[KEY_COMPASSES+ck] + keyareas[KEY_MODULATORY+ck]) / 2
     for cg in counter_grouping1:
-        keyareas['KeyGrouping1'+cg] = counter_grouping1[cg]
-        keyareas['KeyGrouping1Compasses'+cg] = keyGrouping1_compasses[cg]
-        keyareas['KeyGrouping1Modulatory'+cg] = counter_grouping1[cg]/total_g1_areas
-        keyareas['KeyGrouping1ModComp'+cg] = (keyareas['KeyGrouping1Compasses'+cg] + keyareas['KeyGrouping1Modulatory'+cg]) / 2
+        keyareas['KeyGrouping1_'+cg] = counter_grouping1[cg]
+        keyareas['KeyGrouping1Compasses_'+cg] = float(keyGrouping1_compasses[cg])
+        keyareas['KeyGrouping1Modulatory_'+cg] = counter_grouping1[cg]/total_g1_areas
+        keyareas['KeyGrouping1ModComp_'+cg] = (keyareas['KeyGrouping1Compasses_'+cg] + keyareas['KeyGrouping1Modulatory_'+cg]) / 2
     for cg in counter_grouping2:
-        keyareas['KeyGrouping2'+cg] = counter_grouping2[cg]
-        keyareas['KeyGrouping2Compasses'+cg] = keyGrouping2_compasses[cg]
-        keyareas['KeyGrouping2Modulatory'+cg] = counter_grouping2[cg]/total_g2_areas
-        keyareas['KeyGrouping2ModComp'+cg] = (keyareas['KeyGrouping2Compasses'+cg] + keyareas['KeyGrouping2Modulatory'+cg]) / 2
+        keyareas['KeyGrouping2_'+cg] = counter_grouping2[cg]
+        keyareas['KeyGrouping2Compasses_'+cg] = float(keyGrouping2_compasses[cg])
+        keyareas['KeyGrouping2Modulatory_'+cg] = counter_grouping2[cg]/total_g2_areas
+        keyareas['KeyGrouping2ModComp_'+cg] = (keyareas['KeyGrouping2Compasses_'+cg] + keyareas['KeyGrouping2Modulatory_'+cg]) / 2
 
     # for ck in counter_keys_A:
     #     keyareas['KeySectionA'+ck] = counter_keys_A[ck]
@@ -370,7 +372,7 @@ def get_degree_1(element, mode):
         elif  element== 'VII':
             return 'LN'
         else:
-            print(f'Element: {element} not available')
+            print(f'Element: "{element}" not available')
     else:
         if element=='#vii':
             return 'D'
@@ -544,13 +546,24 @@ def get_chord_1(chord, local_key):
     else: 
         parts = chord.split('/')
         degree = get_degree_1(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
+
         if len(parts) == 2:
             chord = get_degree_1(parts[1], mode)
             return '/'.join([degree, chord])
-        elif len(parts) == 3:
-            chord1 = get_degree_1(parts[1], 'M' if parts[2].isupper() else 'm')
-            chord2 = get_degree_1(parts[2], mode)
-            return '/'.join([degree, chord1, chord2])
+        else:
+            chord_list=[]
+            chord_list.append(degree)
+            chord_list.append(get_degree_1(parts[1], 'M' if parts[2].isupper() else 'm'))
+            for i in range(2,len(parts)):
+                chord_list.append(get_degree_1(parts[i], mode))
+            return '/'.join(chord_list)
+
+        # elif len(parts) == 4:
+        #     chord1 = get_degree_1(parts[1], 'M' if parts[2].isupper() else 'm')
+        #     chord2 = get_degree_1(parts[2], mode)
+        #     chord3 = get_degree_1(parts[3], mode)
+            return '/'.join([degree, chord1, chord2, chord3])
+        
 
 # Function to return the second grouping for any chord in any given local key,
 def get_chord_2(grouping1, relativeroot, local_key):

@@ -16,12 +16,6 @@ ALPHA = "abcdefghijklmnopqrstuvwxyz"
 HARMONIC_RHYTHM = "Harmonic_rhythm"
 HARMONIC_RHYTHM_BEATS= "Harmonic_rhythm_beats"
 
-NUMERALS_T='numerals_T'
-NUMERALS_D='numerals_D'
-NUMERALS_SD='numerals_SD'
-NUMERALS_sharp_LN='numerals_#LN'
-NUMERALS='numerals_S'
-
 ADDITIONS_4_6_64_74_94='4_6_64_74_94' 
 ADDITIONS_9='+9' 
 OTHERS_NO_AUG='others_no_+'
@@ -96,6 +90,7 @@ def get_numerals(lausanne_table):
     numerals = lausanne_table.numeral.dropna().tolist()
     keys = lausanne_table.globalkey.dropna().tolist()
     relativeroots = lausanne_table.relativeroot.tolist()
+
     """
     list_grouppings = []
     for x, i in enumerate(numerals):
@@ -121,10 +116,11 @@ def get_numerals(lausanne_table):
     
     nc = {}
     for n in numerals_counter:
+        if str(n)=='':
+            print('some chords here are not parsed well')
+            raise Exception('some chords here are not parsed well')
         nc['Numerals_'+str(n)] = round((numerals_counter[n]/sum(list(numerals_counter.values()))), 2)
     return nc 
-
-
 
 def get_additions(lausanne_table):
     additions = lausanne_table.changes.tolist()
@@ -160,7 +156,7 @@ def get_additions(lausanne_table):
     ad = {}
     for a in additions_counter:
         if additions_counter[a] != 0:
-            ad['additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
+            ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
     return ad
 
 def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: list = None) -> dict:
@@ -186,6 +182,11 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
 
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
+
+from functools import lru_cache
+import time
+
+@lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     # mscx_file=mscx_file.replace(' ', '')
     harmonic_analysis = None
@@ -193,6 +194,7 @@ def parse_score(mscx_file: str, cfg: Configuration):
     has_table = True
     try:
         cfg.read_logger.info(get_color('INFO')+'Getting harmonic analysis...{0}'.format(mscx_file) + RESET_SEQ)
+        print('Getting harmonic analysis...{0}'.format(mscx_file))
         msc3_score = ms3.score.Score(mscx_file, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
 
@@ -223,7 +225,11 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         if 'mscx_path' in score_data:
             path=score_data['mscx_path']
             # This takes a while!!
+            begin = time.time()
             harmonic_analysis, has_table = parse_score(path, cfg)
+            end = time.time()
+            # print("Time taken to execute the function without lru_cache is: ", end-begin)
+
             has_table = True
 
         # elif modulations is not None: # The user may have written only the not-expanded version
