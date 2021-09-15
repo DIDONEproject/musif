@@ -1,12 +1,13 @@
 from collections import Counter
+from functools import lru_cache
 from typing import List
 
 import ms3
 import pandas as pd
 from pandas import DataFrame
 
-from musif.config import Configuration
 from musif.common.constants import RESET_SEQ, get_color
+from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
 from .__harmony_utils import get_chord_types, get_chords, get_keyareas, get_numerals_lists
 
@@ -183,9 +184,6 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
 
-from functools import lru_cache
-import time
-
 @lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     # mscx_file=mscx_file.replace(' ', '')
@@ -225,9 +223,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         if 'mscx_path' in score_data:
             path=score_data['mscx_path']
             # This takes a while!!
-            begin = time.time()
             harmonic_analysis, has_table = parse_score(path, cfg)
-            end = time.time()
             # print("Time taken to execute the function without lru_cache is: ", end-begin)
 
             has_table = True
