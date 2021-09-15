@@ -52,6 +52,8 @@ def get_harmonic_rhythm(ms3_table, sections)-> dict:
 
     return hr
 
+KEY_COMPASSES='KeyCompasses_'
+KEY_MODULATORY='KeyModulatory_'
 ####################
 # METRICAL ANALYSIS
 ####################    
