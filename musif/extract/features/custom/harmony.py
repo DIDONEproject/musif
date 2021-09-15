@@ -183,7 +183,10 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
 
-# @
+from functools import lru_cache
+import time
+
+@lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     # mscx_file=mscx_file.replace(' ', '')
     harmonic_analysis = None
@@ -222,7 +225,11 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         if 'mscx_path' in score_data:
             path=score_data['mscx_path']
             # This takes a while!!
+            begin = time.time()
             harmonic_analysis, has_table = parse_score(path, cfg)
+            end = time.time()
+            # print("Time taken to execute the function without lru_cache is: ", end-begin)
+
             has_table = True
 
         # elif modulations is not None: # The user may have written only the not-expanded version
