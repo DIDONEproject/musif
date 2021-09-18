@@ -3,6 +3,7 @@ from copy import deepcopy
 from glob import glob
 from os import path
 
+import musif.extract.extract
 from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.model import Level
@@ -22,7 +23,6 @@ _CONFIG_FALLBACK = {
     "data_dir": "data",
     "metadata_dir": "metadata",
     "metadata_id_col": "FileName",
-    "intermediate_dir": "intermediate",
     "parallel": False,
     "max_processes": 1,
     "features": None,
@@ -47,7 +47,6 @@ class Configuration:
         self.data_dir = config_data.get("data_dir", _CONFIG_FALLBACK["data_dir"])
         self.metadata_dir = config_data.get("metadata_dir", _CONFIG_FALLBACK["metadata_dir"])
         self.metadata_id_col = config_data.get("metadata_id_col", _CONFIG_FALLBACK["metadata_id_col"])
-        self.intermediate_dir = config_data.get("intermediate_files_dir", _CONFIG_FALLBACK["intermediate_dir"])
         self.parallel = config_data.get("parallel", _CONFIG_FALLBACK["parallel"])
         self.max_processes = config_data.get("max_processes", _CONFIG_FALLBACK["max_processes"])
         self.features = config_data.get("features", _CONFIG_FALLBACK["features"])
@@ -69,10 +68,10 @@ class Configuration:
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
 
-    def is_required_module(self, module) -> bool:
+    def is_requested_module(self, module) -> bool:
         if self.features is None:
             return True
         module_name = module.__name__
         features = {feature.lower() for feature in self.features}
-        module_feature = module_name[module_name.rindex(".") + 1:].lower()  ## also module_name.split('.')[-1]
+        module_feature = module_name[len("musif.extract.features."):].lower()
         return module_feature in features

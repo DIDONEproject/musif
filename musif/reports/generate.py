@@ -120,11 +120,11 @@ class FeaturesGenerator:
                 instrument = instrument.replace('I', '')
                 notes_set.add(catch + instrument.replace('I', '') + '_NotesMean')
 
-        if self._cfg.is_required_module(density) or self._cfg.is_required_module(texture):
+        if self._cfg.is_requested_module(density) or self._cfg.is_requested_module(texture):
             notes_df=all_info[list(notes_set)]
         
         # Getting different features
-        if self._cfg.is_required_module(density):
+        if self._cfg.is_requested_module(density):
             density_set.add(
                 catch + instrument + '_SoundingDensity')
             density_set.add(
@@ -132,12 +132,12 @@ class FeaturesGenerator:
             density_set.add('NumberOfBeats')
             density_df = all_info[list(density_set)]
 
-        if self._cfg.is_required_module(texture):
+        if self._cfg.is_requested_module(texture):
             textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]]
         
 
         # Getting harmonic features
-        if self._cfg.is_required_module(harmony):
+        if self._cfg.is_requested_module(harmony):
             harmony_df=all_info[[i for i in all_info.columns if 'harmonic' in i.lower()]]
             key_areas=all_info[[i for i in all_info.columns if 'Key' in i]]
 
@@ -197,7 +197,7 @@ class FeaturesGenerator:
             # Joining common info and part info, renaming columns for excel writing
             
             # INTERVALS
-            if self._cfg.is_required_module(interval):            
+            if self._cfg.is_requested_module(interval):            
                 intervals_types_list.append(catch + interval.REPEATED_NOTES_COUNT)
                 intervals_info=all_info[intervals_list]
                 intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
@@ -206,12 +206,12 @@ class FeaturesGenerator:
                 intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
                                     for c in intervals_types.columns]
             # MELODY
-            if self._cfg.is_required_module(ambitus):            
+            if self._cfg.is_requested_module(ambitus):            
                 melody_values=all_info[melody_values_list]  
                 melody_values.columns = [c.replace(catch, '').replace('_Count', '')
                                 for c in melody_values.columns]
             # KEYS
-            if self._cfg.is_required_module(scale):            
+            if self._cfg.is_requested_module(scale):            
                 emphasised_scale_degrees_info_A=all_info[emphasised_A_list]
                 emphasised_scale_degrees_info_A.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '')
                     for c in emphasised_scale_degrees_info_A.columns]
@@ -278,7 +278,7 @@ class FeaturesGenerator:
                     self._tasks_execution(rows_groups, not_used_cols, self._cfg,
                         groups, textures_densities_data_path, additional_info, factor, common_columns_df, notes_df=notes_df, density_df=density_df, textures_df=textures_df, harmony_df=harmony_df, key_areas=key_areas, chords=chords_df)
                     
-                    if self._cfg.is_required_module(harmony):
+                    if self._cfg.is_requested_module(harmony):
                         harmony_data_path = path.join(main_results_path, 'Harmony', str(
                             factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
                         if not os.path.exists(harmony_data_path):
