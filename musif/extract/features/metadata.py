@@ -23,3 +23,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
                 features[key] = item_features[key]
     return features
 
+
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+    return {}

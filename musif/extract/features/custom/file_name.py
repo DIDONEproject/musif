@@ -60,3 +60,5 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     }
 
 
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+    return {}

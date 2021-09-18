@@ -1,5 +1,5 @@
 from musif import FeaturesExtractor
-from musif.extract.extract import FilesValidator
+from musif import FilesValidator
 
 if __name__ == "__main__":
 
@@ -7,5 +7,5 @@ if __name__ == "__main__":
     test_filter = ["obI"]
 
     # FilesValidator("config.yml").validate("arias/xml")
-    df_scores = FeaturesExtractor("config.yml", parallel=True).extract("arias", parts_filter=didone_filter)
+    df_scores = FeaturesExtractor("config.yml").extract("../../Corpus/xml", parts_filter=didone_filter)
     df_scores.to_csv("myfeatures.csv", index=False)

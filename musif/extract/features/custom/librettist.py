@@ -25,7 +25,12 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     }
 
 
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+    return {}
+
+
 def _extract_name(text: str) -> str:
     chars = [char for char in text if char.isalpha() or char == " "]
     name = "".join(chars).strip()
     return name
+

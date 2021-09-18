@@ -29,6 +29,10 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     }
 
 
+def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+    return {}
+
+
 def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:
     """
     returns abbreviated designation of keys (uppercase for major mode; lowercase for minor mode)

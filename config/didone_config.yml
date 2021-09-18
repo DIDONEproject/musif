@@ -3,7 +3,6 @@ characters_gender_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tn
 arias_clefs_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Arias_clefs.xlsx"
 metadata_dir: metadata
 metadata_id_col: FileName
-intermediate_files_dir: intermediate
 read_log:
   file_path: logs/read.log
   level: ERROR
