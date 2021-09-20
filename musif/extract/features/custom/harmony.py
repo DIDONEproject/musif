@@ -120,10 +120,6 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         # #         pass
                     # Obtain score sections:
                     # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
-            
-            score = score_data['score']
-            repeat_elements= score_data['repetition_elements']
-            score_prefix = get_score_prefix()
 
         else:
             has_table = False
@@ -178,3 +174,6 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     except Exception as e:
         cfg.read_logger.error('Harmony problem found: ', e)
         return features
+
+def update_part_objects(score_data, part_data, _cfg, part_features):
+    pass
