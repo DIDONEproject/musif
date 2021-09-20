@@ -6,9 +6,9 @@ from music21.stream import Measure, Score
 from musif.config import Configuration
 
 
-def get_score_features(
+def update_score_objects(
     score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict
-) -> dict:
+):
     score: Score = score_data["score"]
     end_of_theme_a = floor(float(score_features.get("EndOfThemeA", "1000000").replace(",", ".")))
     for part in score.parts:
@@ -20,8 +20,7 @@ def get_score_features(
             elif isinstance(elem, Measure) and elem.number >= end_of_theme_a:
                 elements_to_remove.append(elem)
         part.remove(targetOrList=elements_to_remove)
-    return {}
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    return {}
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    pass

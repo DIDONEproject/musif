@@ -13,30 +13,26 @@ DEGREE_COUNT = "{prefix}Degree{key}_Count"
 DEGREE_PER = "{prefix}Degree{key}_Per"
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data["notes"]
     tonality = score_data["tonality"]
     notes_per_degree = get_notes_per_degree(tonality.capitalize(), notes)
     all_degrees = sum(value for value in notes_per_degree.values())
-    features = {}
     for key, value in notes_per_degree.items():
-        features[DEGREE_COUNT.format(key=key, prefix="")] = value
-        features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
-    return features
+        part_features[DEGREE_COUNT.format(key=key, prefix="")] = value
+        part_features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
-        return {}
+        return
 
-    features = {}
     for part_data, parts_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
         for feature in parts_features:
             if "Degree" in feature:
-                features[f"{part_prefix}{feature}"] = parts_features[feature]
-    return features
+                score_features[f"{part_prefix}{feature}"] = parts_features[feature]
 
 
 def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:

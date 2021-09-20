@@ -3,7 +3,7 @@ from typing import List
 from musif.config import Configuration
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     features = {}
     for group_name, group_features in cfg.scores_metadata.items():
         existing_metadata_id = score_features.get(cfg.metadata_id_col)
@@ -21,8 +21,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
                     cfg.read_logger.warning(f"Column {key} exists both in metadata and in existing features")
                     continue
                 features[key] = item_features[key]
-    return features
+    return score_features.update(features)
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    return {}
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    pass
