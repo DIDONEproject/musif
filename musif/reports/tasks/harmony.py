@@ -241,17 +241,25 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         third_columns_names.insert(0, 'Total analysed')
 
         third_columns_names2=['Total analysed'] + list(data2.columns)
+        third_columns_names3=['Total analysed'] + list(data2.columns)
+
 
         # third_columns_names = [i.replace('Numerals','') for i in data.columns if 'Numerals' in i]
         second_column_names = [("", 1), ("Numerals", len(third_columns_names))]
-        second_column_names2 = [('', 1), ("Chords Grouping",  len(third_columns_names2))]
+        second_column_names2 = [('', 1), ("Chords Grouped",  len(third_columns_names2))]
+        second_column_names3 = [('', 1), ("Chords Grouped 2",  len(third_columns_names3))]
+
         
         computations = ["sum"]*len(third_columns_names)
         computations2 = ['sum']*len(third_columns_names2)
+        computations3 = ['sum']*len(third_columns_names3)
+        
         # columns = columns_alike_our_data(
         #     third_columns_names, second_column_names)
         columns=third_columns_names
         columns2=third_columns_names2
+        columns3=third_columns_names2
+
 
         # columns2 = columns_alike_our_data(
         #     third_columns_names2, second_column_names2)
@@ -264,7 +272,7 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                    #  columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
+                     columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
         
         if factor>=1:
@@ -272,8 +280,8 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
          columns, data1, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
-                     columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                    #  columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+                    columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+                    columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
                 
         if "Sheet" in workbook.get_sheet_names():
@@ -285,6 +293,7 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         # third_columns_names.remove('Total analysed')
         title = 'Functions'
+
         # VISUALISATIONS
         # if groups:
         #     data_grouped = data.groupby(list(groups))
