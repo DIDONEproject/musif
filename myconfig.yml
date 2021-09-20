@@ -15,7 +15,8 @@ features:
   - librettist
   - harmony
   # - ambitus
-  # - density
+  - density
+  - texture
   # - interval # to extract Melody_values task, both ambitus and interval are needed
   - key
   - lyrics

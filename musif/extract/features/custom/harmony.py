@@ -1,15 +1,17 @@
+from collections import Counter
 from functools import lru_cache
 from typing import List
 
 import ms3
 import pandas as pd
-from pandas import DataFrame
 
 from musif.common.constants import RESET_SEQ, get_color
 from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
+from pandas import DataFrame
+
 from .__harmony_utils import (get_chord_types, get_chords, get_keyareas,
-                              get_numerals, get_harmonic_rhythm, get_additions, HARMONIC_RHYTHM, HARMONIC_RHYTHM_BEATS)
+                              get_numerals, get_harmonic_rhythm, get_additions)
 
 from .__constants import *
 ###############################################################################
@@ -64,6 +66,7 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame, sections: l
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
 
+#TODO: Check if this cache works in different runs. If not, create our own cache to store parsing of previous scores 
 @lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     # mscx_file=mscx_file.replace(' ', '')
@@ -174,9 +177,4 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     except Exception as e:
         cfg.read_logger.error('Harmony problem found: ', e)
-    finally:
-        score_features.update(features)
-
-
-def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    pass
+        return features
