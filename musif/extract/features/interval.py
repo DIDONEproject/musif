@@ -131,25 +131,22 @@ ALL_FEATURES = [
 ]
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     numeric_intervals = part_data["numeric_intervals"]
     text_intervals = part_data["text_intervals"]
     text_intervals_count = Counter(text_intervals)
 
-    features = {}
-    features.update(get_interval_features(numeric_intervals))
-    features.update(get_interval_count_features(text_intervals_count))
-    features.update(get_interval_type_features(text_intervals_count))
-    features.update(get_interval_stats_features(text_intervals_count))
-
-    return features
+    part_features.update(get_interval_features(numeric_intervals))
+    part_features.update(get_interval_count_features(text_intervals_count))
+    part_features.update(get_interval_type_features(text_intervals_count))
+    part_features.update(get_interval_stats_features(text_intervals_count))
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
-        return {}
+        return
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
@@ -186,7 +183,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     features.update(get_interval_count_features(text_intervals_count, score_prefix))
     features.update(get_interval_type_features(text_intervals_count, score_prefix))
     features.update(get_interval_stats_features(text_intervals_count, score_prefix))
-    return features
+    score_features.update(features)
 
 
 def get_interval_features(numeric_intervals: List[int], prefix: str = ""):

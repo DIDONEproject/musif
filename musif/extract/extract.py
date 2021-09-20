@@ -175,9 +175,8 @@ class FeaturesExtractor:
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for module in self._get_feature_modules():
-            for part_data, part_features in zip(parts_data, parts_features):
-                 part_features.update(self._extract_part_module_features(module, score_data, part_data, part_features))
-            score_features.update(self._extract_score_module_features(module, score_data, parts_data, parts_features, score_features))
+            self._update_parts_module_features(module, score_data, parts_data, parts_features)
+            self._update_score_module_features(module, score_data, parts_data, parts_features, score_features)
         return score_features, parts_features
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
@@ -231,14 +230,11 @@ class FeaturesExtractor:
         for module_name in module_names:
             yield __import__(module_name, fromlist=[''])
 
-    def _extract_part_module_features(self, module, score_data: dict, part_data: dict, part_features: dict) -> dict:
-        if not self._cfg.is_requested_module(module):
-            return {}
-        self._cfg.read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
-        return module.get_part_features(score_data, part_data, self._cfg, part_features)
+    def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict]):
+        for part_data, part_features in zip(parts_data, parts_features):
+            self._cfg.read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
+            module.update_part_objects(score_data, part_data, self._cfg, part_features)
 
-    def _extract_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict) -> dict:
-        if not self._cfg.is_requested_module(module):
-            return {}
+    def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict):
         self._cfg.read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
-        return module.get_score_features(score_data, parts_data, self._cfg, parts_features, score_features)
+        module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)

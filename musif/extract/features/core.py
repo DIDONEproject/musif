@@ -8,8 +8,7 @@ from musif.extract.features.key import get_key_and_mode
 from musif.musicxml import get_intervals, get_notes_and_measures, get_notes_lyrics
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data["part"]
     notes, tied_notes, measures, sounding_measures = get_notes_and_measures(part)
     lyrics = get_notes_lyrics(notes)
@@ -27,9 +26,9 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
         "ambitus_solution": ambitus_solution,
         "ambitus_pitch_span": ambitus_pitch_span,
     })
-    return {}
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     score = score_data["score"]
     score_key, tonality, mode = get_key_and_mode(score)
     score_data.update({
@@ -38,4 +37,3 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         "tonality": tonality,
         "mode": mode,
     })
-    return {}

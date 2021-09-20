@@ -12,27 +12,25 @@ NOTES = "Notes"
 LYRICS = "Lyrics"
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
 
     notes = part_data["notes"]
     lyrics = part_data["lyrics"]
 
     syllabic_ratio = get_syllabic_ratio(notes, lyrics)
 
-    features = {
+    part_features.update({
         NOTES: len(notes),
         LYRICS: len(lyrics),
         SYLLABIC_RATIO: syllabic_ratio,
-    }
-
-    return features
+    })
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
-        return {}
+        return
 
     voice_parts_data = [part_data for part_data in parts_data if part_data["family"] == VOICE_FAMILY]
 
@@ -51,7 +49,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     features[f"{score_prefix}{LYRICS}"] = len(lyrics)
     features[f"{score_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
 
-    return features
+    return score_features.update(features)
 
 
 def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:

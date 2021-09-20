@@ -27,7 +27,8 @@ ALL_FEATURES = [LOWEST_INDEX, LOWEST_NOTE, HIGHEST_INDEX, HIGHEST_NOTE, HIGHEST_
                 LARGEST_INTERVAL, LARGEST_SEMITONES, SMALLEST_INTERVAL, SMALLEST_SEMITONES, LARGEST_ABSOLUTE_SEMITONES,
                 SMALLEST_ABSOLUTE_SEMITONES, MEAN_INTERVAL, MEAN_SEMITONES]
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     this_aria_ambitus = part_data["ambitus_solution"]
     lowest_note, highest_note = part_data["ambitus_pitch_span"]
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
@@ -36,7 +37,7 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
     highest_index = int(highest_note.ps)
     joined_notes = ",".join([lowest_note_text, highest_note_text])
 
-    return {
+    part_features.update({
         LOWEST_NOTE: lowest_note_text,
         HIGHEST_NOTE: highest_note_text,
         LOWEST_INDEX: lowest_index,
@@ -53,17 +54,16 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
         LARGEST_ABSOLUTE_SEMITONES: joined_notes,
         MEAN_INTERVAL: joined_notes,
         MEAN_SEMITONES: joined_notes,
-    }
+    })
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
-        return {}
+        return
 
-    features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data["abbreviation"])
         for feature_name in ALL_FEATURES:
-            features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
-    return features
+            score_features[f"{part_prefix}{feature_name}"] = part_features[feature_name]

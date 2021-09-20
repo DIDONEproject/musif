@@ -32,10 +32,10 @@ FAMILY_SCORING = "FamilyScoring"
 FAMILY_INSTRUMENTATION = "FamilyInstrumentation"
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data["part"]
     instrumental = part_data["family"] != VOICE_FAMILY
-    return {
+    part_features.update({
         PART_NAME: part.partName,
         PART_NUMBER: part_data["part_number"],
         PART_ABBREVIATION: part_data["abbreviation"],
@@ -44,10 +44,10 @@ def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, par
         FAMILY: part_data["family"],
         FAMILY_ABBREVIATION: part_data["family_abbreviation"],
         INSTRUMENTAL: instrumental,
-    }
+    })
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     abbreviated_parts = []
     sounds = []
     sound_abbreviations = []
@@ -113,7 +113,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         features[f"{family_prefix}{NUMBER_OF_PARTS}"] = count_by_family[family_abbreviation]
         features[f"{family_prefix}{NUMBER_OF_FILTERED_PARTS}"] = filtered_count_by_family[family_abbreviation]
 
-    return features
+    return score_features.update(features)
 
 
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:

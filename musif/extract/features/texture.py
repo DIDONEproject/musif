@@ -12,17 +12,14 @@ NOTES = "Notes"
 TEXTURE = "Texture"
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_data) == 0:
-        return {}
-    features = {}
+        return
     notes = {}
     df_parts = DataFrame(parts_features)
-
-    df_sound = df_parts.groupby("SoundAbbreviation").aggregate(
-        {NOTES: "sum"})
+    df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum"})
     df_score = DataFrame(score_features, index=[0])
 
     for f in range(0, len(parts_features)):
@@ -44,6 +41,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
             part2 = list(notes.keys())[j+i+1]
             part1_prefix = get_part_prefix(part1)
             part2_prefix = get_part_prefix(part2)
-            features[f"{part1_prefix}_{part2_prefix}_{TEXTURE}"] = t
+            score_features[f"{part1_prefix}_{part2_prefix}_{TEXTURE}"] = t
 
-    return features
+
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    pass

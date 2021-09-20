@@ -24,21 +24,19 @@ class TempoGroup2(Enum):
     FAST = "Fast"
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data["part"]
     time_signature = list(part.getTimeSignatures())[0].ratioString
     time_signature_grouped = get_time_signature_type(time_signature)
     number_of_beats = get_number_of_beats(time_signature)
-    features = {
+    part_features.update({
         TIME_SIGNATURE: time_signature,
         TIME_SIGNATURE_GROUPED: time_signature_grouped,
         NUMBER_OF_BEATS: number_of_beats
-    }
-    return features
+    })
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
     # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo
@@ -67,7 +65,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     tg2 = get_tempo_grouped_2(tg1).value
     number_of_beats = get_number_of_beats(time_signature)
 
-    return {
+    score_features.update({
         TEMPO: tempo_mark,
         NUMERIC_TEMPO: numeric_tempo,
         TIME_SIGNATURE: time_signature,
@@ -75,7 +73,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         TEMPO_GROUPED_1: tg1,
         TEMPO_GROUPED_2: tg2,
         NUMBER_OF_BEATS: number_of_beats,
-    }
+    })
 
 
 def get_time_signature_type(timesignature):
