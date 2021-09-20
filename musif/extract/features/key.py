@@ -14,23 +14,23 @@ KEY_SIGNATURE_VALUES = ['b', 's']
 MODE_VALUES = ['major', 'minor']
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     key = score_data["key"]
     tonality = score_data["tonality"]
     mode = score_data["mode"]
     key_signature = get_key_signature(key)
     key_signature_type = get_key_signature_type(key_signature)
 
-    return {
+    score_features.update({
         KEY: tonality,
         KEY_SIGNATURE: key_signature,
         KEY_SIGNATURE_TYPE: key_signature_type,
         MODE: mode,
-    }
+    })
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    return {}
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    pass
 
 
 def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:

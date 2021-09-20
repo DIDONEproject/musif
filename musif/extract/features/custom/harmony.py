@@ -93,7 +93,8 @@ def parse_score(mscx_file: str, cfg: Configuration):
 
     return harmonic_analysis, has_table
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     features={}
     sections=[]
     try:
@@ -170,11 +171,12 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
 
             # ADDITIONS
             features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith('additions_')})
-        return features
 
     except Exception as e:
         cfg.read_logger.error('Harmony problem found: ', e)
-        return features
+    finally:
+        score_features.update(features)
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    return {}
+
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    pass

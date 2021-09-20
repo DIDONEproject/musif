@@ -2,7 +2,7 @@ data_dir: ../data
 metadata_dir: ../metadata
 metadata_id_col: AriaId
 parallel: true
-max_processes: 10
+max_processes: 8
 read_log:
   file_path: logs/read.log
   level: DEBUG
