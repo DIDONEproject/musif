@@ -20,28 +20,27 @@ SOUNDING_DENSITY = "SoundingDensity"
 DENSITY = "Density"
 
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     if not part_matches_filter(part_data["abbreviation"], score_data["parts_filter"]):
         return {}
     notes = part_data["notes"]
     sounding_measures = part_data["sounding_measures"]
     measures = part_data["measures"]
     number_of_beats = part_features[NUMBER_OF_BEATS]
-    features = {
+    part_features.update({
         NOTES: len(notes),
         SOUNDING_MEASURES: len(sounding_measures),
         MEASURES: len(measures),
         SOUNDING_DENSITY: len(notes) / number_of_beats / len(sounding_measures) if len(sounding_measures) > 0 else 0,
         DENSITY: len(notes) / number_of_beats / len(measures) if len(measures) > 0 else 0,
-    }
-    return features
+    })
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
     if len(parts_features) == 0:
-        return {}
+        return
 
     features = {}
     df_parts = DataFrame(parts_features)
@@ -106,7 +105,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     features[f"{score_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
     features[f"{score_prefix}{DENSITY}"] = notes_mean / number_of_beats / measures_mean if measures_mean != 0 else 0
 
-    return features
+    score_features.update(features)
+
 
 def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Measure], List[Measure]]:
     notes = []

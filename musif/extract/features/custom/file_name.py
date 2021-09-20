@@ -14,7 +14,7 @@ ARIA_SCENE = "Scene"
 ARIA_ACT_AND_SCENE = "ActAndScene"
 
 
-def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict) -> dict:
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     """
     get variables from file_name
     returns a dictionary so it can be easily input in a df
@@ -51,7 +51,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     aria_labels = file_name[: title_start_idx - 1]
     opera_prefix = aria_labels[: 3]
 
-    return {
+    score_features.update({
         ARIA_OPERA: opera_prefix,
         ARIA_LABEL: aria_labels,
         ARIA_ID: aria_id,
@@ -61,7 +61,8 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         ARIA_ACT: act,
         ARIA_SCENE: scene,
         ARIA_ACT_AND_SCENE: act + scene,
-    }
+    })
 
-def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
-    return {}
+
+def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    pass
