@@ -18,13 +18,13 @@ CLEF2 = 'Clef2'
 CLEF3 = 'Clef3'
 COMPOSER = 'Composer'
 DATE = 'Date'
-GEOGRAPHY='Geography'
 DECADE = 'Decade'
-DRAMA='Drama'
 DECADE = "Decade"
+DRAMA='Drama'
 FINAL='Final'
 FORM = 'Form'
 GENDER ='Gender'
+GEOGRAPHY='Geography'
 KEY = 'Key'
 KEY_SIGNATURE_TYPE = 'KeySignatureType'
 KEYSIGNATURE = 'KeySignature'
@@ -38,12 +38,13 @@ SCENE = 'Scene'
 TEMPO = 'Tempo'
 TERRITORY = 'Territory'
 TIMESIGNATURE = 'TimeSignature'
-TOTAL_ANALYSED='Total analysed'
 TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
 TITLE = 'AriaName'
+TOTAL_ANALYSED='Total analysed'
 YEAR = 'Year'
 
 metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
+
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
                TITLE: ([], "Alphabetic"),
