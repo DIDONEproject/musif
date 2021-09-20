@@ -15,7 +15,9 @@ from .calculations import compute_value
 WIDTH = 20
 HEIGHT = 20
 def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
-                 columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool=False):
+                 columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, 
+                 columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
+                 additional_info: list=[], ponderate: bool=False):
                 # second_subgroup = False, second_subgroup_info = {}, third_subgroup = False, third_subgroup_info = {}, fourth_subgroup = False, fourth_subgroup_info = {},fifth_subgroup=False, fifth_subgroup_info={}, six_subgroup=False, six_subgroup_info={},
                 # additional_info = [], ponderate = False, total = True, valores_filas = [], want_total_counts = False):
     
@@ -55,6 +57,14 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
                     group if len(group) > 1 else group[0])
             rn = row_iteration(sheet,rows_groups, columns, row_number, cnumber, group_data, third_columns, computations_columns, sorting_lists, group=groups, first_columns=first_columns, second_columns=second_columns, per=per,
                                average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2_grouped, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
+            data3_grouped = None
+            if data3 is not None:
+                data3_grouped = data3.groupby(list(groups)).get_group(
+                    group if len(group) > 1 else group[0])
+            rn = row_iteration(sheet,rows_groups, columns, row_number, cnumber, group_data, third_columns, computations_columns, sorting_lists, group=groups, first_columns=first_columns, second_columns=second_columns, per=per,
+                               average=average, last_column=last_column, last_column_average=last_column_average, columns3=columns3, data3=data3_grouped, third_columns3=third_columns3, computations_columns3=computations_columns3, first_columns3=first_columns3, second_columns3=second_columns3, 
+                               additional_info=additional_info, ponderate=ponderate)
+            
             row_number = rn
         # merge last cells
         for i, g in enumerate(group):
@@ -448,7 +458,9 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 ##########################################################################################################
 
 def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
-                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, additional_info: list=[], ponderate: bool =False):
+                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None,
+                  columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None,
+                    additional_info: list=[], ponderate: bool =False):
     all_columns = list(data.columns)
     for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
         if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):

@@ -29,8 +29,12 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     act_scene_end_idx = aria_id_start_idx - 2
     act_scene_start_idx = file_name.rfind("[", 0, act_scene_end_idx - 1) + 1
     act_and_scene = file_name[act_scene_start_idx: act_scene_end_idx]
-    act, scene = act_and_scene.split(".")
-
+    try:
+        act, scene = act_and_scene.split(".")
+    except ValueError:
+        cfg.read_logger.warn('Act and scene were not parsed well!')
+        act = act_and_scene
+        scene = ""
     composer_end_idx = act_scene_start_idx - 1
     composer_start_idx = file_name.rfind("-", 0, composer_end_idx - 1) + 1
     composer = file_name[composer_start_idx: composer_end_idx]
@@ -58,7 +62,6 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
         ARIA_SCENE: scene,
         ARIA_ACT_AND_SCENE: act + scene,
     }
-
 
 def get_part_features(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict) -> dict:
     return {}
