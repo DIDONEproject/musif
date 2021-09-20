@@ -31,8 +31,8 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     score = score_data["score"]
     score_key, tonality, mode = get_key_and_mode(score)
+    score_features["FileName"] = path.basename(score_data["file"])
     score_data.update({
-        "FileName": path.basename(score_data["file"]),
         "key": score_key,
         "tonality": tonality,
         "mode": mode,
