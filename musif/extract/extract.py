@@ -159,6 +159,7 @@ class FeaturesExtractor:
             with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
                 futures = [executor.submit(self._process_score, musicxml_file, parts_filter)
                            for musicxml_file in musicxml_files]
+                           
                 for future in tqdm(as_completed(futures)):
                     score_features, score_parts_features = future.result()
                     scores_features.append(score_features)
