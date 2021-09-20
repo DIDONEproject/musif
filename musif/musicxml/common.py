@@ -1,10 +1,11 @@
 import copy
-import xml.etree.ElementTree as ET
-from typing import List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
-from music21 import *
+from music21.interval import Interval
 from music21.note import Note
-from music21.stream import Part, Score
+from music21.scale import MajorScale, MinorScale
+from music21.stream import Measure, Part, Score, Voice
+from music21.text import assembleLyrics
 from roman import toRoman
 
 from musif.common import group
@@ -17,6 +18,41 @@ def is_voice(part: Part) -> bool:
     if instrument is None or instrument.instrumentSound is None:
         return False
     return "voice" in instrument.instrumentSound
+
+
+def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Note], List[Measure], List[Measure]]:
+    measures = list(part.getElementsByClass(Measure))
+    sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
+    original_notes = [note for measure in measures for note in measure.notes]
+    tied_notes = tie_notes(original_notes)
+    return original_notes, tied_notes, measures, sounding_measures
+
+
+def tie_notes(original_notes: List[Note]) -> List[Note]:
+    tied_notes = []
+    for note in original_notes:
+        if not isinstance(note, Note):
+            pass
+        last_note = tied_notes[-1] if len(tied_notes) > 0 else None
+        if must_be_tied(note, last_note):
+            tied_notes[-1].duration.quarterLength += note.duration.quarterLength
+        else:
+            tied_notes.append(note)
+    return tied_notes
+
+
+def must_be_tied(elem, last_elem) -> bool:
+    if last_elem is None:
+        return False
+    if not isinstance(elem, Note):
+        return False
+    if elem.tie is None:
+        return False
+    if elem.tie.type != "stop" and elem.tie.type != "continue":
+        return False
+    if not isinstance(last_elem, Note):
+        return False
+    return True
 
 
 def split_layers(score: Score, split_keywords: List[str]):
@@ -37,7 +73,7 @@ def split_layers(score: Score, split_keywords: List[str]):
         if possible_layers:  # ONLY WIND INSTRUMENTS
             has_voices = False
             for measure in part.elements:
-                if isinstance(measure, stream.Measure) and any(isinstance(e, stream.Voice) for e in measure.elements):
+                if isinstance(measure, Measure) and any(isinstance(e, Voice) for e in measure.elements):
                     has_voices = True
                     break
 
@@ -46,11 +82,11 @@ def split_layers(score: Score, split_keywords: List[str]):
                 num_measure = 0
                 for measure in part.elements:
                     # add missing information to both parts (dynamics, text annotations, etc are missing)
-                    if isinstance(measure, stream.Measure) and any(
-                        not isinstance(e, stream.Voice) for e in measure.elements
+                    if isinstance(measure, Measure) and any(
+                        not isinstance(e, Voice) for e in measure.elements
                     ):
                         not_voices_elements = [
-                            e for e in measure.elements if not isinstance(e, stream.Voice)
+                            e for e in measure.elements if not isinstance(e, Voice)
                         ]  # elements such as clefs, dynamics, text annotations...
                         # introducimos esta información en cada voz:
                         for p in parts_splitted:
@@ -78,19 +114,10 @@ def split_layers(score: Score, split_keywords: List[str]):
         except:
             pass  # already inserted
 
-def extract_numeric_tempo(file_path: str) -> Optional[int]:
-    tree = ET.parse(file_path)
-    root = tree.getroot()
-    try:
-        tempo = int(root.find("part").find("measure").find("direction").find("sound").get("tempo"))
-    except:
-        tempo = None
-    return tempo
-
 def get_part_clef(part):
     # the clef is in measure 1
     for elem in part.elements:
-        if isinstance(elem, stream.Measure):
+        if isinstance(elem, Measure):
             if hasattr(elem, "clef"):
                 return elem.clef.sign + "-" + str(elem.clef.line)
     return ""
@@ -110,9 +137,9 @@ def get_key(score: Score) -> str:
 
 def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:
     if "major" in key:
-        scl = scale.MajorScale(key.split(" ")[0])
+        scl = MajorScale(key.split(" ")[0])
     else:
-        scl = scale.MinorScale(key.split(" ")[0])
+        scl = MinorScale(key.split(" ")[0])
 
     degrees = [scl.getScaleDegreeAndAccidentalFromPitch(note.pitches[0]) for note in notes]
 
@@ -128,14 +155,14 @@ def get_intervals(notes: List[Note]) -> Tuple[List[Union[int, float]], List[str]
     for i in range(len(notes) - 1):
         note = notes[i]
         next_note = notes[i + 1]
-        i = interval.Interval(note.pitches[0], next_note.pitches[0])
+        i = Interval(note.pitches[0], next_note.pitches[0])
         numeric_intervals.append(i.semitones)
         text_intervals.append(i.directedName)
     return numeric_intervals, text_intervals
 
 
 def contains_text(part: Part) -> bool:
-    return text.assembleLyrics(part)
+    return assembleLyrics(part)
 
 
 def get_notes_lyrics(notes: List[Note]) -> List[str]:
@@ -144,7 +171,7 @@ def get_notes_lyrics(notes: List[Note]) -> List[str]:
         if note.lyrics is None or len(note.lyrics) == 0:
             continue
         note_lyrics = [syllable.text for syllable in note.lyrics if syllable.text is not None]
-        lyrics.append(" ".join(note_lyrics))
+        lyrics.extend(note_lyrics)
     return lyrics
 
 
