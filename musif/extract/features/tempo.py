@@ -1,6 +1,7 @@
 import re
+import xml.etree.ElementTree as ET
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from music21.expressions import TextExpression
 from music21.stream import Measure
@@ -44,7 +45,7 @@ def get_score_features(score_data: dict, parts_data: List[dict], cfg: Configurat
     # indica el tipo de instrumento y por ultimo el nombre. voice.soprano, strings.violin o strings.viola
 
     score = score_data["score"]
-    numeric_tempo = score_data["numeric_tempo"]
+    numeric_tempo = extract_numeric_tempo(score_data["file"])
     time_signatures = []
     for part in score.parts:
         m = list(part.getTimeSignatures())
@@ -188,3 +189,13 @@ def get_number_of_beats(time_signature: str) -> int:
         return 4
     if time_signature in ['8/2', '8/4', '8/8', '8/16']:
         return 8
+
+
+def extract_numeric_tempo(file_path: str) -> Optional[int]:
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+    try:
+        tempo = int(root.find("part").find("measure").find("direction").find("sound").get("tempo"))
+    except:
+        tempo = None
+    return tempo

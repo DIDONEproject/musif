@@ -2,8 +2,8 @@ import pandas as pd
 
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
-from musif.extract.features.custom.file_name import ARIA_DECADE, ARIA_ID, ARIA_YEAR
-from musif.extract.features.density import DENSITY, MEASURES, MEASURES_MEAN, SOUNDING_DENSITY
+from musif.extract.features.custom.file_name import ARIA_ID
+from musif.extract.features.density import DENSITY, MEASURES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
 from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, \
     ABSOLUTE_INTERVALS_KURTOSIS, \
     ABSOLUTE_INTERVALS_SKEWNESS, INTERVALLIC_MEAN, \
@@ -67,8 +67,8 @@ if __name__ == "__main__":
             f"{get_part_prefix('Voice')}SyllabicRatio": row[f"{get_part_prefix(voice)}{SYLLABIC_RATIO}"],
             "Score_Density": row[f"Score_{DENSITY}"],
             "Score_SoundingDensity": row[f"Score_{SOUNDING_DENSITY}"],
-            "Score_Measures": row[f"Score_{MEASURES}"],
             "Score_MeasuresMean": row[f"Score_{MEASURES_MEAN}"],
+            "Score_SoundingMeasuresMean": row[f"Score_{SOUNDING_MEASURES_MEAN}"],
             "Label_Sentiment": row["Label_Sentiment"],
             "Label_BasicPassion": row["Label_BasicPassion"],
             "Label_Passions": row["Label_Passions"],
@@ -97,5 +97,6 @@ if __name__ == "__main__":
             data_item[f"{output_part}RepeatedNotes"] = row[f"{input_part}{REPEATED_NOTES_PER}"]
         data_list.append(data_item)
     df_analysis = pd.DataFrame(data_list)
-    df_analysis.to_csv("analysis2.csv", index=False)
+    df_analysis.sort_values("AriaId", inplace=True)
+    df_analysis.to_csv("analysis3.csv", index=False)
     print()
