@@ -11,9 +11,7 @@ from musif.extract.features.prefix import get_score_prefix
 from .__harmony_utils import (get_chord_types, get_chords, get_keyareas,
                               get_numerals, get_harmonic_rhythm, get_additions, HARMONIC_RHYTHM, HARMONIC_RHYTHM_BEATS)
 
-ALPHA = "abcdefghijklmnopqrstuvwxyz"
-
-
+from .__constants import *
 ###############################################################################
 # This function generates a dataframe with the measures and the local key     #
 # present in each one of them based on the 'modulations' atribute in the json #

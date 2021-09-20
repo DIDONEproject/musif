@@ -16,8 +16,6 @@ from pandas.core.frame import DataFrame
 
 ### Function that prints harmonic data report task ###
 
-# def Harmonic_data(data, total_sections):
-
 def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
@@ -146,12 +144,8 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
         second_column_names = [("", 1), ("Chords", len(third_columns_names))]
         third_columns_names.insert(0, 'Total analysed')
         data = pd.concat([data_general, data], axis=1)
-        # data_total = pd.concat([data_general, notes_and_measures], axis=1)
 
         # computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
-        # computations2 = ["sum"] + ["mean_density"] * \
-        #     (len(third_columns_names)-1)
-
         computations = ["sum"]*len(third_columns_names)
 
         excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
@@ -270,7 +264,7 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                    #  columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+                    #  columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3, 
                 additional_info=additional_info, ponderate=False)
         
         if factor>=1:

@@ -8,20 +8,9 @@ import pandas as pd
 from ms3.expand_dcml import features2type
 from pandas.core.frame import DataFrame
 
+from .__constants import *
 
-REGEX = {}
-
-HARMONIC_RHYTHM = "Harmonic_rhythm"
-HARMONIC_RHYTHM_BEATS= "Harmonic_rhythm_beats"
-
-ADDITIONS_4_6_64_74_94='4_6_64_74_94'
-ADDITIONS_9='+9'
-OTHERS_NO_AUG='others_no_+'
-OTHERS_AUG='others_+'
-
-KEY_COMPASSES='KeyCompasses_'
-KEY_MODULATORY='KeyModulatory_'
-
+REGEX={}
 ####################
 # HARMONIC ANALYSIS
 ####################   
@@ -58,10 +47,11 @@ def get_harmonic_rhythm(ms3_table, sections)-> dict:
         #Calculating harmonuc rythom according to beasts periods
         harmonic_rhythm_beats = chords_length/sum([period * int(time_changes[j].split('/')[0]) for j, period in enumerate(periods_ts)])
 
-    hr[HARMONIC_RHYTHM]=harmonic_rhythm
-    hr[HARMONIC_RHYTHM_BEATS]=harmonic_rhythm_beats
+    hr[HARMONIC_RHYTHM] = harmonic_rhythm
+    hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
 
     return hr
+
 ####################
 # METRICAL ANALYSIS
 ####################    
@@ -503,8 +493,8 @@ def get_chords(lausanne_table):
 
     # Coger columna numeral que hace una pre-separción ?()?)?)
 
-    chords = lausanne_table.chord.dropna().tolist()
-    # chords = lausanne_table.numeral.dropna().tolist()
+    # chords = lausanne_table.chord.dropna().tolist()
+    chords = lausanne_table.numeral.dropna().tolist()
 
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
 
