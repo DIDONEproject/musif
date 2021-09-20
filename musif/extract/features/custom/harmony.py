@@ -4,7 +4,7 @@ from typing import List
 
 import ms3
 import pandas as pd
-from config import Configuration
+
 from musif.common.constants import RESET_SEQ, get_color
 from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
@@ -12,17 +12,6 @@ from pandas import DataFrame
 
 from .__harmony_utils import (get_chord_types, get_chords, get_keyareas,
                               get_numerals, get_harmonic_rhythm, get_additions)
-
-ALPHA = "abcdefghijklmnopqrstuvwxyz"
-
-
-HARMONIC_RHYTHM = "Harmonic_rhythm"
-HARMONIC_RHYTHM_BEATS= "Harmonic_rhythm_beats"
-
-ADDITIONS_4_6_64_74_94='4_6_64_74_94' 
-ADDITIONS_9='+9' 
-OTHERS_NO_AUG='others_no_+'
-OTHERS_AUG='others_+'
 
 from .__constants import *
 ###############################################################################
