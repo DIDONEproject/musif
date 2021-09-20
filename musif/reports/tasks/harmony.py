@@ -264,7 +264,7 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                    #  columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2,
+                    #  columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
         
         if factor>=1:

@@ -17,7 +17,7 @@ features:
   # - ambitus
   # - density
   # - interval # to extract Melody_values task, both ambitus and interval are needed
-  # - key
+  - key
   - lyrics
   - prefix
   # - scale
