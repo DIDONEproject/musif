@@ -8,6 +8,8 @@ from scipy.stats import kurtosis, skew
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
+from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
+from musif.extract.features.core import DATA_NUMERIC_INTERVALS, DATA_TEXT_INTERVALS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
 
 INTERVALLIC_MEAN = "IntervallicMean"
@@ -108,6 +110,7 @@ SMALLEST_ASC_INTERVAL = "SmallestAscInterval"
 SMALLEST_ASC_INTERVAL_SEMITONES = "SmallestAscIntervalSemitones"
 SMALLEST_DESC_INTERVAL = "SmallestDescInterval"
 SMALLEST_DESC_INTERVAL_SEMITONES = "SmallestDescIntervalSemitones"
+INTERVAL_COUNT = "{prefix}Interval_{interval}"
 
 
 ALL_FEATURES = [
@@ -132,8 +135,8 @@ ALL_FEATURES = [
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    numeric_intervals = part_data["numeric_intervals"]
-    text_intervals = part_data["text_intervals"]
+    numeric_intervals = part_data[DATA_NUMERIC_INTERVALS]
+    text_intervals = part_data[DATA_TEXT_INTERVALS]
     text_intervals_count = Counter(text_intervals)
 
     part_features.update(get_interval_features(numeric_intervals))
@@ -144,15 +147,15 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
+    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
     if len(parts_data) == 0:
         return
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
-        part_prefix = get_part_prefix(part_data["abbreviation"])
-        numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
-        text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+        part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
+        numeric_intervals = [interval for part_data in parts_data for interval in part_data[DATA_NUMERIC_INTERVALS]]
+        text_intervals = [interval for part_data in parts_data for interval in part_data[DATA_TEXT_INTERVALS]]
         text_intervals_count = Counter(text_intervals)
         features.update(get_interval_features(numeric_intervals, part_prefix))
         features.update(get_interval_count_features(text_intervals_count, part_prefix))
@@ -161,22 +164,22 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         for feature_name in ALL_FEATURES:
             features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
 
-    parts_data_per_sound = {part_data["sound_abbreviation"]: [] for part_data in parts_data}
+    parts_data_per_sound = {part_data[DATA_SOUND_ABBREVIATION]: [] for part_data in parts_data}
     for part_data in parts_data:
-        sound = part_data["sound_abbreviation"]
+        sound = part_data[DATA_SOUND_ABBREVIATION]
         parts_data_per_sound[sound].append(part_data)
     for sound, parts_data in parts_data_per_sound.items():
         sound_prefix = get_sound_prefix(sound)
-        numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
-        text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+        numeric_intervals = [interval for part_data in parts_data for interval in part_data[DATA_NUMERIC_INTERVALS]]
+        text_intervals = [interval for part_data in parts_data for interval in part_data[DATA_TEXT_INTERVALS]]
         text_intervals_count = Counter(text_intervals)
         features.update(get_interval_features(numeric_intervals, sound_prefix))
         features.update(get_interval_count_features(text_intervals_count, sound_prefix))
         features.update(get_interval_type_features(text_intervals_count, sound_prefix))
         features.update(get_interval_stats_features(text_intervals_count, sound_prefix))
 
-    numeric_intervals = [interval for part_data in parts_data for interval in part_data["numeric_intervals"]]
-    text_intervals = [interval for part_data in parts_data for interval in part_data["text_intervals"]]
+    numeric_intervals = [interval for part_data in parts_data for interval in part_data[DATA_NUMERIC_INTERVALS]]
+    text_intervals = [interval for part_data in parts_data for interval in part_data[DATA_TEXT_INTERVALS]]
     text_intervals_count = Counter(text_intervals)
     score_prefix = get_score_prefix()
     features.update(get_interval_features(numeric_intervals, score_prefix))
@@ -255,7 +258,10 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
 
 
 def get_interval_count_features(interval_counts: Dict[str, int], prefix: str = "") -> dict:
-    return {f"{prefix}Interval_{interval}": count for interval, count in interval_counts.items()}
+    return {
+        INTERVAL_COUNT.format(prefix=prefix, interval=interval): count
+        for interval, count in interval_counts.items()
+    }
 
 
 def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""):

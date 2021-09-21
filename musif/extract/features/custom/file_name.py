@@ -2,6 +2,7 @@ from ntpath import basename
 from typing import List
 
 from musif.config import Configuration
+from musif.constants import DATA_FILE
 
 ARIA_OPERA = "AriaOpera"
 ARIA_LABEL = "AriaLabel"
@@ -20,7 +21,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     returns a dictionary so it can be easily input in a df
     """
 
-    file_name = basename(score_data["file"])
+    file_name = basename(score_data[DATA_FILE])
 
     aria_id_end_idx = file_name.rfind("]")
     aria_id_start_idx = file_name.rfind("[", 0, aria_id_end_idx - 1) + 1

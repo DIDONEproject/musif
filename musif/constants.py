@@ -1,0 +1,13 @@
+FEATURES_MODULE = "musif.extract.features"
+
+DATA_PART = "part"
+DATA_PART_NUMBER = "part_number"
+DATA_PART_ABBREVIATION = "abbreviation"
+DATA_SOUND = "sound"
+DATA_SOUND_ABBREVIATION = "sound_abbreviation"
+DATA_FAMILY = "family"
+DATA_FAMILY_ABBREVIATION = "family_abbreviation"
+DATA_SCORE = "score"
+DATA_FILE = "file"
+DATA_PARTS_FILTER = "parts_filter"
+DATA_FILTERED_PARTS = "parts"

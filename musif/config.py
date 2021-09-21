@@ -1,12 +1,10 @@
 import multiprocessing
-from copy import deepcopy
 from glob import glob
 from os import path
 
-import musif.extract.extract
 from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
-from musif.extract.model import Level
+from musif.constants import FEATURES_MODULE
 
 READ_LOGGER_NAME = "read_log"
 WRITE_LOGGER_NAME = "write_log"
@@ -27,7 +25,6 @@ _CONFIG_FALLBACK = {
     "max_processes": 1,
     "features": None,
     "split_keywords": [],
-    "level": Level.SCORE.value,
 }
 
 class Configuration:
@@ -51,7 +48,6 @@ class Configuration:
         self.max_processes = config_data.get("max_processes", _CONFIG_FALLBACK["max_processes"])
         self.features = config_data.get("features", _CONFIG_FALLBACK["features"])
         self.split_keywords = config_data.get("split_keywords", _CONFIG_FALLBACK["split_keywords"])
-        self.level = Level(config_data.get("level", _CONFIG_FALLBACK["level"]))
         self.scores_metadata = {
             path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))
         }
@@ -68,10 +64,13 @@ class Configuration:
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
 
+    def is_requested_feature(self, feature) -> bool:
+        return feature in self.features
+
     def is_requested_module(self, module) -> bool:
         if self.features is None:
             return True
         module_name = module.__name__
         features = {feature.lower() for feature in self.features}
-        module_feature = module_name[len("musif.extract.features."):].lower()
+        module_feature = module_name[len(FEATURES_MODULE):].lower()
         return module_feature in features
