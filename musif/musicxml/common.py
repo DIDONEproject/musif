@@ -114,6 +114,7 @@ def split_layers(score: Score, split_keywords: List[str]):
         except:
             pass  # already inserted
 
+
 def get_part_clef(part):
     # the clef is in measure 1
     for elem in part.elements:
@@ -129,10 +130,6 @@ def get_xml_scoring_variables(score):
     #################################################################################
     # PRUEBAS CON SORTINGGROUPINGS
     return group.get_scoring(score)
-
-
-def get_key(score: Score) -> str:
-    return str(score.analyze("key"))
 
 
 def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:

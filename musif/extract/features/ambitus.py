@@ -2,6 +2,8 @@ from typing import List
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
+from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.features.core import DATA_AMBITUS_SOLUTION, DATA_AMBITUS_PITCH_SPAN
 from musif.extract.features.prefix import get_part_prefix
 
 LOWEST_NOTE = "AmbitusLowestNote"
@@ -29,8 +31,8 @@ ALL_FEATURES = [LOWEST_INDEX, LOWEST_NOTE, HIGHEST_INDEX, HIGHEST_NOTE, HIGHEST_
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    this_aria_ambitus = part_data["ambitus_solution"]
-    lowest_note, highest_note = part_data["ambitus_pitch_span"]
+    this_aria_ambitus = part_data[DATA_AMBITUS_SOLUTION]
+    lowest_note, highest_note = part_data[DATA_AMBITUS_PITCH_SPAN]
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
     highest_note_text = highest_note.nameWithOctave.replace("-", "b")
     lowest_index = int(lowest_note.ps)
@@ -59,11 +61,11 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
+    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
     if len(parts_data) == 0:
         return
 
     for part_data, part_features in zip(parts_data, parts_features):
-        part_prefix = get_part_prefix(part_data["abbreviation"])
+        part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
         for feature_name in ALL_FEATURES:
             score_features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
