@@ -227,7 +227,7 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         data2.columns = [i.replace('chords_Grouping1','') for i in data2.columns]
 
         data3 = data[[i for i in data.columns if 'chords_Grouping2' in i]]
-        data3.columns = [i.replace('chords_Grouping2','') for i in data3.columns]
+        data3.columns = [i.replace('chords_Grouping2','Grouped_') for i in data3.columns]
 
         #TODO: change with 'sort dataframe'?
         cols = sort(data1.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG1Sorting']])
@@ -236,12 +236,16 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         cols = sort(data2.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG2Sorting']])
         data2=data2[cols]
         data2=data2.round(decimals =2)
+
+        cols = sort(data3.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG2Sorting']])
+        data3=data3[cols]
+        data3=data3.round(decimals =2)
         
         third_columns_names=list(data1.columns)
         third_columns_names.insert(0, 'Total analysed')
 
         third_columns_names2=['Total analysed'] + list(data2.columns)
-        third_columns_names3=['Total analysed'] + list(data2.columns)
+        third_columns_names3=['Total analysed'] + list(data3.columns)
 
 
         # third_columns_names = [i.replace('Numerals','') for i in data.columns if 'Numerals' in i]
@@ -253,35 +257,27 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         computations = ["sum"]*len(third_columns_names)
         computations2 = ['sum']*len(third_columns_names2)
         computations3 = ['sum']*len(third_columns_names3)
-        
-        # columns = columns_alike_our_data(
-        #     third_columns_names, second_column_names)
-        columns=third_columns_names
-        columns2=third_columns_names2
-        columns3=third_columns_names2
 
-
-        # columns2 = columns_alike_our_data(
-        #     third_columns_names2, second_column_names2)
         data1 = pd.concat([data_general, data1], axis=1)
         data2 = pd.concat([data_general, data2], axis=1)
         data3 = pd.concat([data_general, data3], axis=1)
 
         excel_sheet(workbook.create_sheet("Weighted"),
-         columns, data1, third_columns_names,
+         third_columns_names, data1, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
-                     columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                     columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
+                     columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+                     columns3=third_columns_names3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
         
         if factor>=1:
-            excel_sheet(workbook.create_sheet("Weighted"),
-         columns, data1, third_columns_names,
+            ###TODO:  Cambiar last column y per parameters(?)
+            excel_sheet(workbook.create_sheet("Horizontal"),
+         third_columns_names, data1, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
-                    columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                    columns3=columns3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
+                    columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+                    data3=data3, columns3=third_columns_names3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
                 
         if "Sheet" in workbook.get_sheet_names():
@@ -292,6 +288,7 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         # third_columns_names.remove('Total analysed')
+
         title = 'Functions'
 
         # VISUALISATIONS

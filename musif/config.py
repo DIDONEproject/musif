@@ -19,6 +19,7 @@ _CONFIG_FALLBACK = {
         "level": "ERROR",
     },
     "data_dir": "data",
+    "musescore_dir": "data",
     "metadata_dir": "metadata",
     "metadata_id_col": "FileName",
     "parallel": False,
@@ -42,6 +43,7 @@ class Configuration:
         log_config = config_data.get("write_log", _CONFIG_FALLBACK["write_log"])
         self.write_logger = get_logger(WRITE_LOGGER_NAME, log_config["file_path"], log_config["level"])
         self.data_dir = config_data.get("data_dir", _CONFIG_FALLBACK["data_dir"])
+        self.musescore_dir = config_data.get("musescore_dir", _CONFIG_FALLBACK["data_dir"])
         self.metadata_dir = config_data.get("metadata_dir", _CONFIG_FALLBACK["metadata_dir"])
         self.metadata_id_col = config_data.get("metadata_id_col", _CONFIG_FALLBACK["metadata_id_col"])
         self.parallel = config_data.get("parallel", _CONFIG_FALLBACK["parallel"])
