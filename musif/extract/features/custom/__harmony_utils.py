@@ -160,7 +160,7 @@ def get_keys(list_keys, mode):
     result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
     # result_dict = {t: get_localkey_1(t, mode) for t in set(list_keys)}
     function1 = [result_dict[t] for t in list_keys]
-    function2 = [get_second_degree(g1) for g1 in function1]
+    function2 = [get_function_second(g1) for g1 in function1]
     # function2 = [get_localkey_2(g1) for g1 in function1]
     return function1, function2
 
@@ -326,7 +326,7 @@ def get_function_first(element, mode):
     
     for key, value in reference.items():
         if element.replace('#','').replace('-','').lower() in value:
-            output=key.lower() if element.islower() else key
+            output = key.lower() if element.islower() else key
             if '-' in element:
                 output='-'+ output
             elif '#' in element:
@@ -375,7 +375,7 @@ def get_function_first(element, mode):
 ##
 # REVIEW
 ## ESTA FUNCION SOLO DEVUELVE LO MISMO EN MAYUSCULAS(?) Algo pasa
-def get_second_degree(element):
+def get_function_second(element):
     element=element.replace('b','-') #to be able to convert to CAPS without affecting flats
     if element.lower() == '#ln':
         return '#ST'
@@ -436,7 +436,7 @@ def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     tuples = list(zip(list_numerals, list_relativeroots, list_local_keys))
     result_dict = {t: get_first_numeral(*t) for t in set(tuples)}
     function1 = [result_dict[t] for t in tuples]
-    function2 = [get_second_degree(g1) for g1 in function1]
+    function2 = [get_function_second(g1) for g1 in function1]
     return function1, function2
 ### ADDITIONS ###
 def get_additions(lausanne_table):
@@ -616,15 +616,15 @@ def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
         mode = 'M' if relativeroot.isupper() else 'm'
     parts = first_grouping.split('/')
     
-    degree = get_second_degree(parts[0])
+    degree = get_function_second(parts[0])
     if len(parts) == 2:
-        chords = get_second_degree(parts[1], mode)
+        chords = get_function_second(parts[1], mode)
         return '/'.join([degree, chords])
         
     elif len(parts) == 3:
         # chord_1 = get_degree_2(parts[1], )
-        relative_1 = get_second_degree(parts[1], 'M' if parts[2].isupper() else 'm')
-        relative_2 = get_second_degree(parts[2], mode)
+        relative_1 = get_function_second(parts[1], 'M' if parts[2].isupper() else 'm')
+        relative_2 = get_function_second(parts[2], mode)
         return '/'.join([degree, relative_1, relative_2])
     return degree
 
@@ -743,27 +743,27 @@ def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True,
     return labels.loc[ordered_ix]
 
     
-def split_labels(labels, git_branch='master', dropna=True):
-    """ Split DCML harmony labels into their respective features using the regEx
-        from the indicated branch of the DCMLab/standards repository.
-    Parameters
-    ----------
-    labels : :obj:`pandas.Series`
-        Harmony labels to be split.
-    git_branch : :obj:`str`, optional
-        The branch of the DCMLab/standards repo from which you want to use the regEx.
-    dropna : :obj:`bool`, optional
-        Drop rows where the regEx didn't match.
-    """
-    global REGEX
-    if git_branch not in REGEX:
-        url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
-        glo, loc = {}, {}
-        exec(urlopen(url).read(), glo, loc)
-        REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
-    regex = REGEX[git_branch]
-    cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
-    res = labels.str.extract(regex, expand=True)[cols]
-    if dropna:
-        return res.dropna(how='all').fillna('')
-    return res.fillna('')
+# def split_labels(labels, git_branch='master', dropna=True):
+#     """ Split DCML harmony labels into their respective features using the regEx
+#         from the indicated branch of the DCMLab/standards repository.
+#     Parameters
+#     ----------
+#     labels : :obj:`pandas.Series`
+#         Harmony labels to be split.
+#     git_branch : :obj:`str`, optional
+#         The branch of the DCMLab/standards repo from which you want to use the regEx.
+#     dropna : :obj:`bool`, optional
+#         Drop rows where the regEx didn't match.
+#     """
+#     global REGEX
+#     if git_branch not in REGEX:
+#         url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
+#         glo, loc = {}, {}
+#         exec(urlopen(url).read(), glo, loc)
+#         REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
+#     regex = REGEX[git_branch]
+#     cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
+#     res = labels.str.extract(regex, expand=True)[cols]
+#     if dropna:
+#         return res.dropna(how='all').fillna('')
+#     return res.fillna('')
