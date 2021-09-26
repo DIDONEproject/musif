@@ -1,8 +1,10 @@
 import glob
+import inspect
+import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from pathlib import Path
-from typing import Dict, Generator, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -14,10 +16,13 @@ from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.features.custom import harmony
-from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, \
-    to_abbreviation
-from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, split_layers)
+from musif.constants import DATA_PARTS_FILTER, DATA_SCORE, DATA_FILE, DATA_FILTERED_PARTS, DATA_PART, \
+    DATA_PART_NUMBER, DATA_PART_ABBREVIATION, DATA_SOUND, DATA_SOUND_ABBREVIATION, DATA_FAMILY, \
+    DATA_FAMILY_ABBREVIATION, FEATURES_MODULE
+from musif.musicxml import MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, split_layers
+from musif.musicxml.scoring import to_abbreviation, ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound
+
+CUSTOM_FEATURE_HARMONY = "custom.harmony"
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -159,7 +164,6 @@ class FeaturesExtractor:
             with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
                 futures = [executor.submit(self._process_score, musicxml_file, parts_filter)
                            for musicxml_file in musicxml_files]
-                           
                 for future in tqdm(as_completed(futures)):
                     score_features, score_parts_features = future.result()
                     scores_features.append(score_features)
@@ -170,27 +174,27 @@ class FeaturesExtractor:
     def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict]]:
         self._cfg.read_logger.info(f"Processing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file, parts_filter)
-        parts_data = [self._get_part_data(score_data, part) for part in score_data["score"].parts]
-        parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
+        parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
+        parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
-        for module in self._get_feature_modules():
+        for module in self._extract_feature_modules():
             self._update_parts_module_features(module, score_data, parts_data, parts_features)
             self._update_score_module_features(module, score_data, parts_data, parts_features, score_features)
         return score_features, parts_features
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
-        parts = self._filter_parts(score, parts_filter)
-        if len(parts) == 0:
+        filtered_parts = self._filter_parts(score, parts_filter)
+        if len(filtered_parts) == 0:
             self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
         data = {
-            "score": score,
-            "file": musicxml_file,
-            "parts": parts,
-            "parts_filter": parts_filter,
+            DATA_SCORE: score,
+            DATA_FILE: musicxml_file,
+            DATA_FILTERED_PARTS: filtered_parts,
+            DATA_PARTS_FILTER: parts_filter,
         }
-        if self._cfg.is_requested_module(harmony):
+        if self._cfg.is_requested_feature(CUSTOM_FEATURE_HARMONY):
             data["mscx_path"] = self._find_mscx_file(musicxml_file)
         return data
 
@@ -211,30 +215,43 @@ class FeaturesExtractor:
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
-        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part, score_data["parts"], self._cfg)
+        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part, score_data[DATA_FILTERED_PARTS], self._cfg)
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = self._cfg.family_to_abbreviation[family]
         data = {
-            "part": part,
-            "part_number": part_number,
-            "abbreviation": part_abbreviation,
-            "sound": sound,
-            "sound_abbreviation": sound_abbreviation,
-            "family": family,
-            "family_abbreviation": family_abbreviation,
+            DATA_PART: part,
+            DATA_PART_NUMBER: part_number,
+            DATA_PART_ABBREVIATION: part_abbreviation,
+            DATA_SOUND: sound,
+            DATA_SOUND_ABBREVIATION: sound_abbreviation,
+            DATA_FAMILY: family,
+            DATA_FAMILY_ABBREVIATION: family_abbreviation,
         }
         return data
 
-    def _get_feature_modules(self) -> Generator:
-        module_names = [f"musif.extract.features.{feature}" for feature in self._cfg.features]
-        for module_name in module_names:
-            yield __import__(module_name, fromlist=[''])
+    def _extract_feature_modules(self) -> list:
+        found_features = set()
+        for feature in self._cfg.features:
+            module_name = f"{FEATURES_MODULE}.{feature}"
+            module = __import__(module_name, fromlist=[''])
+            feature_dependencies = self._extract_feature_dependencies(module)
+            for feature_dependency in feature_dependencies:
+                if feature_dependency not in found_features:
+                    raise ValueError(f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")
+            found_features.add(feature)
+            yield module
+
+    def _extract_feature_dependencies(self, module) -> List[str]:
+        module_code = inspect.getsource(module)
+        dependencies = re.findall(rf"from {FEATURES_MODULE}.([\w\.]+) import", module_code)
+        dependencies = [dependency for dependency in dependencies if dependency in self._cfg.features]
+        return dependencies
 
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict]):
         for part_data, part_features in zip(parts_data, parts_features):
-            self._cfg.read_logger.debug(f"Extracting part \"{part_data['abbreviation']}\" {module.__name__} features.")
+            self._cfg.read_logger.debug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module.__name__} features.")
             module.update_part_objects(score_data, part_data, self._cfg, part_features)
 
     def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict):
-        self._cfg.read_logger.debug(f"Extracting score \"{score_data['file']}\" {module.__name__} features.")
+        self._cfg.read_logger.debug(f"Extracting score \"{score_data[DATA_FILE]}\" {module.__name__} features.")
         module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)

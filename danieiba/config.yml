@@ -21,9 +21,9 @@ features:
   - interval
   - tempo
   - density
-  - key
   - lyrics
   - scale
+  - key
 #  - custom.harmony
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
