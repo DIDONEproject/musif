@@ -67,6 +67,8 @@ class Configuration:
         )
 
     def is_requested_feature(self, feature) -> bool:
+        if self.features is None:
+            return True
         return feature in self.features
 
     def is_requested_module(self, module) -> bool:
