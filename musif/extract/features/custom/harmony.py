@@ -1,19 +1,12 @@
-from collections import Counter
-from functools import lru_cache
 from typing import List
 
-import ms3
-import pandas as pd
-
-from musif.common.constants import RESET_SEQ, get_color
-from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix
 from pandas import DataFrame
 
-from .__harmony_utils import (get_chord_types, get_chords, get_keyareas,
-                              get_numerals, get_harmonic_rhythm, get_additions)
-
+from musif.config import Configuration
+from musif.extract.features.core import DATA_MODE
 from .__constants import *
+from .__harmony_utils import (get_additions, get_chord_types, get_chords, get_harmonic_rhythm, get_keyareas,
+                              get_numerals)
 
 
 def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame) -> dict:
@@ -55,7 +48,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             # # KEY AREAS #
             # #############
 
-            keyareas = get_keyareas(harmonic_analysis, major = score_data['mode'] == 'major')
+            keyareas = get_keyareas(harmonic_analysis, major = score_data[DATA_MODE] == 'major')
 
             # #############
             # #  CHORDS   #

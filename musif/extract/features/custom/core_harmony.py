@@ -9,7 +9,6 @@ from music21.analysis.discrete import Ambitus
 import pandas as pd
 
 from musif.config import Configuration
-from musif.extract.features.key import get_key_and_mode
 from musif.musicxml import get_intervals, get_notes_and_measures, get_notes_lyrics
 
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, split_layers)
