@@ -5,8 +5,11 @@ from pandas import DataFrame
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
+from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.features.core import DATA_NOTES, DATA_SOUNDING_MEASURES, DATA_MEASURES
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
-from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS
+from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS, SOUND_ABBREVIATION, FAMILY_ABBREVIATION, \
+    PART_ABBREVIATION
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.musicxml import Measure, Note, Part
 
@@ -21,11 +24,11 @@ DENSITY = "Density"
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    if not part_matches_filter(part_data["abbreviation"], score_data["parts_filter"]):
+    if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], score_data[DATA_PARTS_FILTER]):
         return {}
-    notes = part_data["notes"]
-    sounding_measures = part_data["sounding_measures"]
-    measures = part_data["measures"]
+    notes = part_data[DATA_NOTES]
+    sounding_measures = part_data[DATA_SOUNDING_MEASURES]
+    measures = part_data[DATA_MEASURES]
     number_of_beats = part_features[NUMBER_OF_BEATS]
     part_features.update({
         NOTES: len(notes),
@@ -38,18 +41,18 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
+    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
     if len(parts_features) == 0:
         return
 
     features = {}
     df_parts = DataFrame(parts_features)
-    df_sound = df_parts.groupby("SoundAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    df_family = df_parts.groupby("FamilyAbbreviation").aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_sound = df_parts.groupby(SOUND_ABBREVIATION).aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_family = df_parts.groupby(FAMILY_ABBREVIATION).aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
     df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
     number_of_beats = score_features[NUMBER_OF_BEATS]
     for part_features in parts_features:
-        part_prefix = get_part_prefix(part_features['PartAbbreviation'])
+        part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
         features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
         features[f"{part_prefix}{SOUNDING_MEASURES}"] = part_features[SOUNDING_MEASURES]
         features[f"{part_prefix}{MEASURES}"] = part_features[MEASURES]
@@ -155,5 +158,5 @@ def calculate_densities(notes_list, measures_list, names_list, cfg: Configuratio
         density_dict = sort_dict(density_dict, density_sorting, cfg)
         return density_dict
     except:
-        read_logger.error('Densities problem found: ', exc_info=True)
+        cfg.read_logger.error('Densities problem found: ', exc_info=True)
         return {}

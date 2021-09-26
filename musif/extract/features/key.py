@@ -1,9 +1,8 @@
-from typing import List, Tuple
-
-from music21.key import Key
-from music21.stream import Score
+from typing import List
 
 from musif.config import Configuration
+from musif.extract.features.core import DATA_KEY, DATA_TONALITY, DATA_MODE
+from musif.musicxml.key import get_key_signature, get_key_signature_type
 
 KEY = "Key"
 KEY_SIGNATURE = "KeySignature"
@@ -15,9 +14,9 @@ MODE_VALUES = ['major', 'minor']
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-    key = score_data["key"]
-    tonality = score_data["tonality"]
-    mode = score_data["mode"]
+    key = score_data[DATA_KEY]
+    tonality = score_data[DATA_TONALITY]
+    mode = score_data[DATA_MODE]
     key_signature = get_key_signature(key)
     key_signature_type = get_key_signature_type(key_signature)
 
@@ -31,41 +30,3 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     pass
-
-
-def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:
-    """
-    returns abbreviated designation of keys (uppercase for major mode; lowercase for minor mode)
-    example: if key == 'D- major': return 'Db'
-    """
-    score_key = score.analyze("key")
-    key_parts = score_key.name.split(" ")
-    mode = key_parts[1].strip().lower()
-    tonality = key_parts[0]
-    tonality = tonality.lower() if mode == 'minor' else tonality.capitalize()
-    tonality = tonality.replace('-', 'b')  # if the character '-' is not in the string, nothing will change
-    return score_key, tonality, mode
-
-
-def get_key_signature(score_key: Key) -> str:
-    if score_key.sharps:
-        key_signature = "b" * abs(score_key.sharps) if score_key.sharps < 0 else "s" * score_key.sharps
-    else:
-        key_signature = "n"
-    return key_signature
-
-
-def get_key_signature_type(key_signature: str) -> str:
-    """
-    returns the key signature type ('bb) for flats, 'ss' for sharps, and 'nn' for naturals
-    """
-    return key_signature[0]
-
-
-def get_mode(key: str) -> str:
-    if key.isupper():
-        return 'M'
-    else:
-        return 'm'
-
-

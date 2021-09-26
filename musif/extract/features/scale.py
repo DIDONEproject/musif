@@ -1,6 +1,9 @@
 from typing import List, Dict, Union
 
 from music21.note import Note
+
+from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.features.core import DATA_TONALITY, DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix
 
 from musif.config import Configuration
@@ -14,8 +17,8 @@ DEGREE_PER = "{prefix}Degree{key}_Per"
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    notes = part_data["notes"]
-    tonality = score_data["tonality"]
+    notes = part_data[DATA_NOTES]
+    tonality = score_data[DATA_TONALITY]
     notes_per_degree = get_notes_per_degree(tonality.capitalize(), notes)
     all_degrees = sum(value for value in notes_per_degree.values())
     for key, value in notes_per_degree.items():
@@ -24,12 +27,12 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-    parts_data = filter_parts_data(parts_data, score_data["parts_filter"])
+    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
     if len(parts_data) == 0:
         return
 
     for part_data, parts_features in zip(parts_data, parts_features):
-        part_prefix = get_part_prefix(part_data["abbreviation"])
+        part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
         for feature in parts_features:
             if "Degree" in feature:
                 score_features[f"{part_prefix}{feature}"] = parts_features[feature]

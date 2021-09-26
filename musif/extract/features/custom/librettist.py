@@ -3,6 +3,7 @@ from typing import List
 from music21.text import TextBox
 
 from musif.config import Configuration
+from musif.constants import DATA_SCORE
 
 LIBRETTIST = "Librettist"
 
@@ -13,7 +14,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     returns a dictionary so it can be easily input in a df
     """
 
-    score = score_data["score"]
+    score = score_data[DATA_SCORE]
     librettist = None
     for textbox in score.getElementsByClass(TextBox):
         lines = textbox.content.split("\n")
