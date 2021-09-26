@@ -194,8 +194,6 @@ class FeaturesExtractor:
             DATA_FILTERED_PARTS: filtered_parts,
             DATA_PARTS_FILTER: parts_filter,
         }
-        if self._cfg.is_requested_feature(CUSTOM_FEATURE_HARMONY):
-            data["mscx_path"] = self._find_mscx_file(musicxml_file)
         return data
 
     def _find_mscx_file(self, musicxml_file: str) -> Optional[Path]:
