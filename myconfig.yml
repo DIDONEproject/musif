@@ -1,4 +1,5 @@
 data_dir: data
+musescore_dir: data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
@@ -12,21 +13,24 @@ write_log:
   level: INFO
 features:
   - core
+  - custom.core_harmony
   - scoring
   - custom.file_name
+  - scale
+  - custom.modulations
+  - custom.harmony
   - metadata
 #  - custom.themeA
   - composer
   - custom.librettist
-  - custom.harmony
   - tempo
   # - ambitus
-  - density
-  - texture
+  # - density
+  # - texture
   # - interval # to extract Melody_values task, both ambitus and interval are needed
   - key
   - lyrics
-  # - scale
+
 split_keywords:
   - woodwind
   - brass

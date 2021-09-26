@@ -18,14 +18,16 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
                  columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, 
                  columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
                  additional_info: list=[], ponderate: bool=False):
-                # second_subgroup = False, second_subgroup_info = {}, third_subgroup = False, third_subgroup_info = {}, fourth_subgroup = False, fourth_subgroup_info = {},fifth_subgroup=False, fifth_subgroup_info={}, six_subgroup=False, six_subgroup_info={},
-                # additional_info = [], ponderate = False, total = True, valores_filas = [], want_total_counts = False):
     
     row_number = 1  # we start writing in row 1
     column_number = 1
+
     if groups == None:
         row_iteration(sheet, rows_groups, columns, row_number, column_number, data, third_columns, computations_columns, sorting_lists, first_columns=first_columns, second_columns=second_columns, per=per,
-                      average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
+                    average=average, last_column=last_column, last_column_average=last_column_average,
+                    columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, 
+                    columns3=columns3, data3=data3, third_columns3=third_columns3, computations_columns3=computations_columns3, first_columns3=first_columns3, second_columns3=second_columns3, 
+                      additional_info=additional_info, ponderate=ponderate)
     else:
         # we may be grouping by more than 2 factors
         data_grouped = data.groupby(list(groups))
@@ -57,6 +59,7 @@ def excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_column
                     group if len(group) > 1 else group[0])
             rn = row_iteration(sheet,rows_groups, columns, row_number, cnumber, group_data, third_columns, computations_columns, sorting_lists, group=groups, first_columns=first_columns, second_columns=second_columns, per=per,
                                average=average, last_column=last_column, last_column_average=last_column_average, columns2=columns2, data2=data2_grouped, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, additional_info=additional_info, ponderate=ponderate)
+           
             data3_grouped = None
             if data3 is not None:
                 data3_grouped = data3.groupby(list(groups)).get_group(
@@ -280,6 +283,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     exception = -1
     total_analysed_column = "Total analysed" in columns
     cnumber = column_number
+
     # PRINT EACH ROW
     # store each result in case of need of calculating the percentage (per = True)
     columns_values = {c: [] for c in columns}
@@ -364,8 +368,8 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         computations_columns = computations_columns[1:]
 
     last_used_row = row_number
-    if per or last_column:  # These are the two conditions in which we need to transpose valores_columnas
-        # Transpose valores_columnas to valores_filas (change perspective from column to rows)
+    if per or last_column:  # These are the two conditions in which we need to transpose column_values
+        # Transpose colmn_values to valores_filas (change perspective from column to rows)
         columns_list = list(columns_values.values())
         keys_columnas = list(columns_values.keys())
         rows_values = []
@@ -399,9 +403,10 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
         cnumber = cn
 
-    # RECALCULATE VALORES_FILAS AGAIN TO GET THE MOST UPDATED DATA
+    # RECALCULATE AGAIN TO GET THE MOST UPDATED DATA
     columns_list = list(columns_values.values()
-                           )  # Get the updated version
+                           ) 
+
     if per:  # Compute valores_filas again
         rows_values = []
         for i in range(len_lists):
@@ -425,6 +430,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     # PRINT LAST ROW (TOTAL OR AVERAGE)
     values=np.asarray(list(columns_values.values()))
     for i, c in enumerate(columns_values):
+
         # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
         for row in range(0,values.shape[1]):
             if all([str(e)=='0.0' for e in values[:,row]]):
@@ -477,6 +483,7 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                 sheet.cell(row_number, column_number).fill = YELLOWFILL
                 row_number += 1
                 sorting = rows_groups[row][1]
+
                 # 2. Write the information depending on the subgroups (ex: Geography -> City, Country)
                 if len(rows_groups[row][0]) == 0:  # No subgroups
                     starting_row = row_number
@@ -492,8 +499,19 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                         if data2 is not None:
                             data2 = sort_dataframe(
                                 data2, row, sorting_lists, sorting)
-                        _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
+                        #_,_
+                        row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+                    
+                    if columns3 != None:  # Third subgroup
+                        groups_add_info, add_info = get_groups_add_info(
+                            data, row, additional_info)    
+                        if data3 is not None:
+                            data3 = sort_dataframe(
+                                data3, row, sorting_lists, sorting)
+                        _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data3 is None else data3.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns3, third_columns3, computations_columns3, first_columns3,
+                                            second_columns3, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+                
                 else:  # has subgroups, ex: row = Date, subgroups: Year
                     if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:
                         data_joint = data.copy()
@@ -524,8 +542,19 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                                         data2, subrows, sorting_lists, sort_method)
                                 groups_add_info, add_info = get_groups_add_info(
                                     data, subrows, additional_info)
-                                _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
+                                row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                                     second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
+                            
+                            if columns3 != None:  # Second subgroup
+                                if "Tempo" in subrows and data3 is not None:
+                                    data3[subrows] = data3[subrows].fillna('')
+                                if data3 is not None:
+                                    data3 = sort_dataframe(
+                                        data3, subrows, sorting_lists, sort_method)
+                                groups_add_info, add_info = get_groups_add_info(
+                                    data, subrows, additional_info)
+                                _, _ = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data3 is None else data3.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns3, third_columns3, computations_columns3, first_columns3,
+                                                    second_columns3, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
 
                             row_number += 1
                     if rows_groups[row][0] == [CHARACTER, ROLE, GENDER]:

@@ -10,12 +10,13 @@ from pandas.core.frame import DataFrame
 
 from .__constants import *
 
+
 REGEX={}
 ####################
 # HARMONIC ANALYSIS
 ####################   
 
-def get_harmonic_rhythm(ms3_table, sections)-> dict:
+def get_harmonic_rhythm(ms3_table)-> dict:
     hr={}
     measures = ms3_table.mc.dropna().tolist()
     playthrough= ms3_table.playthrough.dropna().tolist()
@@ -29,6 +30,7 @@ def get_harmonic_rhythm(ms3_table, sections)-> dict:
     time_signatures = ms3_table.timesig.tolist()
     
     harmonic_rhythm = chords_length/len(measures_compressed)
+
     # Cases with no time signature changes
     if len(Counter(time_signatures)) == 1:
         harmonic_rhythm_beats = chords_length/int(time_signatures[0].split('/')[0])
@@ -85,9 +87,9 @@ def get_measures_per_possibility(possibilities, measures, possibilities_list, be
 
 ###########################################################################
 # Function that returns the number of beats depending on the time signature
-# 6/8 time signature is classified as having two beats; 6/2, 6/4 and 6/16 time signatures
-# as having 3 beats.
+# 6/8 time signature is classified as having two beats; 6/2, 6/4 and 6/16 time signatures as having 3 beats.
 ###########################################################################
+
 def get_beatspertsig(tsig):
     if tsig in ['1/2', '1/4', '1/8', '1/16']:
         return 1
@@ -155,10 +157,10 @@ def continued_sections(sections, mc):
 
 # Function to return harmonic functions (1 and 2) based on a list of keys #
 def get_keys(list_keys, mode):
-    result_dict = {t: get_degree_1(t, mode) for t in set(list_keys)}
+    result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
     # result_dict = {t: get_localkey_1(t, mode) for t in set(list_keys)}
     function1 = [result_dict[t] for t in list_keys]
-    function2 = [get_degree_2(g1) for g1 in function1]
+    function2 = [get_function_second(g1) for g1 in function1]
     # function2 = [get_localkey_2(g1) for g1 in function1]
     return function1, function2
 
@@ -310,18 +312,21 @@ def get_keyareas(lausanne_table, major = True):
 # Function to obtain the harmonic function1 of every relativeroot, chord, or numeral#
 # harmonic_analysis: columnas AG-AK
 ###########################################################################
-def get_degree_1(element, mode):
+# REVIEW
+
+def get_function_first(element, mode):
+    reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']}
+
     if element.lower()=='bii':
         return 'NAP'
+
     #It6/V -> viio(-3)
     # '-' represents flats
-    element=element.replace('b','-')
+    element=element.replace('b','-')    # '-' represents flats
     
-    reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']
-    }
     for key, value in reference.items():
         if element.replace('#','').replace('-','').lower() in value:
-            output=key.lower() if element.islower() else key
+            output = key.lower() if element.islower() else key
             if '-' in element:
                 output='-'+ output
             elif '#' in element:
@@ -366,7 +371,11 @@ def get_degree_1(element, mode):
 ###########################################################################
 # Function to obtain the harmonic function2 of every relativeroot, chord, or numeral.
 ###########################################################################
-def get_degree_2(element):
+
+##
+# REVIEW
+## ESTA FUNCION SOLO DEVUELVE LO MISMO EN MAYUSCULAS(?) Algo pasa
+def get_function_second(element):
     element=element.replace('b','-') #to be able to convert to CAPS without affecting flats
     if element.lower() == '#ln':
         return '#ST'
@@ -416,20 +425,20 @@ def get_numerals(lausanne_table):
         nc['Numerals_'+str(n)] = round((numerals_counter[n]/sum(list(numerals_counter.values()))), 2)
     return nc 
 
-def get_numeral_1(numeral, relativeroot, local_key):
+def get_first_numeral(numeral, relativeroot, local_key):
     # We use relative root column to discriminate if there is a relatuive numeral or not
     if str(relativeroot) != 'nan':
-        return get_degree_1(numeral, 'M' if relativeroot.isupper() else 'm')
+        return get_function_first(numeral, 'M' if relativeroot.isupper() else 'm')
     else:
-        return get_degree_1(numeral, 'M' if local_key.isupper() else 'm')
+        return get_function_first(numeral, 'M' if local_key.isupper() else 'm')
 
 def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     tuples = list(zip(list_numerals, list_relativeroots, list_local_keys))
-    result_dict = {t: get_numeral_1(*t) for t in set(tuples)}
+    result_dict = {t: get_first_numeral(*t) for t in set(tuples)}
     function1 = [result_dict[t] for t in tuples]
-    function2 = [get_degree_2(g1) for g1 in function1]
+    function2 = [get_function_second(g1) for g1 in function1]
     return function1, function2
-
+### ADDITIONS ###
 def get_additions(lausanne_table):
     additions = lausanne_table.changes.tolist()
     additions_cleaned = []
@@ -471,14 +480,11 @@ def get_additions(lausanne_table):
 ####################
 
 def get_chord_types(lausanne_table):
-    # form = lausanne_table.form.tolist()
-    # #los que son nan hay que cambiarlos en función de una serie de reglas
-    # figbass = lausanne_table.figbass.tolist()
-    # numerals = lausanne_table.numeral.tolist()
-    form_l = make_type_col(lausanne_table)
+
+    chords_forms = make_type_col(lausanne_table) #Nan values represent {} notations, not chords
         
     #convert the list of forms in their groups
-    grouped_forms = get_chordtypes(form_l)
+    grouped_forms = get_chord_types_groupings(chords_forms)
 
     form_counter = Counter(grouped_forms)
     features_chords= {}
@@ -486,68 +492,69 @@ def get_chord_types(lausanne_table):
         features_chords['chords_' + str(f)] = form_counter[f] / sum(list(form_counter.values()))
     return features_chords
 
-def get_chords(lausanne_table):
-    relativeroots = lausanne_table.relativeroot.tolist()
+def get_chords(harmonic_analysis):
+    
+    relativeroots = harmonic_analysis.relativeroot.tolist()
+    keys = harmonic_analysis.localkey.dropna().tolist() 
+    
+    chords = harmonic_analysis.chord.dropna().tolist()
+    numerals=harmonic_analysis.numeral.dropna().tolist()
 
-    keys = lausanne_table.localkey.dropna().tolist() 
+    types = harmonic_analysis.chord_type.dropna().tolist()
 
-    # Coger columna numeral que hace una pre-separción ?()?)?)
-
-    # chords = lausanne_table.chord.dropna().tolist()
-    chords = lausanne_table.numeral.dropna().tolist()
+    chords_forms=make_type_col(harmonic_analysis)
 
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
+    
+    # REVIEW
+    modulations_number = Counter(keys)
+    numerals_dict= CountChords(numerals) #A esta habría que añadirle types?? -> chords_forms
 
+        #### VS ####
+    chords_dict = CountChords(chords)
+
+    counter_function_1 = Counter(chords_functionalities1)
+    counter_function_2 = Counter(chords_functionalities2)
+    chords_group_1 = CountChordsGroup(counter_function_1, '1')
+    chords_group_2 = CountChordsGroup(counter_function_2, '2')
+
+    return chords_dict, chords_group_1, chords_group_2
+
+def CountChords(chords):
     chords_numbers = Counter(chords)
-    chords_functionalities1 = Counter(chords_functionalities1)
-    chords_functionalities2 = Counter(chords_functionalities2)
+    total_chords=sum(chords_numbers.values())
 
-    total_chords=sum(Counter(chords).values())
-    
-    #chords
-    chords = {}
+    chords_dict = {}
     for degree in chords_numbers:
-        chords['chords_'+degree] = chords_numbers[degree]/total_chords
+        chords_dict['chord_'+degree] = chords_numbers[degree]/total_chords
+    return chords_dict
 
-    #chords group 1
-    chords_g1 = {}
-    total_chords_g1=sum(Counter(chords_functionalities1).values())
+def CountChordsGroup(counter_function, number):
+    chords_group = {}
+    total_chords_group=sum(Counter(counter_function).values())
 
-    for degree in chords_functionalities1:
-        chords_g1['chords_Grouping1'+ degree] = chords_functionalities1[degree]/total_chords_g1
-    
-    #chords group 2
-    chords_group2 = {}
-    total_chords_g2=sum(Counter(chords_functionalities2).values())
+    for degree in counter_function:
+        chords_group['Chords_Grouping_' + number + degree] = counter_function[degree]/total_chords_group
 
-    for degree in chords_functionalities2:
-        chords_group2['chords_Grouping2' + degree] = chords_functionalities2[degree]/total_chords_g2
-    return chords, chords_g1, chords_group2
+    return chords_group
 
 #################################################################
 # This function takes the first characters in the chord to 
 # obtain its grouping
-def parse_chord(first_char):
-    if '(' in first_char:
-        first_char = first_char.split('(')[0]
-    if 'o' in first_char:
-        first_char = first_char.split('o')[0]
-    if '+' in first_char:
-        first_char = first_char.split('+')[0]
-    if '%' in first_char:
-        first_char = first_char.split('%')[0]
-    if 'M' in first_char:
-        first_char = first_char.split('M')[0]
+def parse_chord(chord):
+    if '(' in chord:
+        chord = chord.split('(')[0]
+    if 'o' in chord:
+        chord = chord.split('o')[0]
+    if '+' in chord:
+        chord = chord.split('+')[0]
+    if '%' in chord:
+        chord = chord.split('%')[0]
+    if 'M' in chord:
+        chord = chord.split('M')[0]
         
-    # look for a number
-    chars = []
-    for character in first_char:
-        if not character.isdigit():
-            chars.append(character)
-        else:
-            break
-
-    return ''.join(chars)
+    # return chord letter without number
+    return re.split('(\d+)', chord)[0]
 
 ####################
 # CHORD FORM
@@ -555,7 +562,7 @@ def parse_chord(first_char):
 
 #############################################
 # Function that returns the chord_type grouping
-def get_chordtype(chord_type):
+def get_chord_type(chord_type):
     chord_type=str(chord_type)
     if chord_type.lower()=='m':
         return 'triad'
@@ -574,94 +581,67 @@ def get_chordtype(chord_type):
 #############################################
 # Function that returns the chord_type grouping
 
-def get_chordtypes(chordtype_list):
-    return [get_chordtype(chord_type) for chord_type in chordtype_list]
+def get_chord_types_groupings(chordtype_list):
+    return [get_chord_type(chord_type) for chord_type in chordtype_list]
 
-#############################################
-# Function to return the first grouping for any chord
-# in any given local key.
-def get_chord_1(chord, local_key):
 
-    #persegui It6/V. Coger columna numeral paraparsear acordes
+def get_first_chord_local(chord, local_key):
+    #perseguir It6/V. Coger columna numeral paraparsear acordes
 
-    mode = 'M' if local_key else 'm'
+    local_key_mode = 'M' if local_key else 'm'
     if '/' not in chord:
-        return get_degree_1(parse_chord(chord), mode)
+        return get_function_first(parse_chord(chord), local_key_mode)
     else: 
         parts = chord.split('/')
-        degree = get_degree_1(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
-
+        degree = get_function_first(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
         if len(parts) == 2:
-            chord = get_degree_1(parts[1], mode)
-            return '/'.join([degree, chord])
+            relative = get_function_first(parts[1], local_key_mode)
+            return '/'.join([degree, relative])
+
         else:
-            chord_list=[]
-            chord_list.append(degree)
-            chord_list.append(get_degree_1(parts[1], 'M' if parts[2].isupper() else 'm'))
+            relative_list=[]
+            relative_list.append(degree)
+            relative_list.append(get_function_first(parts[1], 'M' if parts[2].isupper() else 'm'))
             for i in range(2,len(parts)):
-                chord_list.append(get_degree_1(parts[i], mode))
-            return '/'.join(chord_list)
+                relative_list.append(get_function_first(parts[i], local_key_mode))
+            return '/'.join(relative_list)
 
-        # elif len(parts) == 4:
-        #     chord1 = get_degree_1(parts[1], 'M' if parts[2].isupper() else 'm')
-        #     chord2 = get_degree_1(parts[2], mode)
-        #     chord3 = get_degree_1(parts[3], mode)
-            return '/'.join([degree, chord1, chord2, chord3])
-        
-
-# Function to return the second grouping for any chord in any given local key,
-def get_chord_2(grouping1, relativeroot, local_key):
+# REVIEW porqué es tan parecida a get_first_chord_local??
+# Function to return second grouping for any chord in any given local key,
+def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     mode = 'M' if local_key else 'm'
+
+    #Qué es relative root aqui exactamente
     if str(relativeroot) != 'nan':
         mode = 'M' if relativeroot.isupper() else 'm'
-    parts = grouping1.split('/')
-    degree = get_degree_2(parts[0])
+    parts = first_grouping.split('/')
+    
+    degree = get_function_second(parts[0])
     if len(parts) == 2:
-        chords = get_degree_2(parts[1])
+        chords = get_function_second(parts[1], mode)
         return '/'.join([degree, chords])
+        
     elif len(parts) == 3:
-        # chord_1 = get_degree_2(parts[1], 'M' if parts[2].isupper() else 'm')
-        chord_1 = get_degree_2(parts[1])
-        chord_2 = get_degree_2(parts[2])
-        return '/'.join([degree, chord_1, chord_2])
+        # chord_1 = get_degree_2(parts[1], )
+        relative_1 = get_function_second(parts[1], 'M' if parts[2].isupper() else 'm')
+        relative_2 = get_function_second(parts[2], mode)
+        return '/'.join([degree, relative_1, relative_2])
     return degree
 
-def get_chords_functions(list_chords, list_relativeroots, list_local_keys):
+def get_chords_functions(chords, relativeroots, local_keys)-> list:
 
     #TODO: review that the order is not changed.
 
-    chords_localkeys = list(zip(list_chords, list_local_keys))
-    functionalities_dict = {t: get_chord_1(*t) for t in set(chords_localkeys)}
-    function_1 = [functionalities_dict[t] for t in chords_localkeys]
-    chords_localkeys = list(zip(function_1, list_relativeroots, list_local_keys))
-    function_2 = [get_chord_2(*g1) for g1 in chords_localkeys]
-    return function_1, function_2
+    chords_localkeys = list(zip(chords, local_keys))
+    functionalities_dict = {t: get_first_chord_local(*t) for t in set(chords_localkeys)}
 
-# ### MODULATIONS ###
-# def get_modulations(lausanne_table: DataFrame, sections, major = True):
-#     keys = lausanne_table.localkey.dropna().tolist()
-#     grouping, _ = get_keys_functions(keys, mode = 'M' if major else 'm')
-#     modulations_sections = {g:[] for g in grouping}
+    function_first = [functionalities_dict[t] for t in chords_localkeys]
 
-#     # Count the number of sections in each key
-#     last_key = ''
-#     for i, k in enumerate(keys):
-#         if (k.lower() != 'i') and k != last_key: #premisa
-#             # section = sections[i] #??? NON comprendo
-#             last_key = k
-#             modulation = grouping[i]
-#             # modulations_sections[modulation].append(section)
-#         # if last_key == k and sections[i] != section:
-#         #     section = sections[i]
-#         #     modulations_sections[modulation].append(section)
-    
-#     #borramos las modulaciones con listas vacías y dejamos un counter en vez de una lista
-#     ms = {}
-#     # for m in modulations_sections:
-#     #     if len(modulations_sections[m]) != 0:
-#     #         ms['Modulations'+str(m)] = len(list(set(modulations_sections[m])))
-#     # return ms
+    #Redefine chords_localkeys to get second chord's functionality
+    second_chords_localkeys = list(zip(function_first, relativeroots, local_keys))
+    function_second = [get_second_grouping_localkey(*first_grouping) for first_grouping in second_chords_localkeys]
 
+    return function_first, function_second
 
 def make_type_col(df, num_col='numeral', form_col='form', fig_col='figbass'):
     """ Create a new Series with the chord type for every row of `df`.
@@ -763,27 +743,27 @@ def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True,
     return labels.loc[ordered_ix]
 
     
-def split_labels(labels, git_branch='master', dropna=True):
-    """ Split DCML harmony labels into their respective features using the regEx
-        from the indicated branch of the DCMLab/standards repository.
-    Parameters
-    ----------
-    labels : :obj:`pandas.Series`
-        Harmony labels to be split.
-    git_branch : :obj:`str`, optional
-        The branch of the DCMLab/standards repo from which you want to use the regEx.
-    dropna : :obj:`bool`, optional
-        Drop rows where the regEx didn't match.
-    """
-    global REGEX
-    if git_branch not in REGEX:
-        url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
-        glo, loc = {}, {}
-        exec(urlopen(url).read(), glo, loc)
-        REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
-    regex = REGEX[git_branch]
-    cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
-    res = labels.str.extract(regex, expand=True)[cols]
-    if dropna:
-        return res.dropna(how='all').fillna('')
-    return res.fillna('')
+# def split_labels(labels, git_branch='master', dropna=True):
+#     """ Split DCML harmony labels into their respective features using the regEx
+#         from the indicated branch of the DCMLab/standards repository.
+#     Parameters
+#     ----------
+#     labels : :obj:`pandas.Series`
+#         Harmony labels to be split.
+#     git_branch : :obj:`str`, optional
+#         The branch of the DCMLab/standards repo from which you want to use the regEx.
+#     dropna : :obj:`bool`, optional
+#         Drop rows where the regEx didn't match.
+#     """
+#     global REGEX
+#     if git_branch not in REGEX:
+#         url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
+#         glo, loc = {}, {}
+#         exec(urlopen(url).read(), glo, loc)
+#         REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
+#     regex = REGEX[git_branch]
+#     cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
+#     res = labels.str.extract(regex, expand=True)[cols]
+#     if dropna:
+#         return res.dropna(how='all').fillna('')
+#     return res.fillna('')
