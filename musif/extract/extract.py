@@ -3,8 +3,7 @@ import inspect
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -15,14 +14,12 @@ from musif.common.cache import Cache
 from musif.common.constants import GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
+from musif.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILE, DATA_FILTERED_PARTS, DATA_PART, \
+    DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION, \
+    FEATURES_MODULE
 from musif.extract.common import filter_parts_data
-from musif.constants import DATA_PARTS_FILTER, DATA_SCORE, DATA_FILE, DATA_FILTERED_PARTS, DATA_PART, \
-    DATA_PART_NUMBER, DATA_PART_ABBREVIATION, DATA_SOUND, DATA_SOUND_ABBREVIATION, DATA_FAMILY, \
-    DATA_FAMILY_ABBREVIATION, FEATURES_MODULE
-from musif.musicxml import MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, split_layers
-from musif.musicxml.scoring import to_abbreviation, ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound
-
-CUSTOM_FEATURE_HARMONY = "custom.harmony"
+from musif.musicxml import MUSICXML_FILE_EXTENSION, split_layers
+from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, to_abbreviation
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -195,14 +192,6 @@ class FeaturesExtractor:
             DATA_PARTS_FILTER: parts_filter,
         }
         return data
-
-    def _find_mscx_file(self, musicxml_file: str) -> Optional[Path]:
-        try:
-            mscx_path=musicxml_file.replace(MUSICXML_FILE_EXTENSION, MUSESCORE_FILE_EXTENSION)
-        except FileNotFoundError:
-            self._cfg.read_logger.info("Musescore file was not found for {} file!".format(musicxml_file))
-            mscx_path=None
-        return mscx_path
 
     def _filter_parts(self, score: Score, parts_filter: List[str] = None) -> List[Part]:
         if parts_filter is None:
