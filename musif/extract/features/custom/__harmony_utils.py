@@ -475,6 +475,7 @@ def get_additions(lausanne_table):
         if additions_counter[a] != 0:
             ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
     return ad
+    
 ####################
 # CHORDS
 ####################

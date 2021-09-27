@@ -35,7 +35,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
         # Get the array based on harmonic_analysis.mc
         # sections = continued_sections(sections, harmonic_analysis.mc)
-        modulations = get_modulations(harmonic_analysis, sections, major = score_data['mode'] == 'major')
+        # modulations = get_modulations(harmonic_analysis, sections, major = score_data['mode'] == 'major')
 
 
     except Exception as e:

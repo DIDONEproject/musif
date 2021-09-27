@@ -132,7 +132,6 @@ def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) ->
     for note in notes_list:
       if note.isChord:
         note=note[0] #If we wave 2or more notes at once, we just take the lowest one
-
       notes_measures.append((note.name, note.measureNumber))
 
 
