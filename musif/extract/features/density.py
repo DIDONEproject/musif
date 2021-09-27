@@ -5,7 +5,7 @@ from pandas import DataFrame
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
-from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
 from musif.extract.features.core import DATA_NOTES, DATA_SOUNDING_MEASURES, DATA_MEASURES
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS, SOUND_ABBREVIATION, FAMILY_ABBREVIATION, \

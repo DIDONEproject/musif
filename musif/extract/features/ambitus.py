@@ -2,7 +2,7 @@ from typing import List
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
 from musif.extract.features.core import DATA_AMBITUS_SOLUTION, DATA_AMBITUS_PITCH_SPAN
 from musif.extract.features.prefix import get_part_prefix
 

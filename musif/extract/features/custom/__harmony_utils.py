@@ -5,7 +5,7 @@ from urllib.request import urlopen
 
 import numpy as np
 import pandas as pd
-from ms3.expand_dcml import features2type
+from ms3.expand_dcml import features2type, split_labels
 from pandas.core.frame import DataFrame
 
 from .__constants import *
@@ -702,8 +702,8 @@ def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True,
     """
     if len(kwargs) == 0:
         raise ValueError("Pass at least one keyword argument for sorting...")
-    if not isinstance(labels, pd.core.series.Series):
-        if isinstance(labels, pd.core.frame.DataFrame):
+    if not isinstance(labels, pd.Series):
+        if isinstance(labels, pd.DataFrame):
             raise TypeError("Pass only one column of your DataFrame.")
         labels = pd.Series(labels)
     if drop_duplicates:

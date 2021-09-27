@@ -2,7 +2,7 @@ from os import path
 from typing import List
 
 from musif.config import Configuration
-from musif.constants import DATA_PART, DATA_SCORE, DATA_FILE
+from musif.extract.constants import DATA_PART, DATA_SCORE, DATA_FILE
 from musif.musicxml import get_intervals, get_notes_and_measures, get_notes_lyrics
 from musif.musicxml.ambitus import get_part_ambitus
 from musif.musicxml.key import get_key_and_mode

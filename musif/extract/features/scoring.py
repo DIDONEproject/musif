@@ -4,7 +4,7 @@ from musif.common.constants import VOICE_FAMILY, GENERAL_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import part_matches_filter
-from musif.constants import DATA_PART, DATA_SCORE, DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_SOUND, \
+from musif.extract.constants import DATA_PART, DATA_SCORE, DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_SOUND, \
     DATA_SOUND_ABBREVIATION, DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_PART_NUMBER, DATA_FILTERED_PARTS
 from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
 from musif.musicxml.scoring import extract_sound, extract_abbreviated_part, ROMAN_NUMERALS_FROM_1_TO_20

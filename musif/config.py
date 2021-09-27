@@ -2,9 +2,9 @@ import multiprocessing
 from glob import glob
 from os import path
 
+from musif.common.constants import FEATURES_MODULE
 from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
-from musif.constants import FEATURES_MODULE
 
 READ_LOGGER_NAME = "read_log"
 WRITE_LOGGER_NAME = "write_log"
@@ -74,7 +74,9 @@ class Configuration:
     def is_requested_module(self, module) -> bool:
         if self.features is None:
             return True
-        module_name = module.__name__
-        features = {feature.lower() for feature in self.features}
-        module_feature = module_name[len(FEATURES_MODULE):].lower()
-        return module_feature in features
+        module_path = module.__name__
+        module_name = module_path if "." not in module_path else module_path[module_path.rindex(".") + 1:]
+        for feature in self.features:
+            if feature.lower().endswith(module_name.lower()):
+                return True
+        return False
