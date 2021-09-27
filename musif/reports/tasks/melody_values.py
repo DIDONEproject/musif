@@ -20,7 +20,7 @@ import musif.extract.features.ambitus as ambitus
 import musif.extract.features.lyrics as lyrics
 from musif.config import Configuration
 from music21 import interval
-from musif.common.constants import get_color
+from musif.common.constants import get_color, RESET_SEQ
 from musif.reports.constants import *
 from musif.reports.utils import (adjust_excel_width_height,
                                  columns_alike_our_data)

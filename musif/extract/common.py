@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from musif.constants import DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION
 
 
 def filter_parts_data(parts_data: List[dict], parts_filter: Optional[List[str]]) -> List[dict]:

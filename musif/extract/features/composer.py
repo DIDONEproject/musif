@@ -1,7 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
-from musif.constants import DATA_SCORE
+from musif.extract.constants import DATA_SCORE
 
 COMPOSER = "Composer"
 

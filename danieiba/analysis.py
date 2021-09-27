@@ -2,7 +2,7 @@ import pandas as pd
 
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
-from musif.extract.features.custom.file_name import ARIA_ID
+from musif.extract.features.custom.file_name import ARIA_ID, ARIA_LABEL
 from musif.extract.features.density import DENSITY, MEASURES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
 from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, \
     ABSOLUTE_INTERVALS_KURTOSIS, \
@@ -69,6 +69,7 @@ if __name__ == "__main__":
             "Score_SoundingDensity": row[f"Score_{SOUNDING_DENSITY}"],
             "Score_MeasuresMean": row[f"Score_{MEASURES_MEAN}"],
             "Score_SoundingMeasuresMean": row[f"Score_{SOUNDING_MEASURES_MEAN}"],
+            "Label_TextId": row[ARIA_LABEL],
             "Label_Sentiment": row["Label_Sentiment"],
             "Label_BasicPassion": row["Label_BasicPassion"],
             "Label_Passions": row["Label_Passions"],
@@ -98,5 +99,5 @@ if __name__ == "__main__":
         data_list.append(data_item)
     df_analysis = pd.DataFrame(data_list)
     df_analysis.sort_values("AriaId", inplace=True)
-    df_analysis.to_csv("analysis3.csv", index=False)
+    df_analysis.to_csv("analysis4.csv", index=False)
     print()

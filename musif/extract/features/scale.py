@@ -2,7 +2,7 @@ from typing import List, Dict, Union
 
 from music21.note import Note
 
-from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
 from musif.extract.features.core import DATA_TONALITY, DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix
 
