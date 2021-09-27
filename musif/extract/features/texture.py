@@ -6,7 +6,7 @@ from pandas import DataFrame
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.constants import DATA_PARTS_FILTER
+from musif.extract.constants import DATA_PARTS_FILTER
 from musif.extract.features.core import DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scoring import SOUND_ABBREVIATION, PART_ABBREVIATION, FAMILY_ABBREVIATION

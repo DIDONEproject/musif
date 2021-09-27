@@ -3,7 +3,7 @@ from typing import List
 from music21.text import TextBox
 
 from musif.config import Configuration
-from musif.constants import DATA_SCORE
+from musif.extract.constants import DATA_SCORE
 
 LIBRETTIST = "Librettist"
 
