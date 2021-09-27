@@ -4,7 +4,7 @@ from typing import List
 from music21.stream import Measure, Score
 
 from musif.config import Configuration
-from musif.constants import DATA_SCORE
+from musif.extract.constants import DATA_SCORE
 
 
 def update_score_objects(

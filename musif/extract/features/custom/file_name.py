@@ -2,7 +2,7 @@ from ntpath import basename
 from typing import List
 
 from musif.config import Configuration
-from musif.constants import DATA_FILE
+from musif.extract.constants import DATA_FILE
 
 ARIA_OPERA = "AriaOpera"
 ARIA_LABEL = "AriaLabel"

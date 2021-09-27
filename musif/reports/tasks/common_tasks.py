@@ -2,7 +2,7 @@ from musif.reports.visualisations import bar_plot_extended, line_plot_extended
 import os
 from multiprocessing import Lock
 import numpy as np
-from musif.common.constants import get_color
+from musif.common.constants import get_color, RESET_SEQ
 
 import pandas as pd
 from musif.common.sort import sort

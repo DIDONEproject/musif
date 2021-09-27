@@ -2,6 +2,7 @@ import pandas as pd
 
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
+from musif.extract.features.core import FILE_NAME
 from musif.extract.features.custom.file_name import ARIA_ID, ARIA_LABEL
 from musif.extract.features.density import DENSITY, MEASURES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
 from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, \
@@ -20,7 +21,6 @@ from musif.extract.features.tempo import NUMERIC_TEMPO, TEMPO, TEMPO_GROUPED_1, 
     TIME_SIGNATURE_GROUPED
 
 if __name__ == "__main__":
-
     df = pd.read_csv("myfeatures.csv", low_memory=False)
     passions = read_dicts_from_csv("passions.csv")
     data_by_aria_label = {label_data["Label"]: label_data for label_data in passions}
@@ -37,7 +37,7 @@ if __name__ == "__main__":
             label_value = data_by_aria[col] if data_by_aria else None
             values.append(label_value)
         df[label] = values
-    df = df[~df["Label_Sentiment"].isnull()]
+
     data_list = []
     for index, row in df.iterrows():
         voice = row[VOICES]
@@ -52,6 +52,7 @@ if __name__ == "__main__":
         output_parts_prefixes = [get_part_prefix(part_prefix) for part_prefix in output_parts]
         data_item = {
             "AriaId": row[ARIA_ID],
+            "FileName": row[FILE_NAME],
             "Mode": row[MODE],
             "Key": row[KEY],
             "KeySignatureType": row[KEY_SIGNATURE_TYPE],
@@ -70,10 +71,6 @@ if __name__ == "__main__":
             "Score_MeasuresMean": row[f"Score_{MEASURES_MEAN}"],
             "Score_SoundingMeasuresMean": row[f"Score_{SOUNDING_MEASURES_MEAN}"],
             "Label_TextId": row[ARIA_LABEL],
-            "Label_Sentiment": row["Label_Sentiment"],
-            "Label_BasicPassion": row["Label_BasicPassion"],
-            "Label_Passions": row["Label_Passions"],
-            "Label_Time": row["Label_Time"],
         }
         for input_part, output_part in zip(input_parts_prefixes, output_parts_prefixes):
             data_item[f"{output_part}HighestNoteIndex"] = row[f"{input_part}{HIGHEST_INDEX}"]
@@ -98,6 +95,7 @@ if __name__ == "__main__":
             data_item[f"{output_part}RepeatedNotes"] = row[f"{input_part}{REPEATED_NOTES_PER}"]
         data_list.append(data_item)
     df_analysis = pd.DataFrame(data_list)
+    df_analysis = df_analysis.reindex(sorted(df_analysis.columns), axis=1)
     df_analysis.sort_values("AriaId", inplace=True)
     df_analysis.to_csv("analysis4.csv", index=False)
     print()

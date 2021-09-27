@@ -5,7 +5,7 @@ from music21.note import Note
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_FAMILY
+from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_FAMILY
 from musif.extract.features.core import DATA_NOTES, DATA_LYRICS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 

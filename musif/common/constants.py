@@ -3,6 +3,7 @@ VERSION = "1.0.0"
 CSV_DELIMITER = ","
 VOICE_FAMILY = "voice"
 GENERAL_FAMILY = "general"
+FEATURES_MODULE = "musif.extract.features"
 
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
