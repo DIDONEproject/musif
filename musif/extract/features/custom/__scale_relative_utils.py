@@ -6,10 +6,8 @@ import roman
 import itertools
 from music21 import scale, pitch
 from music21.note import Note
-# from .__harmony_utils import get_function_first, get_function_second
 from musif.extract.features.custom.__harmony_utils import get_function_first, get_function_second
 
-# REVIEW
 
 def get_modulations(lausanne_table: DataFrame, sections, major = True):
     keys = lausanne_table.localkey.dropna().tolist()

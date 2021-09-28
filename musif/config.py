@@ -2,7 +2,6 @@ import multiprocessing
 from glob import glob
 from os import path
 
-from musif.common.constants import FEATURES_MODULE
 from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 
