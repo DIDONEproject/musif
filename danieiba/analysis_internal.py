@@ -71,6 +71,10 @@ if __name__ == "__main__":
             "Score_MeasuresMean": row[f"Score_{MEASURES_MEAN}"],
             "Score_SoundingMeasuresMean": row[f"Score_{SOUNDING_MEASURES_MEAN}"],
             "Label_TextId": row[ARIA_LABEL],
+            "Label_Sentiment": row["Label_Sentiment"],
+            "Label_BasicPassion": row["Label_BasicPassion"],
+            "Label_Passions": row["Label_Passions"],
+            "Label_Time": row["Label_Time"],
         }
         for input_part, output_part in zip(input_parts_prefixes, output_parts_prefixes):
             data_item[f"{output_part}HighestNoteIndex"] = row[f"{input_part}{HIGHEST_INDEX}"]
