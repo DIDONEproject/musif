@@ -27,10 +27,14 @@ def sort_dict(dict_to_sort, main_list, cfg: Configuration):
     dict_sorted = dict((key, d[key]) for d in list_sorted for key in d)
     return dict_sorted
 
+def sort_columns(data, sorting_list):
+    cols = sort(data.columns.tolist(), [i for i in sorting_list])
+    data=data[cols]
+    return data
+
 ########################################
 # data frame sorting for rows display  #
 ########################################
-
 
 def sort_dataframe(data, column, sorting_lists, key_to_sort):
     if key_to_sort == "Alphabetic":
