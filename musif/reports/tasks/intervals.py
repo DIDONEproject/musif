@@ -10,14 +10,15 @@ from musif.config import Configuration
 from musif.common.sort import sort
 from musif.common.constants import get_color, RESET_SEQ
 from musif.reports.constants import *
-from musif.reports.utils import (adjust_excel_width_height,
-                                 columns_alike_our_data)
+from musif.reports.utils import (Adjust_excel_width_height,
+                                 columns_alike_our_data, save_workbook)
 from musif.reports.visualisations import bar_plot, double_bar_plot, pie_plot
 from pandas.core.frame import DataFrame
-from musif.reports.utils import excel_sheet
+from musif.reports.utils import Create_excel_sheet
 
-def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
+def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string: str, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
+        excel_name= pre_string + name + '.xlsx'
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
@@ -36,19 +37,13 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         # esta sheet va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
         computations = ["sum"]*len(third_columns_names)
 
-        excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            excel_sheet(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+            Create_excel_sheet(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
-
-        if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
-            std = workbook.get_sheet_by_name('Sheet')
-            workbook.remove_sheet(std)
-        adjust_excel_width_height(workbook)
-            
-        workbook.save(os.path.join(results_path, name))
+        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
 
         # with visualiser_lock:
         # VISUALISATIONS
@@ -106,8 +101,9 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
 # Function to generate the reports file Intervals_types.xlsx  #
 #########################################################
 
-def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name, visualiser_lock: Lock, groups=None, additional_info: list=[]):
+def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string: str, name: str, visualiser_lock: Lock, groups=None, additional_info: list=[]):
     try:
+        excel_name= pre_string + name + '.xlsx'
         data.columns=[c.replace('Desc', 'Descending').replace('Asc', 'Ascending') for c in data.columns]
         workbook = openpyxl.Workbook()
         second_column_names = [("", 2), ("Leaps", 3), ("StepwiseMotion", 3)]
@@ -124,22 +120,17 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
         columns2 = columns_alike_our_data(
             third_columns_names2, second_column_names2)
 
-        excel_sheet(workbook.create_sheet("Weighted"),
+        Create_excel_sheet(workbook.create_sheet("Weighted"),
          columns, data, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups, 
           last_column=True, last_column_average=False, second_columns=second_column_names,
            average=True,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            excel_sheet(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
+            Create_excel_sheet(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
 
-        # borramos la sheet por defecto
-        if "Sheet" in workbook.get_sheet_names():
-            std = workbook.get_sheet_by_name('Sheet')
-            workbook.remove_sheet(std)
-        adjust_excel_width_height(workbook)
-        workbook.save(os.path.join(results_path, name))
+        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
 
         # with visualiser_lock:
         # VISUALISATIONS

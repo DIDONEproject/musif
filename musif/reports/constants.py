@@ -157,3 +157,7 @@ BOLD = Font(size = 12, bold=True)
 FONT= Font(size=12)
 FONT_TITLE= Font(size = 12, bold = True, name='Garamond')
 IMAGE_EXTENSION='.png'
+
+WIDE=1.5
+NORMAL_WIDTH=1
+NARROW=0.5
