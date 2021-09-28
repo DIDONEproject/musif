@@ -8,3 +8,4 @@ __pycache__
 raw_files
 logs
 failed_files.txt
+dataframe.csv

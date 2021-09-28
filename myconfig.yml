@@ -17,7 +17,7 @@ features:
   - scoring
   - custom.file_name
   - scale
-  - custom.modulations
+  - custom.scale_relative
   - custom.harmony
   - metadata
 #  - custom.themeA

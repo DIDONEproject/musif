@@ -1,60 +1,65 @@
-from musif.reports.visualisations import bar_plot
 from multiprocessing import Lock
-from os import path
-from musif.common.constants import *
+from os import name, path
 
 import pandas as pd
-from musif.common.sort import sort
-from ..harmony_sorting import *  # TODO: REVIEW
+from musif.extract.features.custom.__constants import NUMERALS_prefix, CHORDS_GROUPING_prefix, CHORD_TYPES_prefix, CHORD_prefix, KEY_prefix, KEY_GROUPING, ADDITIONS_prefix
 
+from musif.common.constants import *
+from musif.common.sort import sort, sort_columns
 from musif.config import Configuration
 from musif.reports.constants import *
-from musif.reports.utils import adjust_excel_width_height, excel_sheet
+from musif.reports.utils import Create_excel_sheet, remove_underscore, save_workbook, get_general_cols
+from musif.reports.visualisations import bar_plot
 from pandas.core.frame import DataFrame
 
-### HARMONY ###
+from ..harmony_sorting import *  # TODO: REVIEW
 
-### Function that prints harmonic data report task ###
+### HARMONY ###
 
 def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
-        for row in rows_groups:
-            if len(rows_groups[row][0]) == 0:
-                general_cols.append(row)
-            else:
-                general_cols += rows_groups[row][0]
+        get_general_cols(rows_groups, general_cols)
         
-        data=data.round(decimals =2)
+        data = data.round(decimals = 2)
         third_columns_names_origin = list(set(all_columns) - set(general_cols))
 
-        third_columns_names = ['Total analysed'] + third_columns_names_origin
-        columns = [i.replace("_", " ") for i in third_columns_names]
+        harmonic_rythm = [c for c in data.columns if 'Harmonic_rhythm' in c]
 
-        # esta sheet va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
-        computations = ["sum"]*len(third_columns_names)
+        chordTypes = [c.replace(CHORD_TYPES_prefix, '') for c in data.columns if CHORD_TYPES_prefix in c]
+        chordTypes = sort(chordTypes, _cfg.sorting_lists['ChordTypeGrouppingSorting'])
 
-        excel_sheet(workbook.create_sheet("Weighted"),  third_columns_names, data,columns, computations, _cfg.sorting_lists,
-                     groups=groups, per= False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
+        additions = [c.replace(ADDITIONS_prefix, '') for c in data.columns if ADDITIONS_prefix in c]
+
+        numerals = [c.replace(NUMERALS_prefix, '') for c in data.columns if NUMERALS_prefix in c]
+        numerals = sort(numerals, _cfg.sorting_lists['NumeralsSorting'])
+
+        second_column_names = [("", 1),('Harmonic Rhythm', len(harmonic_rythm)), ('Numerals', len(numerals)), ('Chord types', len(chordTypes)), ('Additions', len(additions))]
+    
+#     Numerals				Chord_types				Additions		
+# T	SD	D	Other	triad	7th	dim 	aug	4, 6 & 64	Others	None
+        # third_columns_names = ['Total analysed'] + third_columns_names_origin
+        third_columns_names = ['Total analysed'] + harmonic_rythm+ additions + chordTypes + numerals
+
+        columns = remove_underscore(third_columns_names)
+
+
+        computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
+
+        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, columns, computations, _cfg.sorting_lists,
+                    second_columns=second_column_names,
+                    groups=groups, per= False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
         
         if factor>=1:
-            excel_sheet(workbook.create_sheet("Horizontal Per"),  third_columns_names, data, columns, computations, _cfg.sorting_lists,
+            Create_excel_sheet(workbook.create_sheet("Horizontal Per"),  third_columns_names, data, columns, computations, _cfg.sorting_lists,
                      groups=groups, per=False, average=False, last_column=False, last_column_average=False, additional_info=additional_info)
-
-        if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
-            std = workbook.get_sheet_by_name('Sheet')
-            workbook.remove_sheet(std)
-        adjust_excel_width_height(workbook)
-            
-        workbook.save(os.path.join(results_path, name))
-
+        
+        save_workbook(os.path.join(results_path, name), workbook, NORMAL_WIDTH)
         # with visualiser_lock:
         # VISUALISATIONS
-
         title = 'Harmonic Data'
-
         if groups:
             data_grouped = data.groupby(list(groups))
             for g, datag in data_grouped:
@@ -97,9 +102,6 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 
-    # # name = "Harmonic_data.xlsx"
-
-    # workbook = openpyxl.Workbook()
 
     # num_chordTypes = sort([c.replace('Chord types', '') for c in data.columns if 'Chord types' in c], sorting_lists['ChordTypeGrouppingSorting'])
     # num_additions = [c.replace('Additions', '') for c in data.columns if 'Additions' in c]
@@ -131,14 +133,13 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
         data = data[set(data.columns).difference(list(data_general.columns))]
         data_general = data_general.dropna(how='all', axis=1)
         data = data.dropna(how='all', axis=1)
-        data.columns = [i.replace('_','') for i in data.columns]
-        data.columns=[i.replace('chords', '') for i in data.columns]
+        data.columns=[i.replace(CHORDS_GROUPING_prefix, '') for i in data.columns]
+        data.columns=[i.replace(CHORD_prefix, '') for i in data.columns]
+
         
         #TODO: fix this sorting with johannes's function
-        cols = sort(data.columns.tolist(), [
-                    i for i in _cfg.sorting_lists['NumeralsSorting']])
-        
-        data = data[cols]
+        data=sort_columns(data, _cfg.sorting_lists['NumeralsSorting'])
+
         third_columns_names = data.columns.to_list()
 
         second_column_names = [("", 1), ("Chords", len(third_columns_names))]
@@ -148,19 +149,13 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
         # computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
         computations = ["sum"]*len(third_columns_names)
 
-        excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            excel_sheet(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+            Create_excel_sheet(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                         groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
-        # Deleting default sheet
-        if "Sheet" in workbook.get_sheet_names():
-            std = workbook.get_sheet_by_name('Sheet')
-            workbook.remove_sheet(std)
-        adjust_excel_width_height(workbook)
-        workbook.save(os.path.join(results_path, name))
-
+        save_workbook(os.path.join(results_path, name), workbook, NORMAL_WIDTH)
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         third_columns_names.remove('Total analysed')
         title = 'Chords'
@@ -209,70 +204,45 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 
-def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+def Triple_harmonic_excel(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, 
+                            pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+        
+    workbook = openpyxl.Workbook()
+    excel_name=pre_string + name + '.xlsx'
     try:
-        workbook = openpyxl.Workbook()
-        # Splitting the dataframes to reorder them
-        data_general = data[metadata_columns+ ['Total analysed']].copy()
-        data = data[set(data.columns).difference(list(data_general.columns))]
-        data_general = data_general.dropna(how='all', axis=1)
+        data, data_general = SeparateDataframes(data)
+        if 'functions' in name:
+            (data1, data2, data3, third_columns_names,
+            third_columns_names2, third_columns_names3,
+            second_column_names, second_column_names2,
+            second_column_names3) = Process_data(data, NUMERALS_prefix, CHORDS_GROUPING_prefix, CHORDS_GROUPING_prefix,_cfg.sorting_lists['ModulationG1Sorting'],_cfg.sorting_lists['ModulationG2Sorting'],_cfg.sorting_lists['ModulationG2Sorting'])
         
-        data = data.dropna(how='all', axis=1)
+        elif 'Key' in name:
+            (data1, data2, data3, third_columns_names, 
+            third_columns_names2, third_columns_names3, 
+            second_column_names, second_column_names2, 
+            second_column_names3) = Process_data(data, KEY_prefix, KEY_GROUPING, KEY_GROUPING,_cfg.sorting_lists['NumeralsSorting'],_cfg.sorting_lists['ModulationG1Sorting'],_cfg.sorting_lists['ModulationG2Sorting'])
 
-        #Separate 3 dataframmes for 3 sections
-        data1 = data[[i for i in data.columns if 'Numerals' in i]]
-        data1.columns = [i.replace('Numerals_','') for i in data1.columns]
-        
-        data2 = data[[i for i in data.columns if 'chords_Grouping1' in i]]
-        data2.columns = [i.replace('chords_Grouping1','') for i in data2.columns]
-
-        data3 = data[[i for i in data.columns if 'chords_Grouping2' in i]]
-        data3.columns = [i.replace('chords_Grouping2','Grouped_') for i in data3.columns]
-
-        #TODO: change with 'sort dataframe'?
-        cols = sort(data1.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG1Sorting']])
-        data1=data1[cols]
-        # sort_dataframe??
-        cols = sort(data2.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG2Sorting']])
-        data2=data2[cols]
-        data2=data2.round(decimals =2)
-
-        cols = sort(data3.columns.tolist(), [i for i in _cfg.sorting_lists['ModulationG2Sorting']])
-        data3=data3[cols]
-        data3=data3.round(decimals =2)
-        
-        third_columns_names=list(data1.columns)
-        third_columns_names.insert(0, 'Total analysed')
-
-        third_columns_names2=['Total analysed'] + list(data2.columns)
-        third_columns_names3=['Total analysed'] + list(data3.columns)
-
-
-        # third_columns_names = [i.replace('Numerals','') for i in data.columns if 'Numerals' in i]
-        second_column_names = [("", 1), ("Numerals", len(third_columns_names))]
-        second_column_names2 = [('', 1), ("Chords Grouped",  len(third_columns_names2))]
-        second_column_names3 = [('', 1), ("Chords Grouped 2",  len(third_columns_names3))]
-
-        
-        computations = ["sum"]*len(third_columns_names)
-        computations2 = ['sum']*len(third_columns_names2)
-        computations3 = ['sum']*len(third_columns_names3)
+        computations = ["sum"] + ['mean'] * (len(third_columns_names))
+        computations2 = ['sum'] + ['mean'] * (len(third_columns_names2))
+        computations3 = ['sum'] + ['mean'] * (len(third_columns_names3))
 
         data1 = pd.concat([data_general, data1], axis=1)
         data2 = pd.concat([data_general, data2], axis=1)
         data3 = pd.concat([data_general, data3], axis=1)
 
-        excel_sheet(workbook.create_sheet("Weighted"),
+        Create_excel_sheet(workbook.create_sheet("Weighted"),
          third_columns_names, data1, third_columns_names,
-          computations, _cfg.sorting_lists, groups=groups,data2=data2,
-          last_column=True, last_column_average=False, second_columns=second_column_names,
-                     columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                     columns3=third_columns_names3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
+          computations, _cfg.sorting_lists, groups=groups,
+            data2=data2,
+                last_column=True, last_column_average=False, second_columns=second_column_names,
+                columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+                data3=data3,
+                columns3=third_columns_names3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
         
         if factor>=1:
-            ###TODO:  Cambiar last column y per parameters(?)
-            excel_sheet(workbook.create_sheet("Horizontal"),
+            Create_excel_sheet(workbook.create_sheet("Horizontal"),
          third_columns_names, data1, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
@@ -280,16 +250,12 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
                     data3=data3, columns3=third_columns_names3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
                 
-        if "Sheet" in workbook.get_sheet_names():
-            std = workbook.get_sheet_by_name('Sheet')
-            workbook.remove_sheet(std)
-        adjust_excel_width_height(workbook)
-        workbook.save(os.path.join(results_path, name))
+        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
         
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         # third_columns_names.remove('Total analysed')
 
-        title = 'Functions'
+        title = name
 
         # VISUALISATIONS
         # if groups:
@@ -334,6 +300,53 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
         #                         'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
+def SeparateDataframes(data):
+    data_general = data[metadata_columns+ ['Total analysed']].copy()
+    data = data[set(data.columns).difference(list(data_general.columns))]
+    data = data.dropna(how='all', axis=1)
+    data_general = data_general.dropna(how='all', axis=1)
+    return data,data_general
+
+def Process_data(data, prefix1, prefix2, prefix3, sorting_list1, sorting_list2, sorting_list3):
+    data1 = data[[i for i in data.columns if prefix1 in i]]
+    data1.columns = [i.replace(prefix1,'') for i in data1.columns]
+    pass   
+    data2 = data[[i for i in data.columns if prefix2 + '1' in i]]
+    data2.columns = [i.replace(prefix2 + '1','') for i in data2.columns]
+
+    data3 = data[[i for i in data.columns if prefix2 + '2' in i]]
+    data3.columns = [i.replace(prefix3 + '2', 'Grouped_') for i in data3.columns]
+
+    data1 = sort_columns(data1, sorting_list1)
+    data2 = sort_columns(data2, sorting_list2)
+    data3 = sort_columns(data3, sorting_list3)
+
+    data2=data2.round(decimals =2)
+    data3=data3.round(decimals =2)
+        
+    third_columns_names=list(data1.columns)
+    third_columns_names2=list(data2.columns)
+    third_columns_names3=list(data3.columns)
+        
+    insert_total_analysed(third_columns_names)
+    insert_total_analysed(third_columns_names2)
+    insert_total_analysed(third_columns_names3)
+
+    second_column_names = name_second_columns(third_columns_names,prefix1)
+    second_column_names2 = name_second_columns(third_columns_names2, prefix2)
+    second_column_names3 = name_second_columns(third_columns_names3, prefix3+ '_2')
+
+    return data1,data2,data3,third_columns_names,third_columns_names2,third_columns_names3,second_column_names,second_column_names2,second_column_names3
+
+def name_second_columns(third_columns_names, name):
+    second_column_names = [("", 1), (name, len(third_columns_names))]
+    return second_column_names
+
+def insert_total_analysed(columns_names):
+    columns_names.insert(0, 'Total analysed')
+
+
 
 # def Keyareas_columns(rows_groups: dict, not_used_cols: dict, keyareas, sorting_lists, mandatory_word = None, complementary_info = None, computations = 'sum', forbiden_word = ''):
 #     if mandatory_word != None and complementary_info != None:
@@ -576,45 +589,30 @@ def Harmonic_functions(rows_groups: dict, not_used_cols: dict, factor, _cfg: Con
 #         std=workbook.get_sheet_by_name('Sheet')
 #         workbook.remove_sheet(std)
 #     workbook.save(os.path.join(results_path, "Ib.Keyareas_weighted.xlsx"))
-def get_sorting_lists():
-    RoleSorting = general_sorting.get_role_sorting() # Only valid for DIDONE corpus, any other roles will be sorted alphabetically
-    FormSorting = general_sorting.get_form_sorting()
-    KeySorting = general_sorting.get_key_sorting()
-    KeySignatureSorting = general_sorting.get_KeySignature_sorting()
-    KeySignatureGroupedSorted = general_sorting.get_KeySignatureType_sorting()
-    TimeSignatureSorting = general_sorting.get_TimeSignature_sorting()
-    TempoSorting = general_sorting.get_Tempo_sorting()
-    TempoGroupedSorting1 = general_sorting.get_TempoGrouped1_sorting()
-    TempoGroupedSorting2 = general_sorting.get_TempoGrouped2_sorting()
-    clefs = general_sorting.get_Clefs_sorting()
-    scoring_sorting = general_sorting.get_scoring_sorting() #Long combination
-    scoring_family = general_sorting.get_familiesCombinations_sorting()
-    # lista de intervalos (columnas en los archivos 2 y 3)
-    Intervals = melody_sorting.intervals_sorting()
-    Intervals_absolute = melody_sorting.intervals_absolutte_sorting()
-    scale_degrees = melody_sorting.MelodicDegrees_sorting()
-    #harmony
-    modulations = harmony_sorting.get_modulations_sorting()
-    modulationsG1 = harmony_sorting.get_modulationsGrouping1_sorting()
-    modulationsG2 = harmony_sorting.get_modulationsGrouping2_sorting()
-    chordTypes, chordTypesG = harmony_sorting.get_chordtype_sorting()
-    return {"RoleSorting": [i.lower() for i in RoleSorting],
-            "FormSorting": [i.lower() for i in FormSorting],
-            "KeySorting": KeySorting,
-            "KeySignatureSorting": KeySignatureSorting,
-            "KeySignatureGroupedSorted": KeySignatureGroupedSorted,
-            "TimeSignatureSorting": TimeSignatureSorting,
-            "TempoSorting": TempoSorting + [''], #a veces algunas puede ser nan, ya que no tienen tempo mark, las nan las ponemos al final
-            "TempoGroupedSorting1": TempoGroupedSorting1 + [''],
-            "TempoGroupedSorting2": TempoGroupedSorting2 + [''],
-            "Intervals": Intervals,
-            "Intervals_absolute": Intervals_absolute,
-            "Clefs": clefs,
-            "ScoringSorting": scoring_sorting,
-            "ScoringFamilySorting": scoring_family,
-            "ScaleDegrees": scale_degrees,
-            "ModulationG1Sorting": modulationsG1,
-            "ModulationG2Sorting": modulationsG2,
-            "Modulation": modulations,
-            "ChordTypeGrouppingSorting": chordTypesG,
-            }
+# def get_sorting_lists():
+#     # RoleSorting = general_sorting.get_role_sorting() # Only valid for DIDON
+#     #harmony
+#     modulations = harmony_sorting.get_modulations_sorting()
+#     modulationsG1 = harmony_sorting.get_modulationsGrouping1_sorting()
+#     modulationsG2 = harmony_sorting.get_modulationsGrouping2_sorting()
+#     chordTypes, chordTypesG = harmony_sorting.get_chordtype_sorting()
+#     return {"RoleSorting": [i.lower() for i in RoleSorting],
+#             "FormSorting": [i.lower() for i in FormSorting],
+#             "KeySorting": KeySorting,
+#             "KeySignatureSorting": KeySignatureSorting,
+#             "KeySignatureGroupedSorted": KeySignatureGroupedSorted,
+#             "TimeSignatureSorting": TimeSignatureSorting,
+#             "TempoSorting": TempoSorting + [''], #a veces algunas puede ser nan, ya que no tienen tempo mark, las nan las ponemos al final
+#             "TempoGroupedSorting1": TempoGroupedSorting1 + [''],
+#             "TempoGroupedSorting2": TempoGroupedSorting2 + [''],
+#             "Intervals": Intervals,
+#             "Intervals_absolute": Intervals_absolute,
+#             "Clefs": clefs,
+#             "ScoringSorting": scoring_sorting,
+#             "ScoringFamilySorting": scoring_family,
+#             "ScaleDegrees": scale_degrees,
+#             "ModulationG1Sorting": modulationsG1,
+#             "ModulationG2Sorting": modulationsG2,
+#             "Modulation": modulations,
+#             "ChordTypeGrouppingSorting": chordTypesG,
+#             }

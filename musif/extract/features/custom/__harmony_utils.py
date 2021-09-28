@@ -266,22 +266,24 @@ def get_keyareas(lausanne_table, major = True):
     # total_g1_areas_B = sum(counter_grouping1_B.values())
     # total_g2_areas_B = sum(counter_grouping2_B.values())
 
-    for ck in counter_keys:
-        keyareas['Key_'+ck] = counter_keys[ck]
-        keyareas[KEY_COMPASSES+ck] = float(key_compasses[ck])
-        keyareas[KEY_MODULATORY+ck] = counter_keys[ck]/total_key_areas
-        keyareas['KeyModComp_'+ck] = (keyareas[KEY_COMPASSES+ck] + keyareas[KEY_MODULATORY+ck]) / 2
-    for cg in counter_grouping1:
-        keyareas['KeyGrouping1_'+cg] = counter_grouping1[cg]
-        keyareas['KeyGrouping1Compasses_'+cg] = float(keyGrouping1_compasses[cg])
-        keyareas['KeyGrouping1Modulatory_'+cg] = counter_grouping1[cg]/total_g1_areas
-        keyareas['KeyGrouping1ModComp_'+cg] = (keyareas['KeyGrouping1Compasses_'+cg] + keyareas['KeyGrouping1Modulatory_'+cg]) / 2
-    for cg in counter_grouping2:
-        keyareas['KeyGrouping2_'+cg] = counter_grouping2[cg]
-        keyareas['KeyGrouping2Compasses_'+cg] = float(keyGrouping2_compasses[cg])
-        keyareas['KeyGrouping2Modulatory_'+cg] = counter_grouping2[cg]/total_g2_areas
-        keyareas['KeyGrouping2ModComp_'+cg] = (keyareas['KeyGrouping2Compasses_'+cg] + keyareas['KeyGrouping2Modulatory_'+cg]) / 2
-
+    for counter_key in counter_keys:
+        keyareas[KEY_prefix + counter_key] = counter_keys[counter_key]
+        keyareas[KEY_prefix + KEY_MEASURES + counter_key] = float(key_compasses[counter_key])
+        keyareas[KEY_prefix + KEY_MODULATORY + counter_key] = counter_keys[counter_key]/total_key_areas
+        keyareas[KEY_prefix + KEY_MODCOMP + counter_key] = (keyareas[KEY_prefix + KEY_MEASURES+counter_key] + keyareas[KEY_prefix + KEY_MODULATORY+counter_key]) / 2
+    
+    for counter_grouping in counter_grouping1:
+        keyareas[KEY_GROUPING+'1_'+counter_grouping] = counter_grouping1[counter_grouping]
+        keyareas[KEY_GROUPING+'1_'+KEY_MEASURES+counter_grouping] = float(keyGrouping1_compasses[counter_grouping])
+        keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping] = counter_grouping1[counter_grouping]/total_g1_areas
+        keyareas[KEY_GROUPING+'1_'+KEY_MODCOMP+counter_grouping] = (keyareas[KEY_GROUPING+'1_'+KEY_MEASURES+counter_grouping] + keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping]) / 2
+    
+    for counter_grouping in counter_grouping2:
+        keyareas[KEY_GROUPING+'2_'+counter_grouping] = counter_grouping2[counter_grouping]
+        keyareas[KEY_GROUPING+'2_'+KEY_MEASURES+counter_grouping] = float(keyGrouping2_compasses[counter_grouping])
+        keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]  = counter_grouping2[counter_grouping]/total_g2_areas
+        keyareas[KEY_GROUPING+'2_'+KEY_MODCOMP+counter_grouping] = (keyareas[KEY_GROUPING+'2_'+KEY_MEASURES+counter_grouping] + keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]) / 2
+        
     # for ck in counter_keys_A:
     #     keyareas['KeySectionA'+ck] = counter_keys_A[ck]
     #     keyareas['KeyModCompSectionA'+ck] = (key_compasses_A[ck] + (counter_keys_A[ck]/total_key_areas_A)) / 2
@@ -475,6 +477,7 @@ def get_additions(lausanne_table):
         if additions_counter[a] != 0:
             ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
     return ad
+    
 ####################
 # CHORDS
 ####################
@@ -489,7 +492,7 @@ def get_chord_types(lausanne_table):
     form_counter = Counter(grouped_forms)
     features_chords= {}
     for f in form_counter:
-        features_chords['chords_' + str(f)] = form_counter[f] / sum(list(form_counter.values()))
+        features_chords[CHORD_TYPES_prefix + str(f)] = form_counter[f] / sum(list(form_counter.values()))
     return features_chords
 
 def get_chords(harmonic_analysis):
@@ -498,21 +501,14 @@ def get_chords(harmonic_analysis):
     keys = harmonic_analysis.localkey.dropna().tolist() 
     
     chords = harmonic_analysis.chord.dropna().tolist()
+
     numerals=harmonic_analysis.numeral.dropna().tolist()
-
     types = harmonic_analysis.chord_type.dropna().tolist()
-
-    chords_forms=make_type_col(harmonic_analysis)
+    numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
+    chords_dict = CountChords(numerals_and_types)
 
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
     
-    # REVIEW
-    modulations_number = Counter(keys)
-    numerals_dict= CountChords(numerals) #A esta habría que añadirle types?? -> chords_forms
-
-        #### VS ####
-    chords_dict = CountChords(chords)
-
     counter_function_1 = Counter(chords_functionalities1)
     counter_function_2 = Counter(chords_functionalities2)
     chords_group_1 = CountChordsGroup(counter_function_1, '1')
@@ -526,7 +522,7 @@ def CountChords(chords):
 
     chords_dict = {}
     for degree in chords_numbers:
-        chords_dict['chord_'+degree] = chords_numbers[degree]/total_chords
+        chords_dict[CHORD_prefix+degree] = chords_numbers[degree]/total_chords
     return chords_dict
 
 def CountChordsGroup(counter_function, number):
@@ -534,7 +530,7 @@ def CountChordsGroup(counter_function, number):
     total_chords_group=sum(Counter(counter_function).values())
 
     for degree in counter_function:
-        chords_group['Chords_Grouping_' + number + degree] = counter_function[degree]/total_chords_group
+        chords_group[CHORDS_GROUPING_prefix + number + degree] = counter_function[degree]/total_chords_group
 
     return chords_group
 
@@ -618,13 +614,13 @@ def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     
     degree = get_function_second(parts[0])
     if len(parts) == 2:
-        chords = get_function_second(parts[1], mode)
+        chords = get_function_second(parts[1])#, mode)
         return '/'.join([degree, chords])
         
     elif len(parts) == 3:
         # chord_1 = get_degree_2(parts[1], )
-        relative_1 = get_function_second(parts[1], 'M' if parts[2].isupper() else 'm')
-        relative_2 = get_function_second(parts[2], mode)
+        relative_1 = get_function_second(parts[1])#, 'M' if parts[2].isupper() else 'm')
+        relative_2 = get_function_second(parts[2])#, mode)
         return '/'.join([degree, relative_1, relative_2])
     return degree
 

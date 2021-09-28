@@ -6,10 +6,8 @@ import roman
 import itertools
 from music21 import scale, pitch
 from music21.note import Note
-# from .__harmony_utils import get_function_first, get_function_second
 from musif.extract.features.custom.__harmony_utils import get_function_first, get_function_second
 
-# REVIEW
 
 def get_modulations(lausanne_table: DataFrame, sections, major = True):
     keys = lausanne_table.localkey.dropna().tolist()
@@ -132,7 +130,6 @@ def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) ->
     for note in notes_list:
       if note.isChord:
         note=note[0] #If we wave 2or more notes at once, we just take the lowest one
-
       notes_measures.append((note.name, note.measureNumber))
 
 

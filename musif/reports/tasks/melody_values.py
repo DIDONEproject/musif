@@ -20,21 +20,19 @@ import musif.extract.features.ambitus as ambitus
 import musif.extract.features.lyrics as lyrics
 from musif.config import Configuration
 from music21 import interval
-from musif.common.constants import get_color, RESET_SEQ
+from musif.common.constants import RESET_SEQ, get_color
 from musif.reports.constants import *
-from musif.reports.utils import (adjust_excel_width_height,
-                                 columns_alike_our_data)
+from musif.reports.utils import  columns_alike_our_data, save_workbook
 from musif.reports.visualisations import box_plot, melody_bar_plot
 from pandas.core.frame import DataFrame
-from musif.reports.utils import excel_sheet
+from musif.reports.utils import Create_excel_sheet
 
-def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
+def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:
+        excel_name= pre_string + name + '.xlsx'
         workbook = openpyxl.Workbook()
-        data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
-                             interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
-        data.rename(columns={ambitus.LOWEST_INDEX: "LowestIndex", ambitus.HIGHEST_INDEX: "HighestIndex", ambitus.HIGHEST_MEAN_INDEX: "HighestMeanIndex", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",
-             ambitus.LOWEST_NOTE: "LowestNote", ambitus.LOWEST_MEAN_NOTE: "LowestMeanNote",ambitus.HIGHEST_MEAN_NOTE: "HighestMeanNote", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",ambitus.HIGHEST_NOTE: "HighestNote" }, inplace=True)
+        Rename_columns(data)
+        
         # HOJA 1: STATISTICAL_VALUES
         column_names = ["Total analysed", "Intervallic ratio", "Trimmed intervallic ratio", "dif. Trimmed",
                         "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std"]
@@ -43,9 +41,8 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
             data.rename(columns={lyrics.SYLLABIC_RATIO: 'Syllabic ratio'}, inplace=True)
             column_names.append('Syllabic ratio')
 
-        # HAREMOS LA MEDIA DE TODAS LAS COLUMNAS
         computations = ['sum'] + ["mean"]*(len(column_names) - 1)
-        excel_sheet(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
+        Create_excel_sheet(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
                     _cfg.sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
         # HOJA 2: AMBITUS
@@ -63,7 +60,7 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
         columns = columns_alike_our_data(
             third_columns_names, second_column_names, first_column_names)
 
-        excel_sheet(workbook.create_sheet("Ambitus"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
+        Create_excel_sheet(workbook.create_sheet("Ambitus"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
                      first_columns=first_column_names, second_columns=second_column_names, average=True, additional_info=additional_info)
 
         # HOJA 3: LARGEST_LEAPS
@@ -77,15 +74,10 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
 
         data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
 
-        excel_sheet(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
+        Create_excel_sheet(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
                      _cfg.sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
 
-        if "Sheet" in workbook.get_sheet_names():  # Delete the default sheet
-            std = workbook.get_sheet_by_name('Sheet')
-            workbook.remove_sheet(std)
-
-        adjust_excel_width_height(workbook)
-
+        save_workbook(os.path.join(results_path, name), workbook, NORMAL_WIDTH)
 
         workbook.save(os.path.join(results_path, name))
 
@@ -145,3 +137,9 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
             box_plot(name_box, data)
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
+def Rename_columns(data):
+    data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
+                             interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
+    data.rename(columns={ambitus.LOWEST_INDEX: "LowestIndex", ambitus.HIGHEST_INDEX: "HighestIndex", ambitus.HIGHEST_MEAN_INDEX: "HighestMeanIndex", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",
+             ambitus.LOWEST_NOTE: "LowestNote", ambitus.LOWEST_MEAN_NOTE: "LowestMeanNote",ambitus.HIGHEST_MEAN_NOTE: "HighestMeanNote", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",ambitus.HIGHEST_NOTE: "HighestNote" }, inplace=True)
