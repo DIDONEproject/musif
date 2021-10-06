@@ -12,7 +12,7 @@ from musif.common.sort import sort
 
 from musif.config import Configuration
 from musif.reports.constants import *
-from musif.reports.utils import Adjust_excel_width_height, Create_excel_sheet, get_general_cols, save_workbook
+from musif.reports.utils import Create_excel, get_general_cols, save_workbook, get_excel_name
 from pandas.core.frame import DataFrame
 
 ########################################################################
@@ -24,7 +24,7 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
     try:
         workbook = openpyxl.Workbook()
         relative = True if 'relative' in name else False
-        excel_name = pre_string + name + '.xlsx'
+        excel_name = get_excel_name(pre_string, name)
         if relative:
             data.columns=[i.replace('_relative','') for i in data.columns]
 
@@ -48,14 +48,14 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
         _, unique_columns = np.unique(data2.columns, return_index=True)
         data2 = data2.iloc[:, unique_columns]
 
-        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
+        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info, ponderate=True)
         
         if factor>=1:
-            Create_excel_sheet(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
+            Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NARROW)
+        save_workbook(os.path.join(results_path, excel_name) , workbook, NARROW)
 
         # with visualiser_lock:
         Subtitle = 'in relation to the global key' if not relative else 'in relation to the local key'
@@ -106,6 +106,7 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
         elif name == "Others":  # sumamos todas las columnas de data menos 1, 4, 5, 7, #7
             column_data = data[rest_data].sum(axis=1).tolist()
         else:
-            column_data = data[name].tolist()
+
+            column_data = data[name].tolist() if name in data else 0
         data2[name] = pd.Series(column_data)
     return data2

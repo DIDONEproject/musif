@@ -58,32 +58,38 @@ def get_harmonic_rhythm(ms3_table)-> dict:
 # METRICAL ANALYSIS
 ####################    
 
-def get_measures_per_possibility(possibilities, measures, possibilities_list, beats, time_signatures):
+def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signatures):
     # possibilities=list(set(possibilities))
-    voice_measures = {p: 0 for p in possibilities}
-    last_voice = 0
+    key_measures = {p: 0 for p in keys_options}
+    last_key = 0
     done = 0
     starting_measure = 0
     numberofmeasures = len(measures)
-    for i, v in enumerate(possibilities_list):
-        if v != last_voice and i < numberofmeasures:
+    for i in range(1,len(measures)):
+        print(measures[i])
+        if measures[i] < max(measures[:i]):
+            print('Measure is {} and preovious {}'.format( measures[i] ,  measures[i-1] ))
+
+
+    for i, key in enumerate(keys):
+        if key != last_key and i < numberofmeasures:
             #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
             n_beats = get_beatspertsig(time_signatures[i - 1])
-            if last_voice in voice_measures :
-                num_measures, done = compute_number_of_compasses(done, starting_measure, measures[i - 1], measures[i], beats[i - 1], n_beats)
-                voice_measures[last_voice] += num_measures
-            last_voice = v
+            if last_key in key_measures :
+                num_measures, done = compute_number_of_measures(done, starting_measure, measures[i - 1], measures[i], mc_onsets[i - 1], n_beats)
+                key_measures[last_key] += num_measures
+            last_key = key
             starting_measure = measures[i] - 1
     
     #último!
-    num_measures, _ = compute_number_of_compasses(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, beats[numberofmeasures - 1], n_beats)
-    voice_measures[last_voice] += num_measures
+    num_measures, _ = compute_number_of_measures(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, mc_onsets[numberofmeasures - 1], n_beats)
+    key_measures[last_key] += num_measures
 
     #TODO: comprobar que tiene sentido:
     # if (compases[0] != 0 and round(sum(list(compases_voz.values()))) != compases[i]) or (compases[0] == 0 and round(sum(list(compases_voz.values()))) != compases[i] + 1):
     #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
 
-    return voice_measures
+    return key_measures
 
 ###########################################################################
 # Function that returns the number of beats depending on the time signature
@@ -109,25 +115,27 @@ def get_beatspertsig(tsig):
         return 1
 
 
-def compute_number_of_compasses(done, starting_measure, end_measure, next_end_measure, current_beat, max_beats):
+def compute_number_of_measures(done, starting_measure, previous_measure, measure, current_onset, num_beats):
     starting_measure += done
-    if next_end_measure == end_measure:
+    if measure == previous_measure: #We are in the same measure, ionside of it
+
         #hacer el cálculo concreto con el número de beats
-        measures = end_measure - 1 - starting_measure
+        measures = previous_measure - 1 - starting_measure
+
         # habrá que sumarle current_beat / max_beats. Antes convertir current_beat en numérico
-        if type(current_beat) == str:
-            numbers = current_beat.split('.')
+        if type(current_onset) == str:
+            numbers = current_onset.split('.')
             first = int(numbers[0])
             second = numbers[1].split('/')
             second = int(second[0]) / int(second[1])
-            current_beat = first + second
+            current_onset = first + second
 
-        return measures + (current_beat / max_beats), (current_beat / max_beats)
+        return measures + (current_onset / num_beats), (current_onset / num_beats)
     else:
-        if next_end_measure - end_measure > 1:
-            return end_measure - starting_measure + (next_end_measure - 1 - end_measure), 0
+        if measure - previous_measure > 1: #Change occurs in a change of measures
+            return previous_measure - starting_measure + (measure - 1 - previous_measure), 0 ###WTF IS DIS
         else:
-            return end_measure - starting_measure, 0
+            return previous_measure - starting_measure, 0
 
 #########################################################################
 # Como sections tiene una indicación por compás, pero a lo largo del script
@@ -197,9 +205,9 @@ def get_keyareas(lausanne_table, major = True):
     g1, g2 = get_keys(keys, 'M' if major else 'm')
 
     key_areas, key_areas_g1, key_areas_g2 = get_keyareas_lists(keys, g1, g2)
-    counter_keys = Counter(key_areas)
-    counter_grouping1 = Counter(key_areas_g1)
-    counter_grouping2 = Counter(key_areas_g2)
+    number_blocks_keys = Counter(key_areas)
+    number_blocks_grouping1 = Counter(key_areas_g1)
+    number_blocks_grouping2 = Counter(key_areas_g2)
     
     # A_Keys = [keys[i] for i in indexes_A]
     # g1_A = [g1[i] for i in indexes_A]
@@ -221,15 +229,18 @@ def get_keyareas(lausanne_table, major = True):
     measures = lausanne_table.mc.dropna().tolist()
     beats = lausanne_table.mc_onset.dropna().tolist()
     time_signatures = lausanne_table.timesig.tolist()
-    """xml_ts = harmonic_analysis['TimeSignature'].dropna().tolist()
-    xml_beats = harmonic_analysis['NoBeats'].dropna().tolist()
-    relationship_timesignature_beats = {ts: xml_beats[i] for i, ts in enumerate(xml_ts)}"""
-    key_compasses = get_measures_per_possibility(list(set(keys)), measures, keys, beats, time_signatures)
+    # xml_ts = harmonic_analysis['TimeSignature'].dropna().tolist()
+    # xml_beats = harmonic_analysis['NoBeats'].dropna().tolist()
+    # relationship_timesignature_beats = {ts: xml_beats[i] for i, ts in enumerate(xml_ts)}
+    key_compasses = get_measures_per_key(list(set(keys)), measures, keys, beats, time_signatures)
     total_compasses = sum(list(key_compasses.values()))
-    key_compasses = {kc:key_compasses[kc]/total_compasses for kc in key_compasses}
-    keyGrouping1_compasses = get_measures_per_possibility(list(set(g1)), measures, g1, beats, time_signatures)
+    key_compasses = {kc:float(key_compasses[kc]/total_compasses) for kc in key_compasses} #ASI mejor?
+    
+    # key_compasses = {kc:key_compasses[kc]/total_compasses for kc in key_compasses}
+    
+    keyGrouping1_compasses = get_measures_per_key(list(set(g1)), measures, g1, beats, time_signatures)
     keyGrouping1_compasses = {kc:keyGrouping1_compasses[kc]/sum(list(keyGrouping1_compasses.values())) for kc in keyGrouping1_compasses}
-    keyGrouping2_compasses = get_measures_per_possibility(list(set(g2)), measures, g2, beats, time_signatures)
+    keyGrouping2_compasses = get_measures_per_key(list(set(g2)), measures, g2, beats, time_signatures)
     keyGrouping2_compasses = {kc:keyGrouping2_compasses[kc]/sum(list(keyGrouping2_compasses.values())) for kc in keyGrouping2_compasses}
     # SECTION A
     # measures_A = [measures[i] for i in indexes_A]
@@ -255,10 +266,10 @@ def get_keyareas(lausanne_table, major = True):
     # keyGgrouping2_compasses_B = {kc:keyGgrouping2_compasses_B[kc]/sum(list(keyGgrouping2_compasses_B.values())) for kc in keyGgrouping2_compasses_B}
 
     # final dictionary
-    keyareas = {'TotalNumberKeyAreas': len(counter_keys)}
-    total_key_areas = sum(counter_keys.values())
-    total_g1_areas = sum(counter_grouping1.values())
-    total_g2_areas = sum(counter_grouping2.values())
+    keyareas = {'TotalNumberKeyAreas': len(number_blocks_keys)}
+    total_key_areas = sum(number_blocks_keys.values())
+    total_g1_areas = sum(number_blocks_grouping1.values())
+    total_g2_areas = sum(number_blocks_grouping2.values())
     # total_key_areas_A = sum(counter_keys_A.values())
     # total_g1_areas_A = sum(counter_grouping1_A.values())
     # total_g2_areas_A = sum(counter_grouping2_A.values())
@@ -266,22 +277,22 @@ def get_keyareas(lausanne_table, major = True):
     # total_g1_areas_B = sum(counter_grouping1_B.values())
     # total_g2_areas_B = sum(counter_grouping2_B.values())
 
-    for counter_key in counter_keys:
-        keyareas[KEY_prefix + counter_key] = counter_keys[counter_key]
+    for counter_key in number_blocks_keys:
+        keyareas[KEY_prefix + counter_key] = number_blocks_keys[counter_key]
         keyareas[KEY_prefix + KEY_MEASURES + counter_key] = float(key_compasses[counter_key])
-        keyareas[KEY_prefix + KEY_MODULATORY + counter_key] = counter_keys[counter_key]/total_key_areas
+        keyareas[KEY_prefix + KEY_MODULATORY + counter_key] = number_blocks_keys[counter_key]/total_key_areas
         keyareas[KEY_prefix + KEY_MODCOMP + counter_key] = (keyareas[KEY_prefix + KEY_MEASURES+counter_key] + keyareas[KEY_prefix + KEY_MODULATORY+counter_key]) / 2
     
-    for counter_grouping in counter_grouping1:
-        keyareas[KEY_GROUPING+'1_'+counter_grouping] = counter_grouping1[counter_grouping]
+    for counter_grouping in number_blocks_grouping1:
+        keyareas[KEY_GROUPING+'1_'+counter_grouping] = number_blocks_grouping1[counter_grouping]
         keyareas[KEY_GROUPING+'1_'+KEY_MEASURES+counter_grouping] = float(keyGrouping1_compasses[counter_grouping])
-        keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping] = counter_grouping1[counter_grouping]/total_g1_areas
+        keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping] = number_blocks_grouping1[counter_grouping]/total_g1_areas
         keyareas[KEY_GROUPING+'1_'+KEY_MODCOMP+counter_grouping] = (keyareas[KEY_GROUPING+'1_'+KEY_MEASURES+counter_grouping] + keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping]) / 2
     
-    for counter_grouping in counter_grouping2:
-        keyareas[KEY_GROUPING+'2_'+counter_grouping] = counter_grouping2[counter_grouping]
+    for counter_grouping in number_blocks_grouping2:
+        keyareas[KEY_GROUPING+'2_'+counter_grouping] = number_blocks_grouping2[counter_grouping]
         keyareas[KEY_GROUPING+'2_'+KEY_MEASURES+counter_grouping] = float(keyGrouping2_compasses[counter_grouping])
-        keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]  = counter_grouping2[counter_grouping]/total_g2_areas
+        keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]  = number_blocks_grouping2[counter_grouping]/total_g2_areas
         keyareas[KEY_GROUPING+'2_'+KEY_MODCOMP+counter_grouping] = (keyareas[KEY_GROUPING+'2_'+KEY_MEASURES+counter_grouping] + keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]) / 2
         
     # for ck in counter_keys_A:

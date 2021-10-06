@@ -5,13 +5,15 @@ from pandas import DataFrame
 
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
-from musif.extract.constants import DATA_PARTS_FILTER
+from musif.extract.common import filter_parts_data, part_matches_filter
+from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_PARTS_FILTER
 from musif.extract.features.core import DATA_NOTES
-from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring import SOUND_ABBREVIATION, PART_ABBREVIATION, FAMILY_ABBREVIATION
+from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS
 
 NOTES = "Notes"
+NOTES_MEAN = "NotesMean"
 TEXTURE = "Texture"
 
 
@@ -20,11 +22,26 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
     if len(parts_data) == 0:
         return
-    notes = {}
     df_parts = DataFrame(parts_features)
     df_sound = df_parts.groupby(SOUND_ABBREVIATION).aggregate({NOTES: "sum"})
-    df_score = DataFrame(score_features, index=[0])
+    features={}
+    for part_features in parts_features:
+        part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
+        features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
+        
+    for sound_abbreviation in df_sound.index:
+        sound_prefix = get_sound_prefix(sound_abbreviation)
+        len_notes = df_sound.loc[sound_abbreviation, NOTES].tolist()
+        sound_parts = score_features[f"{sound_prefix}{NUMBER_OF_FILTERED_PARTS}"]
+        notes_mean = len_notes / sound_parts if sound_parts > 0 else 0
+        features[f"{sound_prefix}{NOTES}"] = len_notes
+        features[f"{sound_prefix}{NOTES_MEAN}"] = notes_mean
+    score_features.update(features)
 
+    df_score = DataFrame(score_features, index=[0])
+    # df_score = df_parts.aggregate({NOTES: "sum"})
+
+    notes = {}
     for f in range(0, len(parts_features)):
         if parts_features[f][PART_ABBREVIATION].lower().startswith('vn'):
             # cheap capitalization to preserve I and II in Violins
@@ -33,7 +50,6 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             notes[parts_features[f][FAMILY_ABBREVIATION].capitalize()] = int(
                     df_score['Family'+parts_features[f][FAMILY_ABBREVIATION].capitalize()+'_NotesMean'])
         else:
-            # if not parts_features[f]['PartAbbreviation'].endswith('II'):
                 notes[parts_features[f][SOUND_ABBREVIATION].capitalize()] = int(
                     df_score['Sound'+parts_features[f][SOUND_ABBREVIATION].capitalize()+'_NotesMean'])
 
@@ -48,4 +64,8 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    pass
+    if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], score_data[DATA_PARTS_FILTER]):
+        return {}
+    notes = part_data[DATA_NOTES]
+    part_features.update({
+        NOTES: len(notes)})

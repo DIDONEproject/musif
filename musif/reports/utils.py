@@ -15,7 +15,10 @@ from .calculations import compute_value
 WIDTH = 35
 HEIGHT = 20
 
-def Create_excel_sheet(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None,
+def get_excel_name(pre_string, name):
+    return pre_string + name + '.xlsx'
+
+def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None,
                 second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                 columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, 
                 columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
@@ -120,7 +123,6 @@ def get_groups_add_info(data: DataFrame, row: int, additional_info):
             add_info = max(len(additional_info[k]) for k in additional_info)
     return groups, add_info
 
-
 def columns_alike_our_data(third_columns_names: List[str], second_column_names: List[str], first_column_names: List[str] = None):
     columns = []
     counter_first = 0
@@ -151,7 +153,6 @@ def write_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names
         sheet.cell(row, column).fill = titles3Fill
         column += 1
 
-
 def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column: int, values_column: list, average: bool=False, per: bool=False, exception: int=None):
     sheet.cell(row, lable_column).value = "Average" if average else "Total"
     sheet.cell(row, lable_column).font =  FONT_TITLE
@@ -173,12 +174,8 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
         sheet.cell(row, column).value = str(v).replace(',','.') if not per else str(v).replace(',','.') + "%"
         row += 1
 
-################################################################################################################
-# each name can use more than one column) #
-# Column_names will be a list of tuples (name, length)                                                         #
-################################################################################################################
-
 def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill:int):
+    # Column_names will be a list of (name, length)                                                         #
     for c in column_names:
         sheet.cell(row, column).value = c[0]
         sheet.cell(row, column).font = FONT_TITLE
@@ -190,7 +187,8 @@ def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: i
         column += c[1]
 
 def split_voices(data: DataFrame):
-# Voices splitting for duetos in Character classification
+
+    # Voices splitting for duetos in Character classification
     data = data.reset_index(drop=True)
     for ind in data.index:
         names = [i for i in data[ROLE].tolist()]
@@ -266,7 +264,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
     # PRINT EACH ROW
     # store each result in case of need of calculating the percentage (per = True)
-    
     columns_values = {c: [] for c in columns}
 
     # Subgroup: ex: Berlin when groupping by Territory
@@ -455,7 +452,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
     
 ##########################################################################################################
-# Function in charge of printting the data, the arguments are the same as the explained in excel_sheet  #
+                        # Function in charge of printting the data #
 ##########################################################################################################
 
 def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,

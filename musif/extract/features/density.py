@@ -22,7 +22,6 @@ MEASURES_MEAN = "MeasuresMean"
 SOUNDING_DENSITY = "SoundingDensity"
 DENSITY = "Density"
 
-
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], score_data[DATA_PARTS_FILTER]):
         return {}
@@ -37,7 +36,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         SOUNDING_DENSITY: len(notes) / number_of_beats / len(sounding_measures) if len(sounding_measures) > 0 else 0,
         DENSITY: len(notes) / number_of_beats / len(measures) if len(measures) > 0 else 0,
     })
-
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
@@ -58,6 +56,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         features[f"{part_prefix}{MEASURES}"] = part_features[MEASURES]
         features[f"{part_prefix}{SOUNDING_DENSITY}"] = part_features[SOUNDING_DENSITY]
         features[f"{part_prefix}{DENSITY}"] = part_features[DENSITY]
+        
     for sound_abbreviation in df_sound.index:
         sound_prefix = get_sound_prefix(sound_abbreviation)
         notes = df_sound.loc[sound_abbreviation, NOTES].tolist()
