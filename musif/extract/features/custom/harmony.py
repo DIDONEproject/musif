@@ -26,9 +26,6 @@ def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame) -> dict:
 
     return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
 
-
-
-
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     features={}
     try:
@@ -57,9 +54,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
             chords, chords_grouping1, chords_grouping2 = get_chords(harmonic_analysis)
 
-            ## COLLECTING FEATURES 
-
-            #Harmonic Rhythm
+            #HARMONIC RHYTHM
             features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]
             features[f"{HARMONIC_RHYTHM_BEATS}"] = all_harmonic_info[HARMONIC_RHYTHM_BEATS]
             

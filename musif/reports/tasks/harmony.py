@@ -8,7 +8,7 @@ from musif.common.constants import *
 from musif.common.sort import sort, sort_columns
 from musif.config import Configuration
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel_sheet, remove_underscore, save_workbook, get_general_cols
+from musif.reports.utils import Create_excel, get_excel_name, remove_underscore, save_workbook, get_general_cols
 from musif.reports.visualisations import bar_plot
 from pandas.core.frame import DataFrame
 
@@ -16,13 +16,13 @@ from ..harmony_sorting import *  # TODO: REVIEW
 
 ### HARMONY ###
 
-def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
+def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
         get_general_cols(rows_groups, general_cols)
-        
+        excel_name=get_excel_name(pre_string, name)
         data = data.round(decimals = 2)
         third_columns_names_origin = list(set(all_columns) - set(general_cols))
 
@@ -37,10 +37,12 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
         numerals = sort(numerals, _cfg.sorting_lists['NumeralsSorting'])
 
         second_column_names = [("", 1),('Harmonic Rhythm', len(harmonic_rythm)), ('Numerals', len(numerals)), ('Chord types', len(chordTypes)), ('Additions', len(additions))]
-    
-#     Numerals				Chord_types				Additions		
-# T	SD	D	Other	triad	7th	dim 	aug	4, 6 & 64	Others	None
-        # third_columns_names = ['Total analysed'] + third_columns_names_origin
+        
+        #Remove prefixes
+        data.columns=[i.replace(CHORD_TYPES_prefix, '').replace(ADDITIONS_prefix, '').replace(NUMERALS_prefix, '') for i in data.columns]
+        
+        #     Numerals				Chord_types				Additions		
+        # T	SD	D	Other	triad	7th	dim 	aug	4, 6 & 64	Others	None
         third_columns_names = ['Total analysed'] + harmonic_rythm+ additions + chordTypes + numerals
 
         columns = remove_underscore(third_columns_names)
@@ -48,56 +50,53 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
 
         computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
 
-        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, columns, computations, _cfg.sorting_lists,
+        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, columns, computations, _cfg.sorting_lists,
                     second_columns=second_column_names,
                     groups=groups, per= False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
         
-        if factor>=1:
-            Create_excel_sheet(workbook.create_sheet("Horizontal Per"),  third_columns_names, data, columns, computations, _cfg.sorting_lists,
-                     groups=groups, per=False, average=False, last_column=False, last_column_average=False, additional_info=additional_info)
+        save_workbook(os.path.join(results_path,excel_name), workbook, NORMAL_WIDTH)
         
-        save_workbook(os.path.join(results_path, name), workbook, NORMAL_WIDTH)
         # with visualiser_lock:
         # VISUALISATIONS
         title = 'Harmonic Data'
-        if groups:
-            data_grouped = data.groupby(list(groups))
-            for g, datag in data_grouped:
-                result_visualisations = path.join(
-                    results_path, 'visualisations', g)
-                if not os.path.exists(result_visualisations):
-                    os.mkdir(result_visualisations)
-                name_bar = path.join(
-                    result_visualisations, name.replace('.xlsx', IMAGE_EXTENSION))
-                bar_plot(name_bar, datag, third_columns_names_origin,
-                            'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
-        elif factor == 1:
-            for row in rows_groups:
-                if row not in not_used_cols:
-                    plot_name = name.replace(
-                            '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper())
-                    name_bar=path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
-                    if not os.path.exists(name_bar):
-                        os.makedirs(name_bar)
+        # if groups:
+        #     data_grouped = data.groupby(list(groups))
+        #     for g, datag in data_grouped:
+        #         result_visualisations = path.join(
+        #             results_path, 'visualisations', g)
+        #         if not os.path.exists(result_visualisations):
+        #             os.mkdir(result_visualisations)
+        #         name_bar = path.join(
+        #             result_visualisations, name.replace('.xlsx', IMAGE_EXTENSION))
+        #         bar_plot(name_bar, datag, third_columns_names_origin,
+        #                     'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
+        # elif factor == 1:
+        #     for row in rows_groups:
+        #         if row not in not_used_cols:
+        #             plot_name = name.replace(
+        #                     '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper())
+        #             name_bar=path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+        #             if not os.path.exists(name_bar):
+        #                 os.makedirs(name_bar)
 
-                    name_bar=path.join(name_bar,plot_name)
+        #             name_bar=path.join(name_bar,plot_name)
 
-                    if len(rows_groups[row][0]) == 0:  # no sub-groups
-                        data_grouped = data.groupby(row, sort=True)
-                        if data_grouped:
-                            bar_plot(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
-                                        'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
-                    else: #subgroups
-                        for i, subrow in enumerate(rows_groups[row][0]):
-                            if subrow not in EXCEPTIONS:
-                                data_grouped = data.groupby(subrow)
-                                bar_plot(name_bar+'_'+subrow + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
-                                        'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
+        #             if len(rows_groups[row][0]) == 0:  # no sub-groups
+        #                 data_grouped = data.groupby(row, sort=True)
+        #                 if data_grouped:
+        #                     bar_plot(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
+        #                                 'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
+        #             else: #subgroups
+        #                 for i, subrow in enumerate(rows_groups[row][0]):
+        #                     if subrow not in EXCEPTIONS:
+        #                         data_grouped = data.groupby(subrow)
+        #                         bar_plot(name_bar+'_'+subrow + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
+        #                                 'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
 
-        else:
-            name_bar = path.join(
-                results_path, 'visualisations', name.replace('.xlsx', IMAGE_EXTENSION))
-            bar_plot(name_bar, data, third_columns_names_origin,'Harmony', title)
+        # else:
+        #     name_bar = path.join(
+        #         results_path, 'visualisations', name.replace('.xlsx', IMAGE_EXTENSION))
+        #     bar_plot(name_bar, data, third_columns_names_origin,'Harmony', title)
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
@@ -113,21 +112,10 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
     # column_names = ["Total analysed"] + column_names
     # computations = ['sum']*len(column_names)
 
-    # excel_sheet(workbook.create_sheet("Counts"), column_names, data, third_column_names, computations, second_columns=second_column_names,average=False, additional_info = additional_info, total = False, want_total_counts = False)
-    
-    # #borramos la hoja por defecto
-    # if "Sheet" in workbook.get_sheet_names():
-    #     std=workbook.get_sheet_by_name('Sheet')
-    #     workbook.remove_sheet(std)
-    # workbook.save(os.path.join(results_path, name))
-    # # rows_groups = rg
-    # # not_used_cols = nuc
-
-
-def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str,pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
-
+        excel_name=get_excel_name(pre_string, name)
         # Splitting the dataframes to reorder them
         data_general = data[metadata_columns+ ['Total analysed']].copy()
         data = data[set(data.columns).difference(list(data_general.columns))]
@@ -149,16 +137,18 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
         # computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
         computations = ["sum"]*len(third_columns_names)
 
-        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel_sheet(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+            Create_excel(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                         groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path,excel_name), workbook, NARROW)
+
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         third_columns_names.remove('Total analysed')
         title = 'Chords'
+
         # VISUALISATIONS
         # if groups:
         #     data_grouped = data.groupby(list(groups))
@@ -203,12 +193,11 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
-
 def Triple_harmonic_excel(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, 
                             pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
         
     workbook = openpyxl.Workbook()
-    excel_name=pre_string + name + '.xlsx'
+    excel_name=get_excel_name(pre_string, name)
     try:
         data, data_general = SeparateDataframes(data)
         if 'functions' in name:
@@ -231,7 +220,7 @@ def Triple_harmonic_excel(rows_groups: dict, not_used_cols: dict, factor, _cfg: 
         data2 = pd.concat([data_general, data2], axis=1)
         data3 = pd.concat([data_general, data3], axis=1)
 
-        Create_excel_sheet(workbook.create_sheet("Weighted"),
+        Create_excel(workbook.create_sheet("Weighted"),
          third_columns_names, data1, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups,
             data2=data2,
@@ -242,7 +231,7 @@ def Triple_harmonic_excel(rows_groups: dict, not_used_cols: dict, factor, _cfg: 
                 additional_info=additional_info, ponderate=False)
         
         if factor>=1:
-            Create_excel_sheet(workbook.create_sheet("Horizontal"),
+            Create_excel(workbook.create_sheet("Horizontal"),
          third_columns_names, data1, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups,data2=data2,
           last_column=True, last_column_average=False, second_columns=second_column_names,
@@ -345,7 +334,6 @@ def name_second_columns(third_columns_names, name):
 
 def insert_total_analysed(columns_names):
     columns_names.insert(0, 'Total analysed')
-
 
 
 # def Keyareas_columns(rows_groups: dict, not_used_cols: dict, keyareas, sorting_lists, mandatory_word = None, complementary_info = None, computations = 'sum', forbiden_word = ''):
