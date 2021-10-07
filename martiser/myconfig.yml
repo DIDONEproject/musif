@@ -13,11 +13,11 @@ write_log:
   level: INFO
 features:
   - core
-  - custom.core_harmony
+  - custom.core_mscx
   - scoring
   - custom.file_name
   - scale
-  - custom.scale_relative
+  # - custom.scale_relative
   - custom.harmony
   - metadata
 #  - custom.themeA
@@ -26,7 +26,7 @@ features:
   - tempo
   # - ambitus
   # - density
-  # - texture
+  # - texture     
   # - interval # to extract Melody_values task, both ambitus and interval are needed
   - key
   - lyrics

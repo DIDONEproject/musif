@@ -3,22 +3,19 @@ from multiprocessing import Lock
 import os
 from os import path
 
-# import musif.extract.features.ambitus as ambitus
-# import musif.extract.features.lyrics as lyrics
+
 from musif.config import Configuration
-# from music21 import interval
 from musif.common.sort import sort
 from musif.common.constants import get_color, RESET_SEQ
 from musif.reports.constants import *
-from musif.reports.utils import (Adjust_excel_width_height,
-                                 columns_alike_our_data, save_workbook)
+from musif.reports.utils import (columns_alike_our_data, get_excel_name, save_workbook)
 from musif.reports.visualisations import bar_plot, double_bar_plot, pie_plot
 from pandas.core.frame import DataFrame
-from musif.reports.utils import Create_excel_sheet
+from musif.reports.utils import Create_excel
 
 def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string: str, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
-        excel_name= pre_string + name + '.xlsx'
+        excel_name= get_excel_name(pre_string, name)
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
@@ -37,10 +34,10 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         # esta sheet va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
         computations = ["sum"]*len(third_columns_names)
 
-        Create_excel_sheet(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel_sheet(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+            Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
@@ -96,14 +93,9 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
-
-#########################################################
-# Function to generate the reports file Intervals_types.xlsx  #
-#########################################################
-
 def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string: str, name: str, visualiser_lock: Lock, groups=None, additional_info: list=[]):
     try:
-        excel_name= pre_string + name + '.xlsx'
+        excel_name=get_excel_name(pre_string, name)
         data.columns=[c.replace('Desc', 'Descending').replace('Asc', 'Ascending') for c in data.columns]
         workbook = openpyxl.Workbook()
         second_column_names = [("", 2), ("Leaps", 3), ("StepwiseMotion", 3)]
@@ -120,14 +112,14 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
         columns2 = columns_alike_our_data(
             third_columns_names2, second_column_names2)
 
-        Create_excel_sheet(workbook.create_sheet("Weighted"),
+        Create_excel(workbook.create_sheet("Weighted"),
          columns, data, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups, 
           last_column=True, last_column_average=False, second_columns=second_column_names,
            average=True,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel_sheet(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
+            Create_excel(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)

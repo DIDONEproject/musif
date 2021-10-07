@@ -20,7 +20,7 @@ DATA_TONALITY = "tonality"
 DATA_MODE = "mode"
 
 FILE_NAME = "FileName"
-
+LEN_NOTES='Notes'
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data[DATA_PART]
@@ -38,6 +38,8 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DATA_AMBITUS_SOLUTION: ambitus_solution,
         DATA_AMBITUS_PITCH_SPAN: ambitus_pitch_span,
     })
+    part_features.update({
+        LEN_NOTES: len(notes)})
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):

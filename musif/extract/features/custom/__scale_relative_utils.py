@@ -1,12 +1,14 @@
 # ### MODULATIONS ###
 from collections import Counter
-from typing import List
+from typing import List, Union
 from pandas.core.frame import DataFrame
 import roman
 import itertools
 from music21 import scale, pitch
 from music21.note import Note
 from musif.extract.features.custom.__harmony_utils import get_function_first, get_function_second
+
+accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 
 
 def get_modulations(lausanne_table: DataFrame, sections, major = True):
@@ -16,7 +18,6 @@ def get_modulations(lausanne_table: DataFrame, sections, major = True):
 ###
 # Es el nº de secciones que están en cada tonalidad, 
 # viendo las anotaciones como bloques. Nº enteros
-    
     
     # TASK: Count the number of sections in each key ###
     ##sections has the same length that harnmonbic_abalysis dataframe
@@ -66,6 +67,12 @@ def get_tonality_for_measure(harmonic_analysis, tonality, renumbered_measures):
     tonality_map = {}
     for index, grado in enumerate(harmonic_analysis.localkey):
         tonality_map[renumbered_measures[index]] = get_localTonalty(tonality, grado.strip())
+
+    #  Fill measures without a value
+    for measure in range(1, max(list(tonality_map.keys()))):
+        if measure not in tonality_map.keys():
+            tonality_map[measure] = tonality_map[measure-1]
+
     return tonality_map
 
 
@@ -92,6 +99,7 @@ def get_localTonalty(globalkey, degree):
     # modulation = modulation.replace('-', '', 1)
 
     return modulation.upper() if degree.isupper() else modulation.lower()
+
 ###########################################################################
 # Function created to obtain the scale degree of a note in a given key #
 ###########################################################################
@@ -129,11 +137,10 @@ def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) ->
 
     for note in notes_list:
       if note.isChord:
-        note=note[0] #If we wave 2or more notes at once, we just take the lowest one
+        note=note[0] #If we wave 2 or more notes at once, we just take the lowest one
       notes_measures.append((note.name, note.measureNumber))
 
-
-    if IsAnacrusis(harmonic_analysis): #Anacrussis:
+    if IsAnacrusis(harmonic_analysis):
         renumbered_measures = [rm - 1 for rm in renumbered_measures]
     
     tonality_map = get_tonality_for_measure(harmonic_analysis, tonality, renumbered_measures)
@@ -149,23 +156,35 @@ def Add_Missing_Measures_to_tonality_map(tonality_map: dict, renumbered_measures
             tonality_map[num] = tonality_map[num - 1]
             
 def get_emph_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
-    notes_per_degree_relative = {}
-    error_compasses = []
-    for note in notes_list:
+    local_tonality=''
+    
+    notes_per_degree_relative = {
+        to_full_degree(degree, accidental): 0
+        for accidental in ["", "sharp", "flat"]
+        for degree in [1, 2, 3, 4, 5, 6, 7]
+    }
+
+    for j, note in enumerate(notes_list):
         if note.isChord:
           note = note[0]
 
         note_name = note.name
         note_measure = note.measureNumber
+
+        if note_measure is None:
+            note_measure=notes_list[j-1].measureNumber
+
         if note_measure in tonality_map:
             local_tonality = tonality_map[note_measure]
-            degree_value = get_note_degree(local_tonality, note_name)
 
-            if str(degree_value) not in notes_per_degree_relative:
-                notes_per_degree_relative[str(degree_value)] = 1
-            else:
-                notes_per_degree_relative[str(degree_value)] += 1
+        degree_value = get_note_degree(local_tonality, note_name)
+
+        if str(degree_value) not in notes_per_degree_relative:
+            notes_per_degree_relative[str(degree_value)] = 1
         else:
-            if note_measure not in error_compasses:
-                error_compasses.append(note_measure)
-    return notes_per_degree_relative, error_compasses
+            notes_per_degree_relative[str(degree_value)] += 1
+
+    return notes_per_degree_relative
+    
+def to_full_degree(degree: Union[int, str], accidental: str) -> str:
+    return f"{accidental_abbreviation[accidental]}{degree}"

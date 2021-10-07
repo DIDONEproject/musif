@@ -17,8 +17,8 @@ from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, s
 @lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     try:
-        cfg.read_logger.info(get_color('INFO')+'\nGetting harmonic analysis...{0}'.format(mscx_file) + RESET_SEQ)
-        print('\nGetting harmonic analysis...{0}'.format(mscx_file))
+        cfg.read_logger.info(get_color('INFO')+'\nParsing mscx file... {0}'.format(mscx_file) + RESET_SEQ)
+        print('\nParsing mscx file... {0}'.format(mscx_file))
         
         file_path = cfg.musescore_dir + mscx_file if cfg.musescore_dir != cfg.data_dir else mscx_file
        
