@@ -65,11 +65,19 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     done = 0
     starting_measure = 0
     numberofmeasures = len(measures)
+    new_measures=[]
     for i in range(1,len(measures)):
         print(measures[i])
         if measures[i] < max(measures[:i]):
             print('Measure is {} and preovious {}'.format( measures[i] ,  measures[i-1] ))
-
+            
+            if same_measure(measures, i):
+                new_measures[i]=new_measures[i-1]
+            else:
+                new_measures[i]=measures[i-1]+1
+        else:
+            new_measures.append(measures[i])
+           
 
     for i, key in enumerate(keys):
         if key != last_key and i < numberofmeasures:
@@ -90,6 +98,9 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     #    print('Error en el recuento de compases de cada sección/voz en get_compases_per_possibility')
 
     return key_measures
+
+def same_measure(measures, i):
+    return measures[i] == measures[i-1]
 
 ###########################################################################
 # Function that returns the number of beats depending on the time signature

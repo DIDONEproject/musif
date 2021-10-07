@@ -36,7 +36,7 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
         third_columns_names_origin = sort(third_columns_names_origin, _cfg.sorting_lists["ScaleDegrees"])
         third_columns_names = ['Total analysed'] + third_columns_names_origin
         third_columns_names2 = ['Total analysed'] + \
-            ['1', '4', '5', '7', 'Others']
+            ['1','3', '4', '5', '7', 'Others']
 
         computations = ["sum"]*len(third_columns_names)
         computations2 = ["sum"]*len(third_columns_names2)
@@ -51,9 +51,9 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
         Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info, ponderate=True)
         
-        if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
-                     columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
+        # if factor>=1:
+        #     Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
+        #              columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, excel_name) , workbook, NARROW)
 
@@ -103,6 +103,17 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
                                          i]]) for i in range(len(seven))]
             else:
                 column_data = seven.tolist()
+        if name == '3':  # sumamos las columnas 3 y 3b
+            seven=[]
+            if '3' in data.columns:
+                three = data[name]
+            if 'b3' in data.columns:
+                flat_3 = data["b3"]
+                column_data = [np.nansum([three.tolist()[i], flat_3.tolist()[
+                                         i]]) for i in range(len(three))]
+            else:
+                column_data = seven.tolist()
+
         elif name == "Others":  # sumamos todas las columnas de data menos 1, 4, 5, 7, #7
             column_data = data[rest_data].sum(axis=1).tolist()
         else:
