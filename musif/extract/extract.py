@@ -11,7 +11,7 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 from musif.common.cache import Cache
-from musif.common.constants import GENERAL_FAMILY, FEATURES_MODULE
+from musif.common.constants import GENERAL_FAMILY, FEATURES_MODULE, RESET_SEQ, get_color
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILE, DATA_FILTERED_PARTS, DATA_PART, \
@@ -106,6 +106,7 @@ class FeaturesExtractor:
         self._files_extractor = FilesExtractor(*args, **kwargs)
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
+        print(get_color('WARNING')+'\n---Analyzing scores ---\n'+ RESET_SEQ)
         musicxml_files = self._files_extractor.extract(obj)
         score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
