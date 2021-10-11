@@ -18,32 +18,36 @@ from ..harmony_sorting import *  # TODO: REVIEW
 
 def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
+        additions=[]
         workbook = openpyxl.Workbook()
-        all_columns = data.columns.tolist()
-        general_cols = copy.deepcopy(not_used_cols)
-        get_general_cols(rows_groups, general_cols)
         excel_name=get_excel_name(pre_string, name)
-        data = data.round(decimals = 2)
-        third_columns_names_origin = list(set(all_columns) - set(general_cols))
+
+        # all_columns = data.columns.tolist()
+        general_cols = copy.deepcopy(not_used_cols)
+        data_general = data[metadata_columns+ ['Total analysed']].copy()
+        get_general_cols(rows_groups, general_cols)
 
         harmonic_rythm = [c for c in data.columns if 'Harmonic_rhythm' in c]
-
         chordTypes = [c.replace(CHORD_TYPES_prefix, '') for c in data.columns if CHORD_TYPES_prefix in c]
         chordTypes = sort(chordTypes, _cfg.sorting_lists['ChordTypeGrouppingSorting'])
 
-        additions = [c.replace(ADDITIONS_prefix, '') for c in data.columns if ADDITIONS_prefix in c]
+        # additions = [c.replace(ADDITIONS_prefix, '') for c in data.columns if ADDITIONS_prefix in c]
 
         numerals = [c.replace(NUMERALS_prefix, '') for c in data.columns if NUMERALS_prefix in c]
         numerals = sort(numerals, _cfg.sorting_lists['NumeralsSorting'])
 
-        second_column_names = [("", 1),('Harmonic Rhythm', len(harmonic_rythm)), ('Numerals', len(numerals)), ('Chord types', len(chordTypes)), ('Additions', len(additions))]
-        
         #Remove prefixes
         data.columns=[i.replace(CHORD_TYPES_prefix, '').replace(ADDITIONS_prefix, '').replace(NUMERALS_prefix, '') for i in data.columns]
         
-        #     Numerals				Chord_types				Additions		
-        # T	SD	D	Other	triad	7th	dim 	aug	4, 6 & 64	Others	None
-        third_columns_names = ['Total analysed'] + harmonic_rythm+ additions + chordTypes + numerals
+        data=pd.concat((data_general,data[harmonic_rythm+numerals + chordTypes]), axis=1)
+        data = data.round(decimals = 2)
+
+
+        second_column_names = [("", 1),('Harmonic Rhythm', len(harmonic_rythm)), ('Numerals', len(numerals)), ('Chord types', len(chordTypes))]
+        #  ('Additions', len(additions))]
+        
+
+        third_columns_names = ['Total analysed'] + harmonic_rythm + additions + numerals + chordTypes
 
         columns = remove_underscore(third_columns_names)
 
@@ -52,7 +56,7 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
 
         Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, columns, computations, _cfg.sorting_lists,
                     second_columns=second_column_names,
-                    groups=groups, per= False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
+                    groups=groups, per = False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
         
         save_workbook(os.path.join(results_path,excel_name), workbook, NORMAL_WIDTH)
         
@@ -139,9 +143,9 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
 
         Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
-        if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
-                        groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
+        # if factor>=1:
+        #     Create_excel(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        #                 groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path,excel_name), workbook, NARROW)
 
