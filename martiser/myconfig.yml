@@ -17,13 +17,13 @@ features:
   - scoring
   - custom.file_name
   - scale
-  # - custom.scale_relative
+  - custom.scale_relative
   - custom.harmony
+  - tempo
   - metadata
 #  - custom.themeA
   - composer
   - custom.librettist
-  - tempo
   # - ambitus
   # - density
   # - texture     

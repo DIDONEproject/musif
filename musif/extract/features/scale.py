@@ -3,7 +3,7 @@ from typing import List, Dict, Union
 from music21.note import Note
 
 from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
-from musif.extract.features.core import DATA_TONALITY, DATA_NOTES
+from musif.extract.features.core import DATA_KEY, DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix
 
 from musif.config import Configuration
@@ -17,8 +17,10 @@ DEGREE_PER = "{prefix}Degree{key}_Per"
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]
-    tonality = score_data[DATA_TONALITY]
-    notes_per_degree = get_notes_per_degree(tonality.capitalize(), notes)
+    tonality = score_data[DATA_KEY]
+    # notes_per_degree = get_notes_per_degree(tonality.capitalize(), notes)
+    notes_per_degree = get_notes_per_degree(str(tonality), notes)
+
     all_degrees = sum(value for value in notes_per_degree.values())
     for key, value in notes_per_degree.items():
         part_features[DEGREE_COUNT.format(key=key, prefix="")] = value

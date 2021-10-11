@@ -133,7 +133,7 @@ def get_xml_scoring_variables(score):
 
 
 def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:
-    if "major" in key:
+    if "major" in key.split():
         scl = MajorScale(key.split(" ")[0])
     else:
         scl = MinorScale(key.split(" ")[0])
