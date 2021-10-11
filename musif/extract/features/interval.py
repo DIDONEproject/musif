@@ -24,8 +24,8 @@ INTERVALLIC_TRIM_DIFF = "IntervallicTrimDiff"
 INTERVALLIC_TRIM_RATIO = "IntervallicTrimRatio"
 ABSOLUTE_INTERVALLIC_TRIM_DIFF = "AbsoluteIntervallicTrimDiff"
 ABSOLUTE_INTERVALLIC_TRIM_RATIO = "AbsoluteIntervallicTrimRatio"
-ASCENDING_SEMITONES = "AscendingSemitones"
-DESCENDING_SEMITONES = "DescendingSemitones"
+ASCENDING_SEMITONES_SUM = "AscendingSemitones_Sum"
+DESCENDING_SEMITONES_SUM = "DescendingSemitones_Sum"
 ASCENDING_INTERVALS_COUNT = "AscendingIntervals_Count"
 ASCENDING_INTERVALS_PER = "AscendingIntervals_Per"
 DESCENDING_INTERVALS_COUNT = "DescendingIntervals_Count"
@@ -98,25 +98,18 @@ INTERVALS_BEYOND_OCTAVE_ALL_COUNT = "IntervalsBeyondOctaveAll_Count"
 INTERVALS_BEYOND_OCTAVE_ASC_PER = "IntervalsBeyondOctaveAsc_Per"
 INTERVALS_BEYOND_OCTAVE_DESC_PER = "IntervalsBeyondOctaveDesc_Per"
 INTERVALS_BEYOND_OCTAVE_ALL_PER = "IntervalsBeyondOctaveAll_Per"
-INTERVALS_SKEWNESS = "IntervalsSkewness"
-INTERVALS_KURTOSIS = "IntervalsKurtosis"
-ABSOLUTE_INTERVALS_SKEWNESS = "AbsoluteIntervalsSkewness"
-ABSOLUTE_INTERVALS_KURTOSIS = "AbsoluteIntervalsKurtosis"
-LARGEST_ASC_INTERVAL = "LargestAscInterval"
-LARGEST_ASC_INTERVAL_SEMITONES = "LargestAscIntervalSemitones"
-LARGEST_DESC_INTERVAL = "LargestDescInterval"
-LARGEST_DESC_INTERVAL_SEMITONES = "LargestDescIntervalSemitones"
-SMALLEST_ASC_INTERVAL = "SmallestAscInterval"
-SMALLEST_ASC_INTERVAL_SEMITONES = "SmallestAscIntervalSemitones"
-SMALLEST_DESC_INTERVAL = "SmallestDescInterval"
-SMALLEST_DESC_INTERVAL_SEMITONES = "SmallestDescIntervalSemitones"
-INTERVAL_COUNT = "{prefix}Interval_{interval}"
+INTERVALLIC_SKEWNESS = "IntervallicSkewness"
+INTERVALLIC_KURTOSIS = "IntervallicKurtosis"
+ABSOLUTE_INTERVALLIC_SKEWNESS = "AbsoluteIntervallicSkewness"
+ABSOLUTE_INTERVALLIC_KURTOSIS = "AbsoluteIntervallicKurtosis"
+INTERVAL_COUNT = "{prefix}Interval{interval}_Count"
+INTERVAL_PER = "{prefix}Interval{interval}_Per"
 
 
 ALL_FEATURES = [
     INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD,
     TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
-    ASCENDING_INTERVALS_COUNT, DESCENDING_INTERVALS_COUNT, ASCENDING_INTERVALS_PER, DESCENDING_SEMITONES,
+    ASCENDING_INTERVALS_COUNT, DESCENDING_INTERVALS_COUNT, ASCENDING_INTERVALS_PER, DESCENDING_SEMITONES_SUM,
     REPEATED_NOTES_COUNT, REPEATED_NOTES_PER, LEAPS_ASC_COUNT, LEAPS_DESC_COUNT, LEAPS_ALL_COUNT, LEAPS_ASC_PER, LEAPS_DESC_PER, LEAPS_ALL_PER,
     STEPWISE_MOTION_ASC_COUNT, STEPWISE_MOTION_DESC_COUNT, STEPWISE_MOTION_ALL_COUNT, STEPWISE_MOTION_ASC_PER, STEPWISE_MOTION_DESC_PER, STEPWISE_MOTION_ALL_PER,
     INTERVALS_PERFECT_ASC_COUNT, INTERVALS_PERFECT_DESC_COUNT, INTERVALS_PERFECT_ALL_COUNT, INTERVALS_PERFECT_ASC_PER, INTERVALS_PERFECT_DESC_PER, INTERVALS_PERFECT_ALL_PER,
@@ -128,9 +121,7 @@ ALL_FEATURES = [
     INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT, INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT, INTERVALS_DOUBLE_DIMINISHED_DESC_COUNT, INTERVALS_DOUBLE_DIMINISHED_ALL_PER, INTERVALS_DOUBLE_DIMINISHED_ASC_PER, INTERVALS_DOUBLE_DIMINISHED_DESC_PER,
     INTERVALS_WITHIN_OCTAVE_ALL_COUNT, INTERVALS_WITHIN_OCTAVE_ALL_PER, INTERVALS_WITHIN_OCTAVE_ASC_COUNT, INTERVALS_WITHIN_OCTAVE_ASC_PER, INTERVALS_WITHIN_OCTAVE_DESC_COUNT, INTERVALS_WITHIN_OCTAVE_DESC_PER,
     INTERVALS_BEYOND_OCTAVE_ALL_COUNT, INTERVALS_BEYOND_OCTAVE_ALL_PER, INTERVALS_BEYOND_OCTAVE_ASC_COUNT, INTERVALS_BEYOND_OCTAVE_ASC_PER, INTERVALS_BEYOND_OCTAVE_DESC_COUNT, INTERVALS_BEYOND_OCTAVE_DESC_PER,
-    LARGEST_ASC_INTERVAL, LARGEST_ASC_INTERVAL_SEMITONES, LARGEST_DESC_INTERVAL, LARGEST_DESC_INTERVAL_SEMITONES,
-    SMALLEST_ASC_INTERVAL, SMALLEST_ASC_INTERVAL_SEMITONES, SMALLEST_DESC_INTERVAL, SMALLEST_DESC_INTERVAL_SEMITONES,
-    INTERVALS_SKEWNESS, INTERVALS_KURTOSIS, ABSOLUTE_INTERVALS_SKEWNESS, ABSOLUTE_INTERVALS_KURTOSIS
+    INTERVALLIC_SKEWNESS, INTERVALLIC_KURTOSIS, ABSOLUTE_INTERVALLIC_SKEWNESS, ABSOLUTE_INTERVALLIC_KURTOSIS
 ]
 
 
@@ -215,14 +206,6 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     num_descending_intervals = len(descending_intervals) if len(descending_intervals) > 0 else 0
     num_ascending_semitones = sum(ascending_intervals) if len(ascending_intervals) > 0 else 0
     num_descending_semitones = sum(descending_intervals) if len(descending_intervals) > 0 else 0
-    largest_ascending_semitones = max(ascending_intervals) if len(ascending_intervals) > 0 else None
-    largest_ascending = Interval(largest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
-    largest_descending_semitones = min(descending_intervals) if len(descending_intervals) > 0 else None
-    largest_descending = Interval(largest_descending_semitones).directedName if len(descending_intervals) > 0 else None
-    smallest_ascending_semitones = min(ascending_intervals) if len(ascending_intervals) > 0 else None
-    smallest_ascending = Interval(smallest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
-    smallest_descending_semitones = max(descending_intervals) if len(descending_intervals) > 0 else None
-    smallest_descending = Interval(smallest_descending_semitones).directedName if len(descending_intervals) > 0 else None
     ascending_intervals_percentage = num_ascending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
     descending_intervals_percentage = num_descending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
 
@@ -241,27 +224,21 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": absolute_trim_ratio,
         f"{prefix}{ASCENDING_INTERVALS_COUNT}": num_ascending_intervals,
         f"{prefix}{DESCENDING_INTERVALS_COUNT}": num_descending_intervals,
-        f"{prefix}{ASCENDING_SEMITONES}": num_ascending_semitones,
-        f"{prefix}{DESCENDING_SEMITONES}": num_descending_semitones,
+        f"{prefix}{ASCENDING_SEMITONES_SUM}": num_ascending_semitones,
+        f"{prefix}{DESCENDING_SEMITONES_SUM}": num_descending_semitones,
         f"{prefix}{ASCENDING_INTERVALS_PER}": ascending_intervals_percentage,
         f"{prefix}{DESCENDING_INTERVALS_PER}": descending_intervals_percentage,
-        f"{prefix}{LARGEST_ASC_INTERVAL}": largest_ascending,
-        f"{prefix}{LARGEST_ASC_INTERVAL_SEMITONES}": largest_ascending_semitones,
-        f"{prefix}{LARGEST_DESC_INTERVAL}": largest_descending,
-        f"{prefix}{LARGEST_DESC_INTERVAL_SEMITONES}": largest_descending_semitones,
-        f"{prefix}{SMALLEST_ASC_INTERVAL}": smallest_ascending,
-        f"{prefix}{SMALLEST_ASC_INTERVAL_SEMITONES}": smallest_ascending_semitones,
-        f"{prefix}{SMALLEST_DESC_INTERVAL}": smallest_descending,
-        f"{prefix}{SMALLEST_DESC_INTERVAL_SEMITONES}": smallest_descending_semitones,
     }
     return features
 
 
 def get_interval_count_features(interval_counts: Dict[str, int], prefix: str = "") -> dict:
-    return {
-        INTERVAL_COUNT.format(prefix=prefix, interval=interval): count
-        for interval, count in interval_counts.items()
-    }
+    total_count = sum([count for interval, count in interval_counts.items()])
+    interval_features = {}
+    for interval, count in interval_counts.items():
+        interval_features[INTERVAL_COUNT.format(prefix=prefix, interval=interval)] = count
+        interval_features[INTERVAL_PER.format(prefix=prefix, interval=interval)] = count / total_count
+    return interval_features
 
 
 def get_interval_type_features(intervals_count: Dict[str, int], prefix: str = ""):
@@ -422,8 +399,8 @@ def get_interval_stats_features(intervals_count: Dict[str, int], prefix: str = "
     absolute_intervals_skewness = skew(absolute_intervals)
     absolute_intervals_kurtosis = kurtosis(absolute_intervals)
     return {
-        f"{prefix}{INTERVALS_SKEWNESS}": intervals_skewness,
-        f"{prefix}{INTERVALS_KURTOSIS}": intervals_kurtosis,
-        f"{prefix}{ABSOLUTE_INTERVALS_SKEWNESS}": absolute_intervals_skewness,
-        f"{prefix}{ABSOLUTE_INTERVALS_KURTOSIS}": absolute_intervals_kurtosis,
+        f"{prefix}{INTERVALLIC_SKEWNESS}": intervals_skewness,
+        f"{prefix}{INTERVALLIC_KURTOSIS}": intervals_kurtosis,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_SKEWNESS}": absolute_intervals_skewness,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_KURTOSIS}": absolute_intervals_kurtosis,
     }

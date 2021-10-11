@@ -1,7 +1,7 @@
 data_dir: ../data
 metadata_dir: ../metadata
 metadata_id_col: AriaId
-parallel: true
+parallel: false
 max_processes: 8
 read_log:
   file_path: logs/read.log

@@ -1,17 +1,17 @@
 import pandas as pd
 
 from musif.common.utils import read_dicts_from_csv
-from musif.extract.features.ambitus import HIGHEST_INDEX, LOWEST_INDEX
+from musif.extract.features.ambitus import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
 from musif.extract.features.custom.file_name import ARIA_ID, ARIA_LABEL
 from musif.extract.features.density import DENSITY, MEASURES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
 from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, \
-    ABSOLUTE_INTERVALS_KURTOSIS, \
-    ABSOLUTE_INTERVALS_SKEWNESS, INTERVALLIC_MEAN, \
+    ABSOLUTE_INTERVALLIC_KURTOSIS, \
+    ABSOLUTE_INTERVALLIC_SKEWNESS, INTERVALLIC_MEAN, \
     INTERVALLIC_STD, \
-    INTERVALS_AUGMENTED_ALL_PER, INTERVALS_DIMINISHED_ALL_PER, INTERVALS_KURTOSIS, \
+    INTERVALS_AUGMENTED_ALL_PER, INTERVALS_DIMINISHED_ALL_PER, INTERVALLIC_KURTOSIS, \
     INTERVALS_MAJOR_ALL_PER, \
     INTERVALS_MINOR_ALL_PER, \
-    INTERVALS_PERFECT_ALL_PER, INTERVALS_SKEWNESS, LEAPS_ALL_PER, REPEATED_NOTES_PER, STEPWISE_MOTION_ALL_PER
+    INTERVALS_PERFECT_ALL_PER, INTERVALLIC_SKEWNESS, LEAPS_ALL_PER, REPEATED_NOTES_PER, STEPWISE_MOTION_ALL_PER
 from musif.extract.features.key import KEY, KEY_SIGNATURE_TYPE, MODE
 from musif.extract.features.lyrics import SYLLABIC_RATIO
 from musif.extract.features.prefix import get_part_prefix
@@ -76,18 +76,18 @@ if __name__ == "__main__":
             "Label_Time": row["Label_Time"],
         }
         for input_part, output_part in zip(input_parts_prefixes, output_parts_prefixes):
-            data_item[f"{output_part}HighestNoteIndex"] = row[f"{input_part}{HIGHEST_INDEX}"]
-            data_item[f"{output_part}LowestNoteIndex"] = row[f"{input_part}{LOWEST_INDEX}"]
+            data_item[f"{output_part}HighestNoteIndex"] = row[f"{input_part}{HIGHEST_NOTE_INDEX}"]
+            data_item[f"{output_part}LowestNoteIndex"] = row[f"{input_part}{LOWEST_NOTE_INDEX}"]
             data_item[f"{output_part}Density"] = row[f"{input_part}{DENSITY}"]
             data_item[f"{output_part}SoundingDensity"] = row[f"{input_part}{SOUNDING_DENSITY}"]
             data_item[f"{output_part}IntervallicMean"] = row[f"{input_part}{INTERVALLIC_MEAN}"]
             data_item[f"{output_part}IntervallicStd"] = row[f"{input_part}{INTERVALLIC_STD}"]
-            data_item[f"{output_part}IntervallicSkewness"] = row[f"{input_part}{INTERVALS_SKEWNESS}"]
-            data_item[f"{output_part}IntervallicKurtosis"] = row[f"{input_part}{INTERVALS_KURTOSIS}"]
+            data_item[f"{output_part}IntervallicSkewness"] = row[f"{input_part}{INTERVALLIC_SKEWNESS}"]
+            data_item[f"{output_part}IntervallicKurtosis"] = row[f"{input_part}{INTERVALLIC_KURTOSIS}"]
             data_item[f"{output_part}AbsoluteIntervallicMean"] = row[f"{input_part}{ABSOLUTE_INTERVALLIC_MEAN}"]
             data_item[f"{output_part}AbsoluteIntervallicStd"] = row[f"{input_part}{ABSOLUTE_INTERVALLIC_STD}"]
-            data_item[f"{output_part}AbsoluteIntervallicSkewness"] = row[f"{input_part}{ABSOLUTE_INTERVALS_SKEWNESS}"]
-            data_item[f"{output_part}AbsoluteIntervallicKurtosis"] = row[f"{input_part}{ABSOLUTE_INTERVALS_KURTOSIS}"]
+            data_item[f"{output_part}AbsoluteIntervallicSkewness"] = row[f"{input_part}{ABSOLUTE_INTERVALLIC_SKEWNESS}"]
+            data_item[f"{output_part}AbsoluteIntervallicKurtosis"] = row[f"{input_part}{ABSOLUTE_INTERVALLIC_KURTOSIS}"]
             data_item[f"{output_part}IntervalsDiminishedAll"] = row[f"{input_part}{INTERVALS_DIMINISHED_ALL_PER}"]
             data_item[f"{output_part}IntervalsMinorAll"] = row[f"{input_part}{INTERVALS_MINOR_ALL_PER}"]
             data_item[f"{output_part}IntervalsPerfectAll"] = row[f"{input_part}{INTERVALS_PERFECT_ALL_PER}"]
