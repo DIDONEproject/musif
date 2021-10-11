@@ -2,9 +2,8 @@ from os import path
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.constants import DATA_PART, DATA_SCORE, DATA_FILE
+from musif.extract.constants import DATA_FILE, DATA_PART, DATA_SCORE
 from musif.musicxml import get_intervals, get_notes_and_measures, get_notes_lyrics
-from musif.musicxml.ambitus import get_part_ambitus
 from musif.musicxml.key import get_key_and_mode
 
 DATA_NOTES = "notes"
@@ -13,21 +12,18 @@ DATA_SOUNDING_MEASURES = "sounding_measures"
 DATA_MEASURES = "measures"
 DATA_NUMERIC_INTERVALS = "numeric_intervals"
 DATA_TEXT_INTERVALS = "text_intervals"
-DATA_AMBITUS_SOLUTION = "ambitus_solution"
-DATA_AMBITUS_PITCH_SPAN = "ambitus_pitch_span"
 DATA_KEY = "key"
 DATA_TONALITY = "tonality"
 DATA_MODE = "mode"
-
 FILE_NAME = "FileName"
-LEN_NOTES='Notes'
+LEN_NOTES = "Notes"
+
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data[DATA_PART]
     notes, tied_notes, measures, sounding_measures = get_notes_and_measures(part)
     lyrics = get_notes_lyrics(notes)
     numeric_intervals, text_intervals = get_intervals(notes)
-    ambitus_solution, ambitus_pitch_span = get_part_ambitus(part)
     part_data.update({
         DATA_NOTES: tied_notes,
         DATA_LYRICS: lyrics,
@@ -35,8 +31,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DATA_MEASURES: measures,
         DATA_NUMERIC_INTERVALS: numeric_intervals,
         DATA_TEXT_INTERVALS: text_intervals,
-        DATA_AMBITUS_SOLUTION: ambitus_solution,
-        DATA_AMBITUS_PITCH_SPAN: ambitus_pitch_span,
     })
     part_features.update({
         LEN_NOTES: len(notes)})
