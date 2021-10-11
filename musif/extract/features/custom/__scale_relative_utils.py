@@ -1,6 +1,7 @@
 # ### MODULATIONS ###
 from collections import Counter
 from typing import List, Union
+from musif.extract.features.core import DATA_KEY
 from pandas.core.frame import DataFrame
 import roman
 import itertools
@@ -88,7 +89,7 @@ def get_localTonalty(globalkey, degree):
 
     degree_int = roman.fromRoman(degree.upper())
 
-    if globalkey.replace('b', '').isupper():
+    if 'major' in globalkey:
         pitch_scale = scale.MajorScale(globalkey.split()[0]).pitchFromDegree(degree_int).name 
     else:
         pitch_scale = scale.MinorScale(globalkey.split(' ')[0]).pitchFromDegree(degree_int).name 
@@ -131,7 +132,7 @@ def get_note_degree(key, note):
 
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
     harmonic_analysis=score_data['MS3_score']
-    tonality=score_data['tonality']
+    tonality=str(score_data[DATA_KEY])
     notes_measures = []
     renumbered_measures = harmonic_analysis.mc.dropna().tolist()
 

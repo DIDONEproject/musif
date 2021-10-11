@@ -1,5 +1,5 @@
-data_dir: data
-musescore_dir: data
+data_dir: ../data
+musescore_dir: ../data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
@@ -17,13 +17,13 @@ features:
   - scoring
   - custom.file_name
   - scale
-  # - custom.scale_relative
+  - custom.scale_relative
   - custom.harmony
+  - tempo
   - metadata
 #  - custom.themeA
   - composer
   - custom.librettist
-  - tempo
   # - ambitus
   # - density
   # - texture     
