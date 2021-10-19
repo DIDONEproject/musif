@@ -11,11 +11,12 @@ import os
 from re import L
 import sys
 from itertools import permutations
-from os import path
+from os import SEEK_CUR, path
 from typing import List, Optional
 
 import numpy as np
 import pandas as pd
+from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.common.constants import RESET_SEQ, VOICE_FAMILY, get_color
 from musif.config import Configuration
 from musif.extract.features import ambitus, density, lyrics, scale, texture
@@ -65,96 +66,35 @@ class FeaturesGenerator:
         common_tasks={}
         harmony_tasks={}
         tasks={}
+        self.common=True #Flag to run common tasks only once
 
-        # Getting general data that requires all info but is ran only once
-        instruments = self.Extract_instruments(all_info)
-        Instrument_level, notes_set = self.get_intrument_level_and_notes(all_info, instruments)
-
-        if self._cfg.is_requested_module(density) or self._cfg.is_requested_module(texture):
-            notes_df=all_info[list(notes_set)]
-            common_tasks['notes']=notes_df
-        
-        if self._cfg.is_requested_module(density):
-            density_df = self.Capture_density_df(all_info, instruments, Instrument_level)
-            common_tasks['density']=density_df
-
-        if self._cfg.is_requested_module(texture):
-            textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]].copy()
-            common_tasks['textures'] = textures_df
-
-        if self._cfg.is_requested_module(harmony):
-            harmony_df, key_areas_df, chords_df, functions_dfs = self.capture_harmony_DFs(all_info)
-            harmony_tasks['harmonic_data']=harmony_df
-            harmony_tasks['key_areas']=key_areas_df
-            harmony_tasks['chords']=chords_df
-            harmony_tasks['functions']=functions_dfs
-
-
-        ONCE=True #Flag to run common tasks only once
+        instruments = self.extract_instruments(all_info)
+        instrument_level, notes_set = self.get_intrument_level_and_notes(all_info, instruments)
         
         print(get_color('INFO')+'\n' + str(factor) + " factor", end='\n'+RESET_SEQ)
 
-        # CAPTURING FEATURES that depend total or partially on each part
+        self.prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments, instrument_level, notes_set)
+
         for instrument in tqdm(list(instruments), desc='Progress'):
             print(get_color('INFO')+'\nInstrument: ', instrument, end='\n\n'+RESET_SEQ)
-            Instrument_level = 'Part' + instrument + '_'
-            melody_values_list = get_melody_list(Instrument_level)
-            if Instrument_level + lyrics.SYLLABIC_RATIO in all_info.columns:
-                melody_values_list.append(Instrument_level + lyrics.SYLLABIC_RATIO)
 
-            intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.Get_columns_lists(all_info, Instrument_level)
+            instrument_level = 'Part' + instrument + '_'
+            if self.IsVoice(all_info, instrument):
+                instrument_level = 'Family' + instrument + '_'
 
-            if self._cfg.is_requested_module(interval):            
-                intervals_info, intervals_types = self.Extract_interval_columns(all_info, Instrument_level, intervals_list, intervals_types_list)
-                intervals_info.dropna(how='all', axis=1, inplace=True)
-                intervals_types.dropna(how='all', axis=1, inplace=True)
-                tasks['intervals_info'] = intervals_info
-                tasks['intervals_types'] = intervals_types
+            intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.Get_columns(all_info, instrument_level)
 
-            if self._cfg.is_requested_module(ambitus):            
-                tasks['melo'] = self.Exctract_melody_colunms(all_info, Instrument_level, melody_values_list).dropna(how='all', axis=1)
-            
-            if self._cfg.is_requested_module(scale):            
-                tasks['scale'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_list).dropna(how='all', axis=1)
+            self.prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
                 
-            if self._cfg.is_requested_module(scale_relative):            
-                tasks['scale_relative'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_relative_list).dropna(how='all', axis=1)
-            
-            # Getting Voice Clefs info in case Voices are required
-            if self.IsVoice(all_info.Voices[0], instrument):
-                tasks['clefs'] = self.get_clefs(all_info, common_columns_df)
-                
-
-            additional_info, rg_groups = self.Get_additional_info_and_groups(factor, rg) 
+            additional_info, rg_groups = self.get_additional_info_and_groups(factor, rg) 
 
             results_path_factorx = path.join(main_results_path, 'Melody_' + instrument, str(
                 factor) + " factor") if factor > 0 else path.join(main_results_path,'Melody_'+ instrument, "Data")
             if not os.path.exists(results_path_factorx):
                 os.makedirs(results_path_factorx)
                 
-            # ensures this part is only run once, not for every instrument. This executes common tasks for any selected instrument
-            if ONCE:
-                textures_densities_data_path = path.join(main_results_path, 'Texture&Density', str(
-                factor) + " factor") if factor > 0 else path.join(main_results_path, 'Texture&Density', "Data")
-
-                if not os.path.exists(textures_densities_data_path):
-                    os.makedirs(textures_densities_data_path)
-
-                for groups in rg_groups:
-                    self._tasks_execution(rows_groups, not_used_cols, self._cfg,
-                        groups, textures_densities_data_path, additional_info, factor, common_columns_df, **common_tasks)
-                    
-                    if self._cfg.is_requested_module(harmony):
-                        harmony_data_path = path.join(main_results_path, 'Harmony', str(
-                            factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
-                        if not os.path.exists(harmony_data_path):
-                             os.makedirs(harmony_data_path)
-                        
-                        self._tasks_execution(rows_groups, not_used_cols, self._cfg,
-                             groups, harmony_data_path, additional_info, factor, common_columns_df, **harmony_tasks)
-                
-                ONCE = False #FLAG guarantees this is processed only once (all common files)
-
+            if self.common:
+                self.run_common_tasks(factor, main_results_path, rg, nuc, common_columns_df, common_tasks, harmony_tasks, tasks, additional_info, rg_groups, results_path_factorx)
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
             for groups in rg_groups:
@@ -172,8 +112,73 @@ class FeaturesGenerator:
                 #     not_used_cols = nuc
                 pass
 
-    def IsVoice(self, voices, instrument):
-        return instrument.lower() in voices
+    def prepare_part_dataframes(self, all_info, common_columns_df, tasks, Instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list):
+        if self._cfg.is_requested_module(interval):            
+            intervals_info, intervals_types = self.extract_interval_columns(all_info, Instrument_level, intervals_list, intervals_types_list)
+            intervals_info.dropna(how='all', axis=1, inplace=True)
+            intervals_types.dropna(how='all', axis=1, inplace=True)
+            tasks['intervals_info'] = intervals_info
+            tasks['intervals_types'] = intervals_types
+
+        if self._cfg.is_requested_module(ambitus):       
+            try:     
+                tasks['melody_values'] = self.extract_melody_colunms(all_info, Instrument_level).dropna(how='all', axis=1)
+            except KeyError:
+                self._cfg.write_logger.error(get_color('ERROR')+'Melody Values Dataframe could not be extracted.{}'.format(RESET_SEQ))                       
+            
+
+        if self.IsVoice(all_info, instrument):
+            if self._cfg.is_requested_module(scale):            
+                tasks['scale'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_list).dropna(how='all', axis=1)
+            if self._cfg.is_requested_module(scale_relative):            
+                tasks['scale_relative'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_relative_list).dropna(how='all', axis=1)
+            tasks['clefs'] = self.get_clefs(all_info, common_columns_df)
+
+    def prepare_common_dataframes(self, all_info, common_tasks, harmony_tasks, instruments, Instrument_level, notes_set):
+        if self._cfg.is_requested_module(density) or self._cfg.is_requested_module(texture):
+            notes_df=all_info[list(notes_set)]
+            common_tasks['notes']=notes_df
+        
+        if self._cfg.is_requested_module(density):
+            density_df = self.capture_density_df(all_info, instruments, Instrument_level)
+            common_tasks['density']=density_df
+
+        if self._cfg.is_requested_module(texture):
+            textures_df = all_info[[i for i in all_info.columns if i.endswith('Texture')]].copy()
+            common_tasks['textures'] = textures_df
+
+        if self._cfg.is_requested_module(harmony):
+            harmony_df, key_areas_df, chords_df, functions_dfs = self.capture_harmony_DFs(all_info)
+            harmony_tasks['harmonic_data']=harmony_df
+            harmony_tasks['key_areas']=key_areas_df
+            harmony_tasks['chords']=chords_df
+            harmony_tasks['functions']=functions_dfs
+    def run_common_tasks(self, factor, main_results_path, rg, nuc, common_columns_df, common_tasks, harmony_tasks, tasks, additional_info, rg_groups, results_path_factorx):
+        textures_densities_data_path = path.join(main_results_path, 'Texture&Density', str(
+                factor) + " factor") if factor > 0 else path.join(main_results_path, 'Texture&Density', "Data")
+
+        if not os.path.exists(textures_densities_data_path):
+            os.makedirs(textures_densities_data_path)
+
+        for groups in rg_groups:
+            self._tasks_execution(self.rows_groups, self.not_used_cols, self._cfg,
+                        groups, textures_densities_data_path, additional_info, factor, common_columns_df, **common_tasks)
+                    
+            if self._cfg.is_requested_module(harmony):
+                harmony_data_path = path.join(main_results_path, 'Harmony', str(
+                            factor) + " factor") if factor > 0 else path.join(main_results_path, 'Harmony', "Data")
+                if not os.path.exists(harmony_data_path):
+                     os.makedirs(harmony_data_path)
+                        
+                self._tasks_execution(self.rows_groups, self.not_used_cols, self._cfg,
+                             groups, harmony_data_path, additional_info, factor, common_columns_df, **harmony_tasks)
+                
+        self.common = False #FLAG guarantees this is processed only once (all common files)
+        
+    def IsVoice(self, all_info, instrument):
+        if instrument.lower()=='voice':
+            return True
+        return instrument.lower() in all_info.Voices
 
     def get_clefs(self, all_info, common_columns_df):
         if ('Clef2' and 'Clef3') in common_columns_df.columns:
@@ -189,7 +194,7 @@ class FeaturesGenerator:
         clefs_info.dropna(how='all', axis=1, inplace=True)
         return clefs_info
 
-    def Extract_instruments(self, all_info):
+    def extract_instruments(self, all_info):
         instruments = set([])
 
         if self.parts_list:
@@ -202,14 +207,14 @@ class FeaturesGenerator:
         instruments = self.capitalize_instruments(instruments)
         return instruments
 
-    def Capture_density_df(self, all_info, density_set, instruments, catch):
+    def capture_density_df(self, all_info, density_set, instruments, catch):
         density_set = set([])
         for instrument in instruments:
             density_set.add(
                     catch + instrument + '_SoundingDensity')
             density_set.add(
                     catch + instrument + '_SoundingMeasures')
-            density_set.add('NumberOfBeats')
+            density_set.add(NUMBER_OF_BEATS)
             density_df = all_info[list(density_set)]
         return density_df
 
@@ -228,7 +233,7 @@ class FeaturesGenerator:
         return [instrument[0].upper()+instrument[1:]
                         for instrument in instruments]
 
-    def Get_additional_info_and_groups(self, factor, rg):
+    def get_additional_info_and_groups(self, factor, rg):
         additional_info = {ARIA_LABEL: [TITLE],
                                 TITLE: [ARIA_LABEL]}
 
@@ -268,7 +273,7 @@ class FeaturesGenerator:
         scale_degrees_info.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '') for c in scale_degrees_info.columns]
         return scale_degrees_info
 
-    def Get_columns_lists(self, all_info, Instr_level):
+    def Get_columns(self, all_info, Instr_level):
         intervals_list = []
         intervals_types_list = []
         degrees_list = []
@@ -283,19 +288,22 @@ class FeaturesGenerator:
                 degrees_relative_list.append(col)
             elif (col.startswith(Instr_level+'Intervals') or col.startswith(Instr_level+'Leaps') or col.startswith(Instr_level+'Stepwise')) and col.endswith('_Count'):
                 intervals_types_list.append(col)
-        
-        intervals_types_list.append(Instr_level + interval.REPEATED_NOTES_COUNT)
 
-        return intervals_list,intervals_types_list, degrees_list, degrees_relative_list
+            intervals_types_list.append(Instr_level + interval.REPEATED_NOTES_COUNT)
 
-    def Exctract_melody_colunms(self, all_info, catch, melody_values_list):
+        return intervals_list, intervals_types_list, degrees_list, degrees_relative_list
+
+    def extract_melody_colunms(self, all_info, catch):
+        melody_values_list = get_melody_list(catch)
+        if catch + lyrics.SYLLABIC_RATIO in all_info.columns:
+            melody_values_list.append(catch + lyrics.SYLLABIC_RATIO)
+            
         melody_values=all_info[melody_values_list]  
         melody_values.columns = [c.replace(catch, '').replace('_Count', '')
                                 for c in melody_values.columns]
-                        
         return melody_values
 
-    def Extract_interval_columns(self, all_info, catch, intervals_list, intervals_types_list):
+    def extract_interval_columns(self, all_info, catch, intervals_list, intervals_types_list):
         intervals_info=all_info[intervals_list]
         intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
                                     for c in intervals_info.columns]
@@ -312,10 +320,9 @@ class FeaturesGenerator:
                 instrument_level = 'Part'
                 notes_set.add(instrument_level + instrument + '_Notes')
 
-            elif instrument.lower() in all_info.Voices[0]:
+            elif self.IsVoice(all_info, instrument):
                 instrument_level = 'Family'
                 instrument=VOICE_FAMILY.capitalize()
-                # clefs = True # We want clefs only when voice is required
                 notes_set.add(instrument_level + instrument + '_NotesMean')
 
             else:
@@ -374,17 +381,17 @@ class FeaturesGenerator:
             
             if 'intervals_info' in kwargs:
                 intervals_info=pd.concat([common_columns_df, kwargs["intervals_info"]], axis=1)
-                Intervals(rows_groups, not_used_cols, factor, _cfg, intervals_info, pre_string+ "Intervals.xlsx",
+                Intervals(rows_groups, not_used_cols, factor, _cfg, intervals_info, pre_string, "Intervals",
                                     _cfg.sorting_lists["Intervals"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
                 absolute_intervals=make_intervals_absolute(intervals_info)
-                Intervals(rows_groups, not_used_cols, factor, _cfg, absolute_intervals, pre_string + "Intervals_absolute.xlsx",
+                Intervals(rows_groups, not_used_cols, factor, _cfg, absolute_intervals, pre_string , "Intervals_absolute",
                                 _cfg.sorting_lists["Intervals_absolute"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             
             if 'intervals_types' in kwargs:
                 intervals_types = pd.concat([common_columns_df, kwargs["intervals_types"]], axis=1)
-                Intervals_types(rows_groups, not_used_cols, factor, _cfg, intervals_types, results_path, pre_string + "Interval_types.xlsx", visualiser_lock, groups if groups != [] else None, additional_info)
+                Intervals_types(rows_groups, not_used_cols, factor, _cfg, intervals_types, results_path, pre_string, "Interval_types", visualiser_lock, groups if groups != [] else None, additional_info)
             
-            if 'scale' in kwargs:
+            if 'scale' in kwargs and not kwargs['scale'].empty:
                 emphasised_scale_degrees_info_A = pd.concat([common_columns_df,kwargs['scale']], axis=1)
                 Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_A, pre_string,  "Scale_degrees", results_path, visualiser_lock, groups if groups != [] else None, additional_info)
             
@@ -394,7 +401,7 @@ class FeaturesGenerator:
            
             if 'clefs' in kwargs:
                 clefs_info= pd.concat([common_columns_df,kwargs['clefs']], axis=1)
-                Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string +  "Clefs_in_voice",
+                Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
                                 _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
             if 'harmonic_data' in kwargs:
                 harmony_df= pd.concat([common_columns_df , kwargs['harmonic_data']], axis=1)

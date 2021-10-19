@@ -22,7 +22,6 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
         workbook = openpyxl.Workbook()
         excel_name=get_excel_name(pre_string, name)
 
-        # all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
         data_general = data[metadata_columns+ ['Total analysed']].copy()
         get_general_cols(rows_groups, general_cols)
@@ -120,7 +119,6 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
     try:
         workbook = openpyxl.Workbook()
         excel_name=get_excel_name(pre_string, name)
-        # Splitting the dataframes to reorder them
         data_general = data[metadata_columns+ ['Total analysed']].copy()
         data = data[set(data.columns).difference(list(data_general.columns))]
         data_general = data_general.dropna(how='all', axis=1)
@@ -134,18 +132,18 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
 
         third_columns_names = data.columns.to_list()
 
-        second_column_names = [("", 1), ("Chords", len(third_columns_names))]
+        # second_column_names = [("", 1), ("Chords", len(third_columns_names))]
         third_columns_names.insert(0, 'Total analysed')
         data = pd.concat([data_general, data], axis=1)
 
         # computations = ["sum"] + ["mean"] * (len(third_columns_names)-1)
         computations = ["sum"]*len(third_columns_names)
 
-        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        Create_excel(workbook.create_sheet("Total Chords"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
-        # if factor>=1:
-        #     Create_excel(workbook.create_sheet("Horizontal"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
-        #                 groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
+        if factor>=1:
+            Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+                        groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path,excel_name), workbook, NARROW)
 
