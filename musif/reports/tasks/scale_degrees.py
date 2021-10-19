@@ -93,7 +93,7 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
 
     for name in third_columns_names2:
         column_data = []
-        if name == '7':  # sumamos las columnas 7 y #7
+        if name == '7' and name in data:  # sumamos las columnas 7 y #7
             seven=[]
             if '7' in data.columns:
                 seven = data[name]
@@ -102,9 +102,9 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
                 column_data = [np.nansum([seven.tolist()[i], hastagseven.tolist()[
                                          i]]) for i in range(len(seven))]
             else:
-                column_data = seven.tolist()
-        if name == '3':  # sumamos las columnas 3 y 3b
-            seven=[]
+                column_data = seven
+        if name == '3' and name in data:  # sumamos las columnas 3 y 3b
+            three=[]
             if '3' in data.columns:
                 three = data[name]
             if 'b3' in data.columns:
@@ -112,12 +112,13 @@ def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_
                 column_data = [np.nansum([three.tolist()[i], flat_3.tolist()[
                                          i]]) for i in range(len(three))]
             else:
-                column_data = seven.tolist()
+                column_data = three
 
         elif name == "Others":  # sumamos todas las columnas de data menos 1, 4, 5, 7, #7
             column_data = data[rest_data].sum(axis=1).tolist()
         else:
 
             column_data = data[name].tolist() if name in data else 0
+
         data2[name] = pd.Series(column_data)
     return data2

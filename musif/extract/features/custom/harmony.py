@@ -1,3 +1,4 @@
+from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.extract.features.custom.__constants import ADDITIONS_prefix, CHORD_TYPES_prefix, CHORD_prefix, NUMERALS_prefix
 from typing import List
 
@@ -10,21 +11,17 @@ from .__harmony_utils import (get_additions, get_chord_types, get_chords, get_ha
                               get_numerals)
 
 
-def get_harmony_data(score_data: dict, harmonic_analysis: DataFrame) -> dict:
+def get_harmony_data(score_features: dict, harmonic_analysis: DataFrame) -> dict:
     
-    # 1. Harmonic_rhythm
     harmonic_rhythm = get_harmonic_rhythm(harmonic_analysis)
 
-    # 2. Numerals
     numerals = get_numerals(harmonic_analysis)
     
-    # 3. Chord_types
     chord_types = get_chord_types(harmonic_analysis) 
     
-    # 4. Additions
     additions = get_additions(harmonic_analysis)
 
-    return dict( **harmonic_rhythm, **numerals, **chord_types, **additions)#, **modulations) #score_data was also returned before
+    return dict(**harmonic_rhythm, **numerals, **chord_types, **additions)
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     features={}
@@ -40,7 +37,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             # HARMONY DATA #
             ################
             
-            all_harmonic_info = get_harmony_data(score_data, harmonic_analysis)
+            all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
             
             # #############
             # # KEY AREAS #
@@ -69,11 +66,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             
             #CHORDS
             features.update({k:v for (k, v) in chords.items() if k.startswith(CHORD_prefix)})
-            features.update({k:v for (k, v) in chords_grouping1.items() if k.startswith(CHORDS_GROUPING_prefix)})
-            features.update({k:v for (k, v) in chords_grouping2.items() if k.startswith(CHORDS_GROUPING_prefix)})
+            features.update({k:v for (k, v) in chords_grouping1.items()}) # if k.startswith(CHORDS_GROUPING_prefix)})
+            features.update({k:v for (k, v) in chords_grouping2.items()}) # if k.startswith(CHORDS_GROUPING_prefix)})
 
             # ADDITIONS
-            features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith(ADDITIONS_prefix)})
+            # features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith(ADDITIONS_prefix)})
         
     except Exception as e:
         cfg.read_logger.error('Harmony problem found: ', e)
