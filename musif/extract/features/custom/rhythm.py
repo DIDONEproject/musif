@@ -1,3 +1,4 @@
+
 from statistics import mean
 from typing import List
 
@@ -8,11 +9,12 @@ from musif.musicxml.tempo import get_number_of_beats
 
 AVERAGE_DURATION = "AverageDuration"
 RHYTHMINT = "RhythmInt"  # number of notes / number of beats
-RHYTHMINTSEP = "RhythmIntSep"  # SUM number of notes in a time signature/ beat in a time signature
+# RHYTHMINTSEP = "RhythmIntSep"  # SUM number of notes in a time signature/ beat in a time signature
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes_duration = [note.duration.quarterLength for note in part_data["notes"]]
+
     beat = 1
     total_number_notes = 0
     number_notes = 0
@@ -31,9 +33,10 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
     part_features.update({
         AVERAGE_DURATION: mean(notes_duration),
-        RHYTHMINT: total_number_notes / part_features[NUMBER_OF_BEATS],
-        RHYTHMINTSEP: rhythm_intensity_separated
+ #       RHYTHMINT: total_number_notes / part_features[NUMBER_OF_BEATS],
+        RHYTHMINT: rhythm_intensity_separated
     })
+
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
@@ -41,10 +44,12 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     prefix = get_score_prefix()
     average_duration_parts = [part[AVERAGE_DURATION] for part in parts_features]
     rhythm_intensity_parts = [part[RHYTHMINT] for part in parts_features]
-    rhythm_intensity_separated_parts = [part[RHYTHMINTSEP] for part in parts_features]
+
+    rhythm_intensity_separated_parts = [part[RHYTHMINT] for part in parts_features]
 
     score_features.update(({
         f"{prefix}{AVERAGE_DURATION}": mean(average_duration_parts),
-        f"{prefix}{RHYTHMINT}": mean(rhythm_intensity_parts),
-        f"{prefix}{RHYTHMINTSEP}": mean(rhythm_intensity_separated_parts)
+#       f"{prefix}{RHYTHMINT}": mean(rhythm_intensity_parts),
+        f"{prefix}{RHYTHMINT}": mean(rhythm_intensity_separated_parts)
     }))
+
