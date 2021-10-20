@@ -18,7 +18,6 @@ DEGREE_PER = "{prefix}Degree{key}_Per"
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]
     tonality = score_data[DATA_KEY]
-    # notes_per_degree = get_notes_per_degree(tonality.capitalize(), notes)
     notes_per_degree = get_notes_per_degree(str(tonality), notes)
 
     all_degrees = sum(value for value in notes_per_degree.values())

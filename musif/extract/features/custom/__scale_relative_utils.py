@@ -105,7 +105,7 @@ def get_localTonalty(globalkey, degree):
 # Function created to obtain the scale degree of a note in a given key #
 ###########################################################################
 def get_note_degree(key, note):
-  if 'major' in key:
+  if key[0].isupper():
     scl = scale.MajorScale(key.split(' ')[0])
   else:
     scl = scale.MinorScale(key.split(' ')[0])
