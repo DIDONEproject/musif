@@ -175,8 +175,12 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
         row += 1
 
 def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill:int):
-    # Column_names will be a list of (name, length)                                                         #
-    for c in column_names:
+    # Column_names will be a list of (name, length)
+
+    for i, c in enumerate(column_names):
+        
+        if len(column_names)>2:
+            fill=fills_list[i]
         sheet.cell(row, column).value = c[0]
         sheet.cell(row, column).font = FONT_TITLE
         if c[0] != '':
@@ -187,7 +191,6 @@ def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: i
         column += c[1]
 
 def split_voices(data: DataFrame):
-
     # Voices splitting for duetos in Character classification
     data = data.reset_index(drop=True)
     for ind in data.index:
@@ -252,7 +255,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         row_number += 1
     if second_columns:
         write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, second_columns, titles2Fill)
+            sheet, row_number, column_number + 1 + len_add_info, second_columns, titles_second_Fill)
         row_number += 1
     starting_row = row_number
     write_columns_titles(sheet, row_number, column_number +
@@ -343,24 +346,22 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         row_number += 1
 
     if total_analysed_column:  # We don't need Total analysed from this point
-        
         del columns_values['Total analysed']
         computations_columns = computations_columns[1:]
 
     last_used_row = row_number
     if per or last_column:  # These are the two conditions in which we need to transpose column_values
-        # Transpose colmn_values to valores_filas (change perspective from column to rows)
+        # (change perspective from column to rows)
         
         columns_list = list(columns_values.values())
-        
-        keys_columnas = list(columns_values.keys())
+        keys_columns = list(columns_values.keys())
+
         rows_values = []
         len_lists = len(columns_list[0])
         for i in range(len_lists):
             rows_values.append(round(sum([lc[i] for x, lc in enumerate(
-                columns_list) if "All" not in keys_columnas[x]]), 3))
+                columns_list) if "All" not in keys_columns[x]]), 3))
 
-    # PRINT EACH CELL IF PER IS TRUE, now that we have all the information
     if per:
         cn = column_number + len_add_info + \
             2 if total_analysed_column else column_number + len_add_info + 1
@@ -377,7 +378,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                 else:
                     value = round((columns_list[i][j]/sum_column)*100, 3)
                     
-                columns_values[keys_columnas[i]][j] = value if str(
+                columns_values[keys_columns[i]][j] = value if str(
                     value) != "nan" else 0  # update the value
                 sheet.cell(row_number, cn).value = str(
                     value) + "%"  # print the value
@@ -386,32 +387,26 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
         cnumber = cn
 
-    # RECALCULATE AGAIN TO GET THE MOST UPDATED DATA
-    
-    columns_list = list(columns_values.values()
-                           ) 
+    columns_list = list(columns_values.values()) 
 
-    if per:  # Compute valores_filas again
+    if per: 
         rows_values = []
         for i in range(len_lists):
             rows_values.append(round(sum([lc[i] for x, lc in enumerate(
-                columns_list) if "All" not in keys_columnas[x]]), 3))
+                columns_list) if "All" not in keys_columns[x]]), 3))
 
-    # PRINT THE LAST COLUMN (AVERAGE OR TOTAL)
     if last_column:
         if last_column_average:
             for j, vf in enumerate(rows_values):
                 try:
                     rows_values[j]=round(vf / (len(columns_list) - len(
-                [c for c in keys_columnas if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0])), 3)
+                [c for c in keys_columns if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0])), 3)
                 except ZeroDivisionError:
                     rows_values[j]= 0.0
      
-        # PRINT THE LAST COLUMN, CONTAINING THE TOTAL OR THE AVERAGE OF THE DATA
         print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
                                     per=per or ponderate and all(c == "sum" for c in computations_columns))
 
-    # PRINT LAST ROW (TOTAL OR AVERAGE)
     
     values=np.asarray(list(columns_values.values()))
     
@@ -479,7 +474,6 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                 # 2. Write the information depending on the subgroups (ex: Geography -> City, Country)
                 if len(rows_groups[row][0]) == 0:  # No subgroups
                     starting_row = row_number
-                    # Sort the dataframe based on the json sorting_lists in Json_extra
                     data = sort_dataframe(data, row, sorting_lists, sorting)
                     groups_add_info, add_info = get_groups_add_info(
                         data, row, additional_info)

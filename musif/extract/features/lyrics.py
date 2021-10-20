@@ -13,6 +13,7 @@ SYLLABIC_RATIO = "SyllabicRatio"
 NOTES = "Notes"
 SYLLABLES = "Syllables"
 
+VOICE_REG="VoiceReg"
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
 

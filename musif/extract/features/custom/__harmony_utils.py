@@ -6,7 +6,9 @@ from urllib.request import urlopen
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
-from pandas.core.frame import DataFrame
+from musif.musicxml.tempo import get_number_of_beats
+
+# from musif.extract.utils import get_beatspertsig
 
 from .__constants import *
 
@@ -24,30 +26,26 @@ def get_harmonic_rhythm(ms3_table)-> dict:
     measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
     
     chords = ms3_table.chord.dropna().tolist()
-    chords_length=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    chords_number=len([i for j, i in enumerate(chords) if i != chords[j-1]])
     # beats = ms3_table.mc_onset.dropna().tolist()
     # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
     time_signatures = ms3_table.timesig.tolist()
     
-    harmonic_rhythm = chords_length/len(measures_compressed)
+    harmonic_rhythm = chords_number/len(measures_compressed)
 
-    # Cases with no time signature changes
     if len(Counter(time_signatures)) == 1:
-        harmonic_rhythm_beats = chords_length/int(time_signatures[0].split('/')[0])
+        harmonic_rhythm_beats = chords_number/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
     else:
-        #create a timesignatures adapted to measures without repetitions. OR/AND just finde changes in TS and 
-        # correlate them with measures to find length of the different periods
         periods_ts=[]
         time_changes=[]
         for t in range(1, len(time_signatures)):
             if time_signatures[t] != time_signatures[t-1]:
-                #We find what measure in compressed list corresponds to the change in time signature
+                # what measure in compressed list corresponds to the change in time signature
                 time_changes.append(time_signatures[t-1])
-
                 periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
 
-        #Calculating harmonuc rythom according to beasts periods
-        harmonic_rhythm_beats = chords_length/sum([period * int(time_changes[j].split('/')[0]) for j, period in enumerate(periods_ts)])
+        # Calculating harmonic rythm according to beats periods
+        harmonic_rhythm_beats = chords_number/sum([period * get_number_of_beats(time_changes[j]) for j, period in enumerate(periods_ts)])
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
@@ -59,20 +57,20 @@ def get_harmonic_rhythm(ms3_table)-> dict:
 ####################    
 
 def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signatures):
-    # possibilities=list(set(possibilities))
     key_measures = {p: 0 for p in keys_options}
     last_key = 0
     done = 0
     starting_measure = 0
 
-    new_measures = Create_measures_extended(measures)
+    new_measures = create_measures_extended(measures)
     numberofmeasures = len(new_measures)
            
 
     for i, key in enumerate(keys):
         if key != last_key and i < numberofmeasures:
             #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
-            n_beats = get_beatspertsig(time_signatures[i - 1])
+            n_beats = get_number_of_beats(time_signatures[i - 1])
+
             if last_key in key_measures :
                 # num_measures, done = compute_number_of_measures(done, starting_measure, measures[i - 1], measures[i], mc_onsets[i - 1], n_beats)
                 num_measures, done = compute_number_of_measures(done, starting_measure, new_measures[i - 1], new_measures[i], mc_onsets[i - 1], n_beats)
@@ -88,8 +86,6 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     # num_measures, _ = compute_number_of_measures(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, mc_onsets[numberofmeasures - 1], n_beats)
     key_measures[last_key] += num_measures
 
-    #TODO: comprobar que tiene sentido:
-    ##NO TIENE SENTIDO. diferentes cantidades de compases
 
     if (new_measures[0] != 0 and round(sum(list(key_measures.values()))) != new_measures[i]):
         print('0s')
@@ -100,7 +96,7 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
 
     return key_measures
 
-def Create_measures_extended(measures):
+def create_measures_extended(measures):
     new_measures=[]
     new_measures.append(measures[0])
     for i in range(1,len(measures)):
@@ -116,35 +112,13 @@ def Create_measures_extended(measures):
 def same_measure(measures, i):
     return measures[i] == measures[i-1]
 
-###########################################################################
-# Function that returns the number of beats depending on the time signature
-# 6/8 time signature is classified as having two beats; 6/2, 6/4 and 6/16 time signatures as having 3 beats.
-###########################################################################
-
-def get_beatspertsig(tsig):
-    if tsig in ['1/2', '1/4', '1/8', '1/16']:
-        return 1
-    elif tsig in ['2/2', '2/4', '2/8', '2/16', '6/8']:
-        return 2
-    elif tsig in ['3/2', '3/4', '3/8', '3/16', '6/2', '6/4', '6/16', '9/2', '9/4', '9/8', '9/16']:
-        return 3
-    elif tsig in ['4/4','C','4/2','4/8','4/16','8/2','8/4','8/8','8/16', '12/2', '12/4', '12/8', '12/16']:
-        return 4
-    elif tsig in ['5/2', '5/4', '5/8', '5/16', '10/2', '10/4', '10/8', '10/16']:
-        return 5
-    elif tsig in ['6/2', '6/4', '6/16']:
-        return 6
-    elif tsig in ['7/2', '7/4', '7/8', '7/16']:
-        return 7
-    else:
-        return 1
 
 
 def compute_number_of_measures(done, starting_measure, previous_measure, measure, current_onset, num_beats):
     starting_measure += done
     if measure == previous_measure: #We are in the same measure, inside of it
 
-        #TODO: hacer el cálculo concreto con el número de beats
+        #TODO: hacer el cálculo concreto con el número de beats(?)
         measures = previous_measure - 1 - starting_measure
 
         # habrá que sumarle current_beat / max_beats. Antes convertir current_beat en numérico
@@ -307,25 +281,22 @@ def get_keyareas(lausanne_table, major = True):
     # total_g2_areas_B = sum(counter_grouping2_B.values())
 
     for key in number_blocks_keys:
-        keyareas[KEY_prefix + key + '_numberOfblocs'] = number_blocks_keys[key]
+        # keyareas[KEY_prefix + key + '_numberOfblocs'] = number_blocks_keys[key]
+        # keyareas[KEY_prefix + KEY_MEASURES + key] = float(key_measures[key])
         keyareas[KEY_prefix + key + KEY_PERCENTAGE ] = float(key_measures_percentage[key]) #procentaje de compases de cada I, i, etc. en el total
-        keyareas[KEY_prefix + KEY_MEASURES + key] = float(key_measures[key])
         keyareas[KEY_prefix + KEY_MODULATORY + key] = number_blocks_keys[key]/total_key_areas
-        # keyareas[KEY_prefix + KEY_MODCOMP + key] = (keyareas[KEY_prefix + KEY_PERCENTAGE + key] + keyareas[KEY_prefix + KEY_MODULATORY + key]) / 2
     
-    for counter_grouping in number_blocks_grouping1:
-        keyareas[KEY_GROUPING+'1_'+counter_grouping] = number_blocks_grouping1[counter_grouping]
-        keyareas[KEY_GROUPING+'1_'+ KEY_PERCENTAGE  +counter_grouping] = float(keyGrouping1_measures[counter_grouping])
-        keyareas[KEY_GROUPING+'1_' + KEY_MEASURES + counter_grouping] =float( keyGrouping1_measures[counter_grouping])
-        keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping] = number_blocks_grouping1[counter_grouping]/total_g1_areas
-        # keyareas[KEY_GROUPING+'1_'+KEY_MODCOMP+counter_grouping] = (keyareas[KEY_GROUPING+'1_'+KEY_PERCENTAGE+counter_grouping] + keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping]) / 2
+    # for counter_grouping in number_blocks_grouping1:
+    #     keyareas[KEY_GROUPING+'1_'+counter_grouping] = number_blocks_grouping1[counter_grouping]
+    #     keyareas[KEY_GROUPING+'1_'+ KEY_PERCENTAGE  +counter_grouping] = float(keyGrouping1_measures[counter_grouping])
+    #     keyareas[KEY_GROUPING+'1_' + KEY_MEASURES + counter_grouping] =float( keyGrouping1_measures[counter_grouping])
+    #     keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping] = number_blocks_grouping1[counter_grouping]/total_g1_areas
     
-    for counter_grouping in number_blocks_grouping2:
-        keyareas[KEY_GROUPING+'2_'+counter_grouping] = number_blocks_grouping2[counter_grouping]
-        keyareas[KEY_GROUPING+'2_'+KEY_PERCENTAGE+counter_grouping] = float(keyGrouping2_measures[counter_grouping])
-        keyareas[KEY_GROUPING+'2_' + KEY_MEASURES + counter_grouping] = float(keyGrouping2_measures[counter_grouping])
-        keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]  = number_blocks_grouping2[counter_grouping]/total_g2_areas
-        # keyareas[KEY_GROUPING+'2_'+KEY_MODCOMP+counter_grouping] = (keyareas[KEY_GROUPING+'2_'+KEY_PERCENTAGE+counter_grouping] + keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]) / 2
+    # for counter_grouping in number_blocks_grouping2:
+    #     keyareas[KEY_GROUPING+'2_'+counter_grouping] = number_blocks_grouping2[counter_grouping]
+    #     keyareas[KEY_GROUPING+'2_'+KEY_PERCENTAGE+counter_grouping] = float(keyGrouping2_measures[counter_grouping])
+    #     keyareas[KEY_GROUPING+'2_' + KEY_MEASURES + counter_grouping] = float(keyGrouping2_measures[counter_grouping])
+    #     keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]  = number_blocks_grouping2[counter_grouping]/total_g2_areas
         
     # for ck in counter_keys_A:
     #     keyareas['KeySectionA'+ck] = counter_keys_A[ck]
@@ -353,21 +324,22 @@ def get_keyareas(lausanne_table, major = True):
 # DEGREES (for relative roots, numerals and chords)
 ####################
 
-###########################################################################
-# Function to obtain the harmonic function1 of every relativeroot, chord, or numeral#
-# harmonic_analysis: columnas AG-AK
-###########################################################################
-# REVIEW
-
 def get_function_first(element, mode):
-    reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'M': ['iii']}
+    reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'MED': ['iii']}
+
+
+    # Spetial chords
+    if any([i for i in ('It','Ger', 'Fr') if i in element]):
+        return 'D'
 
     if element.lower()=='bii':
         return 'NAP'
+    
+    if element.lower()=='#vii':
+        return 'D'
 
     #It6/V -> viio(-3)
-    # '-' represents flats
-    element=element.replace('b','-')    # '-' represents flats
+    element=element.replace('b','-') # '-' represents flats
     
     for key, value in reference.items():
         if element.replace('#','').replace('-','').lower() in value:
@@ -375,13 +347,10 @@ def get_function_first(element, mode):
             if '-' in element:
                 output='-'+ output
             elif '#' in element:
-                output='#'+ output
+                output='#' + output
             return output.replace('-','b')
     
-    #Check spetial chords
 
-    if any([i for i in ('It','Ger', 'Fr') if i in element]):
-        return 'V'
 
     if mode == 'M':
         if element=='vii':
@@ -483,6 +452,7 @@ def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     function1 = [result_dict[t] for t in tuples]
     function2 = [get_function_second(g1) for g1 in function1]
     return function1, function2
+
 ### ADDITIONS ###
 def get_additions(lausanne_table):
     additions = lausanne_table.changes.tolist()
@@ -529,7 +499,6 @@ def get_chord_types(lausanne_table):
 
     chords_forms = make_type_col(lausanne_table) #Nan values represent {} notations, not chords
         
-    #convert the list of forms in their groups
     grouped_forms = get_chord_types_groupings(chords_forms)
 
     form_counter = Counter(grouped_forms)
@@ -547,11 +516,15 @@ def get_chords(harmonic_analysis):
 
     numerals=harmonic_analysis.numeral.dropna().tolist()
     types = harmonic_analysis.chord_type.dropna().tolist()
-    numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
-    chords_dict = CountChords(numerals_and_types)
-
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
     
+    numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
+    chords_dict = CountChords(numerals_and_types)
+    
+    # Exception for #viio chords
+    if 'Chord_#viio' in chords_dict:
+        chords_dict['Chord_viio']=chords_dict['Chord_viio'] + chords_dict.pop('Chord_#viio') if 'Chord_viio' in chords_dict else chords_dict.pop('Chord_#viio')
+
     counter_function_1 = Counter(chords_functionalities1)
     counter_function_2 = Counter(chords_functionalities2)
     chords_group_1 = CountChordsGroup(counter_function_1, '1')
@@ -577,9 +550,6 @@ def CountChordsGroup(counter_function, number):
 
     return chords_group
 
-#################################################################
-# This function takes the first characters in the chord to 
-# obtain its grouping
 def parse_chord(chord):
     if '(' in chord:
         chord = chord.split('(')[0]
@@ -599,8 +569,6 @@ def parse_chord(chord):
 # CHORD FORM
 ####################
 
-#############################################
-# Function that returns the chord_type grouping
 def get_chord_type(chord_type):
     chord_type=str(chord_type)
     if chord_type.lower()=='m':
@@ -611,31 +579,29 @@ def get_chord_type(chord_type):
         return 'dim'
     elif chord_type in ['+', '+M7', '+m7']:
         return 'aug'
-    elif chord_type == 'nan':
-        return 'nan'
     else:
         print("Chord type ", str(chord_type), 'not observed')
         return ''
-
-#############################################
-# Function that returns the chord_type grouping
 
 def get_chord_types_groupings(chordtype_list):
     return [get_chord_type(chord_type) for chord_type in chordtype_list]
 
 
 def get_first_chord_local(chord, local_key):
-    #perseguir It6/V. Coger columna numeral paraparsear acordes
+    #perseguir It6/V
 
-    local_key_mode = 'M' if local_key else 'm'
+    # local_key_mode = 'M' if local_key else 'm'
+    local_key_mode = 'M' if local_key.isupper() else 'm'
+
     if '/' not in chord:
         return get_function_first(parse_chord(chord), local_key_mode)
     else: 
         parts = chord.split('/')
         degree = get_function_first(parse_chord(parts[0]), 'M' if parts[1].isupper() else 'm')
         if len(parts) == 2:
-            relative = get_function_first(parts[1], local_key_mode)
-            return '/'.join([degree, relative])
+            # relative = get_function_first(parts[1], local_key_mode)
+            # return '/'.join([degree, relative])
+            return degree
 
         else:
             relative_list=[]
@@ -643,7 +609,8 @@ def get_first_chord_local(chord, local_key):
             relative_list.append(get_function_first(parts[1], 'M' if parts[2].isupper() else 'm'))
             for i in range(2,len(parts)):
                 relative_list.append(get_function_first(parts[i], local_key_mode))
-            return '/'.join(relative_list)
+            # return '/'.join(relative_list)
+            return degree
 
 # REVIEW porqué es tan parecida a get_first_chord_local??
 # Function to return second grouping for any chord in any given local key,
@@ -658,7 +625,8 @@ def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     degree = get_function_second(parts[0])
     if len(parts) == 2:
         chords = get_function_second(parts[1])#, mode)
-        return '/'.join([degree, chords])
+        return degree
+        # return '/'.join([degree, chords])
         
     elif len(parts) == 3:
         # chord_1 = get_degree_2(parts[1], )
@@ -683,12 +651,9 @@ def get_chords_functions(chords, relativeroots, local_keys)-> list:
     return function_first, function_second
 
 def make_type_col(df, num_col='numeral', form_col='form', fig_col='figbass'):
-    """ Create a new Series with the chord type for every row of `df`.
-        Uses: features2type()
-    """
     param_tuples = list(df[[num_col, form_col, fig_col]].itertuples(index=False, name=None))
     result_dict = {t: features2type(*t) for t in set(param_tuples)}
-    return pd.Series([result_dict[t] for t in param_tuples], index=df.index, name='chordtype')
+    return pd.Series([result_dict[t] for t in param_tuples], index=df.index, name='chordtype').dropna()
 
 
 

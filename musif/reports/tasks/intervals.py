@@ -15,7 +15,6 @@ from musif.reports.utils import Create_excel
 
 def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string: str, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
-        excel_name= get_excel_name(pre_string, name)
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
         general_cols = copy.deepcopy(not_used_cols)
@@ -40,7 +39,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
             Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, NORMAL_WIDTH)
 
         # with visualiser_lock:
         # VISUALISATIONS
@@ -95,7 +94,6 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
 
 def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string: str, name: str, visualiser_lock: Lock, groups=None, additional_info: list=[]):
     try:
-        excel_name=get_excel_name(pre_string, name)
         data.columns=[c.replace('Desc', 'Descending').replace('Asc', 'Ascending') for c in data.columns]
         workbook = openpyxl.Workbook()
         second_column_names = [("", 2), ("Leaps", 3), ("StepwiseMotion", 3)]
@@ -122,7 +120,7 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
             Create_excel(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, NORMAL_WIDTH)
 
         # with visualiser_lock:
         # VISUALISATIONS
@@ -167,7 +165,7 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
                             double_bar_plot(name_bars, data_grouped, 'Per ' + str(row.replace('Aria','').upper()))
 
                     else: #subgroups
-                            for i, subrow in enumerate(rows_groups[row][0]):
+                            for subrow in rows_groups[row][0]:
                                 if subrow not in EXCEPTIONS:
                                     name_cakes = path.join(results_path, 'visualisations',
                                     name.replace('.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '_AD.png')
@@ -175,7 +173,7 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
                                     name.replace('.xlsx',  '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION)
 
                                     data_grouped = data.groupby(subrow)
-                                    pie_plot(name_cakes, data_grouped, second_title='Per ' + str(row.replace('Aria','').upper()))
+                                    pie_plot(name_cakes, data_grouped, second_title='Per ' + str(subrow.replace('Aria','').upper()))
                                     double_bar_plot(name_bars, data_grouped, 'Per ' + str(row.replace('Aria','').upper()))
 
         else:
