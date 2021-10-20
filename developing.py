@@ -8,7 +8,6 @@ import os
 from musif.extract.extract import FeaturesExtractor
 from musif.reports.generate import FeaturesGenerator
 import pandas as pd
-# print(sus)
 sys.path.insert(0, "../musif")
 sys.path.insert(0, "../musif/musif") 
 
@@ -17,10 +16,7 @@ if __name__ == "__main__":
 
     parts = ["vnI", "obI"]#, "voice"]
 
-    arias_path="./arias/"
-
-    # if os.path.exists("failed_files.txt"):
-    # #     os.remove("failed_files.txt")
+    arias_path="./arias/time_signatures/"
 
     df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
     df.to_csv('martiser/dataframe.csv', index=False)
