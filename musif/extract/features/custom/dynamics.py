@@ -1,38 +1,34 @@
+from statistics import mean
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.constants import DATA_SCORE
-from musif.extract.features.core import DATA_NOTES
+from musif.extract.features.prefix import get_score_prefix
 
 DYNMEAN = "DynMean"
 
+DYNAMIC_VALUES = {"ff": 101, "più f": 96, "f assai": 94, "f": 88, "poco f": 80, "mf": 75, "mp": 62, "p": 49,
+                  "dolce": 49, "p assai": 42, "pp": 36, "soto voce": 36}
+
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    result=0
+    dynamics = []
     for elem in part_data["measures"]:
         for measure in elem.elements:
-            m = measure.get("Dynamic")#Voy por aqui, sacar clase, si es dynamic saco valor
-            if m is not None:
-                result = result+m
+            if measure.classes[0] == "Dynamic":
+                dynamics.append(DYNAMIC_VALUES.get(measure.value))  # also could get a value (0,1) with volumeScalar
 
     part_features.update({
-        DYNMEAN: result
+        DYNMEAN: mean(dynamics) if len(dynamics) != 0 else 0
     })
-    pass
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
-    score = score_data[DATA_SCORE]
-    e = score.elements
-    print(score)
-    for elem in score.elements:
-        if elem.id == "Violino I":
-            v = elem
-            break
+    prefix = get_score_prefix()
+    dic = dict()
+    for part in parts_features:
+        dic.update({part["PartAbbreviation"]: part[DYNMEAN]})
 
-    d = v.elements
-    #sea un diccionario de todos los dynamic mean
     score_features.update({
-        DYNMEAN: e
+        f"{prefix}{DYNMEAN}": dic
     })
