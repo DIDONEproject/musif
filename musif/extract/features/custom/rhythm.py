@@ -1,4 +1,3 @@
-
 from statistics import mean
 from typing import List
 
@@ -14,7 +13,6 @@ RHYTHMINT = "RhythmInt"  # number of notes / number of beats
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes_duration = [note.duration.quarterLength for note in part_data["notes"]]
-
     beat = 1
     total_number_notes = 0
     number_notes = 0
@@ -36,7 +34,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
  #       RHYTHMINT: total_number_notes / part_features[NUMBER_OF_BEATS],
         RHYTHMINT: rhythm_intensity_separated
     })
-
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
