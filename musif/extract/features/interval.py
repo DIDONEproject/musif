@@ -104,6 +104,24 @@ ABSOLUTE_INTERVALLIC_SKEWNESS = "AbsoluteIntervallicSkewness"
 ABSOLUTE_INTERVALLIC_KURTOSIS = "AbsoluteIntervallicKurtosis"
 INTERVAL_COUNT = "{prefix}Interval{interval}_Count"
 INTERVAL_PER = "{prefix}Interval{interval}_Per"
+LARGEST_INTERVAL_ASC = "LargestIntervalAsc"
+LARGEST_SEMITONES_ASC = "LargestSemitonesAsc"
+LARGEST_ABSOLUTE_SEMITONES_ASC = "LargestAbsoluteSemitonesAsc"
+LARGEST_INTERVAL_DESC = "LargestIntervalDesc"
+LARGEST_SEMITONES_DESC = "LargestSemitonesDesc"
+LARGEST_ABSOLUTE_SEMITONES_DESC = "LargestAbsoluteSemitonesDesc"
+LARGEST_INTERVAL_ALL = "LargestIntervalAll"
+LARGEST_SEMITONES_ALL = "LargestSemitonesAll"
+LARGEST_ABSOLUTE_SEMITONES_ALL = "LargestAbsoluteSemitonesAll"
+SMALLEST_INTERVAL_ASC = "SmallestIntervalAsc"
+SMALLEST_SEMITONES_ASC = "SmallestSemitonesAsc"
+SMALLEST_ABSOLUTE_SEMITONES_ASC = "SmallestAbsoluteSemitonesAsc"
+SMALLEST_INTERVAL_DESC = "SmallestIntervalDesc"
+SMALLEST_SEMITONES_DESC = "SmallestSemitonesDesc"
+SMALLEST_ABSOLUTE_SEMITONES_DESC = "SmallestAbsoluteSemitonesDesc"
+SMALLEST_INTERVAL_ALL = "SmallestIntervalAll"
+SMALLEST_SEMITONES_ALL = "SmallestSemitonesAll"
+SMALLEST_ABSOLUTE_SEMITONES_ALL = "SmallestAbsoluteSemitonesAll"
 
 
 ALL_FEATURES = [
@@ -209,6 +227,21 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     ascending_intervals_percentage = num_ascending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
     descending_intervals_percentage = num_descending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
 
+    ascending_intervals = [interval for interval in numeric_intervals if interval > 0]
+    descending_intervals = [interval for interval in numeric_intervals if interval < 0]
+    largest_semitones = max(numeric_intervals) if len(numeric_intervals) > 0 else None
+    largest = Interval(largest_semitones).directedName if len(numeric_intervals) > 0 else None
+    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(numeric_intervals) > 0 else None
+    smallest = Interval(smallest_semitones).directedName if len(numeric_intervals) > 0 else None
+    largest_ascending_semitones = max(ascending_intervals) if len(ascending_intervals) > 0 else None
+    largest_ascending = Interval(largest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
+    largest_descending_semitones = min(descending_intervals) if len(descending_intervals) > 0 else None
+    largest_descending = Interval(largest_descending_semitones).directedName if len(descending_intervals) > 0 else None
+    smallest_ascending_semitones = min(ascending_intervals) if len(ascending_intervals) > 0 else None
+    smallest_ascending = Interval(smallest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
+    smallest_descending_semitones = max(descending_intervals) if len(descending_intervals) > 0 else None
+    smallest_descending = Interval(smallest_descending_semitones).directedName if len(descending_intervals) > 0 else None
+
     features = {
         f"{prefix}{INTERVALLIC_MEAN}": interval_mean,
         f"{prefix}{INTERVALLIC_STD}": interval_std,
@@ -228,6 +261,24 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{DESCENDING_SEMITONES_SUM}": num_descending_semitones,
         f"{prefix}{ASCENDING_INTERVALS_PER}": ascending_intervals_percentage,
         f"{prefix}{DESCENDING_INTERVALS_PER}": descending_intervals_percentage,
+        f"{prefix}{LARGEST_INTERVAL_ALL}": largest,
+        f"{prefix}{LARGEST_INTERVAL_ASC}": largest_ascending,
+        f"{prefix}{LARGEST_INTERVAL_DESC}": largest_descending,
+        f"{prefix}{LARGEST_SEMITONES_ALL}": largest_semitones,
+        f"{prefix}{LARGEST_SEMITONES_ASC}": largest_ascending_semitones,
+        f"{prefix}{LARGEST_SEMITONES_DESC}": largest_descending_semitones,
+        f"{prefix}{LARGEST_ABSOLUTE_SEMITONES_ALL}": abs(largest_semitones) if largest_semitones else None,
+        f"{prefix}{LARGEST_ABSOLUTE_SEMITONES_ASC}": abs(largest_ascending_semitones) if largest_ascending_semitones else None,
+        f"{prefix}{LARGEST_ABSOLUTE_SEMITONES_DESC}": abs(largest_descending_semitones) if largest_descending_semitones else None,
+        f"{prefix}{SMALLEST_INTERVAL_ALL}": smallest,
+        f"{prefix}{SMALLEST_INTERVAL_ASC}": smallest_ascending,
+        f"{prefix}{SMALLEST_INTERVAL_DESC}": smallest_descending,
+        f"{prefix}{SMALLEST_SEMITONES_ALL}": smallest_semitones,
+        f"{prefix}{SMALLEST_SEMITONES_ASC}": smallest_ascending_semitones,
+        f"{prefix}{SMALLEST_SEMITONES_DESC}": smallest_descending_semitones,
+        f"{prefix}{SMALLEST_ABSOLUTE_SEMITONES_ALL}": abs(smallest_semitones) if smallest_semitones else None,
+        f"{prefix}{SMALLEST_ABSOLUTE_SEMITONES_ASC}": abs(smallest_ascending_semitones) if smallest_ascending_semitones else None,
+        f"{prefix}{SMALLEST_ABSOLUTE_SEMITONES_DESC}": abs(smallest_descending_semitones) if smallest_descending_semitones else None,
     }
     return features
 
