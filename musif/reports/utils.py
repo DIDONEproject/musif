@@ -322,6 +322,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                 else:
                     value=0.0
             else:
+                
                 value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":

@@ -1,12 +1,12 @@
 from typing import List, Tuple
 
 from pandas import DataFrame
-
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
 from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
 from musif.extract.features.core import DATA_NOTES, DATA_SOUNDING_MEASURES, DATA_MEASURES
+from musif.extract.features.tempo import TIME_SIGNATURE, TIME_SIGNATURES, TS_CHANGES, get_number_of_beats
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
 from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS, SOUND_ABBREVIATION, FAMILY_ABBREVIATION, \
     PART_ABBREVIATION
@@ -29,13 +29,36 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     sounding_measures = part_data[DATA_SOUNDING_MEASURES]
     measures = part_data[DATA_MEASURES]
     number_of_beats = part_features[NUMBER_OF_BEATS]
+    time_signatures = score_data[TIME_SIGNATURES]
+    time_signature = score_data[TIME_SIGNATURE]
+    time_signatures_changes = score_data[TS_CHANGES]
+
     part_features.update({
-        NOTES: len(notes),
-        SOUNDING_MEASURES: len(sounding_measures),
-        MEASURES: len(measures),
-        SOUNDING_DENSITY: len(notes) / number_of_beats / len(sounding_measures) if len(sounding_measures) > 0 else 0,
-        DENSITY: len(notes) / number_of_beats / len(measures) if len(measures) > 0 else 0,
-    })
+            NOTES: len(notes),
+            SOUNDING_MEASURES: len(sounding_measures),
+            MEASURES: len(measures)})
+
+    if len(set(time_signatures)) == 1:
+            part_features.update({
+            SOUNDING_DENSITY: len(notes) / get_number_of_beats(time_signature)  / len(sounding_measures) if len(sounding_measures) > 0 else 0,
+            DENSITY: len(notes) / get_number_of_beats(time_signature) / len(measures) if len(measures) > 0 else 0,
+        })
+    else:
+        periods_ts=[]
+        time_changes=[]
+        # for t in range(1, len(time_signatures)):
+            # if time_signatures[t] != time_signatures[t-1]:
+            #     # what measure in compressed list corresponds to the change in time signature
+            #     time_changes.append(time_signatures[t-1])
+            #     periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
+
+        sounding_density = len(notes)/sum([period * get_number_of_beats(time_signatures_changes[j]) for j, period in enumerate(time_signatures)])
+        
+        part_features.update({
+            # SOUNDING_DENSITY: len(notes) / number_of_beats / len(sounding_measures) if len(sounding_measures) > 0 else 0,
+            DENSITY: len(notes) / number_of_beats / len(measures) if len(measures) > 0 else 0,
+        })
+        pass
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
