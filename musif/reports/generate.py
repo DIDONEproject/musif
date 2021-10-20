@@ -55,8 +55,7 @@ class FeaturesGenerator:
         self.not_used_cols=not_used_cols
         self.rows_groups=rows_groups
         all_info=self.global_features
-
-        main_results_path = os.path.join(self.main_results_path, 'results')
+        main_results_path = os.path.join(self.main_results_path, 'reports')
         rg = copy.deepcopy(rows_groups)
         nuc = copy.deepcopy(not_used_cols)
         
