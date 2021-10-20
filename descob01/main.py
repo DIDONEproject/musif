@@ -14,4 +14,3 @@ if __name__ == "__main__":
     #print(df_scores.get(f"{prefix}{RHYTHMINTSEP}"))
     print(df_scores.get(f"{prefix}{DYNMEAN}"))
     print(df_scores.get(f"{prefix}{DYNMEAN_WEIGHTED}"))
-

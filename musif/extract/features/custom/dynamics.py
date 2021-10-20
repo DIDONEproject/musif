@@ -1,4 +1,3 @@
-
 from statistics import mean
 from typing import List
 
@@ -53,6 +52,7 @@ def get_position(beat_count, beat, pos):
         return pos
     else:
         return (pos / beat_count) * (beat + 1)
+
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
