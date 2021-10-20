@@ -13,7 +13,7 @@ features:
   - scoring
   - custom.file_name
   - metadata
-#  - custom.themeA
+  - custom.themeA
   - core
   - composer
   - custom.librettist
