@@ -42,7 +42,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         else:
             raise FileNotFoundError
     except FileNotFoundError:
-        cfg.read_logger.warning(get_color('WARNING')+"\nMusescore file was not found for {} file!\nNo harmonic analysis will be extracted.{}".format(mscx_file, RESET_SEQ))
+        cfg.read_logger.warning(get_color('ERROR')+"\nMusescore file was not found for {} file!\nNo harmonic analysis will be extracted.{}".format(mscx_file, RESET_SEQ))
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     pass
