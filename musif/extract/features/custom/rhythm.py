@@ -2,7 +2,6 @@ from statistics import mean
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.constants import DATA_PART
 from musif.extract.features.prefix import get_score_prefix
 from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.musicxml.tempo import get_number_of_beats
@@ -15,12 +14,14 @@ RHYTHMINTSEP = "RhythmIntSep"  # SUM number of notes in a time signature/ beat i
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes_duration = [note.duration.quarterLength for note in part_data["notes"]]
     beat = 1
+    total_number_notes = 0
     number_notes = 0
     rhythm_intensity_separated = 0
-    for elem in part_data["measures"]:
-        for measure in elem.elements:
+    for bar_section in part_data["measures"]:
+        for measure in bar_section.elements:
             if measure.classes[0] == "Note":
                 number_notes += 1
+                total_number_notes += 1
             elif measure.classes[0] == "TimeSignature":
                 rhythm_intensity_separated += number_notes / beat
                 number_notes = 0
@@ -30,7 +31,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
     part_features.update({
         AVERAGE_DURATION: mean(notes_duration),
-        RHYTHMINT: len(notes_duration) / part_features[NUMBER_OF_BEATS],
+        RHYTHMINT: total_number_notes / part_features[NUMBER_OF_BEATS],
         RHYTHMINTSEP: rhythm_intensity_separated
     })
 
