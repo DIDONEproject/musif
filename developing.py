@@ -17,6 +17,7 @@ if __name__ == "__main__":
     parts = ["vnI", "obI"]#, "voice"]
 
     arias_path="./arias/time_signatures/"
+    arias_path="./arias/"
 
     df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
     df.to_csv('martiser/dataframe.csv', index=False)
