@@ -224,26 +224,21 @@ def get_keyareas(lausanne_table, major = True):
     # counter_grouping1_B  = Counter(key_areas_g1_B)
     # counter_grouping2_B  = Counter(key_areas_g2_B)
 
-    #Keys based on the number of measures
     measures = lausanne_table.mc.dropna().tolist()
     beats = lausanne_table.mc_onset.dropna().tolist()
     time_signatures = lausanne_table.timesig.tolist()
 
-    # xml_ts = harmonic_analysis['TimeSignature'].dropna().tolist()
-    # xml_beats = harmonic_analysis['NoBeats'].dropna().tolist()
-    # relationship_timesignature_beats = {ts: xml_beats[i] for i, ts in enumerate(xml_ts)}
     key_measures = get_measures_per_key(list(set(keys)), measures, keys, beats, time_signatures)
 
     total_measures = sum(list(key_measures.values()))
     key_measures_percentage = {kc:float(key_measures[kc]/total_measures) for kc in key_measures} #ASI mejor?
     # key_measures = {kc:key_measures[kc]/total_measures for kc in key_measures}
     
-    ### Número de bloques que están en, por ejemplo, IV, en la columna de local key
-    ### Bloque= grupo de compases seguidos en una misma local key
     keyGrouping1_measures = get_measures_per_key(list(set(g1)), measures, g1, beats, time_signatures)
     keyGrouping1_measures = {kc:keyGrouping1_measures[kc]/sum(list(keyGrouping1_measures.values())) for kc in keyGrouping1_measures}
     keyGrouping2_measures = get_measures_per_key(list(set(g2)), measures, g2, beats, time_signatures)
     keyGrouping2_measures = {kc:keyGrouping2_measures[kc]/sum(list(keyGrouping2_measures.values())) for kc in keyGrouping2_measures}
+    
     # SECTION A
     # measures_A = [measures[i] for i in indexes_A]
     # beats_A = [beats[i] for i in indexes_A]
