@@ -16,7 +16,7 @@ TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"
 TIME_SIGNATURE = "TimeSignature"
 TIME_SIGNATURES = "AllTimeSignatures"
-TS_CHANGES='TimeSignatureChanges'
+TS_MEASURES='TimeSignatureMeasures'
 TIME_SIGNATURE_GROUPED = "TimeSignatureGrouped"
 TEMPO_GROUPED_1 = "TempoGrouped1"
 TEMPO_GROUPED_2 = "TempoGrouped2"
@@ -58,11 +58,12 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     tg1 = get_tempo_grouped_1(tempo_mark)
     tg2 = get_tempo_grouped_2(tg1).value
 
-    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = Extract_Time_Signatures(part, list(part.getElementsByClass(Measure)))
+    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = Extract_Time_Signatures(list(part.getElementsByClass(Measure)))
     
     score_data.update({
         TIME_SIGNATURE: time_signature,
-        TIME_SIGNATURES: zip(measures, time_signatures),        
+        TIME_SIGNATURES:  time_signatures,
+        TS_MEASURES: measures        
     })
     
     score_features.update({
@@ -75,19 +76,18 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         NUMBER_OF_BEATS: number_of_beats,
     })
 
-def Extract_Time_Signatures(part, num_measures):
-    
-    measures=[]
+def Extract_Time_Signatures(measures):
+    ts_measures=[]
     time_signatures = []
-    for i, element in enumerate(num_measures):
-        measures.append(element.measureNumber)
-        if element.measureNumber not in measures[:-1]:
+    for i, element in enumerate(measures):
+        ts_measures.append(element.measureNumber)
+        if element.measureNumber not in ts_measures[:-1]:
             if element.timeSignature:
                 time_signatures.append(element.timeSignature.ratioString)
             else:
                 time_signatures.append(time_signatures[i-1])
         else: #therothetically this works when repetitions are taken into consideration
-            time_signatures.append(time_signatures[measures.index(element.measureNumber)])
+            time_signatures.append(time_signatures[ts_measures.index(element.measureNumber)])
 
     time_signature = ",".join(list(set(time_signatures)))
     time_signature_grouped = get_time_signature_type(time_signature.split(',')[0])
@@ -99,7 +99,7 @@ def Extract_Time_Signatures(part, num_measures):
         # 3: 3/4
         # ...
         # 1: 4/4
-    return time_signature, measures, time_signatures, time_signature_grouped, number_of_beats
+    return time_signature, ts_measures, time_signatures, time_signature_grouped, number_of_beats
 
 
 def ExtractTempo(score_data, part):

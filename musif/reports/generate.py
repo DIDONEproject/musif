@@ -206,7 +206,7 @@ class FeaturesGenerator:
         instruments = self.capitalize_instruments(instruments)
         return instruments
 
-    def capture_density_df(self, all_info, density_set, instruments, catch):
+    def capture_density_df(self, all_info, instruments, catch):
         density_set = set([])
         for instrument in instruments:
             density_set.add(
