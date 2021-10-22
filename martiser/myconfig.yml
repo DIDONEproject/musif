@@ -18,16 +18,16 @@ features:
 #  - custom.themeA
   - scoring
   - custom.file_name
+  # - scale
   # - custom.scale_relative
+  - density
+  - texture     
   - custom.harmony
   - metadata
   - composer
-  - scale
   - custom.librettist
-  # - ambitus
-  # - interval # to extract Melody_values task, both ambitus and interval are needed
-  # - density
-  # - texture     
+  - ambitus
+  - interval # to extract Melody_values task, both ambitus and interval are needed
   - key
   - lyrics
 

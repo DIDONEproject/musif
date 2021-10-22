@@ -5,7 +5,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Tuple
 
-from music21.converter import parse
+from music21.converter import ConverterException, parse
 from music21.stream import Part, Score
 from pandas import DataFrame
 from tqdm import tqdm
@@ -26,9 +26,12 @@ _cache = Cache(10000)  # To cache scanned scores
 def parse_file(file_path: str, split_keywords) -> Score:
     score = _cache.get(file_path)
     if score is None:
-        score = parse(file_path)
-        split_layers(score, split_keywords)
-        _cache.put(file_path, score)
+        try:
+            score = parse(file_path)
+            split_layers(score, split_keywords)
+            _cache.put(file_path, score)
+        except ConverterException:
+            print(get_color('ERROR')+ '\nThat seems to be an invalid path!', RESET_SEQ)
     return score
 
 

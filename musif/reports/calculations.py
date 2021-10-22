@@ -48,10 +48,6 @@ def interval_mean(interval_semitones: list) -> str:
         value=0.0
     return value
 
-###############################################################################################
-# Function used to carry out every kind of computation needed, as determined by 'computation'
-###############################################################################################
-
 def compute_value(column_data, computation, ponderate_data, not_grouped_information, ponderate, extra_info=None):
     value = 0
     i=0

@@ -2,6 +2,8 @@ import itertools
 import os
 import music21 as m21
 
+from musif.musicxml.tempo import get_number_of_beats
+
 file_names = []
 repeat_bracket = False
 
@@ -263,3 +265,19 @@ def remove_folder_contents(path: str):
             os.remove(file_path)
         elif os.path.isdir(file_path):
             remove_folder_contents(file_path)
+
+def Get_TimeSignature_periods(measures, time_signatures):
+    #TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
+    periods=[]
+    periods.append(1)
+    for t, measure in enumerate(measures):
+        if time_signatures[t] != time_signatures[t-1]:
+            print(measure)
+            print(time_signatures[t])
+            periods.append(measure-periods[-1])
+    periods.append(measure+1-periods[-1])
+    return periods
+    
+
+def calculate_total_number_of_beats(time_signatures, periods):
+    return sum([period * get_number_of_beats(time_signatures[j]) for j, period in enumerate(periods)])
