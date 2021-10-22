@@ -17,12 +17,11 @@ class TempoGroup2(Enum):
 
 
 def get_time_signature_type(timesignature):
-    # this function classifies time signatures
     if timesignature in ['1/2', '1/4', '1/8', '1/16', '2/2', '2/4', '2/8', '2/16', '4/4', 'C', '4/2', '4/8', '4/16', '8/2', '8/4', '8/8', '8/16']:
         return 'simple duple'
-    elif timesignature in ['6/8', '12/2', '12/4', '12/8', '12/16']:
+    elif timesignature in ['6/8', '3/8', '12/2', '12/4', '12/8', '12/16']:
         return 'compound duple'
-    elif timesignature in ['3/2', '3/4', '3/8', '3/16', '6/2', '6/4', '6/16']:
+    elif timesignature in ['3/2', '3/4', '3/16', '6/2', '6/4', '6/16']:
         return 'simple triple'
     elif timesignature in ['9/2', '9/4', '9/8', '9/16']:
         return 'compound triple'

@@ -31,7 +31,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     #     Get the array based on harmonic_analysis.mc
         # sections = continued_sections(sections, harmonic_analysis.mc)
-        if not harmonic_analysis.empty:
+        if harmonic_analysis is not None:
 
             ################
             # HARMONY DATA #

@@ -3,16 +3,20 @@ from typing import List
 
 from music21.expressions import TextExpression
 from music21.stream import Measure
+from musif.extract.features.core import DATA_MEASURES
 
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART, DATA_SCORE, DATA_FILE
 from musif.musicxml.tempo import get_time_signature_type, get_number_of_beats, extract_numeric_tempo, \
     get_tempo_grouped_1, get_tempo_grouped_2
+import scripts
 
 
 TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"
 TIME_SIGNATURE = "TimeSignature"
+TIME_SIGNATURES = "AllTimeSignatures"
+TS_CHANGES='TimeSignatureChanges'
 TIME_SIGNATURE_GROUPED = "TimeSignatureGrouped"
 TEMPO_GROUPED_1 = "TempoGrouped1"
 TEMPO_GROUPED_2 = "TempoGrouped2"
@@ -43,30 +47,24 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
     # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo
     # indica el tipo de instrumento y por ultimo el nombre. voice.soprano, strings.violin o strings.viola
+    # for part in score.parts:
+        # m = list(part.getTimeSignatures())
+        # time_signature = m[0].ratioString
+        # time_signatures.append(time_signature)
 
     score = score_data[DATA_SCORE]
-    numeric_tempo = extract_numeric_tempo(score_data[DATA_FILE])
-    time_signatures = []
-    for part in score.parts:
-        m = list(part.getTimeSignatures())
-        time_signature = m[0].ratioString
-        time_signatures.append(time_signature)
-
-    tempo_mark = "ND"
-    for measure in score.parts[0]:
-        if isinstance(measure, Measure):
-            for element in measure:
-                if isinstance(element, TextExpression):
-                    if get_tempo_grouped_1(element.content) != "ND":
-                        tempo_mark = element.content
-                        # break
-            break  # only take into account the first bar!
-    time_signature = ",".join(list(set(time_signatures)))
-    time_signature_grouped = get_time_signature_type(time_signature)
+    part = score.parts[0]
+    numeric_tempo, tempo_mark = ExtractTempo(score_data, part)
     tg1 = get_tempo_grouped_1(tempo_mark)
     tg2 = get_tempo_grouped_2(tg1).value
-    number_of_beats = get_number_of_beats(time_signature)
 
+    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = Extract_Time_Signatures(part, list(part.getElementsByClass(Measure)))
+    
+    score_data.update({
+        TIME_SIGNATURE: time_signature,
+        TIME_SIGNATURES: zip(measures, time_signatures),        
+    })
+    
     score_features.update({
         TEMPO: tempo_mark,
         NUMERIC_TEMPO: numeric_tempo,
@@ -76,3 +74,42 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         TEMPO_GROUPED_2: tg2,
         NUMBER_OF_BEATS: number_of_beats,
     })
+
+def Extract_Time_Signatures(part, num_measures):
+    
+    measures=[]
+    time_signatures = []
+    for i, element in enumerate(num_measures):
+        measures.append(element.measureNumber)
+        if element.measureNumber not in measures[:-1]:
+            if element.timeSignature:
+                time_signatures.append(element.timeSignature.ratioString)
+            else:
+                time_signatures.append(time_signatures[i-1])
+        else: #therothetically this works when repetitions are taken into consideration
+            time_signatures.append(time_signatures[measures.index(element.measureNumber)])
+
+    time_signature = ",".join(list(set(time_signatures)))
+    time_signature_grouped = get_time_signature_type(time_signature.split(',')[0])
+    number_of_beats = get_number_of_beats(time_signature.split(',')[0])
+
+    #time signatures will be a zip containing measure, timesinature
+        # 1: 4/4
+        # 2: 4/4
+        # 3: 3/4
+        # ...
+        # 1: 4/4
+    return time_signature, measures, time_signatures, time_signature_grouped, number_of_beats
+
+
+def ExtractTempo(score_data, part):
+    numeric_tempo = extract_numeric_tempo(score_data[DATA_FILE])
+    tempo_mark = "ND"
+    for measure in part:
+        if isinstance(measure, Measure):
+            for element in measure:
+                if isinstance(element, TextExpression):
+                    if get_tempo_grouped_1(element.content) != "ND":
+                        tempo_mark = element.content
+            break  # only take into account the first bar!
+    return numeric_tempo,tempo_mark
