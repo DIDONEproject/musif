@@ -55,6 +55,7 @@ def get_position(beat_count, beat, pos):
 
 
 
+
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
     prefix = get_score_prefix()
