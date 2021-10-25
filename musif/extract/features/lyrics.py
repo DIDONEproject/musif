@@ -1,7 +1,7 @@
 from typing import List
 
 from music21.note import Note
-
+from statistics import mean
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
@@ -12,25 +12,26 @@ from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 SYLLABIC_RATIO = "SyllabicRatio"
 NOTES = "Notes"
 SYLLABLES = "Syllables"
+VOICE_REG = "VoiceReg"
 
-VOICE_REG="VoiceReg"
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-
     notes = part_data[DATA_NOTES]
     lyrics = part_data[DATA_LYRICS]
 
     syllabic_ratio = get_syllabic_ratio(notes, lyrics)
+    voice_reg = get_voice_reg(notes)
 
     part_features.update({
         NOTES: len(notes),
         SYLLABLES: len(lyrics),
         SYLLABIC_RATIO: syllabic_ratio,
+        VOICE_REG: voice_reg
     })
 
 
-def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
+                         score_features: dict):
     parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
     if len(parts_data) == 0:
         return
@@ -51,6 +52,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features[f"{score_prefix}{NOTES}"] = len(notes)
     features[f"{score_prefix}{SYLLABLES}"] = len(lyrics)
     features[f"{score_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
+    features[f"{score_prefix}{VOICE_REG}"] = get_voice_reg(notes)
 
     return score_features.update(features)
 
@@ -61,3 +63,7 @@ def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:
     return len(notes) / len(lyrics)
 
 
+def get_voice_reg(notes):
+    last_note = notes[-1].pitch.midi
+    distances = [(note.pitch.midi - last_note) for note in notes]
+    return mean(distances)
