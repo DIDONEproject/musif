@@ -12,9 +12,8 @@ from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 SYLLABIC_RATIO = "SyllabicRatio"
 NOTES = "Notes"
 SYLLABLES = "Syllables"
-VOICE_REG = "Voice_reg"
+VOICE_REG = "VoiceReg"
 
-VOICE_REG="VoiceReg"
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]

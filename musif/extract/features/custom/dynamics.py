@@ -51,7 +51,7 @@ def get_position(beat_count, beat, pos):
     if beat == beat_count:
         return pos
     else:
-        return (pos / beat_count) * (beat + 1)
+        return (pos / beat_count) + beat
 
 
 
