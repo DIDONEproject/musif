@@ -1,13 +1,13 @@
 from typing import List
 
-from musif.common.constants import VOICE_FAMILY, GENERAL_FAMILY
+from musif.common.constants import GENERAL_FAMILY, VOICE_FAMILY
 from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import part_matches_filter
-from musif.extract.constants import DATA_PART, DATA_SCORE, DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_SOUND, \
-    DATA_SOUND_ABBREVIATION, DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_PART_NUMBER, DATA_FILTERED_PARTS
+from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART, \
+    DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION
 from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
-from musif.musicxml.scoring import extract_sound, extract_abbreviated_part, ROMAN_NUMERALS_FROM_1_TO_20
+from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound
 
 PART_NAME = "PartName"
 PART_NUMBER = "PartNumber"

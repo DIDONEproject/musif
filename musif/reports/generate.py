@@ -8,32 +8,31 @@
 ########################################################################
 import copy
 import os
-from re import L
 import sys
 from itertools import permutations
-from os import SEEK_CUR, path
+from os import path
 from typing import List, Optional
 
 import numpy as np
 import pandas as pd
-from musif.extract.features.tempo import NUMBER_OF_BEATS
-from musif.common.constants import RESET_SEQ, VOICE_FAMILY, get_color
-from musif.config import Configuration
-from musif.extract.features import ambitus, density, lyrics, scale, texture
-from musif.extract.features.custom import harmony, scale_relative
-from musif.extract.features.custom.__constants import *
-from musif.reports.utils import remove_folder_contents
 from pandas import DataFrame
 from tqdm import tqdm
 
+from musif.common.constants import RESET_SEQ, VOICE_FAMILY, get_color
+from musif.config import Configuration
+from musif.extract.features import density, lyrics, scale, texture
+from musif.extract.features.custom import harmony, scale_relative
+from musif.extract.features.custom.__constants import *
+from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.reports.calculations import make_intervals_absolute
-
+from musif.reports.utils import remove_folder_contents
 from .constants import *
 from .tasks.common_tasks import Densities, Textures
 from .tasks.harmony import Chords, Harmonic_data, Triple_harmonic_excel
 from .tasks.intervals import Intervals, Intervals_types
 from .tasks.melody_values import Melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
+
 
 class FeaturesGenerator:
     def __init__(self, *args, **kwargs):

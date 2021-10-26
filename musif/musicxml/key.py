@@ -1,15 +1,7 @@
-import copy
-from typing import List, Tuple, Union
+from typing import Tuple
 
-from music21.interval import Interval
 from music21.key import Key
-from music21.note import Note
-from music21.scale import MajorScale, MinorScale
-from music21.stream import Measure, Part, Score, Voice
-from music21.text import assembleLyrics
-from roman import toRoman
-
-from musif.common import group
+from music21.stream import Score
 
 
 def get_key(score: Score) -> str:

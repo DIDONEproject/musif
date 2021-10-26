@@ -1,12 +1,14 @@
 # ### MODULATIONS ###
+import itertools
 from collections import Counter
 from typing import List, Union
-from musif.extract.features.core import DATA_KEY
-from pandas.core.frame import DataFrame
+
 import roman
-import itertools
-from music21 import scale, pitch
+from music21 import pitch, scale
 from music21.note import Note
+from pandas.core.frame import DataFrame
+
+from musif.extract.features.core import DATA_KEY
 from musif.extract.features.custom.__harmony_utils import get_function_first, get_function_second
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}

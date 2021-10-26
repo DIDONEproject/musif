@@ -1,6 +1,3 @@
-import copy
-import os
-
 #######################################################################################
 # This function returns the most appropiate sortings for variables in harmonic analysis#
 ########################################################################################

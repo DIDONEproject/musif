@@ -1,5 +1,6 @@
 import itertools
 import os
+
 import music21 as m21
 
 from musif.musicxml.tempo import get_number_of_beats

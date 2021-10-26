@@ -1,9 +1,10 @@
-from musif.extract.features import ambitus
-import musif.extract.features.interval as interval
 import openpyxl
+from openpyxl.styles.fonts import Font
+
+import musif.extract.features.interval as interval
+from musif.extract.features import ambitus
 from musif.extract.features.scoring import FAMILY_SCORING, SCORING
 from musif.extract.features.tempo import TEMPO_GROUPED_1, TEMPO_GROUPED_2
-from openpyxl.styles.fonts import Font
 
 # The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
 

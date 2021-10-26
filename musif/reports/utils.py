@@ -1,16 +1,16 @@
 import copy
-from musif.reports.calculations import compute_average
-from musif.common.sort import sort_dataframe
-from typing import List
 import os
-from openpyxl.writer.excel import ExcelWriter
-from openpyxl.utils import get_column_letter
+from typing import List
+
 import numpy as np
-import pandas as pd
+from openpyxl.utils import get_column_letter
+from openpyxl.writer.excel import ExcelWriter
 from pandas.core.frame import DataFrame
 
-from .constants import *
+from musif.common.sort import sort_dataframe
+from musif.reports.calculations import compute_average
 from .calculations import compute_value
+from .constants import *
 
 WIDTH = 35
 HEIGHT = 20

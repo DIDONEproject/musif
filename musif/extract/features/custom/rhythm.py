@@ -3,7 +3,6 @@ from typing import List
 
 from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
-from musif.extract.features.tempo import NUMBER_OF_BEATS
 from musif.musicxml.tempo import get_number_of_beats
 
 AVERAGE_DURATION = "AverageDuration"

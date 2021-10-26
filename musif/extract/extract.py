@@ -11,12 +11,12 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 from musif.common.cache import Cache
-from musif.common.constants import GENERAL_FAMILY, FEATURES_MODULE, RESET_SEQ, get_color
+from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY, RESET_SEQ, get_color
 from musif.common.sort import sort
 from musif.config import Configuration
+from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILE, DATA_FILTERED_PARTS, DATA_PART, \
     DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION
-from musif.extract.common import filter_parts_data
 from musif.musicxml import MUSICXML_FILE_EXTENSION, split_layers
 from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, to_abbreviation
 
@@ -31,7 +31,7 @@ def parse_file(file_path: str, split_keywords) -> Score:
             split_layers(score, split_keywords)
             _cache.put(file_path, score)
         except ConverterException:
-            print(get_color('ERROR')+ '\nThat seems to be an invalid path!', RESET_SEQ)
+            print(get_color('ERROR') + '\nThat seems to be an invalid path!', RESET_SEQ)
     return score
 
 

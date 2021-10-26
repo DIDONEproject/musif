@@ -1,17 +1,17 @@
 import copy
-from multiprocessing import Lock
 import os
+from multiprocessing import Lock
 from os import path
 
-
-from musif.config import Configuration
-from musif.common.sort import sort
-from musif.common.constants import get_color, RESET_SEQ
-from musif.reports.constants import *
-from musif.reports.utils import (columns_alike_our_data, get_excel_name, save_workbook)
-from musif.reports.visualisations import bar_plot, double_bar_plot, pie_plot
 from pandas.core.frame import DataFrame
-from musif.reports.utils import Create_excel
+
+from musif.common.constants import RESET_SEQ, get_color
+from musif.common.sort import sort
+from musif.config import Configuration
+from musif.reports.constants import *
+from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
+from musif.reports.visualisations import bar_plot, double_bar_plot, pie_plot
+
 
 def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string: str, name: str, sorting_list: list, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:

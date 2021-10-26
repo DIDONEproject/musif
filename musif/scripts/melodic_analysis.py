@@ -4,10 +4,10 @@ import sys
 from os import path
 from typing import List
 
-from musif.extract.extract import FeaturesExtractor, PartsExtractor
 from pandas import DataFrame
 
 from musif import VERSION
+from musif.extract.extract import FeaturesExtractor, PartsExtractor
 
 
 def choose_parts(xml_dir: str, config_file: str) -> List[str]:

@@ -1,19 +1,20 @@
 import copy
-from typing import List
-from musif.common.constants import RESET_SEQ, get_color
-from musif.reports.visualisations import customized_plot
 import os
 from multiprocessing import Lock
 from os import path
+from typing import List
+
 import numpy as np
-
 import pandas as pd
-from musif.common.sort import sort
+from pandas.core.frame import DataFrame
 
+from musif.common.constants import RESET_SEQ, get_color
+from musif.common.sort import sort
 from musif.config import Configuration
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel, get_general_cols, save_workbook, get_excel_name
-from pandas.core.frame import DataFrame
+from musif.reports.utils import Create_excel, get_excel_name, get_general_cols, save_workbook
+from musif.reports.visualisations import customized_plot
+
 
 ########################################################################
 # Function to generate the reports files Emphasised_scale_degrees.xlsx

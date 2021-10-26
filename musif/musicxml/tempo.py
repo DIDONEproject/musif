@@ -1,12 +1,7 @@
 import re
 import xml.etree.ElementTree as ET
 from enum import Enum
-from typing import List, Optional
-
-from music21.expressions import TextExpression
-from music21.stream import Measure
-
-from musif.config import Configuration
+from typing import Optional
 
 
 class TempoGroup2(Enum):

@@ -1,14 +1,9 @@
-import copy
 import math
-import os
 from typing import Dict
 
 import numpy as np
 import pandas as pd
 from music21 import interval, note, pitch
-from musif.common.sort import sort
-
-from .constants import not_used_cols, rows_groups
 
 
 def note_mean(pitch_ps: list, round_mean: bool =False) -> str:

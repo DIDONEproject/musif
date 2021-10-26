@@ -1,16 +1,15 @@
 import itertools
 import re
 from collections import Counter
-from urllib.request import urlopen
 
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
+
 from musif.musicxml.tempo import get_number_of_beats
+from .__constants import *
 
 # from musif.extract.utils import get_beatspertsig
-
-from .__constants import *
 
 
 REGEX={}
