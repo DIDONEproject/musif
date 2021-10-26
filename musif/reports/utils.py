@@ -304,26 +304,23 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         else:
             not_grouped_information = None
 
-        # compute each column's value for the present row (subgroup) and print it
         for i, c in enumerate(columns):
             column_computation = computations_columns[i]
             extra_info = []
             if column_computation == 'mean_density':
                 extra_info = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
-                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
                                       not_grouped_information, ponderate, extra_info=extra_info)
-                                      
             elif column_computation == 'mean_texture':
                 if not subgroup_data[c].isnull().all():
-                    notes = subgroup_data[c.split('/')[0]+'Notes']
                     notes_next = subgroup_data[c.split('/')[1]+'Notes']
-                    value = compute_value(notes, column_computation, total_analysed_row,
+                    value = compute_value(subgroup_data, c,  column_computation, total_analysed_row,
                                         not_grouped_information, ponderate, extra_info=notes_next)
                 else:
                     value=0.0
             else:
                 #TODO: select other columns to calculate lowest mean note
-                value = compute_value(subgroup_data[c], column_computation, total_analysed_row,
+                value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":
                 sheet.cell(row_number, cnumber).value = value
@@ -407,12 +404,10 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
      
         print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
                                     per=per or ponderate and all(c == "sum" for c in computations_columns))
-
     
     values=np.asarray(list(columns_values.values()))
     
     for i, c in enumerate(columns_values):
-
         # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
         for row in range(0,values.shape[1]):
             if all([str(e)=='0.0' for e in values[:,row]]):

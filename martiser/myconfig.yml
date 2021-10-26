@@ -20,15 +20,15 @@ features:
   - custom.file_name
   # - scale
   # - custom.scale_relative
-  - density
-  - texture     
+  - ambitus
+  - interval # to generate Melody_values reports, both ambitus and interval are needed
+  # - density
+  # - texture     
   - custom.harmony
   - metadata
   - composer
   - custom.librettist
-  - ambitus
-  - interval # to extract Melody_values task, both ambitus and interval are needed
-  - key
+  # - key
   - lyrics
 
 split_keywords:

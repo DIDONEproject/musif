@@ -1,26 +1,32 @@
+import os
 from multiprocessing import Lock
 
 import pandas as pd
-from pandas.core.frame import DataFrame
-
 from musif.common.constants import *
 from musif.common.sort import sort, sort_columns
 from musif.config import Configuration
-from musif.extract.features.custom.__constants import ADDITIONS_prefix, CHORDS_GROUPING_prefix, CHORD_TYPES_prefix, \
-    CHORD_prefix, KEY_GROUPING, KEY_prefix, NUMERALS_prefix
+from musif.extract.features.custom.__constants import (KEY_GROUPING,
+                                                       ADDITIONS_prefix,
+                                                       CHORD_prefix,
+                                                       CHORD_TYPES_prefix,
+                                                       CHORDS_GROUPING_prefix,
+                                                       KEY_prefix,
+                                                       NUMERALS_prefix)
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel, get_excel_name, get_general_cols, remove_underscore, save_workbook
+from musif.reports.utils import (Create_excel, get_excel_name,
+                                 get_general_cols, remove_underscore,
+                                 save_workbook)
+from numpy import copy
+from pandas.core.frame import DataFrame
+
 from ..harmony_sorting import *  # TODO: REVIEW
 
-
-### HARMONY ###
 
 def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         additions=[]
         workbook = openpyxl.Workbook()
         excel_name=get_excel_name(pre_string, name)
-
         general_cols = copy.deepcopy(not_used_cols)
         data_general = data[metadata_columns+ ['Total analysed']].copy()
         get_general_cols(rows_groups, general_cols)

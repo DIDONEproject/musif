@@ -61,29 +61,25 @@ class FeaturesGenerator:
         common_columns_df = all_info[metadata_columns]
         common_columns_df['Total analysed'] = 1.0
 
+        tasks={}
         common_tasks={}
         harmony_tasks={}
-        tasks={}
-        self.common=True #Flag to run common tasks only once
+        self.common = True #Flag to run common tasks only once
+        self.voices=all_info.Voices
 
-        instruments = self.extract_instruments(all_info)
-        instrument_level, notes_set = self.get_intrument_level_and_notes(all_info, instruments)
-        
         print(get_color('INFO')+'\n' + str(factor) + " factor", end='\n'+RESET_SEQ)
 
-        self.prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments, instrument_level, notes_set)
+        instruments = self.extract_instruments(all_info)
+
+        self.prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments)
 
         for instrument in tqdm(list(instruments), desc='Progress'):
             print(get_color('INFO')+'\nInstrument: ', instrument, end='\n\n'+RESET_SEQ)
+            instrument_level = 'Part' + instrument + '_' if not self.IsVoice(instrument) else 'Family' + instrument + '_' 
 
-            instrument_level = 'Part' + instrument + '_'
-            if self.IsVoice(all_info, instrument):
-                instrument_level = 'Family' + instrument + '_'
-
-            intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.Get_columns(all_info, instrument_level)
-
+            intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.find_columns(all_info, instrument_level)
             self.prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
-                
+            
             additional_info, rg_groups = self.get_additional_info_and_groups(factor, rg) 
 
             results_path_factorx = path.join(main_results_path, 'Melody_' + instrument, str(
@@ -110,6 +106,15 @@ class FeaturesGenerator:
                 #     not_used_cols = nuc
                 pass
 
+    def find_notes_set(self, instruments):
+        notes_set=set([])
+        for instrument in instruments:
+            if instrument.lower().startswith('vn'):
+                notes_set.add(self.get_instrument_prefix(instrument) + '_Notes')
+            else:
+                notes_set.add(self.get_instrument_prefix(instrument) + '_NotesMean')
+        return notes_set
+
     def prepare_part_dataframes(self, all_info, common_columns_df, tasks, Instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list):
         if self._cfg.is_requested_module(interval):            
             intervals_info, intervals_types = self.extract_interval_columns(all_info, Instrument_level, intervals_list, intervals_types_list)
@@ -125,20 +130,21 @@ class FeaturesGenerator:
                 self._cfg.write_logger.error(get_color('ERROR')+'Melody Values Dataframe could not be extracted.{}'.format(RESET_SEQ))                       
             
 
-        if self.IsVoice(all_info, instrument):
+        if self.IsVoice(instrument):
             if self._cfg.is_requested_module(scale):            
                 tasks['scale'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_list).dropna(how='all', axis=1)
             if self._cfg.is_requested_module(scale_relative):            
                 tasks['scale_relative'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_relative_list).dropna(how='all', axis=1)
             tasks['clefs'] = self.get_clefs(all_info, common_columns_df)
 
-    def prepare_common_dataframes(self, all_info, common_tasks, harmony_tasks, instruments, Instrument_level, notes_set):
+    def prepare_common_dataframes(self, all_info, common_tasks, harmony_tasks, instruments):
         if self._cfg.is_requested_module(density) or self._cfg.is_requested_module(texture):
+            notes_set = self.find_notes_set(instruments)    
             notes_df=all_info[list(notes_set)]
             common_tasks['notes']=notes_df
         
         if self._cfg.is_requested_module(density):
-            density_df = self.capture_density_df(all_info, instruments, Instrument_level)
+            density_df = self.capture_density_df(all_info, instruments)
             common_tasks['density']=density_df
 
         if self._cfg.is_requested_module(texture):
@@ -173,10 +179,10 @@ class FeaturesGenerator:
                 
         self.common = False #FLAG guarantees this is processed only once (all common files)
         
-    def IsVoice(self, all_info, instrument):
+    def IsVoice(self, instrument):
         if instrument.lower()=='voice':
             return True
-        return instrument.lower() in all_info.Voices
+        return instrument.lower() in self.voices
 
     def get_clefs(self, all_info, common_columns_df):
         if ('Clef2' and 'Clef3') in common_columns_df.columns:
@@ -205,25 +211,28 @@ class FeaturesGenerator:
         instruments = self.capitalize_instruments(instruments)
         return instruments
 
-    def capture_density_df(self, all_info, instruments, catch):
+    def capture_density_df(self, all_info, instruments):
         density_set = set([])
         for instrument in instruments:
             density_set.add(
-                    catch + instrument + '_SoundingDensity')
+                    self.get_instrument_prefix(instrument)  + '_SoundingDensity')
             density_set.add(
-                    catch + instrument + '_SoundingMeasures')
-            density_set.add(NUMBER_OF_BEATS)
-            density_df = all_info[list(density_set)]
+                    self.get_instrument_prefix(instrument)  + '_SoundingMeasures')
+            if instrument.endswith('II'):
+                continue
+        density_set.add(NUMBER_OF_BEATS)
+        density_df = all_info[list(density_set)]
         return density_df
 
     def capture_harmony_DFs(self, all_info):
         harmony_df=all_info[(
-            [i for i in all_info.columns if HARMONIC_prefix in i] + [i for i in all_info.columns if CHORD_TYPES_prefix in i] 
+            [i for i in all_info.columns if HARMONIC_prefix in i] +
+            [i for i in all_info.columns if CHORD_TYPES_prefix in i]
             # + [i for i in all_info.columns if ADDITIONS_prefix in i]
-            + [i for i in all_info.columns if NUMERALS_prefix in i]
+            # + [i for i in all_info.columns if NUMERALS_prefix in i]
             )]
         key_areas_df=all_info[[i for i in all_info.columns if KEY_prefix in i or KEY_GROUPING in i ]]
-        functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i] + [i for i in all_info.columns if CHORDS_GROUPING_prefix in i]]
+        functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i] + [i for i in all_info.columns if CHORD_prefix in i]]
         chords_df = all_info[[i for i in all_info.columns if CHORD_prefix in i and CHORD_TYPES_prefix not in i]]
         return harmony_df,key_areas_df,chords_df,functions_dfs
 
@@ -271,7 +280,7 @@ class FeaturesGenerator:
         scale_degrees_info.columns = [c.replace(catch, '').replace('Degree', '').replace('_Count', '') for c in scale_degrees_info.columns]
         return scale_degrees_info
 
-    def Get_columns(self, all_info, Instr_level):
+    def find_columns(self, all_info, Instr_level):
         intervals_list = []
         intervals_types_list = []
         degrees_list = []
@@ -311,25 +320,18 @@ class FeaturesGenerator:
                             
         return intervals_info,intervals_types
 
-    def get_intrument_level_and_notes(self, all_info: DataFrame, instruments: list):
-        notes_set=set([])
-        for instrument in instruments:
-            if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
-                instrument_level = 'Part'
-                notes_set.add(instrument_level + instrument + '_Notes')
-
-            elif self.IsVoice(all_info, instrument):
-                instrument_level = 'Family'
-                instrument=VOICE_FAMILY.capitalize()
-                notes_set.add(instrument_level + instrument + '_NotesMean')
-
-            else:
-                instrument_level = 'Sound'
-                if instrument.endswith('II'):
-                    continue
-                instrument = instrument.replace('I', '')
-                notes_set.add(instrument_level + instrument.replace('I', '') + '_NotesMean')
-        return instrument_level, notes_set
+    def get_instrument_prefix(self, instrument: list):
+        if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
+            prefix = 'Part'
+        elif self.IsVoice(instrument):
+            prefix = 'Family'
+            instrument=VOICE_FAMILY.capitalize()
+        else:
+            prefix = 'Sound'
+            instrument=instrument.replace('I','')
+        
+        inst=prefix+instrument
+        return inst
 
 #####################################################################
 
@@ -415,7 +417,7 @@ class FeaturesGenerator:
             
             if 'key_areas' in kwargs:
                 key_areas= pd.concat([common_columns_df,kwargs['key_areas']], axis=1)
-                Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, key_areas, results_path, pre_string, "Key_Areas", visualiser_lock, groups if groups != [] else None, additional_info)
+                # Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, key_areas, results_path, pre_string, "Key_Areas", visualiser_lock, groups if groups != [] else None, additional_info)
                 
                 # wait for all
                 # if sequential:

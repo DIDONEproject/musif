@@ -1,10 +1,9 @@
 import math
 from typing import Dict
-
+from musif.extract.features import ambitus, density, lyrics, scale, texture
 import numpy as np
 import pandas as pd
 from music21 import interval, note, pitch
-
 
 def note_mean(pitch_ps: list, round_mean: bool =False) -> str:
     mean_pitch = np.nansum(pitch_ps) / len(pitch_ps)
@@ -43,10 +42,10 @@ def interval_mean(interval_semitones: list) -> str:
         value=0.0
     return value
 
-def compute_value(column_data, computation, ponderate_data, not_grouped_information, ponderate, extra_info=None):
+def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_information, ponderate, extra_info=None):
     value = 0
     i=0
- 
+    column_data=subgroup_data[c]
     try:
         if computation == "mean":
             if not ponderate:
@@ -60,6 +59,7 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
                     s += v * w
                 value = round(s / sum(ponderate_data), 3)
         elif computation in ["mean_density","mean_texture"]:
+            notes = subgroup_data[c.split('/')[0]+'Notes']
             value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
         elif computation == "min":
             value = min(column_data)
@@ -97,6 +97,8 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             else:
                 value = i.semitones
         elif computation == "absoluteInterval" or computation == "absolute":
+            column_data = subgroup_data[ambitus.LOWEST_NOTE]
+            # subgroup_data[c]
             lowest_notes_names = [str(a).split(',')[0] for a in column_data]
             max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' else np.nan for a in column_data]
             min_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in lowest_notes_names]
@@ -138,10 +140,6 @@ def compute_value(column_data, computation, ponderate_data, not_grouped_informat
             value = 0.0
     return value
 
-#####################################################################################
-# Function to compute the average in every kind of variable, based on a computation #
-#####################################################################################
-
 def compute_average(dic_data: Dict, computation: str):
     value = 0
     computation = computation.replace('_density', '').replace('_texture', '') #In case we have averages for densities or textures we compute normal average 
@@ -166,15 +164,12 @@ def compute_average(dic_data: Dict, computation: str):
                 semitones = [interval.Interval(n).semitones for n in data.split('-')]
                 mean_dic_data.append(sum(semitones) / len(semitones))
             value = interval_mean(mean_dic_data)
-        
         # value = round(np.nansum(dic_data) / (len(dic_data) - len([z for z in dic_data if z == 0])), 3)
     except ZeroDivisionError or ValueError:
         value = 0.0
     return value
 
-##################################################################################################
-# This function transforms the interval into absolute values, adding the ascending and descending#
-##################################################################################################
+# This function transforms the interval into absolute values, adding the ascending and descending
 
 def make_intervals_absolute(intervals_info):
     intervals_info_columns = intervals_info.columns
@@ -195,5 +190,3 @@ def make_intervals_absolute(intervals_info):
         intervals_info_abs = intervals_info_abs.drop(
             columns_to_merge[i], axis=1)
     return intervals_info_abs
-
-    ########################################################################
