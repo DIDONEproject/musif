@@ -3,6 +3,7 @@ from typing import List
 
 from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
+from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 
 DYNMEAN = "DynMean"
@@ -25,7 +26,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     for bar_section in part_data["measures"]:
         for measure in bar_section.elements:
             if measure.classes[0] == "Dynamic":  # need to change with beat count and beat being different
-                position = get_position(beat_count, beat, measure.beat)
+                position = get_beat_position(beat_count, beat, measure.beat)
                 old_beat = position - 1  # if change in beat 1.5, remaining old beats 0.5
                 dyn_mean_weighted += (beats_section + old_beat) * last_dyn
                 new_dyn = get_dynamic_numeric(measure.value)
@@ -55,13 +56,6 @@ def get_dynamic_numeric(value):
         return DYNAMIC_VALUES.get(value)
     else:
         return 0
-
-
-def get_position(beat_count, beat, pos):
-    if beat == beat_count:
-        return pos
-    else:
-        return (pos / beat_count) + beat
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],

@@ -89,6 +89,12 @@ def get_repeat_elements(score, v = True):
         print("The repeat elements found in this score are: " + str(repeat_elements))
     return repeat_elements
 
+def get_beat_position(beat_count, beat, pos):
+    if beat == beat_count:
+        return pos
+    else:
+        return (pos / beat_count) + beat
+
 def expand_repeat_bars(score):
     final_score = m21.stream.Score()
     final_score.metadata = score.metadata
