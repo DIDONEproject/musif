@@ -86,16 +86,10 @@ def Extract_Time_Signatures(measures):
         else: #therothetically this works when repetitions are taken into consideration
             time_signatures.append(time_signatures[ts_measures.index(element.measureNumber)])
 
-    time_signature = ",".join(list(set(time_signatures)))
+    time_signature = ",".join(list(sorted(set(time_signatures), key=time_signatures.index)))
     time_signature_grouped = get_time_signature_type(time_signature.split(',')[0])
     number_of_beats = get_number_of_beats(time_signature.split(',')[0])
 
-    #time signatures will be a zip containing measure, timesinature
-        # 1: 4/4
-        # 2: 4/4
-        # 3: 3/4
-        # ...
-        # 1: 4/4
     return time_signature, ts_measures, time_signatures, time_signature_grouped, number_of_beats
 
 

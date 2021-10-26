@@ -20,13 +20,8 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
         Rename_columns(data)
         data_general = data[metadata_columns+ ['Total analysed']].copy()
 
-        # SHEET 1: STATISTICAL_VALUES
         PrintStatisticalValues(_cfg, data, additional_info, groups, workbook)
-
-        # SHEET 2: AMBITUS
         PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook)
-
-        # SHEET 3: LARGEST_LEAPS
         PrintLargestLeaps(_cfg, data, data_general,additional_info, groups, workbook)
 
         save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
@@ -97,7 +92,8 @@ def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workboo
 
     computations = ["sum", "max", "maxInterval", "min", "minInterval"]
 
-    data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
+    data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",
+        interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
 
     Create_excel(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
                      _cfg.sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
@@ -135,7 +131,7 @@ def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
                     _cfg.sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
 def Rename_columns(data):
-    data['HighestMeanIndex']=0.0
+    data['HighestMeanIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
     data['LowestMeanIndex']=0.0
     data['HighestIndex']=0.0
     data['MeanSemitones']=0.0

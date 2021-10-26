@@ -19,13 +19,10 @@ if __name__ == "__main__":
     arias_path="./arias/time_signatures/"
     arias_path="./arias/"
 
-    df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
-    df.to_csv('martiser/dataframe.csv', index=False)
-    df2=df
+    # df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
+    # df.to_csv('martiser/dataframe.csv', index=False)
 
-    df2=pd.read_csv('martiser/dataframe.csv')
-    
+    df=pd.read_csv('martiser/dataframe.csv')
     path = './'
-    FeaturesGenerator("martiser/myconfig.yml").generate_reports(df2, 1, path, parts)
-
+    FeaturesGenerator("martiser/myconfig.yml").generate_reports(df, 1, path, parts)
     
