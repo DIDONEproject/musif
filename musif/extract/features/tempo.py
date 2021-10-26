@@ -3,14 +3,11 @@ from typing import List
 
 from music21.expressions import TextExpression
 from music21.stream import Measure
-from musif.extract.features.core import DATA_MEASURES
 
 from musif.config import Configuration
-from musif.extract.constants import DATA_PART, DATA_SCORE, DATA_FILE
-from musif.musicxml.tempo import get_time_signature_type, get_number_of_beats, extract_numeric_tempo, \
-    get_tempo_grouped_1, get_tempo_grouped_2
-import scripts
-
+from musif.extract.constants import DATA_FILE, DATA_PART, DATA_SCORE
+from musif.musicxml.tempo import extract_numeric_tempo, get_number_of_beats, get_tempo_grouped_1, get_tempo_grouped_2, \
+    get_time_signature_type
 
 TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"

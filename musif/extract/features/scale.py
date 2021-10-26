@@ -1,13 +1,12 @@
-from typing import List, Dict, Union
+from typing import Dict, List, Union
 
 from music21.note import Note
 
+from musif.config import Configuration
+from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
 from musif.extract.features.core import DATA_KEY, DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix
-
-from musif.config import Configuration
-from musif.extract.common import filter_parts_data
 from musif.musicxml import get_degrees_and_accidentals
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}

@@ -1,16 +1,17 @@
-from musif.reports.visualisations import bar_plot_extended, line_plot_extended
 import os
 from multiprocessing import Lock
+
 import numpy as np
-from musif.common.constants import get_color, RESET_SEQ
-
 import pandas as pd
-from musif.common.sort import sort
+from pandas.core.frame import DataFrame
 
+from musif.common.constants import RESET_SEQ, get_color
+from musif.common.sort import sort
 from musif.config import Configuration
 from musif.reports.constants import *
-from musif.reports.utils import Adjust_excel_width_height, Create_excel, save_workbook, get_excel_name
-from pandas.core.frame import DataFrame
+from musif.reports.utils import Create_excel, get_excel_name, save_workbook
+from musif.reports.visualisations import bar_plot_extended, line_plot_extended
+
 
 ### COMMON tasks for any INSTRUMENT  ###
 

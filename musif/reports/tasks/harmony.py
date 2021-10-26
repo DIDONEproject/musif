@@ -1,18 +1,17 @@
 from multiprocessing import Lock
-from os import name, path
 
 import pandas as pd
-from musif.extract.features.custom.__constants import NUMERALS_prefix, CHORDS_GROUPING_prefix, CHORD_TYPES_prefix, CHORD_prefix, KEY_prefix, KEY_GROUPING, ADDITIONS_prefix
+from pandas.core.frame import DataFrame
 
 from musif.common.constants import *
 from musif.common.sort import sort, sort_columns
 from musif.config import Configuration
+from musif.extract.features.custom.__constants import ADDITIONS_prefix, CHORDS_GROUPING_prefix, CHORD_TYPES_prefix, \
+    CHORD_prefix, KEY_GROUPING, KEY_prefix, NUMERALS_prefix
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel, get_excel_name, remove_underscore, save_workbook, get_general_cols
-from musif.reports.visualisations import bar_plot
-from pandas.core.frame import DataFrame
-
+from musif.reports.utils import Create_excel, get_excel_name, get_general_cols, remove_underscore, save_workbook
 from ..harmony_sorting import *  # TODO: REVIEW
+
 
 ### HARMONY ###
 

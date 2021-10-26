@@ -1,7 +1,7 @@
+import warnings
 from typing import List
 
 from musif.config import Configuration
-import warnings
 
 
 def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:

@@ -1,13 +1,10 @@
-from musif.common.constants import RESET_SEQ, get_color
 from typing import List
 
-import pandas as pd
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
 from musif.extract.features.prefix import get_part_prefix
-
-from .__scale_relative_utils import get_modulations, get_emphasised_scale_degrees_relative, continued_sections
+from .__scale_relative_utils import get_emphasised_scale_degrees_relative
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 

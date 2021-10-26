@@ -1,7 +1,8 @@
+from statistics import mean
 from typing import List
 
 from music21.note import Note
-from statistics import mean
+
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data

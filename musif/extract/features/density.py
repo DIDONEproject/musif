@@ -1,18 +1,18 @@
-from typing import Counter, List, Tuple
-from ms3 import score
+from typing import List, Tuple
 
 from pandas import DataFrame
-from musif.extract.utils import Get_TimeSignature_periods, calculate_total_number_of_beats
+
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
 from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
-from musif.extract.features.core import DATA_NOTES, DATA_SOUNDING_MEASURES, DATA_MEASURES
-from musif.extract.features.tempo import TIME_SIGNATURE, TIME_SIGNATURES, TS_MEASURES, get_number_of_beats
+from musif.extract.features.core import DATA_MEASURES, DATA_NOTES, DATA_SOUNDING_MEASURES
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
-from musif.extract.features.scoring import NUMBER_OF_FILTERED_PARTS, SOUND_ABBREVIATION, FAMILY_ABBREVIATION, \
-    PART_ABBREVIATION
-from musif.extract.features.tempo import NUMBER_OF_BEATS
+from musif.extract.features.scoring import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, PART_ABBREVIATION, \
+    SOUND_ABBREVIATION
+from musif.extract.features.tempo import NUMBER_OF_BEATS, TIME_SIGNATURE, TIME_SIGNATURES, TS_MEASURES, \
+    get_number_of_beats
+from musif.extract.utils import Get_TimeSignature_periods, calculate_total_number_of_beats
 from musif.musicxml import Measure, Note, Part
 
 NOTES = "Notes"

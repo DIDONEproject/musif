@@ -1,7 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.features.core import DATA_KEY, DATA_TONALITY, DATA_MODE
+from musif.extract.features.core import DATA_KEY, DATA_MODE, DATA_TONALITY
 from musif.musicxml.key import get_key_signature, get_key_signature_type
 
 KEY = "Key"

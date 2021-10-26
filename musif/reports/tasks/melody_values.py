@@ -1,17 +1,17 @@
-from multiprocessing import Lock
 import os
+from multiprocessing import Lock
 from os import path
 
-import musif.extract.features.ambitus as ambitus
-import musif.extract.features.lyrics as lyrics
-from musif.config import Configuration
 from music21 import interval
-from musif.common.constants import RESET_SEQ, get_color
-from musif.reports.constants import *
-from musif.reports.utils import  columns_alike_our_data, get_excel_name, save_workbook
-from musif.reports.visualisations import box_plot, melody_bar_plot
 from pandas.core.frame import DataFrame
-from musif.reports.utils import Create_excel
+
+import musif.extract.features.lyrics as lyrics
+from musif.common.constants import RESET_SEQ, get_color
+from musif.config import Configuration
+from musif.reports.constants import *
+from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
+from musif.reports.visualisations import box_plot, melody_bar_plot
+
 
 def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:

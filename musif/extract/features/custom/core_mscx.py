@@ -1,19 +1,17 @@
 from functools import lru_cache
-from musif.common.constants import RESET_SEQ, get_color
 from os import path
 from pathlib import Path
 from typing import List, Optional
-import ms3
 
-from music21.analysis.discrete import Ambitus
+import ms3
 import pandas as pd
 
+from musif.common.constants import RESET_SEQ, get_color
 from musif.config import Configuration
-from musif.musicxml import get_intervals, get_notes_and_measures, get_notes_lyrics
+from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION)
 
-from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, split_layers)
 
-#TODO: Check if this cache works in different runs. If not, create our own cache to store parsing of previous scores 
+#TODO: Check if this cache works in different runs. If not, create our own cache to store parsing of previous scores
 @lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     cfg.read_logger.info(get_color('INFO')+'\nParsing mscx file... {0}'.format(mscx_file) + RESET_SEQ)

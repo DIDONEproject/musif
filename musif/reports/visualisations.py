@@ -5,17 +5,15 @@
 # module. Each function generates a different visualisation
 ########################################################################
 
-import collections
-from matplotlib.lines import Line2D
-import matplotlib.pyplot as plt
-
-
 import warnings
-import numpy as np
-from music21 import pitch, interval
+
 import matplotlib
-from pandas.core.frame import DataFrame
 import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.lines import Line2D
+from music21 import interval, pitch
+from pandas.core.frame import DataFrame
 
 matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
