@@ -50,10 +50,11 @@ metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, A
 def get_melody_list(catch):
   joined_notes = ",".join([catch + ambitus.LOWEST_NOTE, catch + ambitus.HIGHEST_NOTE])
   return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
-          catch + interval.TRIMMED_INTERVALLIC_STD, catch + interval.TRIMMED_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + ambitus.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + ambitus.LARGEST_INTERVAL_ASC,
-          catch + ambitus.LARGEST_SEMITONES_DESC, catch + ambitus.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
-          catch + ambitus.LOWEST_NOTE_INDEX, catch + ambitus.HIGHEST_NOTE, catch + ambitus.HIGHEST_NOTE_INDEX, catch + ambitus.LARGEST_INTERVAL_ALL, catch + ambitus.LARGEST_SEMITONES_ALL,
-          catch + ambitus.SMALLEST_INTERVAL_ALL, catch + ambitus.SMALLEST_SEMITONES_ALL]
+        catch + interval.TRIMMED_INTERVALLIC_STD, catch + interval.TRIMMED_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_ASC,
+        catch + interval.LARGEST_SEMITONES_DESC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
+        catch + ambitus.LOWEST_NOTE_INDEX, catch + ambitus.HIGHEST_NOTE, catch + ambitus.HIGHEST_NOTE_INDEX,
+        catch + interval.LARGEST_INTERVAL_ALL, catch + interval.LARGEST_SEMITONES_ALL,
+        catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL]
           
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),

@@ -20,13 +20,8 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
         Rename_columns(data)
         data_general = data[metadata_columns+ ['Total analysed']].copy()
 
-        # SHEET 1: STATISTICAL_VALUES
         PrintStatisticalValues(_cfg, data, additional_info, groups, workbook)
-
-        # SHEET 2: AMBITUS
         PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook)
-
-        # SHEET 3: LARGEST_LEAPS
         PrintLargestLeaps(_cfg, data, data_general,additional_info, groups, workbook)
 
         save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
@@ -97,7 +92,8 @@ def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workboo
 
     computations = ["sum", "max", "maxInterval", "min", "minInterval"]
 
-    data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
+    data.rename(columns={interval.LARGEST_ASC_INTERVAL: "AscendingInterval",interval.LARGEST_ASC_INTERVAL_SEMITONES: "AscendingSemitones", interval.LARGEST_DESC_INTERVAL: "DescendingInterval",
+        interval.LARGEST_DESC_INTERVAL_SEMITONES: "DescendingSemitones"}, inplace=True)
 
     Create_excel(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
                      _cfg.sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
@@ -123,7 +119,7 @@ def PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, grou
                      first_columns=first_column_names, second_columns=second_column_names, average=True, additional_info=additional_info)
 
 def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
-    column_names = ["Total analysed", "Intervallic ratio", "Trimmed intervallic ratio", "dif. Trimmed",
+    column_names = ["Total analysed", "Intervallic mean", "Trimmed intervallic mean", "dif. Trimmed",
                         "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std"]
 
     if lyrics.SYLLABIC_RATIO in data.columns:
@@ -135,22 +131,23 @@ def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
                     _cfg.sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
 def Rename_columns(data):
-    data['HighestMeanIndex']=0.0
-    data['LowestMeanIndex']=0.0
-    data['HighestIndex']=0.0
-    data['MeanSemitones']=0.0
-    data['HighestIndex']=0.0
-    data['LowestMeanNote']=0.0
-    data['LowestIndex']=0.0
-    data['HighestMeanNote']=0.0
+    data['LowestMeanIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
+    data['LowestMeanNote']=data[ambitus.LOWEST_NOTE]
 
-    #Algo pasa coneste
-    data['MeanInterval']=0.0
+    data['HighestMeanIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
+    data['HighestMeanNote']=data[ambitus.HIGHEST_NOTE]
+    # data['HighestIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
+    # data['LowestIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
 
-    data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
+    data['MeanSemitones']=data[ambitus.HIGHEST_NOTE_INDEX]
+    # data['MeanInterval']
+    # data.rename(columns={interval.MEAN_INTERVAL}
+    
+    data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic mean", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic mean", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
                              interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
     # data.rename(columns={ambitus.LOWEST_NOTE_INDEX: "LowestIndex", ambitus.HIGHEST_NOTE_INDEX: "HighestIndex", ambitus.HIGHEST_MEAN_INDEX: "HighestMeanIndex", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",
     #                      ambitus.LOWEST_NOTE: "LowestNote", ambitus.LOWEST_MEAN_NOTE: "LowestMeanNote", ambitus.HIGHEST_MEAN_NOTE: "HighestMeanNote", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex", ambitus.HIGHEST_NOTE: "HighestNote"}, inplace=True)
     # data.rename(columns={ambitus.LOWEST_NOTE_INDEX: "LowestIndex", ambitus.HIGHEST_NOTE_INDEX: "HighestIndex",
     #                      ambitus.LOWEST_NOTE: "LowestNote",  ambitus.HIGHEST_NOTE: "HighestNote"}, inplace=True)
+    
     data.columns=[i.replace('All', '') for i in data.columns]

@@ -192,13 +192,6 @@ def get_keyareas(lausanne_table, major = True):
     # indexes_A = [i for i, s in enumerate(sections) if s == "A"]
     # indexes_B = [i for i, s in enumerate(sections) if s == "B"]
 
-    """possible_keys = harmonic_analysis.Chords.dropna().tolist()
-    grouping1 = harmonic_analysis['GC1M' if major else 'GC1m'].dropna().tolist()
-    grouping2 = harmonic_analysis['GC2M' if major else 'GC2m'].dropna().tolist()
-    
-    g1 = [grouping1[possible_keys.index(c)] for c in keys]
-    g2 = [grouping2[possible_keys.index(c)] for c in keys]"""
-
     keys = lausanne_table.localkey.dropna().tolist()
     g1, g2 = get_keys(keys, 'M' if major else 'm')
 
@@ -314,13 +307,10 @@ def get_keyareas(lausanne_table, major = True):
 
     return keyareas
 
-# ####################
 # DEGREES (for relative roots, numerals and chords)
-####################
 
 def get_function_first(element, mode):
     reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'MED': ['iii']}
-
 
     # Spetial chords
     if any([i for i in ('It','Ger', 'Fr') if i in element]):
@@ -343,8 +333,6 @@ def get_function_first(element, mode):
             elif '#' in element:
                 output='#' + output
             return output.replace('-','b')
-    
-
 
     if mode == 'M':
         if element=='vii':
@@ -380,11 +368,8 @@ def get_function_first(element, mode):
 # Function to obtain the harmonic function2 of every relativeroot, chord, or numeral.
 ###########################################################################
 
-##
-# REVIEW
-## ESTA FUNCION SOLO DEVUELVE LO MISMO EN MAYUSCULAS(?) Algo pasa
 def get_function_second(element):
-    element=element.replace('b','-') #to be able to convert to CAPS without affecting flats
+    element=element.replace('b','-')
     if element.lower() == '#ln':
         return '#ST'
     elif element in ['rm', 'rj']:
@@ -394,43 +379,22 @@ def get_function_second(element):
     else:
         return element.upper().replace('-','b')
 
-####################
-# NUMERALS
-####################
 def get_numerals(lausanne_table):
     numerals = lausanne_table.numeral.dropna().tolist()
     keys = lausanne_table.globalkey.dropna().tolist()
-    relativeroots = lausanne_table.relativeroot.tolist()
+    relativeroots = lausanne_table.relativeroot.tolist()  
 
-    """
-    list_grouppings = []
-    for x, i in enumerate(numerals):
-        #TODO cuando tengamos los chords de 3, ver cómo coger los grouppings
-        if str(relativeroot[x]) != 'nan': # or '/' in chord
-            major = relativeroot[x].isupper()
-        else: 
-            major = keys[x].isupper()
-        grouping = harmonic_analysis['NFLG2M' if major else 'NFLG2m'].tolist()
-        
-        try:
-            first_characters = parse_chord(i)
-            grado = numerals_defined.index(first_characters)
-            a = grouping[grado]    
-            if str(a) == 'nan':
-                print('nan numeral with ', i) #TODO: #vii sigue fallando, major no se coge bien. Repasar las condiciones
-            list_general_groupings.append(a)
-        except:
-            print('Falta el numeral: ', i) """
-
-    _, ng2 = get_numerals_lists(numerals, relativeroots, keys)
-    numerals_counter = Counter(ng2)
+    _, ng2 = get_numerals_lists(numerals, relativeroots, keys) # por que se coge solo la funcion segunda?? anyway cojamos los numerals
+    numerals_counter= Counter(numerals)
+    # numerals_counter = Counter(ng2)
     
+    total_numerals=sum(list(numerals_counter.values()))
     nc = {}
     for n in numerals_counter:
         if str(n)=='':
-            print('some chords here are not parsed well')
-            raise Exception('some chords here are not parsed well')
-        nc['Numerals_'+str(n)] = round((numerals_counter[n]/sum(list(numerals_counter.values()))), 2)
+            raise Exception('Some chords here are not parsed well')
+            continue
+        nc['Numerals_'+str(n)] = round((numerals_counter[n]/total_numerals), 3)
     return nc 
 
 def get_first_numeral(numeral, relativeroot, local_key):
@@ -447,29 +411,23 @@ def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     function2 = [get_function_second(g1) for g1 in function1]
     return function1, function2
 
-### ADDITIONS ###
 def get_additions(lausanne_table):
     additions = lausanne_table.changes.tolist()
     additions_cleaned = []
     for i, a in enumerate(additions):
         if isinstance(a, int):
-            # a_int = 
             additions_cleaned.append(int(a))
         else:
             additions_cleaned.append(str(a))
 
     a_c = Counter(additions_cleaned)
-
-
     additions_counter = {ADDITIONS_4_6_64_74_94: 0, 
                         ADDITIONS_9: 0,
                         OTHERS_NO_AUG: 0, 
                         OTHERS_AUG: 0}
-
     for a in a_c:
         c = a_c[a]
         a = str(a)
-        
         if a == '+9':
             additions_counter[ADDITIONS_9] = c
         elif a in ['4', '6', '64', '74', '94', '4.0', '6.0', '64.0', '74.0', '94.0']:
@@ -485,10 +443,6 @@ def get_additions(lausanne_table):
             ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
     return ad
     
-####################
-# CHORDS
-####################
-
 def get_chord_types(lausanne_table):
 
     chords_forms = make_type_col(lausanne_table) #Nan values represent {} notations, not chords
@@ -505,9 +459,7 @@ def get_chords(harmonic_analysis):
     
     relativeroots = harmonic_analysis.relativeroot.tolist()
     keys = harmonic_analysis.localkey.dropna().tolist() 
-    
     chords = harmonic_analysis.chord.dropna().tolist()
-
     numerals=harmonic_analysis.numeral.dropna().tolist()
     types = harmonic_analysis.chord_type.dropna().tolist()
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
@@ -558,10 +510,6 @@ def parse_chord(chord):
         
     # return chord letter without number
     return re.split('(\d+)', chord)[0]
-
-####################
-# CHORD FORM
-####################
 
 def get_chord_type(chord_type):
     chord_type=str(chord_type)
