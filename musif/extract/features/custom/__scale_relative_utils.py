@@ -139,9 +139,9 @@ def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) ->
     renumbered_measures = harmonic_analysis.mc.dropna().tolist()
 
     for note in notes_list:
-      if note.isChord:
-        note=note[0] #If we wave 2 or more notes at once, we just take the lowest one
-      notes_measures.append((note.name, note.measureNumber))
+        if note.isChord:
+            note=note[0] #If we wave 2 or more notes at once, we just take the lowest one
+        notes_measures.append((note.name, note.measureNumber))
 
     if IsAnacrusis(harmonic_analysis):
         renumbered_measures = [rm - 1 for rm in renumbered_measures]
