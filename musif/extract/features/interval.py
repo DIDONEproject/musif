@@ -12,6 +12,7 @@ from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, D
 from musif.extract.features.core import DATA_NUMERIC_INTERVALS, DATA_TEXT_INTERVALS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
 
+MEAN_INTERVAL = "MeanInterval"
 INTERVALLIC_MEAN = "IntervallicMean"
 INTERVALLIC_STD = "IntervallicStd"
 ABSOLUTE_INTERVALLIC_MEAN = "AbsoluteIntervallicMean"
@@ -125,7 +126,7 @@ SMALLEST_ABSOLUTE_SEMITONES_ALL = "SmallestAbsoluteSemitonesAll"
 
 
 ALL_FEATURES = [
-    INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD,
+    MEAN_INTERVAL, INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD,
     TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
     ASCENDING_INTERVALS_COUNT, DESCENDING_INTERVALS_COUNT, ASCENDING_INTERVALS_PER, DESCENDING_SEMITONES_SUM,
     REPEATED_NOTES_COUNT, REPEATED_NOTES_PER, LEAPS_ASC_COUNT, LEAPS_DESC_COUNT, LEAPS_ALL_COUNT, LEAPS_ASC_PER, LEAPS_DESC_PER, LEAPS_ALL_PER,
@@ -200,24 +201,25 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     numeric_intervals = sorted(numeric_intervals)
-    interval_mean = mean(numeric_intervals) if len(numeric_intervals) > 0 else 0
-    interval_std = stdev(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    intervallic_mean = mean(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    intervallic_std = stdev(numeric_intervals) if len(numeric_intervals) > 0 else 0
     absolute_numeric_intervals = sorted([abs(interval) for interval in numeric_intervals])
-    absolute_interval_mean = mean(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
-    absolute_interval_std = stdev(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
+    absolute_intervallic_mean = mean(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
+    absolute_intervallic_std = stdev(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
+    mean_interval = Interval(int(round(absolute_intervallic_mean))).directedName
 
     cutoff = 0.1
     cutoff_elements = int(cutoff * len(numeric_intervals))
     trimmed_intervals = numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(numeric_intervals) > 0 else []
-    trimmed_interval_mean = mean(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
-    trimmed_interval_std = stdev(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
+    trimmed_intervallic_mean = mean(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
+    trimmed_intervallic_std = stdev(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
     trimmed_absolute_intervals = absolute_numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(absolute_numeric_intervals) > 0 else []
-    trimmed_absolute_interval_mean = mean(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
-    trimmed_absolute_interval_std = stdev(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
-    trim_diff = interval_mean - trimmed_interval_mean
-    trim_ratio = trim_diff / interval_mean if interval_mean != 0 else 0
-    absolute_trim_diff = absolute_interval_mean - trimmed_absolute_interval_mean
-    absolute_trim_ratio = absolute_trim_diff / absolute_interval_mean if absolute_interval_mean != 0 else 0
+    trimmed_absolute_intervallic_mean = mean(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
+    trimmed_absolute_intervallic_std = stdev(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
+    trim_diff = intervallic_mean - trimmed_intervallic_mean
+    trim_ratio = trim_diff / intervallic_mean if intervallic_mean != 0 else 0
+    absolute_trim_diff = absolute_intervallic_mean - trimmed_absolute_intervallic_mean
+    absolute_trim_ratio = absolute_trim_diff / absolute_intervallic_mean if absolute_intervallic_mean != 0 else 0
     ascending_intervals = [interval for interval in numeric_intervals if interval > 0]
     descending_intervals = [interval for interval in numeric_intervals if interval < 0]
     num_ascending_intervals = len(ascending_intervals) if len(ascending_intervals) > 0 else 0
@@ -243,14 +245,15 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     smallest_descending = Interval(smallest_descending_semitones).directedName if len(descending_intervals) > 0 else None
 
     features = {
-        f"{prefix}{INTERVALLIC_MEAN}": interval_mean,
-        f"{prefix}{INTERVALLIC_STD}": interval_std,
-        f"{prefix}{ABSOLUTE_INTERVALLIC_MEAN}": absolute_interval_mean,
-        f"{prefix}{ABSOLUTE_INTERVALLIC_STD}": absolute_interval_std,
-        f"{prefix}{TRIMMED_INTERVALLIC_MEAN}": trimmed_interval_mean,
-        f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_interval_std,
-        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_interval_mean,
-        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_interval_std,
+        f"{prefix}{MEAN_INTERVAL}": mean_interval,
+        f"{prefix}{INTERVALLIC_MEAN}": intervallic_mean,
+        f"{prefix}{INTERVALLIC_STD}": intervallic_std,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_MEAN}": absolute_intervallic_mean,
+        f"{prefix}{ABSOLUTE_INTERVALLIC_STD}": absolute_intervallic_std,
+        f"{prefix}{TRIMMED_INTERVALLIC_MEAN}": trimmed_intervallic_mean,
+        f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_intervallic_std,
+        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_intervallic_mean,
+        f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_intervallic_std,
         f"{prefix}{INTERVALLIC_TRIM_DIFF}": trim_diff,
         f"{prefix}{INTERVALLIC_TRIM_RATIO}": trim_ratio,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": absolute_trim_diff,
