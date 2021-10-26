@@ -119,7 +119,7 @@ def PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, grou
                      first_columns=first_column_names, second_columns=second_column_names, average=True, additional_info=additional_info)
 
 def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
-    column_names = ["Total analysed", "Intervallic ratio", "Trimmed intervallic ratio", "dif. Trimmed",
+    column_names = ["Total analysed", "Intervallic mean", "Trimmed intervallic mean", "dif. Trimmed",
                         "% Trimmed", "Absolute intervallic ratio", "Std", "Absolute Std"]
 
     if lyrics.SYLLABIC_RATIO in data.columns:
@@ -131,22 +131,23 @@ def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
                     _cfg.sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
 def Rename_columns(data):
+    data['LowestMeanIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
+    data['LowestMeanNote']=data[ambitus.LOWEST_NOTE]
+
     data['HighestMeanIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
-    data['LowestMeanIndex']=0.0
-    data['HighestIndex']=0.0
-    data['MeanSemitones']=0.0
-    data['HighestIndex']=0.0
-    data['LowestMeanNote']=0.0
-    data['LowestIndex']=0.0
-    data['HighestMeanNote']=0.0
+    data['HighestMeanNote']=data[ambitus.HIGHEST_NOTE]
+    # data['HighestIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
+    # data['LowestIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
 
-    #Algo pasa coneste
-    data['MeanInterval']=0.0
-
-    data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic ratio", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic ratio", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
+    data['MeanSemitones']=data[ambitus.HIGHEST_NOTE_INDEX]
+    # data['MeanInterval']
+    # data.rename(columns={interval.MEAN_INTERVAL}
+    
+    data.rename(columns={interval.INTERVALLIC_MEAN: "Intervallic mean", interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: "Trimmed intervallic mean", interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: "dif. Trimmed",
                              interval.ABSOLUTE_INTERVALLIC_MEAN: "Absolute intervallic ratio", interval.INTERVALLIC_STD: "Std", interval.ABSOLUTE_INTERVALLIC_STD: "Absolute Std", interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO: "% Trimmed"}, inplace=True)
     # data.rename(columns={ambitus.LOWEST_NOTE_INDEX: "LowestIndex", ambitus.HIGHEST_NOTE_INDEX: "HighestIndex", ambitus.HIGHEST_MEAN_INDEX: "HighestMeanIndex", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex",
     #                      ambitus.LOWEST_NOTE: "LowestNote", ambitus.LOWEST_MEAN_NOTE: "LowestMeanNote", ambitus.HIGHEST_MEAN_NOTE: "HighestMeanNote", ambitus.LOWEST_MEAN_INDEX: "LowestMeanIndex", ambitus.HIGHEST_NOTE: "HighestNote"}, inplace=True)
     # data.rename(columns={ambitus.LOWEST_NOTE_INDEX: "LowestIndex", ambitus.HIGHEST_NOTE_INDEX: "HighestIndex",
     #                      ambitus.LOWEST_NOTE: "LowestNote",  ambitus.HIGHEST_NOTE: "HighestNote"}, inplace=True)
+    
     data.columns=[i.replace('All', '') for i in data.columns]

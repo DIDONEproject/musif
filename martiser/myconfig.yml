@@ -18,18 +18,20 @@ features:
 #  - custom.themeA
   - scoring
   - custom.file_name
-  # - scale
-  # - custom.scale_relative
+  - scale
+  - custom.scale_relative
   - ambitus
   - interval # to generate Melody_values reports, both ambitus and interval are needed
-  # - density
-  # - texture     
+  - density
+  - texture     
   - custom.harmony
   - metadata
   - composer
   - custom.librettist
-  # - key
+  - key
   - lyrics
+  - dynamics
+  - rhythm
 
 split_keywords:
   - woodwind
