@@ -29,10 +29,14 @@ features:
   - composer
   - custom.librettist
 <<<<<<< HEAD
+<<<<<<< HEAD
   - key
 =======
   # - key
 >>>>>>> 47933da (harmony fixings and report)
+=======
+  # - key
+>>>>>>> 7892977 (harmony fixings and report)
   - lyrics
   - dynamics
   - rhythm
