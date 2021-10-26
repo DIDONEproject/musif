@@ -21,10 +21,6 @@ from pandas.core.frame import DataFrame
 
 from ..harmony_sorting import *  # TODO: REVIEW
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 7892977 (harmony fixings and report)
 def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
     try:
         additions=[]
