@@ -127,10 +127,7 @@ def get_note_degree(key, note):
 
   return acc + str(degree[0])
 
-
-##########################################################################################
 # Transforms the list of notes into their scale degrees, based on the local key          #
-##########################################################################################
 
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
     harmonic_analysis=score_data['MS3_score']

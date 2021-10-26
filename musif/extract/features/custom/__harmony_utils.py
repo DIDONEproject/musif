@@ -420,13 +420,13 @@ def get_additions(lausanne_table):
         else:
             additions_cleaned.append(str(a))
 
-    a_c = Counter(additions_cleaned)
+    additions_counter = Counter(additions_cleaned)
     additions_counter = {ADDITIONS_4_6_64_74_94: 0, 
                         ADDITIONS_9: 0,
                         OTHERS_NO_AUG: 0, 
                         OTHERS_AUG: 0}
-    for a in a_c:
-        c = a_c[a]
+    for a in additions_counter:
+        c = additions_counter[a]
         a = str(a)
         if a == '+9':
             additions_counter[ADDITIONS_9] = c
@@ -434,6 +434,8 @@ def get_additions(lausanne_table):
             additions_counter[ADDITIONS_4_6_64_74_94] += c
         elif '+' in a:
             additions_counter[OTHERS_AUG] += c
+        elif str(a) =='nan':
+            continue
         else:
             additions_counter[OTHERS_NO_AUG] += c
 
@@ -513,8 +515,10 @@ def parse_chord(chord):
 
 def get_chord_type(chord_type):
     chord_type=str(chord_type)
-    if chord_type.lower()=='m':
-        return 'triad'
+    if chord_type=='m':
+        return 'minor triad'
+    elif chord_type=='M':
+        return 'mayor triad'
     elif chord_type in ['7', 'mm7', 'Mm7', 'MM7', 'mM7']:
         return '7th'
     elif chord_type in ['o', 'o7', '%', '%7']:
@@ -558,7 +562,6 @@ def get_first_chord_local(chord, local_key):
 # Function to return second grouping for any chord in any given local key,
 def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     mode = 'M' if local_key else 'm'
-
     #Qué es relative root aqui exactamente
     if str(relativeroot) != 'nan':
         mode = 'M' if relativeroot.isupper() else 'm'

@@ -16,7 +16,7 @@ from musif.reports.constants import *
 from musif.reports.utils import (Create_excel, get_excel_name,
                                  get_general_cols, remove_underscore,
                                  save_workbook)
-from numpy import copy
+import copy
 from pandas.core.frame import DataFrame
 
 from ..harmony_sorting import *  # TODO: REVIEW
