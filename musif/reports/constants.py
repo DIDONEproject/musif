@@ -54,7 +54,8 @@ def get_melody_list(catch):
         catch + interval.LARGEST_SEMITONES_DESC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
         catch + ambitus.LOWEST_NOTE_INDEX, catch + ambitus.HIGHEST_NOTE, catch + ambitus.HIGHEST_NOTE_INDEX,
         catch + interval.LARGEST_INTERVAL_ALL, catch + interval.LARGEST_SEMITONES_ALL,
-        catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL]
+        catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL,
+        catch + interval.MEAN_INTERVAL]
           
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),

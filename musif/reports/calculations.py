@@ -1,6 +1,7 @@
 import math
+from statistics import mean
 from typing import Dict
-from musif.extract.features import ambitus, density, lyrics, scale, texture
+# from musif.extract.features import ambitus, density, lyrics, scale, texture
 import numpy as np
 import pandas as pd
 from music21 import interval, note, pitch
@@ -84,23 +85,21 @@ def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_inf
             interval_semitones = [interval.Interval(n).semitones if str(n) != 'nan' else np.nan for n in column_data]
             max_sem = max(interval_semitones)
             value = column_data.tolist()[interval_semitones.index(max_sem)]
-        elif computation == "meanInterval" or computation == "meanSemitones":
-            lowest_notes_names = [str(a).split(',')[0] for a in column_data]
-            max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' else np.nan for a in column_data]
-            min_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in lowest_notes_names]
-            max_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in max_notes_names]
-            mean_min = note_mean(min_notes_pitch, round_mean = True)
-            mean_max = note_mean(max_notes_pitch, round_mean = True)
-            i = interval.Interval(noteStart = note.Note(mean_min), noteEnd = note.Note(mean_max))
-            if computation == "meanInterval":
-                value = i.name
-            else:
-                value = i.semitones
+
+        elif computation == "meanInterval":
+        #     lowest_notes_names = [str(a).split(',')[0] for a in column_data]
+        #     max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' else np.nan for a in column_data]
+        #     min_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in lowest_notes_names]
+        #     max_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in max_notes_names]
+        #     mean_min = note_mean(min_notes_pitch, round_mean = True)
+        #     mean_max = note_mean(max_notes_pitch, round_mean = True)
+        #     i = interval.Interval(noteStart = note.Note(mean_min), noteEnd = note.Note(mean_max))
+
+            value = interval.Interval(mean([interval.Interval(i).semitones for i in column_data])).name
+
         elif computation == "absoluteInterval" or computation == "absolute":
-            column_data = subgroup_data[ambitus.LOWEST_NOTE]
-            # subgroup_data[c]
-            lowest_notes_names = [str(a).split(',')[0] for a in column_data]
-            max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' else np.nan for a in column_data]
+            lowest_notes_names = [str(a).split(',')[0] if a != 0.0 else np.nan for a in column_data]
+            max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' and a != 0.0 else np.nan for a in column_data]
             min_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in lowest_notes_names]
             max_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in max_notes_names]
             minimisimo = min(min_notes_pitch)
@@ -129,7 +128,6 @@ def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_inf
                     intervals = column_data.tolist()[i]
                     values.append(
                         (intervals * ponderate_data[i]) / total_intervals)
-
                 value = np.nansum(values) / sum(ponderate_data)
                 value = round(value * 100, 3)
 

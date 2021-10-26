@@ -32,7 +32,7 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                     average=average, last_column=last_column, last_column_average=last_column_average,
                     columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, 
                     columns3=columns3, data3=data3, third_columns3=third_columns3, computations_columns3=computations_columns3, first_columns3=first_columns3, second_columns3=second_columns3, 
-                      additional_info=additional_info, ponderate=ponderate)
+                    additional_info=additional_info, ponderate=ponderate)
     else:
         # we may be grouping by more than 2 factors
         data_grouped = data.groupby(list(groups))
@@ -319,7 +319,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                 else:
                     value=0.0
             else:
-                #TODO: select other columns to calculate lowest mean note
                 value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
                                       not_grouped_information, ponderate)  # absolute value
             if c == "Total analysed":
@@ -482,7 +481,6 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                         if data2 is not None:
                             data2 = sort_dataframe(
                                 data2, row, sorting_lists, sorting)
-                        #_,_
                         row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
                     

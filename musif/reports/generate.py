@@ -227,12 +227,12 @@ class FeaturesGenerator:
     def capture_harmony_DFs(self, all_info):
         harmony_df=all_info[(
             [i for i in all_info.columns if HARMONIC_prefix in i] +
-            [i for i in all_info.columns if CHORD_TYPES_prefix in i]
-            # + [i for i in all_info.columns if ADDITIONS_prefix in i]
+            [i for i in all_info.columns if CHORD_TYPES_prefix in i] +
+            [i for i in all_info.columns if ADDITIONS_prefix in i]
             # + [i for i in all_info.columns if NUMERALS_prefix in i]
             )]
         key_areas_df=all_info[[i for i in all_info.columns if KEY_prefix in i or KEY_GROUPING in i ]]
-        functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i] + [i for i in all_info.columns if CHORD_prefix in i]]
+        functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i] + [i for i in all_info.columns if CHORDS_GROUPING_prefix in i]]
         chords_df = all_info[[i for i in all_info.columns if CHORD_prefix in i and CHORD_TYPES_prefix not in i]]
         return harmony_df,key_areas_df,chords_df,functions_dfs
 
