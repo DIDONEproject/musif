@@ -31,7 +31,7 @@ def parse_file(file_path: str, split_keywords) -> Score:
             split_layers(score, split_keywords)
             _cache.put(file_path, score)
         except ConverterException:
-            print(get_color('ERROR') + '\nThat seems to be an invalid path!', RESET_SEQ)
+            print(get_color('ERROR') + '\nERROR:\tThat seems to be an invalid path!', RESET_SEQ)
     return score
 
 
