@@ -48,14 +48,14 @@ YEAR = 'Year'
 metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
 
 def get_melody_list(catch):
-  joined_notes = ",".join([catch + ambitus.LOWEST_NOTE, catch + ambitus.HIGHEST_NOTE])
-  return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
+    # joined_notes = ",".join([catch + ambitus.LOWEST_NOTE, catch + ambitus.HIGHEST_NOTE])
+    return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
         catch + interval.TRIMMED_INTERVALLIC_STD, catch + interval.TRIMMED_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_ASC,
-        catch + interval.LARGEST_SEMITONES_DESC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
+        catch + interval.LARGEST_SEMITONES_DESC,catch + interval.LARGEST_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
         catch + ambitus.LOWEST_NOTE_INDEX, catch + ambitus.HIGHEST_NOTE, catch + ambitus.HIGHEST_NOTE_INDEX,
         catch + interval.LARGEST_INTERVAL_ALL, catch + interval.LARGEST_SEMITONES_ALL,
         catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL,
-        catch + interval.MEAN_INTERVAL]
+        catch + interval.MEAN_INTERVAL, catch + interval.DESCENDING_SEMITONES_SUM, catch + interval.ASCENDING_SEMITONES_SUM]
           
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),

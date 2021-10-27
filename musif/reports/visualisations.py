@@ -15,6 +15,8 @@ from matplotlib.lines import Line2D
 from music21 import interval, pitch
 from pandas.core.frame import DataFrame
 
+from musif.extract.features.interval import LARGEST_SEMITONES_ALL
+
 matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
 
@@ -43,8 +45,10 @@ LINESTYLES = [i for i in Line2D.lineStyles.keys() if str(i) not in [
 def box_plot(name, data, second_title=None):
 
         columns_box = [['LowestIndex', 'HighestIndex'],
-                       ['AmbitusLargestSemitones']]
+                       [LARGEST_SEMITONES_ALL.replace('All','')]]
+
         column_names = [['Lowest Notes', 'Highest Notes'], ['Ambitus']]
+
         subplot_titles = ['Notes', 'Ambitus']
 
         fig, ax = plt.subplots(ncols=2)

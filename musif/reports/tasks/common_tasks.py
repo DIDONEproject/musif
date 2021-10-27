@@ -20,17 +20,11 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         workbook = openpyxl.Workbook()
         excel_name= get_excel_name(pre_string, name)
 
-        # Splitting the dataframes to reorder them
-        data_general = data[metadata_columns + ['Total analysed']].copy()
-        data = data[set(data.columns).difference(metadata_columns)]
-        data_general = data_general.dropna(how='all', axis=1)
-        data = data.dropna(how='all', axis=1)
-        density_df =data[[i for i in data.columns if i.endswith('SoundingDensity')]]
-        notes_and_measures =data[[i for i in data.columns if i.endswith(
-            'Measures') or i.endswith('Notes') or i.endswith('Mean') or i == 'NumberOfBeats']]
+        data_general, density_df, notes_and_measures = split_reorder_density(data)
 
         density_df.columns = [i.replace('_','').replace('Part', '').replace(
             'Sounding', '').replace('Density', '').replace('Family', '').replace('Sound', '').replace('Notes', '') for i in density_df.columns]
+        
         notes_and_measures.columns = [i.replace('_','').replace('Part', '').replace('SoundingMeasures', 'Measures').replace(
             'Sound', '').replace('Notes', '').replace('Mean', '').replace('Family', '') for i in notes_and_measures.columns]
 
@@ -104,12 +98,23 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
+def split_reorder_density(data):
+    data_general = data[metadata_columns + ['Total analysed']].copy()
+    data = data[set(data.columns).difference(metadata_columns)]
+    data_general = data_general.dropna(how='all', axis=1)
+    data = data.dropna(how='all', axis=1)
+    density_df = data[[i for i in data.columns if i.endswith('SoundingDensity')]]
+    notes_and_measures = data[[i for i in data.columns if i.endswith(
+            'Measures') or 'Notes' in i or i.endswith('Mean') or i == 'NumberOfBeats']]
+        
+    return data_general, density_df, notes_and_measures
+
 
 def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
         excel_name= get_excel_name(pre_string, name)
-        data_general, notes_df, textures_df = split_and_reorder_dataframes(data)
+        data_general, notes_df, textures_df = split_and_reorder_texture(data)
 
 
         third_columns_names = _cfg.sorting_lists['TexturesSorting']
@@ -124,7 +129,6 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
 
         textures_df = textures_df[cols]
         
-        # second_column_names = [("", 1), ("Textures", len(third_columns_names))]
         third_columns_names.insert(0, 'Total analysed')
         second_column_names = [
             ("", 1), ("Texture", len(third_columns_names))]
@@ -193,7 +197,7 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
     except Exception as e:
             _cfg.write_logger.info('{}  Problem found: {}'.format(name, e))
 
-def split_and_reorder_dataframes(data):
+def split_and_reorder_texture(data):
     data_general = data[metadata_columns + ['Total analysed']].copy()
     data_general = data_general.dropna(how='all', axis=1)
     notes_df = data[[i for i in data.columns if i.endswith('Notes') or i.endswith('Mean')]]

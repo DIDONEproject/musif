@@ -33,27 +33,18 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
         harmonic_rythm = [c for c in data.columns if 'Harmonic_rhythm' in c]
         chordTypes = [c.replace(CHORD_TYPES_prefix, '') for c in data.columns if CHORD_TYPES_prefix in c]
         chordTypes = sort(chordTypes, _cfg.sorting_lists['ChordTypeGrouppingSorting'])
+        additions = [c.replace(ADDITIONS_prefix, '') for c in data.columns if ADDITIONS_prefix in c]
 
-        # additions = [c.replace(ADDITIONS_prefix, '') for c in data.columns if ADDITIONS_prefix in c]
-
-        numerals = [c.replace(NUMERALS_prefix, '') for c in data.columns if NUMERALS_prefix in c]
-        numerals = sort(numerals, _cfg.sorting_lists['NumeralsSorting'])
-
-        #Remove prefixes
         data.columns=[i.replace(CHORD_TYPES_prefix, '').replace(ADDITIONS_prefix, '').replace(NUMERALS_prefix, '') for i in data.columns]
         
-        data=pd.concat((data_general,data[harmonic_rythm+numerals + chordTypes]), axis=1)
+        data = pd.concat((data_general,data[harmonic_rythm + chordTypes + additions]), axis=1)
         data = data.round(decimals = 2)
 
+        second_column_names = [("", 1), ('Harmonic Rhythm', len(harmonic_rythm)), ('Chord types', len(chordTypes)), ('Additions', len(additions))]
 
-        second_column_names = [("", 1),('Harmonic Rhythm', len(harmonic_rythm)), ('Numerals', len(numerals)), ('Chord types', len(chordTypes))]
-        #  ('Additions', len(additions))]
-        
-
-        third_columns_names = ['Total analysed'] + harmonic_rythm + additions + numerals + chordTypes
+        third_columns_names = ['Total analysed'] + harmonic_rythm + additions  + chordTypes
 
         columns = remove_underscore(third_columns_names)
-
 
         computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
 

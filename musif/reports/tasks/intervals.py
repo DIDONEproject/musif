@@ -24,13 +24,8 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
             else:
                 general_cols += rows_groups[row][0]
 
-        # nombres de todos los intervalos
-        third_columns_names_origin = set(all_columns) - set(general_cols)
-        third_columns_names_origin = sort(
-            third_columns_names_origin, sorting_list)
-        third_columns_names = ['Total analysed'] + third_columns_names_origin
+        third_columns_names_origin, third_columns_names = fix_column_names(sorting_list, all_columns, general_cols)
 
-        # esta sheet va de sumar, así que en todas las columnas el cómputo que hay que hacer es sumar!
         computations = ["sum"]*len(third_columns_names)
 
         Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
@@ -42,10 +37,9 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, NORMAL_WIDTH)
 
         # with visualiser_lock:
-        # VISUALISATIONS
         if 'Clefs' in name:
             title = 'Use of clefs in the vocal part'
-        elif 'Intervals_absolute' in name:
+        elif name == 'Intervals_absolute':
             title = 'Presence of intervals (direction dismissed)'
         else:
             title = 'Presence of intervals (ascending and descending)'
@@ -90,7 +84,14 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
             bar_plot(name_bar, data, third_columns_names_origin,
                         'Intervals' if 'Clef' not in name else 'Clefs', title)
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.write_logger.warn(get_color('WARNING')+'{} Problem found: {}{}'.format(name, e, RESET_SEQ))
+
+def fix_column_names(sorting_list, all_columns, general_cols):
+    third_columns_names_origin = set(all_columns) - set(general_cols)
+    third_columns_names_origin = sort(
+            third_columns_names_origin, sorting_list)
+    third_columns_names = ['Total analysed'] + third_columns_names_origin
+    return third_columns_names_origin,third_columns_names
 
 def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string: str, name: str, visualiser_lock: Lock, groups=None, additional_info: list=[]):
     try:

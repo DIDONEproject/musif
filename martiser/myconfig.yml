@@ -18,8 +18,8 @@ features:
 #  - custom.themeA
   - scoring
   - custom.file_name
-  # - scale
-  # - custom.scale_relative
+  - scale
+  - custom.scale_relative
   - ambitus
   - interval # to generate Melody_values reports, both ambitus and interval are needed
   # - density
@@ -42,8 +42,8 @@ features:
   - key
 >>>>>>> 25e2c36 (Change directory new features and add tests)
   - lyrics
-  # - dynamics
-  # - rhythm
+  - dynamics
+  - rhythm
 
 split_keywords:
   - woodwind
