@@ -43,7 +43,7 @@ def interval_mean(interval_semitones: list) -> str:
         value=0.0
     return value
 
-def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_information, ponderate, extra_info=None):
+def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_information, ponderate):
     value = 0
     i=0
     column_data=subgroup_data[c]
@@ -59,9 +59,20 @@ def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_inf
                         v=0.0
                     s += v * w
                 value = round(s / sum(ponderate_data), 3)
-        elif computation in ["mean_density","mean_texture"]:
-            notes = subgroup_data[c.split('/')[0]+'Notes']
-            value = round(np.nansum(column_data) / np.nansum(extra_info), 3)
+        elif computation == "mean_density":
+            measures = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
+            notes = subgroup_data[c]
+            
+            value = round(np.nansum(notes) / np.nansum(measures), 3)
+        
+        elif computation == "mean_texture":
+            notes = subgroup_data[c.split('/')[0]+'_Notes']
+            if not subgroup_data[c].isnull().all():
+                notes_next = subgroup_data[c.split('/')[1]+'_Notes']
+                value = round(np.nansum(notes) / np.nansum(notes_next), 3)
+            else:
+                value=0.0
+        
         elif computation == "min":
             value = min(column_data)
         elif computation == "max":

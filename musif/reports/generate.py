@@ -157,6 +157,7 @@ class FeaturesGenerator:
             harmony_tasks['key_areas']=key_areas_df
             harmony_tasks['chords']=chords_df
             harmony_tasks['functions']=functions_dfs
+    
     def run_common_tasks(self, factor, main_results_path, rg, nuc, common_columns_df, common_tasks, harmony_tasks, tasks, additional_info, rg_groups, results_path_factorx):
         textures_densities_data_path = path.join(main_results_path, 'Texture&Density', str(
                 factor) + " factor") if factor > 0 else path.join(main_results_path, 'Texture&Density', "Data")
@@ -229,7 +230,6 @@ class FeaturesGenerator:
             [i for i in all_info.columns if HARMONIC_prefix in i] +
             [i for i in all_info.columns if CHORD_TYPES_prefix in i] +
             [i for i in all_info.columns if ADDITIONS_prefix in i]
-            # + [i for i in all_info.columns if NUMERALS_prefix in i]
             )]
         key_areas_df=all_info[[i for i in all_info.columns if KEY_prefix in i or KEY_GROUPING in i ]]
         functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i] + [i for i in all_info.columns if CHORDS_GROUPING_prefix in i]]
@@ -287,7 +287,7 @@ class FeaturesGenerator:
         degrees_relative_list = []
 
         for col in all_info.columns:
-            if col.startswith(Instr_level+'Interval_'):
+            if col.startswith(Instr_level+'Interval'):
                 intervals_list.append(col)
             elif 'Degree' in col and col.endswith('_Count'):
                 degrees_list.append(col)
@@ -379,7 +379,7 @@ class FeaturesGenerator:
                 [common_columns_df, kwargs["textures"], kwargs["notes"]], axis=1)
                 Textures(rows_groups, not_used_cols, factor, _cfg, textures_df, results_path, pre_string, "Textures", visualiser_lock, groups if groups != [] else None, additional_info)
             
-            if 'intervals_info' in kwargs:
+            if 'intervals_info' in kwargs and not kwargs["intervals_info"].empty:
                 intervals_info=pd.concat([common_columns_df, kwargs["intervals_info"]], axis=1)
                 Intervals(rows_groups, not_used_cols, factor, _cfg, intervals_info, pre_string, "Intervals",
                                     _cfg.sorting_lists["Intervals"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)

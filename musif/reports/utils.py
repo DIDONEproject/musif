@@ -24,7 +24,7 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                 columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
                 additional_info: list=[], ponderate: bool=False):
     
-    row_number = 1  # we start writing in row 1
+    row_number = 1
     column_number = 1
 
     if groups == None:
@@ -33,8 +33,7 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                     columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, 
                     columns3=columns3, data3=data3, third_columns3=third_columns3, computations_columns3=computations_columns3, first_columns3=first_columns3, second_columns3=second_columns3, 
                     additional_info=additional_info, ponderate=ponderate)
-    else:
-        # we may be grouping by more than 2 factors
+    else: # we may be grouping by more than 2 factors
         data_grouped = data.groupby(list(groups))
 
         last_printed = {i: ('', 0) for i in range(len(groups))}
@@ -101,11 +100,11 @@ def get_general_cols(rows_groups, general_cols):
 def Adjust_excel_width_height(workbook: ExcelWriter, multiplier):
         for sheet in workbook.worksheets:
             col_range = sheet[sheet.min_column : sheet.max_column]
-            for col in range(1, len(col_range)):
+            for col in range(1, len(col_range)+1):
                 sheet.column_dimensions[get_column_letter(col)].width = WIDTH * multiplier
 
             row_range = sheet[sheet.min_row : sheet.max_row]
-            for row in range(1, len(row_range)):
+            for row in range(1, len(row_range)+1):
                 sheet.row_dimensions[row].height = HEIGHT
 
 def get_groups_add_info(data: DataFrame, row: int, additional_info):
@@ -265,15 +264,12 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     total_analysed_column = "Total analysed" in columns
     cnumber = column_number
 
-    # PRINT EACH ROW
     # store each result in case of need of calculating the percentage (per = True)
     columns_values = {c: [] for c in columns}
 
-    # Subgroup: ex: Berlin when groupping by Territory
     for s, subgroup in enumerate(grouped):
 
         cnumber = column_number  
-        # Print row name
         if type(subgroup[0]) != tuple:  # It has no additional information
             # could be a tuple if we have grouped by more than one element
             sheet.cell(row_number, column_number).value = subgroup[0]
@@ -306,21 +302,16 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
         for i, c in enumerate(columns):
             column_computation = computations_columns[i]
-            extra_info = []
             if column_computation == 'mean_density':
-                extra_info = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
                 value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate, extra_info=extra_info)
+                                      not_grouped_information, ponderate)
+
             elif column_computation == 'mean_texture':
-                if not subgroup_data[c].isnull().all():
-                    notes_next = subgroup_data[c.split('/')[1]+'Notes']
-                    value = compute_value(subgroup_data, c,  column_computation, total_analysed_row,
-                                        not_grouped_information, ponderate, extra_info=notes_next)
-                else:
-                    value=0.0
+                value = compute_value(subgroup_data, c,  column_computation, total_analysed_row,
+                                        not_grouped_information, ponderate)
             else:
                 value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate)  # absolute value
+                                      not_grouped_information, ponderate) 
             if c == "Total analysed":
                 sheet.cell(row_number, cnumber).value = value
                 total_analysed_row = subgroup_data[c].to_list()
@@ -337,7 +328,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                     value) + '%' if ponderate and column_computation == "sum" and c != "Total analysed" else str(value).replace(',', '.')
                 sheet.cell(row_number, cnumber).font =  FONT
                 cnumber += 1
-            # store each value in case of needing to print the percentage
             
             columns_values[c].append(value)
         row_number += 1
@@ -395,11 +385,14 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     if last_column:
         if last_column_average:
             for j, vf in enumerate(rows_values):
-                try:
-                    rows_values[j]=round(vf / (len(columns_list) - len(
-                [c for c in keys_columns if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0])), 3)
-                except ZeroDivisionError:
-                    rows_values[j]= 0.0
+                    divisor = (len(columns_list) - len([c for c in keys_columns if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0]))
+                    if divisor != 0:      
+                        rows_values[j]=round(vf / divisor, 3)
+                    else:
+                        rows_values[j]= 0.0
+
+                # except ZeroDivisionError:
+                #     rows_values[j]= 0.0
      
         print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
                                     per=per or ponderate and all(c == "sum" for c in computations_columns))
