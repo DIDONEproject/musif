@@ -17,6 +17,12 @@ INTERVALLIC_MEAN = "IntervallicMean"
 INTERVALLIC_STD = "IntervallicStd"
 ABSOLUTE_INTERVALLIC_MEAN = "AbsoluteIntervallicMean"
 ABSOLUTE_INTERVALLIC_STD = "AbsoluteIntervallicStd"
+ASCENDING_INTERVALLIC_MEAN = "AscendingIntervallicMean"
+ASCENDING_INTERVALLIC_STD = "AscendingIntervallicStd"
+DESCENDING_INTERVALLIC_MEAN = "DescendingIntervallicMean"
+DESCENDING_INTERVALLIC_STD = "DescendingIntervallicStd"
+ABSOLUTE_DESCENDING_INTERVALLIC_MEAN = "AbsoluteDescendingIntervallicMean"
+ABSOLUTE_DESCENDING_INTERVALLIC_STD = "AbsoluteDescendingIntervallicStd"
 TRIMMED_INTERVALLIC_MEAN = "TrimmedIntervallicMean"
 TRIMMED_INTERVALLIC_STD = "TrimmedIntervallicStd"
 TRIMMED_ABSOLUTE_INTERVALLIC_MEAN = "TrimmedAbsoluteIntervallicMean"
@@ -126,8 +132,10 @@ SMALLEST_ABSOLUTE_SEMITONES_ALL = "SmallestAbsoluteSemitonesAll"
 
 
 ALL_FEATURES = [
-    MEAN_INTERVAL, INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD,
-    TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
+    MEAN_INTERVAL, INTERVALLIC_MEAN, INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_MEAN, ABSOLUTE_INTERVALLIC_STD,
+    ASCENDING_INTERVALLIC_MEAN, ASCENDING_INTERVALLIC_STD, DESCENDING_INTERVALLIC_MEAN, DESCENDING_INTERVALLIC_STD,
+    ABSOLUTE_DESCENDING_INTERVALLIC_MEAN, ABSOLUTE_DESCENDING_INTERVALLIC_STD,
+    TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD, TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, TRIMMED_ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, ABSOLUTE_INTERVALLIC_TRIM_RATIO,
     ASCENDING_INTERVALS_COUNT, DESCENDING_INTERVALS_COUNT, ASCENDING_INTERVALS_PER, DESCENDING_SEMITONES_SUM,
     REPEATED_NOTES_COUNT, REPEATED_NOTES_PER, LEAPS_ASC_COUNT, LEAPS_DESC_COUNT, LEAPS_ALL_COUNT, LEAPS_ASC_PER, LEAPS_DESC_PER, LEAPS_ALL_PER,
     STEPWISE_MOTION_ASC_COUNT, STEPWISE_MOTION_DESC_COUNT, STEPWISE_MOTION_ALL_COUNT, STEPWISE_MOTION_ASC_PER, STEPWISE_MOTION_DESC_PER, STEPWISE_MOTION_ALL_PER,
@@ -201,11 +209,20 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     numeric_intervals = sorted(numeric_intervals)
-    intervallic_mean = mean(numeric_intervals) if len(numeric_intervals) > 0 else 0
-    intervallic_std = stdev(numeric_intervals) if len(numeric_intervals) > 0 else 0
     absolute_numeric_intervals = sorted([abs(interval) for interval in numeric_intervals])
+    ascending_intervals = [interval for interval in numeric_intervals if interval > 0]
+    descending_intervals = [interval for interval in numeric_intervals if interval < 0]
     absolute_intervallic_mean = mean(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
     absolute_intervallic_std = stdev(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
+    absolute_descending_numeric_intervals = sorted([abs(interval) for interval in numeric_intervals if interval < 0])
+    intervallic_mean = mean(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    intervallic_std = stdev(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    ascending_intervallic_mean = mean(ascending_intervals) if len(ascending_intervals) > 0 else 0
+    ascending_intervallic_std = stdev(ascending_intervals) if len(ascending_intervals) > 0 else 0
+    descending_intervallic_mean = mean(descending_intervals) if len(descending_intervals) > 0 else 0
+    descending_intervallic_std = stdev(descending_intervals) if len(descending_intervals) > 0 else 0
+    absolute_descending_intervallic_mean = mean(absolute_descending_numeric_intervals) if len(absolute_descending_numeric_intervals) > 0 else 0
+    absolute_descending_intervallic_std = stdev(absolute_descending_numeric_intervals) if len(absolute_descending_numeric_intervals) > 0 else 0
     mean_interval = Interval(int(round(absolute_intervallic_mean))).directedName
 
     cutoff = 0.1
@@ -220,8 +237,6 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
     trim_ratio = trim_diff / intervallic_mean if intervallic_mean != 0 else 0
     absolute_trim_diff = absolute_intervallic_mean - trimmed_absolute_intervallic_mean
     absolute_trim_ratio = absolute_trim_diff / absolute_intervallic_mean if absolute_intervallic_mean != 0 else 0
-    ascending_intervals = [interval for interval in numeric_intervals if interval > 0]
-    descending_intervals = [interval for interval in numeric_intervals if interval < 0]
     num_ascending_intervals = len(ascending_intervals) if len(ascending_intervals) > 0 else 0
     num_descending_intervals = len(descending_intervals) if len(descending_intervals) > 0 else 0
     num_ascending_semitones = sum(ascending_intervals) if len(ascending_intervals) > 0 else 0
@@ -250,6 +265,12 @@ def get_interval_features(numeric_intervals: List[int], prefix: str = ""):
         f"{prefix}{INTERVALLIC_STD}": intervallic_std,
         f"{prefix}{ABSOLUTE_INTERVALLIC_MEAN}": absolute_intervallic_mean,
         f"{prefix}{ABSOLUTE_INTERVALLIC_STD}": absolute_intervallic_std,
+        f"{prefix}{ASCENDING_INTERVALLIC_MEAN}": ascending_intervallic_mean,
+        f"{prefix}{ASCENDING_INTERVALLIC_STD}": ascending_intervallic_std,
+        f"{prefix}{DESCENDING_INTERVALLIC_MEAN}": descending_intervallic_mean,
+        f"{prefix}{DESCENDING_INTERVALLIC_STD}": descending_intervallic_std,
+        f"{prefix}{ABSOLUTE_DESCENDING_INTERVALLIC_MEAN}": absolute_descending_intervallic_mean,
+        f"{prefix}{ABSOLUTE_DESCENDING_INTERVALLIC_STD}": absolute_descending_intervallic_std,
         f"{prefix}{TRIMMED_INTERVALLIC_MEAN}": trimmed_intervallic_mean,
         f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_intervallic_std,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_intervallic_mean,
