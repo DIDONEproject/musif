@@ -93,7 +93,7 @@ def get_beat_position(beat_count, beat, pos):
     if beat == beat_count:
         return pos
     else:
-        return (pos / beat_count) + beat
+        return (pos / beat_count) + 1  # It could be better: (pos/beat_count)*beat and changes in dynamics
 
 def expand_repeat_bars(score):
     final_score = m21.stream.Score()

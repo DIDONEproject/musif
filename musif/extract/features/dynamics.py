@@ -27,7 +27,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         for measure in bar_section.elements:
             if measure.classes[0] == "Dynamic":  # need to change with beat count and beat being different
                 position = get_beat_position(beat_count, beat, measure.beat)
-                old_beat = position - 1  # if change in beat 1.5, remaining old beats 0.5
+                old_beat = position - 1  # change in utils.py:old_beat=position-get_beat_position(beat_count,beat,1)
                 dyn_mean_weighted += (beats_section + old_beat) * last_dyn
                 new_dyn = get_dynamic_numeric(measure.value)
                 dynamics.append(new_dyn)  # also could get a value (0,1) with volumeScalar
