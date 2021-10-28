@@ -22,8 +22,8 @@ features:
   - tempo
   - density
   - lyrics
-  - rhythm
-#  - dynamics
+#  - rhythm
+  - dynamics
 #  - scale
 #  - key
 #  - custom.harmony
