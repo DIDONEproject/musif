@@ -7,13 +7,13 @@ from musif.extract.features.rhythm import DOTTEDRHYTHM,DOUBLE_DOTTEDRHYTHM
 
 if __name__ == "__main__":
     didone_filter = ["vnI","va", "bs", "sop", "ten", "alt", "bar", "bass", "bbar"]
-    df_scores = FeaturesExtractor("config.yml").extract("../arias/Dem02M-In_te-1733-Caldara[1.02][0417].xml",
+    df_scores = FeaturesExtractor("config.yml").extract("../arias/Dem01M-O_piu-1735-Leo[1.01][0430].xml",
                                                         parts_filter=didone_filter)
     prefix = get_score_prefix()
     #print(df_scores.get(f"{prefix}{RHYTHMINT}"))
     #print(df_scores.get(f"{prefix}{RHYTHMINTSEP}"))
-    #print(df_scores.get(f"{prefix}{DYNMEAN}"))
-    #print(df_scores.get(f"{prefix}{DYNGRAD}"))
+    print(df_scores.get(f"{prefix}{DYNMEAN}"))
+    print(df_scores.get(f"{prefix}{DYNGRAD}"))
     #print(df_scores.get(f"{prefix}{DYNABRUPTNESS}"))
-    print(df_scores.get(f"{prefix}{DOTTEDRHYTHM}"))
-    print(df_scores.get(f"{prefix}{DOUBLE_DOTTEDRHYTHM}"))
+    #print(df_scores.get(f"{prefix}{DOTTEDRHYTHM}"))
+    #print(df_scores.get(f"{prefix}{DOUBLE_DOTTEDRHYTHM}"))
