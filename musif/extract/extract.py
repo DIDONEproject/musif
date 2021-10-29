@@ -35,25 +35,23 @@ def parse_file(file_path: str, split_keywords) -> Score:
     return score
 
 
-class FilesExtractor:
-    def __init__(self, *args, **kwargs):
-        self._cfg = Configuration(*args, **kwargs)
-
-    def extract(self, obj) -> List[str]:
-        if not (isinstance(obj, list) or isinstance(obj, str)):
-            raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
-        musicxml_files = []
-        if isinstance(obj, list):
-            musicxml_files = list(obj)
-        if isinstance(obj, str):
-            musicxml_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj])
-        return musicxml_files
+def extract(obj) -> List[str]:
+    if not (isinstance(obj, list) or isinstance(obj, str)):
+        raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
+    musicxml_files = []
+    if isinstance(obj, list):
+        musicxml_files = list(obj)
+    if isinstance(obj, str):
+        musicxml_files = sorted(
+            glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj])
+    return musicxml_files
 
 
 class PartsExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._files_extractor = FilesExtractor(*args, **kwargs)
+
+    # self._files_extractor = FilesExtractor(*args, **kwargs)
 
     def extract(self, obj) -> List[str]:
         musicxml_files = self._files_extractor.extract(obj)
@@ -78,7 +76,7 @@ class PartsExtractor:
 class FilesValidator:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._files_extractor = FilesExtractor(*args, **kwargs)
+        # self._files_extractor = FilesExtractor(*args, **kwargs)
 
     def validate(self, obj) -> None:
         musicxml_files = self._files_extractor.extract(obj)
@@ -106,15 +104,16 @@ class FilesValidator:
 class FeaturesExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._files_extractor = FilesExtractor(*args, **kwargs)
+        # self._files_extractor = FilesExtractor(*args, **kwargs)
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
-        print(get_color('WARNING')+'\n---Analyzing scores ---\n'+ RESET_SEQ)
+        print(get_color('WARNING') + '\n---Analyzing scores ---\n' + RESET_SEQ)
         musicxml_files = self._files_extractor.extract(obj)
         score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
-    def _process_corpora(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[DataFrame, DataFrame]:
+    def _process_corpora(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[
+        DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
         all_scores_features = []
         all_parts_features = []
@@ -138,13 +137,14 @@ class FeaturesExtractor:
             corpus_by_dir[corpus_dir].append(file)
         return corpus_by_dir
 
-    def _process_corpus(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[List[dict], List[dict]]:
+    def _process_corpus(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[
+        List[dict], List[dict]]:
         if self._cfg.parallel:
             return self._process_corpus_in_parallel(musicxml_files, parts_filter)
         return self._process_corpus_sequentially(musicxml_files, parts_filter)
 
     def _process_corpus_sequentially(
-        self, musicxml_files: List[str], parts_filter: List[str] = None
+            self, musicxml_files: List[str], parts_filter: List[str] = None
     ) -> Tuple[List[dict], List[dict]]:
         scores_features = []
         parts_features = []
@@ -155,7 +155,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_corpus_in_parallel(
-        self, musicxml_files: List[str], parts_filter: List[str] = None
+            self, musicxml_files: List[str], parts_filter: List[str] = None
     ) -> Tuple[List[dict], List[dict]]:
         scores_features = []
         parts_features = []
@@ -187,7 +187,8 @@ class FeaturesExtractor:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
         filtered_parts = self._filter_parts(score, parts_filter)
         if len(filtered_parts) == 0:
-            self._cfg.read_logger.warning(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
+            self._cfg.read_logger.warning(
+                f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}")
         data = {
             DATA_SCORE: score,
             DATA_FILE: musicxml_file,
@@ -205,7 +206,9 @@ class FeaturesExtractor:
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
-        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part, score_data[DATA_FILTERED_PARTS], self._cfg)
+        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(sound, part,
+                                                                                      score_data[DATA_FILTERED_PARTS],
+                                                                                      self._cfg)
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = self._cfg.family_to_abbreviation[family]
         data = {
@@ -227,7 +230,8 @@ class FeaturesExtractor:
             feature_dependencies = self._extract_feature_dependencies(module)
             for feature_dependency in feature_dependencies:
                 if feature_dependency not in found_features:
-                    raise ValueError(f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")
+                    raise ValueError(
+                        f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")
             found_features.add(feature)
             yield module
 
@@ -237,11 +241,14 @@ class FeaturesExtractor:
         dependencies = [dependency for dependency in dependencies if dependency in self._cfg.features]
         return dependencies
 
-    def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict]):
+    def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],
+                                      parts_features: List[dict]):
         for part_data, part_features in zip(parts_data, parts_features):
-            self._cfg.read_logger.debug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module.__name__} features.")
+            self._cfg.read_logger.debug(
+                f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module.__name__} features.")
             module.update_part_objects(score_data, part_data, self._cfg, part_features)
 
-    def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict], parts_features: List[dict], score_features: dict):
+    def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict],
+                                      parts_features: List[dict], score_features: dict):
         self._cfg.read_logger.debug(f"Extracting score \"{score_data[DATA_FILE]}\" {module.__name__} features.")
         module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
