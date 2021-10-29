@@ -35,7 +35,7 @@ def parse_file(file_path: str, split_keywords) -> Score:
     return score
 
 
-def extract(obj) -> List[str]:
+def extract_files(obj) -> List[str]:
     if not (isinstance(obj, list) or isinstance(obj, str)):
         raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     musicxml_files = []
@@ -52,7 +52,7 @@ class PartsExtractor:
         self._cfg = Configuration(*args, **kwargs)
 
     def extract(self, obj) -> List[str]:
-        musicxml_files = extract(obj)
+        musicxml_files = extract_files(obj)
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
@@ -76,7 +76,7 @@ class FilesValidator:
         self._cfg = Configuration(*args, **kwargs)
 
     def validate(self, obj) -> None:
-        musicxml_files = extract(obj)
+        musicxml_files = extract_files(obj)
         if self._cfg.parallel:
             self._validate_in_parallel(musicxml_files)
         else:
@@ -104,7 +104,7 @@ class FeaturesExtractor:
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
         print(get_color('WARNING') + '\n---Analyzing scores ---\n' + RESET_SEQ)
-        musicxml_files = extract(obj)
+        musicxml_files = extract_files(obj)
         score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
