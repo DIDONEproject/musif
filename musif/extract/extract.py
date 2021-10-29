@@ -51,10 +51,8 @@ class PartsExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
 
-    # self._files_extractor = FilesExtractor(*args, **kwargs)
-
     def extract(self, obj) -> List[str]:
-        musicxml_files = self._files_extractor.extract(obj)
+        musicxml_files = extract(obj)
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
@@ -76,10 +74,9 @@ class PartsExtractor:
 class FilesValidator:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        # self._files_extractor = FilesExtractor(*args, **kwargs)
 
     def validate(self, obj) -> None:
-        musicxml_files = self._files_extractor.extract(obj)
+        musicxml_files = extract(obj)
         if self._cfg.parallel:
             self._validate_in_parallel(musicxml_files)
         else:
@@ -104,11 +101,10 @@ class FilesValidator:
 class FeaturesExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        # self._files_extractor = FilesExtractor(*args, **kwargs)
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
         print(get_color('WARNING') + '\n---Analyzing scores ---\n' + RESET_SEQ)
-        musicxml_files = self._files_extractor.extract(obj)
+        musicxml_files = extract(obj)
         score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
 
