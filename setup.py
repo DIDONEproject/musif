@@ -39,6 +39,12 @@ setup(
         "ms3",
         "pyyaml",
     ],
+    extras_require={
+        'testing': [
+            'pytest',
+            'pytest-cov',
+        ]
+    },
     entry_points={
         "console_scripts": [
             "melodic-analysis=musif.scripts.melodic_analysis:main",
