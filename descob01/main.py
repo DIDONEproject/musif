@@ -7,7 +7,7 @@ from musif.extract.features.rhythm import DOTTEDRHYTHM,DOUBLE_DOTTEDRHYTHM
 
 if __name__ == "__main__":
     didone_filter = ["vnI","va", "bs", "sop", "ten", "alt", "bar", "bass", "bbar"]
-    df_scores = FeaturesExtractor("config.yml").extract("../arias/Dem01M-O_piu-1735-Leo[1.01][0430].xml",
+    df_scores = FeaturesExtractor("config.yml").extract(["../musif/tests/data/arias_test","../musif/tests/data/arias_test1"],
                                                         parts_filter=didone_filter)
     prefix = get_score_prefix()
     #print(df_scores.get(f"{prefix}{RHYTHMINT}"))
