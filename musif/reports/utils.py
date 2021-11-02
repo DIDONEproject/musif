@@ -80,11 +80,11 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                     start_row=last_printed[i][1], start_column=i + 1, end_row=row_number - 2, end_column=i + 1)
                 sheet.cell(last_printed[i][1],  i + 1).fill = factors_Fill[i]
 
-def save_workbook(path, workbook, multiplier):
+def save_workbook(path, workbook, cells_size=NORMAL_WIDTH):
     if "Sheet" in workbook.get_sheet_names():
         std = workbook.get_sheet_by_name('Sheet')
         workbook.remove_sheet(std)
-    Adjust_excel_width_height(workbook, multiplier)
+    Adjust_excel_width_height(workbook, cells_size)
     workbook.save(path)
     
 def remove_underscore(columns):
@@ -145,11 +145,11 @@ def columns_alike_our_data(third_columns_names: List[str], second_column_names: 
         columns.append(cn)
     return columns
 
-def write_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names: List[str]):
+def print_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names: List[str]):
     for c in column_names:
         sheet.cell(row, column).value = c
         sheet.cell(row, column).font =  FONT_TITLE
-        sheet.cell(row, column).fill = titles3Fill
+        sheet.cell(row, column).fill = titles6Fill
         column += 1
 
 def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column: int, values_column: list, average: bool=False, per: bool=False, exception: int=None):
@@ -173,12 +173,12 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
         sheet.cell(row, column).value = str(v).replace(',','.') if not per else str(v).replace(',','.') + "%"
         row += 1
 
-def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill:int):
+def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill = None):
     # Column_names will be a list of (name, length)
 
     for i, c in enumerate(column_names):
         
-        if len(column_names)>2:
+        if len(column_names)>2 and fill is None:
             fill=fills_list[i]
         sheet.cell(row, column).value = c[0]
         sheet.cell(row, column).font = FONT_TITLE
@@ -254,10 +254,10 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         row_number += 1
     if second_columns:
         write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, second_columns, titles_second_Fill)
+            sheet, row_number, column_number + 1 + len_add_info, second_columns)
         row_number += 1
     starting_row = row_number
-    write_columns_titles(sheet, row_number, column_number +
+    print_columns_titles(sheet, row_number, column_number +
                          1 + len_add_info, third_columns)
     row_number += 1
     exception = -1
@@ -311,7 +311,8 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                                         not_grouped_information, ponderate)
             else:
                 value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate) 
+                                      not_grouped_information, ponderate)
+
             if c == "Total analysed":
                 sheet.cell(row_number, cnumber).value = value
                 total_analysed_row = subgroup_data[c].to_list()
@@ -360,15 +361,17 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                 row_number += 1
                 # COMPUTE THE HORIZONTAL AVERAGE (average within the present column or row)
                 if average:
-                    value = round(
-                        (columns_list[i][j]/rows_values[j])*100, 3)
+                    # value = round(
+                    #     (columns_list[i][j]/rows_values[j])*100, 3)
+                    # values = [i for i in columns_list[i][j] if i! = 0.0]
+                    value = round((columns_list[i][j]/rows_values[j])*100, 3)
                 else:
                     value = round((columns_list[i][j]/sum_column)*100, 3)
                     
                 columns_values[keys_columns[i]][j] = value if str(
                     value) != "nan" else 0  # update the value
-                sheet.cell(row_number, cn).value = str(
-                    value) + "%"  # print the value
+                sheet.cell(row_number, cn).value = str(value) + "%" if str(
+                    value) != "nan" else 0 # print the value
                 sheet.cell(row_number, cn).font =  FONT
             cn += 1
 
@@ -390,9 +393,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                         rows_values[j]=round(vf / divisor, 3)
                     else:
                         rows_values[j]= 0.0
-
-                # except ZeroDivisionError:
-                #     rows_values[j]= 0.0
      
         print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
                                     per=per or ponderate and all(c == "sum" for c in computations_columns))
@@ -403,14 +403,10 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
         for row in range(0,values.shape[1]):
             if all([str(e)=='0.0' for e in values[:,row]]):
-                
                 del columns_values[c][0]
 
         if average:  
-            
-            columns_values[c] = compute_average(
-                
-                columns_values[c], computations_columns[i])
+            columns_values[c] = compute_average(columns_values[c], computations_columns[i])
         else:  # total
             
             
@@ -433,10 +429,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
     return last_used_row + 1, cnumber + 1
 
-    
-##########################################################################################################
                         # Function in charge of printting the data #
-##########################################################################################################
 
 def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                   columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None,

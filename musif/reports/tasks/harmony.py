@@ -19,9 +19,9 @@ from musif.reports.utils import (Create_excel, get_excel_name,
 import copy
 from pandas.core.frame import DataFrame
 
-from ..harmony_sorting import *  # TODO: REVIEW
+# from .harmony_sorting import *  # TODO: REVIEW
 
-def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, results_path: str, visualiser_lock: Lock, additional_info: list=[], groups: list=None):
+def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, results_path: str, visualizations: Lock, additional_info: list=[], groups: list=None):
     try:
         additions=[]
         workbook = openpyxl.Workbook()
@@ -52,9 +52,9 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
                     second_columns=second_column_names,
                     groups=groups, per = False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
         
-        save_workbook(os.path.join(results_path,excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path,excel_name), workbook,cells_size= NORMAL_WIDTH)
         
-        # with visualiser_lock:
+        # with visualizations:
         # VISUALISATIONS
         title = 'Harmonic Data'
         # if groups:
@@ -110,7 +110,7 @@ def Harmonic_data(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configur
     # column_names = ["Total analysed"] + column_names
     # computations = ['sum']*len(column_names)
 
-def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str,pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str,pre_string, name: str, visualizations: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
         excel_name=get_excel_name(pre_string, name)
@@ -140,9 +140,9 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
             Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
                         groups=groups, per=False, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path,excel_name), workbook, NARROW)
+        save_workbook(os.path.join(results_path,excel_name), workbook,cells_size= NARROW)
 
-        # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
+        # with visualizations: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         third_columns_names.remove('Total analysed')
         title = 'Chords'
 
@@ -191,7 +191,7 @@ def Chords(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, 
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 def Triple_harmonic_excel(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, 
-                            pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+                            pre_string, name: str, visualizations: Lock, groups: list=None, additional_info: list=[]):
         
     workbook = openpyxl.Workbook()
     excel_name=get_excel_name(pre_string, name)
@@ -236,9 +236,9 @@ def Triple_harmonic_excel(rows_groups: dict, not_used_cols: dict, factor, _cfg: 
                     data3=data3, columns3=third_columns_names3,  third_columns3=third_columns_names3, computations_columns3=computations3, second_columns3=second_column_names3,
                 additional_info=additional_info, ponderate=False)
                 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, excel_name), workbook, cells_size=NORMAL_WIDTH)
         
-        # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
+        # with visualizations: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         # third_columns_names.remove('Total analysed')
 
         title = name
@@ -495,7 +495,7 @@ def insert_total_analysed(columns_names):
 # ########################################################################
 
 # # def Keyareas_weighted(results_path, keyareas, combinations = False, groups = None):
-# def Keyareas_weighted(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, sorting_lists: list, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
+# def Keyareas_weighted(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, name: str, sorting_lists: list, visualizations: Lock, groups: list=None, additional_info: list=[]):
 
 #     # additional_info = {"Label":["Aria"], "Aria":['Label']}
 #     workbook = openpyxl.Workbook()

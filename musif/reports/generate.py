@@ -39,13 +39,15 @@ class FeaturesGenerator:
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.write_logger
 
-    def generate_reports(self, data: DataFrame, num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None) -> DataFrame:
-        print(get_color('WARNING')+'\n---Starting reports generation ---\n'+ RESET_SEQ)
+    def generate_reports(self, data: DataFrame, num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None, visualizations=False) -> DataFrame:
+        print(get_color('WARNING')+'\n\t\t\t---Starting reports generation ---\n'+ RESET_SEQ)
         self.parts_list = [] if parts_list is None else parts_list
+        self.visualizations=visualizations
         self.global_features = data
         self.num_factors_max = num_factors
         self.main_results_path = main_results_path
         self.sorting_lists = self._cfg.sorting_lists
+        print('Visualizations are activated' if self.visualizations else 'Visualizations are deactivated'+'.\n')
         self._write()
             
     def _factor_execution(self, factor: int):
@@ -70,12 +72,16 @@ class FeaturesGenerator:
         print(get_color('INFO')+'\n' + str(factor) + " factor", end='\n'+RESET_SEQ)
 
         instruments = self.extract_instruments(all_info)
+        self.rename_singers(all_info)
 
         self.prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments)
 
         for instrument in tqdm(list(instruments), desc='Progress'):
+            if instrument in singers_list:
+                instrument = 'Voice'
+
             print(get_color('INFO')+'\nInstrument: ', instrument, end='\n\n'+RESET_SEQ)
-            instrument_level = 'Part' + instrument + '_' if not self.IsVoice(instrument) else 'Family' + instrument + '_' 
+            instrument_level = 'Part' + instrument + '_' #if not self.IsVoice(instrument) else 'Family' + instrument + '_' 
 
             intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.find_columns(all_info, instrument_level)
             self.prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
@@ -92,11 +98,13 @@ class FeaturesGenerator:
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
             for groups in rg_groups:
-                self._tasks_execution(rows_groups, not_used_cols, self._cfg, 
-                    groups, results_path_factorx, additional_info, factor, common_columns_df, **tasks)
-                rows_groups = rg
-                not_used_cols = nuc
-
+                try:
+                    self._tasks_execution(rows_groups, not_used_cols, self._cfg, 
+                        groups, results_path_factorx, additional_info, factor, common_columns_df, **tasks)
+                    rows_groups = rg
+                    not_used_cols = nuc
+                except KeyError as e:
+                    self._cfg.write_logger.error(get_color('ERROR'+ 'One or more of the features could not be found in the input dataframe: ', e))
             # else: # from 2 factors
                 # process_executor = concurrent.futures.ProcessPoolExecutor()
                 # futures = [process_executor.submit(_group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals, Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
@@ -105,6 +113,12 @@ class FeaturesGenerator:
                 #     rows_groups = rg
                 #     not_used_cols = nuc
                 pass
+
+    def rename_singers(self, all_info):
+        for c in all_info.columns:
+            if any(i in c for i in singers_list):
+                for s in singers_list:
+                    all_info.rename(columns={c:c.replace(s,'Voice')})
 
     def find_notes_set(self, instruments):
         notes_set=set([])
@@ -210,6 +224,7 @@ class FeaturesGenerator:
                     instruments.add(a)
 
         instruments = self.capitalize_instruments(instruments)
+        
         return instruments
 
     def capture_density_df(self, all_info, instruments):
@@ -287,16 +302,16 @@ class FeaturesGenerator:
         degrees_relative_list = []
 
         for col in all_info.columns:
-            if col.startswith(Instr_level+'Interval'):
+            if (col.startswith(Instr_level+'Intervals') or col.startswith(Instr_level+'Leaps') or col.startswith(Instr_level+'Stepwise')) and col.endswith('_Count'):
+                intervals_types_list.append(col)
+            elif col.startswith(Instr_level+'Interval') and 'Intervals' not in col and not col.endswith('Per') and 'Intervallic' not in col:
                 intervals_list.append(col)
             elif 'Degree' in col and col.endswith('_Count'):
                 degrees_list.append(col)
             elif 'Degree' in col and 'relative' in col and not 'Per' in col:
                 degrees_relative_list.append(col)
-            elif (col.startswith(Instr_level+'Intervals') or col.startswith(Instr_level+'Leaps') or col.startswith(Instr_level+'Stepwise')) and col.endswith('_Count'):
-                intervals_types_list.append(col)
 
-            intervals_types_list.append(Instr_level + interval.REPEATED_NOTES_COUNT)
+        intervals_types_list.append(Instr_level + interval.REPEATED_NOTES_COUNT)
 
         return intervals_list, intervals_types_list, degrees_list, degrees_relative_list
 
@@ -312,12 +327,11 @@ class FeaturesGenerator:
 
     def extract_interval_columns(self, all_info, catch, intervals_list, intervals_types_list):
         intervals_info=all_info[intervals_list]
-        intervals_info.columns = [c.replace(catch+'Interval_', '').replace('_Count', '')
+        intervals_info.columns = [c.replace(catch+'Interval', '').replace('_Count', '')
                                     for c in intervals_info.columns]
         intervals_types=all_info[intervals_types_list]
         intervals_types.columns = [c.replace(catch, '').replace('Intervals', '').replace('_Count', '')
                                     for c in intervals_types.columns]
-                            
         return intervals_info,intervals_types
 
     def get_instrument_prefix(self, instrument: list):
@@ -342,7 +356,7 @@ class FeaturesGenerator:
         rows_groups=rg
         not_used_cols=nuc
 
-        visualiser_lock = True #remve with threads
+        visualizations = True #remve with threads
 
         if groups:
             # if sequential:
@@ -361,63 +375,63 @@ class FeaturesGenerator:
         # MUTITHREADING
         try:
             # executor = concurrent.futures.ThreadPoolExecutor()
-            # visualiser_lock = threading.Lock()
+            # visualizations = threading.Lock()
             # futures = []
 
             pre_string='-'.join(groups) + str(factor) + '_factor_'
             if 'melody_values' in kwargs:
                 melody_values = pd.concat([common_columns_df,  kwargs["melody_values"]], axis=1)
                 Melody_values(rows_groups, not_used_cols, factor, _cfg, melody_values, results_path, pre_string , "Melody_Values.xlsx",
-                        visualiser_lock, additional_info, True if factor == 0 else False, groups if groups != [] else None)
+                        self.visualizations, additional_info, True if factor == 0 else False, groups if groups != [] else None)
             if 'density' in kwargs:
                 density_df = pd.concat(
                     [common_columns_df, kwargs["density"], kwargs["notes"]], axis=1)
-                Densities(rows_groups, not_used_cols, factor, _cfg, density_df, results_path, pre_string, "Densities", visualiser_lock, groups if groups != [] else None, additional_info)
+                Densities(rows_groups, not_used_cols, factor, _cfg, density_df, results_path, pre_string, "Densities", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'textures' in kwargs:
                 textures_df = pd.concat(
                 [common_columns_df, kwargs["textures"], kwargs["notes"]], axis=1)
-                Textures(rows_groups, not_used_cols, factor, _cfg, textures_df, results_path, pre_string, "Textures", visualiser_lock, groups if groups != [] else None, additional_info)
+                Textures(rows_groups, not_used_cols, factor, _cfg, textures_df, results_path, pre_string, "Textures", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'intervals_info' in kwargs and not kwargs["intervals_info"].empty:
                 intervals_info=pd.concat([common_columns_df, kwargs["intervals_info"]], axis=1)
                 Intervals(rows_groups, not_used_cols, factor, _cfg, intervals_info, pre_string, "Intervals",
-                                    _cfg.sorting_lists["Intervals"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+                                    _cfg.sorting_lists["Intervals"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
                 absolute_intervals=make_intervals_absolute(intervals_info)
                 Intervals(rows_groups, not_used_cols, factor, _cfg, absolute_intervals, pre_string , "Intervals_absolute",
-                                _cfg.sorting_lists["Intervals_absolute"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+                                _cfg.sorting_lists["Intervals_absolute"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             
             if 'intervals_types' in kwargs:
                 intervals_types = pd.concat([common_columns_df, kwargs["intervals_types"]], axis=1)
-                Intervals_types(rows_groups, not_used_cols, factor, _cfg, intervals_types, results_path, pre_string, "Interval_types", visualiser_lock, groups if groups != [] else None, additional_info)
+                Intervals_types(rows_groups, not_used_cols, factor, _cfg, intervals_types, results_path, pre_string, "Interval_types", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'scale' in kwargs and not kwargs['scale'].empty:
                 emphasised_scale_degrees_info_A = pd.concat([common_columns_df,kwargs['scale']], axis=1)
-                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_A, pre_string,  "Scale_degrees", results_path, visualiser_lock, groups if groups != [] else None, additional_info)
+                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_A, pre_string,  "Scale_degrees", results_path, self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'scale_relative' in kwargs:
                 emphasised_scale_degrees_info_B = pd.concat([common_columns_df,kwargs['scale_relative']], axis=1)
-                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_B, pre_string, "Scale_degrees_relative", results_path, visualiser_lock, groups if groups != [] else None, additional_info)
+                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_B, pre_string, "Scale_degrees_relative", results_path, self.visualizations, groups if groups != [] else None, additional_info)
            
             if 'clefs' in kwargs:
                 clefs_info= pd.concat([common_columns_df,kwargs['clefs']], axis=1)
                 Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
-                                _cfg.sorting_lists["Clefs"], results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+                                _cfg.sorting_lists["Clefs"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             if 'harmonic_data' in kwargs:
                 harmony_df= pd.concat([common_columns_df , kwargs['harmonic_data']], axis=1)
-                Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string, "Harmonic_data", results_path, visualiser_lock, additional_info, groups if groups != [] else None)
+                Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string, "Harmonic_data", results_path, self.visualizations, additional_info, groups if groups != [] else None)
             
             if 'chords' in kwargs:
                 chords = pd.concat([common_columns_df, kwargs['chords']], axis=1)
-                Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string,  "Chords", visualiser_lock, groups if groups != [] else None, additional_info)
+                Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string,  "Chords", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'functions' in kwargs:
                 functions = pd.concat([common_columns_df, kwargs['functions']], axis=1)
-                Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string, 'Harmonic_functions', visualiser_lock, groups if groups != [] else None, additional_info)
+                Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string, 'Harmonic_functions', self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'key_areas' in kwargs:
                 key_areas= pd.concat([common_columns_df,kwargs['key_areas']], axis=1)
-                # Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, key_areas, results_path, pre_string, "Key_Areas", visualiser_lock, groups if groups != [] else None, additional_info)
+                # Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, key_areas, results_path, pre_string, "Key_Areas", self.visualizations, groups if groups != [] else None, additional_info)
                 
                 # wait for all
                 # if sequential:

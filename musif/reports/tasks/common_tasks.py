@@ -49,7 +49,7 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
             Create_excel(workbook.create_sheet("Horizontal"), columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, excel_name), workbook,cells_size= NORMAL_WIDTH)
 
         # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         columns.remove('Total analysed')
@@ -148,7 +148,7 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, excel_name), workbook,cells_size= NORMAL_WIDTH)
 
         # with visualiser_lock:
         title = 'Textures'

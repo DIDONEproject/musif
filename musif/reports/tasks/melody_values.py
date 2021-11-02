@@ -4,7 +4,7 @@ from os import path
 
 from music21 import interval
 from pandas.core.frame import DataFrame
-
+import numpy as np
 import musif.extract.features.lyrics as lyrics
 from musif.common.constants import RESET_SEQ, get_color
 from musif.config import Configuration
@@ -20,72 +20,70 @@ ABSOLUTE_INTERVALLIC_MEAN = 'Absolute Intervallic Mean'
 ABSOLUTE_STD = "Absolute Std"
 TRIM_RATIO = "% Trimmed"
 
-def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualiser_lock: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
+def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualizations: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:
         excel_name=get_excel_name(pre_string, name)
         workbook = openpyxl.Workbook()
         Rename_columns(data)
         data_general = data[metadata_columns+ ['Total analysed']].copy()
-
         PrintStatisticalValues(_cfg, data, additional_info, groups, workbook)
         PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook)
         PrintLargestLeaps(_cfg, data, data_general,additional_info, groups, workbook)
 
-        save_workbook(os.path.join(results_path, excel_name), workbook, NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, excel_name), workbook, cells_size=NARROW)
 
-        # with visualiser_lock:
-        # VISUALISATIONS
-        columns_visualisations = [INTERVALLIC_MEAN,TRIMMED_INTERVALLIC_MEAN, STD, ABSOLUTE_INTERVALLIC_MEAN,ABSOLUTE_STD]
-        
-        if groups:
-            data_grouped = data.groupby(list(groups))
-            for g, datag in data_grouped:
-                result_visualisations = os.path.join(
-                    results_path, 'visualisations', g)
-                if not os.path.exists(result_visualisations):
-                    os.mkdir(result_visualisations)
+        if visualizations:
+            columns_visualisations = [INTERVALLIC_MEAN,TRIMMED_INTERVALLIC_MEAN, STD, ABSOLUTE_INTERVALLIC_MEAN,ABSOLUTE_STD]
+            
+            if groups:
+                data_grouped = data.groupby(list(groups))
+                for g, datag in data_grouped:
+                    result_visualisations = os.path.join(
+                        results_path, 'visualisations', g)
+                    if not os.path.exists(result_visualisations):
+                        os.mkdir(result_visualisations)
 
-                name_bar = os.path.join(
-                    result_visualisations, name.replace('.xlsx', IMAGE_EXTENSION))
-                melody_bar_plot(
-                    name_bar, datag, columns_visualisations, second_title=str(g))
+                    name_bar = os.path.join(
+                        result_visualisations, name.replace('.xlsx', IMAGE_EXTENSION))
+                    melody_bar_plot(
+                        name_bar, datag, columns_visualisations, second_title=str(g))
+                    name_box = path.join(
+                        result_visualisations, 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
+                    box_plot(name_box, datag, second_title=str(g))
+
+            elif factor == 1:
+                for row in rows_groups:
+                    plot_name = name.replace(
+                        '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
+                    name_bar =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+                    if not os.path.exists(name_bar):
+                        os.makedirs(name_bar)
+                    name_bar=path.join(name_bar,plot_name)
+                    if row not in not_used_cols:
+                        if len(rows_groups[row][0]) == 0:  # no sub-groups
+                            data_grouped = data.groupby(row, sort=True)
+                            if data_grouped:
+                                melody_bar_plot(name_bar, data_grouped, columns_visualisations, second_title='Per ' + str(row.replace('Aria','').upper()))
+                                if row == CLEF1: #Exception for boxplots
+                                    name_box = name_bar.replace('Melody_Values', 'Ambitus')
+                                    box_plot(name_box, data_grouped, second_title='Per '+ str(row.replace('Aria','').upper()))
+                        else: #subgroups
+                                for i, subrow in enumerate(rows_groups[row][0]):
+                                    if subrow not in EXCEPTIONS:
+                                        name_bar=name_bar.replace(IMAGE_EXTENSION,'')+'_'+subrow+IMAGE_EXTENSION
+                                        data_grouped = data.groupby(subrow)
+                                        melody_bar_plot(name_bar, data_grouped, columns_visualisations, second_title='Per ' + str(subrow.replace('Aria','').upper()))
+                                        name_box = path.join(
+                                        results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
+                                        
+                                        if subrow == ROLE:
+                                            box_plot(name_box, data_grouped, second_title='Per '+ str(subrow.replace('Aria','').upper()))
+            else:                   
+                name_bar = path.join(results_path,path.join('visualisations', name.replace('.xlsx', IMAGE_EXTENSION)))
+                melody_bar_plot(name_bar, data, columns_visualisations)
                 name_box = path.join(
-                    result_visualisations, 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
-                box_plot(name_box, datag, second_title=str(g))
-
-        elif factor == 1:
-            for row in rows_groups:
-                plot_name = name.replace(
-                    '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
-                name_bar =path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
-                if not os.path.exists(name_bar):
-                    os.makedirs(name_bar)
-                name_bar=path.join(name_bar,plot_name)
-                if row not in not_used_cols:
-                    if len(rows_groups[row][0]) == 0:  # no sub-groups
-                        data_grouped = data.groupby(row, sort=True)
-                        if data_grouped:
-                            melody_bar_plot(name_bar, data_grouped, columns_visualisations, second_title='Per ' + str(row.replace('Aria','').upper()))
-                            if row == CLEF1: #Exception for boxplots
-                                name_box = name_bar.replace('Melody_Values', 'Ambitus')
-                                box_plot(name_box, data_grouped, second_title='Per '+ str(row.replace('Aria','').upper()))
-                    else: #subgroups
-                            for i, subrow in enumerate(rows_groups[row][0]):
-                                if subrow not in EXCEPTIONS:
-                                    name_bar=name_bar.replace(IMAGE_EXTENSION,'')+'_'+subrow+IMAGE_EXTENSION
-                                    data_grouped = data.groupby(subrow)
-                                    melody_bar_plot(name_bar, data_grouped, columns_visualisations, second_title='Per ' + str(subrow.replace('Aria','').upper()))
-                                    name_box = path.join(
-                                    results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
-                                    
-                                    if subrow == ROLE:
-                                        box_plot(name_box, data_grouped, second_title='Per '+ str(subrow.replace('Aria','').upper()))
-        else:                   
-            name_bar = path.join(results_path,path.join('visualisations', name.replace('.xlsx', IMAGE_EXTENSION)))
-            melody_bar_plot(name_bar, data, columns_visualisations)
-            name_box = path.join(
-                results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
-            box_plot(name_box, data)
+                    results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
+                box_plot(name_box, data)
     except Exception as e:
         _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
@@ -140,12 +138,12 @@ def Rename_columns(data):
     data['HighestMeanIndex']=data[ambitus.HIGHEST_NOTE_INDEX]
     data['HighestMeanNote']=data[ambitus.HIGHEST_NOTE]
 
-    data['MeanSemitones']=[interval.Interval(i).semitones for i in data['MeanInterval']]
+    data['MeanSemitones']= [interval.Interval(i).semitones if str(i) != 'nan' else np.nan for i in data['MeanInterval']]
     data.rename(columns={ambitus.LOWEST_NOTE_INDEX: "LowestIndex", ambitus.HIGHEST_NOTE_INDEX: "HighestIndex"}, inplace=True)
     data.rename(columns={interval.INTERVALLIC_MEAN: INTERVALLIC_MEAN, interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: TRIMMED_INTERVALLIC_MEAN, interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: DIFF_TRIMMED,
                              interval.ABSOLUTE_INTERVALLIC_MEAN: ABSOLUTE_INTERVALLIC_MEAN, interval.INTERVALLIC_STD: STD, interval.ABSOLUTE_INTERVALLIC_STD: ABSOLUTE_STD, interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO:TRIM_RATIO}, inplace=True)
 
-    data.rename(columns={interval.LARGEST_INTERVAL_ASC: "AscendingInterval",interval.ASCENDING_SEMITONES_SUM: "AscendingSemitones", 
-    interval.LARGEST_INTERVAL_DESC: "DescendingInterval", interval.DESCENDING_SEMITONES_SUM: "DescendingSemitones"}, inplace=True)
+    data.rename(columns={interval.LARGEST_INTERVAL_ASC: "AscendingInterval",interval.ASCENDING_INTERVALLIC_MEAN: "AscendingSemitones", 
+    interval.LARGEST_INTERVAL_DESC: "DescendingInterval", interval.DESCENDING_INTERVALLIC_MEAN: "DescendingSemitones"}, inplace=True)
     
     data.columns=[i.replace('All', '').replace('_','') for i in data.columns]
