@@ -24,7 +24,7 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                 columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
                 additional_info: list=[], ponderate: bool=False):
     
-    row_number = 1  # we start writing in row 1
+    row_number = 1
     column_number = 1
 
     if groups == None:
@@ -32,9 +32,8 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                     average=average, last_column=last_column, last_column_average=last_column_average,
                     columns2=columns2, data2=data2, third_columns2=third_columns2, computations_columns2=computations_columns2, first_columns2=first_columns2, second_columns2=second_columns2, 
                     columns3=columns3, data3=data3, third_columns3=third_columns3, computations_columns3=computations_columns3, first_columns3=first_columns3, second_columns3=second_columns3, 
-                      additional_info=additional_info, ponderate=ponderate)
-    else:
-        # we may be grouping by more than 2 factors
+                    additional_info=additional_info, ponderate=ponderate)
+    else: # we may be grouping by more than 2 factors
         data_grouped = data.groupby(list(groups))
 
         last_printed = {i: ('', 0) for i in range(len(groups))}
@@ -81,11 +80,11 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                     start_row=last_printed[i][1], start_column=i + 1, end_row=row_number - 2, end_column=i + 1)
                 sheet.cell(last_printed[i][1],  i + 1).fill = factors_Fill[i]
 
-def save_workbook(path, workbook, multiplier):
+def save_workbook(path, workbook, cells_size=NORMAL_WIDTH):
     if "Sheet" in workbook.get_sheet_names():
         std = workbook.get_sheet_by_name('Sheet')
         workbook.remove_sheet(std)
-    Adjust_excel_width_height(workbook, multiplier)
+    Adjust_excel_width_height(workbook, cells_size)
     workbook.save(path)
     
 def remove_underscore(columns):
@@ -101,11 +100,11 @@ def get_general_cols(rows_groups, general_cols):
 def Adjust_excel_width_height(workbook: ExcelWriter, multiplier):
         for sheet in workbook.worksheets:
             col_range = sheet[sheet.min_column : sheet.max_column]
-            for col in range(1, len(col_range)):
+            for col in range(1, len(col_range)+1):
                 sheet.column_dimensions[get_column_letter(col)].width = WIDTH * multiplier
 
             row_range = sheet[sheet.min_row : sheet.max_row]
-            for row in range(1, len(row_range)):
+            for row in range(1, len(row_range)+1):
                 sheet.row_dimensions[row].height = HEIGHT
 
 def get_groups_add_info(data: DataFrame, row: int, additional_info):
@@ -146,11 +145,11 @@ def columns_alike_our_data(third_columns_names: List[str], second_column_names: 
         columns.append(cn)
     return columns
 
-def write_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names: List[str]):
+def print_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names: List[str]):
     for c in column_names:
         sheet.cell(row, column).value = c
         sheet.cell(row, column).font =  FONT_TITLE
-        sheet.cell(row, column).fill = titles3Fill
+        sheet.cell(row, column).fill = titles6Fill
         column += 1
 
 def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column: int, values_column: list, average: bool=False, per: bool=False, exception: int=None):
@@ -174,12 +173,12 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
         sheet.cell(row, column).value = str(v).replace(',','.') if not per else str(v).replace(',','.') + "%"
         row += 1
 
-def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill:int):
+def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill = None):
     # Column_names will be a list of (name, length)
 
     for i, c in enumerate(column_names):
         
-        if len(column_names)>2:
+        if len(column_names)>2 and fill is None:
             fill=fills_list[i]
         sheet.cell(row, column).value = c[0]
         sheet.cell(row, column).font = FONT_TITLE
@@ -255,25 +254,22 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         row_number += 1
     if second_columns:
         write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, second_columns, titles_second_Fill)
+            sheet, row_number, column_number + 1 + len_add_info, second_columns)
         row_number += 1
     starting_row = row_number
-    write_columns_titles(sheet, row_number, column_number +
+    print_columns_titles(sheet, row_number, column_number +
                          1 + len_add_info, third_columns)
     row_number += 1
     exception = -1
     total_analysed_column = "Total analysed" in columns
     cnumber = column_number
 
-    # PRINT EACH ROW
     # store each result in case of need of calculating the percentage (per = True)
     columns_values = {c: [] for c in columns}
 
-    # Subgroup: ex: Berlin when groupping by Territory
     for s, subgroup in enumerate(grouped):
 
         cnumber = column_number  
-        # Print row name
         if type(subgroup[0]) != tuple:  # It has no additional information
             # could be a tuple if we have grouped by more than one element
             sheet.cell(row_number, column_number).value = subgroup[0]
@@ -306,22 +302,17 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
         for i, c in enumerate(columns):
             column_computation = computations_columns[i]
-            extra_info = []
             if column_computation == 'mean_density':
-                extra_info = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
                 value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate, extra_info=extra_info)
+                                      not_grouped_information, ponderate)
+
             elif column_computation == 'mean_texture':
-                if not subgroup_data[c].isnull().all():
-                    notes_next = subgroup_data[c.split('/')[1]+'Notes']
-                    value = compute_value(subgroup_data, c,  column_computation, total_analysed_row,
-                                        not_grouped_information, ponderate, extra_info=notes_next)
-                else:
-                    value=0.0
+                value = compute_value(subgroup_data, c,  column_computation, total_analysed_row,
+                                        not_grouped_information, ponderate)
             else:
-                #TODO: select other columns to calculate lowest mean note
                 value = compute_value(subgroup_data, c, column_computation, total_analysed_row,
-                                      not_grouped_information, ponderate)  # absolute value
+                                      not_grouped_information, ponderate)
+
             if c == "Total analysed":
                 sheet.cell(row_number, cnumber).value = value
                 total_analysed_row = subgroup_data[c].to_list()
@@ -338,7 +329,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                     value) + '%' if ponderate and column_computation == "sum" and c != "Total analysed" else str(value).replace(',', '.')
                 sheet.cell(row_number, cnumber).font =  FONT
                 cnumber += 1
-            # store each value in case of needing to print the percentage
             
             columns_values[c].append(value)
         row_number += 1
@@ -371,15 +361,17 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
                 row_number += 1
                 # COMPUTE THE HORIZONTAL AVERAGE (average within the present column or row)
                 if average:
-                    value = round(
-                        (columns_list[i][j]/rows_values[j])*100, 3)
+                    # value = round(
+                    #     (columns_list[i][j]/rows_values[j])*100, 3)
+                    # values = [i for i in columns_list[i][j] if i! = 0.0]
+                    value = round((columns_list[i][j]/rows_values[j])*100, 3)
                 else:
                     value = round((columns_list[i][j]/sum_column)*100, 3)
                     
                 columns_values[keys_columns[i]][j] = value if str(
                     value) != "nan" else 0  # update the value
-                sheet.cell(row_number, cn).value = str(
-                    value) + "%"  # print the value
+                sheet.cell(row_number, cn).value = str(value) + "%" if str(
+                    value) != "nan" else 0 # print the value
                 sheet.cell(row_number, cn).font =  FONT
             cn += 1
 
@@ -396,11 +388,11 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     if last_column:
         if last_column_average:
             for j, vf in enumerate(rows_values):
-                try:
-                    rows_values[j]=round(vf / (len(columns_list) - len(
-                [c for c in keys_columns if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0])), 3)
-                except ZeroDivisionError:
-                    rows_values[j]= 0.0
+                    divisor = (len(columns_list) - len([c for c in keys_columns if "All" in c])- len([col[j] for col in columns_list if col[j] == 0.0]))
+                    if divisor != 0:      
+                        rows_values[j]=round(vf / divisor, 3)
+                    else:
+                        rows_values[j]= 0.0
      
         print_averages_total_column(sheet, starting_row, cnumber, rows_values, average=last_column_average,
                                     per=per or ponderate and all(c == "sum" for c in computations_columns))
@@ -411,14 +403,10 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         # In case we have all zeros in a row means that element is not present in the aria so we don't take into account for calculations
         for row in range(0,values.shape[1]):
             if all([str(e)=='0.0' for e in values[:,row]]):
-                
                 del columns_values[c][0]
 
         if average:  
-            
-            columns_values[c] = compute_average(
-                
-                columns_values[c], computations_columns[i])
+            columns_values[c] = compute_average(columns_values[c], computations_columns[i])
         else:  # total
             
             
@@ -441,10 +429,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
     return last_used_row + 1, cnumber + 1
 
-    
-##########################################################################################################
                         # Function in charge of printting the data #
-##########################################################################################################
 
 def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                   columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None,
@@ -482,7 +467,6 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                         if data2 is not None:
                             data2 = sort_dataframe(
                                 data2, row, sorting_lists, sorting)
-                        #_,_
                         row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data2 is None else data2.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns2, third_columns2, computations_columns2, first_columns2,
                                             second_columns2, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
                     

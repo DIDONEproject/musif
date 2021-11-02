@@ -51,10 +51,6 @@ def get_harmonic_rhythm(ms3_table)-> dict:
 
     return hr
 
-####################
-# METRICAL ANALYSIS
-####################    
-
 def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signatures):
     key_measures = {p: 0 for p in keys_options}
     last_key = 0
@@ -76,7 +72,6 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
                 key_measures[last_key] += num_measures
 
             last_key = key
-            # starting_measure = measures[i] - 1
             starting_measure = new_measures[i] - 1
     
     #último!
@@ -85,14 +80,12 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     # num_measures, _ = compute_number_of_measures(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, mc_onsets[numberofmeasures - 1], n_beats)
     key_measures[last_key] += num_measures
 
-
-    if (new_measures[0] != 0 and round(sum(list(key_measures.values()))) != new_measures[i]):
-        print('0s')
-
-    if (new_measures[0] == 0 and round(sum(list(key_measures.values()))) != new_measures[i] + 1):
-        print('0s')
-        
-
+    try:
+        assert not (new_measures[0] != 0 and round(sum(list(key_measures.values()))) != new_measures[i])
+        assert not (new_measures[0] == 0 and round(sum(list(key_measures.values()))) != new_measures[i] + 1)
+    except AssertionError as e:
+        print('There was an error counting the measures!: ', e)
+        return {}
     return key_measures
 
 def create_measures_extended(measures):
@@ -420,28 +413,30 @@ def get_additions(lausanne_table):
         else:
             additions_cleaned.append(str(a))
 
-    a_c = Counter(additions_cleaned)
-    additions_counter = {ADDITIONS_4_6_64_74_94: 0, 
+    additions_counter = Counter(additions_cleaned)
+    additions_dict = {ADDITIONS_4_6_64_74_94: 0, 
                         ADDITIONS_9: 0,
                         OTHERS_NO_AUG: 0, 
                         OTHERS_AUG: 0}
-    for a in a_c:
-        c = a_c[a]
+    for a in additions_counter:
+        c = additions_counter[a]
         a = str(a)
         if a == '+9':
-            additions_counter[ADDITIONS_9] = c
+            additions_dict[ADDITIONS_9] = c
         elif a in ['4', '6', '64', '74', '94', '4.0', '6.0', '64.0', '74.0', '94.0']:
-            additions_counter[ADDITIONS_4_6_64_74_94] += c
+            additions_dict[ADDITIONS_4_6_64_74_94] += c
         elif '+' in a:
-            additions_counter[OTHERS_AUG] += c
+            additions_dict[OTHERS_AUG] += c
+        elif str(a) =='nan':
+            continue
         else:
-            additions_counter[OTHERS_NO_AUG] += c
+            additions_dict[OTHERS_NO_AUG] += c
 
-    ad = {}
+    additions = {}
     for a in additions_counter:
         if additions_counter[a] != 0:
-            ad['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
-    return ad
+            additions['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
+    return additions
     
 def get_chord_types(lausanne_table):
 
@@ -513,8 +508,10 @@ def parse_chord(chord):
 
 def get_chord_type(chord_type):
     chord_type=str(chord_type)
-    if chord_type.lower()=='m':
-        return 'triad'
+    if chord_type=='m':
+        return 'minor triad'
+    elif chord_type=='M':
+        return 'mayor triad'
     elif chord_type in ['7', 'mm7', 'Mm7', 'MM7', 'mM7']:
         return '7th'
     elif chord_type in ['o', 'o7', '%', '%7']:
@@ -558,7 +555,6 @@ def get_first_chord_local(chord, local_key):
 # Function to return second grouping for any chord in any given local key,
 def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     mode = 'M' if local_key else 'm'
-
     #Qué es relative root aqui exactamente
     if str(relativeroot) != 'nan':
         mode = 'M' if relativeroot.isupper() else 'm'

@@ -1,5 +1,7 @@
-datitos.csv
+developing.py
+martiser/myconfig.yml
 results
+reports
 .vscode
 .idea
 *.ini

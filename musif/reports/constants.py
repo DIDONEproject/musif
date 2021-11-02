@@ -46,15 +46,19 @@ TOTAL_ANALYSED='Total analysed'
 YEAR = 'Year'
 
 metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
+singers_list=["sop", "ten", "alt", "bar", "bass", "bbar"]
 
 def get_melody_list(catch):
-  joined_notes = ",".join([catch + ambitus.LOWEST_NOTE, catch + ambitus.HIGHEST_NOTE])
-  return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
+    # joined_notes = ",".join([catch + ambitus.LOWEST_NOTE, catch + ambitus.HIGHEST_NOTE])
+    return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
         catch + interval.TRIMMED_INTERVALLIC_STD, catch + interval.TRIMMED_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_ASC,
-        catch + interval.LARGEST_SEMITONES_DESC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
+        catch + interval.LARGEST_SEMITONES_DESC,catch + interval.LARGEST_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
         catch + ambitus.LOWEST_NOTE_INDEX, catch + ambitus.HIGHEST_NOTE, catch + ambitus.HIGHEST_NOTE_INDEX,
         catch + interval.LARGEST_INTERVAL_ALL, catch + interval.LARGEST_SEMITONES_ALL,
-        catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL]
+        catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL,
+        catch + interval.MEAN_INTERVAL,
+         catch + interval.DESCENDING_INTERVALLIC_MEAN, 
+        catch + interval.ASCENDING_INTERVALLIC_MEAN]
           
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
@@ -166,6 +170,9 @@ titles4Fill = openpyxl.styles.PatternFill(
 
 titles5Fill = openpyxl.styles.PatternFill(
     start_color='C0C0C0', end_color='FBBA93', fill_type='solid')
+
+titles6Fill = openpyxl.styles.PatternFill(
+    start_color='93d3fb', end_color='93d3fb', fill_type='solid')
 
 fills_list=[titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill]
 
