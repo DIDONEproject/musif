@@ -181,6 +181,7 @@ class FeaturesExtractor:
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
+        score = score.expandRepeats()
         filtered_parts = self._filter_parts(score, parts_filter)
         if len(filtered_parts) == 0:
             self._cfg.read_logger.warning(
