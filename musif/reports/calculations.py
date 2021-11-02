@@ -27,6 +27,7 @@ def note_mean(pitch_ps: list, round_mean: bool =False) -> str:
 
 
 def interval_mean(interval_semitones: list) -> str:
+    interval_semitones=[i for i in interval_semitones if i != 0.0]
     if interval_semitones:
         mean_semitones = np.nansum(interval_semitones) / len(interval_semitones)
         if mean_semitones.is_integer():
@@ -59,6 +60,7 @@ def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_inf
                         v=0.0
                     s += v * w
                 value = round(s / sum(ponderate_data), 3)
+        
         elif computation == "mean_density":
             measures = subgroup_data[c+'Measures']*subgroup_data['NumberOfBeats'] # Its a multiplication because it like a division to tjhe whole result
             notes = subgroup_data[c]
@@ -74,47 +76,45 @@ def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_inf
                 value=0.0
         
         elif computation == "min":
-            value = min(column_data)
+            value =  round(np.nanmin(column_data), 3)
         elif computation == "max":
-            value = max(column_data)  
+            value = round( np.nanmax(column_data), 3)  
         elif computation == "minNote":
             pitch_ps = [pitch.Pitch(n).ps if str(n) != 'nan' else np.nan for n in column_data]
-            min_ps = min(pitch_ps)
-            value = column_data.tolist()[pitch_ps.index(min_ps)]
+            min_ps = np.nanmin(pitch_ps)
+            pitch_ps = [str(i) for i in pitch_ps]
+            value = column_data.tolist()[pitch_ps.index(str(min_ps))]
         elif computation == "maxNote":
             pitch_ps = [pitch.Pitch(n).ps if str(n) != 'nan' else np.nan for n in column_data]
-            max_ps = max(pitch_ps)
-            value = column_data.tolist()[pitch_ps.index(max_ps)]
+            max_ps =  np.nanmax(pitch_ps)
+            pitch_ps = [str(i) for i in pitch_ps]
+            value = column_data.tolist()[pitch_ps.index(str(max_ps))]
         elif computation == "meanNote":
             pitch_ps =[pitch.Pitch(n).ps if str(n) != 'nan' else np.nan for n in column_data]
             value = note_mean(pitch_ps)
         elif computation == "minInterval":
             interval_semitones = [interval.Interval(n).semitones if str(n) != 'nan' else np.nan for n in column_data]
-            min_sem = min(interval_semitones)
-            value = column_data.tolist()[interval_semitones.index(min_sem)]
+            min_sem = float(np.nanmin(interval_semitones))
+            interval_semitones = [str(float(i)) for i in interval_semitones]
+            value = column_data.tolist()[interval_semitones.index(str(min_sem))]
         elif computation == "maxInterval":
             interval_semitones = [interval.Interval(n).semitones if str(n) != 'nan' else np.nan for n in column_data]
-            max_sem = max(interval_semitones)
-            value = column_data.tolist()[interval_semitones.index(max_sem)]
+            max_sem = float(np.nanmax(interval_semitones))
+            interval_semitones = [str(float(i)) for i in interval_semitones]
+            value = column_data.tolist()[interval_semitones.index(str(max_sem))]
 
         elif computation == "meanInterval":
-        #     lowest_notes_names = [str(a).split(',')[0] for a in column_data]
-        #     max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' else np.nan for a in column_data]
-        #     min_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in lowest_notes_names]
-        #     max_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in max_notes_names]
-        #     mean_min = note_mean(min_notes_pitch, round_mean = True)
-        #     mean_max = note_mean(max_notes_pitch, round_mean = True)
-        #     i = interval.Interval(noteStart = note.Note(mean_min), noteEnd = note.Note(mean_max))
-
-            value = interval.Interval(mean([interval.Interval(i).semitones for i in column_data])).name
-
+            if not all([str(i)=='nan' for i in column_data]):
+                value = interval.Interval(np.nanmean([interval.Interval(i).semitones for i in column_data if str(i) != 'nan'])).name
+            else:
+                value='nan'
         elif computation == "absoluteInterval" or computation == "absolute":
             lowest_notes_names = [str(a).split(',')[0] if a != 0.0 else np.nan for a in column_data]
             max_notes_names = [str(a).split(',')[1] if str(a) != 'nan' and a != 0.0 else np.nan for a in column_data]
             min_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in lowest_notes_names]
             max_notes_pitch = [pitch.Pitch(a).ps if str(a) != 'nan' else np.nan for a in max_notes_names]
-            minimisimo = min(min_notes_pitch)
-            maximisimo = max(max_notes_pitch)
+            minimisimo = np.nanmin(min_notes_pitch)
+            maximisimo = np.nanmax(max_notes_pitch)
             if not (str(minimisimo) or str(maximisimo)) =='nan':
                 noteStart = note.Note(lowest_notes_names[min_notes_pitch.index(minimisimo)])
                 noteEnd = note.Note(max_notes_names[max_notes_pitch.index(maximisimo)])
@@ -167,10 +167,11 @@ def compute_average(dic_data: Dict, computation: str):
         elif computation in ["minInterval", "maxInterval", "absoluteInterval"]:
             interval_semitones = [interval.Interval(n).semitones for n in dic_data]
             value = interval_mean(interval_semitones)
+        
         elif computation == "meanInterval":
             mean_dic_data = []
             for data in dic_data:
-                semitones = [interval.Interval(n).semitones for n in data.split('-')]
+                semitones = [interval.Interval(n).semitones if str(n) != 'nan' else 0 for n in data.split('-')]
                 mean_dic_data.append(sum(semitones) / len(semitones))
             value = interval_mean(mean_dic_data)
         # value = round(np.nansum(dic_data) / (len(dic_data) - len([z for z in dic_data if z == 0])), 3)

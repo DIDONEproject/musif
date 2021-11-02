@@ -4277,7 +4277,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes" page-number="7">
         <system-layout>
           <top-system-distance>49</top-system-distance>
@@ -4309,7 +4309,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="149">
+      <note default-x="148">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -4326,7 +4326,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4337,7 +4337,7 @@ in Sol</display-text>
         <stem default-y="-60">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -4348,7 +4348,7 @@ in Sol</display-text>
         <stem default-y="-65">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <rest>
           <display-step>A</display-step>
           <display-octave>5</display-octave>
@@ -4357,7 +4357,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="257">
+      <note default-x="254">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -4396,7 +4396,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="149">
+      <note default-x="148">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -4413,7 +4413,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4424,7 +4424,7 @@ in Sol</display-text>
         <stem default-y="-60">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -4435,7 +4435,7 @@ in Sol</display-text>
         <stem default-y="-65">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -4444,7 +4444,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>eighth</type>
       </note>
-      <note default-x="257">
+      <note default-x="254">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -4456,7 +4456,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note default-x="13">
         <grace slash="no"/>
         <pitch>
@@ -4480,7 +4480,7 @@ in Sol</display-text>
         <accidental>sharp</accidental>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="133">
+      <note default-x="131">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4490,7 +4490,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-30">down</stem>
       </note>
-      <note default-x="151">
+      <note default-x="149">
         <grace slash="no"/>
         <pitch>
           <step>G</step>
@@ -4500,7 +4500,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="26">up</stem>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -4512,7 +4512,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-35">down</stem>
       </note>
-      <note default-x="257">
+      <note default-x="255">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -4526,7 +4526,7 @@ in Sol</display-text>
       <backup>
         <duration>16</duration>
       </backup>
-      <note default-x="15">
+      <note default-x="14">
         <grace slash="no"/>
         <pitch>
           <step>D</step>
@@ -4548,7 +4548,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="133">
+      <note default-x="131">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4558,7 +4558,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-30">down</stem>
       </note>
-      <note default-x="151">
+      <note default-x="149">
         <grace slash="no"/>
         <pitch>
           <step>G</step>
@@ -4568,7 +4568,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="26">up</stem>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -4580,7 +4580,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-35">down</stem>
       </note>
-      <note default-x="257">
+      <note default-x="255">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -4592,8 +4592,8 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
-      <note default-x="14">
+    <measure number="55" width="346">
+      <note default-x="13">
         <grace slash="no"/>
         <pitch>
           <step>C</step>
@@ -4603,7 +4603,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="6">up</stem>
       </note>
-      <note default-x="32">
+      <note default-x="31">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4614,7 +4614,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -4624,7 +4624,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="30.5">up</stem>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -4635,7 +4635,7 @@ in Sol</display-text>
         <stem default-y="25.5">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="225">
+      <note default-x="222">
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -4646,7 +4646,7 @@ in Sol</display-text>
         <stem default-y="30.5">up</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="266">
+      <note default-x="263">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -4657,7 +4657,7 @@ in Sol</display-text>
         <stem default-y="25.5">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="308">
+      <note default-x="304">
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -4671,7 +4671,7 @@ in Sol</display-text>
       <backup>
         <duration>16</duration>
       </backup>
-      <note default-x="14">
+      <note default-x="13">
         <grace slash="no"/>
         <pitch>
           <step>C</step>
@@ -4681,7 +4681,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="6">up</stem>
       </note>
-      <note default-x="32">
+      <note default-x="31">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4692,7 +4692,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -4702,7 +4702,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4713,7 +4713,7 @@ in Sol</display-text>
         <stem default-y="-55">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="225">
+      <note default-x="222">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -4724,7 +4724,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="266">
+      <note default-x="263">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4735,7 +4735,7 @@ in Sol</display-text>
         <stem default-y="-55">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="308">
+      <note default-x="304">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -4748,7 +4748,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note default-x="13">
         <pitch>
           <step>D</step>
@@ -4759,7 +4759,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="18">up</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4769,7 +4769,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="33">up</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4779,7 +4779,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="33">up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -4803,7 +4803,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4813,7 +4813,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -4823,7 +4823,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-53">down</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -4835,13 +4835,13 @@ in Sol</display-text>
       </note>
       <direction placement="above">
         <direction-type>
-          <words default-x="186" default-y="59" font-size="8.1" font-weight="bold" justify="right">Go To Measure 58</words>
+          <words default-x="183" default-y="59" font-size="8.1" font-weight="bold" justify="right">Go To Measure 58</words>
         </direction-type>
         <sound tocoda="58"/>
       </direction>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending default-y="57" end-length="30" font-size="5.8" number="1" print-object="yes" type="start"/>
       </barline>
@@ -4855,7 +4855,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="33">up</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest>
           <display-step>A</display-step>
           <display-octave>5</display-octave>
@@ -4864,7 +4864,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <note default-x="103">
+      <note default-x="102">
         <rest>
           <display-step>A</display-step>
           <display-octave>5</display-octave>
@@ -4891,7 +4891,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -4900,7 +4900,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>quarter</type>
       </note>
-      <note default-x="103">
+      <note default-x="102">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -4911,7 +4911,7 @@ in Sol</display-text>
       </note>
       <direction placement="above">
         <direction-type>
-          <words default-x="202" default-y="59" font-size="8.1" font-weight="bold" justify="right">Go To Measure 59</words>
+          <words default-x="199" default-y="59" font-size="8.1" font-weight="bold" justify="right">Go To Measure 59</words>
         </direction-type>
         <sound dalsegno="59"/>
       </direction>
@@ -4920,7 +4920,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending default-y="57" end-length="30" font-size="5.8" number="2" print-object="yes" type="start"/>
       </barline>
@@ -4930,7 +4930,7 @@ in Sol</display-text>
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -4940,7 +4940,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="33">up</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest>
           <display-step>A</display-step>
           <display-octave>5</display-octave>
@@ -4952,7 +4952,7 @@ in Sol</display-text>
       <backup>
         <duration>8</duration>
       </backup>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -4962,7 +4962,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -4971,19 +4971,15 @@ in Sol</display-text>
         <voice>2</voice>
         <type>quarter</type>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <words default-x="130" default-y="63" font-size="10.4" font-weight="bold" justify="right">Fine</words>
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <words default-y="-30" font-size="13.9" xml:space="preserve">[  ]</words>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->
@@ -8349,7 +8345,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>98</staff-distance>
@@ -8365,7 +8361,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="44">up</stem>
       </note>
-      <note default-x="124">
+      <note default-x="123">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -8374,7 +8370,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -8383,7 +8379,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -8393,7 +8389,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="55">up</stem>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -8416,7 +8412,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-40">down</stem>
       </note>
-      <note default-x="124">
+      <note default-x="123">
         <rest>
           <display-step>E</display-step>
           <display-octave>2</display-octave>
@@ -8425,7 +8421,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>quarter</type>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <rest>
           <display-step>E</display-step>
           <display-octave>2</display-octave>
@@ -8434,7 +8430,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>eighth</type>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8444,7 +8440,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-24.5">down</stem>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8456,7 +8452,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note default-x="43">
         <rest>
           <display-step>C</display-step>
@@ -8466,7 +8462,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>half</type>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -8475,7 +8471,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="197">
+      <note default-x="195">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -8485,7 +8481,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="50">up</stem>
       </note>
-      <note default-x="229">
+      <note default-x="227">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -8507,7 +8503,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>half</type>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <rest>
           <display-step>E</display-step>
           <display-octave>2</display-octave>
@@ -8516,7 +8512,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>eighth</type>
       </note>
-      <note default-x="197">
+      <note default-x="195">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -8526,7 +8522,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-40">down</stem>
       </note>
-      <note default-x="229">
+      <note default-x="227">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -8538,7 +8534,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
+    <measure number="55" width="346">
       <note default-x="32">
         <rest>
           <display-step>C</display-step>
@@ -8548,7 +8544,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <note default-x="100">
+      <note default-x="98">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -8559,7 +8555,7 @@ in Sol</display-text>
         <stem default-y="10">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -8570,7 +8566,7 @@ in Sol</display-text>
         <stem default-y="10">up</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -8596,7 +8592,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>quarter</type>
       </note>
-      <note default-x="100">
+      <note default-x="98">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -8607,7 +8603,7 @@ in Sol</display-text>
         <stem default-y="-60">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -8618,7 +8614,7 @@ in Sol</display-text>
         <stem default-y="-60">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -8634,7 +8630,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note default-x="13">
         <pitch>
           <step>C</step>
@@ -8649,7 +8645,7 @@ in Sol</display-text>
           <tied type="stop"/>
         </notations>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -8659,7 +8655,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="49">up</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -8669,7 +8665,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="44">up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -8696,7 +8692,7 @@ in Sol</display-text>
           <tied type="stop"/>
         </notations>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8706,7 +8702,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-24.5">down</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -8716,7 +8712,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-19.5">down</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -8728,7 +8724,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending number="1" print-object="no" type="start"/>
       </barline>
@@ -8742,7 +8738,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="38.5">up</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -8751,7 +8747,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <note default-x="103">
+      <note default-x="102">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -8778,7 +8774,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest>
           <display-step>E</display-step>
           <display-octave>2</display-octave>
@@ -8787,7 +8783,7 @@ in Sol</display-text>
         <voice>2</voice>
         <type>quarter</type>
       </note>
-      <note default-x="103">
+      <note default-x="102">
         <rest>
           <display-step>E</display-step>
           <display-octave>2</display-octave>
@@ -8801,7 +8797,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending number="2" print-object="no" type="start"/>
       </barline>
@@ -8811,7 +8807,7 @@ in Sol</display-text>
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8821,7 +8817,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="38.5">up</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest>
           <display-step>C</display-step>
           <display-octave>4</display-octave>
@@ -8833,7 +8829,7 @@ in Sol</display-text>
       <backup>
         <duration>4</duration>
       </backup>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -8843,7 +8839,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest>
           <display-step>E</display-step>
           <display-octave>2</display-octave>
@@ -8858,8 +8854,9 @@ in Sol</display-text>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->
@@ -11934,7 +11931,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>112</staff-distance>
@@ -11947,7 +11944,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note>
         <rest measure="yes"/>
         <duration>16</duration>
@@ -11955,7 +11952,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
+    <measure number="55" width="346">
       <note>
         <rest measure="yes"/>
         <duration>16</duration>
@@ -11963,7 +11960,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note>
         <rest measure="yes"/>
         <duration>16</duration>
@@ -11971,7 +11968,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending number="1" print-object="no" type="start"/>
       </barline>
@@ -11981,7 +11978,7 @@ in Sol</display-text>
         <voice>1</voice>
         <type>half</type>
       </note>
-      <note default-x="104">
+      <note default-x="102">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -11995,7 +11992,7 @@ in Sol</display-text>
           <text>Am</text>
         </lyric>
       </note>
-      <note default-x="147">
+      <note default-x="146">
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -12019,7 +12016,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending number="2" print-object="no" type="start"/>
       </barline>
@@ -12040,8 +12037,9 @@ in Sol</display-text>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->
@@ -20153,7 +20151,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>153</staff-distance>
@@ -20185,7 +20183,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="149">
+      <note default-x="148">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -20202,7 +20200,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -20213,7 +20211,7 @@ in Sol</display-text>
         <stem default-y="-60">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -20224,13 +20222,13 @@ in Sol</display-text>
         <stem default-y="-65">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="257">
+      <note default-x="254">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -20242,7 +20240,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note default-x="13">
         <grace slash="no"/>
         <pitch>
@@ -20266,7 +20264,7 @@ in Sol</display-text>
         <accidental>sharp</accidental>
         <stem default-y="-49.5">down</stem>
       </note>
-      <note default-x="133">
+      <note default-x="131">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -20276,7 +20274,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-30">down</stem>
       </note>
-      <note default-x="151">
+      <note default-x="149">
         <grace slash="no"/>
         <pitch>
           <step>G</step>
@@ -20286,7 +20284,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="26">up</stem>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -20298,7 +20296,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-35">down</stem>
       </note>
-      <note default-x="257">
+      <note default-x="255">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -20311,8 +20309,8 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
-      <note default-x="14">
+    <measure number="55" width="346">
+      <note default-x="13">
         <grace slash="no"/>
         <pitch>
           <step>C</step>
@@ -20322,7 +20320,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="6">up</stem>
       </note>
-      <note default-x="32">
+      <note default-x="31">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -20336,7 +20334,7 @@ in Sol</display-text>
           <tied type="start"/>
         </notations>
       </note>
-      <note default-x="100">
+      <note default-x="98">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -20352,7 +20350,7 @@ in Sol</display-text>
           <tied type="stop"/>
         </notations>
       </note>
-      <note default-x="121">
+      <note default-x="119">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -20364,10 +20362,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="8" bezier-y="6" default-x="7" default-y="20" number="1" placement="above" type="start"/>
+          <slur bezier-x="8" bezier-y="6" default-x="6" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -20379,10 +20377,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="-4" bezier-y="9" default-x="7" default-y="15" number="1" type="stop"/>
+          <slur bezier-x="-4" bezier-y="9" default-x="6" default-y="15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="162">
+      <note default-x="160">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -20394,7 +20392,7 @@ in Sol</display-text>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -20406,7 +20404,7 @@ in Sol</display-text>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
-      <note default-x="204">
+      <note default-x="202">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -20418,10 +20416,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="8" bezier-y="6" default-x="7" default-y="20" number="1" placement="above" type="start"/>
+          <slur bezier-x="8" bezier-y="6" default-x="6" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="225">
+      <note default-x="222">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -20436,7 +20434,7 @@ in Sol</display-text>
           <slur bezier-x="-4" bezier-y="9" default-x="7" default-y="15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="246">
+      <note default-x="242">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -20448,7 +20446,7 @@ in Sol</display-text>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
-      <note default-x="266">
+      <note default-x="263">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -20460,7 +20458,7 @@ in Sol</display-text>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
-      <note default-x="287">
+      <note default-x="284">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -20475,7 +20473,7 @@ in Sol</display-text>
           <slur bezier-x="8" bezier-y="6" default-x="7" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="308">
+      <note default-x="304">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -20487,10 +20485,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="-4" bezier-y="9" default-x="7" default-y="15" number="1" type="stop"/>
+          <slur bezier-x="-4" bezier-y="9" default-x="6" default-y="15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="329">
+      <note default-x="325">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -20504,7 +20502,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note default-x="13">
         <pitch>
           <step>B</step>
@@ -20515,7 +20513,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-54.5">down</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -20525,7 +20523,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-54.5">down</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <chord/>
         <pitch>
           <step>G</step>
@@ -20536,7 +20534,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="103">
+      <note default-x="102">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -20546,7 +20544,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-53">down</stem>
       </note>
-      <note default-x="103">
+      <note default-x="102">
         <chord/>
         <pitch>
           <step>G</step>
@@ -20557,7 +20555,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -20567,7 +20565,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="29">up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <chord/>
         <pitch>
           <step>A</step>
@@ -20578,7 +20576,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <chord/>
         <pitch>
           <step>F</step>
@@ -20592,7 +20590,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending number="1" print-object="no" type="start"/>
       </barline>
@@ -20628,7 +20626,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -20636,13 +20634,13 @@ in Sol</display-text>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="109" default-y="-73" halign="center">
+          <dynamics default-x="108" default-y="-73" halign="center">
             <p/>
           </dynamics>
         </direction-type>
         <sound dynamics="54"/>
       </direction>
-      <note default-x="103">
+      <note default-x="102">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -20652,13 +20650,13 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-30">down</stem>
       </note>
-      <note default-x="147">
+      <note default-x="146">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="175">
+      <note default-x="173">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -20678,7 +20676,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending number="2" print-object="no" type="start"/>
       </barline>
@@ -20688,7 +20686,7 @@ in Sol</display-text>
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -20698,7 +20696,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-73">down</stem>
       </note>
-      <note default-x="47">
+      <note default-x="48">
         <chord/>
         <pitch>
           <step>B</step>
@@ -20709,7 +20707,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="47">
+      <note default-x="48">
         <chord/>
         <pitch>
           <step>G</step>
@@ -20720,7 +20718,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -20732,8 +20730,9 @@ in Sol</display-text>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->
@@ -28418,7 +28417,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>98</staff-distance>
@@ -28450,7 +28449,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="149">
+      <note default-x="148">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -28467,7 +28466,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -28478,7 +28477,7 @@ in Sol</display-text>
         <stem default-y="-60">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -28489,13 +28488,13 @@ in Sol</display-text>
         <stem default-y="-65">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="257">
+      <note default-x="254">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -28507,7 +28506,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note default-x="13">
         <grace slash="no"/>
         <pitch>
@@ -28531,7 +28530,7 @@ in Sol</display-text>
         <accidental>sharp</accidental>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="133">
+      <note default-x="131">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -28541,7 +28540,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-30">down</stem>
       </note>
-      <note default-x="151">
+      <note default-x="149">
         <grace slash="no"/>
         <pitch>
           <step>G</step>
@@ -28551,7 +28550,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="26">up</stem>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -28563,7 +28562,7 @@ in Sol</display-text>
         <dot/>
         <stem default-y="-35">down</stem>
       </note>
-      <note default-x="257">
+      <note default-x="255">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -28576,8 +28575,8 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
-      <note default-x="14">
+    <measure number="55" width="346">
+      <note default-x="13">
         <grace slash="no"/>
         <pitch>
           <step>C</step>
@@ -28587,7 +28586,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="6">up</stem>
       </note>
-      <note default-x="32">
+      <note default-x="31">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -28601,7 +28600,7 @@ in Sol</display-text>
           <tied type="start"/>
         </notations>
       </note>
-      <note default-x="100">
+      <note default-x="98">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -28617,7 +28616,7 @@ in Sol</display-text>
           <tied type="stop"/>
         </notations>
       </note>
-      <note default-x="121">
+      <note default-x="119">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -28629,10 +28628,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="8" bezier-y="6" default-x="7" default-y="20" number="1" placement="above" type="start"/>
+          <slur bezier-x="8" bezier-y="6" default-x="6" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -28644,10 +28643,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="-4" bezier-y="9" default-x="7" default-y="15" number="1" type="stop"/>
+          <slur bezier-x="-4" bezier-y="9" default-x="6" default-y="15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="162">
+      <note default-x="160">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -28659,7 +28658,7 @@ in Sol</display-text>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -28671,7 +28670,7 @@ in Sol</display-text>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
-      <note default-x="204">
+      <note default-x="202">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -28683,10 +28682,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="8" bezier-y="6" default-x="7" default-y="20" number="1" placement="above" type="start"/>
+          <slur bezier-x="8" bezier-y="6" default-x="6" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="225">
+      <note default-x="222">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -28701,7 +28700,7 @@ in Sol</display-text>
           <slur bezier-x="-4" bezier-y="9" default-x="7" default-y="15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="246">
+      <note default-x="242">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -28713,7 +28712,7 @@ in Sol</display-text>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
-      <note default-x="266">
+      <note default-x="263">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -28725,7 +28724,7 @@ in Sol</display-text>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
-      <note default-x="287">
+      <note default-x="284">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -28740,7 +28739,7 @@ in Sol</display-text>
           <slur bezier-x="8" bezier-y="6" default-x="7" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="308">
+      <note default-x="304">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -28752,10 +28751,10 @@ in Sol</display-text>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="-4" bezier-y="9" default-x="7" default-y="15" number="1" type="stop"/>
+          <slur bezier-x="-4" bezier-y="9" default-x="6" default-y="15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="329">
+      <note default-x="325">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -28769,7 +28768,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note default-x="13">
         <pitch>
           <step>B</step>
@@ -28780,7 +28779,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -28790,7 +28789,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <chord/>
         <pitch>
           <step>G</step>
@@ -28801,7 +28800,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -28811,7 +28810,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-53">down</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <chord/>
         <pitch>
           <step>G</step>
@@ -28822,7 +28821,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -28832,7 +28831,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="28">up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <chord/>
         <pitch>
           <step>A</step>
@@ -28843,7 +28842,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <chord/>
         <pitch>
           <step>F</step>
@@ -28857,7 +28856,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending number="1" print-object="no" type="start"/>
       </barline>
@@ -28893,7 +28892,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -28901,13 +28900,13 @@ in Sol</display-text>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="110" default-y="-73" halign="center">
+          <dynamics default-x="109" default-y="-73" halign="center">
             <p/>
           </dynamics>
         </direction-type>
         <sound dynamics="54"/>
       </direction>
-      <note default-x="104">
+      <note default-x="102">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -28917,13 +28916,13 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-30">down</stem>
       </note>
-      <note default-x="147">
+      <note default-x="146">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="175">
+      <note default-x="173">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -28943,7 +28942,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending number="2" print-object="no" type="start"/>
       </barline>
@@ -28953,7 +28952,7 @@ in Sol</display-text>
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -28963,7 +28962,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-73">down</stem>
       </note>
-      <note default-x="47">
+      <note default-x="48">
         <chord/>
         <pitch>
           <step>B</step>
@@ -28974,7 +28973,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="47">
+      <note default-x="48">
         <chord/>
         <pitch>
           <step>G</step>
@@ -28985,7 +28984,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem>down</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -28997,8 +28996,9 @@ in Sol</display-text>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" print-object="no" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" print-object="no" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->
@@ -33238,7 +33238,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>98</staff-distance>
@@ -33270,7 +33270,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="149">
+      <note default-x="148">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -33287,7 +33287,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33297,7 +33297,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-35">down</stem>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -33308,7 +33308,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="257">
+      <note default-x="254">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -33321,7 +33321,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note default-x="45">
         <pitch>
           <step>G</step>
@@ -33333,7 +33333,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="73">
+      <note default-x="71">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33344,7 +33344,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="105">
+      <note default-x="104">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33355,7 +33355,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="133">
+      <note default-x="131">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33366,7 +33366,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -33377,7 +33377,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="197">
+      <note default-x="195">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -33388,7 +33388,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="229">
+      <note default-x="227">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -33399,7 +33399,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="257">
+      <note default-x="255">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -33413,8 +33413,8 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
-      <note default-x="32">
+    <measure number="55" width="346">
+      <note default-x="31">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -33436,7 +33436,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="100">
+      <note default-x="98">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33447,7 +33447,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33458,7 +33458,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33469,7 +33469,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="225">
+      <note default-x="222">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33480,7 +33480,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="266">
+      <note default-x="263">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33491,7 +33491,7 @@ in Sol</display-text>
         <stem default-y="-35">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="308">
+      <note default-x="304">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -33504,7 +33504,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note default-x="13">
         <pitch>
           <step>G</step>
@@ -33515,13 +33515,13 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-35">down</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <note default-x="79">
+      <note default-x="78">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -33531,7 +33531,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -33541,7 +33541,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-45">down</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -33553,7 +33553,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending number="1" print-object="no" type="start"/>
       </barline>
@@ -33567,7 +33567,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -33575,13 +33575,13 @@ in Sol</display-text>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="110" default-y="-80" halign="center">
+          <dynamics default-x="109" default-y="-80" halign="center">
             <p/>
           </dynamics>
         </direction-type>
         <sound dynamics="54"/>
       </direction>
-      <note default-x="104">
+      <note default-x="102">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -33601,7 +33601,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending number="2" print-object="no" type="start"/>
       </barline>
@@ -33611,7 +33611,7 @@ in Sol</display-text>
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -33621,7 +33621,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-50">down</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -33633,8 +33633,9 @@ in Sol</display-text>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" print-object="no" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" print-object="no" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->
@@ -38605,7 +38606,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="53" width="284">
+    <measure number="53" width="281">
       <print new-page="yes">
         <staff-layout number="1">
           <staff-distance>98</staff-distance>
@@ -38633,11 +38634,11 @@ in Sol</display-text>
         <beam number="1">begin</beam>
         <notations>
           <articulations>
-            <staccato default-x="3" default-y="-7" placement="above"/>
+            <staccato default-x="2" default-y="-7" placement="above"/>
           </articulations>
         </notations>
       </note>
-      <note default-x="149">
+      <note default-x="148">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -38654,7 +38655,7 @@ in Sol</display-text>
           </articulations>
         </notations>
       </note>
-      <note default-x="175">
+      <note default-x="174">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -38665,7 +38666,7 @@ in Sol</display-text>
         <stem default-y="-40">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="201">
+      <note default-x="199">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -38676,7 +38677,7 @@ in Sol</display-text>
         <stem default-y="-40">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="231">
+      <note default-x="229">
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -38687,7 +38688,7 @@ in Sol</display-text>
         <stem default-y="-40">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="257">
+      <note default-x="254">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -38700,7 +38701,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="54" width="286">
+    <measure number="54" width="282">
       <note default-x="45">
         <pitch>
           <step>E</step>
@@ -38712,7 +38713,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="73">
+      <note default-x="71">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -38723,7 +38724,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="105">
+      <note default-x="104">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -38736,7 +38737,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="133">
+      <note default-x="131">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -38748,7 +38749,7 @@ in Sol</display-text>
         <stem default-y="-50">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="169">
+      <note default-x="168">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -38759,7 +38760,7 @@ in Sol</display-text>
         <stem default-y="-55">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="197">
+      <note default-x="195">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -38770,7 +38771,7 @@ in Sol</display-text>
         <stem default-y="-55">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="229">
+      <note default-x="227">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -38781,7 +38782,7 @@ in Sol</display-text>
         <stem default-y="-55">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="257">
+      <note default-x="255">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -38794,8 +38795,8 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="55" width="351">
-      <note default-x="32">
+    <measure number="55" width="346">
+      <note default-x="31">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38817,7 +38818,7 @@ in Sol</display-text>
         <stem default-y="-5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="100">
+      <note default-x="98">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38828,7 +38829,7 @@ in Sol</display-text>
         <stem default-y="-5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="141">
+      <note default-x="140">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38839,7 +38840,7 @@ in Sol</display-text>
         <stem default-y="-5">up</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="183">
+      <note default-x="181">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38850,7 +38851,7 @@ in Sol</display-text>
         <stem default-y="-5">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="225">
+      <note default-x="222">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38861,7 +38862,7 @@ in Sol</display-text>
         <stem default-y="-5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="266">
+      <note default-x="263">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38872,7 +38873,7 @@ in Sol</display-text>
         <stem default-y="-5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="308">
+      <note default-x="304">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38885,7 +38886,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="56" width="186">
+    <measure number="56" width="184">
       <note default-x="13">
         <pitch>
           <step>G</step>
@@ -38896,7 +38897,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-5">up</stem>
       </note>
-      <note default-x="54">
+      <note default-x="53">
         <pitch>
           <step>B</step>
           <octave>2</octave>
@@ -38906,7 +38907,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="5">up</stem>
       </note>
-      <note default-x="105">
+      <note default-x="103">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -38916,7 +38917,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="10">up</stem>
       </note>
-      <note default-x="145">
+      <note default-x="143">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -38928,7 +38929,7 @@ in Sol</display-text>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="57" width="203">
+    <measure number="57" width="200">
       <barline location="left">
         <ending number="1" print-object="no" type="start"/>
       </barline>
@@ -38942,7 +38943,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-5">up</stem>
       </note>
-      <note default-x="60">
+      <note default-x="59">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -38950,13 +38951,13 @@ in Sol</display-text>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="110" default-y="-80" halign="center">
+          <dynamics default-x="109" default-y="-80" halign="center">
             <p/>
           </dynamics>
         </direction-type>
         <sound dynamics="54"/>
       </direction>
-      <note default-x="104">
+      <note default-x="102">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -38976,7 +38977,7 @@ in Sol</display-text>
       </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="168">
+    <measure implicit="yes" number="X1" width="185">
       <barline location="left">
         <ending number="2" print-object="no" type="start"/>
       </barline>
@@ -38986,7 +38987,7 @@ in Sol</display-text>
           <beat-type>4</beat-type>
         </time>
       </attributes>
-      <note default-x="47">
+      <note default-x="48">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -38996,7 +38997,7 @@ in Sol</display-text>
         <type>quarter</type>
         <stem default-y="-5">up</stem>
       </note>
-      <note default-x="89">
+      <note default-x="88">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -39008,8 +39009,9 @@ in Sol</display-text>
         </direction-type>
       </direction>
       <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" print-object="no" type="discontinue"/>
+        <bar-style>light-heavy</bar-style>
+        <ending number="2" print-object="no" type="stop"/>
+        <repeat direction="backward" winged="none"/>
       </barline>
     </measure>
     <!--=======================================================-->

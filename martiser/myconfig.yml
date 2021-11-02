@@ -3,7 +3,7 @@ musescore_dir: data
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
-parallel: true
+parallel: false
 max_processes: 10
 read_log:
   file_path: logs/read.log
@@ -28,24 +28,13 @@ features:
   - metadata
   - composer
   - custom.librettist
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   - key
-=======
-  # - key
->>>>>>> 47933da (harmony fixings and report)
-=======
-  # - key
->>>>>>> 7892977 (harmony fixings and report)
-=======
-  - key
->>>>>>> 25e2c36 (Change directory new features and add tests)
   - lyrics
   - dynamics
   - rhythm
 
 split_keywords:
-  - woodwind
-  - brass
-  - wind
+  - voice
+  # - woodwind
+  # - brass
+  # - wind

@@ -56,7 +56,7 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
         #     Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
         #              columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, excel_name) , workbook, NARROW)
+        save_workbook(os.path.join(results_path, excel_name) , workbook, cells_size=NARROW)
 
         # with visualiser_lock:
         Subtitle = 'in relation to the global key' if not relative else 'in relation to the local key'
