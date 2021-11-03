@@ -41,8 +41,10 @@ def extract_files(obj) -> List[str]:
     if isinstance(obj, str):
         if path.isdir(obj):
             return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")))
-        else:
+        elif path.isfile(obj):
             return [obj] if obj.rstrip().endswith(f".{MUSICXML_FILE_EXTENSION}") else []
+        else:
+            raise ValueError(f"File {obj} doesn't exist")
     return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
 
 
