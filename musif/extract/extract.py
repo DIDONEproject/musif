@@ -36,7 +36,7 @@ def parse_file(file_path: str, split_keywords) -> Score:
 
 
 def extract_files(obj) -> List[str]:
-    """Returns a list of files paths. obj may be a file, a directory, a list of files paths or a list of directories"""
+    """Returns a list of files paths. obj may be a file path, a directory path or a list of files paths """
     if not (isinstance(obj, list) or isinstance(obj, str)):
         raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     if isinstance(obj, str):
