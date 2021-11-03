@@ -39,7 +39,7 @@ class FeaturesGenerator:
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.write_logger
 
-    def generate_reports(self, data: DataFrame, num_factors: int = 0, main_results_path: str = '', parts_list: Optional[List[str]] = None, visualizations=False) -> DataFrame:
+    def generate_reports(self, data: DataFrame, main_results_path: str, parts_list: Optional[List[str]] = None, num_factors: int = 0, visualizations=False) -> DataFrame:
         print(get_color('WARNING')+'\n\t\t\t---Starting reports generation ---\n'+ RESET_SEQ)
         self.parts_list = [] if parts_list is None else parts_list
         self.visualizations=visualizations
@@ -50,7 +50,7 @@ class FeaturesGenerator:
         print('Visualizations are activated' if self.visualizations else 'Visualizations are deactivated'+'.\n')
         self._write()
             
-    def _factor_execution(self, factor: int):
+    def _FactorExecution(self, num_factors: int = 0):
         global rows_groups
         global not_used_cols
         self.not_used_cols=not_used_cols
@@ -69,12 +69,12 @@ class FeaturesGenerator:
         self.common = True #Flag to run common tasks only once
         self.voices=all_info.Voices
 
-        print(get_color('INFO')+'\n' + str(factor) + " factor", end='\n'+RESET_SEQ)
+        print(get_color('INFO')+'\n' + str(num_factors) + " factor", end='\n'+RESET_SEQ)
 
         instruments = self.extract_instruments(all_info)
         self.rename_singers(all_info)
 
-        self.prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments)
+        self._prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments)
 
         for instrument in tqdm(list(instruments), desc='Progress'):
             if instrument in singers_list:
@@ -86,21 +86,21 @@ class FeaturesGenerator:
             intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.find_columns(all_info, instrument_level)
             self.prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
             
-            additional_info, rg_groups = self.get_additional_info_and_groups(factor, rg) 
+            additional_info, rg_groups = self.get_additional_info_and_groups(num_factors, rg) 
 
             results_path_factorx = path.join(main_results_path, 'Melody_' + instrument, str(
-                factor) + " factor") if factor > 0 else path.join(main_results_path,'Melody_'+ instrument, "Data")
+                num_factors) + " factor") if num_factors > 0 else path.join(main_results_path,'Melody_'+ instrument, "Data")
             if not os.path.exists(results_path_factorx):
                 os.makedirs(results_path_factorx)
                 
             if self.common:
-                self.run_common_tasks(factor, main_results_path, rg, nuc, common_columns_df, common_tasks, harmony_tasks, tasks, additional_info, rg_groups, results_path_factorx)
+                self.run_common_tasks(num_factors, main_results_path, rg, nuc, common_columns_df, common_tasks, harmony_tasks, tasks, additional_info, rg_groups, results_path_factorx)
             # # MULTIPROCESSING (one process per group (year, decade, city, country...))
             # if sequential: # 0 and 1 factors
             for groups in rg_groups:
                 try:
                     self._tasks_execution(rows_groups, not_used_cols, self._cfg, 
-                        groups, results_path_factorx, additional_info, factor, common_columns_df, **tasks)
+                        groups, results_path_factorx, additional_info, num_factors, common_columns_df, **tasks)
                     rows_groups = rg
                     not_used_cols = nuc
                 except KeyError as e:
@@ -116,9 +116,9 @@ class FeaturesGenerator:
 
     def rename_singers(self, all_info):
         for c in all_info.columns:
-            if any(i in c for i in singers_list):
+            if any(i.capitalize() in c for i in singers_list):
                 for s in singers_list:
-                    all_info.rename(columns={c:c.replace(s,'Voice')})
+                    all_info.rename(columns={c:c.replace(s.capitalize(),'Voice')}, inplace=True)
 
     def find_notes_set(self, instruments):
         notes_set=set([])
@@ -131,7 +131,7 @@ class FeaturesGenerator:
 
     def prepare_part_dataframes(self, all_info, common_columns_df, tasks, Instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list):
         if self._cfg.is_requested_module(interval):            
-            intervals_info, intervals_types = self.extract_interval_columns(all_info, Instrument_level, intervals_list, intervals_types_list)
+            intervals_info, intervals_types = self._extract_interval_columns(all_info, Instrument_level, intervals_list, intervals_types_list)
             intervals_info.dropna(how='all', axis=1, inplace=True)
             intervals_types.dropna(how='all', axis=1, inplace=True)
             tasks['intervals_info'] = intervals_info
@@ -139,7 +139,7 @@ class FeaturesGenerator:
 
         if self._cfg.is_requested_module(ambitus):       
             try:     
-                tasks['melody_values'] = self.extract_melody_colunms(all_info, Instrument_level).dropna(how='all', axis=1)
+                tasks['melody_values'] = self._extract_melody_colunms(all_info, Instrument_level).dropna(how='all', axis=1)
             except KeyError:
                 self._cfg.write_logger.error(get_color('ERROR')+'Melody Values Dataframe could not be extracted.{}'.format(RESET_SEQ))                       
             
@@ -151,7 +151,7 @@ class FeaturesGenerator:
                 tasks['scale_relative'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_relative_list).dropna(how='all', axis=1)
             tasks['clefs'] = self.get_clefs(all_info, common_columns_df)
 
-    def prepare_common_dataframes(self, all_info, common_tasks, harmony_tasks, instruments):
+    def _prepare_common_dataframes(self, all_info, common_tasks, harmony_tasks, instruments):
         if self._cfg.is_requested_module(density) or self._cfg.is_requested_module(texture):
             notes_set = self.find_notes_set(instruments)    
             notes_df=all_info[list(notes_set)]
@@ -315,7 +315,7 @@ class FeaturesGenerator:
 
         return intervals_list, intervals_types_list, degrees_list, degrees_relative_list
 
-    def extract_melody_colunms(self, all_info, catch):
+    def _extract_melody_colunms(self, all_info, catch):
         melody_values_list = get_melody_list(catch)
         if catch + lyrics.SYLLABIC_RATIO in all_info.columns:
             melody_values_list.append(catch + lyrics.SYLLABIC_RATIO)
@@ -325,7 +325,7 @@ class FeaturesGenerator:
                                 for c in melody_values.columns]
         return melody_values
 
-    def extract_interval_columns(self, all_info, catch, intervals_list, intervals_types_list):
+    def _extract_interval_columns(self, all_info, catch, intervals_list, intervals_types_list):
         intervals_info=all_info[intervals_list]
         intervals_info.columns = [c.replace(catch+'Interval', '').replace('_Count', '')
                                     for c in intervals_info.columns]
@@ -452,4 +452,4 @@ class FeaturesGenerator:
 
         # Start factor generation
         for factor in range(1, self.num_factors_max + 1):
-            self._factor_execution(factor)
+            self._FactorExecution(factor)
