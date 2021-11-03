@@ -38,13 +38,12 @@ def parse_file(file_path: str, split_keywords) -> Score:
 def extract_files(obj) -> List[str]:
     if not (isinstance(obj, list) or isinstance(obj, str)):
         raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
-    musicxml_files = []
-    if isinstance(obj, list):
-        musicxml_files = list(obj)
     if isinstance(obj, str):
-        musicxml_files = sorted(
-            glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")) if path.isdir(obj) else [obj])
-    return musicxml_files
+        if path.isdir(obj):
+            return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")))
+        else:
+            return [obj] if obj.rstrip().endswith(f".{MUSICXML_FILE_EXTENSION}") else []
+    return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
 
 
 class PartsExtractor:
