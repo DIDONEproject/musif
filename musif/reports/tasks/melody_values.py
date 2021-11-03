@@ -29,11 +29,10 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
         PrintStatisticalValues(_cfg, data, additional_info, groups, workbook)
         PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook)
         PrintLargestLeaps(_cfg, data, data_general,additional_info, groups, workbook)
-
         save_workbook(os.path.join(results_path, excel_name), workbook, cells_size=NARROW)
 
         if visualizations:
-            columns_visualisations = [INTERVALLIC_MEAN,TRIMMED_INTERVALLIC_MEAN, STD, ABSOLUTE_INTERVALLIC_MEAN,ABSOLUTE_STD]
+            columns_visualisations = [INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_MEAN, STD, ABSOLUTE_INTERVALLIC_MEAN,ABSOLUTE_STD]
             
             if groups:
                 data_grouped = data.groupby(list(groups))
