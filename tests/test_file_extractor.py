@@ -5,8 +5,10 @@ from musif.extract.extract import extract_files
 
 files_dir_test = path.join("data", "arias_test")
 files_dir_test1 = path.join("data", "arias_tests1")
+files_dir_test_type = path.join("data", "static")
 file_dem1 = "Dem01M-O_piu-1735-Leo[1.01][0430].xml"
 file_dem2 = "Dem02M-In_te-1733-Caldara[1.02][0417].xml"
+file_dem3 = "Did03M-Son_regina-1730-Sarro[1.05][0006].xml"
 
 
 class TestFilesExtractFiles:
@@ -35,14 +37,10 @@ class TestFilesExtractFiles:
         # Then
         assert expected_files == actual_files
 
-    def test_extract_files_recursive_directory(self):  # maybe too much
+    def test_extract_files_recursive_directory(self):
         # Given
         files_dir = path.join("data")
-        expected_files = [path.join(files_dir_test, file_dem1), path.join(files_dir_test, file_dem2),
-                          path.join(files_dir_test1, file_dem1), path.join(files_dir_test1, file_dem2),
-                          path.join("data", "static", "config.yml"),
-                          path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml"),
-                          path.join("data", "static", "expected_features.csv")]
+        expected_files = []  # It search for .xml files, It's not recursive
         # When
         actual_files = extract_files(files_dir)
 
@@ -69,6 +67,7 @@ class TestFilesExtractFiles:
                           path.join(files_dir_test1, file_dem1), path.join(files_dir_test1, file_dem2)]
         # When
         actual_files = extract_files(files_dir)
+        # then
         assert expected_files == actual_files
 
     # INVALID PATH VALUES
@@ -78,9 +77,39 @@ class TestFilesExtractFiles:
         with pytest.raises(ValueError):
             extract_files(0)
 
-    def test_non_existing_file(self):  # Should fail but doesn't
+    def test_extract_non_existing_file(self):
         # Given
         files_dir = "doesntExists"
         # Then
         with pytest.raises(ValueError):
             extract_files(files_dir)
+
+    # TYPE OF FILE
+
+    def test_extract_only_good_files_directory(self):
+        # Given
+        files_dir = files_dir_test_type
+        expected_files = [path.join(files_dir, file_dem3)]
+        # When
+        actual_files = extract_files(files_dir)
+        # Then
+        assert expected_files == actual_files
+
+    def test_extract_not_bad_file(self):
+        # Given
+        files_dir = path.join(files_dir_test_type, "config.yml")
+        expected_files = []
+        # When
+        actual_files = extract_files(files_dir)
+        # Then
+        assert expected_files == actual_files
+
+    def test_extract_only_good_files_list(self):
+        # Given
+        files_dir = [path.join(files_dir_test_type, "config.yml"), path.join(files_dir_test_type, file_dem3)]
+        expected_files = [path.join(files_dir_test_type, file_dem3)]
+        # When
+        actual_files = extract_files(files_dir)
+        # Then
+        assert expected_files == actual_files
+
