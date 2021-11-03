@@ -90,7 +90,7 @@ def compute_value(subgroup_data, c, computation, ponderate_data, not_grouped_inf
             pitch_ps = [str(i) for i in pitch_ps]
             value = column_data.tolist()[pitch_ps.index(str(max_ps))]
         elif computation == "meanNote":
-            pitch_ps =[pitch.Pitch(n).ps if str(n) != 'nan' else np.nan for n in column_data]
+            pitch_ps = [pitch.Pitch(n).ps if str(n) != 'nan' else np.nan for n in column_data]
             value = note_mean(pitch_ps)
         elif computation == "minInterval":
             interval_semitones = [interval.Interval(n).semitones if str(n) != 'nan' else np.nan for n in column_data]

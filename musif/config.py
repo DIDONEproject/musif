@@ -13,6 +13,7 @@ WRITE_LOG = "write_log"
 LOG_FILE_PATH = "file_path"
 LOG_LEVEL = "level"
 DATA_DIR = "data_dir"
+MUSESCORE_DIR = "musescore_dir"
 METADATA_DIR = "metadata_dir"
 METADATA_ID_COL = "metadata_id_col"
 PARALLEL = "parallel"
@@ -30,6 +31,7 @@ _CONFIG_FALLBACK = {
         LOG_LEVEL: "ERROR",
     },
     DATA_DIR: "data",
+    MUSESCORE_DIR:"data",
     METADATA_DIR: "metadata",
     METADATA_ID_COL: "FileName",
     PARALLEL: False,
@@ -57,6 +59,7 @@ class Configuration:
         self._write_log_data = config_data.get(WRITE_LOG, _CONFIG_FALLBACK[WRITE_LOG])
         self.write_logger = get_logger(WRITE_LOGGER_NAME, self._write_log_data[LOG_FILE_PATH], self._write_log_data[LOG_LEVEL])
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
+        self.musescore_dir = config_data.get(MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
         self.metadata_id_col = config_data.get(METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL])
         self.parallel = config_data.get(PARALLEL, _CONFIG_FALLBACK[PARALLEL])

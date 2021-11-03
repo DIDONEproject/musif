@@ -35,7 +35,6 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
-
         if visualizations:
             if 'Clefs' in name:
                 title = 'Use of clefs in the vocal part'
@@ -71,7 +70,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                             if data_grouped:
                                 bar_plot(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
                                             'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
-                        else: #subgroups
+                        else: #w ith subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in EXCEPTIONS:
                                     data_grouped = data.groupby(subrow)
