@@ -3,7 +3,7 @@ import inspect
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from music21.converter import ConverterException, parse
 from music21.stream import Part, Score
@@ -35,7 +35,7 @@ def parse_file(file_path: str, split_keywords) -> Score:
     return score
 
 
-def extract_files(obj) -> List[str]:
+def extract_files(obj: Union[str, List[str]]) -> List[str]:
     """Extracts the paths to musicxml files
 
         Given a file path, a directory path, a list of files paths or a list of directories paths, returns a list of
