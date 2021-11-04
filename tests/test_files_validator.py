@@ -14,10 +14,14 @@ test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006
 malformed_file = path.join("data", "arias_test", "malformed.xml")
 incompleted_file = path.join("data", "arias_test", "incompleted.xml")
 
+config_file = path.join("data", "static", "config.yml")
+test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
+
 
 class TestFilesValidator:
 
     # configurations tests
+
 
     @pytest.mark.configurations
     def test_config_passed_as_path(self):
