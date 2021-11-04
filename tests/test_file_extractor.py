@@ -17,7 +17,7 @@ file_dem2_test1 = path.join(files_dir_test1, "Dem02M-In_te-1733-Caldara[1.02][04
 file_dem3 = path.join(files_dir_test_type, "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 
 
-class TestFilesExtractFiles:
+class TestExtractFiles:
 
     # ONE FILE/DIRECTORY
 
