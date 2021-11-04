@@ -357,10 +357,6 @@ def get_function_first(element, mode):
             print(element, ' is not available!')
     return ''
 
-###########################################################################
-# Function to obtain the harmonic function2 of every relativeroot, chord, or numeral.
-###########################################################################
-
 def get_function_second(element):
     element=element.replace('b','-')
     if element.lower() == '#ln':

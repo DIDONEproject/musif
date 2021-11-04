@@ -40,7 +40,7 @@ class FeaturesGenerator:
         self._logger = self._cfg.write_logger
 
     def generate_reports(self, data: DataFrame, main_results_path: str, parts_list: Optional[List[str]] = None, num_factors: int = 0, visualizations=False) -> DataFrame:
-        print(get_color('WARNING')+'\n\t\t\t---Starting reports generation ---\n'+ RESET_SEQ)
+        print(get_color('WARNING')+'\n\t\t\t--- Starting reports generation ---\n'+ RESET_SEQ)
         self.parts_list = [] if parts_list is None else parts_list
         self.visualizations=visualizations
         self.global_features = data
@@ -77,7 +77,7 @@ class FeaturesGenerator:
         self._prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments)
 
         for instrument in tqdm(list(instruments), desc='Progress'):
-            if instrument in singers_list:
+            if instrument.lower() in singers_list:
                 instrument = 'Voice'
 
             print(get_color('INFO')+'\nInstrument: ', instrument, end='\n\n'+RESET_SEQ)

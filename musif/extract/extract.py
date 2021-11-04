@@ -169,7 +169,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict]]:
-        self._cfg.read_logger.info(f"Processing score {musicxml_file}")
+        self._cfg.read_logger.info(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file, parts_filter)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
         parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
@@ -182,7 +182,7 @@ class FeaturesExtractor:
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
-        score = score.expandRepeats()
+        # score = score.expandRepeats()
         filtered_parts = self._filter_parts(score, parts_filter)
         if len(filtered_parts) == 0:
             self._cfg.read_logger.warning(

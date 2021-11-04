@@ -24,7 +24,7 @@ features:
   - interval # to generate Melody_values reports, both ambitus and interval are needed
   # - density
   # - texture     
-  # - custom.harmony
+  - custom.harmony
   - metadata
   - composer
   - custom.librettist
@@ -34,7 +34,6 @@ features:
   - rhythm
 
 split_keywords:
-  - voice
-  # - woodwind
-  # - brass
-  # - wind
+  - woodwind
+  - brass
+  - wind
