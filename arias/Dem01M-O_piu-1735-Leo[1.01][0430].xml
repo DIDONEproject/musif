@@ -6,7 +6,7 @@
     <creator type="composer">Leonardo Leo</creator>
     <encoding>
       <software>Finale v26.3 for Mac</software>
-      <encoding-date>2021-10-29</encoding-date>
+      <encoding-date>2021-10-07</encoding-date>
       <supports attribute="new-system" element="print" type="yes" value="yes"/>
       <supports attribute="new-page" element="print" type="yes" value="yes"/>
       <supports element="accidental" type="yes"/>
@@ -656,7 +656,7 @@ in Sol</display-text>
         <type>eighth</type>
         <stem default-y="-41.5">down</stem>
       </note>
-      <note default-x="108">
+      <note default-x="121">
         <grace slash="no"/>
         <pitch>
           <step>D</step>
@@ -958,7 +958,7 @@ in Sol</display-text>
       <backup>
         <duration>16</duration>
       </backup>
-      <note default-x="12">
+      <note default-x="24">
         <grace slash="no"/>
         <pitch>
           <step>D</step>
@@ -3287,7 +3287,7 @@ in Sol</display-text>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="150" default-y="-67" halign="center">
+          <dynamics default-x="151" default-y="-73" halign="center">
             <p/>
           </dynamics>
         </direction-type>
@@ -4526,7 +4526,7 @@ in Sol</display-text>
       <backup>
         <duration>16</duration>
       </backup>
-      <note default-x="15">
+      <note default-x="26">
         <grace slash="no"/>
         <pitch>
           <step>D</step>
@@ -4843,7 +4843,7 @@ in Sol</display-text>
     <!--=======================================================-->
     <measure number="57" width="203">
       <barline location="left">
-        <ending default-y="57" end-length="30" font-size="5.8" number="1" print-object="yes" type="start"/>
+        <ending default-y="40" end-length="30" font-size="5.8" number="1" print-object="yes" type="start"/>
       </barline>
       <note default-x="16">
         <pitch>
@@ -4922,7 +4922,7 @@ in Sol</display-text>
     <!--=======================================================-->
     <measure implicit="yes" number="X1" width="168">
       <barline location="left">
-        <ending default-y="57" end-length="30" font-size="5.8" number="2" print-object="yes" type="start"/>
+        <ending default-y="40" end-length="30" font-size="5.8" number="2" print-object="yes" type="start"/>
       </barline>
       <attributes>
         <time>
@@ -4973,7 +4973,7 @@ in Sol</display-text>
       </note>
       <direction placement="above">
         <direction-type>
-          <words default-x="130" default-y="63" font-size="10.4" font-weight="bold" justify="right">Fine</words>
+          <words default-x="130" default-y="53" font-size="10.4" font-weight="bold" justify="right">Fine</words>
         </direction-type>
       </direction>
       <direction placement="below">

@@ -15,7 +15,6 @@ from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION)
 @lru_cache(maxsize=None, typed=False)
 def parse_score(mscx_file: str, cfg: Configuration):
     cfg.read_logger.info(get_color('INFO')+'\nParsing mscx file... {0}'.format(mscx_file) + RESET_SEQ)
-    print('\nParsing mscx file... {0}'.format(mscx_file))
 
     msc3_score = ms3.score.Score(mscx_file.strip(), logger_cfg={'level': 'ERROR'})
     harmonic_analysis = msc3_score.mscx.expanded
