@@ -11,8 +11,14 @@ DYNMEAN_WEIGHTED = "DynMean_weighted"
 DYNABRUPTNESS = "DynAbruptness"
 DYNGRAD = "DynGrad"
 
-DYNAMIC_VALUES = {"ff": 101, "più f": 96, "f assai": 94, "f": 88, "poco f": 80, "mf": 75, "mp": 62, "p": 49,
-                  "dolce": 49, "p assai": 42, "pp": 36, "soto voce": 36}
+DYNAMIC = "Dynamic"  # all coulf be in a dictionary with this variables?
+TEXTEXPRESSION = "TextExpression"
+TIMESIGNATURE = "TimeSignature"
+REST = "Rest"
+
+DYNAMIC_VALUES = {"ff": 101, "più f": 96, "f assai": 94, "f": 88, "sempre f": 88, "poco f": 80, "mf": 75,
+                  "mp": 62, "p": 49, "sempre p": 49, "p dolce": 49, "p assai": 42, "pp": 36, "sempre pp": 36,
+                  "sotto voce assai": 36}
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -23,21 +29,45 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     dyn_grad = 0
     last_dyn = 0
     beat = 1
+    name = ""
+    dyn = False
     for bar_section in part_data["measures"]:
         for measure in bar_section.elements:
-            if measure.classes[0] == "Dynamic":  # need to change with beat count and beat being different
+            if measure.classes[0] == DYNAMIC or (measure.classes[0] == TEXTEXPRESSION and
+                                                 measure.content == "sotto voce assai"):
                 position = get_beat_position(beat_count, beat, measure.beat)
-                old_beat = position - 1  # change in utils.py:old_beat=position-get_beat_position(beat_count,beat,1)
+                old_beat = position - get_beat_position(beat_count, beat, 1)
                 dyn_mean_weighted += (beats_section + old_beat) * last_dyn
-                new_dyn = get_dynamic_numeric(measure.value)
-                dynamics.append(new_dyn)  # also could get a value (0,1) with volumeScalar
+                if measure.classes[0] == TEXTEXPRESSION:
+                    name += measure.content
+                else:
+                    name += measure.value
+                dyn = True
+                wait = True
+            elif measure.classes[0] == TEXTEXPRESSION:
+                if measure.content == "dolce" or measure.content == "assai":
+                    name += " " + measure.content
+                else:
+                    name += measure.content + " "
+            elif measure.classes[0] == TIMESIGNATURE:
+                beat_count = measure.beatCount
+                beat = get_number_of_beats(measure.ratioString)
+            elif measure.classes[0] == REST:
+                beats_section -= get_beat_position(beat_count, beat, measure.duration.quarterLength)
+                total_beats -= get_beat_position(beat_count, beat, measure.duration.quarterLength)
+                dynamics.append(0)
+
+            if dyn and not wait:
+                new_dyn = get_dynamic_numeric(name)
+                dynamics.append(new_dyn)
                 if (beats_section + old_beat) > 0:
                     dyn_grad += (new_dyn - last_dyn) / (beats_section + old_beat)
                 last_dyn = new_dyn
                 beats_section = - old_beat  # number of beats that has old dynamic
-            elif measure.classes[0] == "TimeSignature":
-                beat_count = measure.beatCount
-                beat = get_number_of_beats(measure.ratioString)
+                name = ""
+                dyn = False
+            wait = False
+
         beats_section += beat
         total_beats += beat
 

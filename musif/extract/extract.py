@@ -3,7 +3,7 @@ import inspect
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from music21.converter import ConverterException, parse
 from music21.stream import Part, Score
@@ -35,9 +35,34 @@ def parse_file(file_path: str, split_keywords) -> Score:
     return score
 
 
-def extract_files(obj) -> List[str]:
+def extract_files(obj: Union[str, List[str]]) -> List[str]:
+    """Extracts the paths to musicxml files
+
+        Given a file path, a directory path, a list of files paths or a list of directories paths, returns a list of
+        paths to musicxml files found, in alphabetic order. If given neither a string nor list of strings raise a
+        TypeError and if the file doesn't exists returns a ValueError
+
+        Parameters
+        ----------
+        obj : Union[str, List[str]]
+          A path or a list of paths
+
+        Returns
+        -------
+        resp : List[str]
+          The list of musicxml files found in the provided arguments
+          This list will be returned in alphabetical order
+
+        Raises
+        ------
+        TypeError
+          - If the type is not the expected (str or List[str]).
+
+        ValueError
+          - If the provided string is neither a directory nor a file path
+    """
     if not (isinstance(obj, list) or isinstance(obj, str)):
-        raise ValueError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
+        raise TypeError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     if isinstance(obj, str):
         if path.isdir(obj):
             return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")))
