@@ -98,10 +98,22 @@ class PartsExtractor:
 
 
 class FilesValidator:
+    """
+        Checks if each file can be parsed. If one can't be parsed, it'll print an error message and continues to check.
+        Non parseables files will return None.
+    """
     def __init__(self, *args, **kwargs):
+        """
+        *args:
+        **kwargs:
+        """
         self._cfg = Configuration(*args, **kwargs)
 
     def validate(self, obj) -> None:
+        """
+         obj : Union[str, List[str]]
+          A path or a list of paths
+        """
         musicxml_files = extract_files(obj)
         if self._cfg.parallel:
             self._validate_in_parallel(musicxml_files)
