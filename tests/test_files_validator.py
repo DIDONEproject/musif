@@ -14,9 +14,6 @@ test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006
 malformed_file = path.join("data", "arias_test", "malformed.xml")
 incompleted_file = path.join("data", "arias_test", "incompleted.xml")
 
-config_file = path.join("data", "static", "config.yml")
-test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
-
 
 class TestFilesValidator:
 
@@ -58,6 +55,7 @@ class TestFilesValidator:
         assert extractor._cfg.to_dict() == expected
 
     @pytest.mark.configurations
+
     def test_config_passed_as_configuration_object(self):
         # Given
         config = Configuration(config_file)
@@ -137,6 +135,7 @@ class TestFilesValidator:
         # When
         validator.validate([malformed_file, test_file])
         out, err = capsys.readouterr()
+
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
 

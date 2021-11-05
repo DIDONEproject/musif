@@ -1,6 +1,7 @@
 import glob
 import inspect
 import re
+import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Optional, Tuple, Union
@@ -130,19 +131,31 @@ class PartsExtractor:
 
 class FilesValidator:
     """
-        Checks if each file can be parsed. If one can't be parsed, it'll print an error message and continues to check.
-        Non parseables files will return None.
+    Checks if each file can be parsed. If a file can't be parsed, it'll print an error message and continues to check
+    the remaining files.
     """
+
     def __init__(self, *args, **kwargs):
         """
-        *args:
-        **kwargs:
+        Parameters
+        ----------
+        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
+        **kwargs: Get keywords to construct Configuration.
         """
         self._cfg = Configuration(*args, **kwargs)
 
     def validate(self) -> None:
         pinfo("Starting files validation", level=self._cfg.read_console_log_level)
         musicxml_files = extract_files(self._cfg.data_dir)
+        """
+        Checks, squentially or in parallel, if the given files are parseable. Parse file will print error message and
+        return a None object if file fails??. Don't give a return value nor raises an exception??
+
+        Parameters
+        ----------
+         obj : Union[str, List[str]]
+          A path or a list of paths
+        """
         if self._cfg.parallel:
             errors = self._validate_in_parallel(musicxml_files)
         else:
@@ -338,7 +351,7 @@ class FeaturesExtractor:
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict]):
         for part_data, part_features in zip(parts_data, parts_features):
-            module_name=str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
+            module_name = str(module.__name__).replace("musif.extract.features.", '').replace('.handler', '')
             pdebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.", self._logger)
             module.update_part_objects(score_data, part_data, self._cfg, part_features)
 
