@@ -1,6 +1,7 @@
 import glob
 import inspect
 import re
+import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Tuple, Union
@@ -25,13 +26,16 @@ _cache = Cache(10000)  # To cache scanned scores
 
 def parse_file(file_path: str, split_keywords) -> Score:
     score = _cache.get(file_path)
+
     if score is None:
         try:
             score = parse(file_path)
             split_layers(score, split_keywords)
             _cache.put(file_path, score)
-        except ConverterException:
-            print(get_color('ERROR') + '\nERROR:\tThat seems to be an invalid path!', RESET_SEQ)
+        except Exception:
+            score = None
+            print(get_color('ERROR') + '\nERROR:\tThat seems to be an invalid path!', RESET_SEQ, file=sys.stderr)
+
     return score
 
 
@@ -99,18 +103,26 @@ class PartsExtractor:
 
 class FilesValidator:
     """
-        Checks if each file can be parsed. If one can't be parsed, it'll print an error message and continues to check.
-        Non parseables files will return None.
+    Checks if each file can be parsed. If a file can't be parsed, it'll print an error message and continues to check
+    the remaining files.
     """
+
     def __init__(self, *args, **kwargs):
         """
-        *args:
-        **kwargs:
+        Parameters
+        ----------
+        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
+        **kwargs: Get keywords to construct Configuration.
         """
         self._cfg = Configuration(*args, **kwargs)
 
-    def validate(self, obj) -> None:
+    def validate(self, obj: Union[str, List[str]]) -> None:
         """
+        Checks, squentially or in parallel, if the given files are parseable. Parse file will print error message and
+        return a None object if file fails??. Don't give a return value nor raises an exception??
+
+        Parameters
+        ----------
          obj : Union[str, List[str]]
           A path or a list of paths
         """
