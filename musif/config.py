@@ -66,7 +66,6 @@ class Configuration:
             else:
                 raise TypeError()
         config_data.update(kwargs)  # Override values
-
         read_log_config = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
         self.read_log_file = read_log_config[LOG_FILE_PATH]
         self.read_file_log_level = read_log_config[FILE_LOG_LEVEL]
