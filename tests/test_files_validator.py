@@ -55,7 +55,6 @@ class TestFilesValidator:
         assert extractor._cfg.to_dict() == expected
 
     @pytest.mark.configurations
-
     def test_config_passed_as_configuration_object(self):
         # Given
         config = Configuration(config_file)

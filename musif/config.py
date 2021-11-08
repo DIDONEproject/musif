@@ -49,6 +49,7 @@ _CONFIG_FALLBACK = {
     EXPAND_REPEATS: False,
 }
 
+
 class Configuration:
 
     def __init__(self, *args, **kwargs):
@@ -62,7 +63,10 @@ class Configuration:
                 config_data = args[0]
             elif isinstance(args[0], Configuration):
                 config_data = args[0].to_dict()
+            else:
+                raise TypeError()
         config_data.update(kwargs)  # Override values
+
         read_log_config = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
         self.read_log_file = read_log_config[LOG_FILE_PATH]
         self.read_file_log_level = read_log_config[FILE_LOG_LEVEL]
@@ -127,7 +131,8 @@ class Configuration:
 
     def _load_metadata(self) -> None:
         self.scores_metadata = {
-            path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))
+            path.basename(file): read_dicts_from_csv(file) for file in
+            glob(path.join(self.metadata_dir, "score", "*.csv"))
         }
         self.characters_gender = read_dicts_from_csv(path.join(self.internal_data_dir, "characters_gender.csv"))
         self.sound_to_abbreviation = read_object_from_json_file(path.join(self.internal_data_dir, "sound_abbreviation.json"))
