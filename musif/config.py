@@ -31,7 +31,7 @@ _CONFIG_FALLBACK = {
         LOG_LEVEL: "ERROR",
     },
     DATA_DIR: "data",
-    MUSESCORE_DIR:"data",
+    MUSESCORE_DIR: "data",
     METADATA_DIR: "metadata",
     METADATA_ID_COL: "FileName",
     PARALLEL: False,
@@ -39,6 +39,7 @@ _CONFIG_FALLBACK = {
     FEATURES: None,
     SPLIT_KEYWORDS: [],
 }
+
 
 class Configuration:
 
@@ -53,11 +54,15 @@ class Configuration:
                 config_data = args[0]
             elif isinstance(args[0], Configuration):
                 config_data = args[0].to_dict()
+            else:
+                raise TypeError()
         config_data.update(kwargs)  # Override values
         self._read_log_data = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
-        self.read_logger = get_logger(READ_LOGGER_NAME, self._read_log_data[LOG_FILE_PATH], self._read_log_data[LOG_LEVEL])
+        self.read_logger = get_logger(READ_LOGGER_NAME, self._read_log_data[LOG_FILE_PATH],
+                                      self._read_log_data[LOG_LEVEL])
         self._write_log_data = config_data.get(WRITE_LOG, _CONFIG_FALLBACK[WRITE_LOG])
-        self.write_logger = get_logger(WRITE_LOGGER_NAME, self._write_log_data[LOG_FILE_PATH], self._write_log_data[LOG_LEVEL])
+        self.write_logger = get_logger(WRITE_LOGGER_NAME, self._write_log_data[LOG_FILE_PATH],
+                                       self._write_log_data[LOG_LEVEL])
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
         self.musescore_dir = config_data.get(MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
@@ -104,7 +109,8 @@ class Configuration:
 
     def _load_metadata(self) -> None:
         self.scores_metadata = {
-            path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))
+            path.basename(file): read_dicts_from_csv(file) for file in
+            glob(path.join(self.metadata_dir, "score", "*.csv"))
         }
         self.characters_gender = read_dicts_from_csv(path.join(self.data_dir, "characters_gender.csv"))
         self.sound_to_abbreviation = read_object_from_json_file(path.join(self.data_dir, "sound_abbreviation.json"))

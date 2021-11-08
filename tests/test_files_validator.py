@@ -9,6 +9,7 @@ from musif import FilesValidator
 from musif.extract.extract import extract_files
 
 config_file = path.join("data", "static", "config.yml")
+config_file_parallel = path.join("data", "config_test", "configParallel.yml")
 test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 malformed_file = path.join("data", "arias_test", "malformed.xml")
 incompleted_file = path.join("data", "arias_test", "incompleted.xml")
@@ -37,6 +38,17 @@ class TestFilesValidator:
 
         # When
         extractor = FilesValidator(**config_dict)
+
+        # Then
+        assert extractor._cfg.to_dict() == expected
+
+    @pytest.mark.configurations
+    def test_config_passed_with_overwrite(self):
+        # Given
+        expected = read_object_from_yaml_file(config_file_parallel)
+
+        # When
+        extractor = FilesValidator(config_file, parallel=True)
 
         # Then
         assert extractor._cfg.to_dict() == expected
