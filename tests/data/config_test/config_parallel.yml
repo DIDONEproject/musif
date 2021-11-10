@@ -1,0 +1,31 @@
+data_dir: ../data
+metadata_dir: ../metadata
+metadata_id_col: AriaId
+parallel: true
+max_processes: 8
+read_log:
+  file_path: data/logs/read.log
+  level: DEBUG
+write_log:
+  file_path: data/logs/write.log
+  level: INFO
+features:
+  - scoring
+  - custom.file_name
+  - metadata
+  - custom.themeA
+  - core
+  - composer
+  - custom.librettist
+  - ambitus
+  - interval
+  - tempo
+  - density
+  - lyrics
+  - scale
+  - key
+#  - custom.harmony
+split_keywords:  # Used to split the possible layers present depending on the instrument name
+  - woodwind
+  - brass
+  - wind

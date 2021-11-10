@@ -8,7 +8,10 @@ import pandas as pd
 import yaml
 from pandas import DataFrame
 
-from musif.common.constants import COLOR_SEQ, CSV_DELIMITER, Color, ENCODING, RESET_SEQ
+from musif.common.constants import (
+    COLORS, COLOR_SEQ, CSV_DELIMITER, ENCODING, LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEVEL_INFO, LEVEL_WARNING,
+    RESET_SEQ
+)
 
 
 def get_file_name(file_path: str) -> str:
@@ -99,42 +102,46 @@ def write_dicts_to_csv(dicts: List[dict], file_path: str):
             writer.writerow(obj)
 
 
-def get_color(color: Color) -> str:
-    return str(COLOR_SEQ % (30 + color.value))
+def get_color(levelname: str) -> str:
+    return COLOR_SEQ % (30 + COLORS[levelname])
 
 
-def colorize(text: str, color: Color) -> str:
-    return get_color(color) + text + RESET_SEQ
+def colorize(text: str, levelname: str):
+    return get_color(levelname) + text + RESET_SEQ
 
 
 def pinfo(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is not None:
+    if logger is None:
+        print(colorize(text, LEVEL_INFO))
+    else:
         logger.info(text)
-    print(colorize(text, Color.INFO))
 
 
 def pdebug(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is not None:
+    if logger is None:
+        print(colorize(text, LEVEL_DEBUG))
+    else:
         logger.debug(text)
-    print(colorize(text, Color.DEBUG))
 
 
 def pwarn(text: str, logger: Optional[logging.Logger] = None) -> None:
     if logger is None:
-        print(colorize(text, Color.WARNING))
+        print(colorize(text, LEVEL_WARNING))
     else:
         logger.warning(text)
 
 
 def perr(text: str, logger: Optional[logging.Logger] = None) -> None:
     if logger is None:
-        print(colorize(text, Color.ERROR))
+        print(colorize(text, LEVEL_ERROR))
     else:
         logger.error(text)
 
 
 def pcrit(text: str, logger: Optional[logging.Logger] = None) -> None:
     if logger is None:
-        print(colorize(text, Color.CRITICAL))
+        print(colorize(text, LEVEL_CRITICAL))
     else:
         logger.critical(text)
+
+

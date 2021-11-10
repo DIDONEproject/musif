@@ -8,7 +8,7 @@ from scipy.stats import kurtosis, skew
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_NUMERIC_INTERVALS, DATA_TEXT_INTERVALS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
 from .constants import *
@@ -27,7 +27,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
+    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 

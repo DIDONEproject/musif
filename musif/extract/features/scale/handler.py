@@ -4,7 +4,7 @@ from music21.note import Note
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_KEY, DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 from musif.musicxml import get_degrees_and_accidentals
@@ -22,7 +22,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         part_features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
+    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 

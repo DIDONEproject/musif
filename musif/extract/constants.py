@@ -8,6 +8,5 @@ DATA_FAMILY_ABBREVIATION = "family_abbreviation"
 DATA_SCORE = "score"
 DATA_MUSESCORE_SCORE = 'MS3_score'
 DATA_FILE = "file"
-DATA_PARTS_FILTER = "parts_filter"
 DATA_FILTERED_PARTS = "parts"
 HARMONY_FEATURES = "harmony"
