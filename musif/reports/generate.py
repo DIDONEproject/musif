@@ -18,12 +18,11 @@ import pandas as pd
 from pandas import DataFrame
 from tqdm import tqdm
 
-from musif.common.constants import RESET_SEQ, VOICE_FAMILY, get_color
+from musif.common.constants import RESET_SEQ, VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.features import density, lyrics, scale, texture
-from musif.extract.features.custom import harmony, scale_relative
-from musif.extract.features.custom.__constants import *
-from musif.extract.features.tempo import NUMBER_OF_BEATS
+from musif.extract.features import density, lyrics, scale, scale_relative, texture, harmony
+from musif.extract.features.harmony.constants import *
+from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
 from musif.reports.calculations import make_intervals_absolute
 from musif.reports.utils import remove_folder_contents
 from .constants import *
@@ -32,6 +31,7 @@ from .tasks.harmony import  Harmonic_analysis
 from .tasks.intervals import Intervals, Intervals_types
 from .tasks.melody_values import Melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
+from ..common.utils import get_color
 
 
 class FeaturesGenerator:

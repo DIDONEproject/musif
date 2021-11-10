@@ -1,0 +1,8 @@
+NOTES = "Notes"
+NOTES_MEAN = "NotesMean"
+SOUNDING_MEASURES = "SoundingMeasures"
+SOUNDING_MEASURES_MEAN = "SoundingMeasuresMean"
+MEASURES = "Measures"
+MEASURES_MEAN = "MeasuresMean"
+SOUNDING_DENSITY = "SoundingDensity"
+DENSITY = "Density"
