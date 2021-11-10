@@ -1,13 +1,14 @@
 import csv
 import json
+import logging
 from os import path
-from typing import Iterator, List, Union
+from typing import Iterator, List, Optional, Union
 
 import pandas as pd
 import yaml
 from pandas import DataFrame
 
-from musif.common.constants import CSV_DELIMITER, ENCODING
+from musif.common.constants import COLOR_SEQ, CSV_DELIMITER, Color, ENCODING, RESET_SEQ
 
 
 def get_file_name(file_path: str) -> str:
@@ -96,3 +97,44 @@ def write_dicts_to_csv(dicts: List[dict], file_path: str):
         writer.writeheader()
         for i, obj in enumerate(dicts):
             writer.writerow(obj)
+
+
+def get_color(color: Color) -> str:
+    return str(COLOR_SEQ % (30 + color.value))
+
+
+def colorize(text: str, color: Color) -> str:
+    return get_color(color) + text + RESET_SEQ
+
+
+def pinfo(text: str, logger: Optional[logging.Logger] = None) -> None:
+    if logger is not None:
+        logger.info(text)
+    print(colorize(text, Color.INFO))
+
+
+def pdebug(text: str, logger: Optional[logging.Logger] = None) -> None:
+    if logger is not None:
+        logger.debug(text)
+    print(colorize(text, Color.DEBUG))
+
+
+def pwarn(text: str, logger: Optional[logging.Logger] = None) -> None:
+    if logger is None:
+        print(colorize(text, Color.WARNING))
+    else:
+        logger.warning(text)
+
+
+def perr(text: str, logger: Optional[logging.Logger] = None) -> None:
+    if logger is None:
+        print(colorize(text, Color.ERROR))
+    else:
+        logger.error(text)
+
+
+def pcrit(text: str, logger: Optional[logging.Logger] = None) -> None:
+    if logger is None:
+        print(colorize(text, Color.CRITICAL))
+    else:
+        logger.critical(text)
