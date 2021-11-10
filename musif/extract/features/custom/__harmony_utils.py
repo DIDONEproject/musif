@@ -300,32 +300,18 @@ def get_keyareas(lausanne_table, major = True):
 
     return keyareas
 
-# DEGREES (for relative roots, numerals and chords)
-
 def get_function_first(element, mode):
     reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'MED': ['iii']}
 
-    # Spetial chords
+    # Spetial chords 
     if any([i for i in ('It','Ger', 'Fr') if i in element]):
         return 'D'
 
-    if element.lower()=='bii':
+    elif element.lower()=='bii':
         return 'NAP'
     
-    if element.lower()=='#vii':
+    elif element.lower() in ['#vii', 'vii']:
         return 'D'
-
-    #It6/V -> viio(-3)
-    element=element.replace('b','-') # '-' represents flats
-    
-    for key, value in reference.items():
-        if element.replace('#','').replace('-','').lower() in value:
-            output = key.lower() if element.islower() else key
-            if '-' in element:
-                output='-'+ output
-            elif '#' in element:
-                output='#' + output
-            return output.replace('-','b')
 
     if mode == 'M':
         if element=='vii':
@@ -338,9 +324,8 @@ def get_function_first(element, mode):
             return 'st'
         elif  element== 'VII':
             return 'LN'
-        else:
-            print(f'Element: "{element}" not available')
-    else:
+
+    if mode == 'm':
         if element=='#vii':
             return 'D'
         elif  element == 'VII':
@@ -353,13 +338,17 @@ def get_function_first(element, mode):
             return 'LN'
         elif element=='vii':
             return 'st'
-        else:
-            print(element, ' is not available!')
-    return ''
 
-###########################################################################
-# Function to obtain the harmonic function2 of every relativeroot, chord, or numeral.
-###########################################################################
+
+    element=element.replace('b','-') # '-' represents flats
+    for key, value in reference.items():
+        if element.replace('#','').replace('-','').lower() in value:
+            output = key.lower() if element.islower() else key
+            if '-' in element:
+                output='-'+ output
+            elif '#' in element:
+                output='#' + output
+            return output.replace('-','b')
 
 def get_function_second(element):
     element=element.replace('b','-')
@@ -391,7 +380,6 @@ def get_numerals(lausanne_table):
     return nc 
 
 def get_first_numeral(numeral, relativeroot, local_key):
-    # We use relative root column to discriminate if there is a relatuive numeral or not
     if str(relativeroot) != 'nan':
         return get_function_first(numeral, 'M' if relativeroot.isupper() else 'm')
     else:

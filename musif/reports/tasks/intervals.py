@@ -24,14 +24,14 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
             else:
                 general_cols += rows_groups[row][0]
 
-        third_columns_names_origin, third_columns_names = fix_column_names(sorting_list, all_columns, general_cols)
+        third_columns_names_origin, third_columns = fix_column_names(sorting_list, all_columns, general_cols)
     
-        computations = ["sum"]*len(third_columns_names)
+        computations = ["sum"]*len(third_columns)
 
-        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+        Create_excel(workbook.create_sheet("Weighted"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists,
+            Create_excel(workbook.create_sheet("Horizontal Per"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
