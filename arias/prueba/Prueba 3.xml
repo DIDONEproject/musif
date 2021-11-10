@@ -1,15 +1,12 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="3.1">
-  <!--This work is provided under the terms of Creative Commons CC BY-NC-ND license. 
- ICCMU - ERC Didone project (788986) 
- contacto@iccmu.es, didone@iccmu.es
---><movement-title>In te spero, o sposo amato</movement-title>
+  <movement-title>In te spero, o sposo amato</movement-title>
   <identification>
     <creator type="composer">Antonio Caldara</creator>
     <encoding>
-      <software>Finale v26.2.2 for Mac</software>
-      <encoding-date>2020-07-14</encoding-date>
+      <software>Finale v26.3 for Mac</software>
+      <encoding-date>2021-11-10</encoding-date>
       <supports attribute="new-system" element="print" type="yes" value="yes"/>
       <supports attribute="new-page" element="print" type="yes" value="yes"/>
       <supports element="accidental" type="yes"/>
@@ -3062,7 +3059,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="67" width="189">
+    <measure number="67" width="197">
       <print new-system="yes">
         <system-layout>
           <system-distance>219</system-distance>
@@ -3075,7 +3072,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="68" width="191">
+    <measure number="68" width="206">
       <note>
         <rest measure="yes"/>
         <duration>12</duration>
@@ -3083,34 +3080,22 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="69" width="160">
+    <measure number="69" width="173">
       <note>
         <rest measure="yes"/>
         <duration>12</duration>
         <voice>1</voice>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <words default-x="160" default-y="60" font-size="8.7" font-weight="bold" justify="right">Go To Measure 71</words>
-        </direction-type>
-        <sound tocoda="71"/>
-      </direction>
     </measure>
     <!--=======================================================-->
-    <measure number="70" width="197">
-      <barline location="left">
-        <ending default-y="40" end-length="30" font-size="6.2" number="1" print-object="yes" type="start"/>
-      </barline>
-      <note default-x="14">
+    <measure number="70" width="213">
+      <note default-x="13">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <fermata default-x="-7" default-y="5" type="upright"/>
-        </notations>
       </note>
-      <note default-x="74">
+      <note default-x="80">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -3124,7 +3109,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <text>Pur</text>
         </lyric>
       </note>
-      <note default-x="135">
+      <note default-x="146">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -3144,37 +3129,14 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
       <direction placement="above">
         <direction-type>
-          <words default-x="196" default-y="60" font-size="8.7" font-weight="bold" justify="right">Go To Measure 72</words>
+          <words default-x="212" default-y="30" font-size="8.7" font-weight="bold" justify="right">To Coda </words>
         </direction-type>
-        <sound dalsegno="72"/>
+        <sound tocoda="100"/>
       </direction>
-      <barline location="right">
-        <ending number="1" type="discontinue"/>
-      </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="108">
-      <barline location="left">
-        <ending default-y="40" end-length="30" font-size="6.2" number="2" print-object="yes" type="start"/>
-      </barline>
-      <note>
-        <rest measure="yes"/>
-        <duration>12</duration>
-        <voice>1</voice>
-      </note>
-      <direction placement="above">
-        <direction-type>
-          <words default-x="101" default-y="59" font-size="11.2" font-weight="bold" justify="right">Fine</words>
-        </direction-type>
-      </direction>
-      <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" type="discontinue"/>
-      </barline>
-    </measure>
-    <!--=======================================================-->
-    <measure number="71" width="172">
-      <note default-x="26">
+    <measure number="71" width="186">
+      <note default-x="27">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -3191,7 +3153,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <extend type="start"/>
         </lyric>
       </note>
-      <note default-x="74">
+      <note default-x="79">
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -3207,7 +3169,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <extend type="stop"/>
         </lyric>
       </note>
-      <note default-x="123">
+      <note default-x="133">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -3228,8 +3190,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="72" width="155">
-      <note default-x="14">
+    <measure number="72" width="167">
+      <note default-x="13">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -3246,7 +3208,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <extend type="stop"/>
         </lyric>
       </note>
-      <note default-x="54">
+      <note default-x="57">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -3262,7 +3224,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <text>mo</text>
         </lyric>
       </note>
-      <note default-x="79">
+      <note default-x="84">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -3275,7 +3237,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
       </note>
-      <note default-x="104">
+      <note default-x="112">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -3292,7 +3254,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <extend type="start"/>
         </lyric>
       </note>
-      <note default-x="129">
+      <note default-x="139">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -3309,7 +3271,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="73" width="210">
+    <measure number="73" width="241">
       <note default-x="13">
         <pitch>
           <step>G</step>
@@ -3324,7 +3286,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <text>mi</text>
         </lyric>
       </note>
-      <note default-x="70">
+      <note default-x="80">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -3340,7 +3302,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
           <text>o</text>
         </lyric>
       </note>
-      <note default-x="140">
+      <note default-x="160">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -4303,7 +4265,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="95" width="362">
+    <measure number="95" width="330">
       <print new-system="yes">
         <system-layout>
           <system-distance>219</system-distance>
@@ -4316,7 +4278,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="96" width="287">
+    <measure number="96" width="255">
       <note>
         <rest measure="yes"/>
         <duration>12</duration>
@@ -4324,7 +4286,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="97" width="288">
+    <measure number="97" width="255">
       <note>
         <rest measure="yes"/>
         <duration>12</duration>
@@ -4332,7 +4294,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="98" width="185">
+    <measure number="98" width="164">
       <note>
         <rest measure="yes"/>
         <duration>12</duration>
@@ -4340,7 +4302,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="99" width="261">
+    <measure number="99" width="233">
       <note>
         <rest measure="yes"/>
         <duration>12</duration>
@@ -4348,12 +4310,29 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
       <direction placement="above">
         <direction-type>
-          <words default-x="255" default-y="59" font-size="11.2" font-weight="bold" justify="right">Da capo</words>
+          <words default-x="227" default-y="30" font-size="8.7" font-weight="bold" justify="right">D.C. al Coda</words>
         </direction-type>
         <sound dacapo="yes"/>
       </direction>
       <barline location="right">
         <bar-style>light-light</bar-style>
+      </barline>
+    </measure>
+    <!--=======================================================-->
+    <measure number="100" width="144">
+      <direction placement="above">
+        <direction-type>
+          <coda default-x="-1" default-y="30"/>
+        </direction-type>
+        <sound coda="100" divisions="8"/>
+      </direction>
+      <note>
+        <rest measure="yes"/>
+        <duration>12</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
@@ -4365,7 +4344,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <staff-layout number="1">
           <staff-distance>185</staff-distance>
         </staff-layout>
-        <measure-numbering>system</measure-numbering>
+        <measure-numbering>none</measure-numbering>
       </print>
       <attributes>
         <divisions>8</divisions>
@@ -7918,7 +7897,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="67" width="189">
+    <measure number="67" width="197">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>202</staff-distance>
@@ -7936,10 +7915,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="10" bezier-y="9" default-x="6" default-y="5" number="1" placement="above" type="start"/>
+          <slur bezier-x="11" bezier-y="10" default-x="6" default-y="5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="121">
+      <note default-x="124">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -7950,10 +7929,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">continue</beam>
         <notations>
-          <slur bezier-x="-9" bezier-y="10" default-x="7" default-y="3" number="1" type="stop"/>
+          <slur bezier-x="-10" bezier-y="11" default-x="6" default-y="3" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="155">
+      <note default-x="161">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -7964,12 +7943,12 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">end</beam>
         <notations>
-          <slur bezier-x="13" bezier-y="14" default-x="6" default-y="20" number="1" placement="above" type="start"/>
+          <slur bezier-x="14" bezier-y="15" default-x="6" default-y="20" number="1" placement="above" type="start"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="68" width="191">
+    <measure number="68" width="206">
       <note default-x="16">
         <pitch>
           <step>B</step>
@@ -7982,10 +7961,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-67">down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="-15" bezier-y="11" default-x="7" default-y="25" number="1" type="stop"/>
+          <slur bezier-x="-16" bezier-y="12" default-x="7" default-y="25" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="66">
+      <note default-x="72">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -7999,13 +7978,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="15" bezier-y="9" default-x="7" default-y="-7" number="1" placement="above" type="start"/>
+          <slur bezier-x="15" bezier-y="10" default-x="6" default-y="-7" number="1" placement="above" type="start"/>
           <ornaments>
-            <trill-mark default-x="-1" default-y="6" placement="above"/>
+            <trill-mark default-x="-1" default-y="7" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="108">
+      <note default-x="117">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -8018,10 +7997,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-10" bezier-y="14" default-x="7" default-y="-15" number="1" type="stop"/>
+          <slur bezier-x="-11" bezier-y="14" default-x="7" default-y="-15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="129">
+      <note default-x="138">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8035,10 +8014,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="12" bezier-y="12" default-x="6" default-y="-7" number="1" placement="above" type="start"/>
+          <slur bezier-x="13" bezier-y="13" default-x="6" default-y="-7" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="170">
+      <note default-x="184">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -8051,13 +8030,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-12" bezier-y="11" default-x="7" default-y="-5" number="1" type="stop"/>
+          <slur bezier-x="-14" bezier-y="12" default-x="7" default-y="-5" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="69" width="160">
-      <note default-x="13">
+    <measure number="69" width="173">
+      <note default-x="14">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -8070,10 +8049,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">begin</beam>
         <beam number="3">begin</beam>
         <notations>
-          <slur bezier-x="13" bezier-y="7" default-x="7" default-y="3" number="1" placement="above" type="start"/>
+          <slur bezier-x="13" bezier-y="7" default-x="6" default-y="3" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="32">
+      <note default-x="31">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -8086,7 +8065,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">end</beam>
       </note>
-      <note default-x="49">
+      <note default-x="50">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8099,10 +8078,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <slur bezier-x="-7" bezier-y="13" default-x="7" default-y="-7" number="1" type="stop"/>
+          <slur bezier-x="-7" bezier-y="13" default-x="6" default-y="-7" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="76">
+      <note default-x="79">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -8114,11 +8093,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="70" width="197">
-      <barline location="left">
-        <ending number="1" print-object="no" type="start"/>
-      </barline>
-      <note default-x="14">
+    <measure number="70" width="213">
+      <note default-x="13">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8128,19 +8104,16 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <voice>1</voice>
         <type>eighth</type>
         <stem default-y="-54.5">down</stem>
-        <notations>
-          <fermata default-x="-6" default-y="5" type="upright"/>
-        </notations>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="80" default-y="-75" halign="center">
+          <dynamics default-x="86" default-y="-75" halign="center">
             <p/>
           </dynamics>
         </direction-type>
         <sound dynamics="54"/>
       </direction>
-      <note default-x="74">
+      <note default-x="80">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -8151,7 +8124,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="135">
+      <note default-x="146">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -8163,40 +8136,16 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-40">down</stem>
         <beam number="1">end</beam>
       </note>
-      <barline location="right">
-        <ending number="1" type="discontinue"/>
-      </barline>
+      <direction placement="above">
+        <direction-type>
+          <words default-x="212" default-y="30" font-size="8.7" font-weight="bold" justify="right">To Coda </words>
+        </direction-type>
+        <sound tocoda="100"/>
+      </direction>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="108">
-      <barline location="left">
-        <ending number="2" print-object="no" type="start"/>
-      </barline>
-      <note default-x="13">
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem default-y="-54.5">down</stem>
-      </note>
-      <note default-x="68">
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" type="discontinue"/>
-      </barline>
-    </measure>
-    <!--=======================================================-->
-    <measure number="71" width="172">
-      <note default-x="26">
+    <measure number="71" width="186">
+      <note default-x="27">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -8208,10 +8157,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-50">down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="16" bezier-y="10" default-x="6" default-y="5" number="1" placement="above" type="start"/>
+          <slur bezier-x="18" bezier-y="10" default-x="6" default-y="5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="74">
+      <note default-x="79">
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -8224,10 +8173,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
         <notations>
-          <slur bezier-x="-11" bezier-y="15" default-x="7" default-y="-5" number="1" type="stop"/>
+          <slur bezier-x="-12" bezier-y="16" default-x="7" default-y="-5" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="123">
+      <note default-x="133">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -8240,8 +8189,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="72" width="155">
-      <note default-x="14">
+    <measure number="72" width="167">
+      <note default-x="13">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8253,7 +8202,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-54.5">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="54">
+      <note default-x="57">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8265,7 +8214,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-54.5">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="104">
+      <note default-x="112">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8279,7 +8228,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="73" width="210">
+    <measure number="73" width="241">
       <note default-x="13">
         <pitch>
           <step>B</step>
@@ -8292,7 +8241,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="23">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="70">
+      <note default-x="80">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -8305,13 +8254,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="11" bezier-y="-15" default-x="7" default-y="-35" number="1" placement="below" type="start"/>
+          <slur bezier-x="13" bezier-y="-16" default-x="6" default-y="-35" number="1" placement="below" type="start"/>
           <ornaments>
             <trill-mark default-x="-1" default-y="38" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="118">
+      <note default-x="134">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -8324,10 +8273,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-16" bezier-y="-10" default-x="6" default-y="-43" number="1" type="stop"/>
+          <slur bezier-x="-17" bezier-y="-11" default-x="6" default-y="-43" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="140">
+      <note default-x="160">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -8340,10 +8289,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="14" bezier-y="-12" default-x="6" default-y="-35" number="1" placement="below" type="start"/>
+          <slur bezier-x="16" bezier-y="-13" default-x="6" default-y="-35" number="1" placement="below" type="start"/>
         </notations>
       </note>
-      <note default-x="187">
+      <note default-x="214">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -8357,7 +8306,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-13" bezier-y="-12" default-x="6" default-y="-33" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="-14" default-x="6" default-y="-33" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
@@ -9498,7 +9447,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="95" width="362">
+    <measure number="95" width="330">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>202</staff-distance>
@@ -9515,7 +9464,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-63">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="168">
+      <note default-x="158">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9528,13 +9477,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="19" bezier-y="15" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
+          <slur bezier-x="17" bezier-y="14" default-x="7" default-y="-5" number="1" placement="above" type="start"/>
           <ornaments>
-            <trill-mark default-x="-1" default-y="10" placement="above"/>
+            <trill-mark default-x="0" default-y="10" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="234">
+      <note default-x="216">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -9548,10 +9497,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-18" bezier-y="16" default-x="6" default-y="-7" number="1" type="stop"/>
+          <slur bezier-x="-16" bezier-y="15" default-x="7" default-y="-7" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="265">
+      <note default-x="244">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9564,10 +9513,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="16" bezier-y="18" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
+          <slur bezier-x="15" bezier-y="17" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="330">
+      <note default-x="302">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -9580,13 +9529,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-20" bezier-y="13" default-x="7" default-y="3" number="1" type="stop"/>
+          <slur bezier-x="-18" bezier-y="12" default-x="7" default-y="3" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="96" width="287">
-      <note default-x="13">
+    <measure number="96" width="255">
+      <note default-x="14">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -9598,7 +9547,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-57">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -9611,13 +9560,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="20" bezier-y="13" default-x="7" default-y="3" number="1" placement="above" type="start"/>
+          <slur bezier-x="18" bezier-y="12" default-x="7" default-y="3" number="1" placement="above" type="start"/>
           <ornaments>
             <trill-mark default-x="0" default-y="18" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="159">
+      <note default-x="142">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9630,10 +9579,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-16" bezier-y="18" default-x="7" default-y="-5" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="17" default-x="7" default-y="-5" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -9646,10 +9595,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="18" bezier-y="16" default-x="7" default-y="3" number="1" placement="above" type="start"/>
+          <slur bezier-x="16" bezier-y="15" default-x="6" default-y="3" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="256">
+      <note default-x="227">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -9663,13 +9612,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-19" bezier-y="15" default-x="7" default-y="5" number="1" type="stop"/>
+          <slur bezier-x="-17" bezier-y="14" default-x="7" default-y="5" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="97" width="288">
-      <note default-x="13">
+    <measure number="97" width="255">
+      <note default-x="14">
         <pitch>
           <step>F</step>
           <octave>5</octave>
@@ -9680,7 +9629,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-52.5">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -9694,13 +9643,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="19" bezier-y="15" default-x="7" default-y="5" number="1" placement="above" type="start"/>
+          <slur bezier-x="17" bezier-y="14" default-x="6" default-y="5" number="1" placement="above" type="start"/>
           <ornaments>
             <trill-mark default-x="-1" default-y="20" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="159">
+      <note default-x="142">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -9713,10 +9662,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-18" bezier-y="16" default-x="7" default-y="3" number="1" type="stop"/>
+          <slur bezier-x="-16" bezier-y="15" default-x="7" default-y="3" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -9730,10 +9679,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="17" bezier-y="17" default-x="7" default-y="5" number="1" placement="above" type="start"/>
+          <slur bezier-x="15" bezier-y="15" default-x="6" default-y="5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="256">
+      <note default-x="227">
         <pitch>
           <step>F</step>
           <octave>5</octave>
@@ -9746,13 +9695,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-19" bezier-y="14" default-x="7" default-y="10" number="1" type="stop"/>
+          <slur bezier-x="-17" bezier-y="13" default-x="7" default-y="10" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="98" width="185">
-      <note default-x="13">
+    <measure number="98" width="164">
+      <note default-x="14">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -9763,10 +9712,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-25">down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="15" bezier-y="15" default-x="7" default-y="15" number="1" placement="above" type="start"/>
+          <slur bezier-x="13" bezier-y="14" default-x="6" default-y="15" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="70">
+      <note default-x="63">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -9777,10 +9726,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-24">down</stem>
         <beam number="1">continue</beam>
         <notations>
-          <slur bezier-x="-17" bezier-y="13" default-x="7" default-y="20" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="12" default-x="7" default-y="20" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="127">
+      <note default-x="114">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -9794,8 +9743,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="99" width="261">
-      <note default-x="14">
+    <measure number="99" width="233">
+      <note default-x="13">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -9807,10 +9756,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="22" bezier-y="14" default-x="6" default-y="3" number="1" placement="above" type="start"/>
+          <slur bezier-x="20" bezier-y="12" default-x="7" default-y="3" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="57">
+      <note default-x="52">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9823,7 +9772,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">begin</beam>
       </note>
-      <note default-x="85">
+      <note default-x="77">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -9837,10 +9786,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">end</beam>
         <notations>
-          <slur bezier-x="-17" bezier-y="19" default-x="6" default-y="-7" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="18" default-x="6" default-y="-7" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="112">
+      <note default-x="101">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9850,8 +9799,43 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <type>quarter</type>
         <stem default-y="-50">down</stem>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <words default-x="227" default-y="30" font-size="8.7" font-weight="bold" justify="right">D.C. al Coda</words>
+        </direction-type>
+        <sound dacapo="yes"/>
+      </direction>
       <barline location="right">
         <bar-style>light-light</bar-style>
+      </barline>
+    </measure>
+    <!--=======================================================-->
+    <measure number="100" width="144">
+      <direction placement="above">
+        <direction-type>
+          <coda default-x="-1" default-y="30"/>
+        </direction-type>
+        <sound coda="100" divisions="8"/>
+      </direction>
+      <note default-x="13">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem default-y="-54.5">down</stem>
+      </note>
+      <note default-x="88">
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
@@ -13294,7 +13278,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="67" width="189">
+    <measure number="67" width="197">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>152</staff-distance>
@@ -13311,10 +13295,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-55">down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="10" bezier-y="9" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
+          <slur bezier-x="11" bezier-y="10" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="121">
+      <note default-x="124">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -13326,10 +13310,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-55">down</stem>
         <beam number="1">continue</beam>
         <notations>
-          <slur bezier-x="-9" bezier-y="10" default-x="7" default-y="-7" number="1" type="stop"/>
+          <slur bezier-x="-10" bezier-y="11" default-x="6" default-y="-7" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="155">
+      <note default-x="161">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -13341,12 +13325,12 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-55">down</stem>
         <beam number="1">end</beam>
         <notations>
-          <slur bezier-x="13" bezier-y="11" default-x="6" default-y="5" number="1" placement="above" type="start"/>
+          <slur bezier-x="14" bezier-y="11" default-x="6" default-y="5" number="1" placement="above" type="start"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="68" width="191">
+    <measure number="68" width="206">
       <note default-x="16">
         <pitch>
           <step>D</step>
@@ -13358,10 +13342,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="33">up</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="-8" bezier-y="15" default-x="-6" default-y="-1" number="1" type="stop"/>
+          <slur bezier-x="-10" bezier-y="15" default-x="-6" default-y="-1" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="66">
+      <note default-x="72">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -13374,13 +13358,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="11" bezier-y="-13" default-x="7" default-y="-55" number="1" placement="below" type="start"/>
+          <slur bezier-x="12" bezier-y="-14" default-x="6" default-y="-55" number="1" placement="below" type="start"/>
           <ornaments>
             <trill-mark default-x="-1" default-y="46" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="108">
+      <note default-x="117">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -13393,10 +13377,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-14" bezier-y="-10" default-x="7" default-y="-60" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="-10" default-x="7" default-y="-60" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="129">
+      <note default-x="138">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -13409,10 +13393,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="14" bezier-y="-10" default-x="6" default-y="-55" number="1" placement="below" type="start"/>
+          <slur bezier-x="15" bezier-y="-10" default-x="6" default-y="-55" number="1" placement="below" type="start"/>
         </notations>
       </note>
-      <note default-x="170">
+      <note default-x="184">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -13426,13 +13410,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-11" bezier-y="-13" default-x="7" default-y="-50" number="1" type="stop"/>
+          <slur bezier-x="-12" bezier-y="-13" default-x="7" default-y="-50" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="69" width="160">
-      <note default-x="13">
+    <measure number="69" width="173">
+      <note default-x="14">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -13444,7 +13428,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
       </note>
-      <note default-x="49">
+      <note default-x="50">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -13457,7 +13441,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">end</beam>
       </note>
-      <note default-x="76">
+      <note default-x="79">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -13469,7 +13453,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="15.5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="118">
+      <note default-x="125">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -13482,90 +13466,54 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="70" width="197">
-      <barline location="left">
-        <ending number="1" print-object="no" type="start"/>
-      </barline>
-      <note default-x="14">
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem default-y="-55">down</stem>
-        <notations>
-          <fermata default-x="-6" default-y="5" type="upright"/>
-        </notations>
-      </note>
-      <direction placement="below">
-        <direction-type>
-          <dynamics default-x="80" default-y="-85" halign="center">
-            <p/>
-          </dynamics>
-        </direction-type>
-        <sound dynamics="54"/>
-      </direction>
-      <note default-x="74">
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem default-y="-55">down</stem>
-        <beam number="1">begin</beam>
-      </note>
-      <note default-x="135">
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem default-y="-55">down</stem>
-        <beam number="1">end</beam>
-      </note>
-      <barline location="right">
-        <ending number="1" print-object="no" type="discontinue"/>
-      </barline>
-    </measure>
-    <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="108">
-      <barline location="left">
-        <ending number="2" print-object="no" type="start"/>
-      </barline>
+    <measure number="70" width="213">
       <note default-x="13">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="68">
-        <rest/>
+      <direction placement="below">
+        <direction-type>
+          <dynamics default-x="86" default-y="-85" halign="center">
+            <p/>
+          </dynamics>
+        </direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note default-x="80">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <stem default-y="-55">down</stem>
+        <beam number="1">begin</beam>
       </note>
-      <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" print-object="no" type="discontinue"/>
-      </barline>
+      <note default-x="146">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem default-y="-55">down</stem>
+        <beam number="1">end</beam>
+      </note>
     </measure>
     <!--=======================================================-->
-    <measure number="71" width="172">
-      <note default-x="26">
+    <measure number="71" width="186">
+      <note default-x="27">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -13576,7 +13524,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="10">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="74">
+      <note default-x="79">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -13587,7 +13535,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="10">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="123">
+      <note default-x="133">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -13600,8 +13548,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="72" width="155">
-      <note default-x="14">
+    <measure number="72" width="167">
+      <note default-x="13">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -13612,7 +13560,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="5">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="54">
+      <note default-x="57">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -13623,7 +13571,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="104">
+      <note default-x="112">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -13636,7 +13584,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="73" width="210">
+    <measure number="73" width="241">
       <note default-x="13">
         <pitch>
           <step>G</step>
@@ -13648,7 +13596,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="13">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="70">
+      <note default-x="80">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -13663,13 +13611,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="12" bezier-y="-15" default-x="7" default-y="-45" number="1" placement="below" type="start"/>
+          <slur bezier-x="14" bezier-y="-16" default-x="6" default-y="-45" number="1" placement="below" type="start"/>
           <ornaments>
             <trill-mark default-x="-1" default-y="28" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="118">
+      <note default-x="134">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -13683,10 +13631,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-15" bezier-y="-12" default-x="6" default-y="-50" number="1" type="stop"/>
+          <slur bezier-x="-17" bezier-y="-12" default-x="6" default-y="-50" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="140">
+      <note default-x="160">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -13700,10 +13648,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="14" bezier-y="-12" default-x="6" default-y="-45" number="1" placement="below" type="start"/>
+          <slur bezier-x="16" bezier-y="-13" default-x="6" default-y="-45" number="1" placement="below" type="start"/>
         </notations>
       </note>
-      <note default-x="187">
+      <note default-x="214">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -13716,7 +13664,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-13" bezier-y="-12" default-x="6" default-y="-43" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="-14" default-x="6" default-y="-43" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
@@ -14809,7 +14757,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="95" width="362">
+    <measure number="95" width="330">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>152</staff-distance>
@@ -14827,7 +14775,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="23">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="168">
+      <note default-x="158">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -14840,13 +14788,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="16" bezier-y="-17" default-x="6" default-y="-35" number="1" placement="below" type="start"/>
+          <slur bezier-x="15" bezier-y="-17" default-x="7" default-y="-35" number="1" placement="below" type="start"/>
           <ornaments>
-            <trill-mark default-x="-1" default-y="38" placement="above"/>
+            <trill-mark default-x="0" default-y="38" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="234">
+      <note default-x="216">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -14859,10 +14807,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-20" bezier-y="-13" default-x="6" default-y="-43" number="1" type="stop"/>
+          <slur bezier-x="-18" bezier-y="-12" default-x="7" default-y="-43" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="265">
+      <note default-x="244">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -14875,10 +14823,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="19" bezier-y="-15" default-x="6" default-y="-35" number="1" placement="below" type="start"/>
+          <slur bezier-x="17" bezier-y="-14" default-x="6" default-y="-35" number="1" placement="below" type="start"/>
         </notations>
       </note>
-      <note default-x="330">
+      <note default-x="302">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -14892,13 +14840,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-18" bezier-y="-16" default-x="7" default-y="-33" number="1" type="stop"/>
+          <slur bezier-x="-16" bezier-y="-15" default-x="7" default-y="-33" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="96" width="287">
-      <note default-x="13">
+    <measure number="96" width="255">
+      <note default-x="14">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -14909,7 +14857,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-67">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -14923,13 +14871,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="20" bezier-y="13" default-x="7" default-y="-7" number="1" placement="above" type="start"/>
+          <slur bezier-x="18" bezier-y="12" default-x="7" default-y="-7" number="1" placement="above" type="start"/>
           <ornaments>
             <trill-mark default-x="0" default-y="8" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="159">
+      <note default-x="142">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -14942,10 +14890,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-16" bezier-y="18" default-x="7" default-y="-15" number="1" type="stop"/>
+          <slur bezier-x="-15" bezier-y="17" default-x="7" default-y="-15" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -14959,10 +14907,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="18" bezier-y="16" default-x="7" default-y="-7" number="1" placement="above" type="start"/>
+          <slur bezier-x="16" bezier-y="15" default-x="6" default-y="-7" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="256">
+      <note default-x="227">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -14975,13 +14923,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-19" bezier-y="15" default-x="7" default-y="-5" number="1" type="stop"/>
+          <slur bezier-x="-17" bezier-y="14" default-x="7" default-y="-5" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="97" width="288">
-      <note default-x="13">
+    <measure number="97" width="255">
+      <note default-x="14">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -14992,7 +14940,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-62.5">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -15005,13 +14953,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">begin</beam>
         <notations>
-          <slur bezier-x="19" bezier-y="15" default-x="7" default-y="-5" number="1" placement="above" type="start"/>
+          <slur bezier-x="17" bezier-y="14" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
           <ornaments>
             <trill-mark default-x="-1" default-y="10" placement="above"/>
           </ornaments>
         </notations>
       </note>
-      <note default-x="159">
+      <note default-x="142">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -15025,10 +14973,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">continue</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-18" bezier-y="16" default-x="7" default-y="-7" number="1" type="stop"/>
+          <slur bezier-x="-16" bezier-y="15" default-x="7" default-y="-7" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -15041,10 +14989,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="1">continue</beam>
         <beam number="2">continue</beam>
         <notations>
-          <slur bezier-x="16" bezier-y="18" default-x="7" default-y="-5" number="1" placement="above" type="start"/>
+          <slur bezier-x="14" bezier-y="16" default-x="6" default-y="-5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="256">
+      <note default-x="227">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -15057,13 +15005,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <beam number="2">end</beam>
         <beam number="3">backward hook</beam>
         <notations>
-          <slur bezier-x="-20" bezier-y="13" default-x="7" default-y="3" number="1" type="stop"/>
+          <slur bezier-x="-18" bezier-y="12" default-x="7" default-y="3" number="1" type="stop"/>
         </notations>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="98" width="185">
-      <note default-x="13">
+    <measure number="98" width="164">
+      <note default-x="14">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -15075,10 +15023,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-50">down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur bezier-x="18" bezier-y="11" default-x="7" default-y="5" number="1" placement="above" type="start"/>
+          <slur bezier-x="17" bezier-y="10" default-x="6" default-y="5" number="1" placement="above" type="start"/>
         </notations>
       </note>
-      <note default-x="70">
+      <note default-x="63">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -15089,10 +15037,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
         <notations>
-          <slur bezier-x="-13" bezier-y="17" default-x="7" default-y="-5" number="1" type="stop"/>
+          <slur bezier-x="-12" bezier-y="15" default-x="7" default-y="-5" number="1" type="stop"/>
         </notations>
       </note>
-      <note default-x="127">
+      <note default-x="114">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -15105,8 +15053,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="99" width="261">
-      <note default-x="14">
+    <measure number="99" width="233">
+      <note default-x="13">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -15118,7 +15066,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="15.5">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="112">
+      <note default-x="101">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -15130,10 +15078,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="15.5">up</stem>
         <beam number="1">continue</beam>
         <notations>
-          <slur bezier-x="19" bezier-y="-17" default-x="6" default-y="-33" number="1" placement="below" type="start"/>
+          <slur bezier-x="17" bezier-y="-15" default-x="6" default-y="-33" number="1" placement="below" type="start"/>
         </notations>
       </note>
-      <note default-x="184">
+      <note default-x="164">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -15144,11 +15092,34 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="15.5">up</stem>
         <beam number="1">end</beam>
         <notations>
-          <slur bezier-x="-20" bezier-y="-16" default-x="7" default-y="-35" number="1" type="stop"/>
+          <slur bezier-x="-18" bezier-y="-15" default-x="6" default-y="-35" number="1" type="stop"/>
         </notations>
       </note>
       <barline location="right">
         <bar-style>light-light</bar-style>
+      </barline>
+    </measure>
+    <!--=======================================================-->
+    <measure number="100" width="144">
+      <note default-x="13">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem default-y="-55">down</stem>
+      </note>
+      <note default-x="88">
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
@@ -16188,7 +16159,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="67" width="189">
+    <measure number="67" width="197">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>152</staff-distance>
@@ -16205,7 +16176,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-40">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="121">
+      <note default-x="124">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16216,7 +16187,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-41">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="155">
+      <note default-x="161">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -16230,7 +16201,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="68" width="191">
+    <measure number="68" width="206">
       <note default-x="16">
         <pitch>
           <step>F</step>
@@ -16241,7 +16212,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <type>quarter</type>
         <stem default-y="-40">down</stem>
       </note>
-      <note default-x="129">
+      <note default-x="138">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
@@ -16249,14 +16220,14 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="69" width="160">
-      <note default-x="13">
+    <measure number="69" width="173">
+      <note default-x="14">
         <rest/>
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
       </note>
-      <note default-x="49">
+      <note default-x="50">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16266,7 +16237,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <type>16th</type>
         <stem default-y="-40">down</stem>
       </note>
-      <note default-x="76">
+      <note default-x="79">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16277,7 +16248,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-40">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="118">
+      <note default-x="125">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16290,67 +16261,32 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="70" width="197">
-      <barline location="left">
-        <ending number="1" print-object="no" type="start"/>
-      </barline>
-      <note default-x="14">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem default-y="-40">down</stem>
-        <notations>
-          <fermata default-x="-6" default-y="10" type="upright"/>
-        </notations>
-      </note>
-      <note default-x="74">
-        <rest/>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <note default-x="136">
-        <rest/>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <barline location="right">
-        <ending number="1" print-object="no" type="discontinue"/>
-      </barline>
-    </measure>
-    <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="108">
-      <barline location="left">
-        <ending number="2" print-object="no" type="start"/>
-      </barline>
+    <measure number="70" width="213">
       <note default-x="13">
         <pitch>
           <step>F</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <stem default-y="-40">down</stem>
       </note>
-      <note default-x="68">
+      <note default-x="80">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" print-object="no" type="discontinue"/>
-      </barline>
+      <note default-x="146">
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
     </measure>
     <!--=======================================================-->
-    <measure number="71" width="172">
+    <measure number="71" width="186">
       <note>
         <rest measure="yes"/>
         <duration>6</duration>
@@ -16358,7 +16294,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="72" width="155">
+    <measure number="72" width="167">
       <note>
         <rest measure="yes"/>
         <duration>6</duration>
@@ -16366,7 +16302,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="73" width="210">
+    <measure number="73" width="241">
       <note>
         <rest measure="yes"/>
         <duration>6</duration>
@@ -16598,7 +16534,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="95" width="362">
+    <measure number="95" width="330">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>152</staff-distance>
@@ -16614,7 +16550,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <type>quarter</type>
         <stem default-y="-40">down</stem>
       </note>
-      <note default-x="265">
+      <note default-x="244">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
@@ -16622,8 +16558,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="96" width="287">
-      <note default-x="13">
+    <measure number="96" width="255">
+      <note default-x="14">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -16634,7 +16570,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-30">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16645,7 +16581,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-32">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
@@ -16653,8 +16589,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="97" width="288">
-      <note default-x="13">
+    <measure number="97" width="255">
+      <note default-x="14">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16665,7 +16601,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-35">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -16676,7 +16612,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-32">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <rest/>
         <duration>2</duration>
         <voice>1</voice>
@@ -16684,8 +16620,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="98" width="185">
-      <note default-x="13">
+    <measure number="98" width="164">
+      <note default-x="14">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -16697,7 +16633,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="70">
+      <note default-x="63">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16708,7 +16644,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-42">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="127">
+      <note default-x="114">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16721,8 +16657,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="99" width="261">
-      <note default-x="14">
+    <measure number="99" width="233">
+      <note default-x="13">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -16733,7 +16669,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-30">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="112">
+      <note default-x="101">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -16744,7 +16680,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-31.5">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="184">
+      <note default-x="164">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -16757,6 +16693,28 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
       <barline location="right">
         <bar-style>light-light</bar-style>
+      </barline>
+    </measure>
+    <!--=======================================================-->
+    <measure number="100" width="144">
+      <note default-x="13">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem default-y="-40">down</stem>
+      </note>
+      <note default-x="88">
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
@@ -19103,7 +19061,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="67" width="189">
+    <measure number="67" width="197">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>152</staff-distance>
@@ -19120,7 +19078,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="25">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="121">
+      <note default-x="124">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -19132,7 +19090,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="22.5">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="155">
+      <note default-x="161">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -19145,7 +19103,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="68" width="191">
+    <measure number="68" width="206">
       <note default-x="16">
         <pitch>
           <step>B</step>
@@ -19157,7 +19115,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <type>quarter</type>
         <stem default-y="5">up</stem>
       </note>
-      <note default-x="129">
+      <note default-x="138">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -19165,8 +19123,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="69" width="160">
-      <note default-x="13">
+    <measure number="69" width="173">
+      <note default-x="14">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -19178,7 +19136,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="25">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="76">
+      <note default-x="79">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -19189,7 +19147,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="25">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="118">
+      <note default-x="125">
         <pitch>
           <step>F</step>
           <octave>2</octave>
@@ -19202,16 +19160,13 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="70" width="197">
-      <barline location="left">
-        <ending number="1" print-object="no" type="start"/>
-      </barline>
+    <measure number="70" width="213">
       <direction placement="above">
         <direction-type>
           <words default-x="39" default-y="39" font-size="8.7" font-weight="bold">Violoncelli soli</words>
         </direction-type>
       </direction>
-      <note default-x="14">
+      <note default-x="13">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -19221,19 +19176,16 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <voice>1</voice>
         <type>eighth</type>
         <stem default-y="5">up</stem>
-        <notations>
-          <fermata default-x="-6" default-y="16" type="upright"/>
-        </notations>
       </note>
       <direction placement="below">
         <direction-type>
-          <dynamics default-x="80" default-y="-73" halign="center">
+          <dynamics default-x="86" default-y="-73" halign="center">
             <p/>
           </dynamics>
         </direction-type>
         <sound dynamics="54"/>
       </direction>
-      <note default-x="74">
+      <note default-x="80">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -19244,7 +19196,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-40">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="135">
+      <note default-x="146">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -19255,40 +19207,10 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-40">down</stem>
         <beam number="1">end</beam>
       </note>
-      <barline location="right">
-        <ending number="1" print-object="no" type="discontinue"/>
-      </barline>
     </measure>
     <!--=======================================================-->
-    <measure implicit="yes" number="X1" width="108">
-      <barline location="left">
-        <ending number="2" print-object="no" type="start"/>
-      </barline>
-      <note default-x="13">
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>2</octave>
-        </pitch>
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem default-y="5">up</stem>
-      </note>
-      <note default-x="68">
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <barline location="right">
-        <bar-style>light-light</bar-style>
-        <ending number="2" print-object="no" type="discontinue"/>
-      </barline>
-    </measure>
-    <!--=======================================================-->
-    <measure number="71" width="172">
-      <note default-x="26">
+    <measure number="71" width="186">
+      <note default-x="27">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -19301,7 +19223,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="74">
+      <note default-x="79">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -19313,7 +19235,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="123">
+      <note default-x="133">
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -19327,8 +19249,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="72" width="155">
-      <note default-x="14">
+    <measure number="72" width="167">
+      <note default-x="13">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -19339,7 +19261,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-55">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="54">
+      <note default-x="57">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -19350,7 +19272,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-57">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="104">
+      <note default-x="112">
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -19365,7 +19287,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="73" width="210">
+    <measure number="73" width="241">
       <note default-x="13">
         <pitch>
           <step>D</step>
@@ -19376,7 +19298,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <type>quarter</type>
         <stem default-y="-55">down</stem>
       </note>
-      <note default-x="140">
+      <note default-x="160">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -20165,7 +20087,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="95" width="362">
+    <measure number="95" width="330">
       <print new-system="yes">
         <staff-layout number="1">
           <staff-distance>152</staff-distance>
@@ -20182,7 +20104,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="25">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="168">
+      <note default-x="158">
         <pitch>
           <step>F</step>
           <octave>2</octave>
@@ -20193,7 +20115,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="20.5">up</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="265">
+      <note default-x="244">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -20201,8 +20123,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="96" width="287">
-      <note default-x="13">
+    <measure number="96" width="255">
+      <note default-x="14">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -20213,7 +20135,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-45">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -20225,7 +20147,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-40">down</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -20233,8 +20155,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="97" width="288">
-      <note default-x="13">
+    <measure number="97" width="255">
+      <note default-x="14">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -20246,7 +20168,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="15">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="93">
+      <note default-x="84">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -20258,7 +20180,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="20.5">up</stem>
         <beam number="1">end</beam>
       </note>
-      <note default-x="190">
+      <note default-x="170">
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
@@ -20266,8 +20188,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="98" width="185">
-      <note default-x="13">
+    <measure number="98" width="164">
+      <note default-x="14">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -20278,7 +20200,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="28">up</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="70">
+      <note default-x="63">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -20289,7 +20211,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="25">up</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="127">
+      <note default-x="114">
         <pitch>
           <step>B</step>
           <alter>-1</alter>
@@ -20303,8 +20225,8 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
     </measure>
     <!--=======================================================-->
-    <measure number="99" width="261">
-      <note default-x="14">
+    <measure number="99" width="233">
+      <note default-x="13">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -20315,7 +20237,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-50">down</stem>
         <beam number="1">begin</beam>
       </note>
-      <note default-x="112">
+      <note default-x="101">
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -20327,7 +20249,7 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
         <stem default-y="-50">down</stem>
         <beam number="1">continue</beam>
       </note>
-      <note default-x="184">
+      <note default-x="164">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -20340,6 +20262,29 @@ Text: Pietro Metastasio (1689-1782)</credit-words>
       </note>
       <barline location="right">
         <bar-style>light-light</bar-style>
+      </barline>
+    </measure>
+    <!--=======================================================-->
+    <measure number="100" width="144">
+      <note default-x="13">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem default-y="5">up</stem>
+      </note>
+      <note default-x="88">
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
