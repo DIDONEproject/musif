@@ -28,7 +28,7 @@ from musif.reports.calculations import make_intervals_absolute
 from musif.reports.utils import remove_folder_contents
 from .constants import *
 from .tasks.common_tasks import Densities, Textures
-from .tasks.harmony import Chords, Harmonic_data, Triple_harmonic_excel
+from .tasks.harmony import  Harmonic_analysis
 from .tasks.intervals import Intervals, Intervals_types
 from .tasks.melody_values import Melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
@@ -40,7 +40,7 @@ class FeaturesGenerator:
         self._logger = self._cfg.write_logger
 
     def generate_reports(self, data: DataFrame, main_results_path: str, parts_list: Optional[List[str]] = None, num_factors: int = 0, visualizations=False) -> DataFrame:
-        print(get_color('WARNING')+'\n\t\t\t--- Starting reports generation ---\n'+ RESET_SEQ)
+        print(get_color('WARNING')+ '\n' +'--- Starting reports generation ---\n'.center(120, ' ') + RESET_SEQ)
         self.parts_list = [] if parts_list is None else parts_list
         self.visualizations=visualizations
         self.global_features = data
@@ -418,19 +418,20 @@ class FeaturesGenerator:
                 Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
                                 _cfg.sorting_lists["Clefs"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             if 'harmonic_data' in kwargs:
-                harmony_df= pd.concat([common_columns_df , kwargs['harmonic_data']], axis=1)
-                Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string, "Harmonic_data", results_path, self.visualizations, additional_info, groups if groups != [] else None)
+                kwargs['common_df']=common_columns_df
+                # harmonic_analysis=pd.concat([common_columns_df, kwargs['harmonic_data'],kwargs['chords'], kwargs['functions'], kwargs['key_areas']], axis=1)
+                # Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string, "Harmonic_data", results_path, self.visualizations, additional_info, groups if groups != [] else None)
+                Harmonic_analysis(rows_groups, not_used_cols, factor, _cfg, kwargs, pre_string, "Harmonic_Analysis", results_path, self.visualizations, additional_info, groups if groups != [] else None)
+            # if 'chords' in kwargs:
+            #     chords = pd.concat([common_columns_df, kwargs['chords']], axis=1)
+            #     Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string,  "Chords", self.visualizations, groups if groups != [] else None, additional_info)
             
-            if 'chords' in kwargs:
-                chords = pd.concat([common_columns_df, kwargs['chords']], axis=1)
-                Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string,  "Chords", self.visualizations, groups if groups != [] else None, additional_info)
+            # if 'functions' in kwargs:
+            #     functions = pd.concat([common_columns_df, kwargs['functions']], axis=1)
+            #     Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string, 'Harmonic_functions', self.visualizations, groups if groups != [] else None, additional_info)
             
-            if 'functions' in kwargs:
-                functions = pd.concat([common_columns_df, kwargs['functions']], axis=1)
-                Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string, 'Harmonic_functions', self.visualizations, groups if groups != [] else None, additional_info)
-            
-            if 'key_areas' in kwargs:
-                key_areas= pd.concat([common_columns_df,kwargs['key_areas']], axis=1)
+            # if 'key_areas' in kwargs:
+            #     key_areas= pd.concat([common_columns_df,kwargs['key_areas']], axis=1)
                 # Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, key_areas, results_path, pre_string, "Key_Areas", self.visualizations, groups if groups != [] else None, additional_info)
                 
                 # wait for all

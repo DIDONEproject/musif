@@ -65,7 +65,7 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
         raise TypeError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     if isinstance(obj, str):
         if path.isdir(obj):
-            return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")))
+            return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
         elif path.isfile(obj):
             return [obj] if obj.rstrip().endswith(f".{MUSICXML_FILE_EXTENSION}") else []
         else:
@@ -129,7 +129,7 @@ class FeaturesExtractor:
         self._cfg = Configuration(*args, **kwargs)
 
     def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
-        print(get_color('WARNING') + '\n---Analyzing scores ---\n' + RESET_SEQ)
+        print(get_color('WARNING') + '\n' + '---Analyzing scores ---'.center(120, ' ') + RESET_SEQ)
         musicxml_files = extract_files(obj)
         score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
         return score_df
@@ -207,7 +207,7 @@ class FeaturesExtractor:
 
     def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
         score = parse_file(musicxml_file, self._cfg.split_keywords)
-        # score = score.expandRepeats()
+        score = score.expandRepeats()
         filtered_parts = self._filter_parts(score, parts_filter)
         if len(filtered_parts) == 0:
             self._cfg.read_logger.warning(
