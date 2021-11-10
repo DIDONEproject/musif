@@ -1,5 +1,5 @@
 data_dir: data
-musescore_dir: data
+musescore_dir: 
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
@@ -13,18 +13,17 @@ write_log:
   level: DEBUG
 features:
   - core
-  - custom.core_mscx
   - tempo
-#  - custom.themeA
+#  - themeA
   - scoring
-  # - custom.file_name
+  # - file_name
   - scale
-  - custom.scale_relative
+  - scale_relative
   - ambitus
   - interval # to generate Melody_values reports, both ambitus and interval are needed
   # - density
   # - texture     
-  - custom.harmony
+  - harmony
   - metadata
   - composer
   - custom.librettist
