@@ -197,11 +197,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="73"/>
           <controller ctrl="7" value="101"/>
@@ -214,11 +210,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="0"/>
           <controller ctrl="7" value="101"/>
@@ -289,11 +281,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="68"/>
           <controller ctrl="7" value="101"/>
@@ -364,11 +352,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="52"/>
           <controller ctrl="7" value="127"/>
@@ -442,11 +426,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="40"/>
           <controller ctrl="7" value="101"/>
@@ -465,11 +445,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -538,11 +514,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="40"/>
           <controller ctrl="7" value="101"/>
@@ -561,11 +533,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -635,11 +603,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="41"/>
           <controller ctrl="7" value="101"/>
@@ -658,11 +622,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -732,11 +692,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="42"/>
           <controller ctrl="7" value="101"/>
@@ -755,11 +711,7 @@
 <<<<<<< HEAD
           <controller ctrl="0" value="0"/>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -784,11 +736,7 @@
 <font size="14"/>Alessandro
 <i>Cleofide</i> (1731) 
 <font size="12"/>Atto I - Scena 4. Aria</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </Text>
         <Text>
           <style>Composer</style>
@@ -818,11 +766,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="11.9"></font><b>Allegro</b></text>
 =======
             <text><font size="11.9"/><b>Allegro</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Tempo>
           <Dynamic>
             <subtype>f</subtype>
@@ -1131,11 +1075,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><i>poco </i></text>
 =======
             <text><font size="7.5"/><i>poco </i></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -4982,11 +4922,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <label>coda</label>
           </Marker>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
         <voice>
           <Harmony>
             <name>I</name>
@@ -5215,11 +5151,7 @@ Text: Pietro Metastasio (1689-1782)</text>
                 </location>
               </next>
             </Spanner>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -5274,11 +5206,7 @@ Text: Pietro Metastasio (1689-1782)</text>
                 </location>
               </next>
             </Spanner>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         <voice>
           <Chord>
@@ -5413,11 +5341,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-1/2</fractions>
@@ -5450,11 +5374,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5499,11 +5419,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5548,11 +5464,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-1/2</fractions>
@@ -5579,11 +5491,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5611,11 +5519,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <LayoutBreak>
           <subtype>page</subtype>
           </LayoutBreak>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
         <voice>
           <Harmony>
             <name>iii.V6(9)</name>
@@ -5626,11 +5530,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5657,11 +5557,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5703,11 +5599,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5767,11 +5659,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5857,11 +5745,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5931,11 +5815,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5981,11 +5861,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6013,11 +5889,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -6088,11 +5960,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6120,11 +5988,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -6187,11 +6051,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
         <voice>
           <Harmony>
             <name>II</name>
@@ -6201,11 +6061,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -6259,11 +6115,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6321,11 +6173,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -6373,11 +6221,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6435,11 +6279,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6529,11 +6369,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6601,11 +6437,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6684,11 +6516,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6756,11 +6584,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6854,11 +6678,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6926,11 +6746,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -7017,11 +6833,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -7092,11 +6904,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <jumpTo>segno</jumpTo>
           <playUntil>end</playUntil>
           <continueAt></continueAt>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </Jump>
         <voice>
           <TimeSig>
@@ -7114,11 +6922,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="13.9"></font>[  ]</text>
             </StaffText>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
@@ -7138,11 +6942,7 @@ Text: Pietro Metastasio (1689-1782)</text>
 <<<<<<< HEAD
 =======
             <span>0</span>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </BarLine>
           </voice>
         <voice>
@@ -7212,11 +7012,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     <Staff id="2">
       <Measure>
@@ -7524,11 +7320,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><i>poco </i></text>
 =======
             <text><font size="7.5"/><i>poco </i></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -10617,11 +10409,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="2.46881" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         <voice>
           <Chord>
@@ -10710,11 +10498,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10726,11 +10510,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10742,11 +10522,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10758,11 +10534,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10774,11 +10546,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10790,11 +10558,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10806,11 +10570,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -10828,11 +10588,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -10889,11 +10645,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -10973,11 +10725,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11044,11 +10792,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11091,11 +10835,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11123,11 +10863,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -11189,11 +10925,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11221,11 +10953,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -11289,11 +11017,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -11344,11 +11068,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11400,11 +11120,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -11452,11 +11168,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11511,11 +11223,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11578,11 +11286,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11647,11 +11351,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11718,11 +11418,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11787,11 +11483,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11858,11 +11550,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -11927,11 +11615,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -12006,11 +11690,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -12082,11 +11762,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="13.9"></font>[  ]</text>
             </StaffText>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
@@ -12164,11 +11840,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     <Staff id="3">
       <Measure>
@@ -15028,11 +14700,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <minDistance>-999</minDistance>
             <offset x="2.46881" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           </voice>
         </Measure>
@@ -15069,11 +14737,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="-7.0266" y="-2.19994"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>eighth</durationType>
             <appoggiatura/>
@@ -15106,11 +14770,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8"></font>-</text>
 =======
             <text><font size="8"/>-</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <location>
             <fractions>1/4</fractions>
@@ -15318,11 +14978,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -15348,11 +15004,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -15382,11 +15034,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -15415,11 +15063,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -15628,11 +15272,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -15644,11 +15284,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -15660,11 +15296,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -15676,11 +15308,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -15692,11 +15320,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -15708,11 +15332,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <duration>4/4</duration>
 =======
             <duration>1/1</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           </voice>
         </Measure>
@@ -15732,11 +15352,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="3.03853" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -15759,11 +15375,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/2</duration>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </Rest>
           <BarLine>
             <subtype>double</subtype>
@@ -15783,11 +15395,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     <Staff id="4">
       <Measure>
@@ -15962,11 +15570,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><i>poco </i></text>
 =======
             <text><font size="7.5"/><i>poco </i></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -20158,11 +19762,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="2.46881" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -20231,11 +19831,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="-7.21651" y="-0.616686"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>eighth</durationType>
             <appoggiatura/>
@@ -20337,11 +19933,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -20434,11 +20026,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -20523,11 +20111,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20569,11 +20153,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20614,11 +20194,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20688,11 +20264,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20764,11 +20336,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20848,11 +20416,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20895,11 +20459,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20927,11 +20487,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -20995,11 +20551,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -21050,11 +20602,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -21108,11 +20656,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -21177,11 +20721,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -21250,11 +20790,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -21323,11 +20859,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -21395,11 +20927,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="3.03853" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -21416,11 +20944,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="13.9"></font>[  ]</text>
             </StaffText>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
@@ -21451,11 +20975,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <leadingSpace>1.68962</leadingSpace>
             </Segment>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
@@ -21521,11 +21041,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </BarLine>
           </voice>
         </Measure>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     <Staff id="5">
       <Measure>
@@ -21700,11 +21216,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><i>poco </i></text>
 =======
             <text><font size="7.5"/><i>poco </i></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -25943,11 +25455,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -25965,11 +25473,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="-7.21651" y="-0.616686"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>eighth</durationType>
             <appoggiatura/>
@@ -26071,11 +25575,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -26168,11 +25668,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -26257,11 +25753,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26303,11 +25795,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26348,11 +25836,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26422,11 +25906,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26501,11 +25981,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26585,11 +26061,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26632,11 +26104,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26664,11 +26132,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -26732,11 +26196,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -26784,11 +26244,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26842,11 +26298,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26911,11 +26363,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -26984,11 +26432,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -27057,11 +26501,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -27129,11 +26569,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="3.03853" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -27150,11 +26586,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="13.9"></font>[  ]</text>
             </StaffText>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
@@ -27241,11 +26673,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     <Staff id="6">
       <Measure>
@@ -27436,11 +26864,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><i>poco </i></text>
 =======
             <text><font size="7.5"/><i>poco </i></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -31379,11 +30803,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -31404,11 +30824,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31446,11 +30862,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31506,11 +30918,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31535,11 +30943,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31581,11 +30985,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31623,11 +31023,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31672,11 +31068,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31714,11 +31106,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31760,11 +31148,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31836,11 +31220,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31874,11 +31254,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31900,11 +31276,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31961,11 +31333,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32019,11 +31387,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32061,11 +31425,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32099,11 +31459,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32141,11 +31497,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32187,11 +31539,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32229,11 +31577,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32275,11 +31619,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32317,11 +31657,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32363,11 +31699,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32409,11 +31741,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32455,11 +31783,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32501,11 +31825,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32547,11 +31867,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32593,11 +31909,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -32638,11 +31950,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="3.03853" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -32659,11 +31967,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="13.9"></font>[  ]</text>
             </StaffText>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -32700,11 +32004,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     <Staff id="7">
       <Measure>
@@ -32731,11 +32031,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><b>tutti</b></text>
 =======
             <text><font size="7.5"/><b>tutti</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -32770,11 +32066,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -32848,11 +32140,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -32930,11 +32218,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="7.5"></font><i>poco </i></text>
 =======
             <text><font size="7.5"/><i>poco </i></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -33013,11 +32297,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33106,11 +32386,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33192,11 +32468,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33278,11 +32550,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33325,11 +32593,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -33371,11 +32635,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>3</text>
 =======
             <text><font face="Finale Numerics"/>3</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33582,11 +32842,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33744,11 +33000,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>Basso</b></text>
 =======
             <text><font size="8.1"/><b>Basso</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -33838,11 +33090,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33977,11 +33225,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -34112,11 +33356,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34210,11 +33450,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>5</text>
 =======
             <text><font face="Finale Numerics"/>5</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -34331,11 +33567,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -34614,11 +33846,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34704,11 +33932,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34802,11 +34026,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34821,11 +34041,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>tutti</b></text>
 =======
             <text><font size="8.1"/><b>tutti</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -34876,11 +34092,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -34907,11 +34119,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34927,11 +34135,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34947,11 +34151,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -34981,11 +34181,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35048,11 +34244,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -35071,11 +34263,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35091,11 +34279,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35142,11 +34326,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35181,11 +34361,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>3</text>
 =======
             <text><font face="Finale Numerics"/>3</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35201,11 +34377,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35243,11 +34415,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>Basso</b></text>
 =======
             <text><font size="8.1"/><b>Basso</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -35293,11 +34461,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35313,11 +34477,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35444,11 +34604,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35464,11 +34620,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35484,11 +34636,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -35515,11 +34663,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35583,11 +34727,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </StaffText>
           <StaffText>
             <text><font size="8.1"/><b>tutti</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -35659,11 +34799,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>Basso</b></text>
 =======
             <text><font size="8.1"/><b>Basso</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -35694,11 +34830,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35753,11 +34885,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35773,11 +34901,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -35804,11 +34928,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35855,11 +34975,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35902,11 +35018,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35961,11 +35073,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35981,11 +35089,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>4</text>
 =======
             <text><font face="Finale Numerics"/>4</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -36004,11 +35108,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>3</text>
 =======
             <text><font face="Finale Numerics"/>3</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36153,11 +35253,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -36492,11 +35588,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>tutti</b></text>
 =======
             <text><font size="8.1"/><b>tutti</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -36545,11 +35637,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </StaffText>
           <StaffText>
             <text><font size="8.1"/><b>Basso</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -36580,11 +35668,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36635,11 +35719,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36659,11 +35739,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -36690,11 +35766,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36776,11 +35848,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36854,11 +35922,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>4</text>
 =======
             <text><font face="Finale Numerics"/>4</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36874,11 +35938,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>3</text>
 =======
             <text><font face="Finale Numerics"/>3</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37216,11 +36276,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>tutti</b></text>
 =======
             <text><font size="8.1"/><b>tutti</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -37325,11 +36381,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37345,11 +36397,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37404,11 +36452,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -37435,11 +36479,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37486,11 +36526,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37525,11 +36561,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>3</text>
 =======
             <text><font face="Finale Numerics"/>3</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37585,11 +36617,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </StaffText>
           <StaffText>
             <text><font size="8.1"/><b>Basso</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -37620,11 +36648,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37675,11 +36699,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -37708,11 +36728,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -37750,11 +36766,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -37796,11 +36808,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -37823,11 +36831,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>#</text>
 =======
             <text><font face="Finale Numerics"/>#</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37856,11 +36860,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -37902,11 +36902,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -37937,11 +36933,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -37956,11 +36948,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38002,11 +36990,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38050,11 +37034,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38077,11 +37057,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38114,11 +37090,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38141,11 +37113,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38169,11 +37137,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>5</text>
 =======
             <text><font face="Finale Numerics"/>5</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -38192,11 +37156,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -38226,11 +37186,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38264,11 +37220,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38296,11 +37248,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38353,11 +37301,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="8.1"></font><b>tutti</b></text>
 =======
             <text><font size="8.1"/><b>tutti</b></text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -38392,11 +37336,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38434,11 +37374,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38461,11 +37397,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>7</text>
 =======
             <text><font face="Finale Numerics"/>7</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38492,11 +37424,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38534,11 +37462,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38561,11 +37485,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38592,11 +37512,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38619,11 +37535,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38639,11 +37551,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38664,11 +37572,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38683,11 +37587,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>3</text>
 =======
             <text><font face="Finale Numerics"/>3</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38722,11 +37622,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38749,11 +37645,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38776,11 +37668,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38822,11 +37710,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38853,11 +37737,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38880,11 +37760,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38926,11 +37802,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -38957,11 +37829,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -38984,11 +37852,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -39030,11 +37894,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -39061,11 +37921,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font face="Finale Numerics"></font>6</text>
 =======
             <text><font face="Finale Numerics"/>6</text>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -39088,11 +37944,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -39133,11 +37985,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <offset x="3.03853" y="-0.728439"/>
             <text><font size="13.9"/>[  ]</text>
             </StaffText>
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           </voice>
         </Measure>
       <Measure>
@@ -39154,11 +38002,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <text><font size="13.9"></font>[  ]</text>
             </StaffText>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -39195,11 +38039,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
 =======
-<<<<<<< HEAD
->>>>>>> 8d95491 (Move some files)
-=======
 >>>>>>> 8d95491ebf630e67feb9cc5f0fbc87fd7ba07297
->>>>>>> 4d695711d6099084932efdeb9cf2ec1d41f2ad99
       </Staff>
     </Score>
   </museScore>
