@@ -13,9 +13,9 @@ WRITE_LOG = "write_log"
 LOG_FILE_PATH = "file_path"
 LOG_LEVEL = "level"
 DATA_DIR = "data_dir"
-MUSESCORE_DIR = "musescore_dir"
 METADATA_DIR = "metadata_dir"
 METADATA_ID_COL = "metadata_id_col"
+MUSESCORE_DIR = "musescore_dir"
 PARALLEL = "parallel"
 MAX_PROCESSES = "max_processes"
 FEATURES = "features"
@@ -31,9 +31,9 @@ _CONFIG_FALLBACK = {
         LOG_LEVEL: "ERROR",
     },
     DATA_DIR: "data",
-    MUSESCORE_DIR:"data",
     METADATA_DIR: "metadata",
     METADATA_ID_COL: "FileName",
+    MUSESCORE_DIR: "metadata",
     PARALLEL: False,
     MAX_PROCESSES: 1,
     FEATURES: None,
@@ -59,16 +59,16 @@ class Configuration:
         self._write_log_data = config_data.get(WRITE_LOG, _CONFIG_FALLBACK[WRITE_LOG])
         self.write_logger = get_logger(WRITE_LOGGER_NAME, self._write_log_data[LOG_FILE_PATH], self._write_log_data[LOG_LEVEL])
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
-        self.musescore_dir = config_data.get(MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
         self.metadata_id_col = config_data.get(METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL])
+        self.musescore_dir = config_data.get(MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
         self.parallel = config_data.get(PARALLEL, _CONFIG_FALLBACK[PARALLEL])
         self.max_processes = config_data.get(MAX_PROCESSES, _CONFIG_FALLBACK[MAX_PROCESSES])
         self.features = config_data.get(FEATURES, _CONFIG_FALLBACK[FEATURES])
         self.split_keywords = config_data.get(SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS])
         self._load_metadata()
 
-    def is_requested_feature(self, feature) -> bool:
+    def is_requested_feature_category(self, feature) -> bool:
         if self.features is None:
             return True
         return feature in self.features

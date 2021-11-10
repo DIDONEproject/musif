@@ -15,7 +15,7 @@ from matplotlib.lines import Line2D
 from music21 import interval, pitch
 from pandas.core.frame import DataFrame
 
-from musif.extract.features.interval import LARGEST_SEMITONES_ALL
+from musif.extract.features.interval.constants import LARGEST_SEMITONES_ALL
 
 matplotlib.use('Agg')
 warnings.filterwarnings("ignore")

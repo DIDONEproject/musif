@@ -5,8 +5,9 @@ from os import path
 
 from pandas.core.frame import DataFrame
 
-from musif.common.constants import RESET_SEQ, get_color
+from musif.common.constants import RESET_SEQ
 from musif.common.sort import sort
+from musif.common.utils import get_color
 from musif.config import Configuration
 from musif.reports.constants import *
 from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
@@ -46,8 +47,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
             if groups:
                 data_grouped = data.groupby(list(groups))
                 for g, datag in data_grouped:
-                    result_visualisations = path.join(
-                        results_path, 'visualisations', g)
+                    result_visualisations = path.join(results_path, 'visualisations', g)
                     if not os.path.exists(result_visualisations):
                         os.mkdir(result_visualisations)
                     name_bar = path.join(

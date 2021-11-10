@@ -8,6 +8,7 @@ from musif.musicxml.tempo import get_number_of_beats
 file_names = []
 repeat_bracket = False
 
+
 def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks = False):
     measures = []
     o = offset
