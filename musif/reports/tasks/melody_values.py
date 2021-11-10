@@ -6,7 +6,8 @@ from music21 import interval
 from pandas.core.frame import DataFrame
 import numpy as np
 import musif.extract.features.lyrics as lyrics
-from musif.common.constants import RESET_SEQ, get_color
+from musif.common.constants import RESET_SEQ
+from musif.common.utils import get_color
 from musif.config import Configuration
 from musif.reports.constants import *
 from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook

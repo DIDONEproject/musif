@@ -1,0 +1,9 @@
+TEMPO = "Tempo"
+NUMERIC_TEMPO = "NumericTempo"
+TIME_SIGNATURE = "TimeSignature"
+TIME_SIGNATURES = "AllTimeSignatures"
+TS_MEASURES='TimeSignatureMeasures'
+TIME_SIGNATURE_GROUPED = "TimeSignatureGrouped"
+TEMPO_GROUPED_1 = "TempoGrouped1"
+TEMPO_GROUPED_2 = "TempoGrouped2"
+NUMBER_OF_BEATS = "NumberOfBeats"
