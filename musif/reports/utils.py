@@ -80,15 +80,15 @@ def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_colum
                     start_row=last_printed[i][1], start_column=i + 1, end_row=row_number - 2, end_column=i + 1)
                 sheet.cell(last_printed[i][1],  i + 1).fill = factors_Fill[i]
 
-def save_workbook(path, workbook, cells_size=NORMAL_WIDTH):
+def save_workbook(path, workbook, cells_size = NORMAL_WIDTH):
     if "Sheet" in workbook.get_sheet_names():
         std = workbook.get_sheet_by_name('Sheet')
         workbook.remove_sheet(std)
     Adjust_excel_width_height(workbook, cells_size)
     workbook.save(path)
     
-def remove_underscore(columns):
-    return [i.replace("_", " ") for i in columns]
+def remove_underscore(one_list: List) -> List:
+    return [i.replace("_", " ") for i in one_list]
 
 def get_general_cols(rows_groups, general_cols):
     for row in rows_groups:
@@ -96,6 +96,14 @@ def get_general_cols(rows_groups, general_cols):
             general_cols.append(row)
         else:
             general_cols += rows_groups[row][0]
+
+def print_basic_sheet(_cfg,name, data, additional_info, groups, workbook, second_column_names, third_columns_names):
+    columns = remove_underscore(third_columns_names)
+    data = data.round(decimals = 2)
+    computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
+    Create_excel(workbook.create_sheet(name), third_columns_names, data, columns, computations, _cfg.sorting_lists,
+                    second_columns=second_column_names,
+                    groups=groups, per = False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
 
 def Adjust_excel_width_height(workbook: ExcelWriter, multiplier):
         for sheet in workbook.worksheets:
@@ -149,7 +157,7 @@ def print_columns_titles(sheet: ExcelWriter, row: int, column: int, column_names
     for c in column_names:
         sheet.cell(row, column).value = c
         sheet.cell(row, column).font =  FONT_TITLE
-        sheet.cell(row, column).fill = titles6Fill
+        sheet.cell(row, column).fill = titles2Fill
         column += 1
 
 def print_averages_total(sheet: ExcelWriter, row: int, values:List, lable_column: int, values_column: list, average: bool=False, per: bool=False, exception: int=None):
@@ -173,17 +181,14 @@ def print_averages_total_column(sheet: ExcelWriter, row: int, column: int, value
         sheet.cell(row, column).value = str(v).replace(',','.') if not per else str(v).replace(',','.') + "%"
         row += 1
 
-def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], fill = None):
-    # Column_names will be a list of (name, length)
-
+def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: int, column_names: List[tuple], filler = None):
     for i, c in enumerate(column_names):
-        
-        if len(column_names)>2 and fill is None:
-            fill=fills_list[i]
+        if len(column_names) > 2:
+            filler=fills_list[i]
         sheet.cell(row, column).value = c[0]
         sheet.cell(row, column).font = FONT_TITLE
         if c[0] != '':
-            sheet.cell(row, column).fill = fill
+            sheet.cell(row, column).fill = filler
         sheet.cell(row, column).alignment = center
         sheet.merge_cells(start_row=row, start_column=column,
                          end_row=row, end_column=column + c[1] - 1)
@@ -219,42 +224,19 @@ def remove_folder_contents(path: str):
         elif os.path.isdir(file_path):
             remove_folder_contents(file_path)
 
-###########################################################################################################################################################
-# Function is in charge of printing each group: 'Per Opera', 'Per City'...
-#
-#   sheet: the openpyxl object in which we will write
-#   grouped: dataframe already grouped by the main factor and the additional information that it may show
-#   row_number, column_number: row and column in which we will start to write the information
-#   columns: list of the dataframe (grouped) column names that we need to access (as it doesn't necessarily correspond to the names that we want to print)
-#   third_columns: list of the names of the columns that we need to print
-#   computations_columns: information about the matematical computation that has to be done to each column (sum, mean...)
-#   ----------------
-#   first_columns: list of column names to print in first place, along with the number of columns that each has to embrace
-#   second_columns: list of column names to print in second place, along with the number of columns that each has to embrace
-#   per: boolean value to indicate if we need to compute the excel in absolute values or percentage (by default it is absolute)
-#   average: boolean value to indicate if we want the average row at the last group's row
-#   last_column: boolean value to indicate if we want a summarize on the last column
-#   last_column_average: boolean to indicate if we want the last column to have each row's average (otherwise, the total is writen)
-#   additional_info: number of extra columns containing additional info
-#   ponderate: boolean to indicate if we want to ponderate the data printed or not
-#   not_grouped_df: tuple containing the additional information columns and the dataframe without applying groupBy
-#
-###########################################################################################################################################################
-
 def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_number: int, columns: list, third_columns: list, computations_columns: list,
                  first_columns: list = None, second_columns: List=None, per: bool=False, average:bool=False, last_column: bool=False,
                  last_column_average: bool=False, additional_info: DataFrame=None, ponderate: bool=False, not_grouped_df:DataFrame=None):
     len_add_info = 0  # Space for the possible column of additional information
     if additional_info:
         len_add_info = additional_info
-    # WRITE THE COLUMN NAMES (<first>, <second> and third)
     if first_columns:
         write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, first_columns, titles1Fill)
+            sheet, row_number, column_number + 1 + len_add_info, first_columns, filler=titles1Fill)
         row_number += 1
     if second_columns:
         write_columns_titles_variable_length(
-            sheet, row_number, column_number + 1 + len_add_info, second_columns)
+            sheet, row_number, column_number + 1 + len_add_info, second_columns,filler=titles3Fill)
         row_number += 1
     starting_row = row_number
     print_columns_titles(sheet, row_number, column_number +
@@ -264,8 +246,7 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
     total_analysed_column = "Total analysed" in columns
     cnumber = column_number
 
-    # store each result in case of need of calculating the percentage (per = True)
-    columns_values = {c: [] for c in columns}
+    columns_values = {c: [] for c in columns}# store each result 
 
     for s, subgroup in enumerate(grouped):
 
@@ -425,12 +406,10 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         2 if total_analysed_column else column_number + len_add_info + 1
     print_averages_total(sheet, last_used_row, final_values, column_number, data_column, average=average,
                          per=per or ponderate and all(c == "sum" for c in computations_columns), exception=exception)
-    ###
 
     return last_used_row + 1, cnumber + 1
 
-                        # Function in charge of printting the data #
-
+# Function in charge of printting the data #
 def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                   columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None,
                   columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None,
@@ -445,14 +424,9 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                 forbiden = [item for sublist in forbiden for item in sublist]
             if group == None and row not in forbiden: #it was 'or' and not 'and' before, but change considered neccessary  
 
-                # 1. Write the Title in Yellow
-                sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
-                sheet.cell(row_number, column_number).font =  FONT
-                sheet.cell(row_number, column_number).fill = YELLOWFILL
-                row_number += 1
-                sorting = rows_groups[row][1]
+                sorting = WriteTitle(sheet, rows_groups, row_number, column_number, row)
 
-                # 2. Write the information depending on the subgroups (ex: Geography -> City, Country)
+                # Write the information depending on the subgroups (ex: Geography -> City, Country)
                 if len(rows_groups[row][0]) == 0:  # No subgroups
                     starting_row = row_number
                     data = sort_dataframe(data, row, sorting_lists, sorting)
@@ -460,7 +434,6 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                         data, row, additional_info)
                     row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False), row_number, column_number, columns, third_columns, computations_columns, first_columns, second_columns, per=per,
                                                                 average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
-                    
                     if columns2 != None:  # Second subgroup
                         groups_add_info, add_info = get_groups_add_info(
                             data, row, additional_info)
@@ -520,7 +493,6 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                                         data3, subrows, sorting_lists, sort_method)
                                 groups_add_info, add_info = get_groups_add_info(
                                     data, subrows, additional_info)
-                                    #_, _
                                 row_number, last_column_used = print_groups(sheet, data.groupby(groups_add_info, sort=False) if data3 is None else data3.groupby(groups_add_info, sort=False), starting_row, last_column_used + 1, columns3, third_columns3, computations_columns3, first_columns3,
                                                     second_columns3, per=per, average=average, last_column=last_column, last_column_average=last_column_average, additional_info=add_info, ponderate=ponderate, not_grouped_df=(groups_add_info, data[groups_add_info + columns]))
 
@@ -529,3 +501,11 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                         data = copy.deepcopy(data_joint)
                 row_number += 1
     return row_number
+
+def WriteTitle(sheet, rows_groups, row_number, column_number, row):
+    sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
+    sheet.cell(row_number, column_number).font =  FONT
+    sheet.cell(row_number, column_number).fill = YELLOWFILL
+    row_number += 1
+    sorting = rows_groups[row][1]
+    return sorting

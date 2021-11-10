@@ -1,12 +1,9 @@
 import openpyxl
 from openpyxl.styles.fonts import Font
-
 import musif.extract.features.interval as interval
 from musif.extract.features import ambitus
 from musif.extract.features.scoring import FAMILY_SCORING, SCORING
 from musif.extract.features.tempo import TEMPO_GROUPED_1, TEMPO_GROUPED_2
-
-# The structure shows the grouping name as key, and as value a tuple containing its subgroupings and the sorting methods
 
 ACT = 'Act'
 ACTANDSCENE = 'ActAndScene'
@@ -14,14 +11,12 @@ ARIA_ID = 'AriaId'
 ARIA_LABEL = 'AriaLabel'
 CHARACTER = 'Character'
 CITY = 'City'
-CITY = "City"
 CLEF1 = 'Clef1'
 CLEF2 = 'Clef2'
 CLEF3 = 'Clef3'
 COMPOSER = 'Composer'
 DATE = 'Date'
 DECADE = 'Decade'
-DECADE = "Decade"
 DRAMA='Drama'
 FINAL='Final'
 FORM = 'Form'
@@ -49,7 +44,6 @@ metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, A
 singers_list=["sop", "ten", "alt", "bar", "bass", "bbar"]
 
 def get_melody_list(catch):
-    # joined_notes = ",".join([catch + ambitus.LOWEST_NOTE, catch + ambitus.HIGHEST_NOTE])
     return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
         catch + interval.TRIMMED_INTERVALLIC_STD, catch + interval.TRIMMED_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_ASC,
         catch + interval.LARGEST_SEMITONES_DESC,catch + interval.LARGEST_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
@@ -115,7 +109,6 @@ EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, CITY, SCENE, NAME]
 
 alfa = "abcdefghijklmnopqrstuvwxyz"
 
-# Some combinations are not needed when using more than one factor
 forbiden_groups = {OPERA: [OPERA],
                    ARIA_LABEL: [OPERA, ARIA_LABEL],
                    TITLE: [TITLE, OPERA],
@@ -155,24 +148,25 @@ greenFill = openpyxl.styles.PatternFill(
 orangeFill = openpyxl.styles.PatternFill(
     start_color='EE6513', end_color='EE6513', fill_type='solid')
 
-
 titles_second_Fill = openpyxl.styles.PatternFill(
     start_color='FA9455', end_color='FA9455', fill_type='solid')
 
 titles1Fill = openpyxl.styles.PatternFill(
     start_color='F97626', end_color='F97626', fill_type='solid')
 
+titles2Fill = openpyxl.styles.PatternFill(
+    start_color='93d3fb', end_color='93d3fb', fill_type='solid')
+    
 titles3Fill = openpyxl.styles.PatternFill(
     start_color='FBBA93', end_color='FBBA93', fill_type='solid')
 
 titles4Fill = openpyxl.styles.PatternFill(
-    start_color='00FFFF', end_color='FBBA93', fill_type='solid')
+    start_color='00FFFF', end_color='00FFFF', fill_type='solid')
 
 titles5Fill = openpyxl.styles.PatternFill(
-    start_color='C0C0C0', end_color='FBBA93', fill_type='solid')
+    start_color='C0C0C0', end_color='C0C0C0', fill_type='solid')
 
-titles6Fill = openpyxl.styles.PatternFill(
-    start_color='93d3fb', end_color='93d3fb', fill_type='solid')
+
 
 fills_list=[titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill]
 
@@ -187,8 +181,9 @@ center = openpyxl.styles.Alignment(horizontal='center')
 BOLD = Font(size = 12, bold=True)
 FONT= Font(size=12)
 FONT_TITLE= Font(size = 12, bold = True, name='Garamond')
-IMAGE_EXTENSION='.png'
 
 WIDE=1.5
 NORMAL_WIDTH=1
 NARROW=0.5
+
+IMAGE_EXTENSION='.png'
