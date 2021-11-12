@@ -11,9 +11,8 @@ if __name__ == "__main__":
     parts = ["vnI", "obI", "ten"]
 
     # arias_path="./tests/data/static/"
-    arias_path="./arias/prueba/"
-
-    arias_path="./arias/error"
+    arias_path="./arias"
+    # arias_path="./arias/error/"
 
     # df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
     # df.to_csv('martiser/dataframe.csv', index=False)
