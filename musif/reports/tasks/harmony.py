@@ -16,7 +16,7 @@ from musif.extract.features.harmony.constants import (ADDITIONS_prefix,
 from musif.extract.features.harmony.utils import sort_labels
 from musif.reports.constants import *
 from musif.reports.utils import (Create_excel, get_excel_name,
-                                 get_general_cols, remove_underscore,
+                                 get_general_cols,
                                  save_workbook, print_basic_sheet)
 import copy
 from pandas.core.frame import DataFrame
@@ -55,10 +55,11 @@ def Print_Harmonic_Data(_cfg, data, data_general, additional_info, groups, workb
 def Print_Chords(factor, _cfg, data, data_general, groups, additional_info, workbook):
     data.columns=[i.replace(CHORDS_GROUPING_prefix, '') for i in data.columns]
     data.columns=[i.replace(CHORD_prefix, '') for i in data.columns]
+    data.columns=[i.replace('_Count', '') for i in data.columns]
     try:
-        data=sort_columns(data, sort_labels(data.columns, chordtype='occurrences'))
+        data = sort_columns(data, sort_labels(data.columns, chordtype='occurrences')) #form=['', '+', 'o', '%', 'M']
     except:
-        data=sort_columns(data, _cfg.sorting_lists['NumeralsSorting'])
+        data = sort_columns(data, _cfg.sorting_lists['NumeralsSorting'])
     
     third_columns = data.columns.to_list()
 
@@ -141,6 +142,7 @@ def Print_Double_Excel(name, factor, _cfg, groups, additional_info, workbook, da
                 additional_info=additional_info, ponderate=True)
                 
 def Process_data(data, prefix1, prefix2, prefix3, sorting_list1, sorting_list2, sorting_list3):
+    data.columns= [i.replace('_Count','') for i in data.columns]
     data1 = data[[i for i in data.columns if prefix1 in i]]
     data1.columns = [i.replace(prefix1,'').replace('_',' ') for i in data1.columns]
 

@@ -194,6 +194,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="73"/>
           <controller ctrl="7" value="101"/>
@@ -203,6 +204,7 @@
           <midiChannel>0</midiChannel>
           </Channel>
         <Channel name="harmony">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="0"/>
           <controller ctrl="7" value="101"/>
@@ -270,6 +272,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="68"/>
           <controller ctrl="7" value="101"/>
@@ -337,6 +340,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
           <controller ctrl="7" value="127"/>
@@ -407,6 +411,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="40"/>
           <controller ctrl="7" value="101"/>
@@ -422,6 +427,7 @@
           <midiChannel>2</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -487,6 +493,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="40"/>
           <controller ctrl="7" value="101"/>
@@ -502,6 +509,7 @@
           <midiChannel>4</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -568,6 +576,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="41"/>
           <controller ctrl="7" value="101"/>
@@ -583,6 +592,7 @@
           <midiChannel>11</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -649,6 +659,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="42"/>
           <controller ctrl="7" value="101"/>
@@ -664,6 +675,7 @@
           <midiChannel>13</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
@@ -680,9 +692,9 @@
           <style>Title</style>
           <size>20</size>
           <text>Vil trofeo d’un’alma imbelle
-<font size="14"/>Alessandro
+<font size="14"></font>Alessandro
 <i>Cleofide</i> (1731) 
-<font size="12"/>Atto I - Scena 4. Aria</text>
+<font size="12"></font>Atto I - Scena 4. Aria</text>
           </Text>
         <Text>
           <style>Composer</style>
@@ -708,7 +720,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <text><font size="11.9"/><b>Allegro</b></text>
+            <text><font size="11.9"></font><b>Allegro</b></text>
             </Tempo>
           <Dynamic>
             <subtype>f</subtype>
@@ -1013,7 +1025,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>0.448144</minDistance>
             <offset x="-3.51749" y="6.66251"/>
-            <text><font size="7.5"/><i>poco </i></text>
+            <text><font size="7.5"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -4853,6 +4865,11 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
       <Measure>
+        <Marker>
+          <style>Repeat Text Right</style>
+          <text>To <font size="20"></font><sym>coda</sym></text>
+          <label>coda</label>
+          </Marker>
         <voice>
           <Harmony>
             <name>I</name>
@@ -5067,18 +5084,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I}</name>
             </Harmony>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>1.</beginText>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -5102,35 +5107,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>vi</name>
             </Harmony>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>2.</beginText>
-              <endings>2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>2</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           </voice>
         <voice>
           <Chord>
@@ -5154,108 +5130,13 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
-        <Marker>
-          <style>Repeat Text Right</style>
-          <text>Fine</text>
-          <label>fine</label>
-          </Marker>
         <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Harmony>
-            <name>I}</name>
-            </Harmony>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>2.</beginText>
-              <endings>2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
-          <Chord>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            <span>0</span>
-            </BarLine>
-          </voice>
-        <voice>
-          <Chord>
-            <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            <visible>0</visible>
-            <placement>above</placement>
-            </Fermata>
-          <Rest>
-            <offset x="0" y="3"/>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-7.21651" y="-1.29816"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           <Harmony>
             <name>V.V</name>
             </Harmony>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-1/2</fractions>
@@ -5284,7 +5165,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5325,7 +5206,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5366,7 +5247,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-1/2</fractions>
@@ -5389,7 +5270,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5412,16 +5293,13 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>page</subtype>
-          </LayoutBreak>
         <voice>
           <Harmony>
             <name>iii.V6(9)</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5444,7 +5322,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           <location>
             <fractions>-3/4</fractions>
@@ -5481,9 +5359,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I.I{</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5538,9 +5413,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             <visible>0</visible>
             <durationType>half</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5621,9 +5493,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>V6</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5688,9 +5557,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5731,9 +5597,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5756,9 +5619,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -5824,9 +5684,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           </voice>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -5849,9 +5706,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -5909,16 +5763,10 @@ Text: Pietro Metastasio (1689-1782)</text>
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Harmony>
             <name>II</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -5967,9 +5815,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>ii6</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6022,9 +5867,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           </voice>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -6067,9 +5909,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6122,9 +5961,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I}</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6209,9 +6045,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           </voice>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6274,9 +6107,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I}</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6350,9 +6180,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           </voice>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6415,9 +6242,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I}</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6506,9 +6330,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Harmony>
           </voice>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6571,9 +6392,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I}</name>
             </Harmony>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6645,17 +6463,8 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -6716,10 +6525,10 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <Jump>
           <style>Repeat Text Right</style>
-          <text>D.S.</text>
+          <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
           </Jump>
         <voice>
           <TimeSig>
@@ -6729,6 +6538,12 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Harmony>
             <name>I}</name>
             </Harmony>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.71994" y="-0.165233"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
@@ -6745,7 +6560,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <span>0</span>
             </BarLine>
           </voice>
         <voice>
@@ -6760,6 +6574,52 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <offset x="0" y="3"/>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>coda</sym></text>
+          <label>codab</label>
+          </Marker>
+        <voice>
+          <Harmony>
+            <name>I}</name>
+            </Harmony>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <visible>0</visible>
+            <placement>above</placement>
+            </Fermata>
           <Rest>
             <offset x="0" y="3"/>
             <visible>0</visible>
@@ -7070,7 +6930,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <placement>below</placement>
             <minDistance>0.448144</minDistance>
             <offset x="-3.51749" y="6.66251"/>
-            <text><font size="7.5"/><i>poco </i></text>
+            <text><font size="7.5"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -10151,12 +10011,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>half</durationType>
             </Rest>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         <voice>
           <Chord>
@@ -10181,10 +10035,1157 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>88</velocity>
+            </Dynamic>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Rest>
+            <offset x="0" y="3"/>
+            <visible>0</visible>
+            <durationType>half</durationType>
+            </Rest>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>16th</durationType>
+            <Note>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <dots>1</dots>
+            <durationType>eighth</durationType>
+            <Spanner type="Slur">
+              <Slur>
+                <up>up</up>
+                </Slur>
+              <next>
+                <location>
+                  <fractions>7/32</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <Articulation>
+              <subtype>ornamentTrill</subtype>
+              </Articulation>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <Spanner type="Slur">
+              <prev>
+                <location>
+                  <fractions>-7/32</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>ornamentTrill</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <dots>1</dots>
+            <durationType>eighth</durationType>
+            <Spanner type="Slur">
+              <Slur>
+                <up>down</up>
+                </Slur>
+              <next>
+                <location>
+                  <fractions>7/32</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <Spanner type="Slur">
+              <prev>
+                <location>
+                  <fractions>-7/32</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>ornamentTrill</subtype>
+              <visible>0</visible>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            </Dynamic>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>88</velocity>
+            </Dynamic>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            </Dynamic>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.71994" y="-0.165233"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
+          </voice>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <offset x="0" y="3"/>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -10199,9 +11200,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            </BarLine>
           </voice>
         <voice>
           <Chord>
@@ -10217,1228 +11215,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             <visible>0</visible>
             <placement>above</placement>
             </Fermata>
-          <Rest>
-            <offset x="0" y="3"/>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-7.21651" y="-1.29816"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>half</durationType>
-            </Rest>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>88</velocity>
-            </Dynamic>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Rest>
-            <offset x="0" y="3"/>
-            <visible>0</visible>
-            <durationType>half</durationType>
-            </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>eighth</durationType>
-            <appoggiatura/>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <dots>1</dots>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>no</BeamMode>
-            <durationType>eighth</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Chord>
-            <durationType>eighth</durationType>
-            <appoggiatura/>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <dots>1</dots>
-            <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>no</BeamMode>
-            <durationType>eighth</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <dots>1</dots>
-            <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>7/32</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Articulation>
-              <subtype>ornamentTrill</subtype>
-              </Articulation>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-7/32</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>ornamentTrill</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <dots>1</dots>
-            <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <up>down</up>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>7/32</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-7/32</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>ornamentTrill</subtype>
-              <visible>0</visible>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Dynamic>
-            <subtype>p</subtype>
-            <velocity>49</velocity>
-            </Dynamic>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>88</velocity>
-            </Dynamic>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>81</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Dynamic>
-            <subtype>p</subtype>
-            <velocity>49</velocity>
-            </Dynamic>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
-          </voice>
-        <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>79</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoAbove</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            </BarLine>
-          </voice>
-        <voice>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
           <Rest>
             <offset x="0" y="3"/>
             <visible>0</visible>
@@ -14292,50 +14068,12 @@ Text: Pietro Metastasio (1689-1782)</text>
             </location>
           <StaffText>
             <placement>below</placement>
-            <text><font size="8"/>-</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
+            <text><font size="8"></font>-</text>
             </StaffText>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/2</duration>
-            </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-7.0266" y="-2.19994"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <appoggiatura/>
@@ -14364,7 +14102,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </location>
           <StaffText>
             <placement>below</placement>
-            <text><font size="8"/>-</text>
+            <text><font size="8"></font>-</text>
             </StaffText>
           <location>
             <fractions>1/4</fractions>
@@ -14567,9 +14305,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -14590,9 +14325,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -14617,9 +14349,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -14643,9 +14372,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -14850,7 +14576,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -14858,7 +14584,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -14866,7 +14592,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -14874,7 +14600,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -14882,7 +14608,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -14890,7 +14616,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -14898,14 +14624,8 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/1</duration>
+            <duration>4/4</duration>
             </Rest>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
@@ -14914,13 +14634,30 @@ Text: Pietro Metastasio (1689-1782)</text>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.71994" y="-0.165233"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
-            <duration>1/2</duration>
+            <duration>2/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -15093,7 +14830,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.51749" y="3.45251"/>
-            <text><font size="7.5"/><i>poco </i></text>
+            <text><font size="7.5"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -19277,78 +19014,10 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <BarLine>
-            <subtype>double</subtype>
-            <span>0</span>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-7.21651" y="-0.616686"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <appoggiatura/>
@@ -19445,9 +19114,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -19535,9 +19201,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -19617,9 +19280,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19656,9 +19316,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19694,9 +19351,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19761,9 +19415,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19830,9 +19481,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             <subtype>f</subtype>
             <velocity>88</velocity>
             </Dynamic>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19907,9 +19555,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19947,9 +19592,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -19972,9 +19614,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -20033,9 +19672,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -20081,9 +19717,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20132,9 +19765,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20194,9 +19824,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20260,9 +19887,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20326,9 +19950,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -20388,12 +20009,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
@@ -20402,6 +20017,12 @@ Text: Pietro Metastasio (1689-1782)</text>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.71994" y="-0.165233"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
@@ -20427,6 +20048,9 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
+          <Segment>
+            <leadingSpace>1.68962</leadingSpace>
+            </Segment>
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
@@ -20440,8 +20064,50 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <BarLine>
             <subtype>double</subtype>
-            <span>0</span>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Beam>
+            <StemDirection>up</StemDirection>
+            </Beam>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
@@ -20614,7 +20280,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.51749" y="3.45251"/>
-            <text><font size="7.5"/><i>poco </i></text>
+            <text><font size="7.5"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -24795,77 +24461,10 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
-          <Chord>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>mid</BeamMode>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
-              </Articulation>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <BarLine>
-            <subtype>double</subtype>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-7.21651" y="-0.616686"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <appoggiatura/>
@@ -24962,9 +24561,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -25052,9 +24648,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -25134,9 +24727,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25173,9 +24763,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25211,9 +24798,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25278,9 +24862,6 @@ Text: Pietro Metastasio (1689-1782)</text>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25350,9 +24931,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             <subtype>f</subtype>
             <velocity>88</velocity>
             </Dynamic>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25427,9 +25005,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25467,9 +25042,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25492,9 +25064,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -25553,9 +25122,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
@@ -25598,9 +25164,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25649,9 +25212,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25711,9 +25271,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25777,9 +25334,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25843,9 +25397,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -25905,12 +25456,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
@@ -25919,6 +25464,12 @@ Text: Pietro Metastasio (1689-1782)</text>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.15673" y="-1.57325"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
             </Beam>
@@ -25958,6 +25509,49 @@ Text: Pietro Metastasio (1689-1782)</text>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Beam>
+            <StemDirection>up</StemDirection>
+            </Beam>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
@@ -26146,7 +25740,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.51749" y="2.3332"/>
-            <text><font size="7.5"/><i>poco </i></text>
+            <text><font size="7.5"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -30052,55 +29646,10 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-7.21651" y="-1.17011"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30133,9 +29682,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30186,9 +29732,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30208,9 +29751,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30247,9 +29787,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30282,9 +29819,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30324,9 +29858,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30359,9 +29890,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30398,9 +29926,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30467,9 +29992,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>21</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30498,9 +30020,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30517,9 +30036,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30571,9 +30087,6 @@ Text: Pietro Metastasio (1689-1782)</text>
             <subtype>f</subtype>
             <velocity>88</velocity>
             </Dynamic>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30622,9 +30135,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30657,9 +30167,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30688,9 +30195,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30723,9 +30227,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30762,9 +30263,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30797,9 +30295,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30836,9 +30331,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30871,9 +30363,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30910,9 +30399,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30949,9 +30435,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -30988,9 +30471,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31027,9 +30507,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31066,9 +30543,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31105,9 +30579,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -31140,12 +30611,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
@@ -31154,6 +30619,12 @@ Text: Pietro Metastasio (1689-1782)</text>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.71994" y="-0.165233"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -31168,6 +30639,24 @@ Text: Pietro Metastasio (1689-1782)</text>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -31192,7 +30681,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <velocity>88</velocity>
             </Dynamic>
           <StaffText>
-            <text><font size="7.5"/><b>tutti</b></text>
+            <text><font size="7.5"></font><b>tutti</b></text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -31223,7 +30712,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31293,7 +30782,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31367,7 +30856,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           <StaffText>
             <placement>below</placement>
             <offset x="-3.51749" y="2.3332"/>
-            <text><font size="7.5"/><i>poco </i></text>
+            <text><font size="7.5"></font><i>poco </i></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -31442,7 +30931,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31527,7 +31016,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31605,7 +31094,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31683,7 +31172,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31722,7 +31211,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -31760,7 +31249,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>3</text>
+            <text><font face="Finale Numerics"></font>3</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -31963,7 +31452,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -32117,7 +31606,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <StaffText>
-            <text><font size="8.1"/><b>Basso</b></text>
+            <text><font size="8.1"></font><b>Basso</b></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -32203,7 +31692,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -32334,7 +31823,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -32461,7 +31950,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -32551,7 +32040,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>5</text>
+            <text><font face="Finale Numerics"></font>5</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -32664,7 +32153,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -32939,7 +32428,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33021,7 +32510,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33111,7 +32600,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33122,7 +32611,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <StaffText>
-            <text><font size="8.1"/><b>tutti</b></text>
+            <text><font size="8.1"></font><b>tutti</b></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -33169,7 +32658,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -33192,7 +32681,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33204,7 +32693,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33216,7 +32705,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -33242,7 +32731,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33301,7 +32790,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -33316,7 +32805,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33328,7 +32817,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33371,7 +32860,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33402,7 +32891,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>3</text>
+            <text><font face="Finale Numerics"></font>3</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33414,7 +32903,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33448,7 +32937,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <durationType>quarter</durationType>
             </Rest>
           <StaffText>
-            <text><font size="8.1"/><b>Basso</b></text>
+            <text><font size="8.1"></font><b>Basso</b></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -33490,7 +32979,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33502,7 +32991,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33625,7 +33114,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33637,7 +33126,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33649,7 +33138,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -33672,7 +33161,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33726,10 +33215,10 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Rest>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <StaffText>
-            <text><font size="8.1"/><b>tutti</b></text>
+            <text><font size="8.1"></font><b>tutti</b></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -33797,7 +33286,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <StaffText>
-            <text><font size="8.1"/><b>Basso</b></text>
+            <text><font size="8.1"></font><b>Basso</b></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -33824,7 +33313,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33875,7 +33364,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33887,7 +33376,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -33910,7 +33399,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33953,7 +33442,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -33992,7 +33481,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34043,7 +33532,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34055,7 +33544,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>4</text>
+            <text><font face="Finale Numerics"></font>4</text>
             </StaffText>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -34070,7 +33559,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>3</text>
+            <text><font face="Finale Numerics"></font>3</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34211,7 +33700,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -34542,7 +34031,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <StaffText>
-            <text><font size="8.1"/><b>tutti</b></text>
+            <text><font size="8.1"></font><b>tutti</b></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -34581,10 +34070,10 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <StaffText>
-            <text><font size="8.1"/><b>Basso</b></text>
+            <text><font size="8.1"></font><b>Basso</b></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -34611,7 +34100,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34658,7 +34147,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34674,7 +34163,7 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -34697,7 +34186,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34775,7 +34264,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34845,7 +34334,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>4</text>
+            <text><font face="Finale Numerics"></font>4</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -34857,7 +34346,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>3</text>
+            <text><font face="Finale Numerics"></font>3</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35191,7 +34680,7 @@ Text: Pietro Metastasio (1689-1782)</text>
               </Note>
             </Chord>
           <StaffText>
-            <text><font size="8.1"/><b>tutti</b></text>
+            <text><font size="8.1"></font><b>tutti</b></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -35292,7 +34781,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35304,7 +34793,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35355,7 +34844,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -35378,7 +34867,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35421,7 +34910,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35452,7 +34941,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>3</text>
+            <text><font face="Finale Numerics"></font>3</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35498,10 +34987,10 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Rest>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>5</text>
+            <text><font face="Finale Numerics"></font>5</text>
             </StaffText>
           <StaffText>
-            <text><font size="8.1"/><b>Basso</b></text>
+            <text><font size="8.1"></font><b>Basso</b></text>
             </StaffText>
           <Dynamic>
             <subtype>p</subtype>
@@ -35528,7 +35017,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35546,59 +35035,14 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="2.46881" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <pitch>43</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <TimeSig>
-            <subtype>1</subtype>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-6.64679" y="-1.10114"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35631,9 +35075,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35670,9 +35111,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35691,7 +35129,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35711,11 +35149,8 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35752,9 +35187,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35781,7 +35213,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35791,9 +35223,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35830,9 +35259,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35867,11 +35293,8 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35890,7 +35313,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35914,11 +35337,8 @@ Text: Pietro Metastasio (1689-1782)</text>
         <voice>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>#</text>
+            <text><font face="Finale Numerics"></font>#</text>
             </StaffText>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -35937,7 +35357,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -35957,7 +35377,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>5</text>
+            <text><font face="Finale Numerics"></font>5</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -35972,7 +35392,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -35997,9 +35417,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>24</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36028,9 +35445,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36049,11 +35463,8 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36102,7 +35513,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <durationType>quarter</durationType>
             </Rest>
           <StaffText>
-            <text><font size="8.1"/><b>tutti</b></text>
+            <text><font size="8.1"></font><b>tutti</b></text>
             </StaffText>
           <Dynamic>
             <subtype>f</subtype>
@@ -36132,9 +35543,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36167,9 +35575,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36188,7 +35593,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>7</text>
+            <text><font face="Finale Numerics"></font>7</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36210,9 +35615,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36245,9 +35647,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36266,7 +35665,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36288,9 +35687,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36309,7 +35705,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36321,7 +35717,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36333,11 +35729,8 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>4</text>
+            <text><font face="Finale Numerics"></font>4</text>
             </StaffText>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36348,7 +35741,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>3</text>
+            <text><font face="Finale Numerics"></font>3</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36378,9 +35771,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36399,7 +35789,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36417,9 +35807,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36456,9 +35843,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36481,7 +35865,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36499,9 +35883,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36538,9 +35919,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36563,7 +35941,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36581,9 +35959,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36620,9 +35995,6 @@ Text: Pietro Metastasio (1689-1782)</text>
         </Measure>
       <Measure>
         <voice>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36645,7 +36017,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <text><font face="Finale Numerics"/>6</text>
+            <text><font face="Finale Numerics"></font>6</text>
             </StaffText>
           <Chord>
             <BeamMode>mid</BeamMode>
@@ -36663,9 +36035,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -36698,12 +36067,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="3.03853" y="-0.728439"/>
-            <text><font size="13.9"/>[  ]</text>
-            </StaffText>
           </voice>
         </Measure>
       <Measure>
@@ -36712,6 +36075,12 @@ Text: Pietro Metastasio (1689-1782)</text>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-3.71994" y="-0.165233"/>
+            <text><font size="13.9"></font>[  ]</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
@@ -36726,6 +36095,24 @@ Text: Pietro Metastasio (1689-1782)</text>
           <BarLine>
             <subtype>double</subtype>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>

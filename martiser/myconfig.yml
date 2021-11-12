@@ -3,11 +3,11 @@ musescore_dir:
 metadata_dir: metadata
 metadata_id_col: AriaId
 intermediate_files_dir: intermediate
-parallel: false
+parallel: true
 max_processes: 10
 read_log:
   file_path: logs/read.log
-  level: DEBUG
+  level: INFO
 write_log:
   file_path: logs/write.log
   level: DEBUG
@@ -16,7 +16,7 @@ features:
   - tempo
 #  - themeA
   - scoring
-  # - file_name
+  - file_name
   - scale
   - scale_relative
   - ambitus
@@ -26,7 +26,7 @@ features:
   - harmony
   - metadata
   - composer
-  - custom.librettist
+  - librettist
   - key
   - lyrics
   - dynamics

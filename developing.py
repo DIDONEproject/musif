@@ -1,7 +1,4 @@
 import sys
-
-# from musif import FeaturesExtractor
-# from musif import FeaturesGenerator
 from musif.extract.extract import FeaturesExtractor
 from musif.reports.generate import FeaturesGenerator
 import pandas as pd
@@ -14,12 +11,11 @@ if __name__ == "__main__":
     parts = ["vnI", "obI", "ten"]
 
     # arias_path="./tests/data/static/"
-    arias_path="./arias/prueba/"
+    arias_path="./arias"
+    # arias_path="./arias/error/"
 
-    arias_path="./arias/error"
-
-    df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
-    df.to_csv('martiser/dataframe.csv', index=False)
+    # df = FeaturesExtractor("martiser/myconfig.yml").extract(arias_path, parts)
+    # df.to_csv('martiser/dataframe.csv', index=False)
 
     df=pd.read_csv('martiser/dataframe.csv')
     path = './'

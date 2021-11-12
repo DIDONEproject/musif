@@ -1,7 +1,7 @@
 ########################################################################
 # GENERATION MODULE
 ########################################################################
-# This script is ment to read the intermediate DataFrame computed by the
+# This script is meant to read the intermediate DataFrame computed by the
 # FeaturesExtractor and perform several computations while grouping the data
 # based on several characteristics.
 # Writes the final report files as well as generates the visualisations
@@ -18,10 +18,20 @@ import pandas as pd
 from pandas import DataFrame
 from tqdm import tqdm
 
-from musif.common.constants import RESET_SEQ, VOICE_FAMILY
+from musif.common.constants import VOICE_FAMILY
+from musif.common.utils import perr
+
 from musif.config import Configuration
-from musif.extract.features import density, lyrics, scale, scale_relative, texture, harmony
-from musif.extract.features.harmony.constants import *
+from musif.extract.features import density
+from musif.extract.features import texture
+from musif.extract.features import lyrics
+from musif.extract.features import scale
+from musif.extract.features import scale_relative
+from musif.extract.features import lyrics
+from musif.extract.features import interval
+from musif.extract.features import ambitus
+from musif.extract.features import harmony
+
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
 from musif.reports.calculations import make_intervals_absolute
 from musif.reports.utils import remove_folder_contents
@@ -31,7 +41,7 @@ from .tasks.harmony import  Harmonic_analysis
 from .tasks.intervals import Intervals, Intervals_types
 from .tasks.melody_values import Melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
-from ..common.utils import get_color
+from ..common.utils import pinfo
 
 
 class FeaturesGenerator:
@@ -40,14 +50,14 @@ class FeaturesGenerator:
         self._logger = self._cfg.write_logger
 
     def generate_reports(self, data: DataFrame, main_results_path: str, parts_list: Optional[List[str]] = None, num_factors: int = 0, visualizations=False) -> DataFrame:
-        print(get_color('WARNING')+ '\n' +'--- Starting reports generation ---\n'.center(120, ' ') + RESET_SEQ)
+        pinfo('\n'+'--- Starting reports generation ---\n'.center(120, ' '))
         self.parts_list = [] if parts_list is None else parts_list
         self.visualizations=visualizations
         self.global_features = data
         self.num_factors_max = num_factors
         self.main_results_path = main_results_path
         self.sorting_lists = self._cfg.sorting_lists
-        print('Visualizations are activated' if self.visualizations else 'Visualizations are deactivated'+'.\n')
+        pinfo('Visualizations are enabled' if self.visualizations else 'Visualizations are disabled'+'.\n')
         self._write()
             
     def _FactorExecution(self, num_factors: int = 0):
@@ -69,7 +79,7 @@ class FeaturesGenerator:
         self.common = True #Flag to run common tasks only once
         self.voices=all_info.Voices
 
-        print(get_color('INFO')+'\n' + str(num_factors) + " factor", end='\n'+RESET_SEQ)
+        pinfo('\n' + str(num_factors) + " factor" + "\n")
 
         instruments = self.extract_instruments(all_info)
         self.rename_singers(all_info)
@@ -80,7 +90,7 @@ class FeaturesGenerator:
             if instrument.lower() in singers_list:
                 instrument = 'Voice'
 
-            print(get_color('INFO')+'\nInstrument: ', instrument, end='\n\n'+RESET_SEQ)
+            pinfo(f'\nInstrument:\t{instrument}' + '\n')
             instrument_level = 'Part' + instrument + '_' #if not self.IsVoice(instrument) else 'Family' + instrument + '_' 
 
             intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.find_columns(all_info, instrument_level)
@@ -104,7 +114,7 @@ class FeaturesGenerator:
                     rows_groups = rg
                     not_used_cols = nuc
                 except KeyError as e:
-                    self._cfg.write_logger.error(get_color('ERROR'+ 'One or more of the features could not be found in the input dataframe: ', e))
+                    perr('One or more of the features could not be found in the input dataframe: '.format(e), self._cfg.write_logger)
             # else: # from 2 factors
                 # process_executor = concurrent.futures.ProcessPoolExecutor()
                 # futures = [process_executor.submit(_group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals, Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
@@ -140,9 +150,8 @@ class FeaturesGenerator:
         if self._cfg.is_requested_module(ambitus):       
             try:     
                 tasks['melody_values'] = self._extract_melody_colunms(all_info, Instrument_level).dropna(how='all', axis=1)
-            except KeyError:
-                self._cfg.write_logger.error(get_color('ERROR')+'Melody Values Dataframe could not be extracted.{}'.format(RESET_SEQ))                       
-            
+            except KeyError as e:                 
+                perr('Melody Values information could not be extracted'.format(e), self._cfg.write_logger)
 
         if self.IsVoice(instrument):
             if self._cfg.is_requested_module(scale):            
@@ -242,13 +251,13 @@ class FeaturesGenerator:
 
     def capture_harmony_DFs(self, all_info):
         harmony_df=all_info[(
-            [i for i in all_info.columns if HARMONIC_prefix in i] +
-            [i for i in all_info.columns if CHORD_TYPES_prefix in i] +
-            [i for i in all_info.columns if ADDITIONS_prefix in i]
+            [i for i in all_info.columns if harmony.constants.HARMONIC_prefix in i] +
+            [i for i in all_info.columns if harmony.constants.CHORD_TYPES_prefix in i] +
+            [i for i in all_info.columns if harmony.constants.ADDITIONS_prefix in i]
             )]
-        key_areas_df=all_info[[i for i in all_info.columns if KEY_prefix in i or KEY_GROUPING in i ]]
-        functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i] + [i for i in all_info.columns if CHORDS_GROUPING_prefix in i]]
-        chords_df = all_info[[i for i in all_info.columns if CHORD_prefix in i and CHORD_TYPES_prefix not in i]]
+        key_areas_df=all_info[[i for i in all_info.columns if harmony.constants.KEY_prefix in i or harmony.constants.KEY_GROUPING in i ]]
+        functions_dfs = all_info[[i for i in all_info.columns if harmony.constants.NUMERALS_prefix in i and i.endswith('_Count')] + [i for i in all_info.columns if harmony.constants.CHORDS_GROUPING_prefix in i and i.endswith('_Count')]]
+        chords_df = all_info[[i for i in all_info.columns if harmony.constants.CHORD_prefix in i and harmony.constants.CHORD_TYPES_prefix not in i and i.endswith('_Count')]]
         return harmony_df,key_areas_df,chords_df,functions_dfs
 
     def capitalize_instruments(self, instruments):
@@ -311,13 +320,13 @@ class FeaturesGenerator:
             elif 'Degree' in col and 'relative' in col and not 'Per' in col:
                 degrees_relative_list.append(col)
 
-        intervals_types_list.append(Instr_level + interval.REPEATED_NOTES_COUNT)
+        intervals_types_list.append(Instr_level + interval.constants.REPEATED_NOTES_COUNT)
 
         return intervals_list, intervals_types_list, degrees_list, degrees_relative_list
 
     def _extract_melody_colunms(self, all_info, catch):
         melody_values_list = get_melody_list(catch)
-        if catch + lyrics.SYLLABIC_RATIO in all_info.columns:
+        if catch + lyrics.constants.SYLLABIC_RATIO in all_info.columns:
             melody_values_list.append(catch + lyrics.SYLLABIC_RATIO)
             
         melody_values=all_info[melody_values_list]  

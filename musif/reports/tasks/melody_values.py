@@ -6,8 +6,7 @@ from music21 import interval
 from pandas.core.frame import DataFrame
 import numpy as np
 import musif.extract.features.lyrics as lyrics
-from musif.common.constants import RESET_SEQ
-from musif.common.utils import get_color
+from musif.common.utils import pwarn
 from musif.config import Configuration
 from musif.reports.constants import *
 from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
@@ -85,7 +84,7 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
                     results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
                 box_plot(name_box, data)
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        pwarn('{}  Problem found: {}'.format(name, e), _cfg.write_logger)
 
 def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workbook):
     second_column_names = [("", 1), ("Ascending", 2), ("Descending", 2)]
