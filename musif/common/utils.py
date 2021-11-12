@@ -8,7 +8,10 @@ import pandas as pd
 import yaml
 from pandas import DataFrame
 
-from musif.common.constants import COLOR_SEQ, CSV_DELIMITER, Color, ENCODING, RESET_SEQ
+from musif.common.constants import (
+    COLORS, COLOR_SEQ, CSV_DELIMITER, ENCODING, LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEVEL_INFO, LEVEL_WARNING,
+    RESET_SEQ
+)
 
 
 def get_file_name(file_path: str) -> str:
@@ -99,42 +102,38 @@ def write_dicts_to_csv(dicts: List[dict], file_path: str):
             writer.writerow(obj)
 
 
-def get_color(color: Color) -> str:
-    return str(COLOR_SEQ % (30 + color.value))
+def get_color(levelname: str) -> str:
+    return COLOR_SEQ % (30 + COLORS[levelname])
 
 
-def colorize(text: str, color: Color) -> str:
-    return get_color(color) + text + RESET_SEQ
+def colorize(text: str, levelname: str):
+    return get_color(levelname) + text + RESET_SEQ
 
 
-def pinfo(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is not None:
-        logger.info(text)
-    print(colorize(text, Color.INFO))
+def pinfo(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_INFO, logger=logger, allowed_level=level)
 
 
-def pdebug(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is not None:
-        logger.debug(text)
-    print(colorize(text, Color.DEBUG))
+def pdebug(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_DEBUG, logger=logger, allowed_level=level)
 
 
-def pwarn(text: str, logger: Optional[logging.Logger] = None) -> None:
+def pwarn(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_WARNING, logger=logger, allowed_level=level)
+
+
+def perr(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_ERROR, logger=logger, allowed_level=level)
+
+
+def pcrit(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_CRITICAL, logger=logger, allowed_level=level)
+
+
+def plog(text: str, level: str, logger: Optional[logging.Logger] = None, allowed_level: str = LEVEL_INFO) -> None:
+    if logging.getLevelName(level) < logging.getLevelName(allowed_level):
+        return
     if logger is None:
-        print(colorize(text, Color.WARNING))
+        print(colorize(text, level))
     else:
-        logger.warning(text)
-
-
-def perr(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is None:
-        print(colorize(text, Color.ERROR))
-    else:
-        logger.error(text)
-
-
-def pcrit(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is None:
-        print(colorize(text, Color.CRITICAL))
-    else:
-        logger.critical(text)
+        logger.log(logging.getLevelName(level), text)

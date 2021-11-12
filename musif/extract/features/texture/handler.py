@@ -6,17 +6,17 @@ from pandas import DataFrame
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
-from musif.extract.constants import DATA_PARTS_FILTER, DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, PART_ABBREVIATION, \
+from musif.extract.features.scoring.constants import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, PART_ABBREVIATION, \
     SOUND_ABBREVIATION
 from .constants import *
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
+    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
     df_parts = DataFrame(parts_features)
@@ -61,7 +61,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], score_data[DATA_PARTS_FILTER]):
+    if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
         return {}
     notes = part_data[DATA_NOTES]
     part_features.update({

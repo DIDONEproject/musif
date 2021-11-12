@@ -26,11 +26,11 @@ features:
   - interval
   - tempo
   - density
-  #  - texture
+#  - texture
   - harmony
   - lyrics
   - scale
-  #  - scale_relative
+#  - scale_relative
   - key
   - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name

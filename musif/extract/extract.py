@@ -26,29 +26,32 @@ from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbrevia
 _cache = Cache(10000)  # To cache scanned scores
 
 
-def parse_musicxml_file(file_path: str, split_keywords) -> Score:
+def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeats: bool = False) -> Score:
     score = _cache.get(file_path)
     if score is not None:
         return score
     try:
         score = parse(file_path)
         split_layers(score, split_keywords)
+        if expand_repeats:
+            score = score.expandRepeats()
         _cache.put(file_path, score)
     except Exception as e:
         raise ParseFileError(file_path, str(e)) from e
     return score
 
 
-def parse_musescore_file(file_path: str):
+def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.DataFrame:
     harmonic_analysis = _cache.get(file_path)
     if harmonic_analysis is not None:
         return harmonic_analysis
     try:
-        msc3_score = ms3.score.Score(file_path.strip(), logger_cfg={'level': 'ERROR'})
+        msc3_score = ms3.score.Score(file_path, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
         mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
         mn = pd.Series(mn, name='mc_playthrough')
-        harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
+        if expand_repeats:
+            harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
         raise ParseFileError(file_path, str(e)) from e
@@ -93,12 +96,12 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
     return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
 
 
-def find_musescore_file(musicxml_file: str, musescore_dir: Optional[str]) -> Optional[str]:
+def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> Optional[str]:
     extension_index = musicxml_file.rfind(".")
-    musescore_file = musicxml_file[:extension_index] + "." + MUSESCORE_FILE_EXTENSION
+    musescore_file_path = musicxml_file[:extension_index] + "." + MUSESCORE_FILE_EXTENSION
     if musescore_dir:
-        musescore_file = path.join(musescore_dir, path.basename(musescore_file))
-    return musescore_file
+        musescore_file_path = path.join(musescore_dir, path.basename(musescore_file_path))
+    return musescore_file_path
 
 
 class PartsExtractor:
@@ -129,31 +132,32 @@ class FilesValidator:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
 
-    def validate(self, obj: Union[str, List[str]]) -> None:
-        pinfo("Starting files validation")
-        musicxml_files = extract_files(obj)
+    def validate(self) -> None:
+        pinfo("Starting files validation", level=self._cfg.read_console_log_level)
+        musicxml_files = extract_files(self._cfg.data_dir)
         if self._cfg.parallel:
             errors = self._validate_in_parallel(musicxml_files)
         else:
             errors = self._validate_sequentially(musicxml_files)
         if len(errors) > 0:
-            perr("\n".join(errors))
-        pinfo("Finished files validation")
+            perr("\n".join(errors), level=self._cfg.read_console_log_level)
+        else:
+            pinfo("Finished files validation with 0 errors", level=self._cfg.read_console_log_level)
 
     def _validate_sequentially(self, musicxml_files: List[str]) -> List[str]:
-        return [
-            error
-            for musicxml_file in tqdm(musicxml_files)
-            for error in self._validate_file(musicxml_file)
-            if error is not None
-        ]
+        errors = []
+        for musicxml_file in tqdm(musicxml_files):
+            error = self._validate_file(musicxml_file)
+            if error is not None:
+                errors.append(error)
+        return errors
 
     def _validate_in_parallel(self, musicxml_files: List[str]) -> List[str]:
         errors = []
         with tqdm(total=len(musicxml_files)) as pbar:
             with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
                 futures = [executor.submit(self._validate_file, musicxml_file) for musicxml_file in musicxml_files]
-                for future in tqdm(as_completed(futures)):
+                for future in as_completed(futures):
                     pbar.update(1)
                     error = future.result()
                     if error is not None:
@@ -161,12 +165,13 @@ class FilesValidator:
         return errors
 
     def _validate_file(self, musicxml_file: str) -> Optional[str]:
+        pdebug(f"Validating file '{musicxml_file}'", level=self._cfg.read_console_log_level)
         try:
             parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
             if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
-                musescore_file = find_musescore_file(musicxml_file, self._cfg.musescore_dir)
-                if musescore_file is None:
-                    raise MissingFileError(musicxml_file)
+                musescore_file = compose_musescore_file_path(musicxml_file, self._cfg.musescore_dir)
+                if not path.isfile(musescore_file):
+                    raise MissingFileError(musescore_file)
                 parse_musescore_file(musescore_file)
         except (ParseFileError, MissingFileError) as e:
             return str(e)
@@ -178,20 +183,18 @@ class FeaturesExtractor:
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.read_logger
 
-    def extract(self, obj, parts_filter: List[str] = None) -> DataFrame:
+    def extract(self) -> DataFrame:
         pinfo('---Analyzing scores ---', self._logger)
-        musicxml_files = extract_files(obj)
-        score_df, parts_df = self._process_corpora(musicxml_files, parts_filter)
+        musicxml_files = extract_files(self._cfg.data_dir)
+        score_df, parts_df = self._process_corpora(musicxml_files)
         return score_df
 
-    def _process_corpora(
-        self, musicxml_files: List[str], parts_filter: List[str] = None
-    ) -> Tuple[DataFrame, DataFrame]:
+    def _process_corpora(self, musicxml_files: List[str]) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
         all_scores_features = []
         all_parts_features = []
         for corpus_dir, files in corpus_by_dir.items():
-            scores_features, parts_features = self._process_corpus(files, parts_filter)
+            scores_features, parts_features = self._process_corpus(files)
             all_scores_features.extend(scores_features)
             all_parts_features.extend(parts_features)
         df_scores = DataFrame(all_scores_features)
@@ -210,45 +213,40 @@ class FeaturesExtractor:
             corpus_by_dir[corpus_dir].append(file)
         return corpus_by_dir
 
-    def _process_corpus(self, musicxml_files: List[str], parts_filter: List[str] = None) -> Tuple[
-        List[dict], List[dict]]:
+    def _process_corpus(self, musicxml_files: List[str]) -> Tuple[List[dict], List[dict]]:
         if self._cfg.parallel:
-            return self._process_corpus_in_parallel(musicxml_files, parts_filter)
-        return self._process_corpus_sequentially(musicxml_files, parts_filter)
+            return self._process_corpus_in_parallel(musicxml_files)
+        return self._process_corpus_sequentially(musicxml_files)
 
-    def _process_corpus_sequentially(
-            self, musicxml_files: List[str], parts_filter: List[str] = None
-    ) -> Tuple[List[dict], List[dict]]:
+    def _process_corpus_sequentially(self, musicxml_files: List[str]) -> Tuple[List[dict], List[dict]]:
         scores_features = []
         parts_features = []
         for musicxml_file in tqdm(musicxml_files):
-            score_features, score_parts_features = self._process_score(musicxml_file, parts_filter)
+            score_features, score_parts_features = self._process_score(musicxml_file)
             scores_features.append(score_features)
             parts_features.extend(score_parts_features)
         return scores_features, parts_features
 
-    def _process_corpus_in_parallel(
-            self, musicxml_files: List[str], parts_filter: List[str] = None
-    ) -> Tuple[List[dict], List[dict]]:
+    def _process_corpus_in_parallel(self, musicxml_files: List[str]) -> Tuple[List[dict], List[dict]]:
         scores_features = []
         parts_features = []
 
         with tqdm(total=len(musicxml_files)) as pbar:
             with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
-                futures = [executor.submit(self._process_score, musicxml_file, parts_filter)
+                futures = [executor.submit(self._process_score, musicxml_file)
                            for musicxml_file in musicxml_files]
-                for future in tqdm(as_completed(futures)):
+                for future in as_completed(futures):
                     score_features, score_parts_features = future.result()
                     scores_features.append(score_features)
                     parts_features.extend(score_parts_features)
                     pbar.update(1)
         return scores_features, parts_features
 
-    def _process_score(self, musicxml_file: str, parts_filter: List[str] = None) -> Tuple[dict, List[dict]]:
+    def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         pinfo(f"Processing score {musicxml_file}", self._logger)
-        score_data = self._get_score_data(musicxml_file, parts_filter)
+        score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
-        parts_data = filter_parts_data(parts_data, score_data[DATA_PARTS_FILTER])
+        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for module in self._extract_feature_modules():
@@ -256,16 +254,16 @@ class FeaturesExtractor:
             self._update_score_module_features(module, score_data, parts_data, parts_features, score_features)
         return score_features, parts_features
 
-    def _get_score_data(self, musicxml_file: str, parts_filter: List[str] = None) -> dict:
+    def _get_score_data(self, musicxml_file: str) -> dict:
         score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
-        filtered_parts = self._filter_parts(score, parts_filter)
+        filtered_parts = self._filter_parts(score)
         if len(filtered_parts) == 0:
-            pwarn(f"No parts were found for file {musicxml_file} and filter: {','.join(parts_filter)}", self._logger)
+            pwarn(f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}",
+                  self._logger)
         data = {
             DATA_SCORE: score,
             DATA_FILE: musicxml_file,
             DATA_FILTERED_PARTS: filtered_parts,
-            DATA_PARTS_FILTER: parts_filter,
         }
         if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
             data.update(self._get_harmony_data(musicxml_file))
@@ -273,7 +271,7 @@ class FeaturesExtractor:
 
     def _get_harmony_data(self, musicxml_file: str) -> dict:
         data = {}
-        musescore_file_path = find_musescore_file(musicxml_file, self._cfg.musescore_dir)
+        musescore_file_path = compose_musescore_file_path(musicxml_file, self._cfg.musescore_dir)
         if musescore_file_path is None:
             perr(f"Musescore file was not found for {musescore_file_path} file!", self._logger)
             perr(f"No harmonic analysis will be extracted.{musescore_file_path}", self._logger)
@@ -284,12 +282,12 @@ class FeaturesExtractor:
                 perr(str(e), self._logger)
         return data
 
-    def _filter_parts(self, score: Score, parts_filter: List[str] = None) -> List[Part]:
-        if parts_filter is None:
+    def _filter_parts(self, score: Score) -> List[Part]:
+        if self._cfg.parts_filter is None:
             return list(score.parts)
-        filter = set(parts_filter)
+        filter_set = set(self._cfg.parts_filter)
         parts = list(score.parts)
-        return [part for part in parts if to_abbreviation(part, parts, self._cfg) in filter]
+        return [part for part in parts if to_abbreviation(part, parts, self._cfg) in filter_set]
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
