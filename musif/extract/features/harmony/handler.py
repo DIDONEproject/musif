@@ -34,13 +34,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
         features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]
         features[f"{HARMONIC_RHYTHM_BEATS}"] = all_harmonic_info[HARMONIC_RHYTHM_BEATS]
-
         features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith(NUMERALS_prefix)})
-
         features.update({k:v for (k, v) in keyareas.items()})
-
         features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith(CHORD_TYPES_prefix)})
-
         features.update({k:v for (k, v) in chords.items() if k.startswith(CHORD_prefix)})
         features.update({k:v for (k, v) in chords_grouping1.items()})
         features.update({k:v for (k, v) in chords_grouping2.items()})

@@ -330,7 +330,8 @@ class FeaturesExtractor:
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict]):
         for part_data, part_features in zip(parts_data, parts_features):
-            pdebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module.__name__} features.", self._logger)
+            module_name=str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
+            pdebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.", self._logger)
             module.update_part_objects(score_data, part_data, self._cfg, part_features)
 
     def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict],

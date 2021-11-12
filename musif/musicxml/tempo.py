@@ -82,7 +82,6 @@ def get_tempo_grouped_1(tempo):
         else:
             return 'Con brio'
 
-    # print('Sorry, we can\'t group the tempo', tempo)
     return 'ND'
 
 

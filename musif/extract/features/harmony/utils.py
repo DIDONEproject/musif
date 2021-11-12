@@ -5,17 +5,12 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
+from musif.common.utils import perr, pwarn
 
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
 
-# from musif.extract.utils import get_beatspertsig
-
-
 REGEX={}
-####################
-# HARMONIC ANALYSIS
-####################   
 
 def get_harmonic_rhythm(ms3_table)-> dict:
     hr={}
@@ -84,7 +79,7 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
         assert not (new_measures[0] != 0 and round(sum(list(key_measures.values()))) != new_measures[i])
         assert not (new_measures[0] == 0 and round(sum(list(key_measures.values()))) != new_measures[i] + 1)
     except AssertionError as e:
-        print('There was an error counting the measures!: ', e)
+        perr('There was an error counting the measures!: ', e)
         return {}
     return key_measures
 
@@ -103,8 +98,6 @@ def create_measures_extended(measures):
 
 def same_measure(measures, i):
     return measures[i] == measures[i-1]
-
-
 
 def compute_number_of_measures(done, starting_measure, previous_measure, measure, current_onset, num_beats):
     starting_measure += done
@@ -141,10 +134,6 @@ def continued_sections(sections, mc):
 
     # Flat list
     return list(itertools.chain(*extended_sections))
-
-####################
-# LOCAL KEY
-####################
 
 ################################################################################
 # Function to return the harmonic function1 based on the global key mode. Uppercase if
@@ -376,7 +365,9 @@ def get_numerals(lausanne_table):
         if str(n)=='':
             raise Exception('Some chords here are not parsed well')
             continue
-        nc['Numerals_'+str(n)] = round((numerals_counter[n]/total_numerals), 3)
+        nc['Numerals_'+str(n)+'_Per'] = round((numerals_counter[n]/total_numerals), 3)
+        nc['Numerals_'+str(n)+'_Count'] = round((numerals_counter[n]), 3)
+
     return nc 
 
 def get_first_numeral(numeral, relativeroot, local_key):
@@ -446,7 +437,6 @@ def get_chords(harmonic_analysis):
     numerals=harmonic_analysis.numeral.dropna().tolist()
     types = harmonic_analysis.chord_type.dropna().tolist()
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
-    
     numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
     chords_dict = CountChords(numerals_and_types)
     
@@ -467,7 +457,8 @@ def CountChords(chords):
 
     chords_dict = {}
     for degree in chords_numbers:
-        chords_dict[CHORD_prefix+degree] = chords_numbers[degree]/total_chords
+        chords_dict[CHORD_prefix+degree+'_Per'] = chords_numbers[degree]/total_chords
+        chords_dict[CHORD_prefix+degree+'_Count'] = chords_numbers[degree]
     return chords_dict
 
 def CountChordsGroup(counter_function, number):
@@ -475,7 +466,8 @@ def CountChordsGroup(counter_function, number):
     total_chords_group=sum(Counter(counter_function).values())
 
     for degree in counter_function:
-        chords_group[CHORDS_GROUPING_prefix + number + degree] = counter_function[degree]/total_chords_group
+        chords_group[CHORDS_GROUPING_prefix + number + degree + '_Per'] = counter_function[degree]/total_chords_group
+        chords_group[CHORDS_GROUPING_prefix + number + degree + '_Count'] = counter_function[degree]
 
     return chords_group
 
@@ -507,7 +499,7 @@ def get_chord_type(chord_type):
     elif chord_type in ['+', '+M7', '+m7']:
         return 'aug'
     else:
-        print("Chord type ", str(chord_type), 'not observed')
+        pwarn("Chord type ", str(chord_type), 'not observed')
         return ''
 
 def get_chord_types_groupings(chordtype_list):
@@ -515,9 +507,7 @@ def get_chord_types_groupings(chordtype_list):
 
 
 def get_first_chord_local(chord, local_key):
-    #perseguir It6/V
-
-    # local_key_mode = 'M' if local_key else 'm'
+    #TODO: chase It6/V
     local_key_mode = 'M' if local_key.isupper() else 'm'
 
     if '/' not in chord:
