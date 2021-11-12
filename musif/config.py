@@ -63,10 +63,16 @@ class Configuration:
             elif isinstance(args[0], Configuration):
                 config_data = args[0].to_dict()
         config_data.update(kwargs)  # Override values
-        self._read_log_data = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
-        self.read_logger = get_logger(READ_LOGGER_NAME, self._read_log_data[LOG_FILE_PATH], self._read_log_data[FILE_LOG_LEVEL], self._read_log_data[CONSOLE_LOG_LEVEL])
-        self._write_log_data = config_data.get(WRITE_LOG, _CONFIG_FALLBACK[WRITE_LOG])
-        self.write_logger = get_logger(WRITE_LOGGER_NAME, self._write_log_data[LOG_FILE_PATH], self._write_log_data[FILE_LOG_LEVEL], self._write_log_data[CONSOLE_LOG_LEVEL])
+        read_log_config = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
+        self.read_log_file = read_log_config[LOG_FILE_PATH]
+        self.read_file_log_level = read_log_config[FILE_LOG_LEVEL]
+        self.read_console_log_level = read_log_config[CONSOLE_LOG_LEVEL]
+        self.read_logger = get_logger(READ_LOGGER_NAME, self.read_log_file, self.read_file_log_level, self.read_console_log_level)
+        write_log_config = config_data.get(WRITE_LOG, _CONFIG_FALLBACK[WRITE_LOG])
+        self.write_log_file = write_log_config[LOG_FILE_PATH]
+        self.write_file_log_level = write_log_config[FILE_LOG_LEVEL]
+        self.write_console_log_level = write_log_config[CONSOLE_LOG_LEVEL]
+        self.write_logger = get_logger(READ_LOGGER_NAME, self.write_log_file, self.write_file_log_level, self.write_console_log_level)
         self.internal_data_dir = config_data.get(INTERNAL_DATA_DIR, _CONFIG_FALLBACK[INTERNAL_DATA_DIR])
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
         self.metadata_id_col = config_data.get(METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL])
@@ -98,14 +104,14 @@ class Configuration:
     def to_dict(self) -> dict:
         return {
             READ_LOG: {
-                LOG_FILE_PATH: self._read_log_data[LOG_FILE_PATH],
-                FILE_LOG_LEVEL: self._read_log_data[FILE_LOG_LEVEL],
-                CONSOLE_LOG_LEVEL: self._read_log_data[CONSOLE_LOG_LEVEL],
+                LOG_FILE_PATH: self.read_log_config[LOG_FILE_PATH],
+                FILE_LOG_LEVEL: self.read_log_config[FILE_LOG_LEVEL],
+                CONSOLE_LOG_LEVEL: self.read_log_config[CONSOLE_LOG_LEVEL],
             },
             WRITE_LOG: {
-                LOG_FILE_PATH: self._write_log_data[LOG_FILE_PATH],
-                FILE_LOG_LEVEL: self._write_log_data[FILE_LOG_LEVEL],
-                CONSOLE_LOG_LEVEL: self._write_log_data[CONSOLE_LOG_LEVEL],
+                LOG_FILE_PATH: self.write_log_config[LOG_FILE_PATH],
+                FILE_LOG_LEVEL: self.write_log_config[FILE_LOG_LEVEL],
+                CONSOLE_LOG_LEVEL: self.write_log_config[CONSOLE_LOG_LEVEL],
             },
             INTERNAL_DATA_DIR: self.internal_data_dir,
             METADATA_DIR: self.metadata_dir,
@@ -118,7 +124,6 @@ class Configuration:
             SPLIT_KEYWORDS: list(self.split_keywords),
             PARTS_FILTER: list(self.parts_filter),
             EXPAND_REPEATS: self.expand_repeats,
-
         }
 
     def _load_metadata(self) -> None:

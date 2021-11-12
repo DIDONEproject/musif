@@ -1,20 +1,50 @@
-arias_scoring_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Arias_scoring.xlsx"
-characters_gender_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Groupings\\Characters gender.xlsx"
-arias_clefs_file_path: "G:\\.shortcut-targets-by-id\\1_cjGg4wtpwon9Q16G4tndJVUqWzXGz4n\\DidonERC\\Investigacion DIDONE\\_Ana\\Music Analysis\\Arias_clefs.xlsx"
-metadata_dir: metadata
-metadata_id_col: FileName
+internal_data_dir: ../internal_data
+metadata_dir: ../metadata
+metadata_id_col: AriaId
+data_dir: ../../Corpus/xml
+musescore_dir: ../../Corpus/musescore
+expand_repeats: false
+parallel: true
+max_processes: 8
 read_log:
   file_path: logs/read.log
-  level: ERROR
+  file_level: DEBUG
+  console_level: INFO
 write_log:
   file_path: logs/write.log
-  level: INFO
-parallel: true
+  file_level: WARNING
+  console_level: INFO
 features:
-  - melodic
-#  - harmonic
-#  - texture
-split_keywords:
+  - scoring
+  - file_name
+  - metadata
+  - themeA
+  - core
+  - composer
+  - librettist
+  - ambitus
+  - interval
+  - tempo
+  - density
+  #  - texture
+  - harmony
+  - lyrics
+  - scale
+  #  - scale_relative
+  - key
+  - dynamics
+split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
+parts_filter:
+  - vnI
+  - vnII
+  - va
+  - bs
+  - sop
+  - ten
+  - alt
+  - bar
+  - bass
+  - bbar

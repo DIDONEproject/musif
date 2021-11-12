@@ -110,38 +110,30 @@ def colorize(text: str, levelname: str):
     return get_color(levelname) + text + RESET_SEQ
 
 
-def pinfo(text: str, logger: Optional[logging.Logger] = None) -> None:
+def pinfo(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_INFO, logger=logger, allowed_level=level)
+
+
+def pdebug(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_DEBUG, logger=logger, allowed_level=level)
+
+
+def pwarn(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_WARNING, logger=logger, allowed_level=level)
+
+
+def perr(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_ERROR, logger=logger, allowed_level=level)
+
+
+def pcrit(text: str, logger: Optional[logging.Logger] = None, level: str = LEVEL_INFO) -> None:
+    plog(text, LEVEL_CRITICAL, logger=logger, allowed_level=level)
+
+
+def plog(text: str, level: str, logger: Optional[logging.Logger] = None, allowed_level: str = LEVEL_INFO) -> None:
+    if logging.getLevelName(level) < logging.getLevelName(allowed_level):
+        return
     if logger is None:
-        print(colorize(text, LEVEL_INFO))
+        print(colorize(text, level))
     else:
-        logger.info(text)
-
-
-def pdebug(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is None:
-        print(colorize(text, LEVEL_DEBUG))
-    else:
-        logger.debug(text)
-
-
-def pwarn(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is None:
-        print(colorize(text, LEVEL_WARNING))
-    else:
-        logger.warning(text)
-
-
-def perr(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is None:
-        print(colorize(text, LEVEL_ERROR))
-    else:
-        logger.error(text)
-
-
-def pcrit(text: str, logger: Optional[logging.Logger] = None) -> None:
-    if logger is None:
-        print(colorize(text, LEVEL_CRITICAL))
-    else:
-        logger.critical(text)
-
-
+        logger.log(logging.getLevelName(level), text)
