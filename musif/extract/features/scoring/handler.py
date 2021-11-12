@@ -5,7 +5,7 @@ from musif.common.sort import sort
 from musif.config import Configuration
 from musif.extract.common import part_matches_filter
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART, \
-    DATA_PARTS_FILTER, DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION
+    DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION
 from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
 from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound
 from .constants import *
@@ -44,7 +44,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         sound = extract_sound(part, cfg)
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
             sound, part, score_data[DATA_FILTERED_PARTS], cfg)
-        is_matching_part = part_matches_filter(part_abbreviation, score_data[DATA_PARTS_FILTER])
+        is_matching_part = part_matches_filter(part_abbreviation, cfg.parts_filter)
         family = cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = cfg.family_to_abbreviation[family]
         abbreviated_parts.append(part_abbreviation)

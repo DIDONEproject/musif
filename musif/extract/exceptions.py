@@ -2,7 +2,7 @@ class MissingFileError(Exception):
     """Exception informing that an expected file couldn't be found."""
 
     def __init__(self, file_path: str):
-        super().__init__(f"File with path '{file_path}' couldn't be found ")
+        super().__init__(f"File with path '{file_path}' couldn't be found")
 
 
 class ParseFileError(Exception):
