@@ -49,9 +49,9 @@ class FeaturesGenerator:
         self._cfg = Configuration(*args, **kwargs)
         self._logger = self._cfg.write_logger
 
-    def generate_reports(self, data: DataFrame, main_results_path: str, parts_list: Optional[List[str]] = None, num_factors: int = 0, visualizations=False) -> DataFrame:
+    def generate_reports(self, data: DataFrame, main_results_path: str, num_factors: int = 0, visualizations=False) -> DataFrame:
         pinfo('\n'+'--- Starting reports generation ---\n'.center(120, ' '))
-        self.parts_list = [] if parts_list is None else parts_list
+        self.parts_list = [] if self._cfg.parts_filter is None else self._cfg.parts_filter
         self.visualizations=visualizations
         self.global_features = data
         self.num_factors_max = num_factors
