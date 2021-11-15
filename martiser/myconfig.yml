@@ -1,16 +1,19 @@
-data_dir: data
-musescore_dir: 
-metadata_dir: metadata
+internal_data_dir: ./internal_data
+metadata_dir: ./metadata
 metadata_id_col: AriaId
-intermediate_files_dir: intermediate
-parallel: true
-max_processes: 10
+data_dir: arias/prueba
+musescore_dir:
+expand_repeats: true
+parallel: false
+max_processes: 8
 read_log:
   file_path: logs/read.log
-  level: INFO
+  file_level: DEBUG
+  console_level: INFO
 write_log:
   file_path: logs/write.log
-  level: DEBUG
+  file_level: WARNING
+  console_level: INFO
 features:
   - core
   - tempo
@@ -32,7 +35,20 @@ features:
   - dynamics
   - rhythm
 
-split_keywords:
+split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
+
   - wind
+parts_filter:
+  - vnI
+  # - vnII
+  - obI
+  # - va
+  # - bs
+  # - sop
+  - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar

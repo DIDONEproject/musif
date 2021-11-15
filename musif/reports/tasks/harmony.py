@@ -90,7 +90,7 @@ def Print_Functions(factor, _cfg, data, data_general, groups, additional_info, w
     (data1, data2, data3, third_columns_names,
             third_columns_names2, third_columns_names3,
             second_column_names, second_column_names2,
-            second_column_names3) = Process_data(data, NUMERALS_prefix, CHORDS_GROUPING_prefix, CHORDS_GROUPING_prefix,_cfg.sorting_lists['ModulationG1Sorting'],_cfg.sorting_lists['ModulationG2Sorting'],_cfg.sorting_lists['ModulationG2Sorting'])
+            second_column_names3) = Process_data(data, NUMERALS_prefix, CHORDS_GROUPING_prefix, CHORDS_GROUPING_prefix,_cfg.sorting_lists['NumeralsSorting'],_cfg.sorting_lists['ModulationG2Sorting'],_cfg.sorting_lists['ModulationG2Sorting'])
     Print_Triple_Excel('Functions', factor, _cfg, groups, additional_info, workbook, data_general, data1, data2, data3, third_columns_names, third_columns_names2, third_columns_names3, second_column_names, second_column_names2, second_column_names3)
 
 def Print_Triple_Excel(name, factor, _cfg, groups, additional_info, workbook, data_general, data1, data2, data3, third_columns_names, third_columns_names2, third_columns_names3, second_column_names, second_column_names2, second_column_names3):
@@ -133,13 +133,13 @@ def Print_Double_Excel(name, factor, _cfg, groups, additional_info, workbook, da
             columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
             additional_info=additional_info, ponderate=False)
         
-    if factor>=1:
-        Create_excel(workbook.create_sheet(name + "_Horizontal"),
-         third_columns_names, data1, third_columns_names,
-          computations, _cfg.sorting_lists, groups=groups, data2 = data2,
-          last_column=True, last_column_average=False, second_columns=second_column_names,
-                columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
-                additional_info=additional_info, ponderate=True)
+    # if factor>=1:
+    #     Create_excel(workbook.create_sheet(name + "_Horizontal"),
+    #      third_columns_names, data1, third_columns_names,
+    #       computations, _cfg.sorting_lists, groups=groups, data2 = data2,
+    #       last_column=True, last_column_average=False, second_columns=second_column_names,
+    #             columns2=third_columns_names2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, 
+    #             additional_info=additional_info, ponderate=True)
                 
 def Process_data(data, prefix1, prefix2, prefix3, sorting_list1, sorting_list2, sorting_list3):
     data.columns= [i.replace('_Count','') for i in data.columns]

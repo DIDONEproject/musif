@@ -117,7 +117,7 @@ class PartsExtractor:
         return sort(parts, abbreviated_parts_scoring_order)
 
     def _process_score(self, musicxml_file: str) -> List[str]:
-        score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
+        score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords, expand_repeats=self._cfg.expand_repeats)
         parts = list(score.parts)
         parts_abbreviations = [self._get_part(part, parts) for part in parts]
         return parts_abbreviations
@@ -243,7 +243,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        pinfo(f"Processing score {musicxml_file}", self._logger)
+        pinfo(f"\nProcessing score {musicxml_file}", self._logger)
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
@@ -255,7 +255,7 @@ class FeaturesExtractor:
         return score_features, parts_features
 
     def _get_score_data(self, musicxml_file: str) -> dict:
-        score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
+        score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords, expand_repeats=self._cfg.expand_repeats)
         filtered_parts = self._filter_parts(score)
         if len(filtered_parts) == 0:
             pwarn(f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}",
