@@ -1,7 +1,8 @@
 import openpyxl
 from openpyxl.styles.fonts import Font
-import musif.extract.features.interval as interval
 from musif.extract.features import ambitus
+from musif.extract.features import interval
+
 from musif.extract.features.scoring.constants import FAMILY_SCORING, SCORING
 from musif.extract.features.tempo.constants import TEMPO_GROUPED_1, TEMPO_GROUPED_2
 
@@ -44,15 +45,15 @@ metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, A
 singers_list=["sop", "ten", "alt", "bar", "bass", "bbar"]
 
 def get_melody_list(catch):
-    return [catch + interval.INTERVALLIC_MEAN, catch + interval.INTERVALLIC_STD, catch + interval.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_STD, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
-        catch + interval.TRIMMED_INTERVALLIC_STD, catch + interval.TRIMMED_INTERVALLIC_MEAN, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_ASC,
-        catch + interval.LARGEST_SEMITONES_DESC,catch + interval.LARGEST_SEMITONES_ASC, catch + interval.LARGEST_INTERVAL_DESC, catch + ambitus.LOWEST_NOTE,
-        catch + ambitus.LOWEST_NOTE_INDEX, catch + ambitus.HIGHEST_NOTE, catch + ambitus.HIGHEST_NOTE_INDEX,
-        catch + interval.LARGEST_INTERVAL_ALL, catch + interval.LARGEST_SEMITONES_ALL,
-        catch + interval.SMALLEST_INTERVAL_ALL, catch + interval.SMALLEST_SEMITONES_ALL,
-        catch + interval.MEAN_INTERVAL,
-         catch + interval.DESCENDING_INTERVALLIC_MEAN, 
-        catch + interval.ASCENDING_INTERVALLIC_MEAN]
+    return [catch + interval.constants.INTERVALLIC_MEAN, catch + interval.constants.INTERVALLIC_STD, catch + interval.constants.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.constants.ABSOLUTE_INTERVALLIC_STD, catch + interval.constants.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.constants.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
+        catch + interval.constants.TRIMMED_INTERVALLIC_STD, catch + interval.constants.TRIMMED_INTERVALLIC_MEAN, catch + interval.constants.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.constants.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.constants.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.constants.LARGEST_INTERVAL_ASC,
+        catch + interval.constants.LARGEST_SEMITONES_DESC,catch + interval.constants.LARGEST_SEMITONES_ASC, catch + interval.constants.LARGEST_INTERVAL_DESC, catch + ambitus.constants.LOWEST_NOTE,
+        catch + ambitus.constants.LOWEST_NOTE_INDEX, catch + ambitus.constants.HIGHEST_NOTE, catch + ambitus.constants.HIGHEST_NOTE_INDEX,
+        catch + interval.constants.LARGEST_INTERVAL_ALL, catch + interval.constants.LARGEST_SEMITONES_ALL,
+        catch + interval.constants.SMALLEST_INTERVAL_ALL, catch + interval.constants.SMALLEST_SEMITONES_ALL,
+        catch + interval.constants.MEAN_INTERVAL,
+         catch + interval.constants.DESCENDING_INTERVALLIC_MEAN, 
+        catch + interval.constants.ASCENDING_INTERVALLIC_MEAN]
           
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
