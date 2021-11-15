@@ -1,4 +1,3 @@
-internal_data_dir: ../internal_data
 metadata_dir: ../metadata
 metadata_id_col: AriaId
 data_dir: arias

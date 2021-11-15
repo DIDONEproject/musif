@@ -136,4 +136,6 @@ def plog(text: str, level: str, logger: Optional[logging.Logger] = None, allowed
     if logger is None:
         print(colorize(text, level))
     else:
-        logger.log(logging.getLevelName(level), text)
+        log_lines = text.strip().split("\n")
+        for line in log_lines:
+            logger.log(logging.getLevelName(level), line.strip())
