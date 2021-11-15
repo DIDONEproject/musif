@@ -5,6 +5,8 @@ from os import path
 from musif.common.logs import get_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 
+from musif import internal_data
+
 READ_LOGGER_NAME = "read_log"
 WRITE_LOGGER_NAME = "write_log"
 
@@ -13,7 +15,6 @@ WRITE_LOG = "write_log"
 LOG_FILE_PATH = "file_path"
 FILE_LOG_LEVEL = "file_level"
 CONSOLE_LOG_LEVEL = "console_level"
-INTERNAL_DATA_DIR = "internal_data_dir"
 METADATA_DIR = "metadata_dir"
 METADATA_ID_COL = "metadata_id_col"
 DATA_DIR = "data_dir"
@@ -36,7 +37,6 @@ _CONFIG_FALLBACK = {
         FILE_LOG_LEVEL: "ERROR",
         CONSOLE_LOG_LEVEL: "INFO",
     },
-    INTERNAL_DATA_DIR: "internal_data",
     METADATA_DIR: "metadata",
     METADATA_ID_COL: "FileName",
     DATA_DIR: ".",
@@ -73,7 +73,6 @@ class Configuration:
         self.write_file_log_level = write_log_config[FILE_LOG_LEVEL]
         self.write_console_log_level = write_log_config[CONSOLE_LOG_LEVEL]
         self.write_logger = get_logger(READ_LOGGER_NAME, self.write_log_file, self.write_file_log_level, self.write_console_log_level)
-        self.internal_data_dir = config_data.get(INTERNAL_DATA_DIR, _CONFIG_FALLBACK[INTERNAL_DATA_DIR])
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
         self.metadata_id_col = config_data.get(METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL])
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
@@ -84,6 +83,7 @@ class Configuration:
         self.split_keywords = config_data.get(SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS])
         self.parts_filter = config_data.get(PARTS_FILTER, _CONFIG_FALLBACK[PARTS_FILTER])
         self.expand_repeats = config_data.get(EXPAND_REPEATS, _CONFIG_FALLBACK[EXPAND_REPEATS])
+        self.internal_data_dir = path.dirname(internal_data.__file__)
         self._load_metadata()
 
     def is_requested_feature_category(self, feature) -> bool:
@@ -104,16 +104,15 @@ class Configuration:
     def to_dict(self) -> dict:
         return {
             READ_LOG: {
-                LOG_FILE_PATH: self.read_log_config[LOG_FILE_PATH],
-                FILE_LOG_LEVEL: self.read_log_config[FILE_LOG_LEVEL],
-                CONSOLE_LOG_LEVEL: self.read_log_config[CONSOLE_LOG_LEVEL],
+                LOG_FILE_PATH: self.read_log_file,
+                FILE_LOG_LEVEL: self.read_file_log_level,
+                CONSOLE_LOG_LEVEL: self.read_console_log_level,
             },
             WRITE_LOG: {
-                LOG_FILE_PATH: self.write_log_config[LOG_FILE_PATH],
-                FILE_LOG_LEVEL: self.write_log_config[FILE_LOG_LEVEL],
-                CONSOLE_LOG_LEVEL: self.write_log_config[CONSOLE_LOG_LEVEL],
+                LOG_FILE_PATH: self.write_log_file,
+                FILE_LOG_LEVEL: self.write_file_log_level,
+                CONSOLE_LOG_LEVEL: self.write_console_log_level,
             },
-            INTERNAL_DATA_DIR: self.internal_data_dir,
             METADATA_DIR: self.metadata_dir,
             METADATA_ID_COL: self.metadata_id_col,
             DATA_DIR: self.data_dir,
