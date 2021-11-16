@@ -28,6 +28,28 @@ _cache = Cache(10000)  # To cache scanned scores
 
 
 def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeats: bool = False) -> Score:
+    """
+    Checks if the file's score is already in cache, it returns the saved score. If it's a new file, it parses the
+    given file and slit in layers based in the keywords argument. Returns the resulted score and saves it in cache.
+
+    Parameters
+    ----------
+    file_path: str
+     A path to a music xml path
+
+    split_keywords: List[str]
+      A list of keywords to split in layers certain type of part.
+
+    Returns
+    -------
+    resp : Score
+      The score saved in cache or the new score parsed with the necessary parts splitted.
+
+    Raises
+    ------
+      ParseFileError
+        If the xml file can't be parsed for any reason.
+    """
     score = _cache.get(file_path)
     if score is not None:
         return score
@@ -131,8 +153,8 @@ class PartsExtractor:
 
 class FilesValidator:
     """
-    Checks if each file can be parsed. If a file can't be parsed, it'll print an error message and continues to check
-    the remaining files.
+    Checks if each file can be parsed. If any file can't be parsed, at the end it will print a list of the file paths
+    and their respective raised error.
     """
 
     def __init__(self, *args, **kwargs):
@@ -141,6 +163,17 @@ class FilesValidator:
         ----------
         *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
         **kwargs: Get keywords to construct Configuration.
+
+        Raises
+        ------
+        TypeError
+          - If the type is not the expected (str, dict or Configuration).
+
+        ValueError
+          - If there is too many arguments(args)
+
+        FileNotFoundError
+          - If any of the files/directories path inside the expected configuration doesn't exit.
         """
         self._cfg = Configuration(*args, **kwargs)
 
@@ -148,13 +181,13 @@ class FilesValidator:
         pinfo("Starting files validation", level=self._cfg.read_console_log_level)
         musicxml_files = extract_files(self._cfg.data_dir)
         """
-        Checks, squentially or in parallel, if the given files are parseable. Parse file will print error message and
-        return a None object if file fails??. Don't give a return value nor raises an exception??
+        Checks, squentially or in parallel, if the given files are parseable. If any file has a problem, at the end
+        it will print a list of the file paths and their respective raised error.
 
         Parameters
         ----------
-         obj : Union[str, List[str]]
-          A path or a list of paths
+        obj : Union[str, List[str]]
+        A path or a list of paths
         """
         if self._cfg.parallel:
             errors = self._validate_in_parallel(musicxml_files)
