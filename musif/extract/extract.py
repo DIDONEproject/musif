@@ -37,6 +37,9 @@ def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeat
     file_path: str
      A path to a music xml path
 
+    expand_repeats: bool
+      Determinates rather expand or not the repetitions
+
     split_keywords: List[str]
       A list of keywords to split in layers certain type of part.
 
@@ -178,8 +181,6 @@ class FilesValidator:
         self._cfg = Configuration(*args, **kwargs)
 
     def validate(self) -> None:
-        pinfo("Starting files validation", level=self._cfg.read_console_log_level)
-        musicxml_files = extract_files(self._cfg.data_dir)
         """
         Checks, squentially or in parallel, if the given files are parseable. If any file has a problem, at the end
         it will print a list of the file paths and their respective raised error.
@@ -189,6 +190,8 @@ class FilesValidator:
         obj : Union[str, List[str]]
         A path or a list of paths
         """
+        pinfo("Starting files validation", level=self._cfg.read_console_log_level)
+        musicxml_files = extract_files(self._cfg.data_dir)
         if self._cfg.parallel:
             errors = self._validate_in_parallel(musicxml_files)
         else:
