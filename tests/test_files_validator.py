@@ -19,6 +19,7 @@ class TestFilesValidator:
 
     # configurations tests
 
+
     @pytest.mark.configurations
     def test_config_passed_as_path(self):
         # Given
@@ -133,6 +134,7 @@ class TestFilesValidator:
         # When
         validator.validate([malformed_file, test_file])
         out, err = capsys.readouterr()
+
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
 
