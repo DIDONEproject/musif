@@ -54,6 +54,8 @@ class Configuration:
                 config_data = args[0]
             elif isinstance(args[0], Configuration):
                 config_data = args[0].to_dict()
+            else:
+                raise TypeError()
         config_data.update(kwargs)  # Override values
         log_config = config_data.get(LOG, _CONFIG_FALLBACK[LOG])
         self.log_file = log_config.get(LOG_FILE_PATH, _CONFIG_FALLBACK.get(LOG_FILE_PATH))
