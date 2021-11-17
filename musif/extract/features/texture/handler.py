@@ -8,8 +8,8 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_NOTES
-from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, PART_ABBREVIATION, \
+from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.scoring.constants import FAMILY_ABBREVIATION, PART_ABBREVIATION, \
     SOUND_ABBREVIATION
 from .constants import *
 
@@ -19,20 +19,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     parts_data = filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
-    df_parts = DataFrame(parts_features)
-    df_sound = df_parts.groupby(SOUND_ABBREVIATION).aggregate({NOTES: "sum"})
-    features={}
+    features = {}
     for part_features in parts_features:
         part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
         features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
         
-    for sound_abbreviation in df_sound.index:
-        sound_prefix = get_sound_prefix(sound_abbreviation)
-        len_notes = df_sound.loc[sound_abbreviation, NOTES].tolist()
-        sound_parts = score_features[f"{sound_prefix}{NUMBER_OF_FILTERED_PARTS}"]
-        notes_mean = len_notes / sound_parts if sound_parts > 0 else 0
-        features[f"{sound_prefix}{NOTES}"] = len_notes
-        features[f"{sound_prefix}{NOTES_MEAN}"] = notes_mean
     score_features.update(features)
 
     df_score = DataFrame(score_features, index=[0])

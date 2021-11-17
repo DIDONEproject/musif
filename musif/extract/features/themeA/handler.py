@@ -18,7 +18,7 @@ def update_score_objects(
             elem = part.elements[i]
             if len(elements_to_remove) > 0:
                 elements_to_remove.append(elem)
-            elif isinstance(elem, Measure) and elem.number >= end_of_theme_a:
+            elif isinstance(elem, Measure) and elem.number > end_of_theme_a:
                 elements_to_remove.append(elem)
         part.remove(targetOrList=elements_to_remove)
 
