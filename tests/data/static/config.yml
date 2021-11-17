@@ -1,31 +1,49 @@
-data_dir: ../data
+data_dir: .
+musescore_dir:
 metadata_dir: ../metadata
 metadata_id_col: AriaId
 parallel: false
+expand_repeats: false
 max_processes: 8
 read_log:
-  file_path: data/logs/read.log
-  level: DEBUG
+  file_path: logs/read.log
+  file_level: DEBUG
+  console_level: WARNING
 write_log:
-  file_path: data/logs/write.log
-  level: INFO
+  file_path: logs/write.log
+  file_level: WARNING
+  console_level: INFO
 features:
   - scoring
-  - custom.file_name
+  - file_name
   - metadata
-  - custom.themeA
+  - themeA
   - core
   - composer
-  - custom.librettist
+  - librettist
   - ambitus
   - interval
   - tempo
   - density
+  #  - texture
+  - harmony
   - lyrics
   - scale
+  #  - scale_relative
   - key
-#  - custom.harmony
+  - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
+parts_filter:
+  - vnI
+  - vnII
+  - va
+  - bs
+  - sop
+  - ten
+  - alt
+  - bar
+  - bass
+  - bbar
