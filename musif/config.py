@@ -7,8 +7,8 @@ from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, 
 
 from musif import internal_data
 
-READ_LOGGER_NAME = "read_log"
-WRITE_LOGGER_NAME = "write_log"
+READ_LOGGER_NAME = "musiF_read"
+WRITE_LOGGER_NAME = "musiF_write"
 
 READ_LOG = "read_log"
 WRITE_LOG = "write_log"

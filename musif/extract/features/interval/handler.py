@@ -8,9 +8,9 @@ from scipy.stats import kurtosis, skew
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.constants import DATA_NUMERIC_INTERVALS, DATA_TEXT_INTERVALS
-from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 from .constants import *
 
 
@@ -43,20 +43,6 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         features.update(get_interval_stats_features(text_intervals_count, part_prefix))
         for feature_name in SCORE_FEATURES:
             features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
-
-    parts_data_per_sound = {part_data[DATA_SOUND_ABBREVIATION]: [] for part_data in parts_data}
-    for part_data in parts_data:
-        sound = part_data[DATA_SOUND_ABBREVIATION]
-        parts_data_per_sound[sound].append(part_data)
-    for sound, parts_data in parts_data_per_sound.items():
-        sound_prefix = get_sound_prefix(sound)
-        numeric_intervals = [interval for part_data in parts_data for interval in part_data[DATA_NUMERIC_INTERVALS]]
-        text_intervals = [interval for part_data in parts_data for interval in part_data[DATA_TEXT_INTERVALS]]
-        text_intervals_count = Counter(text_intervals)
-        features.update(get_interval_features(numeric_intervals, sound_prefix))
-        features.update(get_interval_count_features(text_intervals_count, sound_prefix))
-        features.update(get_interval_type_features(text_intervals_count, sound_prefix))
-        features.update(get_interval_stats_features(text_intervals_count, sound_prefix))
 
     numeric_intervals = [interval for part_data in parts_data for interval in part_data[DATA_NUMERIC_INTERVALS]]
     text_intervals = [interval for part_data in parts_data for interval in part_data[DATA_TEXT_INTERVALS]]
