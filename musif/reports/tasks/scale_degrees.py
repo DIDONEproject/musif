@@ -82,7 +82,7 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
                 name1, data, third_columns_names_origin, Subtitle)
 
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 
 ########################################################################################################

@@ -48,7 +48,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith(ADDITIONS_prefix)})
         
     except Exception as e:
-        perr(f'Harmony problem found: {str(e)}', cfg.read_logger)
+        perr(f'Harmony problem found: {str(e)}', cfg.logger)
     
     finally:
         score_features.update(features)
