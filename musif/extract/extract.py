@@ -48,9 +48,9 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     try:
         msc3_score = ms3.score.Score(file_path, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
-        mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
-        mn = pd.Series(mn, name='mc_playthrough')
         if expand_repeats:
+            mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
+            mn = pd.Series(mn, name='mc_playthrough')
             harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
