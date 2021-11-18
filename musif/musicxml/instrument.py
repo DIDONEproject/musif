@@ -3,8 +3,9 @@ from typing import Optional, Tuple
 import roman
 from music21.stream import Part
 
+from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.features.scoring import ROMAN_NUMERALS_FROM_1_TO_20, VOICE_FAMILY
+from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20
 
 
 def extract_instrument_and_number_from_part(part: str) -> Tuple[str, Optional[str]]:
