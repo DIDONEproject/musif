@@ -35,7 +35,7 @@ def Harmonic_analysis(rows_groups: dict, not_used_cols: dict, factor, _cfg: Conf
         save_workbook(os.path.join(results_path,excel_name), workbook, cells_size = NORMAL_WIDTH)
         
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 def Print_Harmonic_Data(_cfg, data, data_general, additional_info, groups, workbook):
     harmonic_rythm = [c for c in data.columns if 'Harmonic_rhythm' in c]

@@ -1,4 +1,3 @@
-internal_data_dir: ../internal_data
 metadata_dir: ../metadata
 metadata_id_col: AriaId
 data_dir: ../../Corpus/xml
@@ -6,13 +5,9 @@ musescore_dir: ../../Corpus/musescore
 expand_repeats: false
 parallel: true
 max_processes: 8
-read_log:
+log:
   file_path: logs/read.log
   file_level: DEBUG
-  console_level: INFO
-write_log:
-  file_path: logs/write.log
-  file_level: WARNING
   console_level: INFO
 features:
   - scoring

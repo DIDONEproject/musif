@@ -52,6 +52,8 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
             mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
             mn = pd.Series(mn, name='mc_playthrough')
             harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
+        else:
+            harmonic_analysis['playthrough'] = harmonic_analysis.mn
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
         raise ParseFileError(file_path, str(e)) from e
@@ -133,16 +135,16 @@ class FilesValidator:
         self._cfg = Configuration(*args, **kwargs)
 
     def validate(self) -> None:
-        pinfo("Starting files validation", level=self._cfg.read_console_log_level)
+        pinfo("Starting files validation", level=self._cfg.console_log_level)
         musicxml_files = extract_files(self._cfg.data_dir)
         if self._cfg.parallel:
             errors = self._validate_in_parallel(musicxml_files)
         else:
             errors = self._validate_sequentially(musicxml_files)
         if len(errors) > 0:
-            perr("\n".join(errors), level=self._cfg.read_console_log_level)
+            perr("\n".join(errors), level=self._cfg.console_log_level)
         else:
-            pinfo("Finished files validation with 0 errors", level=self._cfg.read_console_log_level)
+            pinfo("Finished files validation with 0 errors", level=self._cfg.console_log_level)
 
     def _validate_sequentially(self, musicxml_files: List[str]) -> List[str]:
         errors = []
@@ -165,7 +167,7 @@ class FilesValidator:
         return errors
 
     def _validate_file(self, musicxml_file: str) -> Optional[str]:
-        pdebug(f"Validating file '{musicxml_file}'", level=self._cfg.read_console_log_level)
+        pdebug(f"Validating file '{musicxml_file}'", level=self._cfg.console_log_level)
         try:
             parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
             if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
@@ -181,7 +183,7 @@ class FilesValidator:
 class FeaturesExtractor:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._logger = self._cfg.read_logger
+        self._logger = self._cfg.logger
 
     def extract(self) -> DataFrame:
         pinfo('---Analyzing scores ---', self._logger)

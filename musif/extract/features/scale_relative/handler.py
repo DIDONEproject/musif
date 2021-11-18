@@ -18,7 +18,7 @@ def update_part_objects(score_data, part_data, cfg, part_features):
                 part_features[DEGREE_COUNT.format(key=key, prefix="")] = value
                 part_features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
         except Exception as e:
-            cfg.read_logger.error('Error extracting relative scale degrees: {}', e)
+            cfg.logger.error('Error extracting relative scale degrees: {}', e)
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     parts_data = filter_parts_data(parts_data, cfg.parts_filter)

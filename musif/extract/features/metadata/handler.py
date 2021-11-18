@@ -18,7 +18,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
                 continue
             for key in item_features:
                 if (key in score_features) and (key != cfg.metadata_id_col):
-                    cfg.read_logger.warning(f"Column {key} exists both in metadata and in existing features")
+                    cfg.logger.warning(f"Column {key} exists both in metadata and in existing features")
                     continue
                 features[key] = item_features[key]
     return score_features.update(features)

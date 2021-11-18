@@ -7,11 +7,8 @@ from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, 
 
 from musif import internal_data
 
-READ_LOGGER_NAME = "musiF_read"
-WRITE_LOGGER_NAME = "musiF_write"
-
-READ_LOG = "read_log"
-WRITE_LOG = "write_log"
+LOGGER_NAME = "musiF"
+LOG = "log"
 LOG_FILE_PATH = "file_path"
 FILE_LOG_LEVEL = "file_level"
 CONSOLE_LOG_LEVEL = "console_level"
@@ -27,14 +24,9 @@ PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 
 _CONFIG_FALLBACK = {
-    READ_LOG: {
-        LOG_FILE_PATH: "logs/read.log",
+    LOG: {
+        LOG_FILE_PATH: "./musiF.log",
         FILE_LOG_LEVEL: "DEBUG",
-        CONSOLE_LOG_LEVEL: "INFO",
-    },
-    WRITE_LOG: {
-        LOG_FILE_PATH: "logs/write.log",
-        FILE_LOG_LEVEL: "ERROR",
         CONSOLE_LOG_LEVEL: "INFO",
     },
     METADATA_DIR: "metadata",
@@ -63,16 +55,11 @@ class Configuration:
             elif isinstance(args[0], Configuration):
                 config_data = args[0].to_dict()
         config_data.update(kwargs)  # Override values
-        read_log_config = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
-        self.read_log_file = read_log_config[LOG_FILE_PATH]
-        self.read_file_log_level = read_log_config[FILE_LOG_LEVEL]
-        self.read_console_log_level = read_log_config[CONSOLE_LOG_LEVEL]
-        self.read_logger = get_logger(READ_LOGGER_NAME, self.read_log_file, self.read_file_log_level, self.read_console_log_level)
-        write_log_config = config_data.get(WRITE_LOG, _CONFIG_FALLBACK[WRITE_LOG])
-        self.write_log_file = write_log_config[LOG_FILE_PATH]
-        self.write_file_log_level = write_log_config[FILE_LOG_LEVEL]
-        self.write_console_log_level = write_log_config[CONSOLE_LOG_LEVEL]
-        self.write_logger = get_logger(READ_LOGGER_NAME, self.write_log_file, self.write_file_log_level, self.write_console_log_level)
+        log_config = config_data.get(LOG, _CONFIG_FALLBACK[LOG])
+        self.log_file = log_config.get(LOG_FILE_PATH, _CONFIG_FALLBACK.get(LOG_FILE_PATH))
+        self.file_log_level = log_config.get(FILE_LOG_LEVEL, _CONFIG_FALLBACK.get(FILE_LOG_LEVEL))
+        self.console_log_level = log_config.get(CONSOLE_LOG_LEVEL, _CONFIG_FALLBACK.get(CONSOLE_LOG_LEVEL))
+        self.logger = get_logger(LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level)
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
         self.metadata_id_col = config_data.get(METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL])
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
@@ -103,15 +90,10 @@ class Configuration:
 
     def to_dict(self) -> dict:
         return {
-            READ_LOG: {
-                LOG_FILE_PATH: self.read_log_file,
-                FILE_LOG_LEVEL: self.read_file_log_level,
-                CONSOLE_LOG_LEVEL: self.read_console_log_level,
-            },
-            WRITE_LOG: {
-                LOG_FILE_PATH: self.write_log_file,
-                FILE_LOG_LEVEL: self.write_file_log_level,
-                CONSOLE_LOG_LEVEL: self.write_console_log_level,
+            LOG: {
+                LOG_FILE_PATH: self.log_file,
+                FILE_LOG_LEVEL: self.file_log_level,
+                CONSOLE_LOG_LEVEL: self.console_log_level,
             },
             METADATA_DIR: self.metadata_dir,
             METADATA_ID_COL: self.metadata_id_col,

@@ -37,7 +37,7 @@ from ..common.utils import get_color
 class FeaturesGenerator:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._logger = self._cfg.write_logger
+        self._logger = self._cfg.logger
 
     def generate_reports(self, data: DataFrame, main_results_path: str, parts_list: Optional[List[str]] = None, num_factors: int = 0, visualizations=False) -> DataFrame:
         print(get_color('WARNING')+ '\n' +'--- Starting reports generation ---\n'.center(120, ' ') + RESET_SEQ)
@@ -104,7 +104,7 @@ class FeaturesGenerator:
                     rows_groups = rg
                     not_used_cols = nuc
                 except KeyError as e:
-                    self._cfg.write_logger.error(get_color('ERROR'+ 'One or more of the features could not be found in the input dataframe: ', e))
+                    self._cfg.logger.error(get_color('ERROR'+ 'One or more of the features could not be found in the input dataframe: ', e))
             # else: # from 2 factors
                 # process_executor = concurrent.futures.ProcessPoolExecutor()
                 # futures = [process_executor.submit(_group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals, Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
@@ -141,7 +141,7 @@ class FeaturesGenerator:
             try:     
                 tasks['melody_values'] = self._extract_melody_colunms(all_info, Instrument_level).dropna(how='all', axis=1)
             except KeyError:
-                self._cfg.write_logger.error(get_color('ERROR')+'Melody Values Dataframe could not be extracted.{}'.format(RESET_SEQ))                       
+                self._cfg.logger.error(get_color('ERROR')+'Melody Values Dataframe could not be extracted.{}'.format(RESET_SEQ))
             
 
         if self.IsVoice(instrument):
