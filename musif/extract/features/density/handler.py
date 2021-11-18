@@ -148,5 +148,5 @@ def calculate_densities(notes_list, measures_list, names_list, cfg: Configuratio
         density_dict = sort_dict(density_dict, density_sorting, cfg)
         return density_dict
     except:
-        cfg.read_logger.error('Densities problem found: ', exc_info=True)
+        cfg.logger.error('Densities problem found: ', exc_info=True)
         return {}

@@ -83,7 +83,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                 bar_plot(name_bar, data, third_columns_names_origin,
                             'Intervals' if 'Clef' not in name else 'Clefs', title)
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{} Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.logger.warn(get_color('WARNING')+'{} Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 def fix_column_names(sorting_list, all_columns, general_cols):
     third_columns_names_origin = set(all_columns) - set(general_cols)
@@ -181,4 +181,4 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
                                     name.replace('.xlsx',  IMAGE_EXTENSION))
                 double_bar_plot(name_bars, data)
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))

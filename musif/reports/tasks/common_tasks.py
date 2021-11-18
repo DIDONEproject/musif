@@ -97,7 +97,7 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                 bar_plot_extended(name_bar, data, columns,
                                 'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 def split_reorder_density(data):
     data_general = data[metadata_columns + ['Total analysed']].copy()
@@ -196,7 +196,7 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
                     bar_plot_extended(name_bar, data, columns,
                                         'Instrumental Textures', 'Ratio', title + ' ' +instr, instr=instr)
     except Exception as e:
-            _cfg.write_logger.info('{}  Problem found: {}'.format(name, e))
+            _cfg.logger.info('{}  Problem found: {}'.format(name, e))
 
 def split_and_reorder_texture(data):
     data_general = data[metadata_columns + ['Total analysed']].copy()

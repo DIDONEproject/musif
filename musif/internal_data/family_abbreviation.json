@@ -4,5 +4,6 @@
     "wind": "ww", 
     "brass": "br",
     "percussion": "perc",
-    "voice": "voice"
+    "voice": "voice",
+    "general": "gen"
 }
