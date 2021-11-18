@@ -28,7 +28,11 @@ class ConsoleFormatter(logging.Formatter):
 
 def get_logger(logger_name: str, log_file_path: str, file_log_level: str, console_log_level: str) -> Logger:
     logger = logging.getLogger(logger_name)
-    if not logger.hasHandlers():
+
+    if logger.hasHandlers():
+        return logger
+
+    if log_file_path and file_log_level:
         logger.propagate = False
         logger.setLevel(LEVEL_DEBUG)
         log_filename = path.basename(log_file_path)
@@ -41,8 +45,10 @@ def get_logger(logger_name: str, log_file_path: str, file_log_level: str, consol
         file_handler.setFormatter(log_formatter)
         logger.addHandler(file_handler)
 
+    if console_log_level:
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(console_log_level)
         console_handler.setFormatter(ConsoleFormatter())
         logger.addHandler(console_handler)
+
     return logger

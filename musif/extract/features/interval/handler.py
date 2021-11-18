@@ -7,7 +7,6 @@ from music21.interval import Interval
 from scipy.stats import kurtosis, skew
 
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.constants import DATA_NUMERIC_INTERVALS, DATA_TEXT_INTERVALS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix
@@ -27,20 +26,12 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-        numeric_intervals = [interval for part_data in parts_data for interval in part_data[DATA_NUMERIC_INTERVALS]]
-        text_intervals = [interval for part_data in parts_data for interval in part_data[DATA_TEXT_INTERVALS]]
-        text_intervals_count = Counter(text_intervals)
-        features.update(get_interval_features(numeric_intervals, part_prefix))
-        features.update(get_interval_count_features(text_intervals_count, part_prefix))
-        features.update(get_interval_type_features(text_intervals_count, part_prefix))
-        features.update(get_interval_stats_features(text_intervals_count, part_prefix))
         for feature_name in SCORE_FEATURES:
             features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
 
