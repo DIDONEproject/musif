@@ -1,5 +1,5 @@
 import copy
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 from music21.interval import Interval
 from music21.note import Note
@@ -143,19 +143,8 @@ def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, 
     return [(degree[0], degree[1].fullName if degree[1] else "") for degree in degrees]
 
 
-def get_intervals(notes: List[Note]) -> Tuple[List[Union[int, float]], List[str]]:
-    """
-    my_interval_list is a list of tuples where we insert intervals in both variables types: numeric (in semitones) and nominal (name)
-    """
-    numeric_intervals = []
-    text_intervals = []
-    for i in range(len(notes) - 1):
-        note = notes[i]
-        next_note = notes[i + 1]
-        i = Interval(note.pitches[0], next_note.pitches[0])
-        numeric_intervals.append(i.semitones)
-        text_intervals.append(i.directedName)
-    return numeric_intervals, text_intervals
+def get_intervals(notes: List[Note]) -> List[Interval]:
+    return [Interval(notes[i].pitches[0], notes[i + 1].pitches[0]) for i in range(len(notes) - 1)]
 
 
 def contains_text(part: Part) -> bool:

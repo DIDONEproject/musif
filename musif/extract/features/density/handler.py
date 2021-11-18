@@ -15,6 +15,7 @@ from musif.musicxml import Measure, Note, Part
 from musif.musicxml.tempo import get_number_of_beats
 from musif.logs import lerr
 from .constants import *
+from ..core.constants import NOTES
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -30,7 +31,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     #for repetitions(?)
     # measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
     part_features.update({
-            NOTES: len(notes),
             SOUNDING_MEASURES: len(sounding_measures),
             MEASURES: len(measures)})
 
