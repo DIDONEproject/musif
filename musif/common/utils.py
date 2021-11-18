@@ -1,6 +1,5 @@
 import csv
 import json
-import logging
 from os import path
 from typing import Iterator, List, Union
 
@@ -8,7 +7,7 @@ import pandas as pd
 import yaml
 from pandas import DataFrame
 
-from musif.common.constants import COLORS, COLOR_SEQ, CSV_DELIMITER, ENCODING, LEVEL_INFO, RESET_SEQ
+from musif.common.constants import COLORS, COLOR_SEQ, CSV_DELIMITER, ENCODING, RESET_SEQ
 
 
 def get_file_name(file_path: str) -> str:
@@ -105,3 +104,7 @@ def get_color(levelname: str) -> str:
 
 def colorize(text: str, levelname: str):
     return get_color(levelname) + text + RESET_SEQ
+
+
+def extract_digits(text: str) -> str:
+    return ''.join([char for char in text if char.isdigit()])
