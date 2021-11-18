@@ -1,11 +1,11 @@
 import pandas as pd
 
 from musif.common.utils import read_dicts_from_csv
-from musif.extract.features.ambitus import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
+from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
 from musif.extract.features.composer.handler import COMPOSER
-from musif.extract.features.custom.file_name import ARIA_ID, ARIA_LABEL
-from musif.extract.features.density import DENSITY, MEASURES_MEAN, NOTES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
-from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_KURTOSIS, ABSOLUTE_INTERVALLIC_MEAN, \
+from musif.extract.features.density.constants import DENSITY, NOTES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
+from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
+from musif.extract.features.interval.constants import ABSOLUTE_INTERVALLIC_KURTOSIS, ABSOLUTE_INTERVALLIC_MEAN, \
     ABSOLUTE_INTERVALLIC_SKEWNESS, ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, \
     ABSOLUTE_INTERVALLIC_TRIM_RATIO, ASCENDING_INTERVALS_PER, ASCENDING_SEMITONES_SUM, DESCENDING_INTERVALS_PER, \
     DESCENDING_SEMITONES_SUM, INTERVALLIC_KURTOSIS, INTERVALLIC_MEAN, INTERVALLIC_SKEWNESS, INTERVALLIC_STD, \
@@ -24,11 +24,13 @@ from musif.extract.features.interval import ABSOLUTE_INTERVALLIC_KURTOSIS, ABSOL
     SMALLEST_SEMITONES_ALL, SMALLEST_SEMITONES_ASC, SMALLEST_SEMITONES_DESC, STEPWISE_MOTION_ALL_PER, \
     STEPWISE_MOTION_ASC_PER, STEPWISE_MOTION_DESC_PER, TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, \
     TRIMMED_ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD
-from musif.extract.features.key import KEY, KEY_SIGNATURE_TYPE, MODE
-from musif.extract.features.lyrics import SYLLABIC_RATIO, SYLLABLES
+from musif.extract.features.key.constants import KEY, KEY_SIGNATURE_TYPE, MODE
+from musif.extract.features.lyrics.constants import SYLLABIC_RATIO, SYLLABLES
 from musif.extract.features.prefix import get_part_prefix
-from musif.extract.features.scoring import FAMILY_INSTRUMENTATION, INSTRUMENTATION, NUMBER_OF_PARTS, SCORING, VOICES
-from musif.extract.features.tempo import NUMERIC_TEMPO, TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2, TIME_SIGNATURE, \
+from musif.extract.features.scoring.constants import FAMILY_INSTRUMENTATION, INSTRUMENTATION, NUMBER_OF_PARTS, SCORING, \
+    VOICES
+from musif.extract.features.tempo.constants import NUMERIC_TEMPO, TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2, \
+    TIME_SIGNATURE, \
     TIME_SIGNATURE_GROUPED
 
 if __name__ == "__main__":
@@ -86,7 +88,6 @@ if __name__ == "__main__":
             "Score_Density": row[f"Score_{DENSITY}"],
             "Score_SoundingDensity": row[f"Score_{SOUNDING_DENSITY}"],
             "Score_NotesMean": row[f"Score_{NOTES_MEAN}"],
-            "Score_MeasuresMean": row[f"Score_{MEASURES_MEAN}"],
             "Score_SoundingMeasuresMean": row[f"Score_{SOUNDING_MEASURES_MEAN}"],
             "Label_TextId": row[ARIA_LABEL],
             "Label_Sentiment": row["Label_Sentiment"],

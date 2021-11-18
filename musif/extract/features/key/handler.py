@@ -3,14 +3,7 @@ from typing import List
 from musif.config import Configuration
 from musif.extract.features.core.handler import DATA_KEY, DATA_MODE, DATA_TONALITY
 from musif.musicxml.key import get_key_signature, get_key_signature_type
-
-KEY = "Key"
-KEY_SIGNATURE = "KeySignature"
-KEY_SIGNATURE_TYPE = "KeySignatureType"
-MODE = "Mode"
-
-KEY_SIGNATURE_VALUES = ['b', 's']
-MODE_VALUES = ['major', 'minor']
+from .constants import *
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
