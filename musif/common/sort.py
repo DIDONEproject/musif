@@ -19,7 +19,7 @@ def sort_dict(dict_to_sort, main_list, cfg: Configuration):
             indexes.append(main_list.index(i))
         else:
             huerfanos.append({i: dict_to_sort[i]})
-            cfg.read_logger.warning(
+            cfg.logger.warning(
                 'We do not have the appropiate sorting for {}'.format(i))
     indexes = sorted(indexes)
     list_sorted = [{main_list[i]: dict_to_sort[main_list[i]]} for i in indexes]

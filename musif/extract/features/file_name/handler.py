@@ -24,7 +24,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     try:
         act, scene = act_and_scene.split(".")
     except ValueError:
-        cfg.read_logger.warn('Act and scene were not parsed well!')
+        cfg.logger.warn('Act and scene were not parsed well!')
         act = act_and_scene
         scene = ""
     composer_end_idx = act_scene_start_idx - 1

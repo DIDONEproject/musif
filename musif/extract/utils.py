@@ -275,12 +275,13 @@ def remove_folder_contents(path: str):
             remove_folder_contents(file_path)
 
 def Get_TimeSignature_periods(time_signatures):
-    #TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
-    periods=[]
-    periods.append(0)
+    # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
+    periods = [0]
+    if len(time_signatures) == 0:
+        return periods
     for t in range(1, len(time_signatures)):
         if time_signatures[t] != time_signatures[t-1]:
-            periods.append(t - periods[-1])#Substract indexes in case measures are not cointinuous
+            periods.append(t - periods[-1])  # Substract indexes in case measures are not cointinuous
     periods.append(t - periods[-1])
     
     return periods

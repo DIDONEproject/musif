@@ -85,7 +85,7 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
                     results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
                 box_plot(name_box, data)
     except Exception as e:
-        _cfg.write_logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workbook):
     second_column_names = [("", 1), ("Ascending", 2), ("Descending", 2)]
