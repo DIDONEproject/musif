@@ -5,45 +5,38 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
+from musif.common.utils import perr, pwarn
 
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
 
-# from musif.extract.utils import get_beatspertsig
-
-
 REGEX={}
-####################
-# HARMONIC ANALYSIS
-####################   
 
 def get_harmonic_rhythm(ms3_table)-> dict:
     hr={}
     measures = ms3_table.mc.dropna().tolist()
-    playthrough= ms3_table.playthrough.dropna().tolist()
-
     measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
-    
     chords = ms3_table.chord.dropna().tolist()
     chords_number=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    time_signatures = ms3_table.timesig.tolist()
+    harmonic_rhythm = chords_number/len(measures_compressed)
+    
     # beats = ms3_table.mc_onset.dropna().tolist()
     # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
-    time_signatures = ms3_table.timesig.tolist()
-    
-    harmonic_rhythm = chords_number/len(measures_compressed)
-
     if len(Counter(time_signatures)) == 1:
         harmonic_rhythm_beats = chords_number/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
     else:
+        playthrough = ms3_table.playthrough.dropna().tolist()
         periods_ts=[]
         time_changes=[]
+        
         for t in range(1, len(time_signatures)):
             if time_signatures[t] != time_signatures[t-1]:
+                
                 # what measure in compressed list corresponds to the change in time signature
                 time_changes.append(time_signatures[t-1])
                 periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
 
-        # Calculating harmonic rythm according to beats periods
         harmonic_rhythm_beats = chords_number/sum([period * get_number_of_beats(time_changes[j]) for j, period in enumerate(periods_ts)])
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
@@ -84,7 +77,7 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
         assert not (new_measures[0] != 0 and round(sum(list(key_measures.values()))) != new_measures[i])
         assert not (new_measures[0] == 0 and round(sum(list(key_measures.values()))) != new_measures[i] + 1)
     except AssertionError as e:
-        print('There was an error counting the measures!: ', e)
+        perr('There was an error counting the measures!: ', e)
         return {}
     return key_measures
 
@@ -103,8 +96,6 @@ def create_measures_extended(measures):
 
 def same_measure(measures, i):
     return measures[i] == measures[i-1]
-
-
 
 def compute_number_of_measures(done, starting_measure, previous_measure, measure, current_onset, num_beats):
     starting_measure += done
@@ -141,10 +132,6 @@ def continued_sections(sections, mc):
 
     # Flat list
     return list(itertools.chain(*extended_sections))
-
-####################
-# LOCAL KEY
-####################
 
 ################################################################################
 # Function to return the harmonic function1 based on the global key mode. Uppercase if
@@ -376,7 +363,9 @@ def get_numerals(lausanne_table):
         if str(n)=='':
             raise Exception('Some chords here are not parsed well')
             continue
-        nc['Numerals_'+str(n)] = round((numerals_counter[n]/total_numerals), 3)
+        nc['Numerals_'+str(n)+'_Per'] = round((numerals_counter[n]/total_numerals), 3)
+        nc['Numerals_'+str(n)+'_Count'] = round((numerals_counter[n]), 3)
+
     return nc 
 
 def get_first_numeral(numeral, relativeroot, local_key):
@@ -446,7 +435,6 @@ def get_chords(harmonic_analysis):
     numerals=harmonic_analysis.numeral.dropna().tolist()
     types = harmonic_analysis.chord_type.dropna().tolist()
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
-    
     numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
     chords_dict = CountChords(numerals_and_types)
     
@@ -467,7 +455,8 @@ def CountChords(chords):
 
     chords_dict = {}
     for degree in chords_numbers:
-        chords_dict[CHORD_prefix+degree] = chords_numbers[degree]/total_chords
+        chords_dict[CHORD_prefix+degree+'_Per'] = chords_numbers[degree]/total_chords
+        chords_dict[CHORD_prefix+degree+'_Count'] = chords_numbers[degree]
     return chords_dict
 
 def CountChordsGroup(counter_function, number):
@@ -475,7 +464,8 @@ def CountChordsGroup(counter_function, number):
     total_chords_group=sum(Counter(counter_function).values())
 
     for degree in counter_function:
-        chords_group[CHORDS_GROUPING_prefix + number + degree] = counter_function[degree]/total_chords_group
+        chords_group[CHORDS_GROUPING_prefix + number + degree + '_Per'] = counter_function[degree]/total_chords_group
+        chords_group[CHORDS_GROUPING_prefix + number + degree + '_Count'] = counter_function[degree]
 
     return chords_group
 
@@ -507,7 +497,7 @@ def get_chord_type(chord_type):
     elif chord_type in ['+', '+M7', '+m7']:
         return 'aug'
     else:
-        print("Chord type ", str(chord_type), 'not observed')
+        pwarn("Chord type ", str(chord_type), 'not observed')
         return ''
 
 def get_chord_types_groupings(chordtype_list):
@@ -515,9 +505,7 @@ def get_chord_types_groupings(chordtype_list):
 
 
 def get_first_chord_local(chord, local_key):
-    #perseguir It6/V
-
-    # local_key_mode = 'M' if local_key else 'm'
+    #TODO: chase It6/V
     local_key_mode = 'M' if local_key.isupper() else 'm'
 
     if '/' not in chord:
