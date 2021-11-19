@@ -1,15 +1,19 @@
 import os
 from multiprocessing import Lock
 from os import path
+import openpyxl
 
 from music21 import interval
 from pandas.core.frame import DataFrame
 import numpy as np
 import musif.extract.features.lyrics as lyrics
-from musif.common.constants import RESET_SEQ
-from musif.common.utils import get_color
+from musif.common.utils import pwarn
 from musif.config import Configuration
-from musif.reports.constants import *
+from musif.reports.constants import metadata_columns, IMAGE_EXTENSION, EXCEPTIONS, ROLE, NARROW, CLEF1
+from musif.extract.features import ambitus
+
+from musif.extract.features import interval as I
+
 from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
 from musif.reports.visualisations import box_plot, melody_bar_plot
 
@@ -85,7 +89,7 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
                     results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
                 box_plot(name_box, data)
     except Exception as e:
-        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        pwarn('{}  Problem found: {}'.format(name, e), _cfg.write_logger)
 
 def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workbook):
     second_column_names = [("", 1), ("Ascending", 2), ("Descending", 2)]
@@ -140,10 +144,10 @@ def Rename_columns(data):
 
     data['MeanSemitones']= [interval.Interval(i).semitones if str(i) != 'nan' else np.nan for i in data['MeanInterval']]
     data.rename(columns={ambitus.LOWEST_NOTE_INDEX: "LowestIndex", ambitus.HIGHEST_NOTE_INDEX: "HighestIndex"}, inplace=True)
-    data.rename(columns={interval.INTERVALLIC_MEAN: INTERVALLIC_MEAN, interval.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: TRIMMED_INTERVALLIC_MEAN, interval.ABSOLUTE_INTERVALLIC_TRIM_DIFF: DIFF_TRIMMED,
-                             interval.ABSOLUTE_INTERVALLIC_MEAN: ABSOLUTE_INTERVALLIC_MEAN, interval.INTERVALLIC_STD: STD, interval.ABSOLUTE_INTERVALLIC_STD: ABSOLUTE_STD, interval.ABSOLUTE_INTERVALLIC_TRIM_RATIO:TRIM_RATIO}, inplace=True)
+    data.rename(columns={I.constants.INTERVALLIC_MEAN: INTERVALLIC_MEAN, I.constants.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN: TRIMMED_INTERVALLIC_MEAN, I.constants.ABSOLUTE_INTERVALLIC_TRIM_DIFF: DIFF_TRIMMED,
+                             I.constants.ABSOLUTE_INTERVALLIC_MEAN: ABSOLUTE_INTERVALLIC_MEAN,I.constants.INTERVALLIC_STD: STD,I.constants.ABSOLUTE_INTERVALLIC_STD: ABSOLUTE_STD, I.constants.ABSOLUTE_INTERVALLIC_TRIM_RATIO:TRIM_RATIO}, inplace=True)
 
-    data.rename(columns={interval.LARGEST_INTERVAL_ASC: "AscendingInterval",interval.ASCENDING_INTERVALLIC_MEAN: "AscendingSemitones", 
-    interval.LARGEST_INTERVAL_DESC: "DescendingInterval", interval.DESCENDING_INTERVALLIC_MEAN: "DescendingSemitones"}, inplace=True)
+    data.rename(columns={I.constants.LARGEST_INTERVAL_ASC: "AscendingInterval",I.constants.ASCENDING_INTERVALLIC_MEAN: "AscendingSemitones", 
+    I.constants.LARGEST_INTERVAL_DESC: "DescendingInterval", I.constants.DESCENDING_INTERVALLIC_MEAN: "DescendingSemitones"}, inplace=True)
     
     data.columns=[i.replace('All', '').replace('_','') for i in data.columns]
