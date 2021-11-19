@@ -63,7 +63,7 @@ class Configuration:
             elif isinstance(args[0], Configuration):
                 config_data = args[0].to_dict()
             else:
-                raise TypeError()
+                raise TypeError(f"The argument type is {type(args[0])}, and it was expected a dictionary, a Configuration or a string object")
         config_data.update(kwargs)  # Override values
         read_log_config = config_data.get(READ_LOG, _CONFIG_FALLBACK[READ_LOG])
         self.read_log_file = read_log_config[LOG_FILE_PATH]

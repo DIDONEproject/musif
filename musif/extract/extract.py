@@ -28,17 +28,18 @@ _cache = Cache(10000)  # To cache scanned scores
 
 def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeats: bool = False) -> Score:
     """
-       Checks if the file's score is already in cache, it returns the saved score. If it's a new file, it parses the
-       given file and slit in layers based in the keywords argument. Returns the resulted score and saves it in cache.
+    This function parses a musicxml file and returns a music21 Score object. if the file has already been parsed,
+    it will be load from cache instead of processing it again. Split a part in different parts if the instrument
+    family is in keywords argument and expands repeats if indicated.
 
        Parameters
        ----------
        file_path: str
         A path to a music xml path.
        split_keywords: List[str]
-         A list of keywords to split in layers certain type of part.
+         A lists of keywords based on music21 instrument sound names to split in different parts.
        expand_repeats: bool
-         Determinates rather expand or not the repetitions.
+         Determines whether to expand or not the repetitions. Default value is False.
 
        Returns
        -------
