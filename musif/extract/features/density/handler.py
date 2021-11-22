@@ -13,6 +13,7 @@ from musif.extract.features.tempo.constants import NUMBER_OF_BEATS, TIME_SIGNATU
 from musif.extract.utils import Get_TimeSignature_periods, calculate_total_number_of_beats
 from musif.musicxml import Measure, Note, Part
 from musif.musicxml.tempo import get_number_of_beats
+from musif.logs import lerr
 from .constants import *
 
 
@@ -145,8 +146,8 @@ def calculate_densities(notes_list, measures_list, names_list, cfg: Configuratio
 
         density_dict = dict((key, d[key]) for d in density_list for key in d)
         density_sorting = cfg.scoring_order
-        density_dict = sort_dict(density_dict, density_sorting, cfg)
+        density_dict = sort_dict(density_dict, density_sorting)
         return density_dict
     except:
-        cfg.logger.error('Densities problem found: ', exc_info=True)
+        lerr('Densities problem found: ', exc_info=True)
         return {}

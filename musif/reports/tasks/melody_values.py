@@ -1,19 +1,17 @@
 import os
 from multiprocessing import Lock
 from os import path
-import openpyxl
 
+import numpy as np
+import openpyxl
 from music21 import interval
 from pandas.core.frame import DataFrame
-import numpy as np
+
 import musif.extract.features.lyrics as lyrics
-from musif.common.utils import pwarn
 from musif.config import Configuration
-from musif.reports.constants import metadata_columns, IMAGE_EXTENSION, EXCEPTIONS, ROLE, NARROW, CLEF1
-from musif.extract.features import ambitus
-
-from musif.extract.features import interval as I
-
+from musif.extract.features import ambitus, interval as I
+from musif.logs import pwarn
+from musif.reports.constants import CLEF1, EXCEPTIONS, IMAGE_EXTENSION, NARROW, ROLE, metadata_columns
 from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
 from musif.reports.visualisations import box_plot, melody_bar_plot
 
@@ -89,7 +87,8 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data:
                     results_path, 'visualisations', 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
                 box_plot(name_box, data)
     except Exception as e:
-        pwarn('{}  Problem found: {}'.format(name, e), _cfg.write_logger)
+        pwarn('{}  Problem found: {}'.format(name, e))
+
 
 def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workbook):
     second_column_names = [("", 1), ("Ascending", 2), ("Descending", 2)]

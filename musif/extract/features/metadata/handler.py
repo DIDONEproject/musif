@@ -1,6 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
+from musif.logs import lwarn
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
@@ -18,7 +19,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
                 continue
             for key in item_features:
                 if (key in score_features) and (key != cfg.metadata_id_col):
-                    cfg.logger.warning(f"Column {key} exists both in metadata and in existing features")
+                    lwarn(f"Column {key} exists both in metadata and in existing features")
                     continue
                 features[key] = item_features[key]
     return score_features.update(features)
