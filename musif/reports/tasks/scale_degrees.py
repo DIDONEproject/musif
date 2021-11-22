@@ -10,8 +10,8 @@ from pandas.core.frame import DataFrame
 
 from musif.common.constants import RESET_SEQ
 from musif.common.sort import sort
-from musif.common.utils import get_color
 from musif.config import Configuration
+from musif.logs import lwarn
 from musif.reports.constants import *
 from musif.reports.utils import Create_excel, get_excel_name, get_general_cols, save_workbook
 from musif.reports.visualisations import customized_plot
@@ -82,7 +82,7 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
                 name1, data, third_columns_names_origin, Subtitle)
 
     except Exception as e:
-        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        lwarn('{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
 
 
 ########################################################################################################

@@ -11,7 +11,6 @@ import os
 import sys
 from itertools import permutations
 from os import path
-from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -19,35 +18,24 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 from musif.common.constants import VOICE_FAMILY
-from musif.common.utils import perr
-
 from musif.config import Configuration
-from musif.extract.features import density
-from musif.extract.features import texture
-from musif.extract.features import lyrics
-from musif.extract.features import scale
-from musif.extract.features import scale_relative
-from musif.extract.features import lyrics
-from musif.extract.features import interval
-from musif.extract.features import ambitus
-from musif.extract.features import harmony
-
+from musif.extract.features import density, harmony, lyrics, scale, scale_relative, texture
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
+from musif.logs import lerr, perr
 from musif.reports.calculations import make_intervals_absolute
 from musif.reports.utils import remove_folder_contents
 from .constants import *
 from .tasks.common_tasks import Densities, Textures
-from .tasks.harmony import  Harmonic_analysis
+from .tasks.harmony import Harmonic_analysis
 from .tasks.intervals import Intervals, Intervals_types
 from .tasks.melody_values import Melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
-from ..common.utils import pinfo
+from ..logs import pinfo
 
 
 class FeaturesGenerator:
     def __init__(self, *args, **kwargs):
         self._cfg = Configuration(*args, **kwargs)
-        self._logger = self._cfg.logger
 
     def generate_reports(self, data: DataFrame, main_results_path: str, num_factors: int = 0, visualizations=False) -> DataFrame:
         pinfo('\n'+'--- Starting reports generation ---\n'.center(120, ' '))
@@ -114,7 +102,7 @@ class FeaturesGenerator:
                     rows_groups = rg
                     not_used_cols = nuc
                 except KeyError as e:
-                    perr('One or more of the features could not be found in the input dataframe: '.format(e), self._cfg.write_logger)
+                    perr('One or more of the features could not be found in the input dataframe: '.format(e))
             # else: # from 2 factors
                 # process_executor = concurrent.futures.ProcessPoolExecutor()
                 # futures = [process_executor.submit(_group_execution, groups, results_path_factorx, additional_info, i, sorting_lists, Melody_values, intervals_info, absolute_intervals, Intervals_types, Emphasised_scale_degrees_info_A, Emphasised_scale_degrees_info_B, clefs_info, sequential) for groups in rg_groups]
@@ -151,7 +139,7 @@ class FeaturesGenerator:
             try:     
                 tasks['melody_values'] = self._extract_melody_colunms(all_info, Instrument_level).dropna(how='all', axis=1)
             except KeyError as e:                 
-                perr('Melody Values information could not be extracted'.format(e), self._cfg.write_logger)
+                perr('Melody Values information could not be extracted'.format(e))
 
         if self.IsVoice(instrument):
             if self._cfg.is_requested_module(scale):            
@@ -454,7 +442,7 @@ class FeaturesGenerator:
                 #         pass
 
         except KeyboardInterrupt:
-            self._logger.error('\033[93mAn error ocurred during the report generation process. \033[37m')
+            lerr('An error ocurred during the report generation process.')
             sys.exit(2)
 
 
