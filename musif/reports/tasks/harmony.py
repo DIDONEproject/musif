@@ -56,7 +56,7 @@ def Print_Chords(factor, _cfg, data, data_general, groups, additional_info, work
     data.columns=[i.replace(CHORD_prefix, '') for i in data.columns]
     data.columns=[i.replace('_Count', '') for i in data.columns]
     try:
-        data = sort_columns(data, sort_labels(data.columns, chordtype='occurrences')) #form=['', '+', 'o', '%', 'M']
+        data = sort_columns(data, sort_labels(data.columns, chordtype='occurrences',form=['', '+', 'o', '%', 'M']) )
     except:
         data = sort_columns(data, _cfg.sorting_lists['NumeralsSorting'])
     
@@ -152,7 +152,7 @@ def Process_data(data, prefix1, prefix2, prefix3, sorting_list1, sorting_list2, 
 
     second_column_names = name_second_columns(third_columns_names,prefix1)
     second_column_names2 = name_second_columns(third_columns_names2, prefix2)
-    second_column_names3 = name_second_columns(third_columns_names3, prefix3+ ' 2')
+    second_column_names3 = name_second_columns(third_columns_names3, prefix3 + ' 2')
 
     return data1, data2, data3, third_columns_names, third_columns_names2, third_columns_names3, second_column_names, second_column_names2, second_column_names3
 
