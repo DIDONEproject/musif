@@ -5,7 +5,8 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
-
+from musif.common.utils import perr, pwarn
+from urllib.request import urlopen
 from musif.musicxml.tempo import get_number_of_beats
 from musif.logs import perr, pwarn
 from .constants import *
@@ -661,27 +662,27 @@ def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True,
     return labels.loc[ordered_ix]
 
     
-# def split_labels(labels, git_branch='master', dropna=True):
-#     """ Split DCML harmony labels into their respective features using the regEx
-#         from the indicated branch of the DCMLab/standards repository.
-#     Parameters
-#     ----------
-#     labels : :obj:`pandas.Series`
-#         Harmony labels to be split.
-#     git_branch : :obj:`str`, optional
-#         The branch of the DCMLab/standards repo from which you want to use the regEx.
-#     dropna : :obj:`bool`, optional
-#         Drop rows where the regEx didn't match.
-#     """
-#     global REGEX
-#     if git_branch not in REGEX:
-#         url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
-#         glo, loc = {}, {}
-#         exec(urlopen(url).read(), glo, loc)
-#         REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
-#     regex = REGEX[git_branch]
-#     cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
-#     res = labels.str.extract(regex, expand=True)[cols]
-#     if dropna:
-#         return res.dropna(how='all').fillna('')
-#     return res.fillna('')
+def split_labels(labels, git_branch='master', dropna=True):
+    """ Split DCML harmony labels into their respective features using the regEx
+        from the indicated branch of the DCMLab/standards repository.
+    Parameters
+    ----------
+    labels : :obj:`pandas.Series`
+        Harmony labels to be split.
+    git_branch : :obj:`str`, optional
+        The branch of the DCMLab/standards repo from which you want to use the regEx.
+    dropna : :obj:`bool`, optional
+        Drop rows where the regEx didn't match.
+    """
+    global REGEX
+    if git_branch not in REGEX:
+        url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
+        glo, loc = {}, {}
+        exec(urlopen(url).read(), glo, loc)
+        REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
+    regex = REGEX[git_branch]
+    cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
+    res = labels.str.extract(regex, expand=True)[cols]
+    if dropna:
+        return res.dropna(how='all').fillna('')
+    return res.fillna('')
