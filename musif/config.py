@@ -2,10 +2,9 @@ import multiprocessing
 from glob import glob
 from os import path
 
-from musif.common.logs import get_logger
-from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
-
 from musif import internal_data
+from musif.common.logs import create_logger
+from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 
 LOGGER_NAME = "musiF"
 LOG = "log"
@@ -61,7 +60,7 @@ class Configuration:
         self.log_file = log_config.get(LOG_FILE_PATH, _CONFIG_FALLBACK.get(LOG_FILE_PATH))
         self.file_log_level = log_config.get(FILE_LOG_LEVEL, _CONFIG_FALLBACK.get(FILE_LOG_LEVEL))
         self.console_log_level = log_config.get(CONSOLE_LOG_LEVEL, _CONFIG_FALLBACK.get(CONSOLE_LOG_LEVEL))
-        self.logger = get_logger(LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level)
+        create_logger(LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level)
         self.metadata_dir = config_data.get(METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR])
         self.metadata_id_col = config_data.get(METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL])
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])

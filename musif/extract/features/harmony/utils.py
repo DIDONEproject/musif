@@ -5,9 +5,9 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
-from musif.common.utils import perr, pwarn
 
 from musif.musicxml.tempo import get_number_of_beats
+from musif.logs import perr, pwarn
 from .constants import *
 
 REGEX={}

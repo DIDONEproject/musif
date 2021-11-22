@@ -1,5 +1,4 @@
 import logging
-from enum import Enum
 
 ENCODING = 'utf-8'
 VERSION = "1.0.0"

@@ -1,10 +1,11 @@
 import math
-from statistics import mean
 from typing import Dict
+
 # from musif.extract.features import ambitus, density, lyrics, scale, texture
 import numpy as np
 import pandas as pd
 from music21 import interval, note, pitch
+
 
 def note_mean(pitch_ps: list, round_mean: bool =False) -> str:
     mean_pitch = np.nansum(pitch_ps) / len(pitch_ps)

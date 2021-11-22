@@ -7,8 +7,8 @@ from pandas.core.frame import DataFrame
 
 from musif.common.constants import RESET_SEQ
 from musif.common.sort import sort
-from musif.common.utils import get_color
 from musif.config import Configuration
+from musif.logs import linfo, lwarn
 from musif.reports.constants import *
 from musif.reports.utils import Create_excel, get_excel_name, save_workbook
 from musif.reports.visualisations import bar_plot_extended, line_plot_extended
@@ -97,7 +97,8 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                 bar_plot_extended(name_bar, data, columns,
                                 'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
-        _cfg.logger.warn(get_color('WARNING')+'{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        lwarn('{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+
 
 def split_reorder_density(data):
     data_general = data[metadata_columns + ['Total analysed']].copy()
@@ -196,7 +197,8 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
                     bar_plot_extended(name_bar, data, columns,
                                         'Instrumental Textures', 'Ratio', title + ' ' +instr, instr=instr)
     except Exception as e:
-            _cfg.logger.info('{}  Problem found: {}'.format(name, e))
+        linfo('{}  Problem found: {}'.format(name, e))
+
 
 def split_and_reorder_texture(data):
     data_general = data[metadata_columns + ['Total analysed']].copy()
