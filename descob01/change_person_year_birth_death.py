@@ -1,6 +1,7 @@
 import glob
 from os import path
 from musif.musicxml import MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION
+from PyPDF2 import PdfFileWriter, PdfFileReader
 
 
 def extract_musecore_files(obj):
@@ -45,24 +46,25 @@ def change_year_xml(person, old_date, new_date, origin_paths):
       A path or a list of paths
     """
     files = extract_xml_files(origin_paths)
+    cont = 0
     for name in files:
-        f = open(name)
+        print(name)
+        f = open(name, encoding="utf8")
         list_lines = f.readlines()
+        cont += 1
         i = 0
         for line in list_lines:
             if person + " (" in line and old_date in line:
-                print(line)
                 break
             i += 1
-
-        name_position = list_lines[i].find(person + " (")
-        end_dates = list_lines[i][name_position:].find(')') + name_position
-        list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date,
-                                                                                                       new_date) + \
-                        list_lines[i][end_dates:]
-        f = open(name, "w")
-        f.writelines(list_lines)
+        if i != len(list_lines):
+            name_position = list_lines[i].find(person + " (")
+            end_dates = list_lines[i][name_position:].find(')') + name_position
+            list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date, new_date) + list_lines[i][end_dates:]
+            f = open(name, "w", encoding="utf8")
+            f.writelines(list_lines)
         f.close()
+    print(cont)
 
 
 def change_year_musecore(person, old_date, new_date, origin_paths):
@@ -81,57 +83,23 @@ def change_year_musecore(person, old_date, new_date, origin_paths):
       A path or a list of paths
     """
     files = extract_musecore_files(origin_paths)
+    cont = 0
     for name in files:
-        f = open(name)
+        print(name)
+        f = open(name, encoding="utf8")
         list_lines = f.readlines()
+        cont += 1
         i = 0
         for line in list_lines:
             if person + " (" in line and old_date in line:
-                print(line)
                 break
             i += 1
 
-        name_position = list_lines[i].find(person + " (")
-        end_dates = list_lines[i][name_position:].find(')') + name_position
-        list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date,
-                                                                                                       new_date) + \
-                        list_lines[i][end_dates:]
-        f = open(name, "w")
-        f.writelines(list_lines)
+        if i != len(list_lines):
+            name_position = list_lines[i].find(person + " (")
+            end_dates = list_lines[i][name_position:].find(')') + name_position
+            list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date, new_date) + list_lines[i][end_dates:]
+            f = open(name, "w", encoding="utf8")
+            f.writelines(list_lines)
         f.close()
-
-
-def change_year_pdf(person, old_date, new_date, origin_paths):
-    """
-    Changes person's date(year of birth or death) from old_date to new_date and saves it in the original file.
-
-    Parameters
-    ----------
-    person : str
-      Name of person wich year of death or birt want to be changed
-    old_date : str
-      Year that will be changed
-    new_date : str
-      New year that will replace the old one
-    origin_paths : Union[str, List[str]]
-      A path or a list of paths
-    """
-    files = extract_musecore_files(origin_paths)
-    for name in files:
-        f = open(name)
-        list_lines = f.readlines()
-        i = 0
-        for line in list_lines:
-            if person + " (" in line and old_date in line:
-                print(line)
-                break
-            i += 1
-
-        name_position = list_lines[i].find(person + " (")
-        end_dates = list_lines[i][name_position:].find(')') + name_position
-        list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date,
-                                                                                                       new_date) + \
-                        list_lines[i][end_dates:]
-        f = open(name, "w")
-        f.writelines(list_lines)
-        f.close()
+    print(cont)
