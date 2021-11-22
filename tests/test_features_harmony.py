@@ -5,7 +5,7 @@ from musif import FeaturesExtractor
 from musif.common.utils import read_dicts_from_csv
 
 data_static_dir = path.join("data", "static")
-config_path = path.join(data_static_dir, "config_harm.yml")
+config_path = path.join(data_static_dir, "config_harmony.yml")
 data_features_dir = path.join(data_static_dir, "features")
 reference_file_path = path.join(data_features_dir, "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 expected_features_file_path = path.join(data_features_dir, "expected_features.csv")

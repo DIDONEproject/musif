@@ -1,36 +1,47 @@
-data_dir: data
-musescore_dir: data
-metadata_dir: metadata
+metadata_dir: ./metadata
 metadata_id_col: AriaId
-intermediate_files_dir: intermediate
+data_dir: arias
+# data_dir: tests/data/static/features
+musescore_dir:
+expand_repeats: false
 parallel: false
-max_processes: 10
+max_processes: 8
 log:
-  file_path: logs/read.log
-  level: DEBUG
+  file_path: logs/musif.log
+  file_level: DEBUG
+  console_level: INFO
 features:
-  - core
-  - custom.core_mscx
-  - tempo
-#  - custom.themeA
   - scoring
-  # - custom.file_name
-  - scale
-  - custom.scale_relative
-  - ambitus
-  - interval # to generate Melody_values reports, both ambitus and interval are needed
-  # - density
-  # - texture     
-  - custom.harmony
+  - file_name
   - metadata
+  - core
   - composer
-  - custom.librettist
-  - key
+  - librettist
+  # - ambitus
+  # - interval
+  - tempo
+  # - density
+#  - texture
+  - themeA
+  - harmony
   - lyrics
-  - dynamics
-  - rhythm
-
-split_keywords:
+  # - scale
+#  - scale_relative
+  - key
+  # - dynamics
+split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
+parts_filter:
+  - vnI
+  - obI
+  - ten
+  # - vnII
+  # - va
+  # - bs
+  # - sop
+  # - alt
+  # - bar
+  # - bass
+  # - bbar
