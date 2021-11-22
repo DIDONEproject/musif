@@ -2,12 +2,11 @@ from typing import List
 
 from pandas import DataFrame
 
-from musif.common.utils import perr
 from musif.config import Configuration
 from musif.extract.features.core.handler import DATA_MODE
+from musif.logs import perr
 from .constants import *
-from .utils import (get_additions, get_chord_types, get_chords, get_harmonic_rhythm, get_keyareas,
-                    get_numerals)
+from .utils import get_additions, get_chord_types, get_chords, get_harmonic_rhythm, get_keyareas, get_numerals
 from ...constants import DATA_MUSESCORE_SCORE
 
 
@@ -44,7 +43,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         features.update({k:v for (k, v) in all_harmonic_info.items() if k.startswith(ADDITIONS_prefix)})
         
     except Exception as e:
-        perr(f'Harmony problem found: {str(e)}', cfg.logger)
+        perr(f'Harmony problem found: {str(e)}')
     
     finally:
         score_features.update(features)

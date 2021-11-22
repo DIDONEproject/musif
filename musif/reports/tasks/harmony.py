@@ -1,25 +1,19 @@
+import copy
 import os
 from multiprocessing import Lock
 
 import pandas as pd
-from musif.common.constants import *
-from musif.common.sort import sort, sort_columns
-from musif.common.utils import pwarn
-from musif.config import Configuration
-from musif.extract.features.harmony.constants import (HARMONIC_RHYTHM, HARMONIC_RHYTHM_BEATS, ADDITIONS_prefix,
-                                                      CHORD_prefix,
-                                                      CHORD_TYPES_prefix,
-                                                      CHORDS_GROUPING_prefix,
-                                                      KEY_MODULATORY,
-                                                      KEY_PERCENTAGE, HARMONIC_prefix,
-                                                      NUMERALS_prefix)
-from musif.extract.features.harmony.utils import sort_labels
-from musif.reports.constants import *
-from musif.reports.utils import (Create_excel, get_excel_name,
-                                 get_general_cols,
-                                 save_workbook, print_basic_sheet)
-import copy
 from pandas.core.frame import DataFrame
+
+from musif.common.sort import sort, sort_columns
+from musif.config import Configuration
+from musif.extract.features.harmony.constants import (ADDITIONS_prefix, CHORDS_GROUPING_prefix, CHORD_TYPES_prefix,
+                                                      CHORD_prefix, HARMONIC_RHYTHM, HARMONIC_RHYTHM_BEATS,
+                                                      KEY_MODULATORY, KEY_PERCENTAGE, NUMERALS_prefix)
+from musif.extract.features.harmony.utils import sort_labels
+from musif.logs import pwarn
+from musif.reports.constants import *
+from musif.reports.utils import (Create_excel, get_excel_name, get_general_cols, print_basic_sheet, save_workbook)
 
 
 def Harmonic_analysis(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, kwargs: DataFrame, pre_string, name: str, results_path: str, visualizations: Lock, additional_info: list=[], groups: list=None):

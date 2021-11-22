@@ -5,7 +5,6 @@ from musif.config import Configuration
 from musif.extract.features.prefix import get_score_prefix
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
-
 from .constants import *
 
 
@@ -76,8 +75,7 @@ def get_dynamic_numeric(value):
         return 0
 
 
-def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
-                         score_features: dict):
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     prefix = get_score_prefix()
     dic_dyn_mean = dict()
     dic_dyn_mean_weighted = dict()
