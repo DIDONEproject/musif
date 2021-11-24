@@ -11,9 +11,9 @@ sys.path.insert(0, "../musif/musif")
 
 if __name__ == "__main__":
 
-    # data_dir = r'tests/data/static/features'
+    data_dir = r'tests/data/static/features'
     # data_dir = r'arias/prueba/'
-    # data_dir=data_dir
+    #  data_dir=data_dir
     df = FeaturesExtractor("martiser/myconfig.yml").extract()
 
     df.to_csv('martiser/dataframe.csv', index=False)
