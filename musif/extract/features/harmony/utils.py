@@ -1,11 +1,13 @@
 import itertools
 import re
 from collections import Counter
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
-from musif.common.utils import perr, pwarn
+from musif.common.sort import sort_dict, sort_list
+from musif.logs import perr, pwarn
 from urllib.request import urlopen
 from musif.musicxml.tempo import get_number_of_beats
 from musif.logs import perr, pwarn
@@ -433,11 +435,17 @@ def get_chords(harmonic_analysis):
     relativeroots = harmonic_analysis.relativeroot.tolist()
     keys = harmonic_analysis.localkey.dropna().tolist() 
     chords = harmonic_analysis.chord.dropna().tolist()
-    numerals=harmonic_analysis.numeral.dropna().tolist()
-    types = harmonic_analysis.chord_type.dropna().tolist()
+    numerals = harmonic_analysis.numeral.dropna().tolist()
+    types =[str(i) for i in  harmonic_analysis.chord_type.dropna().tolist()]
+    # form = harmonic_analysis.form.tolist()
+
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
-    numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
-    chords_dict = CountChords(numerals_and_types)
+
+    numerals_and_types = [str(chord)+str(types[index]).replace('Mm','').replace('mm', '') if types[index] not in ('M','m') else str(chord) for index, chord in enumerate(numerals)] 
+    
+    # chords_order = sort_labels(numerals_and_types, numeral=['I', 'i', 'V', 'v', 'VII', 'vii', 'II', 'ii', 'IV', 'iv','VI','vi','III','iii'], chordtype=['', '7', '+', 'o', '%', 'M', 'm','It'], drop_duplicates=True)
+    
+    chords_dict = count_chords(numerals_and_types)# ,order)
     
     # Exception for #viio chords
     if 'Chord_#viio' in chords_dict:
@@ -450,8 +458,10 @@ def get_chords(harmonic_analysis):
 
     return chords_dict, chords_group_1, chords_group_2
 
-def CountChords(chords):
+def count_chords(chords: list, order: List[str] =[]) -> Dict[str, str]:
     chords_numbers = Counter(chords)
+    # chords_numbers=sort_dict(chords_numbers, order)
+    
     total_chords=sum(chords_numbers.values())
 
     chords_dict = {}
@@ -460,7 +470,7 @@ def CountChords(chords):
         chords_dict[CHORD_prefix+degree+'_Count'] = chords_numbers[degree]
     return chords_dict
 
-def CountChordsGroup(counter_function, number):
+def CountChordsGroup(counter_function: List[str], number: str) -> Dict[str, str]:
     chords_group = {}
     total_chords_group=sum(Counter(counter_function).values())
 
@@ -506,7 +516,6 @@ def get_chord_types_groupings(chordtype_list):
 
 
 def get_first_chord_local(chord, local_key):
-    #TODO: chase It6/V
     local_key_mode = 'M' if local_key.isupper() else 'm'
 
     if '/' not in chord:
@@ -528,11 +537,9 @@ def get_first_chord_local(chord, local_key):
             # return '/'.join(relative_list)
             return degree
 
-# REVIEW porqué es tan parecida a get_first_chord_local??
 # Function to return second grouping for any chord in any given local key,
 def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     mode = 'M' if local_key else 'm'
-    #Qué es relative root aqui exactamente
     if str(relativeroot) != 'nan':
         mode = 'M' if relativeroot.isupper() else 'm'
     parts = first_grouping.split('/')

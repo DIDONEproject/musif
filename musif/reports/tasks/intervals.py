@@ -6,7 +6,7 @@ from os import path
 from pandas.core.frame import DataFrame
 
 from musif.common.constants import RESET_SEQ
-from musif.common.sort import sort
+from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.logs import lwarn
 from musif.reports.constants import *
@@ -83,12 +83,12 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                 bar_plot(name_bar, data, third_columns_names_origin,
                             'Intervals' if 'Clef' not in name else 'Clefs', title)
     except Exception as e:
-        lwarn('{} Problem found: {}{}'.format(name, e, RESET_SEQ))
+        lwarn('{} Problem found: {}'.format(name, e))
 
 
 def fix_column_names(sorting_list, all_columns, general_cols):
     third_columns_names_origin = set(all_columns) - set(general_cols)
-    third_columns_names_origin = sort(
+    third_columns_names_origin = sort_list(
             third_columns_names_origin, sorting_list)
     third_columns_names = ['Total analysed'] + third_columns_names_origin
     return third_columns_names_origin,third_columns_names
@@ -182,4 +182,4 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
                                     name.replace('.xlsx',  IMAGE_EXTENSION))
                 double_bar_plot(name_bars, data)
     except Exception as e:
-        lwarn('{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        lwarn('{}  Problem found: {}'.format(name, e))

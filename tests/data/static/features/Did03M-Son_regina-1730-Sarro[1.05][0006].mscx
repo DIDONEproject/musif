@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.5.2</programVersion>
-  <programRevision>465e7b6</programRevision>
+<museScore version="3.02">
+  <programVersion>3.6.2</programVersion>
+  <programRevision>3224f34</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -9,11 +9,86 @@
     <Style>
       <staffDistance>8</staffDistance>
       <minSystemDistance>24.7</minSystemDistance>
-      <lyricsOddFontFace>TimesFinLyric</lyricsOddFontFace>
-      <lyricsOddFontSize>9.3</lyricsOddFontSize>
-      <lyricsEvenFontFace>TimesFinLyric</lyricsEvenFontFace>
-      <lyricsEvenFontSize>9.3</lyricsEvenFontSize>
+      <lyricsMinDistance>0.25</lyricsMinDistance>
+      <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+      <lyricsOddFontFace>Edwin</lyricsOddFontFace>
+      <lyricsOddFontSize>10</lyricsOddFontSize>
+      <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
+      <lyricsEvenFontSize>10</lyricsEvenFontSize>
+      <barWidth>0.18</barWidth>
+      <doubleBarWidth>0.18</doubleBarWidth>
+      <endBarWidth>0.55</endBarWidth>
+      <doubleBarDistance>0.55</doubleBarDistance>
+      <endBarDistance>0.7</endBarDistance>
+      <repeatBarlineDotSeparation>0.7</repeatBarlineDotSeparation>
+      <bracketWidth>0.44</bracketWidth>
+      <stemWidth>0.11</stemWidth>
+      <staffLineWidth>0.11</staffLineWidth>
+      <ledgerLineLength>0.35</ledgerLineLength>
+      <hairpinWidth>0.12</hairpinWidth>
+      <hairpinFontFace>Edwin</hairpinFontFace>
+      <hairpinFontSize>10</hairpinFontSize>
+      <pedalLineWidth>0.11</pedalLineWidth>
+      <pedalFontFace>Edwin</pedalFontFace>
       <harmonyPlay>0</harmonyPlay>
+      <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
+      <chordSymbolAFontSize>14</chordSymbolAFontSize>
+      <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
+      <chordSymbolBFontSize>11</chordSymbolBFontSize>
+      <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
+      <slurMidWidth>0.21</slurMidWidth>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
+      <voltaLineWidth>0.11</voltaLineWidth>
+      <ottavaLineWidth>0.11</ottavaLineWidth>
+      <ottavaFontFace>Edwin</ottavaFontFace>
+      <tupletFontFace>Edwin</tupletFontFace>
+      <tupletFontSize>9</tupletFontSize>
+      <defaultFontFace>Edwin</defaultFontFace>
+      <titleFontFace>Edwin</titleFontFace>
+      <titleFontSize>22</titleFontSize>
+      <subTitleFontFace>Edwin</subTitleFontFace>
+      <subTitleFontSize>16</subTitleFontSize>
+      <composerFontFace>Edwin</composerFontFace>
+      <composerFontSize>10</composerFontSize>
+      <lyricistFontFace>Edwin</lyricistFontFace>
+      <lyricistFontSize>10</lyricistFontSize>
+      <fingeringFontFace>Edwin</fingeringFontFace>
+      <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontStyle>2</rhGuitarFingeringFontStyle>
+      <stringNumberFontFace>Edwin</stringNumberFontFace>
+      <longInstrumentFontFace>Edwin</longInstrumentFontFace>
+      <longInstrumentFontSize>10</longInstrumentFontSize>
+      <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
+      <shortInstrumentFontSize>10</shortInstrumentFontSize>
+      <partInstrumentFontFace>Edwin</partInstrumentFontFace>
+      <partInstrumentFontSize>14</partInstrumentFontSize>
+      <dynamicsFontFace>Edwin</dynamicsFontFace>
+      <dynamicsFontSize>11</dynamicsFontSize>
+      <expressionFontFace>Edwin</expressionFontFace>
+      <expressionFontSize>10</expressionFontSize>
+      <tempoFontFace>Edwin</tempoFontFace>
+      <metronomeFontFace>Edwin</metronomeFontFace>
+      <metronomeFontStyle>0</metronomeFontStyle>
+      <measureNumberFontFace>Edwin</measureNumberFontFace>
+      <measureNumberFontSpatiumDependent>0</measureNumberFontSpatiumDependent>
+      <measureNumberFontStyle>2</measureNumberFontStyle>
+      <translatorFontFace>Edwin</translatorFontFace>
+      <translatorFontSize>10</translatorFontSize>
+      <systemFontFace>Edwin</systemFontFace>
+      <staffFontFace>Edwin</staffFontFace>
+      <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
+      <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
+      <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
+      <repeatLeftFontFace>Edwin</repeatLeftFontFace>
+      <repeatLeftFontSize>18</repeatLeftFontSize>
+      <repeatRightFontFace>Edwin</repeatRightFontFace>
+      <repeatRightFontSize>15</repeatRightFontSize>
+      <frameFontFace>Edwin</frameFontFace>
+      <frameFontSize>10</frameFontSize>
+      <usePre_3_6_defaults>1</usePre_3_6_defaults>
+      <defaultsVersion>301</defaultsVersion>
       <Spatium>1</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -31,6 +106,7 @@
     <metaTag name="lyricist">Pietro Metastasio</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle">Son regina e sono amante</metaTag>
+    <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="opera">Didone abbandonata</metaTag>
     <metaTag name="originalFormat">xml</metaTag>
     <metaTag name="platform">Microsoft Windows</metaTag>
@@ -49,7 +125,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Oboi</trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboi</longName>
         <shortName>Ob.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -127,7 +203,7 @@
           </StaffType>
         </Staff>
       <trackName>DIDONE</trackName>
-      <Instrument>
+      <Instrument id="soprano">
         <longName>DIDONE</longName>
         <shortName>DID.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -197,7 +273,7 @@
         <barLineSpan>4</barLineSpan>
         </Staff>
       <trackName>Violino I</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violino I</longName>
         <shortName>Vn. I</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -279,7 +355,7 @@
           </StaffType>
         </Staff>
       <trackName>Violino II</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violino II</longName>
         <shortName>Vn. II</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -361,7 +437,7 @@
           </StaffType>
         </Staff>
       <trackName>Viola</trackName>
-      <Instrument>
+      <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Va.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -444,7 +520,7 @@
           </StaffType>
         </Staff>
       <trackName>Basso</trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Basso</longName>
         <shortName>Bs.</shortName>
         <trackName>SmartMusic SoftSynth 1</trackName>
@@ -523,14 +599,17 @@
     <Staff id="1">
       <VBox>
         <height>49.3292</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Composer</style>
+          <size>12</size>
           <offset x="-0.275414" y="-16.3837"/>
           <text><font size="10"></font>Music: Domenico Natale Sarro (1679-1744)
-Text: Pietro Metastasio (1689-1782)</text>
+Text: Pietro Metastasio (1698-1782)</text>
           </Text>
         <Text>
           <style>Title</style>
+          <size>24</size>
           <text><font size="20"></font>Son regina e sono amante
 <font size="14"></font>Didone
 <font size="14"></font><i>Didone abbandonata </i><font size="14"></font>(1730)<font size="18"></font> 
@@ -672,7 +751,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>ii</name>
+            <name>viio6</name>
             <offset x="0.205443" y="-5.12982"/>
             </Harmony>
           <Chord>
@@ -683,17 +762,8 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-3/8</fractions>
-            </location>
           <Harmony>
-            <name>viio6</name>
-            </Harmony>
-          <location>
-            <fractions>3/8</fractions>
-            </location>
-          <Harmony>
-            <name>iii</name>
+            <name>I6</name>
             <offset x="-0.410887" y="-4.71893"/>
             </Harmony>
           <Chord>
@@ -704,12 +774,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-3/8</fractions>
-            </location>
-          <Harmony>
-            <name>I6</name>
-            </Harmony>
           </voice>
         <voice>
           <Chord>
@@ -739,7 +803,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>IV6</name>
+            <name>ii6</name>
             <offset x="-0.616329" y="-5.5407"/>
             </Harmony>
           <Chord>
@@ -750,15 +814,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-3/8</fractions>
-            </location>
-          <Harmony>
-            <name>ii6</name>
-            </Harmony>
-          <location>
-            <fractions>3/8</fractions>
-            </location>
           <Harmony>
             <name>V</name>
             </Harmony>
@@ -809,16 +864,10 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>1/8</fractions>
             </location>
           <Harmony>
-            <name>I\\</name>
+            <name>I}</name>
             </Harmony>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <Harmony>
-            <name>}</name>
-            </Harmony>
-          <location>
-            <fractions>1/8</fractions>
+            <fractions>3/8</fractions>
             </location>
           <BarLine>
             <subtype>double</subtype>
@@ -892,6 +941,12 @@ Text: Pietro Metastasio (1689-1782)</text>
             </location>
           <Harmony>
             <name>I</name>
+            </Harmony>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <name>viio(-1)</name>
             </Harmony>
           </voice>
         </Measure>
@@ -969,10 +1024,33 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-3/4</fractions>
             </location>
           <Harmony>
-            <name>V65/V</name>
+            <name>V.V65</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <name>I</name>
+            </Harmony>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <Harmony>
+            <name>V6/IV</name>
+            </Harmony>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Harmony>
+            <name>IV</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <location>
+            <fractions>-1/2</fractions>
             </location>
           <Harmony>
             <name>V</name>
@@ -982,36 +1060,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>I</name>
-            </Harmony>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          <location>
-            <fractions>-7/8</fractions>
-            </location>
-          <Harmony>
-            <name>vi6</name>
-            </Harmony>
-          <location>
-            <fractions>3/8</fractions>
-            </location>
-          <Harmony>
-            <name>II</name>
-            </Harmony>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
-          <Harmony>
-            <name>viio6</name>
-            </Harmony>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Harmony>
-            <name>I6</name>
+            <name>vi</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -1021,32 +1070,38 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-3/4</fractions>
             </location>
           <Harmony>
-            <name>V65/V</name>
+            <name>V65</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>V</name>
-            </Harmony>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          <Harmony>
-            <name>ii6/V</name>
+            <name>I</name>
             </Harmony>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Harmony>
-            <name>V/V</name>
+            <name>I6</name>
+            </Harmony>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Harmony>
+            <name>ii6</name>
+            </Harmony>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Harmony>
+            <name>V</name>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Harmony>
-            <name>V.I}{</name>
+            <name>I}{</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -1150,13 +1205,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>1/8</fractions>
             </location>
           <Harmony>
-            <name>I\\</name>
-            </Harmony>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          <Harmony>
-            <name>}</name>
+            <name>I}</name>
             </Harmony>
           </voice>
         </Measure>
@@ -1179,13 +1228,13 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>3/8</fractions>
             </location>
           <Harmony>
-            <name>ii7/IV</name>
+            <name>I.ii7</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>V65/IV</name>
+            <name>V65</name>
             <offset x="-2.16916" y="-1.11167"/>
             </Harmony>
           </voice>
@@ -1193,7 +1242,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>I.I</name>
+            <name>I</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -1276,13 +1325,13 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>1/8</fractions>
             </location>
           <Harmony>
-            <name>V-I/V\\</name>
+            <name>V}</name>
             </Harmony>
           <location>
             <fractions>3/8</fractions>
             </location>
           <Harmony>
-            <name>V</name>
+            <name>V{</name>
             </Harmony>
           </voice>
         </Measure>
@@ -1430,7 +1479,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>ii</name>
+            <name>viio6</name>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -1440,17 +1489,8 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-3/8</fractions>
-            </location>
           <Harmony>
-            <name>viio</name>
-            </Harmony>
-          <location>
-            <fractions>3/8</fractions>
-            </location>
-          <Harmony>
-            <name>ii</name>
+            <name>I6</name>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -1460,12 +1500,6 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-3/8</fractions>
-            </location>
-          <Harmony>
-            <name>I6</name>
-            </Harmony>
           </voice>
         <voice>
           <Chord>
@@ -1498,7 +1532,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <name>iv6</name>
+            <name>ii6</name>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -1508,28 +1542,13 @@ Text: Pietro Metastasio (1689-1782)</text>
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-3/8</fractions>
-            </location>
           <Harmony>
-            <name>ii6</name>
-            </Harmony>
-          <location>
-            <fractions>3/8</fractions>
-            </location>
-          <Harmony>
-            <name>V\\</name>
+            <name>V}</name>
             </Harmony>
           <Rest>
             <offset x="0.196828" y="-0.197251"/>
             <durationType>half</durationType>
             </Rest>
-          <location>
-            <fractions>-1/4</fractions>
-            </location>
-          <Harmony>
-            <name>}</name>
-            </Harmony>
           </voice>
         <voice>
           <Chord>
@@ -1705,13 +1724,13 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-3/4</fractions>
             </location>
           <Harmony>
-            <name>iio6</name>
+            <name>viio(-1)</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>I</name>
+            <name>I(-1)</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
@@ -1924,19 +1943,19 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-3/4</fractions>
             </location>
           <Harmony>
-            <name>V7/iv</name>
+            <name>ii.V7</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>iv6</name>
+            <name>i6</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>V65/iv</name>
+            <name>V65</name>
             </Harmony>
           </voice>
         </Measure>
@@ -1946,7 +1965,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <name>ii.i</name>
+            <name>i</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -1956,7 +1975,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <name>ii</name>
+            <name>iio</name>
             </Harmony>
           </voice>
         </Measure>
@@ -1985,7 +2004,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>ii6</name>
+            <name>iio6</name>
             </Harmony>
           <location>
             <fractions>1/8</fractions>
@@ -1998,7 +2017,7 @@ Text: Pietro Metastasio (1689-1782)</text>
       <Measure>
         <voice>
           <Harmony>
-            <name>i\\</name>
+            <name>i</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -2008,7 +2027,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-3/4</fractions>
             </location>
           <Harmony>
-            <name>ii6</name>
+            <name>iio6</name>
             </Harmony>
           <location>
             <fractions>1/8</fractions>
@@ -2106,7 +2125,7 @@ Text: Pietro Metastasio (1689-1782)</text>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <name>ii</name>
+            <name>iio</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -2157,7 +2176,7 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>-3/4</fractions>
             </location>
           <Harmony>
-            <name>ii6</name>
+            <name>iio6</name>
             </Harmony>
           <location>
             <fractions>1/8</fractions>
@@ -2198,14 +2217,14 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <name>i\\</name>
+            <name>i}</name>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Harmony>
-            <name>III.I</name>
+            <name>I.I{</name>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -2269,16 +2288,10 @@ Text: Pietro Metastasio (1689-1782)</text>
             <fractions>1/8</fractions>
             </location>
           <Harmony>
-            <name>V\\</name>
+            <name>V}</name>
             </Harmony>
           <location>
-            <fractions>1/4</fractions>
-            </location>
-          <Harmony>
-            <name>}</name>
-            </Harmony>
-          <location>
-            <fractions>1/4</fractions>
+            <fractions>1/2</fractions>
             </location>
           <BarLine>
             <subtype>double</subtype>

@@ -1,7 +1,6 @@
 metadata_dir: ./metadata
 metadata_id_col: AriaId
 data_dir: arias
-# data_dir: tests/data/static/features
 musescore_dir:
 expand_repeats: false
 parallel: false
@@ -17,17 +16,17 @@ features:
   - core
   - composer
   - librettist
+  - key
+  - tempo
   # - ambitus
   # - interval
-  - tempo
   # - density
 #  - texture
   - themeA
   - harmony
-  - lyrics
+  # - lyrics
   # - scale
 #  - scale_relative
-  - key
   # - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
