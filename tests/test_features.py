@@ -15,7 +15,7 @@ class TestFeatures:
 
     def test_features(self):
         # Given
-        extractor = FeaturesExtractor(config_path, data_dir=data_features_dir)
+        extractor = FeaturesExtractor(config_path, data_dir=data_features_dir, parts_filter=["sop", "vnI"])
         expected_data = read_dicts_from_csv(expected_features_file_path)[0]
         errors = ""
 
@@ -36,11 +36,11 @@ class TestFeatures:
     def _format(self, value, data_type: str):
         try:
             if data_type == 'object':
-                return str(value)
+                return str(value) if value is not None else ""
             if data_type.startswith("float"):
-                return round(float(value), 3)
+                return round(float(value), 3) if value is not None else 0.0
             if data_type.startswith("int"):
-                return math.floor(float(value))
+                return math.floor(float(value)) if value is not None else 0
         except:
             ...
         return None

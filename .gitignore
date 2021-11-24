@@ -5,6 +5,7 @@ reports
 .vscode
 .idea
 *.ini
+**/*.log
 ./*.csv
 __pycache__
 raw_files
