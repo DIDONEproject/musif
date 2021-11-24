@@ -5,7 +5,7 @@ from multiprocessing import Lock
 import pandas as pd
 from pandas.core.frame import DataFrame
 
-from musif.common.sort import sort, sort_columns
+from musif.common.sort import sort_list, sort_columns
 from musif.config import Configuration
 from musif.extract.features.harmony.constants import (ADDITIONS_prefix, CHORDS_GROUPING_prefix, CHORD_TYPES_prefix,
                                                       CHORD_prefix, HARMONIC_RHYTHM, HARMONIC_RHYTHM_BEATS,
@@ -35,7 +35,7 @@ def Print_Harmonic_Data(_cfg, data, data_general, additional_info, groups, workb
     harmonic_rythm = [c for c in data.columns if 'Harmonic_rhythm' in c]
 
     chordTypes = [c for c in data.columns if CHORD_TYPES_prefix in c]
-    chordTypes = sort(chordTypes, _cfg.sorting_lists['ChordTypeGrouppingSorting'])
+    chordTypes = sort_list(chordTypes, _cfg.sorting_lists['ChordTypeGrouppingSorting'])
 
     additions = [c for c in data.columns if ADDITIONS_prefix in c]
 
@@ -56,7 +56,7 @@ def Print_Chords(factor, _cfg, data, data_general, groups, additional_info, work
     data.columns=[i.replace(CHORD_prefix, '') for i in data.columns]
     data.columns=[i.replace('_Count', '') for i in data.columns]
     try:
-        data = sort_columns(data, sort_labels(data.columns, chordtype='occurrences',form=['', '+', 'o', '%', 'M']) )
+        data = sort_columns(data, sort_labels(data.columns, chordtype='occurrences',form=['', '+', 'o', '%', 'M']))
     except:
         data = sort_columns(data, _cfg.sorting_lists['NumeralsSorting'])
     
