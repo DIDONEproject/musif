@@ -17,17 +17,15 @@ REGEX={}
 
 def get_harmonic_rhythm(ms3_table)-> dict:
     hr={}
-    measures = ms3_table.mc.dropna().tolist()
-    measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
-    chords = ms3_table.chord.dropna().tolist()
-    chords_number=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    measures = ms3_table.mn.dropna().tolist()
+    measures_compressed = [i for j, i in enumerate(measures) if i != measures[j-1]]
+    numerals = ms3_table.numeral.dropna().tolist()
+    number_of_chords = sum(Counter(numerals).values())
     time_signatures = ms3_table.timesig.tolist()
-    harmonic_rhythm = chords_number/len(measures_compressed)
-    
-    # beats = ms3_table.mc_onset.dropna().tolist()
-    # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
+    harmonic_rhythm = number_of_chords/len(measures_compressed)
+
     if len(Counter(time_signatures)) == 1:
-        harmonic_rhythm_beats = chords_number/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
+        harmonic_rhythm_beats = number_of_chords/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
     else:
         playthrough = ms3_table.playthrough.dropna().tolist()
         periods_ts=[]
@@ -40,7 +38,7 @@ def get_harmonic_rhythm(ms3_table)-> dict:
                 time_changes.append(time_signatures[t-1])
                 periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
 
-        harmonic_rhythm_beats = chords_number/sum([period * get_number_of_beats(time_changes[j]) for j, period in enumerate(periods_ts)])
+        harmonic_rhythm_beats = number_of_chords/sum([period * get_number_of_beats(time_changes[j]) for j, period in enumerate(periods_ts)])
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
@@ -144,7 +142,6 @@ def continued_sections(sections, mc):
 # Lowered degrees are indicated with 'b', raised with '#' (bII = Neapolitan key).
 # Leading notes are abrreviated as LN.
 
-# Function to return harmonic functions (1 and 2) based on a list of keys #
 def get_keys(list_keys, mode):
     result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
     # result_dict = {t: get_localkey_1(t, mode) for t in set(list_keys)}
@@ -158,7 +155,6 @@ def get_keys(list_keys, mode):
 ###################
 
 def get_keyareas_lists(keys, g1, g2):
-    # key areas
     key_areas = []
     key_areas_g1 = []
     key_areas_g2 = []
@@ -437,8 +433,7 @@ def get_chords(harmonic_analysis):
     chords = harmonic_analysis.chord.dropna().tolist()
     numerals = harmonic_analysis.numeral.dropna().tolist()
     types =[str(i) for i in  harmonic_analysis.chord_type.dropna().tolist()]
-    # form = harmonic_analysis.form.tolist()
-
+    
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
 
     numerals_and_types = [str(chord)+str(types[index]).replace('Mm','').replace('mm', '') if types[index] not in ('M','m') else str(chord) for index, chord in enumerate(numerals)] 
