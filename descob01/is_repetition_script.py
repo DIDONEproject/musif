@@ -1,5 +1,7 @@
 import glob
 from os import path
+from shutil import copy
+
 from colorama import Fore
 
 from musif.musicxml import MUSICXML_FILE_EXTENSION
@@ -35,11 +37,8 @@ def is_repetition(path_name, direc, names):
     cont = 0
     resul = []
     for file in paths:
-        try:
-            f_read = open(file, encoding="utf8")
+        with open(file, encoding="utf8") as f_read:
             list_lines = f_read.readlines()
-        finally:
-            f_read.close()
         cont += 1
         i = 0
         for line in list_lines:
@@ -55,11 +54,8 @@ def is_repetition(path_name, direc, names):
 
     print(cont)
     if len(resul) > 0:
-        try:
-            save_name = open(names, 'w', encoding="utf-8")
-            save_name.writelines(resul)
-        finally:
-            save_name.close()
+        with open(names, "w", encoding="utf8") as f_write:
+            f_write.writelines(list_lines)
 
 
 def is_segno_beginning(path_name, names):
@@ -77,11 +73,8 @@ def is_segno_beginning(path_name, names):
     cont = 0
     resul = []
     for file in paths:
-        try:
-            f_read = open(file, encoding="utf8")
+        with open(file, encoding="utf8") as f_read:
             list_lines = f_read.readlines()
-        finally:
-            f_read.close()
         cont += 1
         i = 0
         find = False
@@ -102,8 +95,5 @@ def is_segno_beginning(path_name, names):
 
     print(cont)
     if len(resul) > 0:
-        try:
-            save_name = open(names, 'w', encoding="utf-8")
-            save_name.writelines(resul)
-        finally:
-            save_name.close()
+        with open(names, "w", encoding="utf8") as f_write:
+            f_write.writelines(list_lines)
