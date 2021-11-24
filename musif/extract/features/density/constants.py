@@ -1,4 +1,3 @@
-NOTES = "Notes"
 NOTES_MEAN = "NotesMean"
 SOUNDING_MEASURES = "SoundingMeasures"
 SOUNDING_MEASURES_MEAN = "SoundingMeasuresMean"
