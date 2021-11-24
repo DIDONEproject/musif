@@ -49,8 +49,8 @@ def change_year_xml(person, old_date, new_date, origin_paths):
     cont = 0
     for name in files:
         print(name)
-        f = open(name, encoding="utf8")
-        list_lines = f.readlines()
+        with open(name, encoding="utf8") as f_read:
+            list_lines = f_read.readlines()
         cont += 1
         i = 0
         for line in list_lines:
@@ -61,9 +61,8 @@ def change_year_xml(person, old_date, new_date, origin_paths):
             name_position = list_lines[i].find(person + " (")
             end_dates = list_lines[i][name_position:].find(')') + name_position
             list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date, new_date) + list_lines[i][end_dates:]
-            f = open(name, "w", encoding="utf8")
-            f.writelines(list_lines)
-        f.close()
+            with open(name, "w", encoding="utf8") as f_write:
+                f_write.writelines(list_lines)
     print(cont)
 
 
@@ -86,8 +85,8 @@ def change_year_musecore(person, old_date, new_date, origin_paths):
     cont = 0
     for name in files:
         print(name)
-        f = open(name, encoding="utf8")
-        list_lines = f.readlines()
+        with open(name, encoding="utf8") as f_read:
+            list_lines = f_read.readlines()
         cont += 1
         i = 0
         for line in list_lines:
@@ -99,7 +98,6 @@ def change_year_musecore(person, old_date, new_date, origin_paths):
             name_position = list_lines[i].find(person + " (")
             end_dates = list_lines[i][name_position:].find(')') + name_position
             list_lines[i] = list_lines[i][:name_position] + list_lines[i][name_position:end_dates].replace(old_date, new_date) + list_lines[i][end_dates:]
-            f = open(name, "w", encoding="utf8")
-            f.writelines(list_lines)
-        f.close()
+            with open(name, "w", encoding="utf8") as f_write:
+                f_write.writelines(list_lines)
     print(cont)
