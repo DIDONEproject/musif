@@ -26,8 +26,8 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     measures = part_data[DATA_MEASURES]
     time_signature = score_data[TIME_SIGNATURE].split(',')
     time_signatures = score_data[TIME_SIGNATURES]
-    measures= score_data[TS_MEASURES]
-    
+    # measures = score_data[TS_MEASURES]
+
     #for repetitions(?)
     # measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
     part_features.update({
