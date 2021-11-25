@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 from musif.common.cache import Cache
 from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
-from musif.common.sort import sort
+from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.constants import *
@@ -80,6 +80,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
             harmonic_analysis['playthrough'] = harmonic_analysis.mn
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
+        harmonic_analysis = None
         raise ParseFileError(file_path, str(e)) from e
     return harmonic_analysis
 
@@ -140,7 +141,7 @@ class PartsExtractor:
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
                                            for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
-        return sort(parts, abbreviated_parts_scoring_order)
+        return sort_list(parts, abbreviated_parts_scoring_order)
 
     def _process_score(self, musicxml_file: str) -> List[str]:
         score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords)

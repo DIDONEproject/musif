@@ -5,8 +5,7 @@ import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
 
-from musif.common.constants import RESET_SEQ
-from musif.common.sort import sort
+from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.logs import linfo, lwarn
 from musif.reports.constants import *
@@ -29,7 +28,7 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         notes_and_measures.columns = [i.replace('_','').replace('Part', '').replace('SoundingMeasures', 'Measures').replace(
             'Sound', '').replace('Notes', '').replace('Mean', '').replace('Family', '') for i in notes_and_measures.columns]
 
-        cols = sort(density_df.columns.tolist(), [
+        cols = sort_list(density_df.columns.tolist(), [
                     i.capitalize() for i in _cfg.sorting_lists['InstrumentSorting']])
         
         density_df = density_df[cols]
@@ -97,7 +96,7 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                 bar_plot_extended(name_bar, data, columns,
                                 'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
-        lwarn('{}  Problem found: {}{}'.format(name, e, RESET_SEQ))
+        lwarn('{}  Problem found: {}'.format(name, e))
 
 
 def split_reorder_density(data):
@@ -127,7 +126,7 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
                 notes_df[col]=np.nan
                 notes_df[col.split('/')[0]+'_Notes']=np.nan
 
-        cols = sort(textures_df.columns.tolist(), _cfg.sorting_lists['TexturesSorting'])  
+        cols = sort_list(textures_df.columns.tolist(), _cfg.sorting_lists['TexturesSorting'])  
 
         textures_df = textures_df[cols]
         

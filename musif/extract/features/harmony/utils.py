@@ -1,11 +1,14 @@
 import itertools
 import re
 from collections import Counter
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
-
+from musif.common.sort import sort_dict, sort_list
+from musif.logs import perr, pwarn
+from urllib.request import urlopen
 from musif.musicxml.tempo import get_number_of_beats
 from musif.logs import perr, pwarn
 from .constants import *
@@ -14,17 +17,15 @@ REGEX={}
 
 def get_harmonic_rhythm(ms3_table)-> dict:
     hr={}
-    measures = ms3_table.mc.dropna().tolist()
-    measures_compressed=[i for j, i in enumerate(measures) if i != measures[j-1]]
-    chords = ms3_table.chord.dropna().tolist()
-    chords_number=len([i for j, i in enumerate(chords) if i != chords[j-1]])
+    measures = ms3_table.mn.dropna().tolist()
+    measures_compressed = [i for j, i in enumerate(measures) if i != measures[j-1]]
+    numerals = ms3_table.numeral.dropna().tolist()
+    number_of_chords = sum(Counter(numerals).values())
     time_signatures = ms3_table.timesig.tolist()
-    harmonic_rhythm = chords_number/len(measures_compressed)
-    
-    # beats = ms3_table.mc_onset.dropna().tolist()
-    # voice = ['N' if str(v) == 'nan' else v for v in ms3_table.voice.tolist()]
+    harmonic_rhythm = number_of_chords/len(measures_compressed)
+
     if len(Counter(time_signatures)) == 1:
-        harmonic_rhythm_beats = chords_number/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
+        harmonic_rhythm_beats = number_of_chords/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
     else:
         playthrough = ms3_table.playthrough.dropna().tolist()
         periods_ts=[]
@@ -37,7 +38,7 @@ def get_harmonic_rhythm(ms3_table)-> dict:
                 time_changes.append(time_signatures[t-1])
                 periods_ts.append(len(measures_compressed[0:playthrough[t-1]])-sum(periods_ts))
 
-        harmonic_rhythm_beats = chords_number/sum([period * get_number_of_beats(time_changes[j]) for j, period in enumerate(periods_ts)])
+        harmonic_rhythm_beats = number_of_chords/sum([period * get_number_of_beats(time_changes[j]) for j, period in enumerate(periods_ts)])
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
@@ -141,7 +142,6 @@ def continued_sections(sections, mc):
 # Lowered degrees are indicated with 'b', raised with '#' (bII = Neapolitan key).
 # Leading notes are abrreviated as LN.
 
-# Function to return harmonic functions (1 and 2) based on a list of keys #
 def get_keys(list_keys, mode):
     result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
     # result_dict = {t: get_localkey_1(t, mode) for t in set(list_keys)}
@@ -155,7 +155,6 @@ def get_keys(list_keys, mode):
 ###################
 
 def get_keyareas_lists(keys, g1, g2):
-    # key areas
     key_areas = []
     key_areas_g1 = []
     key_areas_g2 = []
@@ -432,11 +431,16 @@ def get_chords(harmonic_analysis):
     relativeroots = harmonic_analysis.relativeroot.tolist()
     keys = harmonic_analysis.localkey.dropna().tolist() 
     chords = harmonic_analysis.chord.dropna().tolist()
-    numerals=harmonic_analysis.numeral.dropna().tolist()
-    types = harmonic_analysis.chord_type.dropna().tolist()
+    numerals = harmonic_analysis.numeral.dropna().tolist()
+    types =[str(i) for i in  harmonic_analysis.chord_type.dropna().tolist()]
+    
     chords_functionalities1, chords_functionalities2 = get_chords_functions(chords, relativeroots, keys)
-    numerals_and_types =  [str(chord)+str(types[index]) if (str(types[index]) not in ('M','m')) else str(chord) for index, chord in enumerate(numerals)] 
-    chords_dict = CountChords(numerals_and_types)
+
+    numerals_and_types = [str(chord)+str(types[index]).replace('Mm','').replace('mm', '') if types[index] not in ('M','m') else str(chord) for index, chord in enumerate(numerals)] 
+    
+    # chords_order = sort_labels(numerals_and_types, numeral=['I', 'i', 'V', 'v', 'VII', 'vii', 'II', 'ii', 'IV', 'iv','VI','vi','III','iii'], chordtype=['', '7', '+', 'o', '%', 'M', 'm','It'], drop_duplicates=True)
+    
+    chords_dict = count_chords(numerals_and_types)# ,order)
     
     # Exception for #viio chords
     if 'Chord_#viio' in chords_dict:
@@ -449,8 +453,10 @@ def get_chords(harmonic_analysis):
 
     return chords_dict, chords_group_1, chords_group_2
 
-def CountChords(chords):
+def count_chords(chords: list, order: List[str] =[]) -> Dict[str, str]:
     chords_numbers = Counter(chords)
+    # chords_numbers=sort_dict(chords_numbers, order)
+    
     total_chords=sum(chords_numbers.values())
 
     chords_dict = {}
@@ -459,7 +465,7 @@ def CountChords(chords):
         chords_dict[CHORD_prefix+degree+'_Count'] = chords_numbers[degree]
     return chords_dict
 
-def CountChordsGroup(counter_function, number):
+def CountChordsGroup(counter_function: List[str], number: str) -> Dict[str, str]:
     chords_group = {}
     total_chords_group=sum(Counter(counter_function).values())
 
@@ -505,7 +511,6 @@ def get_chord_types_groupings(chordtype_list):
 
 
 def get_first_chord_local(chord, local_key):
-    #TODO: chase It6/V
     local_key_mode = 'M' if local_key.isupper() else 'm'
 
     if '/' not in chord:
@@ -527,11 +532,9 @@ def get_first_chord_local(chord, local_key):
             # return '/'.join(relative_list)
             return degree
 
-# REVIEW porqué es tan parecida a get_first_chord_local??
 # Function to return second grouping for any chord in any given local key,
 def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     mode = 'M' if local_key else 'm'
-    #Qué es relative root aqui exactamente
     if str(relativeroot) != 'nan':
         mode = 'M' if relativeroot.isupper() else 'm'
     parts = first_grouping.split('/')
@@ -661,27 +664,27 @@ def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True,
     return labels.loc[ordered_ix]
 
     
-# def split_labels(labels, git_branch='master', dropna=True):
-#     """ Split DCML harmony labels into their respective features using the regEx
-#         from the indicated branch of the DCMLab/standards repository.
-#     Parameters
-#     ----------
-#     labels : :obj:`pandas.Series`
-#         Harmony labels to be split.
-#     git_branch : :obj:`str`, optional
-#         The branch of the DCMLab/standards repo from which you want to use the regEx.
-#     dropna : :obj:`bool`, optional
-#         Drop rows where the regEx didn't match.
-#     """
-#     global REGEX
-#     if git_branch not in REGEX:
-#         url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
-#         glo, loc = {}, {}
-#         exec(urlopen(url).read(), glo, loc)
-#         REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
-#     regex = REGEX[git_branch]
-#     cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
-#     res = labels.str.extract(regex, expand=True)[cols]
-#     if dropna:
-#         return res.dropna(how='all').fillna('')
-#     return res.fillna('')
+def split_labels(labels, git_branch='master', dropna=True):
+    """ Split DCML harmony labels into their respective features using the regEx
+        from the indicated branch of the DCMLab/standards repository.
+    Parameters
+    ----------
+    labels : :obj:`pandas.Series`
+        Harmony labels to be split.
+    git_branch : :obj:`str`, optional
+        The branch of the DCMLab/standards repo from which you want to use the regEx.
+    dropna : :obj:`bool`, optional
+        Drop rows where the regEx didn't match.
+    """
+    global REGEX
+    if git_branch not in REGEX:
+        url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
+        glo, loc = {}, {}
+        exec(urlopen(url).read(), glo, loc)
+        REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
+    regex = REGEX[git_branch]
+    cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
+    res = labels.str.extract(regex, expand=True)[cols]
+    if dropna:
+        return res.dropna(how='all').fillna('')
+    return res.fillna('')
