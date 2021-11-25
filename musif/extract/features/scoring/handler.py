@@ -1,7 +1,7 @@
 from typing import List
 
 from musif.common.constants import GENERAL_FAMILY, VOICE_FAMILY
-from musif.common.sort import sort
+from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import part_matches_filter
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART, \
@@ -75,12 +75,12 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     abbreviated_parts_scoring_order = [instr + num
                                        for instr in cfg.scoring_order for num in [''] + ROMAN_NUMERALS_FROM_1_TO_20]
     features = {
-        SCORING: ','.join(sort(abbreviated_parts, abbreviated_parts_scoring_order)),
-        SOUND_SCORING: ','.join(sort(sound_abbreviations, cfg.scoring_order)),
-        INSTRUMENTATION: ','.join(sort(instrument_abbreviations, cfg.scoring_order)),
-        VOICES: ','.join(sort(voice_abbreviations, cfg.scoring_order)),
-        FAMILY_SCORING: ','.join(sort(family_abbreviations, cfg.scoring_family_order)),
-        FAMILY_INSTRUMENTATION: ','.join(sort(instrumental_family_abbreviations, cfg.scoring_family_order)),
+        SCORING: ','.join(sort_list(abbreviated_parts, abbreviated_parts_scoring_order)),
+        SOUND_SCORING: ','.join(sort_list(sound_abbreviations, cfg.scoring_order)),
+        INSTRUMENTATION: ','.join(sort_list(instrument_abbreviations, cfg.scoring_order)),
+        VOICES: ','.join(sort_list(voice_abbreviations, cfg.scoring_order)),
+        FAMILY_SCORING: ','.join(sort_list(family_abbreviations, cfg.scoring_family_order)),
+        FAMILY_INSTRUMENTATION: ','.join(sort_list(instrumental_family_abbreviations, cfg.scoring_family_order)),
         NUMBER_OF_PARTS: len(abbreviated_parts),
     }
     for family_abbreviation in family_abbreviations:

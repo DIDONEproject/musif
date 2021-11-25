@@ -1,46 +1,45 @@
-metadata_dir: ./metadata
-metadata_id_col: AriaId
-data_dir: arias
+data_dir: .
 musescore_dir:
-expand_repeats: false
+metadata_dir: ../metadata
+metadata_id_col: AriaId
 parallel: false
+expand_repeats: false
 max_processes: 8
 log:
-  file_path: logs/musif.log
+  file_path: ./musif.log
   file_level: DEBUG
-  console_level: INFO
+  console_level: WARNING
 features:
   - scoring
   - file_name
   - metadata
+  - themeA
   - core
-  - composer
-  - librettist
-  - key
-  - tempo
+  # - composer
+  # - librettist
   # - ambitus
   # - interval
+  # - tempo
   # - density
-#  - texture
-  - themeA
+  #  - texture
   - harmony
   # - lyrics
   # - scale
-#  - scale_relative
-  # - dynamics
+  #  - scale_relative
+  - key
+  - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
 parts_filter:
   - vnI
-  - obI
+  - vnII
+  - va
+  - bs
+  - sop
   - ten
-  # - vnII
-  # - va
-  # - bs
-  # - sop
-  # - alt
-  # - bar
-  # - bass
-  # - bbar
+  - alt
+  - bar
+  - bass
+  - bbar

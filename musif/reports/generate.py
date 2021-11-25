@@ -58,13 +58,12 @@ class FeaturesGenerator:
         rg = copy.deepcopy(rows_groups)
         nuc = copy.deepcopy(not_used_cols)
         
-        common_columns_df = all_info[metadata_columns]
-        common_columns_df['Total analysed'] = 1.0
+        # common_columns_df = all_info[metadata_columns]
+        common_columns_df = self._find_common_columns(all_info)
 
         tasks={}
-        common_tasks={}
-        harmony_tasks={}
-        self.common = True #Flag to run common tasks only once
+
+        self.common = True # Flag to run common tasks only once
         self.voices=all_info.Voices
 
         pinfo('\n' + str(num_factors) + " factor" + "\n")
@@ -72,15 +71,14 @@ class FeaturesGenerator:
         instruments = self.extract_instruments(all_info)
         self.rename_singers(all_info)
 
-        self._prepare_common_dataframes(all_info, common_tasks, harmony_tasks, instruments)
+        common_tasks, harmony_tasks=self._prepare_common_dataframes(all_info, instruments)
 
         for instrument in tqdm(list(instruments), desc='Progress'):
             if instrument.lower() in singers_list:
                 instrument = 'Voice'
 
             pinfo(f'\nInstrument:\t{instrument}' + '\n')
-            instrument_level = 'Part' + instrument + '_' #if not self.IsVoice(instrument) else 'Family' + instrument + '_' 
-
+            instrument_level = 'Part' + instrument + '_'
             intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self.find_columns(all_info, instrument_level)
             self.prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
             
@@ -111,6 +109,17 @@ class FeaturesGenerator:
                 #     rows_groups = rg
                 #     not_used_cols = nuc
                 pass
+
+    def _find_common_columns(self, all_info):
+        common_columns_df= pd.DataFrame()
+        for column in metadata_columns:
+            info=all_info.get(column)
+            if info is not None:
+                common_columns_df=pd.concat((common_columns_df, info), axis=1)
+            else:
+                perr(f'No column was found for {column} in the df!')
+        common_columns_df['Total analysed'] = 1.0
+        return common_columns_df
 
     def rename_singers(self, all_info):
         for c in all_info.columns:
@@ -148,7 +157,9 @@ class FeaturesGenerator:
                 tasks['scale_relative'] = self.Extract_scale_degrees_columns(all_info, Instrument_level, degrees_relative_list).dropna(how='all', axis=1)
             tasks['clefs'] = self.get_clefs(all_info, common_columns_df)
 
-    def _prepare_common_dataframes(self, all_info, common_tasks, harmony_tasks, instruments):
+    def _prepare_common_dataframes(self, all_info, instruments):
+        common_tasks={}
+        harmony_tasks={}
         if self._cfg.is_requested_module(density) or self._cfg.is_requested_module(texture):
             notes_set = self.find_notes_set(instruments)    
             notes_df=all_info[list(notes_set)]
@@ -168,6 +179,9 @@ class FeaturesGenerator:
             harmony_tasks['key_areas']=key_areas_df
             harmony_tasks['chords']=chords_df
             harmony_tasks['functions']=functions_dfs
+        
+        return common_tasks, harmony_tasks
+
     
     def run_common_tasks(self, factor, main_results_path, rg, nuc, common_columns_df, common_tasks, harmony_tasks, tasks, additional_info, rg_groups, results_path_factorx):
         textures_densities_data_path = path.join(main_results_path, 'Texture&Density', str(
@@ -257,7 +271,7 @@ class FeaturesGenerator:
                                 TITLE: [ARIA_LABEL]}
 
         if factor == 0:
-            rows_groups = {ARIA_ID: ([], "Alphabetic")}
+            # rows_groups = {ARIA_ID: ([], "Alphabetic")}
             rg_keys = [rg[r][0] if rg[r][0] != [] else r for r in rg]
             for r in rg_keys:
                 if type(r) == list:
@@ -267,7 +281,7 @@ class FeaturesGenerator:
             additional_info = [ARIA_LABEL, TITLE, COMPOSER, YEAR]
 
         rg_groups = [[]]
-        if factor >= 2:  # 2 factors or more
+        if factor >= 2:
             rg_groups = list(permutations(
                     list(forbiden_groups.keys()), factor - 1))[4:]
 
@@ -415,22 +429,8 @@ class FeaturesGenerator:
                 Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
                                 _cfg.sorting_lists["Clefs"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             if 'harmonic_data' in kwargs:
-                kwargs['common_df']=common_columns_df
-                # harmonic_analysis=pd.concat([common_columns_df, kwargs['harmonic_data'],kwargs['chords'], kwargs['functions'], kwargs['key_areas']], axis=1)
-                # Harmonic_data(rows_groups, not_used_cols, factor, _cfg, harmony_df, pre_string, "Harmonic_data", results_path, self.visualizations, additional_info, groups if groups != [] else None)
                 Harmonic_analysis(rows_groups, not_used_cols, factor, _cfg, kwargs, pre_string, "Harmonic_Analysis", results_path, self.visualizations, additional_info, groups if groups != [] else None)
-            # if 'chords' in kwargs:
-            #     chords = pd.concat([common_columns_df, kwargs['chords']], axis=1)
-            #     Chords(rows_groups, not_used_cols, factor, _cfg, chords, results_path, pre_string,  "Chords", self.visualizations, groups if groups != [] else None, additional_info)
-            
-            # if 'functions' in kwargs:
-            #     functions = pd.concat([common_columns_df, kwargs['functions']], axis=1)
-            #     Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, functions, results_path, pre_string, 'Harmonic_functions', self.visualizations, groups if groups != [] else None, additional_info)
-            
-            # if 'key_areas' in kwargs:
-            #     key_areas= pd.concat([common_columns_df,kwargs['key_areas']], axis=1)
-                # Triple_harmonic_excel(rows_groups, not_used_cols, factor, _cfg, key_areas, results_path, pre_string, "Key_Areas", self.visualizations, groups if groups != [] else None, additional_info)
-                
+
                 # wait for all
                 # if sequential:
                 # kwargs = {'total': len(futures), 'unit': 'it',

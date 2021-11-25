@@ -5,7 +5,7 @@ from typing import List
 from musif.config import LOGGER_NAME
 
 
-def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
+def sort_list(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     sort_dictionary = {elem: i for i, elem in enumerate(reference_list)}
     found = [elem for elem in list_to_sort if elem in sort_dictionary]
     orphans = [elem for elem in list_to_sort if elem not in sort_dictionary]
@@ -28,7 +28,7 @@ def sort_dict(dict_to_sort, main_list):
     return dict_sorted
 
 def sort_columns(data, sorting_list):
-    cols = sort(data.columns.tolist(), [i for i in sorting_list])
+    cols = sort_list(data.columns.tolist(), [i for i in sorting_list])
     data=data[cols]
     return data
     
