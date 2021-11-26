@@ -13,8 +13,8 @@ empty_dir = path.join("data", "config_test")
 
 directory_tests = path.join("data", "arias_tests1")
 first_file_dir = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
-first_file_dir1 = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
-second_file_dir1 = path.join("data", "arias_tests1", "Dem02M-In_te-1733-Caldara[1.02][0417].xml")
+first_file_dir_twin = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
+second_file_dir = path.join("data", "arias_test", "Dem02M-In_te-1733-Caldara[1.02][0417].xml")
 
 incomplete_file = path.join("data", "arias_test", "incomplete.xml")
 malformed_file = path.join("data", "arias_test", "malformed.xml")
@@ -87,8 +87,10 @@ class TestPartsExtractor:
     def test_config_no_argument(self):
         # GIVEN
         expected = Configuration(config_default)
+
         # WHEN
         extractor = PartsExtractor()
+
         # THEN
         assert expected.to_dict() == extractor._cfg.to_dict()
 
@@ -97,34 +99,43 @@ class TestPartsExtractor:
     def test_basic_parts_extractor(self):
         # GIVEN
         extractor = PartsExtractor(config_file)
+
         # WHEN
         parts = extractor.extract(first_file_dir)
+
         # THEN
         assert parts == first_content
 
     def test_extract_directory(self):
         # GIVEN
         extractor = PartsExtractor(config_file)
+
         # WHEN
         parts = extractor.extract(directory_tests)
+
         # THEN
         assert parts == union_content
 
     def test_extract_files_same_parts(self):
         # GIVEN
         extractor = PartsExtractor(config_file)
-        files = [first_file_dir, first_file_dir1]  # If I put the same path it will just load from cache the first one
+        files = [first_file_dir, first_file_dir_twin]
+        # If it's given the same path it will just load from cache the first one
+
         # WHEN
         parts = extractor.extract(files)
+
         # THEN
         assert parts == first_content
 
     def test_extract_different_parts(self):
         # GIVEN
         extractor = PartsExtractor(config_file)
-        files = [first_file_dir1, second_file_dir1]
+        files = [first_file_dir, second_file_dir]
+
         # WHEN
         parts = extractor.extract(files)
+
         # THEN
         assert parts == union_content
 
@@ -155,6 +166,7 @@ class TestPartsExtractor:
             extractor.extract(incomplete_file)
 
     # ---------------PATHS VALUES---------------
+    
     def test_extract_wrong_type(self):
         # GIVEN
         extractor = PartsExtractor(config_file)
