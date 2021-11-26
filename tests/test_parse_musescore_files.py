@@ -5,8 +5,8 @@ from musif.extract.exceptions import ParseFileError
 from musif.extract.extract import parse_musescore_file, _cache
 
 test_file = path.join("data", "static", "features", "Did03M-Son_regina-1730-Sarro[1.05][0006].mscx")
-test_file_content = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
-test_file_content1 = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
+test_file_repeats = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
+test_file_repeats_twin = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
 malformed_file = path.join("data", "arias_test", "malformed.mscx")
 
 
@@ -23,11 +23,12 @@ class TestParseMusicXMLFile:
 
     def test_parse_musescore_with_repeats(self):
         # GIVEN
-        score_no_repeats = parse_musescore_file(test_file_content)
+        score_no_repeats = parse_musescore_file(test_file_repeats)
 
         # WHEN
-        score = parse_musescore_file(test_file_content1, expand_repeats=True)
-        # a= score.compare(score_no_repeats)
+        score = parse_musescore_file(test_file_repeats_twin, expand_repeats=True)
+        # different path to not use cache
+
         # THEN
         assert len(score.index) > len(score_no_repeats.index)
 
@@ -78,8 +79,8 @@ class TestParseMusicXMLFile:
         # GIVEN
 
         # WHEN
-        parse_musescore_file(test_file_content)
-        parse_musescore_file(test_file_content1)
+        parse_musescore_file(test_file_repeats)
+        parse_musescore_file(test_file_repeats_twin)
 
         # THEN
-        assert _cache.get(test_file_content) is not None and _cache.get(test_file_content1) is not None
+        assert _cache.get(test_file_repeats) is not None and _cache.get(test_file_repeats_twin) is not None
