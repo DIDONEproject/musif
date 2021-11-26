@@ -126,10 +126,10 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
         Raises
         ------
         TypeError
-          - If the type is not the expected (str or List[str]).
+          If the type is not the expected (str or List[str]).
 
         ValueError
-          - If the provided string is neither a directory nor a file path
+          If the provided string is neither a directory nor a file path
     """
     if not (isinstance(obj, list) or isinstance(obj, str)):
         raise TypeError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
@@ -176,10 +176,49 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
 
 
 class PartsExtractor:
+    """
+    Given xml file, extracts the name of the different parts within it.
+    """
     def __init__(self, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
+        **kwargs: Get keywords to construct Configuration.
+
+        Raises
+        ------
+        TypeError
+             If the type is not the expected (str, dict or Configuration).
+        ValueError
+             If there is too many arguments(args)
+        FileNotFoundError
+             If any of the files/directories path inside the expected configuration doesn't exit.
+        """
         self._cfg = Configuration(*args, **kwargs)
 
-    def extract(self, obj) -> List[str]:
+    def extract(self, obj: Union[str, List[str]]) -> List[str]:
+        """
+        Given xml file, extracts the name of the different parts within it.
+
+        Parameters
+        ---------
+        obj : Union[str, List[str]]
+          A path or a list of paths
+
+        Returns
+        -------
+        resp : List[str]
+          A list of parts names in the given files
+
+        Raises
+        ------
+        TypeError
+          If the type is not the expected (str or List[str]).
+
+        ValueError
+          If the provided string is neither a directory nor a file path
+        """
         musicxml_files = extract_files(obj)
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
@@ -214,11 +253,11 @@ class FilesValidator:
         Raises
         ------
         TypeError
-         - If the type is not the expected (str, dict or Configuration).
+          If the type is not the expected (str, dict or Configuration).
         ValueError
-          - If there is too many arguments(args)
+           If there is too many arguments(args)
         FileNotFoundError
-          - If any of the files/directories path inside the expected configuration doesn't exit.
+          If any of the files/directories path inside the expected configuration doesn't exit.
         """
 
         self._cfg = Configuration(*args, **kwargs)

@@ -12,7 +12,7 @@ config_file = path.join("data", "static", "config.yml")
 config_file_parallel = path.join("data", "config_test", "config_parallel.yml")
 test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 malformed_file = path.join("data", "arias_test", "malformed.xml")
-incompleted_file = path.join("data", "arias_test", "incompleted.xml")
+incompleted_file = path.join("data", "arias_test", "incomplete.xml")
 
 
 class TestFilesValidator:
