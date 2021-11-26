@@ -5,7 +5,7 @@ import pytest
 from musif.common.utils import read_object_from_yaml_file
 from musif.config import Configuration
 from musif.extract.exceptions import ParseFileError
-from musif.extract.extract import PartsExtractor
+from musif.extract.extract import PartsExtractor, _cache
 
 config_file = path.join("data", "static", "config.yml")
 config_default = path.join("data", "config_test", "config_default.yml")
@@ -106,6 +106,7 @@ class TestPartsExtractor:
 
     def test_basic_parts_extractor(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
 
         # WHEN
@@ -116,6 +117,7 @@ class TestPartsExtractor:
 
     def test_basic_parts_extractor_without_split(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file, split_keywords=[])
 
         # WHEN
@@ -126,6 +128,7 @@ class TestPartsExtractor:
 
     def test_extract_directory(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
 
         # WHEN
@@ -136,6 +139,7 @@ class TestPartsExtractor:
 
     def test_extract_files_same_parts(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
         files = [first_file_dir, first_file_dir_twin]
         # If it's given the same path it will just load from cache the first one
@@ -148,6 +152,7 @@ class TestPartsExtractor:
 
     def test_extract_different_parts(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
         files = [first_file_dir, second_file_dir]
 
@@ -159,6 +164,7 @@ class TestPartsExtractor:
 
     def test_extract_empty_directory(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
 
         # WHEN
@@ -169,6 +175,7 @@ class TestPartsExtractor:
 
     def test_extract_malformed_file(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
 
         # WHEN/THEN
@@ -177,6 +184,7 @@ class TestPartsExtractor:
 
     def test_extract_incomplete_file(self):
         # GIVEN
+        _cache.clear()
         extractor = PartsExtractor(config_file)
 
         # WHEN/THEN
