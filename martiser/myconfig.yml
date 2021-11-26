@@ -15,11 +15,11 @@ features:
   - metadata
   - core
   - composer
-  - librettist
+  # - librettist
   - key
   - tempo
-  # - ambitus
-  # - interval
+  - ambitus
+  - interval
   # - density
 #  - texture
   - themeA

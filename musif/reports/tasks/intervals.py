@@ -29,6 +29,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
     
         computations = ["sum"]*len(third_columns)
 
+        #ERROR AriaOpera is nor unique
         Create_excel(workbook.create_sheet("Weighted"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:

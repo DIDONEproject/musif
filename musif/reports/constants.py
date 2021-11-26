@@ -80,8 +80,6 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                ], ["CharacterSorting", "Alphabetic", "Alphabetic"]),
                FORM: ([], "FormSorting"),
                CLEF1: ([], "Alphabetic"),
-            #    "Clef2": ([], "Alphabetic"),
-            #    "Clef3": ([], "Alphabetic"),
                LIBRETTIST: ([], "Alphabetic"),
                KEY: ([
                    KEY,
@@ -141,6 +139,7 @@ forbiden_groups = {OPERA: [OPERA],
                    "AbrScoring": ["AbrScoring", "RealScoringGrouped"],
                    "RealScoringGrouped": ["RealScoringGrouped"]
                    }
+COMMON_DF='common_df'
 
 YELLOWFILL = openpyxl.styles.PatternFill(
     start_color='F9E220', end_color='F9E220', fill_type='solid')

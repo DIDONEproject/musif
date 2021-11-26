@@ -6,6 +6,7 @@ import numpy as np
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import ExcelWriter
 from pandas.core.frame import DataFrame
+from musif.common.constants import VOICE_FAMILY
 
 from musif.common.sort import sort_dataframe
 from musif.reports.calculations import compute_average
@@ -409,7 +410,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
 
     return last_used_row + 1, cnumber + 1
 
-# Function in charge of printting the data #
 def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_number: int, column_number: int, data: DataFrame, third_columns: list, computations_columns: List[str], sorting_lists: list, group: list=None, first_columns: list=None, second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                   columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None,
                   columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None,
@@ -424,7 +424,7 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                 forbiden = [item for sublist in forbiden for item in sublist]
             if group == None and row not in forbiden: #it was 'or' and not 'and' before, but change considered neccessary  
 
-                sorting = WriteTitle(sheet, rows_groups, row_number, column_number, row)
+                sorting = write_title(sheet, rows_groups, row_number, column_number, row)
 
                 # Write the information depending on the subgroups (ex: Geography -> City, Country)
                 if len(rows_groups[row][0]) == 0:  # No subgroups
@@ -502,10 +502,27 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                 row_number += 1
     return row_number
 
-def WriteTitle(sheet, rows_groups, row_number, column_number, row):
+def write_title(sheet, rows_groups, row_number, column_number, row):
     sheet.cell(row_number, column_number).value = "Per " + row.replace('Aria', '')
     sheet.cell(row_number, column_number).font =  FONT
     sheet.cell(row_number, column_number).fill = YELLOWFILL
     row_number += 1
     sorting = rows_groups[row][1]
     return sorting
+
+def get_instrument_prefix(self, instrument: list):
+        if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
+            prefix = 'Part'
+        elif self._IsVoice(instrument):
+            prefix = 'Family'
+            instrument=VOICE_FAMILY.capitalize()
+        else:
+            prefix = 'Sound'
+            instrument=instrument.replace('I','')
+        
+        inst=prefix+instrument
+        return inst
+
+def capitalize_instruments(self, instruments):
+    return [instrument[0].upper()+instrument[1:]
+                    for instrument in instruments]
