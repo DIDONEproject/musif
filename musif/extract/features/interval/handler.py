@@ -1,3 +1,4 @@
+import re
 from collections import Counter
 from statistics import mean, stdev
 from typing import List, Tuple
@@ -5,6 +6,7 @@ from typing import List, Tuple
 import numpy as np
 from music21.interval import Interval
 from scipy.stats import kurtosis, skew
+from scipy.stats.mstats import trimmed_mean, trimmed_std
 
 from musif.common.utils import extract_digits
 from musif.config import Configuration
@@ -31,8 +33,14 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-        for feature_name in SCORE_FEATURES:
-            features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+        for feature_name, feature_value in part_features.items():
+            if feature_name in SCORE_FEATURES:
+                features[f"{part_prefix}{feature_name}"] = feature_value
+            else:
+                interval_count_pattern = INTERVAL_COUNT.format(prefix="", interval=".+")
+                interval_per_pattern = INTERVAL_PER.format(prefix="", interval=".+")
+                if re.match(interval_count_pattern, feature_name) or re.match(interval_per_pattern, feature_name):
+                    features[f"{part_prefix}{feature_name}"] = feature_value
 
     score_intervals = [interval for part_data in parts_data for interval in part_data[DATA_INTERVALS]]
     score_prefix = get_score_prefix()
@@ -45,31 +53,26 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 
 def get_interval_features(intervals: List[Interval], prefix: str = ""):
-    numeric_intervals = sorted([interval.semitones for interval in intervals])
-    absolute_numeric_intervals = sorted([abs(numeric_interval) for numeric_interval in numeric_intervals])
+    numeric_intervals = [interval.semitones for interval in intervals]
+    absolute_numeric_intervals = [abs(numeric_interval) for numeric_interval in numeric_intervals]
     ascending_intervals = [numeric_interval for numeric_interval in numeric_intervals if numeric_interval > 0]
     descending_intervals = [numeric_interval for numeric_interval in numeric_intervals if numeric_interval < 0]
-    absolute_intervallic_mean = mean(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 0 else 0
-    absolute_intervallic_std = stdev(absolute_numeric_intervals) if len(absolute_numeric_intervals) > 1 else 0
-    absolute_descending_numeric_intervals = sorted([abs(interval) for interval in numeric_intervals if interval < 0])
-    intervallic_mean = mean(numeric_intervals) if len(numeric_intervals) > 0 else 0
-    intervallic_std = stdev(numeric_intervals) if len(numeric_intervals) > 1 else 0
+
+    absolute_intervallic_mean = mean(absolute_numeric_intervals) if len(intervals) > 0 else 0
+    absolute_intervallic_std = stdev(absolute_numeric_intervals) if len(intervals) > 1 else 0
+    intervallic_mean = mean(numeric_intervals) if len(intervals) > 0 else 0
+    intervallic_std = stdev(numeric_intervals) if len(intervals) > 1 else 0
     ascending_intervallic_mean = mean(ascending_intervals) if len(ascending_intervals) > 0 else 0
     ascending_intervallic_std = stdev(ascending_intervals) if len(ascending_intervals) > 1 else 0
     descending_intervallic_mean = mean(descending_intervals) if len(descending_intervals) > 0 else 0
     descending_intervallic_std = stdev(descending_intervals) if len(descending_intervals) > 1 else 0
-    absolute_descending_intervallic_mean = mean(absolute_descending_numeric_intervals) if len(absolute_descending_numeric_intervals) > 0 else 0
-    absolute_descending_intervallic_std = stdev(absolute_descending_numeric_intervals) if len(absolute_descending_numeric_intervals) > 1 else 0
     mean_interval = Interval(int(round(absolute_intervallic_mean))).directedName
 
     cutoff = 0.1
-    cutoff_elements = int(cutoff * len(numeric_intervals))
-    trimmed_intervals = numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(numeric_intervals) > 0 else []
-    trimmed_intervallic_mean = mean(trimmed_intervals) if len(trimmed_intervals) > 0 else 0
-    trimmed_intervallic_std = stdev(trimmed_intervals) if len(trimmed_intervals) > 1 else 0
-    trimmed_absolute_intervals = absolute_numeric_intervals[cutoff_elements:len(numeric_intervals) - cutoff_elements] if len(absolute_numeric_intervals) > 0 else []
-    trimmed_absolute_intervallic_mean = mean(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 0 else 0
-    trimmed_absolute_intervallic_std = stdev(trimmed_absolute_intervals) if len(trimmed_absolute_intervals) > 1 else 0
+    trimmed_intervallic_mean = trimmed_mean(numeric_intervals[:10], limits=(cutoff, cutoff)) if len(intervals) > 0 else 0
+    trimmed_intervallic_std = trimmed_std(numeric_intervals, limits=(cutoff, cutoff)) if len(intervals) > 1 else 0
+    trimmed_absolute_intervallic_mean = trimmed_mean(absolute_numeric_intervals, limits=(cutoff, cutoff)) if len(intervals) > 0 else 0
+    trimmed_absolute_intervallic_std = trimmed_std(absolute_numeric_intervals, limits=(cutoff, cutoff)) if len(intervals) > 1 else 0
     trim_diff = intervallic_mean - trimmed_intervallic_mean
     trim_ratio = trim_diff / intervallic_mean if intervallic_mean != 0 else 0
     absolute_trim_diff = absolute_intervallic_mean - trimmed_absolute_intervallic_mean
@@ -78,15 +81,13 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     num_descending_intervals = len(descending_intervals) if len(descending_intervals) > 0 else 0
     num_ascending_semitones = sum(ascending_intervals) if len(ascending_intervals) > 0 else 0
     num_descending_semitones = sum(descending_intervals) if len(descending_intervals) > 0 else 0
-    ascending_intervals_percentage = num_ascending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
-    descending_intervals_percentage = num_descending_intervals / len(numeric_intervals) if len(numeric_intervals) > 0 else 0
+    ascending_intervals_percentage = num_ascending_intervals / len(intervals) if len(intervals) > 0 else 0
+    descending_intervals_percentage = num_descending_intervals / len(intervals) if len(intervals) > 0 else 0
 
-    ascending_intervals = [interval for interval in numeric_intervals if interval > 0]
-    descending_intervals = [interval for interval in numeric_intervals if interval < 0]
-    largest_semitones = max(numeric_intervals) if len(numeric_intervals) > 0 else None
-    largest = Interval(largest_semitones).directedName if len(numeric_intervals) > 0 else None
-    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(numeric_intervals) > 0 else None
-    smallest = Interval(smallest_semitones).directedName if len(numeric_intervals) > 0 else None
+    largest_semitones = max(numeric_intervals) if len(intervals) > 0 else None
+    largest = Interval(largest_semitones).directedName if len(intervals) > 0 else None
+    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(intervals) > 0 else None
+    smallest = Interval(smallest_semitones).directedName if len(intervals) > 0 else None
     largest_ascending_semitones = max(ascending_intervals) if len(ascending_intervals) > 0 else None
     largest_ascending = Interval(largest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
     largest_descending_semitones = min(descending_intervals) if len(descending_intervals) > 0 else None
@@ -106,8 +107,6 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
         f"{prefix}{ASCENDING_INTERVALLIC_STD}": ascending_intervallic_std,
         f"{prefix}{DESCENDING_INTERVALLIC_MEAN}": descending_intervallic_mean,
         f"{prefix}{DESCENDING_INTERVALLIC_STD}": descending_intervallic_std,
-        f"{prefix}{ABSOLUTE_DESCENDING_INTERVALLIC_MEAN}": absolute_descending_intervallic_mean,
-        f"{prefix}{ABSOLUTE_DESCENDING_INTERVALLIC_STD}": absolute_descending_intervallic_std,
         f"{prefix}{TRIMMED_INTERVALLIC_MEAN}": trimmed_intervallic_mean,
         f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_intervallic_std,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_intervallic_mean,
