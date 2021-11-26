@@ -111,7 +111,7 @@ class FeaturesGenerator:
                 # for f in tqdm(concurrent.futures.as_completed(futures), **kwargs):
                 #     rows_groups = rg
                 #     not_used_cols = nuc
-
+                
     def _find_common_columns(self, all_info):
         common_columns_df= pd.DataFrame()
         columns_to_remove=[]
