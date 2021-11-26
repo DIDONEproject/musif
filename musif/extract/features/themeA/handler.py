@@ -22,7 +22,7 @@ def update_score_objects(
                 elements_to_remove.append(measure)
         part.remove(targetOrList=elements_to_remove)
 
-    score_data['MS3_score']=score_data['MS3_score'].loc[score_data['MS3_score']['mn'] <= end_of_theme_a]
+    score_data['MS3_score']=score_data['MS3_score'].loc[score_data['MS3_score']['mn'] <= last_measure]
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     pass
