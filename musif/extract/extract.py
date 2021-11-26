@@ -177,7 +177,8 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
 
 class PartsExtractor:
     """
-    Given xml file, extracts the name of the different parts within it.
+    Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
+    indicated in the configurations.
     """
     def __init__(self, *args, **kwargs):
         """
@@ -199,7 +200,8 @@ class PartsExtractor:
 
     def extract(self, obj: Union[str, List[str]]) -> List[str]:
         """
-        Given xml file, extracts the name of the different parts within it.
+        Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
+        indicated in the configurations.
 
         Parameters
         ---------

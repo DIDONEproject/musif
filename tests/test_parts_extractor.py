@@ -20,6 +20,7 @@ incomplete_file = path.join("data", "arias_test", "incomplete.xml")
 malformed_file = path.join("data", "arias_test", "malformed.xml")
 
 first_content = ['obI', 'obII', 'hnI', 'hnII', 'ten', 'vnI', 'vnII', 'va', 'bs']
+first_content_no_split = ['ob', 'hn', 'ten', 'vnI', 'vnII', 'va', 'bs']
 union_content = ['obI', 'obII', 'hnI', 'hnII', 'sop', 'ten', 'vnI', 'vnII', 'va', 'bs']
 
 
@@ -70,6 +71,13 @@ class TestPartsExtractor:
         # THEN
         assert extractor._cfg.to_dict() == expected
 
+    def test_config_wrong_path(self):
+        # GIVEN
+
+        # WHEN/THEN
+        with pytest.raises(FileNotFoundError):
+            PartsExtractor("wrong_path")
+
     def test_config_more_than_one_argument(self):
         # GIVEN
 
@@ -105,6 +113,16 @@ class TestPartsExtractor:
 
         # THEN
         assert parts == first_content
+
+    def test_basic_parts_extractor_without_split(self):
+        # GIVEN
+        extractor = PartsExtractor(config_file, split_keywords=[])
+
+        # WHEN
+        parts = extractor.extract(first_file_dir)
+
+        # THEN
+        assert parts == first_content_no_split
 
     def test_extract_directory(self):
         # GIVEN
@@ -166,7 +184,7 @@ class TestPartsExtractor:
             extractor.extract(incomplete_file)
 
     # ---------------PATHS VALUES---------------
-    
+
     def test_extract_wrong_type(self):
         # GIVEN
         extractor = PartsExtractor(config_file)
