@@ -16,7 +16,7 @@ features:
   - themeA
   - core
   - composer
-  - librettist
+  # - librettist
   - key
   - tempo
   - ambitus
