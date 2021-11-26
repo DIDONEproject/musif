@@ -18,6 +18,9 @@ class Cache:
                 return item["value"]
         return None
 
+    def clear(self) -> None:
+        self._items.clear()
+
     @property
     def full(self) -> bool:
         return len(self._items) == self._capacity
