@@ -1,6 +1,7 @@
 import os
 from multiprocessing import Lock
 from os import path
+from typing import Dict
 
 import numpy as np
 import openpyxl
@@ -11,7 +12,8 @@ import musif.extract.features.lyrics as lyrics
 from musif.config import Configuration
 from musif.extract.features import ambitus, interval as I
 from musif.logs import pwarn
-from musif.reports.constants import CLEF1, EXCEPTIONS, IMAGE_EXTENSION, NARROW, ROLE, metadata_columns
+from musif.reports.constants import CLEF1, EXCEPTIONS, IMAGE_EXTENSION, NARROW, ROLE, COMMON_DF
+from musif.reports.tasks.harmony import insert_total_analysed
 from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
 from musif.reports.visualisations import box_plot, melody_bar_plot
 
@@ -23,12 +25,18 @@ ABSOLUTE_INTERVALLIC_MEAN = 'Absolute Intervallic Mean'
 ABSOLUTE_STD = "Absolute Std"
 TRIM_RATIO = "% Trimmed"
 
-def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualizations: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
+def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info: Dict[str, DataFrame], results_path: str, pre_string, name: str, visualizations: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:
         excel_name=get_excel_name(pre_string, name)
         workbook = openpyxl.Workbook()
+        data=info['melody_values']
         Rename_columns(data)
-        data_general = data[metadata_columns+ ['Total analysed']].copy()
+
+        # data_general = data[metadata_columns+ ['Total analysed']]
+
+        #Inserttar total analysed?
+        data_general = info[COMMON_DF]
+
         PrintStatisticalValues(_cfg, data, additional_info, groups, workbook)
         PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook)
         PrintLargestLeaps(_cfg, data, data_general,additional_info, groups, workbook)
