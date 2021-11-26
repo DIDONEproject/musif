@@ -6,7 +6,7 @@ from musif.extract.extract import parse_musescore_file, _cache
 
 test_file = path.join("data", "static", "features", "Did03M-Son_regina-1730-Sarro[1.05][0006].mscx")
 test_file_repeats = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
-test_file_repeats_twin = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
+test_file_repeats_same_file_different_dir = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
 malformed_file = path.join("data", "arias_test", "malformed.mscx")
 
 
@@ -26,7 +26,7 @@ class TestParseMusicXMLFile:
         score_no_repeats = parse_musescore_file(test_file_repeats)
 
         # WHEN
-        score = parse_musescore_file(test_file_repeats_twin, expand_repeats=True)
+        score = parse_musescore_file(test_file_repeats_same_file_different_dir, expand_repeats=True)
         # different path to not use cache
 
         # THEN
@@ -80,7 +80,7 @@ class TestParseMusicXMLFile:
 
         # WHEN
         parse_musescore_file(test_file_repeats)
-        parse_musescore_file(test_file_repeats_twin)
+        parse_musescore_file(test_file_repeats_same_file_different_dir)
 
         # THEN
-        assert _cache.get(test_file_repeats) is not None and _cache.get(test_file_repeats_twin) is not None
+        assert _cache.get(test_file_repeats) is not None and _cache.get(test_file_repeats_same_file_different_dir) is not None
