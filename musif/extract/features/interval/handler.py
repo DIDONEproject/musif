@@ -215,18 +215,18 @@ def get_interval_type_features(intervals_list: List[Interval], prefix: str = "")
     return {
         f"{prefix}{REPEATED_NOTES_COUNT}": all_repeated,
         f"{prefix}{REPEATED_NOTES_PER}": all_repeated / all_intervals if all_intervals != 0 else 0,
-        f"{prefix}{LEAPS_ASC_COUNT}": ascending_leaps,
-        f"{prefix}{LEAPS_DESC_COUNT}": descending_leaps,
-        f"{prefix}{LEAPS_ALL_COUNT}": all_leaps,
-        f"{prefix}{LEAPS_ASC_PER}": ascending_leaps / all_intervals if all_intervals != 0 else 0,
-        f"{prefix}{LEAPS_DESC_PER}": descending_leaps / all_intervals if all_intervals != 0 else 0,
-        f"{prefix}{LEAPS_ALL_PER}": all_leaps / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{STEPWISE_MOTION_ASC_COUNT}": ascending_stepwise,
         f"{prefix}{STEPWISE_MOTION_DESC_COUNT}": descending_stepwise,
         f"{prefix}{STEPWISE_MOTION_ALL_COUNT}": all_stepwise,
         f"{prefix}{STEPWISE_MOTION_ASC_PER}": ascending_stepwise / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{STEPWISE_MOTION_DESC_PER}": descending_stepwise / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{STEPWISE_MOTION_ALL_PER}": all_stepwise / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{LEAPS_ASC_COUNT}": ascending_leaps,
+        f"{prefix}{LEAPS_DESC_COUNT}": descending_leaps,
+        f"{prefix}{LEAPS_ALL_COUNT}": all_leaps,
+        f"{prefix}{LEAPS_ASC_PER}": ascending_leaps / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{LEAPS_DESC_PER}": descending_leaps / all_intervals if all_intervals != 0 else 0,
+        f"{prefix}{LEAPS_ALL_PER}": all_leaps / all_intervals if all_intervals != 0 else 0,
         f"{prefix}{INTERVALS_PERFECT_ASC_COUNT}": ascending_perfect,
         f"{prefix}{INTERVALS_PERFECT_DESC_COUNT}": descending_perfect,
         f"{prefix}{INTERVALS_PERFECT_ALL_COUNT}": all_perfect,
@@ -296,14 +296,12 @@ def get_all_asc_desc_count(intervals: List[Interval]) -> Tuple[int, int, int]:
 
 
 def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
-    numeric_intervals = [interval.semitones for interval in intervals]
-    absolute_numeric_intervals = [abs(numeric_interval) for numeric_interval in numeric_intervals]
-    intervals_array = np.array(numeric_intervals)
-    absolute_intervals_array = np.array(absolute_numeric_intervals)
-    intervals_skewness = skew(intervals_array)
-    intervals_kurtosis = kurtosis(intervals_array)
-    absolute_intervals_skewness = skew(absolute_intervals_array)
-    absolute_intervals_kurtosis = kurtosis(absolute_intervals_array)
+    numeric_intervals = np.array([interval.semitones for interval in intervals])
+    absolute_numeric_intervals = abs(numeric_intervals)
+    intervals_skewness = skew(numeric_intervals, bias=False)
+    intervals_kurtosis = kurtosis(numeric_intervals, bias=False)
+    absolute_intervals_skewness = skew(absolute_numeric_intervals, bias=False)
+    absolute_intervals_kurtosis = kurtosis(absolute_numeric_intervals, bias=False)
     return {
         f"{prefix}{INTERVALLIC_SKEWNESS}": intervals_skewness,
         f"{prefix}{INTERVALLIC_KURTOSIS}": intervals_kurtosis,
