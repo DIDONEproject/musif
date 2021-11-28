@@ -6,7 +6,7 @@ from musif.config import Configuration
 from musif.extract.common import part_matches_filter
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART, \
     DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION
-from musif.extract.features.prefix import get_family_prefix
+from musif.extract.features.prefix import get_family_prefix, get_sound_prefix
 from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound
 from .constants import *
 
@@ -83,6 +83,10 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         FAMILY_INSTRUMENTATION: ','.join(sort_list(instrumental_family_abbreviations, cfg.scoring_family_order)),
         NUMBER_OF_PARTS: len(abbreviated_parts),
     }
+    for sound_abbreviation in sound_abbreviations:
+        sound_prefix = get_sound_prefix(sound_abbreviation)
+        features[f"{sound_prefix}{NUMBER_OF_PARTS}"] = count_by_sound[sound_abbreviation]
+        features[f"{sound_prefix}{NUMBER_OF_FILTERED_PARTS}"] = filtered_count_by_sound[sound_abbreviation]
     for family_abbreviation in family_abbreviations:
         family_prefix = get_family_prefix(family_abbreviation)
         features[f"{family_prefix}{NUMBER_OF_PARTS}"] = count_by_family[family_abbreviation]
