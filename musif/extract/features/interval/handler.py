@@ -70,7 +70,7 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
 
     cutoff = 0.1
     limits = (cutoff / 2, cutoff / 2)
-    trimmed_intervallic_mean = trimmed_mean(numeric_intervals[:10], limits) if len(intervals) > 0 else 0
+    trimmed_intervallic_mean = trimmed_mean(numeric_intervals, limits) if len(intervals) > 0 else 0
     trimmed_intervallic_std = trimmed_std(numeric_intervals, limits) if len(intervals) > 1 else 0
     trimmed_absolute_intervallic_mean = trimmed_mean(absolute_numeric_intervals, limits) if len(intervals) > 0 else 0
     trimmed_absolute_intervallic_std = trimmed_std(absolute_numeric_intervals, limits) if len(intervals) > 1 else 0
