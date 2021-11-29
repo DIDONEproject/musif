@@ -510,19 +510,8 @@ def write_title(sheet, rows_groups, row_number, column_number, row):
     sorting = rows_groups[row][1]
     return sorting
 
-def get_instrument_prefix(self, instrument: list):
-        if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
-            prefix = 'Part'
-        elif self._IsVoice(instrument):
-            prefix = 'Family'
-            instrument=VOICE_FAMILY.capitalize()
-        else:
-            prefix = 'Sound'
-            instrument=instrument.replace('I','')
-        
-        inst=prefix+instrument
-        return inst
 
-def capitalize_instruments(self, instruments):
+
+def capitalize_instruments(instruments):
     return [instrument[0].upper()+instrument[1:]
                     for instrument in instruments]

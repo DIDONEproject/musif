@@ -15,7 +15,7 @@ from musif.extract.features.harmony.constants import (HARMONIC_RHYTHM,
                                                       CHORD_TYPES_prefix,
                                                       CHORDS_GROUPING_prefix,
                                                       NUMERALS_prefix)
-from musif.extract.features.harmony.utils import sort_labels
+from .sort_labels import sort_labels
 from musif.logs import pwarn
 from musif.reports.constants import COMMON_DF, NORMAL_WIDTH
 from musif.reports.utils import (Create_excel, get_excel_name,
