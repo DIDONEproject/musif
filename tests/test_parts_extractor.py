@@ -13,7 +13,7 @@ empty_dir = path.join("data", "config_test")
 
 directory_tests = path.join("data", "arias_tests1")
 first_file_dir = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
-first_file_dir_twin = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
+first_file_same_file_different_dir = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
 second_file_dir = path.join("data", "arias_test", "Dem02M-In_te-1733-Caldara[1.02][0417].xml")
 
 incomplete_file = path.join("data", "arias_test", "incomplete.xml")
@@ -141,7 +141,7 @@ class TestPartsExtractor:
         # GIVEN
         _cache.clear()
         extractor = PartsExtractor(config_file)
-        files = [first_file_dir, first_file_dir_twin]
+        files = [first_file_dir, first_file_same_file_different_dir]
         # If it's given the same path it will just load from cache the first one
 
         # WHEN
