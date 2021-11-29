@@ -12,7 +12,7 @@ config_file = path.join("data", "static", "config.yml")
 config_file_parallel = path.join("data", "config_test", "config_parallel.yml")
 test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 malformed_file = path.join("data", "arias_test", "malformed.xml")
-incompleted_file = path.join("data", "arias_test", "incomplete.xml")
+incomplete_file = path.join("data", "arias_test", "incomplete.xml")
 
 
 class TestFilesValidator:
@@ -20,7 +20,6 @@ class TestFilesValidator:
     # configurations tests
 
 
-    @pytest.mark.configurations
     def test_config_passed_as_path(self):
         # Given
         expected = read_object_from_yaml_file(config_file)
@@ -31,7 +30,7 @@ class TestFilesValidator:
         # Then
         assert expected == extractor._cfg.to_dict()
 
-    @pytest.mark.configurations
+
     def test_config_passed_as_keywords(self):
         # Given
         config_dict = Configuration(config_file).to_dict()
@@ -43,7 +42,6 @@ class TestFilesValidator:
         # Then
         assert extractor._cfg.to_dict() == expected
 
-    @pytest.mark.configurations
     def test_config_passed_with_override(self):
         # Given
         expected = read_object_from_yaml_file(config_file_parallel)
@@ -54,7 +52,6 @@ class TestFilesValidator:
         # Then
         assert extractor._cfg.to_dict() == expected
 
-    @pytest.mark.configurations
     def test_config_passed_as_configuration_object(self):
         # Given
         config = Configuration(config_file)
@@ -66,7 +63,6 @@ class TestFilesValidator:
         # Then
         assert extractor._cfg.to_dict() == expected
 
-    @pytest.mark.configurations
     def test_config_passed_as_dict(self):
         # Given
         config_dict = Configuration(config_file).to_dict()
@@ -78,7 +74,6 @@ class TestFilesValidator:
         # Then
         assert extractor._cfg.to_dict() == expected
 
-    @pytest.mark.configurations
     def test_config_more_than_one_argument(self):
         # Given
 
@@ -86,7 +81,6 @@ class TestFilesValidator:
         with pytest.raises(ValueError):
             FilesValidator(config_file, "another argument")
 
-    @pytest.mark.configurations
     def test_config_wrong_type_argument(self):
         # Given
 
@@ -94,7 +88,6 @@ class TestFilesValidator:
         with pytest.raises(TypeError):
             FilesValidator(0)
 
-    @pytest.mark.configurations
     def test_config_no_argument(self):
         # Given
 
@@ -104,7 +97,6 @@ class TestFilesValidator:
 
     # MALFORMED FILES TESTS
 
-    @pytest.mark.malformed
     def test_validate_file(self, capsys):
         # Given
         validator = FilesValidator(config_file)
@@ -115,7 +107,6 @@ class TestFilesValidator:
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 0
 
-    @pytest.mark.malformed
     def test_validate_malformed_file(self, capsys):
         # Given
         validator = FilesValidator(config_file)
@@ -126,7 +117,6 @@ class TestFilesValidator:
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
 
-    @pytest.mark.malformed
     def test_validate_malformed_file_with_correct_file(self, capsys):
         # Given
         validator = FilesValidator(config_file)
@@ -138,7 +128,6 @@ class TestFilesValidator:
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
 
-    @pytest.mark.malformed
     def test_validate_two_malformed_files(self, capsys):
         # Given
         validator = FilesValidator(config_file)
@@ -151,35 +140,32 @@ class TestFilesValidator:
 
     # INCOMPLETE FILES TESTS
 
-    @pytest.mark.incompleted
     def test_validate_incompleted_file(self, capsys):
         # Given
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate(incompleted_file)
+        validator.validate(incomplete_file)
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
 
-    @pytest.mark.incompleted
     def test_validate_incompleted_file_with_correct_file(self, capsys):
         # Given
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate([incompleted_file, test_file])
+        validator.validate([incomplete_file, test_file])
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
 
-    @pytest.mark.incompleted
     def test_validate_two_incompleted_files(self, capsys):
         # Given
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate([incompleted_file, incompleted_file])
+        validator.validate([incomplete_file, incomplete_file])
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 2
