@@ -37,6 +37,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
+
         if visualizations:
             if 'Clefs' in name:
                 title = 'Use of clefs in the vocal part'
@@ -77,7 +78,6 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                                     data_grouped = data.groupby(subrow)
                                     bar_plot(name_bar+'_'+subrow + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
                                             'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
-
             else:
                 name_bar = path.join(
                     results_path, 'visualisations', name.replace('.xlsx', IMAGE_EXTENSION))
@@ -85,7 +85,6 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                             'Intervals' if 'Clef' not in name else 'Clefs', title)
     except Exception as e:
         lwarn('{} Problem found: {}'.format(name, e))
-
 
 def fix_column_names(sorting_list, all_columns, general_cols):
     third_columns_names_origin = set(all_columns) - set(general_cols)

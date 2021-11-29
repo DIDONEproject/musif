@@ -22,7 +22,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features = {}
     for part_features in parts_features:
         part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
-        features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
+        features[f"{part_prefix}{DATA_NOTES}"] = part_features[DATA_NOTES]
         
     score_features.update(features)
 
@@ -56,4 +56,4 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         return {}
     notes = part_data[DATA_NOTES]
     part_features.update({
-        NOTES: len(notes)})
+        DATA_NOTES: len(notes)})

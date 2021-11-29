@@ -15,13 +15,13 @@ features:
   - metadata
   - core
   - composer
-  # - librettist
+  - librettist
   - key
   - tempo
   - ambitus
   - interval
   # - density
-#  - texture
+  # - texture
   - themeA
   - harmony
   # - lyrics

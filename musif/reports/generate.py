@@ -16,13 +16,15 @@ from os import path
 
 import numpy as np
 import pandas as pd
+from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.features import (density, harmony, lyrics, scale,
                                     scale_relative, texture)
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
 from musif.logs import lerr, perr
 from musif.reports.calculations import make_intervals_absolute
-from musif.reports.utils import get_instrument_prefix, remove_folder_contents, capitalize_instruments
+from musif.reports.utils import (capitalize_instruments,
+                                 remove_folder_contents)
 from pandas import DataFrame
 from tqdm import tqdm
 
@@ -44,23 +46,23 @@ class FeaturesGenerator:
         pinfo('\n'+'--- Starting reports generation ---\n'.center(120, ' '))
         self.parts_list = [] if self._cfg.parts_filter is None else self._cfg.parts_filter
         self.visualizations=visualizations
+        pinfo('Visualizations are enabled' if self.visualizations else 'Visualizations are disabled'+'.\n')
+        
         self.global_features = data
         self.num_factors_max = num_factors
         self.main_results_path = main_results_path
         self.sorting_lists = self._cfg.sorting_lists
-        pinfo('Visualizations are enabled' if self.visualizations else 'Visualizations are disabled'+'.\n')
         self._write()
 
     def _write(self):
-        for factor in range(0, self.num_factors_max + 1):
-            self._FactorExecution(factor)
+        for factor in range(1, self.num_factors_max + 1):
+            self._Factor_Execution(factor)
            
     def _Factor_Execution(self, num_factors: int = 0):
         global rows_groups
         global not_used_cols
         self.not_used_cols=not_used_cols
         self.rows_groups=rows_groups
-        self.common = True # Flag to run common tasks only once
         self.main_results_path = os.path.join(self.main_results_path, 'reports')
         self.metadata_columns=metadata_columns
         all_info = self.global_features
@@ -70,10 +72,9 @@ class FeaturesGenerator:
         common_columns_df = self._find_common_columns(all_info)
         pinfo('\n' + str(num_factors) + " factor" + "\n")
         instruments = self._extract_instruments(all_info)
-        self.rename_singers(all_info)
+        self._rename_singers(all_info)
 
         common_tasks, harmony_tasks=self._prepare_common_dataframes(all_info, instruments)
-
 
         additional_info, rg_groups = self._get_additional_info_and_groups(num_factors, self.rows_groups) 
 
@@ -82,13 +83,12 @@ class FeaturesGenerator:
         for instrument in tqdm(list(instruments), desc='Instruments'):
             if instrument.lower() in singers_list:
                 instrument = 'Voice'
-
             pinfo(f'\nInstrument:\t{instrument}' + '\n')
+
             instrument_level = 'Part' + instrument + '_'
             intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self._find_interval_degree_columns(all_info, instrument_level)
             self._prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
             
-
             self.results_path_factorx = path.join(self.main_results_path, 'Melody_' + instrument, str(
                 num_factors) + " factor") if num_factors > 0 else path.join(self.main_results_path,'Melody_'+ instrument, "Data")
             if not os.path.exists(self.results_path_factorx):
@@ -112,12 +112,6 @@ class FeaturesGenerator:
                 #     rows_groups = rg
                 #     not_used_cols = nuc
 
-    def rename_singers(self, all_info):
-        for c in all_info.columns:
-            if any(i.capitalize() in c for i in singers_list):
-                for s in singers_list:
-                    all_info.rename(columns={c:c.replace(s.capitalize(),'Voice')}, inplace=True)
-
     def _find_common_columns(self, all_info):
         common_columns_df= pd.DataFrame()
         columns_to_remove=[]
@@ -136,14 +130,13 @@ class FeaturesGenerator:
         common_columns_df['Total analysed'] = 1.0
         return common_columns_df
 
-
     def _find_notes_set(self, instruments):
         notes_set=set([])
         for instrument in instruments:
             if instrument.lower().startswith('vn'):
-                notes_set.add(get_instrument_prefix(instrument) + '_Notes')
+                notes_set.add(self._get_instrument_prefix(instrument) + '_Notes')
             else:
-                notes_set.add(get_instrument_prefix(instrument) + '_NotesMean')
+                notes_set.add(self._get_instrument_prefix(instrument) + '_NotesMean')
         return notes_set
 
     def _prepare_part_dataframes(self, all_info, common_columns_df, tasks, Instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list):
@@ -216,7 +209,13 @@ class FeaturesGenerator:
 
                 self._tasks_execution(self.rows_groups, self.not_used_cols, self._cfg,
                              groups, additional_info, factor, common_columns_df,results_path=harmony_data_path, **harmony_tasks)
-                
+    
+    def _rename_singers(self, all_info):
+        for c in all_info.columns:
+            if any(i.capitalize() in c for i in singers_list):
+                for s in singers_list:
+                    all_info.rename(columns={c:c.replace(s.capitalize(),'Voice')}, inplace=True)
+            
     def _IsVoice(self, instrument):
         if instrument.lower()=='voice':
             return True
@@ -246,7 +245,7 @@ class FeaturesGenerator:
                 for a in aria.split(','):
                     instruments.add(a)
 
-        instruments = self.capitalize_instruments(instruments)
+        instruments = capitalize_instruments(instruments)
         
         return instruments
 
@@ -254,9 +253,9 @@ class FeaturesGenerator:
         density_set = set([])
         for instrument in instruments:
             density_set.add(
-                    get_instrument_prefix(instrument)  + '_SoundingDensity')
+                    self._get_instrument_prefix(instrument)  + '_SoundingDensity')
             density_set.add(
-                    get_instrument_prefix(instrument)  + '_SoundingMeasures')
+                    self._get_instrument_prefix(instrument)  + '_SoundingMeasures')
             if instrument.endswith('II'):
                 continue
         density_set.add(NUMBER_OF_BEATS)
@@ -318,6 +317,18 @@ class FeaturesGenerator:
                                     for c in intervals_types.columns]
         return intervals_info, intervals_types
 
+    def _get_instrument_prefix(self, instrument: list):
+            if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
+                prefix = 'Part'
+            elif self._IsVoice(instrument):
+                prefix = 'Family'
+                instrument=VOICE_FAMILY.capitalize()
+            else:
+                prefix = 'Sound'
+                instrument=instrument.replace('I','')
+            
+            inst=prefix+instrument
+            return inst
     def _get_additional_info_and_groups(self, factor, rows_groups):
         additional_info = {ARIA_LABEL: [TITLE],
                                 TITLE: [ARIA_LABEL]}
