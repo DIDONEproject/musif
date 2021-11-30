@@ -16,7 +16,7 @@ from musif.logs import lerr
 from musif.musicxml import Measure, Note, Part
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
-from ..core.constants import NOTES
+from ..core.constants import NUM_NOTES
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -61,26 +61,26 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     measures = len(parts_data[0][DATA_MEASURES])
     features = {}
     df_parts = DataFrame(parts_features)
-    df_sound = df_parts.groupby(SOUND_ABBREVIATION).aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    df_family = df_parts.groupby(FAMILY_ABBREVIATION).aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
-    df_score = df_parts.aggregate({NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_sound = df_parts.groupby(SOUND_ABBREVIATION).aggregate({NUM_NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_family = df_parts.groupby(FAMILY_ABBREVIATION).aggregate({NUM_NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
+    df_score = df_parts.aggregate({NUM_NOTES: "sum", MEASURES: "sum", SOUNDING_MEASURES: "sum"})
     number_of_beats = score_features[NUMBER_OF_BEATS]
     for part_features in parts_features:
         part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
-        features[f"{part_prefix}{NOTES}"] = part_features[NOTES]
+        features[f"{part_prefix}{NUM_NOTES}"] = part_features[NUM_NOTES]
         features[f"{part_prefix}{SOUNDING_MEASURES}"] = part_features[SOUNDING_MEASURES]
         features[f"{part_prefix}{SOUNDING_DENSITY}"] = part_features[SOUNDING_DENSITY]
         features[f"{part_prefix}{DENSITY}"] = part_features[DENSITY]
 
     for sound_abbreviation in df_sound.index:
         sound_prefix = get_sound_prefix(sound_abbreviation)
-        notes = df_sound.loc[sound_abbreviation, NOTES].tolist()
+        notes = df_sound.loc[sound_abbreviation, NUM_NOTES].tolist()
         measures = df_sound.loc[sound_abbreviation, MEASURES].tolist()
         sounding_measures = df_sound.loc[sound_abbreviation, SOUNDING_MEASURES].tolist()
         sound_parts = score_features[f"{sound_prefix}{NUMBER_OF_FILTERED_PARTS}"]
         notes_mean = notes / sound_parts if sound_parts > 0 else 0
         sounding_measures_mean = sounding_measures / sound_parts if sound_parts > 0 else 0
-        features[f"{sound_prefix}{NOTES}"] = notes
+        features[f"{sound_prefix}{NUM_NOTES}"] = notes
         features[f"{sound_prefix}{NOTES_MEAN}"] = notes_mean
         features[f"{sound_prefix}{SOUNDING_MEASURES}"] = sounding_measures
         features[f"{sound_prefix}{SOUNDING_MEASURES_MEAN}"] = sounding_measures_mean
@@ -90,12 +90,12 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     for family in df_family.index:
         family_prefix = get_family_prefix(family)
-        notes = df_family.loc[family, NOTES].tolist()
+        notes = df_family.loc[family, NUM_NOTES].tolist()
         sounding_measures = df_family.loc[family, SOUNDING_MEASURES].tolist()
         family_parts = score_features[f"{family_prefix}{NUMBER_OF_FILTERED_PARTS}"]
         notes_mean = notes / family_parts if family_parts > 0 else 0
         sounding_measures_mean = sounding_measures / family_parts if family_parts > 0 else 0
-        features[f"{family_prefix}{NOTES}"] = notes
+        features[f"{family_prefix}{NUM_NOTES}"] = notes
         features[f"{family_prefix}{NOTES_MEAN}"] = notes_mean
         features[f"{family_prefix}{SOUNDING_MEASURES}"] = df_family.loc[family, SOUNDING_MEASURES].tolist()
         features[f"{family_prefix}{SOUNDING_MEASURES_MEAN}"] = sounding_measures_mean
@@ -103,13 +103,13 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         features[f"{family_prefix}{DENSITY}"] = notes_mean / number_of_beats / measures if measures != 0 else 0
 
     score_prefix = get_score_prefix()
-    notes = df_score[NOTES].tolist()
+    notes = df_score[NUM_NOTES].tolist()
     notes_mean = notes / len(parts_data)
     measures = df_score[MEASURES].tolist()
     sounding_measures = df_score[SOUNDING_MEASURES].tolist()
     measures_mean = measures / len(parts_data)
     sounding_measures_mean = sounding_measures / len(parts_data)
-    features[f"{score_prefix}{NOTES}"] = notes
+    features[f"{score_prefix}{NUM_NOTES}"] = notes
     features[f"{score_prefix}{NOTES_MEAN}"] = notes_mean
     features[f"{score_prefix}{SOUNDING_MEASURES}"] = sounding_measures
     features[f"{score_prefix}{SOUNDING_MEASURES_MEAN}"] = sounding_measures_mean

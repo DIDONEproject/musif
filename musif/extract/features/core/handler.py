@@ -22,7 +22,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DATA_INTERVALS: intervals,
     })
     part_features.update({
-        NOTES: len(notes)
+        NUM_NOTES: len(notes)
     })
 
 
@@ -38,9 +38,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     })
 
     for part_data, part_features in zip(parts_data, parts_features):
-        score_features[part_feature_name(part_data, NOTES)] = part_features[NOTES]
+        score_features[part_feature_name(part_data, NUM_NOTES)] = part_features[NUM_NOTES]
 
-    score_notes = sum([part_features[NOTES] for part_features in parts_features])
+    score_notes = sum([part_features[NUM_NOTES] for part_features in parts_features])
     score_features.update({
-        score_feature_name(NOTES): score_notes,
+        score_feature_name(NUM_NOTES): score_notes,
     })
