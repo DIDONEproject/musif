@@ -10,9 +10,9 @@ from scipy.stats.mstats import trimmed_mean, trimmed_std
 
 from musif.common.utils import extract_digits
 from musif.config import Configuration
-from musif.extract.constants import DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_INTERVALS
-from musif.extract.features.prefix import get_part_prefix, get_score_prefix
+from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
 from .constants import *
 
 
@@ -41,6 +41,18 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
                 interval_per_pattern = INTERVAL_PER.format(prefix="", interval=".+")
                 if re.match(interval_count_pattern, feature_name) or re.match(interval_per_pattern, feature_name):
                     features[f"{part_prefix}{feature_name}"] = feature_value
+
+    parts_data_per_sound = {part_data[DATA_SOUND_ABBREVIATION]: [] for part_data in parts_data}
+    for part_data in parts_data:
+        sound = part_data[DATA_SOUND_ABBREVIATION]
+        parts_data_per_sound[sound].append(part_data)
+    for sound, parts_data in parts_data_per_sound.items():
+        sound_prefix = get_sound_prefix(sound)
+        intervals = [interval for part_data in parts_data for interval in part_data[DATA_INTERVALS]]
+        features.update(get_interval_features(intervals, sound_prefix))
+        features.update(get_interval_count_features(intervals, sound_prefix))
+        features.update(get_interval_type_features(intervals, sound_prefix))
+        features.update(get_interval_stats_features(intervals, sound_prefix))
 
     score_intervals = [interval for part_data in parts_data for interval in part_data[DATA_INTERVALS]]
     score_prefix = get_score_prefix()
