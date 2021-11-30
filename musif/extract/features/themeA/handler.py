@@ -24,5 +24,6 @@ def update_score_objects(
     if cfg.is_requested_feature_category(HARMONY_FEATURES):
         score_data['MS3_score'] = score_data['MS3_score'].loc[score_data['MS3_score']['mn'] <= last_measure]
 
+
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     pass
