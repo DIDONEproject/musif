@@ -144,6 +144,29 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
 
 
 def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> Optional[str]:
+    """
+    Given a xml file name, returns the equivalent musescore file name, withint different directory or not.
+
+    Parameters
+    ----------
+    musicxml_file: str
+        original xml file
+    musescore_dir: Optional[str]
+        prefix to resul musescore file, sustitute original path
+
+    Returns
+    -------
+    resp: Optional[str]
+        musescore file path
+
+    Raises
+    ------
+    ValueError
+        If the given file is not a xml.
+
+    """
+    if musicxml_file[-4:] != ".xml":
+        raise ValueError(f"The file {musicxml_file} is not a xml file")
     extension_index = musicxml_file.rfind(".")
     musescore_file_path = musicxml_file[:extension_index] + "." + MUSESCORE_FILE_EXTENSION
     if musescore_dir:
