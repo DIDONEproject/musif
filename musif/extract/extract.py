@@ -28,8 +28,8 @@ _cache = Cache(10000)  # To cache scanned scores
 
 def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeats: bool = False) -> Score:
     """
-    This function parses a musicxml file and returns a music21 Score object. if the file has already been parsed,
-    it will be load from cache instead of processing it again. Split a part in different parts if the instrument
+    This function parses a musicxml file and returns a music21 Score object. If the file has already been parsed,
+    it will be loaded from cache instead of processing it again. Split a part in different parts if the instrument
     family is in keywords argument and expands repeats if indicated.
 
        Parameters
@@ -66,6 +66,26 @@ def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeat
 
 
 def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.DataFrame:
+    """
+    This function parses a musescore file and returns a pandas dataframe. If the file has
+    already been parsed, it will be loaded from cache instead of processing it again.
+
+        Parameters
+        ----------
+        file_path: str
+            A path to a music xml path.
+        expand_repeats: bool
+            Determines whether to expand or not the repetitions. Default value is False.
+
+        Returns
+        -------
+        resp : pd.DataFrame
+             The score saved in cache or the new score parsed with the necessary parts splitted.
+        Raises
+        ------
+        ParseFileError
+            If the musescore file can't be parsed for any reason.
+    """
     harmonic_analysis = _cache.get(file_path)
     if harmonic_analysis is not None:
         return harmonic_analysis
