@@ -3,7 +3,8 @@ import pandas as pd
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
 from musif.extract.features.composer.handler import COMPOSER
-from musif.extract.features.density.constants import DENSITY, NOTES_MEAN, SOUNDING_DENSITY, SOUNDING_MEASURES_MEAN
+from musif.extract.features.core.constants import NOTES_MEAN, SOUNDING_MEASURES_MEAN
+from musif.extract.features.density.constants import DENSITY, SOUNDING_DENSITY
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.interval.constants import ABSOLUTE_INTERVALLIC_KURTOSIS, ABSOLUTE_INTERVALLIC_MEAN, \
     ABSOLUTE_INTERVALLIC_SKEWNESS, ABSOLUTE_INTERVALLIC_STD, ABSOLUTE_INTERVALLIC_TRIM_DIFF, \
