@@ -152,7 +152,7 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
     musicxml_file: str
         original xml file
     musescore_dir: Optional[str]
-        prefix to resul musescore file, sustitute original path
+        Directory path to musescore file.
 
     Returns
     -------
