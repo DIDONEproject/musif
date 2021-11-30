@@ -1,6 +1,2 @@
-NOTES_MEAN = "NotesMean"
-SOUNDING_MEASURES = "SoundingMeasures"
-SOUNDING_MEASURES_MEAN = "SoundingMeasuresMean"
-MEASURES = "Measures"
 SOUNDING_DENSITY = "SoundingDensity"
 DENSITY = "Density"
