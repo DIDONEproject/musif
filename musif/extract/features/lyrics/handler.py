@@ -9,7 +9,7 @@ from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_LYRICS, DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix
 from .constants import *
-from ..core.constants import NOTES
+from ..core.constants import NUM_NOTES
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -37,7 +37,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     if voice_parts_data:
         for part_data in voice_parts_data:
             part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-            features[f"{part_prefix}{NOTES}"] = len(part_data[DATA_NOTES])
+            features[f"{part_prefix}{NUM_NOTES}"] = len(part_data[DATA_NOTES])
             features[f"{part_prefix}{SYLLABLES}"] = len(part_data[DATA_LYRICS])
             features[f"{part_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(part_data[DATA_NOTES], part_data[DATA_LYRICS])
 
