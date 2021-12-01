@@ -165,7 +165,7 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
         If the given file is not a xml.
 
     """
-    if musicxml_file[-4:] != ".xml":
+    if not musicxml_file.endswith("." + MUSICXML_FILE_EXTENSION):
         raise ValueError(f"The file {musicxml_file} is not a xml file")
     extension_index = musicxml_file.rfind(".")
     musescore_file_path = musicxml_file[:extension_index] + "." + MUSESCORE_FILE_EXTENSION

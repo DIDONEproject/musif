@@ -76,3 +76,9 @@ class TestComposeMusescoreFilePath:
 
         # THEN
         assert path_name == expected
+
+    def test_empty_str(self):
+        # WHEN/THEN
+        with pytest.raises(ValueError):
+            compose_musescore_file_path("", None)
+
