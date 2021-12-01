@@ -145,7 +145,7 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
 
 def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> Optional[str]:
     """
-    Given a xml file name, returns the equivalent musescore file name, withint different directory or not.
+    Given a musicxml file name, returns the equivalent musescore file name, withint different directory or not.
 
     Parameters
     ----------
