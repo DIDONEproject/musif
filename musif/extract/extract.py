@@ -316,10 +316,44 @@ class FilesValidator:
 
 
 class FeaturesExtractor:
+    """
+    Extract features given in the configuration data getting a file, directory or several files paths,
+    returning a DataFrame of the score.
+    """
     def __init__(self, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
+        **kwargs: Get keywords to construct Configuration.
+
+        Raises
+        ------
+        TypeError
+         - If the type is not the expected (str, dict or Configuration).
+        ValueError
+          - If there is too many arguments(args)
+        FileNotFoundError
+          - If any of the files/directories path inside the expected configuration doesn't exit.
+        """
         self._cfg = Configuration(*args, **kwargs)
 
     def extract(self) -> DataFrame:
+        """
+        Extract features given in the configuration data getting a file, directory or several files paths,
+        returning a DataFrame of the score.
+
+        Returns
+        ------
+            Score dataframe with the extracted features of given scores.
+
+        Raises
+        ------
+        ParseFileError
+           If the xml file can't be parsed for any reason.
+        KeyError
+           If features aren't loaded in corrected order or dependencies
+        """
         linfo('---Analyzing scores ---')
         musicxml_files = extract_files(self._cfg.data_dir)
         score_df, parts_df = self._process_corpora(musicxml_files)
