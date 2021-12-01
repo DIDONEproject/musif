@@ -53,17 +53,17 @@ class TestComposeMusescoreFilePath:
         # THEN
         assert path_name == expected
 
-    def test_file_wrong_extention(self):
+    def test_file_wrong_extension(self):
         # WHEN/THEN
         with pytest.raises(ValueError):
             compose_musescore_file_path("file.txt", None)
 
-    def test_file_without_extention(self):
+    def test_file_without_extension(self):
         # WHEN/THEN
         with pytest.raises(ValueError):
             compose_musescore_file_path("file", None)
 
-    def test_bad_extention(self):
+    def test_bad_extension(self):
         with pytest.raises(ValueError):
             compose_musescore_file_path("file.xml.txt", None)
 
