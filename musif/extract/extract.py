@@ -143,7 +143,7 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
     return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
 
 
-def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> Optional[str]:
+def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> str:
     """
     Given a musicxml file name, returns the equivalent musescore file name, withint different directory or not.
 
@@ -156,7 +156,7 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
 
     Returns
     -------
-    resp: Optional[str]
+    resp: str
         musescore file path
 
     Raises
