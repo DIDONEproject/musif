@@ -19,4 +19,5 @@ if __name__ == "__main__":
 
     df=pd.read_csv('martiser/dataframe.csv')
     path = './'
-    FeaturesGenerator("martiser/myconfig.yml").generate_reports(df, path, num_factors=1, visualizations=False)
+    FeaturesGenerator("martiser/myconfig.yml").generate_reports(df, path, num_factors=1, visualizations=True)
+    

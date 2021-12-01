@@ -510,8 +510,6 @@ def write_title(sheet, rows_groups, row_number, column_number, row):
     sorting = rows_groups[row][1]
     return sorting
 
-
-
 def capitalize_instruments(instruments):
     return [instrument[0].upper()+instrument[1:]
                     for instrument in instruments]
