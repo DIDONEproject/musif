@@ -71,7 +71,7 @@ def get_tonality_for_measure(harmonic_analysis, tonality, renumbered_measures):
     for index, grado in enumerate(harmonic_analysis.localkey):
         tonality_map[renumbered_measures[index]] = get_localTonalty(tonality, grado.strip())
 
-    #  Fill measures without a value
+    # Fill measures without any value
     for measure in range(1, max(list(tonality_map.keys()))):
         if measure not in tonality_map.keys():
             tonality_map[measure] = tonality_map[measure-1]
@@ -98,14 +98,8 @@ def get_localTonalty(globalkey, degree):
     
     modulation = pitch_scale + accidental
 
-    # modulation = modulation.replace('#', '', 1)
-    # modulation = modulation.replace('-', '', 1)
-
     return modulation.upper() if degree.isupper() else modulation.lower()
 
-###########################################################################
-# Function created to obtain the scale degree of a note in a given key #
-###########################################################################
 def get_note_degree(key, note):
   if key[0].isupper():
     scl = scale.MajorScale(key.split(' ')[0])
@@ -128,11 +122,10 @@ def get_note_degree(key, note):
   return acc + str(degree[0])
 
 # Transforms the list of notes into their scale degrees, based on the local key          #
-
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
-    harmonic_analysis, tonality, notes_measures, renumbered_measures = Extract_Harmony(score_data)
+    harmonic_analysis, tonality, renumbered_measures = extract_Harmony(score_data)
 
-    get_notes(notes_list, notes_measures)
+    notes_measures=get_notes(notes_list)
     if IsAnacrusis(harmonic_analysis):
         renumbered_measures = [rm - 1 for rm in renumbered_measures]
     
@@ -140,21 +133,21 @@ def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) ->
 
     Add_Missing_Measures_to_tonality_map(tonality_map,renumbered_measures)
 
-    return get_emphasized_degrees(notes_list, tonality_map)
+    return get_emphasized_degrees(notes_list, tonality_map, notes_measures)
 
 
-def get_notes(notes_list, notes_measures):
+def get_notes(notes_list):
+    notes_measures=[]
     for note in notes_list:
         if note.isChord:
             note=note[0] #If we wave 2 or more notes at once, we just take the lowest one
         notes_measures.append((note.name, note.measureNumber))
-
-def Extract_Harmony(score_data):
+    return notes_measures
+def extract_Harmony(score_data):
     harmonic_analysis=score_data['MS3_score']
     tonality=str(score_data[DATA_KEY])
-    notes_measures = []
     renumbered_measures = harmonic_analysis.mc.dropna().tolist()
-    return harmonic_analysis,tonality,notes_measures,renumbered_measures
+    return harmonic_analysis,tonality,renumbered_measures
 
     
 def Add_Missing_Measures_to_tonality_map(tonality_map: dict, renumbered_measures: list):
@@ -162,7 +155,7 @@ def Add_Missing_Measures_to_tonality_map(tonality_map: dict, renumbered_measures
         if num not in tonality_map:
             tonality_map[num] = tonality_map[num - 1]
             
-def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
+def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict, notes_measures)-> dict:
     local_tonality=''
     
     notes_per_degree_relative = {
