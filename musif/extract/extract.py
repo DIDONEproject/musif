@@ -44,7 +44,7 @@ def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeat
        Returns
        -------
        resp : Score
-         The score saved in cache or the new score parsed with the necessary parts splitted.
+         The score saved in cache or the new score parsed with the necessary parts split.
 
        Raises
        ------

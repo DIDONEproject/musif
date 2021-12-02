@@ -1,4 +1,4 @@
-from musif.extract.constants import DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 
 
 def get_part_prefix(part_abbreviation: str) -> str:
@@ -27,30 +27,70 @@ def get_corpus_prefix() -> str:
     return "Corpus_"
 
 
-def part_feature_name(part_data: dict, feature: str) -> str:
+def get_part_feature(part: str, feature: str) -> str:
     """
-    It builds the name of a feature for a specific part, prefixing the feature name
-    with the part abbreviation prefix.
+    It builds the name of a feature with part scope.
 
-    For instance, if the feature is "NumberOfIntervals" and the part abbreviation is "ObI",
-    this class would return: "PartObI_NumberOfIntervals".
+    For instance, if the feature is "NumberOfIntervals" and the part is "VnI",
+    this class would return: "PartVnI_NumberOfIntervals".
 
     Args:
-        part_data (dict): A dictionary containing the data part abbreviation.
+        part (str): The part name.
         feature (str): Name of the feature to be prefixed.
 
     Returns:
         str: The feature properly prefixed for the part passed as argument.
     """
-    part_abbreviation = part_data[DATA_PART_ABBREVIATION]
-    return get_part_prefix(part_abbreviation) + feature
+    return get_part_prefix(part) + feature
+
+
+def get_sound_feature(sound: str, feature: str) -> str:
+    """
+    It builds the name of a feature with sound scope.
+
+    For instance, if the feature is "NumberOfIntervals" and the sound is "Ob",
+    this class would return: "SoundOb_NumberOfIntervals".
+
+    Args:
+        sound (str): The sound name.
+        feature (str): Name of the feature to be prefixed.
+
+    Returns:
+        str: The feature properly prefixed for the sound passed as argument.
+    """
+    return get_sound_prefix(sound) + feature
 
 
 def get_family_feature(family: str, feature: str) -> str:
+    """
+    It builds the name of a feature with family scope.
+
+    For instance, if the feature is "NumberOfIntervals" and the family is "Str",
+    this class would return: "FamilyStr_NumberOfIntervals".
+
+    Args:
+        family (str): The family name.
+        feature (str): Name of the feature to be prefixed.
+
+    Returns:
+        str: The feature properly prefixed for the family passed as argument.
+    """
     return get_family_prefix(family) + feature
 
 
-def score_feature_name(feature: str) -> str:
+def get_score_feature(feature: str) -> str:
+    """
+    It builds the name of a feature with Score scope.
+
+    For instance, if the feature is "NumberOfIntervals",
+    this class would return: "Score_NumberOfIntervals".
+
+    Args:
+        feature (str): Name of the feature to be prefixed.
+
+    Returns:
+        str: The feature properly prefixed for score scope.
+    """
     return get_score_prefix() + feature
 
 
