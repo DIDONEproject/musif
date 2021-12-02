@@ -3,15 +3,22 @@ import os
 from typing import List
 
 import numpy as np
+from musif.common.constants import VOICE_FAMILY
+from musif.common.sort import sort_dataframe
+from musif.reports.calculations import compute_average
+from musif.reports.constants import (ARIA_ID, BOLD, CHARACTER, FONT,
+                                     FONT_TITLE, GENDER, NAME, NORMAL_WIDTH,
+                                     ROLE, YELLOWFILL, alfa, center,
+                                     factors_Fill, forbiden_groups, greenFill,
+                                     titles1Fill, titles2Fill, titles3Fill)
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import ExcelWriter
 from pandas.core.frame import DataFrame
-from musif.common.constants import VOICE_FAMILY
 
-from musif.common.sort import sort_dataframe
-from musif.reports.calculations import compute_average
 from .calculations import compute_value
-from .constants import *
+
+# from .constants import *
+
 
 WIDTH = 35
 HEIGHT = 20
@@ -415,6 +422,9 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                   columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None,
                     additional_info: list=[], ponderate: bool =False):
     all_columns = list(data.columns)
+    #ROWS GROUPS DEBE SER CAMBIANTE, AKA UNA VARIABLE DE LA VCLASE QUE SE PASA A LASFUNCIONES
+    #mirar en el commit bien anterior cómo es rows_group a factor 0
+    #modificarlo acordemente como self-rows_roups
     for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
         if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):
             forbiden = [NAME]
