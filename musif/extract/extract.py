@@ -340,7 +340,7 @@ class FeaturesExtractor:
 
     def extract(self) -> DataFrame:
         """
-        Extract features given in the configuration data getting a file, directory or several files paths,
+        Extracts features given in the configuration data getting a file, directory or several files paths,
         returning a DataFrame of the score.
 
         Returns
@@ -350,7 +350,7 @@ class FeaturesExtractor:
         Raises
         ------
         ParseFileError
-           If the xml file can't be parsed for any reason.
+           If the musicxml file can't be parsed for any reason.
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
