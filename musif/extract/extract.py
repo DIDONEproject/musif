@@ -150,23 +150,24 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
     Parameters
     ----------
     musicxml_file: str
-        original xml file
+        Original musicxml file
+
     musescore_dir: Optional[str]
         Directory path to musescore file.
 
     Returns
     -------
     resp: str
-        musescore file path
+        Musescore file path
 
     Raises
     ------
     ValueError
-        If the given file is not a xml.
+        If the given file is not a musicxml.
 
     """
     if not musicxml_file.endswith("." + MUSICXML_FILE_EXTENSION):
-        raise ValueError(f"The file {musicxml_file} is not a xml file")
+        raise ValueError(f"The file {musicxml_file} is not a .{MUSICXML_FILE_EXTENSION} file")
     extension_index = musicxml_file.rfind(".")
     musescore_file_path = musicxml_file[:extension_index] + "." + MUSESCORE_FILE_EXTENSION
     if musescore_dir:
