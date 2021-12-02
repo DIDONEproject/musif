@@ -3,9 +3,14 @@ from typing import List, Tuple
 from musif.common.sort import sort_dict
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
-from musif.extract.constants import DATA_FAMILY_ABBREVIATION, DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
+from musif.extract.constants import DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART_ABBREVIATION, \
+    DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.handler import DATA_MEASURES, DATA_NOTES, DATA_SOUNDING_MEASURES
-from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_score_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_family_feature, get_family_prefix, get_part_feature, get_part_prefix, \
+    get_score_feature, \
+    get_score_prefix, \
+    get_sound_feature, \
+    get_sound_prefix
 from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, PART_ABBREVIATION
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS, TIME_SIGNATURE, TIME_SIGNATURES
 from musif.extract.utils import Get_TimeSignature_periods, calculate_total_number_of_beats
@@ -45,7 +50,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
             SOUNDING_DENSITY: len(notes)/calculate_total_number_of_beats(time_signatures, sounding_periods) if len(sounding_measures) > 0 else 0,
             DENSITY: len(notes)/calculate_total_number_of_beats(time_signatures, periods) if len(measures) > 0 else 0,
         })
-        
+
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     parts_data = filter_parts_data(parts_data, cfg.parts_filter)
@@ -56,41 +61,31 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     features = {}
     for part_features in parts_features:
-        part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
-        features[f"{part_prefix}{SOUNDING_DENSITY}"] = part_features[SOUNDING_DENSITY]
-        features[f"{part_prefix}{DENSITY}"] = part_features[DENSITY]
+        part = part_features[PART_ABBREVIATION]
+        features[get_part_feature(part, SOUNDING_DENSITY)] = part_features[SOUNDING_DENSITY]
+        features[get_part_feature(part, DENSITY)] = part_features[DENSITY]
 
     sound_abbreviations = {part_data[DATA_SOUND_ABBREVIATION] for part_data in parts_data}
-    for sound_abbreviation in sound_abbreviations:
-        sound_prefix = get_sound_prefix(sound_abbreviation)
-        num_measures = score_features[f"{sound_prefix}{NUM_MEASURES}"]
-        num_sounding_measures = score_features[f"{sound_prefix}{NUM_SOUNDING_MEASURES}"]
-        sound_parts = score_features[f"{sound_prefix}{NUMBER_OF_FILTERED_PARTS}"]
-        notes_mean = score_features[f"{sound_prefix}{NUM_NOTES}"]
-        sounding_measures_mean = num_sounding_measures / sound_parts if sound_parts > 0 else 0
-        features[f"{sound_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
-        features[f"{sound_prefix}{DENSITY}"] = notes_mean / number_of_beats / num_measures if num_measures != 0 else 0
+    for sound in sound_abbreviations:
+        num_measures = score_features[get_sound_feature(sound, NUM_MEASURES)]
+        num_sounding_measures = score_features[get_sound_feature(sound, NUM_SOUNDING_MEASURES)]
+        num_notes = score_features[get_sound_feature(sound, NUM_NOTES)]
+        features[get_sound_feature(sound, SOUNDING_DENSITY)] = num_notes / number_of_beats / num_sounding_measures if num_sounding_measures != 0 else 0
+        features[get_sound_feature(sound, DENSITY)] = num_notes / number_of_beats / num_measures if num_measures != 0 else 0
 
     family_abbreviations = {part_data[DATA_FAMILY_ABBREVIATION] for part_data in parts_data}
-    for family_abbreviation in family_abbreviations:
-        family_prefix = get_family_prefix(family_abbreviation)
-        num_measures = score_features[f"{family_prefix}{NUM_MEASURES}"]
-        num_sounding_measures = score_features[f"{family_prefix}{NUM_SOUNDING_MEASURES}"]
-        family_parts = score_features[f"{family_prefix}{NUMBER_OF_FILTERED_PARTS}"]
-        notes_mean = score_features[f"{family_prefix}{NUM_NOTES}"]
-        sounding_measures_mean = num_sounding_measures / family_parts if family_parts > 0 else 0
-        features[f"{family_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
-        features[f"{family_prefix}{DENSITY}"] = notes_mean / number_of_beats / num_measures if num_measures != 0 else 0
+    for family in family_abbreviations:
+        num_measures = score_features[get_family_feature(family, NUM_MEASURES)]
+        num_sounding_measures = score_features[get_family_feature(family, NUM_SOUNDING_MEASURES)]
+        num_notes = score_features[get_family_feature(family, NUM_NOTES)]
+        features[get_family_feature(family, SOUNDING_DENSITY)] = num_notes / number_of_beats / num_sounding_measures if num_sounding_measures != 0 else 0
+        features[get_family_feature(family, DENSITY)] = num_notes / number_of_beats / num_measures if num_measures != 0 else 0
 
-    score_prefix = get_score_prefix()
-    notes = score_features[f"{score_prefix}{NUM_NOTES}"]
-    notes_mean = notes / len(parts_data)
-    measures = score_features[f"{score_prefix}{NUM_MEASURES}"]
-    sounding_measures = score_features[f"{score_prefix}{NUM_SOUNDING_MEASURES}"]
-    measures_mean = measures / len(parts_data)
-    sounding_measures_mean = sounding_measures / len(parts_data)
-    features[f"{score_prefix}{SOUNDING_DENSITY}"] = notes_mean / number_of_beats / sounding_measures_mean if sounding_measures_mean != 0 else 0
-    features[f"{score_prefix}{DENSITY}"] = notes_mean / number_of_beats / measures_mean if measures_mean != 0 else 0
+    num_measures = score_features[get_score_feature(NUM_MEASURES)]
+    num_sounding_measures = score_features[get_score_feature(NUM_SOUNDING_MEASURES)]
+    num_notes = score_features[get_score_feature(NUM_NOTES)]
+    features[get_score_feature(SOUNDING_DENSITY)] = num_notes / number_of_beats / num_sounding_measures if num_sounding_measures != 0 else 0
+    features[get_score_feature(DENSITY)] = num_notes / number_of_beats / num_measures if num_measures != 0 else 0
 
     score_features.update(features)
 
