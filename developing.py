@@ -14,8 +14,8 @@ if __name__ == "__main__":
     # data_dir = r'tests/data/static/features'
     data_dir = r'arias/'
     # 
-    df = FeaturesExtractor("martiser/myconfig.yml" ,data_dir=data_dir).extract()
-    df.to_csv('martiser/dataframe.csv', index=False)
+    # df = FeaturesExtractor("martiser/myconfig.yml", data_dir=data_dir).extract()
+    # df.to_csv('martiser/dataframe.csv', index=False)
 
     df=pd.read_csv('martiser/dataframe.csv')
     path = './'

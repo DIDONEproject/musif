@@ -55,7 +55,7 @@ class FeaturesGenerator:
         self._write()
 
     def _write(self):
-        for factor in range(1, self.num_factors_max + 1):
+        for factor in range(0, self.num_factors_max + 1):
             self._Factor_Execution(factor)
            
     def _Factor_Execution(self, num_factors: int = 0):
@@ -70,6 +70,7 @@ class FeaturesGenerator:
         
         tasks={}
         common_columns_df = self._find_common_columns(all_info)
+
         pinfo('\n' + str(num_factors) + " factor" + "\n")
         instruments = self._extract_instruments(all_info)
         self._rename_singers(all_info)
@@ -335,14 +336,14 @@ class FeaturesGenerator:
 
         if factor == 0:
             # rows_groups = {ARIA_ID: ([], "Alphabetic")}
-            # rg_keys = [rows_groups[r][0] if rows_groups[r][0] != [] else r for r in rows_groups]
-            rg_keys = list(rows_groups.keys())
+            rg_keys = [rows_groups[r][0] if rows_groups[r][0] != [] else r for r in rows_groups]
             for r in rg_keys:
                 if type(r) == list:
                     self.not_used_cols += r
                 else:
                    self.not_used_cols.append(r)
             additional_info = [ARIA_LABEL, TITLE, COMPOSER, YEAR]
+
         rg_groups = [[]]
         if factor >= 2:
             rg_groups = list(permutations(
@@ -362,13 +363,14 @@ class FeaturesGenerator:
             rg_groups = [r for r in rg_groups if r[0]
                                 in list(self.metadata_columns)]
                             
-        return additional_info,rg_groups
+        return additional_info, rg_groups
 
     def _tasks_execution(self, rg: dict, nuc:list, _cfg: Configuration, groups: list, additional_info, factor: int, common_columns_df: DataFrame, results_path:str=None, **kwargs): 
-        global rows_groups
-        global not_used_cols
-        rows_groups=rg
-        not_used_cols=nuc
+        # global rows_groups
+        # global not_used_cols
+        # rows_groups=rg
+        # not_used_cols=nuc
+        
         visualizations = True #remove with threads
 
         if results_path is None:
@@ -390,48 +392,47 @@ class FeaturesGenerator:
             kwargs['common_df'] = common_columns_df
 
             if 'melody_values' in kwargs:
-                # melody_values = pd.concat([common_columns_df,  kwargs["melody_values"]], axis=1)
-                Melody_values(rows_groups, not_used_cols, factor, _cfg, kwargs, results_path, pre_string , "Melody_Values.xlsx",
+                Melody_values(self.rows_groups, self.not_used_cols, factor, _cfg, kwargs, results_path, pre_string , "Melody_Values",
                         self.visualizations, additional_info, True if factor == 0 else False, groups if groups != [] else None)
             if 'density' in kwargs:
                 density_df = pd.concat(
                     [common_columns_df, kwargs["density"], kwargs["notes"]], axis=1)
-                Densities(rows_groups, not_used_cols, factor, _cfg, density_df, results_path, pre_string, "Densities", self.visualizations, groups if groups != [] else None, additional_info)
+                Densities(self.rows_groups, self.not_used_cols, factor, _cfg, density_df, results_path, pre_string, "Densities", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'textures' in kwargs:
                 textures_df = pd.concat(
                 [common_columns_df, kwargs["textures"], kwargs["notes"]], axis=1)
-                Textures(rows_groups, not_used_cols, factor, _cfg, textures_df, results_path, pre_string, "Textures", self.visualizations, groups if groups != [] else None, additional_info)
+                Textures(self.rows_groups, self.not_used_cols, factor, _cfg, textures_df, results_path, pre_string, "Textures", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'intervals_info' in kwargs and not kwargs["intervals_info"].empty:
                 intervals_info=pd.concat([common_columns_df, kwargs["intervals_info"]], axis=1)
-                Intervals(rows_groups, not_used_cols, factor, _cfg, intervals_info, pre_string, "Intervals",
+                Intervals(self.rows_groups, self.not_used_cols, factor, _cfg, intervals_info, pre_string, "Intervals",
                                     _cfg.sorting_lists["Intervals"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
                 
                 absolute_intervals=make_intervals_absolute(intervals_info)
-                Intervals(rows_groups, not_used_cols, factor, _cfg, absolute_intervals, pre_string , "Intervals_absolute",
+                Intervals(self.rows_groups, self.not_used_cols, factor, _cfg, absolute_intervals, pre_string , "Intervals_absolute",
                                 _cfg.sorting_lists["Intervals_absolute"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             
             if 'intervals_types' in kwargs:
                 intervals_types = pd.concat([common_columns_df, kwargs["intervals_types"]], axis=1)
-                Intervals_types(rows_groups, not_used_cols, factor, _cfg, intervals_types, results_path, pre_string, "Interval_types", self.visualizations, groups if groups != [] else None, additional_info)
+                Intervals_types(self.rows_groups, self.not_used_cols, factor, _cfg, intervals_types, results_path, pre_string, "Interval_types", self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'scale' in kwargs and not kwargs['scale'].empty:
                 emphasised_scale_degrees_info_A = pd.concat([common_columns_df,kwargs['scale']], axis=1)
-                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_A, pre_string,  "Scale_degrees", results_path, self.visualizations, groups if groups != [] else None, additional_info)
+                Emphasised_scale_degrees(self.rows_groups, self.not_used_cols, factor, _cfg, emphasised_scale_degrees_info_A, pre_string,  "Scale_degrees", results_path, self.visualizations, groups if groups != [] else None, additional_info)
             
             if 'scale_relative' in kwargs:
                 emphasised_scale_degrees_info_B = pd.concat([common_columns_df,kwargs['scale_relative']], axis=1)
-                Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg, emphasised_scale_degrees_info_B, pre_string, "Scale_degrees_relative", results_path, self.visualizations, groups if groups != [] else None, additional_info)
+                Emphasised_scale_degrees(self.rows_groups, self.not_used_cols, factor, _cfg, emphasised_scale_degrees_info_B, pre_string, "Scale_degrees_relative", results_path, self.visualizations, groups if groups != [] else None, additional_info)
            
             if 'clefs' in kwargs:
                 clefs_info= pd.concat([common_columns_df,kwargs['clefs']], axis=1)
-                Intervals(rows_groups, not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
+                Intervals(self.rows_groups, self.not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
                                 _cfg.sorting_lists["Clefs"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             
             if 'harmonic_data' in kwargs:
                 kwargs['common_df'] = common_columns_df
-                Harmonic_analysis(rows_groups, not_used_cols, factor, _cfg, kwargs, pre_string, "Harmonic_Analysis", results_path, self.visualizations, additional_info, groups if groups != [] else None)
+                Harmonic_analysis(self.rows_groups, self.not_used_cols, factor, _cfg, kwargs, pre_string, "Harmonic_Analysis", results_path, self.visualizations, additional_info, groups if groups != [] else None)
 
                 # wait for all
                 # if sequential:
