@@ -1,7 +1,7 @@
 import math
 from os import path
 
-from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 
 from musif import FeaturesExtractor
 from musif.common.utils import read_dicts_from_csv
@@ -29,6 +29,11 @@ class TestFeatures:
             if not col.startswith(get_part_prefix("")):
                 continue
             if not col.startswith(get_part_prefix("vnI")) and not col.startswith(get_part_prefix("sop")):
+                cols_to_remove.append(col)
+        for col in data_df.columns:
+            if not col.startswith(get_sound_prefix("")):
+                continue
+            if not col.startswith(get_sound_prefix("vn")) and not col.startswith(get_sound_prefix("sop")):
                 cols_to_remove.append(col)
         data_df.drop(cols_to_remove, axis=1, inplace=True)
         for col in data_df.columns:
