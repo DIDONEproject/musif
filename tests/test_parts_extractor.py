@@ -8,7 +8,6 @@ from musif.extract.exceptions import ParseFileError
 from musif.extract.extract import PartsExtractor, _cache
 
 config_file = path.join("data", "static", "config.yml")
-config_default = path.join("data", "config_test", "config_default.yml")
 empty_dir = path.join("data", "config_test")
 
 directory_tests = path.join("data", "arias_tests1")
@@ -94,7 +93,7 @@ class TestPartsExtractor:
 
     def test_config_no_argument(self):
         # GIVEN
-        expected = Configuration(config_default)
+        expected = Configuration()
 
         # WHEN
         extractor = PartsExtractor()
