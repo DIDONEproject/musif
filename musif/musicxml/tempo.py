@@ -118,8 +118,13 @@ def get_number_of_beats(time_signature: str) -> int:
         return 3
     if time_signature in ['4/4', '4/2', '4/8', '4/16', 'C', '12/2', '12/4', '12/8', '12/16']:
         return 4
+    if time_signature in ['5/2', '5/4', '5/8', '5/16']:
+        return 5
+    if time_signature in ['7/2', '7/4', '7/8', '7/16']:
+        return 7
     if time_signature in ['8/2', '8/4', '8/8', '8/16']:
         return 8
+    raise ValueError(f"The {time_signature} is not a known time signature")
 
 
 def extract_numeric_tempo(file_path: str) -> Optional[int]:
