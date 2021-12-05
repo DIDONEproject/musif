@@ -10,7 +10,7 @@ test_file_repeats_same_file_different_dir = path.join("data", "arias_tests1", "D
 malformed_file = path.join("data", "arias_test", "malformed.mscx")
 
 
-class TestParseMusicXMLFile:
+class TestParseMusescoreFile:
 
     def test_parse_musiscore_basic(self):
         # GIVEN
