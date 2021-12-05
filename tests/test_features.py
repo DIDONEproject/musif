@@ -1,7 +1,7 @@
 import math
 from os import path
 
-from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_sound_prefix
 
 from musif import FeaturesExtractor
 from musif.common.utils import read_dicts_from_csv
@@ -17,7 +17,7 @@ class TestFeatures:
 
     def test_features(self):
         # Given
-        parts_filter = ["vnI", "vnII", "va", "bs", "sop", "ten", "alt", "bar", "bass", "bbar"]
+        parts_filter = None
         extractor = FeaturesExtractor(config_path, data_dir=data_features_dir, parts_filter=parts_filter)
         expected_data = read_dicts_from_csv(expected_features_file_path)[0]
         errors = ""
@@ -34,6 +34,11 @@ class TestFeatures:
             if not col.startswith(get_sound_prefix("")):
                 continue
             if not col.startswith(get_sound_prefix("vn")) and not col.startswith(get_sound_prefix("sop")):
+                cols_to_remove.append(col)
+        for col in data_df.columns:
+            if not (col.startswith(get_family_prefix("")) and "_" in col):
+                continue
+            if not col.startswith(get_family_prefix("Str")) and not col.startswith(get_family_prefix("Voice")):
                 cols_to_remove.append(col)
         data_df.drop(cols_to_remove, axis=1, inplace=True)
         for col in data_df.columns:

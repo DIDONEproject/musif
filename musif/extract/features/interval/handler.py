@@ -46,9 +46,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     for part_data in parts_data:
         sound = part_data[DATA_SOUND_ABBREVIATION]
         parts_data_per_sound[sound].append(part_data)
-    for sound, parts_data in parts_data_per_sound.items():
+    for sound, sound_parts_data in parts_data_per_sound.items():
         sound_prefix = get_sound_prefix(sound)
-        intervals = [interval for part_data in parts_data for interval in part_data[DATA_INTERVALS]]
+        intervals = [interval for part_data in sound_parts_data for interval in part_data[DATA_INTERVALS]]
         features.update(get_interval_features(intervals, sound_prefix))
         features.update(get_interval_count_features(intervals, sound_prefix))
         features.update(get_interval_type_features(intervals, sound_prefix))
