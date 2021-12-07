@@ -108,3 +108,5 @@ def colorize(text: str, levelname: str):
 
 def extract_digits(text: str) -> str:
     return ''.join([char for char in text if char.isdigit()])
+
+

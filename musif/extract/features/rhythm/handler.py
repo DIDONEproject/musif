@@ -39,7 +39,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     rhythm_intensity_separated += number_notes / beat
 
     part_features.update({
-        AVERAGE_DURATION: mean(notes_duration),
+        AVERAGE_DURATION: mean(notes_duration) if len(notes_duration) != 0 else 0,
         #        RHYTHMINT: total_number_notes / part_features[NUMBER_OF_BEATS],
         RHYTHMINT: rhythm_intensity_separated,
         DOTTEDRHYTHM: (rhythm_dot / total_beats) * 100,
