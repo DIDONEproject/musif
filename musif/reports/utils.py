@@ -9,8 +9,10 @@ from musif.reports.calculations import compute_average
 from musif.reports.constants import (ARIA_ID, BOLD, CHARACTER, FONT,
                                      FONT_TITLE, GENDER, NAME, NORMAL_WIDTH,
                                      ROLE, YELLOWFILL, alfa, center,
-                                     factors_Fill, forbiden_groups, greenFill,
-                                     titles1Fill, titles2Fill, titles3Fill)
+                                     factors_Fill, fills_list, forbiden_groups,
+                                     greenFill, interval, orangeFill,
+                                     rows_groups, titles1Fill, titles2Fill,
+                                     titles3Fill)
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import ExcelWriter
 from pandas.core.frame import DataFrame

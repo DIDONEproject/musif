@@ -101,8 +101,8 @@ class FeaturesGenerator:
                     self._tasks_execution(self.rows_groups, self.not_used_cols, self._cfg, 
                         groups, additional_info, num_factors, common_columns_df, **tasks)
                     pass
-                    # rows_groups = rg
-                    # not_used_cols = nuc
+                    # self.rows_groups = rg
+                    # self.not_used_cols = nuc
                 except KeyError as e:
                     perr('One or more of the features could not be found in the input dataframe: '.format(e))
             # else: # from 2 factors
@@ -335,7 +335,9 @@ class FeaturesGenerator:
                                 TITLE: [ARIA_LABEL]}
 
         if factor == 0:
-            # rows_groups = {ARIA_ID: ([], "Alphabetic")}
+            rows_groups = {ARIA_ID: ([], "Alphabetic")}
+            self.rows_groups = {ARIA_ID: ([], "Alphabetic")}
+
             rg_keys = [rows_groups[r][0] if rows_groups[r][0] != [] else r for r in rows_groups]
             for r in rg_keys:
                 if type(r) == list:
