@@ -26,7 +26,7 @@ features:
   - lyrics
   - scale
   - key
-  #  - scale_relative
+  - scale_relative
   - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
