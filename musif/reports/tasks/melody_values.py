@@ -111,7 +111,7 @@ def PrintLargestLeaps(_cfg, data, additional_info, groups, workbook):
 
 
 
-    Create_excel(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
+    Create_excel(workbook.create_sheet("Largest_leaps"), rows_groups, columns, data, third_columns_names, computations,
                      _cfg.sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
 
 def PrintAmbitus(_cfg, data, additional_info, remove_columns, groups, workbook):
@@ -130,7 +130,7 @@ def PrintAmbitus(_cfg, data, additional_info, remove_columns, groups, workbook):
     columns = [i.replace('Ambitus', '') for i in columns]
 
 
-    Create_excel(workbook.create_sheet("Ambitus"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
+    Create_excel(workbook.create_sheet("Ambitus"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
                      first_columns=first_column_names, second_columns=second_column_names, average=True, additional_info=additional_info)
 
 def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
@@ -142,7 +142,7 @@ def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
         column_names.append('Syllabic ratio')
 
     computations = ['sum'] + ["mean"]*(len(column_names) - 1)
-    Create_excel(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
+    Create_excel(workbook.create_sheet("Statistical_values"), rows_groups, column_names, data, column_names, computations,
                     _cfg.sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
 def Rename_columns(data):

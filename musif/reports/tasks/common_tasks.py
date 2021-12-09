@@ -43,10 +43,10 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         computations2 = ["sum"] + ["mean_density"] * \
             (len(third_columns_names)-1)
         columns = third_columns_names
-        Create_excel(workbook.create_sheet("Weighted"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True,
+        Create_excel(workbook.create_sheet("Weighted"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True,
                      last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
         if factor >=1:
-            Create_excel(workbook.create_sheet("Horizontal"), columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
+            Create_excel(workbook.create_sheet("Horizontal"), rows_groups, columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, excel_name), workbook,cells_size= NORMAL_WIDTH)
@@ -142,10 +142,10 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
         data = pd.concat([data_general, textures_df], axis=1)
         notes_df = pd.concat([data_general, notes_df], axis=1)
 
-        Create_excel(workbook.create_sheet("Weighted_textures"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
+        Create_excel(workbook.create_sheet("Weighted_textures"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
                      last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
         if factor >=1:
-            Create_excel(workbook.create_sheet("Horizontal_textures"), columns, notes_df, third_columns_names, computations2,   _cfg.sorting_lists, groups=groups,
+            Create_excel(workbook.create_sheet("Horizontal_textures"), rows_groups, columns, notes_df, third_columns_names, computations2,   _cfg.sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
 

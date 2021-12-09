@@ -1,6 +1,6 @@
 import copy
 import os
-from typing import List
+from typing import Dict, List
 
 import numpy as np
 from musif.common.constants import VOICE_FAMILY
@@ -10,8 +10,7 @@ from musif.reports.constants import (ARIA_ID, BOLD, CHARACTER, FONT,
                                      FONT_TITLE, GENDER, NAME, NORMAL_WIDTH,
                                      ROLE, YELLOWFILL, alfa, center,
                                      factors_Fill, fills_list, forbiden_groups,
-                                     greenFill, interval, orangeFill,
-                                     rows_groups, titles1Fill, titles2Fill,
+                                     greenFill, interval, orangeFill, titles1Fill, titles2Fill,
                                      titles3Fill)
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import ExcelWriter
@@ -19,16 +18,10 @@ from pandas.core.frame import DataFrame
 
 from .calculations import compute_value
 
-# from .constants import *
-
-
 WIDTH = 35
 HEIGHT = 20
 
-def get_excel_name(pre_string, name):
-    return pre_string + name + '.xlsx'
-
-def Create_excel(sheet: ExcelWriter, columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None,
+def Create_excel(sheet: ExcelWriter, rows_groups: Dict[str, list], columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None,
                 second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                 columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, 
                 columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
@@ -107,11 +100,11 @@ def get_general_cols(rows_groups, general_cols):
         else:
             general_cols += rows_groups[row][0]
 
-def print_basic_sheet(_cfg,name, data, additional_info, groups, workbook, second_column_names, third_columns_names):
+def print_basic_sheet(_cfg, rows_groups, name, data, additional_info, groups, workbook, second_column_names, third_columns_names):
     columns = remove_underscore(third_columns_names)
     data = data.round(decimals = 2)
     computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
-    Create_excel(workbook.create_sheet(name), third_columns_names, data, columns, computations, _cfg.sorting_lists,
+    Create_excel(workbook.create_sheet(name), rows_groups, third_columns_names, data, columns, computations, _cfg.sorting_lists,
                     second_columns=second_column_names,
                     groups=groups, per = False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
 
@@ -428,6 +421,8 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
     #mirar en el commit bien anterior cómo es rows_group a factor 0
     #modificarlo acordemente como self-rows_roups
     for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
+    
+    # for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
         if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):
             forbiden = [NAME]
             if group != None:
@@ -525,3 +520,7 @@ def write_title(sheet, rows_groups, row_number, column_number, row):
 def capitalize_instruments(instruments):
     return [instrument[0].upper()+instrument[1:]
                     for instrument in instruments]
+
+
+def get_excel_name(pre_string, name):
+    return pre_string + name + '.xlsx'

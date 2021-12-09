@@ -50,7 +50,7 @@ class FeaturesGenerator:
         
         self.global_features = data
         self.num_factors_max = num_factors
-        self.main_results_path = main_results_path
+        self.main_results_path = os.path.join(self.main_results_path, 'reports')
         self.sorting_lists = self._cfg.sorting_lists
         self._write()
 
@@ -61,9 +61,11 @@ class FeaturesGenerator:
     def _Factor_Execution(self, num_factors: int = 0):
         global rows_groups
         global not_used_cols
-        self.not_used_cols=not_used_cols
-        self.rows_groups=rows_groups
-        self.main_results_path = os.path.join(self.main_results_path, 'reports')
+        self.not_used_cols = not_used_cols
+        self.rows_groups = rows_groups
+        self.not_used_cols_original = not_used_cols
+        self.rows_groups_original = rows_groups
+
         self.metadata_columns=metadata_columns
         all_info = self.global_features
         self.voices=all_info.Voices
@@ -330,15 +332,19 @@ class FeaturesGenerator:
             
             inst=prefix+instrument
             return inst
+
+
     def _get_additional_info_and_groups(self, factor, rows_groups):
         additional_info = {ARIA_LABEL: [TITLE],
                                 TITLE: [ARIA_LABEL]}
 
         if factor == 0:
-            rows_groups = {ARIA_ID: ([], "Alphabetic")}
+            # rows_groups = {ARIA_ID: ([], "Alphabetic")}
             self.rows_groups = {ARIA_ID: ([], "Alphabetic")}
 
-            rg_keys = [rows_groups[r][0] if rows_groups[r][0] != [] else r for r in rows_groups]
+            rg_keys = [self.rows_groups_original[r][0] if self.rows_groups_original[r][0] != [] else r for r in self.rows_groups_original]
+            # rg_keys = [rows_groups[r][0] if rows_groups[r][0] != [] else r for r in rows_groups]
+
             for r in rg_keys:
                 if type(r) == list:
                     self.not_used_cols += r

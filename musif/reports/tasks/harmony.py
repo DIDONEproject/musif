@@ -23,13 +23,16 @@ from musif.reports.utils import (Create_excel, get_excel_name,
                                  save_workbook)
 from pandas.core.frame import DataFrame
 
-
+rows_groups_harmony = {}
 def Harmonic_analysis(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, kwargs: DataFrame, pre_string, name: str, results_path: str, visualizations: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
         excel_name=get_excel_name(pre_string, name)
         general_cols = copy.deepcopy(not_used_cols)
         get_general_cols(rows_groups, general_cols)
+        global rows_groups_harmony 
+        rows_groups_harmony = rows_groups
+        
         Print_Harmonic_Data(_cfg, kwargs, additional_info, groups, workbook)
         Print_Chords(factor, _cfg, kwargs,  groups, additional_info, workbook)
         Print_Functions(factor, _cfg, kwargs, groups, additional_info, workbook)
@@ -58,7 +61,7 @@ def Print_Harmonic_Data(_cfg, info, additional_info, groups, workbook):
         
     third_columns = ['Total analysed'] + list(data.columns)
     
-    print_basic_sheet(_cfg, "Harmonic data", data_total, additional_info, groups, workbook, second_column, third_columns)
+    print_basic_sheet(_cfg, rows_groups_harmony,"Harmonic data", data_total, additional_info, groups, workbook, second_column, third_columns)
 
 def Print_Chords(factor, _cfg, info, groups, additional_info, workbook):
     data=info['chords']
@@ -77,7 +80,7 @@ def Print_Chords(factor, _cfg, info, groups, additional_info, workbook):
 
     computations = ["sum"] + ["mean"] * (len(third_columns)-1)
 
-    Create_excel(workbook.create_sheet("Chords Weighted"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
+    Create_excel(workbook.create_sheet("Chords Weighted"), rows_groups_harmony, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                         groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
 def Print_Keys(factor, _cfg, info, groups, additional_info, workbook):
@@ -114,7 +117,7 @@ def Print_Triple_Excel(name, factor, _cfg, groups, additional_info, workbook, da
     data2 = pd.concat([data_general, data2], axis=1)
     data3 = pd.concat([data_general, data3], axis=1)
 
-    Create_excel(workbook.create_sheet(name + " Weighted"),
+    Create_excel(workbook.create_sheet(name + " Weighted"), rows_groups_harmony,
         third_columns_names, data1, third_columns_names,
         computations, _cfg.sorting_lists, groups=groups,
         data2=data2, second_columns=second_column_names,
@@ -129,7 +132,7 @@ def Print_Double_Excel(name, factor, _cfg, groups, additional_info, workbook, da
     data1 = pd.concat([data_general, data1], axis=1)
     data2 = pd.concat([data_general, data2], axis=1)
 
-    Create_excel(workbook.create_sheet(name),
+    Create_excel(workbook.create_sheet(name), rows_groups_harmony,
         third_columns_names, data1, third_columns_names,
         computations, _cfg.sorting_lists, groups=groups,
         second_columns=second_column_names,

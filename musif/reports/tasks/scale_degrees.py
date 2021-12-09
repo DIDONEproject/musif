@@ -49,7 +49,7 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
         _, unique_columns = np.unique(data2.columns, return_index=True)
         data2 = data2.iloc[:, unique_columns]
 
-        Create_excel(workbook.create_sheet("Weighted"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
+        Create_excel(workbook.create_sheet("Weighted"), rows_groups, third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info, ponderate=True)
         
         # if factor>=1:
