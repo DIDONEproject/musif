@@ -80,30 +80,30 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
                          score_features: dict):
     features = {}
 
-    dyn_mean = []
-    dyn_mean_weighted = []
-    dyn_grad = []
+    dyn_means = []
+    dyn_means_weighted = []
+    dyn_grads = []
     dyn_abruptness = []
 
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
 
         features[get_part_feature(part, DYNMEAN)] = part_features[DYNMEAN]
-        dyn_mean.append(part_features[DYNMEAN])
+        dyn_means.append(part_features[DYNMEAN])
 
         features[get_part_feature(part, DYNMEAN_WEIGHTED)] = part_features[DYNMEAN_WEIGHTED]
-        dyn_mean_weighted.append(part_features[DYNMEAN_WEIGHTED])
+        dyn_means_weighted.append(part_features[DYNMEAN_WEIGHTED])
 
         features[get_part_feature(part, DYNGRAD)] = part_features[DYNGRAD]
-        dyn_grad.append(part_features[DYNGRAD])
+        dyn_grads.append(part_features[DYNGRAD])
 
         features[get_part_feature(part, DYNABRUPTNESS)] = part_features[DYNABRUPTNESS]
         dyn_abruptness.append(part_features[DYNABRUPTNESS])
 
     features.update({
-        get_score_feature(DYNMEAN): mean(dyn_mean) if len(dyn_mean) != 0 else 0,
-        get_score_feature(DYNMEAN_WEIGHTED): mean(dyn_mean_weighted) if len(dyn_mean_weighted) != 0 else 0,
-        get_score_feature(DYNGRAD): mean(dyn_grad) if len(dyn_grad) != 0 else 0,
+        get_score_feature(DYNMEAN): mean(dyn_means) if len(dyn_means) != 0 else 0,
+        get_score_feature(DYNMEAN_WEIGHTED): mean(dyn_means_weighted) if len(dyn_means_weighted) != 0 else 0,
+        get_score_feature(DYNGRAD): mean(dyn_grads) if len(dyn_grads) != 0 else 0,
         get_score_feature(DYNABRUPTNESS): mean(dyn_abruptness) if len(dyn_abruptness) != 0 else 0
     })
 
