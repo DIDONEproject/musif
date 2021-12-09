@@ -33,14 +33,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-        for feature_name, feature_value in part_features.items():
-            if feature_name in SCORE_FEATURES:
-                features[f"{part_prefix}{feature_name}"] = feature_value
-            else:
-                interval_count_pattern = INTERVAL_COUNT.format(prefix="", interval=".+")
-                interval_per_pattern = INTERVAL_PER.format(prefix="", interval=".+")
-                if re.match(interval_count_pattern, feature_name) or re.match(interval_per_pattern, feature_name):
-                    features[f"{part_prefix}{feature_name}"] = feature_value
+        intervals = part_data[DATA_INTERVALS]
+        features.update(get_interval_features(intervals, part_prefix))
+        features.update(get_interval_count_features(intervals, part_prefix))
+        features.update(get_interval_type_features(intervals, part_prefix))
+        features.update(get_interval_stats_features(intervals, part_prefix))
 
     parts_data_per_sound = {part_data[DATA_SOUND_ABBREVIATION]: [] for part_data in parts_data}
     for part_data in parts_data:
