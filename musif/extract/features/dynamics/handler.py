@@ -2,10 +2,11 @@ from statistics import mean
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix
+from musif.extract.features.prefix import get_part_feature, get_score_prefix
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
+from ...constants import DATA_PART_ABBREVIATION
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -76,20 +77,19 @@ def get_dynamic_numeric(value):
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-    prefix = get_score_prefix()
-    dic_dyn_mean = dict()
-    dic_dyn_mean_weighted = dict()
-    dic_dyn_grad = dict()
-    dic_dyn_abrup = dict()
-    for part in parts_features:
-        dic_dyn_mean.update({part["PartAbbreviation"]: part[DYNMEAN]})
-        dic_dyn_mean_weighted.update({part["PartAbbreviation"]: part[DYNMEAN_WEIGHTED]})
-        dic_dyn_grad.update({part["PartAbbreviation"]: part[DYNGRAD]})
-        dic_dyn_abrup.update({part["PartAbbreviation"]: part[DYNABRUPTNESS]})
+    features = {}
+    for part_data, part_features in zip(parts_data, parts_features):
+        part = part_data[DATA_PART_ABBREVIATION]
+        features[get_part_feature(part, DYNMEAN)] = part_features[DYNMEAN]
+        features[get_part_feature(part, DYNMEAN_WEIGHTED)] = part_features[DYNMEAN_WEIGHTED]
+        features[get_part_feature(part, DYNGRAD)] = part_features[DYNGRAD]
+        features[get_part_feature(part, DYNABRUPTNESS)] = part_features[DYNABRUPTNESS]
 
-    score_features.update({
-        f"{prefix}{DYNMEAN}": dic_dyn_mean,
-        f"{prefix}{DYNMEAN_WEIGHTED}": dic_dyn_mean_weighted,
-        f"{prefix}{DYNGRAD}": dic_dyn_grad,
-        f"{prefix}{DYNABRUPTNESS}": dic_dyn_abrup
-    })
+    # features.update({
+    #     f"{prefix}{DYNMEAN}": dic_dyn_mean,
+    #     f"{prefix}{DYNMEAN_WEIGHTED}": dic_dyn_mean_weighted,
+    #     f"{prefix}{DYNGRAD}": dic_dyn_grad,
+    #     f"{prefix}{DYNABRUPTNESS}": dic_dyn_abrup
+    # })
+
+    score_features.update(features)
