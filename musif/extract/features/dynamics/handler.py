@@ -2,7 +2,7 @@ from statistics import mean
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.features.prefix import get_part_feature, get_score_prefix
+from musif.extract.features.prefix import get_part_feature, get_score_prefix, get_score_feature
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
@@ -76,20 +76,35 @@ def get_dynamic_numeric(value):
         return 0
 
 
-def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
+                         score_features: dict):
     features = {}
+
+    dyn_mean = []
+    dyn_mean_weighted = []
+    dyn_grad = []
+    dyn_abruptness = []
+
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
-        features[get_part_feature(part, DYNMEAN)] = part_features[DYNMEAN]
-        features[get_part_feature(part, DYNMEAN_WEIGHTED)] = part_features[DYNMEAN_WEIGHTED]
-        features[get_part_feature(part, DYNGRAD)] = part_features[DYNGRAD]
-        features[get_part_feature(part, DYNABRUPTNESS)] = part_features[DYNABRUPTNESS]
 
-    # features.update({
-    #     f"{prefix}{DYNMEAN}": dic_dyn_mean,
-    #     f"{prefix}{DYNMEAN_WEIGHTED}": dic_dyn_mean_weighted,
-    #     f"{prefix}{DYNGRAD}": dic_dyn_grad,
-    #     f"{prefix}{DYNABRUPTNESS}": dic_dyn_abrup
-    # })
+        features[get_part_feature(part, DYNMEAN)] = part_features[DYNMEAN]
+        dyn_mean.append(part_features[DYNMEAN])
+
+        features[get_part_feature(part, DYNMEAN_WEIGHTED)] = part_features[DYNMEAN_WEIGHTED]
+        dyn_mean_weighted.append(part_features[DYNMEAN_WEIGHTED])
+
+        features[get_part_feature(part, DYNGRAD)] = part_features[DYNGRAD]
+        dyn_grad.append(part_features[DYNGRAD])
+
+        features[get_part_feature(part, DYNABRUPTNESS)] = part_features[DYNABRUPTNESS]
+        dyn_abruptness.append(part_features[DYNABRUPTNESS])
+
+    features.update({
+        get_score_feature(DYNMEAN): mean(dyn_mean) if len(dyn_mean) != 0 else 0,
+        get_score_feature(DYNMEAN_WEIGHTED): mean(dyn_mean_weighted) if len(dyn_mean_weighted) != 0 else 0,
+        get_score_feature(DYNGRAD): mean(dyn_grad) if len(dyn_grad) != 0 else 0,
+        get_score_feature(DYNABRUPTNESS): mean(dyn_abruptness) if len(dyn_abruptness) != 0 else 0
+    })
 
     score_features.update(features)
