@@ -1,33 +1,36 @@
-data_dir: ../data
+data_dir: ../tests/data/static/features/Did03M-Son_regina-1730-Sarro[1.05][0006].xml
+musescore_dir:
 metadata_dir: ../metadata
 metadata_id_col: AriaId
 parallel: false
+expand_repeats: false
 max_processes: 8
-read_log:
-  file_path: logs/read.log
-  level: DEBUG
-write_log:
-  file_path: logs/write.log
-  level: INFO
+log:
+  file_path: ./musif.log
+  file_level: DEBUG
+  console_level: WARNING
 features:
   - scoring
-  - custom.file_name
-  - metadata
-  - custom.themeA
+  - file_name
+  - themeA
   - core
-  - composer
-  - custom.librettist
   - ambitus
   - interval
   - tempo
-  - density
-  - lyrics
-#  - rhythm
+  - key
   - dynamics
-#  - scale
-#  - key
-#  - custom.harmony
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
+parts_filter:
+  - vnI
+  - vnII
+  - va
+  - bs
+  - sop
+  - ten
+  - alt
+  - bar
+  - bass
+  - bbar
