@@ -5,7 +5,7 @@
 # This script is meant to read the intermediate DataFrame computed by the
 # FeaturesExtractor and perform several computations while grouping the data
 # based on some characteristics.
-# Writes the final report files as well as generates visualisations forthe data
+# Writes the final report files as well as generates visualizations forthe data
 ########################################################################
 
 import copy
@@ -50,7 +50,7 @@ class FeaturesGenerator:
         
         self.global_features = data
         self.num_factors_max = num_factors
-        self.main_results_path = os.path.join(self.main_results_path, 'reports')
+        self.main_results_path = os.path.join(main_results_path, 'reports')
         self.sorting_lists = self._cfg.sorting_lists
         self._write()
 
@@ -89,8 +89,8 @@ class FeaturesGenerator:
             pinfo(f'\nInstrument:\t{instrument}' + '\n')
 
             instrument_level = 'Part' + instrument + '_'
-            intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self._find_interval_degree_columns(all_info, instrument_level)
-            self._prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list)
+            
+            self._prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument)
             
             self.results_path_factorx = path.join(self.main_results_path, 'Melody_' + instrument, str(
                 num_factors) + " factor") if num_factors > 0 else path.join(self.main_results_path,'Melody_'+ instrument, "Data")
@@ -142,9 +142,11 @@ class FeaturesGenerator:
                 notes_set.add(self._get_instrument_prefix(instrument) + '_NotesMean')
         return notes_set
 
-    def _prepare_part_dataframes(self, all_info, common_columns_df, tasks, Instrument_level, instrument, intervals_list, intervals_types_list, degrees_list, degrees_relative_list):
+    def _prepare_part_dataframes(self, all_info, common_columns_df, tasks, instrument_level, instrument):
+        intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self._find_interval_degree_columns(all_info, instrument_level)
+        
         if self._cfg.is_requested_module(interval):            
-            intervals_info, intervals_types = self._find_interval_columns(all_info, Instrument_level, intervals_list, intervals_types_list)
+            intervals_info, intervals_types = self._find_interval_columns(all_info, instrument_level, intervals_list, intervals_types_list)
             intervals_info.dropna(how='all', axis=1, inplace=True)
             intervals_types.dropna(how='all', axis=1, inplace=True)
             if not intervals_info.empty:
@@ -152,17 +154,22 @@ class FeaturesGenerator:
             if not intervals_types.empty:
                 tasks['intervals_types'] = intervals_types
 
-        if self._cfg.is_requested_module(ambitus):       
+        if self._cfg.is_requested_module(ambitus):      
+                 
             try:     
-                tasks['melody_values'] = self._find_melody_columns(all_info, Instrument_level).dropna(how='all', axis=1)
+                if not self._cfg.is_requested_module(interval):
+                    perr('Interval module is needed to generate Melody Values report!')
+                    tasks['melody_values']=pd.DataFrame()
+                else:
+                    tasks['melody_values'] = self._find_melody_columns(all_info, instrument_level).dropna(how='all', axis=1)
             except KeyError as e:                 
                 perr('Melody Values information could not be extracted'.format(e))
 
         if self._IsVoice(instrument):
             if self._cfg.is_requested_module(scale):            
-                tasks['scale'] = self._find_scale_degrees_columns(all_info, Instrument_level, degrees_list).dropna(how='all', axis=1)
+                tasks['scale'] = self._find_scale_degrees_columns(all_info, instrument_level, degrees_list).dropna(how='all', axis=1)
             if self._cfg.is_requested_module(scale_relative):            
-                tasks['scale_relative'] = self._find_scale_degrees_columns(all_info, Instrument_level, degrees_relative_list).dropna(how='all', axis=1)
+                tasks['scale_relative'] = self._find_scale_degrees_columns(all_info, instrument_level, degrees_relative_list).dropna(how='all', axis=1)
             tasks['clefs'] = self._get_clefs(all_info, common_columns_df)
 
     def _prepare_common_dataframes(self, all_info, instruments):
@@ -240,13 +247,14 @@ class FeaturesGenerator:
 
     def _extract_instruments(self, all_info):
         instruments = set([])
-
+        all_instruments = set([inst for aria in all_info['Scoring'] for inst in aria.split(',')])
+        
         if self.parts_list:
-            instruments = self.parts_list
+            for inst in self.parts_list:
+                if inst in all_instruments:
+                    instruments.add(inst)
         else:
-            for aria in all_info['Scoring']:
-                for a in aria.split(','):
-                    instruments.add(a)
+            instruments = all_instruments
 
         instruments = capitalize_instruments(instruments)
         
@@ -339,11 +347,9 @@ class FeaturesGenerator:
                                 TITLE: [ARIA_LABEL]}
 
         if factor == 0:
-            # rows_groups = {ARIA_ID: ([], "Alphabetic")}
             self.rows_groups = {ARIA_ID: ([], "Alphabetic")}
 
             rg_keys = [self.rows_groups_original[r][0] if self.rows_groups_original[r][0] != [] else r for r in self.rows_groups_original]
-            # rg_keys = [rows_groups[r][0] if rows_groups[r][0] != [] else r for r in rows_groups]
 
             for r in rg_keys:
                 if type(r) == list:
@@ -379,16 +385,15 @@ class FeaturesGenerator:
         # rows_groups=rg
         # not_used_cols=nuc
         
-        visualizations = True #remove with threads
-
         if results_path is None:
             results_path = self._rename_path(groups)
 
-        if os.path.exists(path.join(results_path, 'visualisations')):
-            remove_folder_contents(
-                path.join(results_path, 'visualisations'))
-        else:
-            os.makedirs(path.join(results_path, 'visualisations'))
+        if self.visualizations: 
+            if os.path.exists(path.join(results_path, 'visualizations')):
+                remove_folder_contents(
+                    path.join(results_path, 'visualizations'))
+            else:
+                os.makedirs(path.join(results_path, 'visualizations'))
 
         # MUTITHREADING
         try:

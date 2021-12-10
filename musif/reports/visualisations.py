@@ -22,6 +22,8 @@ warnings.filterwarnings("ignore")
 
 plt.style.use('seaborn')
 
+prefix_visualizations='\\visualisations\\'
+
 # COLORS = "rgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmyk"
 COLORS=list(mcolors.BASE_COLORS.keys())*5
 SOFT_COLORS=list(mcolors.TABLEAU_COLORS.keys())
