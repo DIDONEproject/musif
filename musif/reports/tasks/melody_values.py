@@ -6,6 +6,7 @@ from typing import Dict
 import numpy as np
 import openpyxl
 from music21 import interval
+import pandas as pd
 from pandas.core.frame import DataFrame
 
 import musif.extract.features.lyrics as lyrics
@@ -27,19 +28,20 @@ TRIM_RATIO = "% Trimmed"
 
 def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info: Dict[str, DataFrame], results_path: str, pre_string, name: str, visualizations: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:
-        excel_name=get_excel_name(pre_string, name)
+        excel_name = get_excel_name(pre_string, name)
         workbook = openpyxl.Workbook()
         data=info['melody_values']
         Rename_columns(data)
 
         # data_general = data[metadata_columns+ ['Total analysed']]
 
-        #Inserttar total analysed?
         data_general = info[COMMON_DF]
-
+        data_general['Total analysed']=1.0
+        data = pd.concat([data_general,  data], axis=1)
+        
         PrintStatisticalValues(_cfg, data, additional_info, groups, workbook)
-        PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook)
-        PrintLargestLeaps(_cfg, data, data_general,additional_info, groups, workbook)
+        PrintAmbitus(_cfg, data, additional_info, remove_columns, groups, workbook)
+        PrintLargestLeaps(_cfg, data, additional_info, groups, workbook)
         save_workbook(os.path.join(results_path, excel_name), workbook, cells_size=NARROW)
 
         if visualizations:
@@ -98,7 +100,7 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info:
         pwarn('{}  Problem found: {}'.format(name, e))
 
 
-def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workbook):
+def PrintLargestLeaps(_cfg, data, additional_info, groups, workbook):
     second_column_names = [("", 1), ("Ascending", 2), ("Descending", 2)]
     third_columns_names = ["Total analysed",
                                "Semitones", "Interval", "Semitones", "Interval"]
@@ -109,10 +111,10 @@ def PrintLargestLeaps(_cfg, data, data_general, additional_info, groups, workboo
 
 
 
-    Create_excel(workbook.create_sheet("Largest_leaps"), columns, data, third_columns_names, computations,
+    Create_excel(workbook.create_sheet("Largest_leaps"), rows_groups, columns, data, third_columns_names, computations,
                      _cfg.sorting_lists, groups=groups, second_columns=second_column_names, average=True, additional_info=additional_info)
 
-def PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, groups, workbook):
+def PrintAmbitus(_cfg, data, additional_info, remove_columns, groups, workbook):
     first_column_names = [("", 1), ("Lowest", 2), ("Highest", 2), ("Lowest", 2), ("Highest", 2), (
             "Ambitus", 6)] if not remove_columns else [("", 1), ("Lowest", 2), ("Highest", 2), ("Ambitus", 2)]
 
@@ -125,10 +127,10 @@ def PrintAmbitus(_cfg, data, data_general, additional_info, remove_columns, grou
 
     columns = columns_alike_our_data(
             third_columns_names, second_column_names, first_column_names)
-    columns=[i.replace('Ambitus', '') for i in columns]
+    columns = [i.replace('Ambitus', '') for i in columns]
 
 
-    Create_excel(workbook.create_sheet("Ambitus"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
+    Create_excel(workbook.create_sheet("Ambitus"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
                      first_columns=first_column_names, second_columns=second_column_names, average=True, additional_info=additional_info)
 
 def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
@@ -140,7 +142,7 @@ def PrintStatisticalValues(_cfg, data, additional_info, groups, workbook):
         column_names.append('Syllabic ratio')
 
     computations = ['sum'] + ["mean"]*(len(column_names) - 1)
-    Create_excel(workbook.create_sheet("Statistical_values"), column_names, data, column_names, computations,
+    Create_excel(workbook.create_sheet("Statistical_values"), rows_groups, column_names, data, column_names, computations,
                     _cfg.sorting_lists, groups=groups, average=True, additional_info=additional_info, ponderate=True)
 
 def Rename_columns(data):

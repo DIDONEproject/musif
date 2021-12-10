@@ -13,33 +13,35 @@ features:
   - scoring
   - file_name
   - metadata
+  - themeA
   - core
   - composer
   - librettist
   - key
   - tempo
-  - ambitus
-  - interval
+  # - interval
+  - ambitus # Melody Values report depends on both ambitus and interval to work!
+  # - scale_relative
+  - harmony
   # - density
   # - texture
-  - themeA
-  - harmony
   # - lyrics
   # - scale
-#  - scale_relative
   # - dynamics
+
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
+
 parts_filter:
   - vnI
   - obI
-  - ten
+  - sop
+  # - ten
   # - vnII
   # - va
   # - bs
-  # - sop
   # - alt
   # - bar
   # - bass

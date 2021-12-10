@@ -36,7 +36,7 @@ setup(
         "tqdm==4.56.0",
         "xlrd==2.0.1",
         "scipy",
-        "ms3",
+        "ms3==0.4.10",
         "pyyaml",
     ],
     extras_require={

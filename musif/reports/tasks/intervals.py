@@ -30,10 +30,10 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         computations = ["sum"]*len(third_columns)
 
         #ERROR AriaOpera is nor unique
-        Create_excel(workbook.create_sheet("Weighted"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
+        Create_excel(workbook.create_sheet("Weighted"), rows_groups, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal Per"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
+            Create_excel(workbook.create_sheet("Horizontal Per"), rows_groups, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
@@ -111,13 +111,13 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
         columns2 = columns_alike_our_data(
             third_columns_names2, second_column_names2)
 
-        Create_excel(workbook.create_sheet("Weighted"),
+        Create_excel(workbook.create_sheet("Weighted"), rows_groups,
          columns, data, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups, 
           last_column=True, last_column_average=False, second_columns=second_column_names,
            average=True, columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal Per"), columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
+            Create_excel(workbook.create_sheet("Horizontal Per"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
