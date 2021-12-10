@@ -16,30 +16,46 @@ from musif.extract.features.harmony.constants import (HARMONIC_RHYTHM,
                                                       CHORDS_GROUPING_prefix,
                                                       NUMERALS_prefix)
 from musif.logs import pwarn
-from musif.reports.constants import COMMON_DF, NORMAL_WIDTH
+from musif.reports.constants import COMMON_DF, IMAGE_EXTENSION, NORMAL_WIDTH, not_used_cols, EXCEPTIONS
+
 from musif.reports.tasks.sort_labels import sort_labels
 from musif.reports.utils import (Create_excel, get_excel_name,
                                  get_general_cols, print_basic_sheet,
                                  save_workbook)
 from pandas.core.frame import DataFrame
 
+from musif.reports.visualisations import bar_plot_extended, line_plot_extended, prefix_visualizations
+
+rows_groups_harmony = {}
+visualizations_harmony = bool
+visualizations_name = '' 
+
 
 def Harmonic_analysis(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, kwargs: DataFrame, pre_string, name: str, results_path: str, visualizations: Lock, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
         excel_name=get_excel_name(pre_string, name)
+
         general_cols = copy.deepcopy(not_used_cols)
         get_general_cols(rows_groups, general_cols)
-        Print_Harmonic_Data(_cfg, kwargs, additional_info, groups, workbook)
-        Print_Chords(factor, _cfg, kwargs,  groups, additional_info, workbook)
-        Print_Functions(factor, _cfg, kwargs, groups, additional_info, workbook)
-        Print_Keys(factor, _cfg, kwargs, groups, additional_info, workbook)
+
+        global rows_groups_harmony 
+        rows_groups_harmony = rows_groups
+        global visualizations_harmony
+        visualizations_harmony = visualizations
+        global visualizations_name
+        visualizations_name = pre_string+name
+        
+        # Print_Harmonic_Data(_cfg, kwargs, additional_info, groups, workbook, name)
+        Print_Chords(factor, _cfg, kwargs,  groups, additional_info, workbook, name)
+        # Print_Functions(factor, _cfg, kwargs, groups, additional_info, workbook, name)
+        # Print_Keys(factor, _cfg, kwargs, groups, additional_info, workbook, name)
         save_workbook(os.path.join(results_path,excel_name), workbook, cells_size = NORMAL_WIDTH)
         
     except Exception as e:
         pwarn('{}  Problem found: {}'.format(name, e))
         
-def Print_Harmonic_Data(_cfg, info, additional_info, groups, workbook):
+def Print_Harmonic_Data(_cfg, info, additional_info, groups, workbook, name):
     data=info['harmonic_data']
     harmonic_rythm = [c for c in data.columns if 'Harmonic_rhythm' in c]
 
@@ -58,15 +74,17 @@ def Print_Harmonic_Data(_cfg, info, additional_info, groups, workbook):
         
     third_columns = ['Total analysed'] + list(data.columns)
     
-    print_basic_sheet(_cfg, "Harmonic data", data_total, additional_info, groups, workbook, second_column, third_columns)
+    print_basic_sheet(_cfg, rows_groups_harmony,"Harmonic data", data_total, additional_info, groups, workbook, second_column, third_columns)
+    
+def Print_Chords(factor, _cfg, info, groups, additional_info, workbook, name):
 
-def Print_Chords(factor, _cfg, info, groups, additional_info, workbook):
     data=info['chords']
     data.columns=[i.replace(CHORDS_GROUPING_prefix, '') for i in data.columns]
     data.columns=[i.replace(CHORD_prefix, '') for i in data.columns]
     data.columns=[i.replace('_Count', '') for i in data.columns]
+
     try:
-        data = sort_columns(data, sort_labels(data.columns, chordtype='occurrences',form=['', '+', 'o', '%', 'M']))
+        data = sort_columns(data, sort_labels(data.columns, chordtype = 'occurrences',form = ['', '+', 'o', '%', 'M']))
     except:
         data = sort_columns(data, _cfg.sorting_lists['NumeralsSorting'])
     
@@ -77,8 +95,57 @@ def Print_Chords(factor, _cfg, info, groups, additional_info, workbook):
 
     computations = ["sum"] + ["mean"] * (len(third_columns)-1)
 
-    Create_excel(workbook.create_sheet("Chords Weighted"), third_columns, data, third_columns, computations, _cfg.sorting_lists,
+    Create_excel(workbook.create_sheet("Chords Weighted"), rows_groups_harmony, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                         groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
+    if visualizations_harmony:
+        create_visualizations(factor, data, third_columns, groups, name)
+
+
+def create_visualizations(factor: int, data: DataFrame, columns: list, groups, name):
+        columns.remove('Total analysed')
+        title = name.capitalize()
+        # VISUALISATIONS
+
+        if groups:
+            data_grouped = data.groupby(list(groups))
+            for g, datag in data_grouped:
+                visualisations_path = name + \
+                    prefix_visualizations + str(g.replace('/', '_'))
+                if not os.path.exists(visualisations_path):
+                    os.mkdir(visualisations_path)
+                name_bar = visualisations_path + \
+                    '\\' + name.replace('.xlsx', IMAGE_EXTENSION)
+                bar_plot_extended(name_bar, datag, columns, title,
+                                  'Percentage', title, second_title=str(g))
+
+        elif factor == 1:
+            groups = [i for i in rows_groups_harmony]
+            for row in rows_groups_harmony:
+                plot_name = name.replace(
+                    '.xlsx', '') + '_Per_' + str(row.upper()) + IMAGE_EXTENSION
+
+                name_bar = title + prefix_visualizations + plot_name
+
+                if row not in not_used_cols:
+                    if len(rows_groups_harmony[row][0]) == 0:  # no sub-groups
+                        data_grouped = data.groupby(row, sort=True)
+                        if data_grouped:
+                            line_plot_extended(
+                            name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title='Per ' + str(row))
+                    else:
+                        for i, subrow in enumerate(rows_groups_harmony[row][0]):
+                            if subrow not in EXCEPTIONS:
+                                plot_name = name.replace(
+                                    '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION
+                                name_bar = title + prefix_visualizations + plot_name
+                                data_grouped = data.groupby(subrow)
+                                line_plot_extended(
+                                    name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title= 'Per ' + str(subrow))
+        else:
+                columns_names = data['AriaName']
+                name_bar =  visualizations_name + name + IMAGE_EXTENSION
+                bar_plot_extended(name_bar, data, columns,
+                                    title, 'Percentage', title)
 
 def Print_Keys(factor, _cfg, info, groups, additional_info, workbook):
     data=info['key_areas']
@@ -114,7 +181,7 @@ def Print_Triple_Excel(name, factor, _cfg, groups, additional_info, workbook, da
     data2 = pd.concat([data_general, data2], axis=1)
     data3 = pd.concat([data_general, data3], axis=1)
 
-    Create_excel(workbook.create_sheet(name + " Weighted"),
+    Create_excel(workbook.create_sheet(name + " Weighted"), rows_groups_harmony,
         third_columns_names, data1, third_columns_names,
         computations, _cfg.sorting_lists, groups=groups,
         data2=data2, second_columns=second_column_names,
@@ -129,7 +196,7 @@ def Print_Double_Excel(name, factor, _cfg, groups, additional_info, workbook, da
     data1 = pd.concat([data_general, data1], axis=1)
     data2 = pd.concat([data_general, data2], axis=1)
 
-    Create_excel(workbook.create_sheet(name),
+    Create_excel(workbook.create_sheet(name), rows_groups_harmony,
         third_columns_names, data1, third_columns_names,
         computations, _cfg.sorting_lists, groups=groups,
         second_columns=second_column_names,

@@ -34,15 +34,3 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             if "Degree" in feature:
                 score_features[f"{part_prefix}{feature}"] = parts_features[feature]
     
-    
-
-    ## MODULATIONS MODULE DISABLED AT THE MOMENT. t simplify things, we don't take modulations info into analysis and only Emphasized degrees relative
-    
-    # sections=[]
-
-    # harmonic_analysis=score_data['MS3_score']
-    # Obtain score sections:
-    # sections = musical_form.get_form_measures(score, repeat_elements) #TODO: prove functionality
-    # Get the array based on harmonic_analysis.mc
-    # sections = continued_sections(sections, harmonic_analysis.mc)
-    # modulations = get_modulations(harmonic_analysis, sections, major = score_data['mode'] == 'major')

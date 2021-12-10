@@ -80,7 +80,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         Returns
         -------
         resp : pd.DataFrame
-             The score saved in cache or the new score parsed with the necessary parts splitted.
+             The score saved in cache or the new score parsed in the form of a dataframe.
         Raises
         ------
         ParseFileError
@@ -305,7 +305,7 @@ class FilesValidator:
         pdebug(f"Validating file '{musicxml_file}'", level=self._cfg.console_log_level)
         try:
             parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
-            if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
+            if self._cfg.is_requested_feature_category(HARMONY_FEATURES) or self._cfg.is_requested_feature_category(RELATIVE_DEGREES_FEATURES):
                 musescore_file = compose_musescore_file_path(musicxml_file, self._cfg.musescore_dir)
                 if not path.isfile(musescore_file):
                     raise MissingFileError(musescore_file)
@@ -434,7 +434,7 @@ class FeaturesExtractor:
             DATA_FILE: musicxml_file,
             DATA_FILTERED_PARTS: filtered_parts,
         }
-        if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
+        if self._cfg.is_requested_feature_category(HARMONY_FEATURES) or self._cfg.is_requested_feature_category(RELATIVE_DEGREES_FEATURES):
             data.update(self._get_harmony_data(musicxml_file))
         return data
 
