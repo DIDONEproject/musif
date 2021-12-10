@@ -13,8 +13,6 @@ from musif.reports.utils import Create_excel, get_excel_name, save_workbook
 from musif.reports.visualisations import bar_plot_extended, line_plot_extended
 
 
-### COMMON tasks for any INSTRUMENT  ###
-
 def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
     try:
         workbook = openpyxl.Workbook()
