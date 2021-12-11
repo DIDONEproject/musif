@@ -22,7 +22,7 @@ features:
   - tempo
   - density
   #  - texture
-#  - harmony
+  - harmony
   - lyrics
   - scale
   - key
