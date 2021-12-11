@@ -57,7 +57,8 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     if len(parts_features) == 0:
         return
 
-    number_of_beats = score_features[NUMBER_OF_BEATS]
+    time_signature = score_data[TIME_SIGNATURE].split(',')
+    number_of_beats = get_number_of_beats(time_signature[0])
 
     features = {}
     for part_features in parts_features:
@@ -67,7 +68,8 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     sound_abbreviations = {part_data[DATA_SOUND_ABBREVIATION] for part_data in parts_data}
     for sound in sound_abbreviations:
-        num_measures = score_features[get_sound_feature(sound, NUM_MEASURES)]
+        num_parts = score_features[get_sound_feature(sound, NUMBER_OF_FILTERED_PARTS)]
+        num_measures = score_features[NUM_MEASURES] * num_parts
         num_sounding_measures = score_features[get_sound_feature(sound, NUM_SOUNDING_MEASURES)]
         num_notes = score_features[get_sound_feature(sound, NUM_NOTES)]
         features[get_sound_feature(sound, SOUNDING_DENSITY)] = num_notes / number_of_beats / num_sounding_measures if num_sounding_measures != 0 else 0
@@ -75,13 +77,15 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     family_abbreviations = {part_data[DATA_FAMILY_ABBREVIATION] for part_data in parts_data}
     for family in family_abbreviations:
-        num_measures = score_features[get_family_feature(family, NUM_MEASURES)]
+        num_parts = score_features[get_family_feature(family, NUMBER_OF_FILTERED_PARTS)]
+        num_measures = score_features[NUM_MEASURES] * num_parts
         num_sounding_measures = score_features[get_family_feature(family, NUM_SOUNDING_MEASURES)]
         num_notes = score_features[get_family_feature(family, NUM_NOTES)]
         features[get_family_feature(family, SOUNDING_DENSITY)] = num_notes / number_of_beats / num_sounding_measures if num_sounding_measures != 0 else 0
         features[get_family_feature(family, DENSITY)] = num_notes / number_of_beats / num_measures if num_measures != 0 else 0
 
-    num_measures = score_features[get_score_feature(NUM_MEASURES)]
+    num_parts = score_features[get_score_feature(NUMBER_OF_FILTERED_PARTS)]
+    num_measures = score_features[NUM_MEASURES] * num_parts
     num_sounding_measures = score_features[get_score_feature(NUM_SOUNDING_MEASURES)]
     num_notes = score_features[get_score_feature(NUM_NOTES)]
     features[get_score_feature(SOUNDING_DENSITY)] = num_notes / number_of_beats / num_sounding_measures if num_sounding_measures != 0 else 0
