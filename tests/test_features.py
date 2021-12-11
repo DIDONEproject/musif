@@ -48,7 +48,7 @@ class TestFeatures:
         for col in actual_columns:
             if col not in expected_data:
                 not_in_expected_data += f'  {col}\n'
-        if len(not_in_actual_data) > 0:
+        if len(not_in_expected_data) > 0:
             errors += "\nColumns in actual data, but missing in expected data\n" + not_in_expected_data
 
         # Then
