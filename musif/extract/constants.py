@@ -10,4 +10,4 @@ DATA_MUSESCORE_SCORE = 'MS3_score'
 DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
 HARMONY_FEATURES = "harmony"
-RELATIVE_DEGREES_FEATURES = "scale_relative"
+SCALE_RELATIVE_FEATURES = "scale_relative"

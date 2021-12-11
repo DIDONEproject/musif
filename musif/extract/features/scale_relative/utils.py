@@ -6,10 +6,11 @@ import pandas as pd
 import roman
 from music21 import pitch, scale
 from music21.note import Note
+from pandas.core.frame import DataFrame
+
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import (get_function_first,
                                                   get_function_second)
-from pandas.core.frame import DataFrame
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 

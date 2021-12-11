@@ -7,7 +7,7 @@ import pytest
 from musif import FeaturesExtractor
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, NUMBER_OF_PARTS, SOUND_SCORING
+from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, NUMBER_OF_PARTS
 
 data_static_dir = path.join("data", "static")
 config_path = path.join(data_static_dir, "config.yml")
@@ -18,9 +18,7 @@ expected_features_file_path = path.join(data_features_dir, "expected_features.cs
 
 @pytest.fixture(scope="session")
 def actual_data():
-    parts_filter = None
-    extractor = FeaturesExtractor(config_path, data_dir=data_features_dir, parts_filter=parts_filter)
-    data_df = extractor.extract()
+    data_df = FeaturesExtractor(config_path, data_dir=data_features_dir, parts_filter=None).extract()
     remove_columns_not_being_tested(data_df)
     yield data_df
 
