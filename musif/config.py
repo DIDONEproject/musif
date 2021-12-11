@@ -5,6 +5,7 @@ from os import path
 from musif import internal_data
 from musif.common.logs import create_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
+from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
 
 LOGGER_NAME = "musiF"
 LOG = "log"
@@ -73,6 +74,13 @@ class Configuration:
         self.expand_repeats = config_data.get(EXPAND_REPEATS, _CONFIG_FALLBACK[EXPAND_REPEATS])
         self.internal_data_dir = path.dirname(internal_data.__file__)
         self._load_metadata()
+
+    def is_requested_musescore_file(self) -> bool:
+        if self.is_requested_feature_category(HARMONY_FEATURES):
+            return True
+        if self.is_requested_feature_category(SCALE_RELATIVE_FEATURES):
+            return True
+        return False
 
     def is_requested_feature_category(self, feature) -> bool:
         if self.features is None:

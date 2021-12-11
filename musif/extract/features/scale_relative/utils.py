@@ -8,6 +8,7 @@ from music21 import pitch, scale
 from music21.note import Note
 from pandas.core.frame import DataFrame
 
+from musif.extract.constants import DATA_MUSESCORE_SCORE
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import get_function_first, get_function_second
 
@@ -130,7 +131,7 @@ def get_note_degree(key, note):
 # Transforms the list of notes into their scale degrees, based on the local key          #
 
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
-    harmonic_analysis, tonality, notes_measures, renumbered_measures = Extract_Harmony(score_data)
+    harmonic_analysis, tonality, notes_measures, renumbered_measures = extract_harmony(score_data)
 
     get_notes(notes_list, notes_measures)
     if IsAnacrusis(harmonic_analysis):
@@ -149,9 +150,9 @@ def get_notes(notes_list, notes_measures):
             note=note[0] #If we wave 2 or more notes at once, we just take the lowest one
         notes_measures.append((note.name, note.measureNumber))
 
-def Extract_Harmony(score_data):
-    harmonic_analysis=score_data['MS3_score']
-    tonality=str(score_data[DATA_KEY])
+def extract_harmony(score_data):
+    harmonic_analysis = score_data[DATA_MUSESCORE_SCORE]
+    tonality = str(score_data[DATA_KEY])
     notes_measures = []
     renumbered_measures = harmonic_analysis.mc.dropna().tolist()
     return harmonic_analysis,tonality,notes_measures,renumbered_measures

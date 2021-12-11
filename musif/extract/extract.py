@@ -305,7 +305,7 @@ class FilesValidator:
         pdebug(f"Validating file '{musicxml_file}'", level=self._cfg.console_log_level)
         try:
             parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
-            if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
+            if self._cfg.is_requested_musescore_file():
                 musescore_file = compose_musescore_file_path(musicxml_file, self._cfg.musescore_dir)
                 if not path.isfile(musescore_file):
                     raise MissingFileError(musescore_file)
@@ -434,7 +434,7 @@ class FeaturesExtractor:
             DATA_FILE: musicxml_file,
             DATA_FILTERED_PARTS: filtered_parts,
         }
-        if self._cfg.is_requested_feature_category(HARMONY_FEATURES):
+        if self._cfg.is_requested_musescore_file():
             data.update(self._get_harmony_data(musicxml_file))
         return data
 
