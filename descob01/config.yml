@@ -19,6 +19,7 @@ features:
   - tempo
   - key
   - dynamics
+  - rhythm
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
