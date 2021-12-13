@@ -33,9 +33,9 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                 dyn = True
                 wait = True
             elif measure.classes[0] == TEXTEXPRESSION:
-                if measure.content == "dolce" or measure.content == "assai":
+                if measure.content in DYNAMIC_LAST_WORDS:
                     name += " " + measure.content
-                else:
+                elif measure.content in DYNAMIC_FIRST_WORD:
                     name += measure.content + " "
             elif measure.classes[0] == TIMESIGNATURE:
                 beat_count = measure.beatCount
