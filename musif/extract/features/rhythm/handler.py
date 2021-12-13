@@ -1,8 +1,10 @@
 from statistics import mean
 from typing import List
 
+from musif.extract.constants import DATA_PART_ABBREVIATION
+
 from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix
+from musif.extract.features.prefix import get_score_prefix, get_part_feature, get_score_feature
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
@@ -49,21 +51,33 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
-    prefix = get_score_prefix()
-    average_duration_parts = [part[AVERAGE_DURATION] for part in parts_features]
+    features = {}
 
-    # rhythm_intensity_parts = [part[RHYTHMINT] for part in parts_features]
-    rhythm_intensity_separated_parts = [part[RHYTHMINT] for part in parts_features]
-    dic_dotted_rhythm = dict()
-    dic_double_dotted_rhythm = dict()
-    for part in parts_features:
-        dic_dotted_rhythm.update({part["PartAbbreviation"]: part[DOTTEDRHYTHM]})
-        dic_double_dotted_rhythm.update({part["PartAbbreviation"]: part[DOUBLE_DOTTEDRHYTHM]})
+    average_durations = []
+    rhythm_intensities = []
+    dotted_rhythm = []
+    double_dotted_rhythm = []
 
-    score_features.update(({
-        f"{prefix}{AVERAGE_DURATION}": mean(average_duration_parts),
-        #       f"{prefix}{RHYTHMINT}": mean(rhythm_intensity_parts),
-        f"{prefix}{RHYTHMINT}": mean(rhythm_intensity_separated_parts),
-        f"{prefix}{DOTTEDRHYTHM}": dic_dotted_rhythm,
-        f"{prefix}{DOUBLE_DOTTEDRHYTHM}": dic_double_dotted_rhythm
-    }))
+    for part_data, part_features in zip(parts_data, parts_features):
+        part = part_data[DATA_PART_ABBREVIATION]
+
+        features[get_part_feature(part, AVERAGE_DURATION)] = part_features[AVERAGE_DURATION]
+        average_durations.append(part_features[AVERAGE_DURATION])
+
+        features[get_part_feature(part, RHYTHMINT)] = part_features[RHYTHMINT]
+        rhythm_intensities.append(part_features[RHYTHMINT])
+
+        features[get_part_feature(part, DOTTEDRHYTHM)] = part_features[DOTTEDRHYTHM]
+        dotted_rhythm.append(part_features[DOTTEDRHYTHM])
+
+        features[get_part_feature(part, DOUBLE_DOTTEDRHYTHM)] = part_features[DOUBLE_DOTTEDRHYTHM]
+        double_dotted_rhythm.append(part_features[DOUBLE_DOTTEDRHYTHM])
+
+    features.update({
+        get_score_feature(AVERAGE_DURATION): mean(average_durations),
+        get_score_feature(RHYTHMINT): mean(rhythm_intensities),
+        get_score_feature(DOTTEDRHYTHM): mean(dotted_rhythm),
+        get_score_feature(DOUBLE_DOTTEDRHYTHM): mean(double_dotted_rhythm)
+    })
+
+    score_features.update(features)
