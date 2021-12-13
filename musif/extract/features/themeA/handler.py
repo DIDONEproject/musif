@@ -4,7 +4,7 @@ from typing import List
 from music21.stream import Measure, Score
 
 from musif.config import Configuration
-from musif.extract.constants import DATA_SCORE, HARMONY_FEATURES, RELATIVE_DEGREES_FEATURES
+from musif.extract.constants import DATA_MUSESCORE_SCORE, DATA_SCORE, HARMONY_FEATURES
 
 
 def update_score_objects(
@@ -21,10 +21,9 @@ def update_score_objects(
             if read_measures > last_measure:
                 elements_to_remove.append(measure)
         part.remove(targetOrList=elements_to_remove)
-        
-    if cfg.is_requested_feature_category(HARMONY_FEATURES) or cfg.is_requested_feature_category(RELATIVE_DEGREES_FEATURES):
-        if 'MS3_score' in score_data:
-            score_data['MS3_score'] = score_data['MS3_score'].loc[score_data['MS3_score']['mn'] <= last_measure]
+    if cfg.is_requested_musescore_file():
+        score_data[DATA_MUSESCORE_SCORE] = score_data[DATA_MUSESCORE_SCORE].loc[score_data[DATA_MUSESCORE_SCORE]['mn'] <= last_measure]
+
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     pass

@@ -13,8 +13,8 @@ features:
   - scoring
   - file_name
   - metadata
-  - core
   - themeA
+  - core
   # - composer
   # - librettist
   # - ambitus

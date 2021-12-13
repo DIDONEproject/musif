@@ -7,19 +7,16 @@ from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale_relative.utils import get_emphasised_scale_degrees_relative
 from musif.logs import lerr
 from .constants import *
+from ..core.constants import DATA_NOTES
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    if 'MS3_score' in score_data:
-        try:
-            notes_per_degree_relative = get_emphasised_scale_degrees_relative(part_data['notes'], score_data)
-            all_degrees = sum(value for value in notes_per_degree_relative.values())
+    notes_per_degree_relative = get_emphasised_scale_degrees_relative(part_data[DATA_NOTES], score_data)
+    all_degrees = sum(value for value in notes_per_degree_relative.values())
 
-            for key, value in notes_per_degree_relative.items():
-                part_features[DEGREE_COUNT.format(key=key, prefix="")] = value
-                part_features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
-        except Exception as e:
-            lerr(f'Error extracting relative scale degrees: {str(e)}')
+    for key, value in notes_per_degree_relative.items():
+        part_features[DEGREE_RELATIVE_COUNT.format(key=key)] = value
+        part_features[DEGREE_RELATIVE_PER.format(key=key)] = value / all_degrees if all_degrees != 0 else 0
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
