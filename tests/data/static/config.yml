@@ -22,12 +22,13 @@ features:
   - tempo
   - density
   #  - texture
-#  - harmony
+  - harmony
   - lyrics
   - scale
   - key
   - scale_relative
   - dynamics
+  - rhythm
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
