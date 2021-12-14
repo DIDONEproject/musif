@@ -1,4 +1,5 @@
 import math
+import re
 from os import path
 
 import pandas as pd
@@ -41,13 +42,13 @@ class TestFeatures:
             if col not in actual_columns:
                 not_in_actual_data += f'\t{col}\n'
         if len(not_in_actual_data) > 0:
-            errors += "\nColumns in expected data, but missing in actual data\n" + not_in_actual_data
+            errors += "\nColumns in CSV, but missing in DataFrame\n" + not_in_actual_data
         not_in_expected_data = ""
         for col in actual_columns:
             if col not in expected_data:
                 not_in_expected_data += f'  {col}\n'
         if len(not_in_expected_data) > 0:
-            errors += "\nColumns in actual data, but missing in expected data\n" + not_in_expected_data
+            errors += "\nColumns in DataFrame, but missing in CSV\n" + not_in_expected_data
 
         # Then
         assert len(errors) == 0, errors
@@ -62,7 +63,7 @@ class TestFeatures:
             actual_value = format_value(actual_data[col].values[0], data_type)
             expected_value = format_value(expected_data.get(col), data_type)
             if actual_value != expected_value:
-                errors += f'\t{col}\n\t\tExpected: {expected_value}\n\t\tActual:   {actual_value}\n'
+                errors += f'\t{col}\n\t\tCSV      : {expected_value}\n\t\tDataFrame: {actual_value}\n'
         if len(errors) > 0:
             errors = f"\nThese values are wrong:\n\n{errors}"
 
@@ -84,17 +85,20 @@ def format_value(value, data_type: str):
 
 def remove_columns_not_being_tested(df: pd.DataFrame) -> None:
     cols_to_remove = []
+    part_feature_pattern = get_part_prefix(".+")
+    sound_feature_pattern = get_sound_prefix(".+")
+    family_feature_pattern = get_family_prefix(".+")
     for col in df.columns:
         # Keep all scoring features
         if col.endswith(NUMBER_OF_FILTERED_PARTS) or col.endswith(NUMBER_OF_PARTS):
             continue
-        if col.startswith(get_part_prefix("")) and "_" in col:
-            if not col.startswith(get_part_prefix("vnI")) and not col.startswith(get_part_prefix("sop")):
+        if re.match(part_feature_pattern, col):
+            if (get_part_prefix("vnI") not in col) and (get_part_prefix("sop") not in col):
                 cols_to_remove.append(col)
-        if col.startswith(get_sound_prefix("")) and "_" in col:
-            if not col.startswith(get_sound_prefix("vn")) and not col.startswith(get_sound_prefix("sop")):
+        if re.match(sound_feature_pattern, col):
+            if (get_sound_prefix("vn") not in col) and (get_sound_prefix("sop") not in col):
                 cols_to_remove.append(col)
-        if col.startswith(get_family_prefix("")) and "_" in col:
-            if not col.startswith(get_family_prefix("Str")) and not col.startswith(get_family_prefix("Voice")):
+        if re.match(family_feature_pattern, col):
+            if (get_family_prefix("Str") not in col) and (get_family_prefix("Voice") not in col):
                 cols_to_remove.append(col)
     df.drop(cols_to_remove, axis=1, inplace=True)
