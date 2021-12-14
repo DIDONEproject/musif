@@ -85,20 +85,23 @@ def format_value(value, data_type: str):
 
 def remove_columns_not_being_tested(df: pd.DataFrame) -> None:
     cols_to_remove = []
-    part_feature_pattern = get_part_prefix(".+")
-    sound_feature_pattern = get_sound_prefix(".+")
-    family_feature_pattern = get_family_prefix(".+")
+    part_feature_pattern = ".*" + get_part_prefix(".+")
+    sound_feature_pattern = ".*" + get_sound_prefix(".+")
+    family_feature_pattern = ".*" + get_family_prefix(".+")
     for col in df.columns:
         # Keep all scoring features
         if col.endswith(NUMBER_OF_FILTERED_PARTS) or col.endswith(NUMBER_OF_PARTS):
             continue
-        if re.match(part_feature_pattern, col):
-            if (get_part_prefix("vnI") not in col) and (get_part_prefix("sop") not in col):
-                cols_to_remove.append(col)
-        if re.match(sound_feature_pattern, col):
-            if (get_sound_prefix("vn") not in col) and (get_sound_prefix("sop") not in col):
-                cols_to_remove.append(col)
-        if re.match(family_feature_pattern, col):
-            if (get_family_prefix("Str") not in col) and (get_family_prefix("Voice") not in col):
-                cols_to_remove.append(col)
+        col_without_part = col.replace(get_part_prefix("VnI"), "")
+        col_without_part = col_without_part.replace(get_part_prefix("Sop"), "")
+        if re.match(part_feature_pattern, col_without_part):
+            cols_to_remove.append(col)
+        col_without_sound = col.replace(get_sound_prefix("Vn"), "")
+        col_without_sound = col_without_sound.replace(get_sound_prefix("Sop"), "")
+        if re.match(sound_feature_pattern, col_without_sound):
+            cols_to_remove.append(col)
+        col_without_family = col.replace(get_family_prefix("Str"), "")
+        col_without_family = col_without_family.replace(get_family_prefix("Voice"), "")
+        if re.match(family_feature_pattern, col_without_family):
+            cols_to_remove.append(col)
     df.drop(cols_to_remove, axis=1, inplace=True)
