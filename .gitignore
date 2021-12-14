@@ -1,5 +1,6 @@
 developing.py
 martiser/myconfig.yml
+./arias
 results
 reports
 .vscode
@@ -11,13 +12,4 @@ __pycache__
 raw_files
 logs
 failed_files.txt
-dataframe.csv
-chords.csv
-functions.csv
-key_areas.csv
-harmonic_data.csv
-martiser/myconfig.yml
-developing.py
-martiser/myconfig.yml
-developing.py
-developing.py
+tests/data/static/features/expected_features.csv

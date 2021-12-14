@@ -90,6 +90,15 @@ def get_repeat_elements(score, v = True):
         print("The repeat elements found in this score are: " + str(repeat_elements))
     return repeat_elements
 
+def include_beats(harmonic_analysis):
+    harmonic_analysis['beats']=0
+    for index, measure in enumerate(harmonic_analysis.playthrough):
+        if measure==1:
+            beat = int(measure + float(harmonic_analysis.mn_onset[index])*int(harmonic_analysis.timesig[index][0]))
+        else:
+            beat = int((measure-1)*int(harmonic_analysis.timesig[index-1][0])+1  + harmonic_analysis.mn_onset[index]*int(harmonic_analysis.timesig[index][0]))
+        harmonic_analysis['beats'][index]=beat
+        
 def get_beat_position(beat_count, beat, pos):
     if beat == beat_count:
         return pos

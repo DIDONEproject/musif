@@ -24,7 +24,7 @@ from musif.reports.utils import (Create_excel, get_excel_name,
                                  save_workbook)
 from pandas.core.frame import DataFrame
 
-from musif.reports.visualisations import bar_plot_extended, line_plot_extended, prefix_visualizations
+from musif.reports.visualisations import bar_plot, bar_plot_extended, line_plot_extended, prefix_visualizations
 
 rows_groups_harmony = {}
 visualizations_harmony = bool
@@ -44,7 +44,8 @@ def Harmonic_analysis(rows_groups: dict, not_used_cols: dict, factor, _cfg: Conf
         global visualizations_harmony
         visualizations_harmony = visualizations
         global visualizations_name
-        visualizations_name = pre_string+name
+        visualizations_name = os.path.join(results_path,prefix_visualizations,pre_string, name)
+        
         
         # Print_Harmonic_Data(_cfg, kwargs, additional_info, groups, workbook, name)
         Print_Chords(factor, _cfg, kwargs,  groups, additional_info, workbook, name)
@@ -98,13 +99,12 @@ def Print_Chords(factor, _cfg, info, groups, additional_info, workbook, name):
     Create_excel(workbook.create_sheet("Chords Weighted"), rows_groups_harmony, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                         groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
     if visualizations_harmony:
-        create_visualizations(factor, data, third_columns, groups, name)
+        create_visualizations(factor, data, third_columns, groups, 'Chords')
 
 
 def create_visualizations(factor: int, data: DataFrame, columns: list, groups, name):
         columns.remove('Total analysed')
         title = name.capitalize()
-        # VISUALISATIONS
 
         if groups:
             data_grouped = data.groupby(list(groups))
@@ -142,10 +142,10 @@ def create_visualizations(factor: int, data: DataFrame, columns: list, groups, n
                                 line_plot_extended(
                                     name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title= 'Per ' + str(subrow))
         else:
-                columns_names = data['AriaName']
-                name_bar =  visualizations_name + name + IMAGE_EXTENSION
-                bar_plot_extended(name_bar, data, columns,
-                                    title, 'Percentage', title)
+            columns_names = data['AriaName']
+            name_bar = visualizations_name + IMAGE_EXTENSION
+            bar_plot(name_bar, data, columns,
+                                    'Chords', title)
 
 def Print_Keys(factor, _cfg, info, groups, additional_info, workbook):
     data=info['key_areas']
