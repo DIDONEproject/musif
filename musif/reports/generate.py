@@ -395,7 +395,7 @@ class FeaturesGenerator:
             else:
                 os.makedirs(path.join(results_path, 'visualizations'))
 
-        # MUTITHREADING
+        # MUTITHREADING?
         try:
             # executor = concurrent.futures.ThreadPoolExecutor()
             # visualizations = threading.Lock()
