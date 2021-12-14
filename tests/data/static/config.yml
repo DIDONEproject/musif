@@ -23,9 +23,9 @@ features:
   - density
   - texture
   - harmony
-  - lyrics
-  - scale
-  - key
+  # - lyrics
+  # - scale
+  # - key
   - scale_relative
   - dynamics
   - rhythm
@@ -35,12 +35,12 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - wind
 parts_filter:
   - vnI
-  - vnII
-  - va
-  - bs
+  # - vnII
+  # - va
+  # - bs
   - sop
-  - ten
-  - alt
-  - bar
-  - bass
-  - bbar
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar

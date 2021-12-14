@@ -21,8 +21,8 @@ features:
   - tempo
   # - interval
   # - ambitus # Melody Values report depends on both ambitus and interval to work!
-  - scale_relative
   # - harmony
+  - scale_relative
   # - density
   # - texture
   # - lyrics
