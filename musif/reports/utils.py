@@ -392,8 +392,6 @@ def print_groups(sheet: ExcelWriter, grouped:DataFrame, row_number: int, column_
         if average:  
             columns_values[c] = compute_average(columns_values[c], computations_columns[i])
         else:  # total
-            
-            
             columns_values[c] = round(sum(columns_values[c]), 3)
 
 
@@ -417,12 +415,7 @@ def row_iteration(sheet: ExcelWriter, rows_groups: dict, columns: list, row_numb
                   columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None,
                     additional_info: list=[], ponderate: bool =False):
     all_columns = list(data.columns)
-    #ROWS GROUPS DEBE SER CAMBIANTE, AKA UNA VARIABLE DE LA VCLASE QUE SE PASA A LASFUNCIONES
-    #mirar en el commit bien anterior cómo es rows_group a factor 0
-    #modificarlo acordemente como self-rows_roups
-    for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
-    
-    # for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...
+    for row in rows_groups:  # Geography, Dramma, Opera, Aria, Label, Composer...    
         if row in all_columns or any(sub in all_columns for sub in rows_groups[row][0]):
             forbiden = [NAME]
             if group != None:

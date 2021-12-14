@@ -9,9 +9,6 @@ import ms3
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
-from pandas import DataFrame
-from tqdm import tqdm
-
 from musif.common.cache import Cache
 from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
@@ -19,9 +16,15 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.constants import *
 from musif.extract.exceptions import MissingFileError, ParseFileError
-from musif.musicxml import MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION, split_layers
-from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20, extract_abbreviated_part, extract_sound, to_abbreviation
+from musif.extract.utils import include_beats
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
+from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION,
+                            split_layers)
+from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,
+                                    extract_abbreviated_part, extract_sound,
+                                    to_abbreviation)
+from pandas import DataFrame
+from tqdm import tqdm
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -98,6 +101,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
             harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
         else:
             harmonic_analysis['playthrough'] = harmonic_analysis.mn
+        include_beats(harmonic_analysis)
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
         harmonic_analysis = None

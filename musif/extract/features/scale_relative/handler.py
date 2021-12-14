@@ -18,6 +18,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
             for key, value in notes_per_degree_relative.items():
                 part_features[DEGREE_COUNT.format(key=key, prefix="")] = value
                 part_features[DEGREE_PER.format(key=key, prefix="")] = value / all_degrees if all_degrees != 0 else 0
+                
         except Exception as e:
             lerr(f'Error extracting relative scale degrees: {str(e)}')
 
