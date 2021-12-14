@@ -7,7 +7,7 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_LYRICS, DATA_NOTES
-from musif.extract.features.prefix import get_part_prefix, get_score_prefix
+from musif.extract.features.prefix import get_part_feature, get_score_feature
 from .constants import *
 from ..core.constants import NUM_NOTES
 
@@ -36,18 +36,17 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features = {}
     if voice_parts_data:
         for part_data in voice_parts_data:
-            part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-            features[f"{part_prefix}{NUM_NOTES}"] = len(part_data[DATA_NOTES])
-            features[f"{part_prefix}{SYLLABLES}"] = len(part_data[DATA_LYRICS])
-            features[f"{part_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(part_data[DATA_NOTES], part_data[DATA_LYRICS])
+            part = part_data[DATA_PART_ABBREVIATION]
+            features[get_part_feature(part, NUM_NOTES)] = len(part_data[DATA_NOTES])
+            features[get_part_feature(part, SYLLABLES)] = len(part_data[DATA_LYRICS])
+            features[get_part_feature(part, SYLLABIC_RATIO)] = get_syllabic_ratio(part_data[DATA_NOTES], part_data[DATA_LYRICS])
 
         notes = [note for part_data in voice_parts_data for note in part_data[DATA_NOTES]]
         lyrics = [lyrics for part_data in voice_parts_data for lyrics in part_data[DATA_LYRICS]]
 
-        score_prefix = get_score_prefix()
-        features[f"{score_prefix}{SYLLABLES}"] = len(lyrics)
-        features[f"{score_prefix}{SYLLABIC_RATIO}"] = get_syllabic_ratio(notes, lyrics)
-        # features[f"{score_prefix}{VOICE_REG}"] = get_voice_reg(notes)
+        features[get_score_feature(SYLLABLES)] = len(lyrics)
+        features[get_score_feature(SYLLABIC_RATIO)] = get_syllabic_ratio(notes, lyrics)
+        # features[get_score_feature(VOICE_REG)] = get_voice_reg(notes)
 
     return score_features.update(features)
 
