@@ -8,10 +8,11 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data, part_matches_filter
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_NOTES
-from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.prefix import get_part_feature, get_part_prefix
 from musif.extract.features.scoring.constants import FAMILY_ABBREVIATION, PART_ABBREVIATION, \
     SOUND_ABBREVIATION
 from .constants import *
+from ..core.constants import NUM_NOTES
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
@@ -20,9 +21,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     if len(parts_data) == 0:
         return
     features = {}
-    for part_features in parts_features:
-        part_prefix = get_part_prefix(part_features[PART_ABBREVIATION])
-        features[f"{part_prefix}{DATA_NOTES}"] = part_features[DATA_NOTES]
+    for part_data, part_features in zip(parts_data, parts_features):
+        part = part_data[DATA_PART_ABBREVIATION]
+        features[get_part_feature(part, NUM_NOTES)] = part_features[NUM_NOTES]
         
     score_features.update(features)
 
