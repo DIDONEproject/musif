@@ -31,11 +31,11 @@ def continued_sections(sections: list, mc):
 def IsAnacrusis(harmonic_analysis):
     return harmonic_analysis.mn.dropna().tolist()[0] == 0
     
-def get_tonality_per_beat(harmonic_analysis, tonality, renumbered_measures):
+def get_tonality_per_beat(harmonic_analysis, tonality):
     tonality_map = {}
-    for index, grado in enumerate(harmonic_analysis.localkey):
+    for index, degree in enumerate(harmonic_analysis.localkey):
         beat = harmonic_analysis.beats[index]
-        tonality_map[beat] = get_localTonalty(tonality, grado.strip())
+        tonality_map[beat] = get_localTonalty(tonality, degree.strip())
 
     # Fill measures without a value
     for beat in range(1, max(list(tonality_map.keys()))):
@@ -46,9 +46,9 @@ def get_tonality_per_beat(harmonic_analysis, tonality, renumbered_measures):
 
 
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
-    harmonic_analysis, tonality, measures = extract_harmony(score_data)
+    harmonic_analysis, tonality = extract_harmony(score_data)
 
-    tonality_map = get_tonality_per_beat(harmonic_analysis, tonality, measures)
+    tonality_map = get_tonality_per_beat(harmonic_analysis, tonality)
     emph_degrees = get_emphasized_degrees(notes_list, tonality_map)
     
     return emph_degrees
@@ -110,9 +110,9 @@ def extract_harmony(score_data):
     harmonic_analysis=score_data.get('MS3_score', pd.DataFrame())
 
     tonality=str(score_data[DATA_KEY])
-    measures = harmonic_analysis.mc.dropna().tolist() if IsAnacrusis(harmonic_analysis) else harmonic_analysis.mn.dropna().tolist()
+    # measures = harmonic_analysis.mc.dropna().tolist() if IsAnacrusis(harmonic_analysis) else harmonic_analysis.mn.dropna().tolist()
 
-    return harmonic_analysis, tonality, measures
+    return harmonic_analysis, tonality
 
 
 def get_note_degree(key, note):
