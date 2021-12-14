@@ -168,33 +168,13 @@ def get_keyareas_lists(keys, g1, g2):
     return key_areas, key_areas_g1, key_areas_g2
 
 def get_keyareas(lausanne_table, major = True):
-    # indexes_A = [i for i, s in enumerate(sections) if s == "A"]
-    # indexes_B = [i for i, s in enumerate(sections) if s == "B"]
-
     keys = lausanne_table.localkey.dropna().tolist()
     g1, g2 = get_keys(keys, 'M' if major else 'm')
 
     key_areas, key_areas_g1, key_areas_g2 = get_keyareas_lists(keys, g1, g2)
     number_blocks_keys = Counter(key_areas)
-    number_blocks_grouping1 = Counter(key_areas_g1)
-    number_blocks_grouping2 = Counter(key_areas_g2)
-    
-    # A_Keys = [keys[i] for i in indexes_A]
-    # g1_A = [g1[i] for i in indexes_A]
-    # g2_A = [g2[i] for i in indexes_A]
-    # key_area_A, key_areas_g1_A, key_areas_g2_A = get_keyareas_lists(A_Keys, g1_A, g2_A)
-    # counter_keys_A = Counter(key_area_A)
-    # counter_grouping1_A  = Counter(key_areas_g1_A)
-    # counter_grouping2_A  = Counter(key_areas_g2_A)
-    
-    # B_Keys = [keys[i] for i in indexes_B]
-    # g1_B = [g1[i] for i in indexes_B]
-    # # g2_B = [g2[i] for i in indexes_B]
-    # key_areas_B, key_areas_g1_B, key_areas_g2_B = get_keyareas_lists(B_Keys, g1_B, g2_B)
-    # counter_keys_B = Counter(key_areas_B)
-    # counter_grouping1_B  = Counter(key_areas_g1_B)
-    # counter_grouping2_B  = Counter(key_areas_g2_B)
-
+    # number_blocks_grouping1 = Counter(key_areas_g1)
+    # number_blocks_grouping2 = Counter(key_areas_g2)
     measures = lausanne_table.mc.dropna().tolist()
     beats = lausanne_table.mc_onset.dropna().tolist()
     time_signatures = lausanne_table.timesig.tolist()
@@ -209,80 +189,16 @@ def get_keyareas(lausanne_table, major = True):
     keyGrouping1_measures = {kc:keyGrouping1_measures[kc]/sum(list(keyGrouping1_measures.values())) for kc in keyGrouping1_measures}
     keyGrouping2_measures = get_measures_per_key(list(set(g2)), measures, g2, beats, time_signatures)
     keyGrouping2_measures = {kc:keyGrouping2_measures[kc]/sum(list(keyGrouping2_measures.values())) for kc in keyGrouping2_measures}
-    
-    # SECTION A
-    # measures_A = [measures[i] for i in indexes_A]
-    # beats_A = [beats[i] for i in indexes_A]
-    # time_signatures_A = [time_signatures[i] for i in indexes_A]
-    # key_compasses_A = get_compases_per_possibility(list(set(A_Keys)), measures_A, A_Keys, beats_A, time_signatures_A)
-    # total_compasses_A = sum(list(key_compasses_A.values()))
-    # key_compasses_A = {kc:key_compasses_A[kc]/total_compasses_A for kc in key_compasses_A}
-    # keyGrouping1_compasses_A = get_compases_per_possibility(list(set(g1_A)), measures_A, g1_A, beats_A, time_signatures_A)
-    # keyGrouping1_compasses_A = {kc:keyGrouping1_compasses_A[kc]/sum(list(keyGrouping1_compasses_A.values())) for kc in keyGrouping1_compasses_A}
-    # keyGgrouping2_compasses_A = get_compases_per_possibility(list(set(g2_A)), measures_A, g2_A, beats_A, time_signatures_A)
-    # keyGgrouping2_compasses_A = {kc:keyGgrouping2_compasses_A[kc]/sum(list(keyGgrouping2_compasses_A.values())) for kc in keyGgrouping2_compasses_A}
-    # # SECTION B
-    # measures_B = [measures[i] for i in indexes_B]
-    # beats_B = [beats[i] for i in indexes_B]
-    # time_signatures_B = [time_signatures[i] for i in indexes_B]
-    # key_compasses_B = get_compases_per_possibility(list(set(B_Keys)), measures_B, B_Keys, beats_B, time_signatures_B)
-    # total_compasses_B = sum(list(key_compasses_B.values()))
-    # key_compasses_B = {kc:key_compasses_B[kc]/total_compasses_B for kc in key_compasses_B}
-    # keyGrouping1_compasses_B = get_compases_per_possibility(list(set(g1_B)), measures_B, g1_B, beats_B, time_signatures_B)
-    # keyGrouping1_compasses_B = {kc:keyGrouping1_compasses_B[kc]/sum(list(keyGrouping1_compasses_B.values())) for kc in keyGrouping1_compasses_B}
-    # keyGgrouping2_compasses_B = get_compases_per_possibility(list(set(g2_B)), measures_B, g2_B, beats_B, time_signatures_B)
-    # keyGgrouping2_compasses_B = {kc:keyGgrouping2_compasses_B[kc]/sum(list(keyGgrouping2_compasses_B.values())) for kc in keyGgrouping2_compasses_B}
 
     total_key_areas = sum(number_blocks_keys.values())
-    total_g1_areas = sum(number_blocks_grouping1.values())
-    total_g2_areas = sum(number_blocks_grouping2.values())
+    # total_g1_areas = sum(number_blocks_grouping1.values())
+    # total_g2_areas = sum(number_blocks_grouping2.values())
     
-    keyareas = {'TotalNumberKeyAreas': total_key_areas, 'TotalNumberMeasures': int(total_measures) }
-
-    # total_key_areas_A = sum(counter_keys_A.values())
-    # total_g1_areas_A = sum(counter_grouping1_A.values())
-    # total_g2_areas_A = sum(counter_grouping2_A.values())
-    # total_key_areas_B = sum(counter_keys_B.values())
-    # total_g1_areas_B = sum(counter_grouping1_B.values())
-    # total_g2_areas_B = sum(counter_grouping2_B.values())
-
+    # keyareas = {'TotalNumberKeyAreas': total_key_areas, 'TotalNumberMeasures': int(total_measures) }
+    keyareas={}
     for key in number_blocks_keys:
-        # keyareas[KEY_prefix + key + '_numberOfblocs'] = number_blocks_keys[key]
-        # keyareas[KEY_prefix + KEY_MEASURES + key] = float(key_measures[key])
         keyareas[KEY_prefix + key + KEY_PERCENTAGE ] = float(key_measures_percentage[key]) #procentaje de compases de cada I, i, etc. en el total
         keyareas[KEY_prefix + KEY_MODULATORY + key] = number_blocks_keys[key]/total_key_areas
-    
-    # for counter_grouping in number_blocks_grouping1:
-    #     keyareas[KEY_GROUPING+'1_'+counter_grouping] = number_blocks_grouping1[counter_grouping]
-    #     keyareas[KEY_GROUPING+'1_'+ KEY_PERCENTAGE  +counter_grouping] = float(keyGrouping1_measures[counter_grouping])
-    #     keyareas[KEY_GROUPING+'1_' + KEY_MEASURES + counter_grouping] =float( keyGrouping1_measures[counter_grouping])
-    #     keyareas[KEY_GROUPING+'1_'+KEY_MODULATORY+counter_grouping] = number_blocks_grouping1[counter_grouping]/total_g1_areas
-    
-    # for counter_grouping in number_blocks_grouping2:
-    #     keyareas[KEY_GROUPING+'2_'+counter_grouping] = number_blocks_grouping2[counter_grouping]
-    #     keyareas[KEY_GROUPING+'2_'+KEY_PERCENTAGE+counter_grouping] = float(keyGrouping2_measures[counter_grouping])
-    #     keyareas[KEY_GROUPING+'2_' + KEY_MEASURES + counter_grouping] = float(keyGrouping2_measures[counter_grouping])
-    #     keyareas[KEY_GROUPING+'2_'+KEY_MODULATORY+counter_grouping]  = number_blocks_grouping2[counter_grouping]/total_g2_areas
-        
-    # for ck in counter_keys_A:
-    #     keyareas['KeySectionA'+ck] = counter_keys_A[ck]
-    #     keyareas['KeyModCompSectionA'+ck] = (key_compasses_A[ck] + (counter_keys_A[ck]/total_key_areas_A)) / 2
-    # for cg in counter_grouping1_A:
-    #     keyareas['KeyGgrouping1SectionA'+cg] = counter_grouping1_A[cg]
-    #     keyareas['KeyGgrouping1ModCompSectionA'+cg] = (keyGrouping1_compasses_A[cg] + (counter_grouping1_A[cg]/total_g1_areas_A)) / 2
-    # for cg in counter_grouping2_A:
-    #     keyareas['KeyGgrouping2SectionA'+cg] = counter_grouping2_A[cg]
-    #     keyareas['KeyGgrouping2ModCompSectionA'+cg] = (keyGgrouping2_compasses_A[cg] + (counter_grouping2_A[cg]/total_g2_areas_A)) / 2
-    
-    # for ck in counter_keys_B:
-    #     keyareas['KeySectionB'+ck] = counter_keys_B[ck]
-    #     keyareas['KeyModCompSectionB'+ck] = (key_compasses_B[ck] + (counter_keys_B[ck]/total_key_areas_B)) / 2
-    # for cg in counter_grouping1_B:
-    #     keyareas['KeyGgrouping1SectionB'+cg] = counter_grouping1_B[cg]
-    #     keyareas['KeyGgrouping1ModCompSectionB'+cg] = (keyGrouping1_compasses_B[cg] + (counter_grouping1_B[cg]/total_g1_areas_B)) / 2
-    # for cg in counter_grouping2_B:
-    #     keyareas['KeyGgrouping2SectionB'+cg] = counter_grouping2_B[cg]
-    #     keyareas['KeyGgrouping2ModCompSectionB'+cg] = (keyGgrouping2_compasses_B[cg] + (counter_grouping2_B[cg]/total_g2_areas_B)) / 2
 
     return keyareas
 
