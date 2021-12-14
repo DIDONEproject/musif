@@ -21,7 +21,7 @@ features:
   - interval
   - tempo
   - density
-  #  - texture
+  - texture
   - harmony
   - lyrics
   - scale
