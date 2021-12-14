@@ -22,7 +22,7 @@ warnings.filterwarnings("ignore")
 
 plt.style.use('seaborn')
 
-prefix_visualizations='\\visualisations\\'
+prefix_visualizations='\\visualizations\\'
 
 # COLORS = "rgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmykrgbcmyk"
 COLORS=list(mcolors.BASE_COLORS.keys())*5

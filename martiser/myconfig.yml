@@ -20,9 +20,9 @@ features:
   - key
   - tempo
   # - interval
-  - ambitus # Melody Values report depends on both ambitus and interval to work!
-  # - scale_relative
-  - harmony
+  # - ambitus # Melody Values report depends on both ambitus and interval to work!
+  - scale_relative
+  # - harmony
   # - density
   # - texture
   # - lyrics
