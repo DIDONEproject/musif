@@ -2,20 +2,19 @@ from typing import List
 
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
-from musif.extract.constants import DATA_PART, DATA_PART_ABBREVIATION
-from musif.extract.features.prefix import get_part_prefix
-from musif.musicxml.ambitus import get_part_ambitus
+from musif.extract.constants import DATA_PART_ABBREVIATION
+from musif.musicxml.ambitus import get_notes_ambitus
 from .constants import *
+from ..core.constants import DATA_NOTES
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    part = part_data[DATA_PART]
-    this_aria_ambitus, ambitus_pitch_span = get_part_ambitus(part)
-    lowest_note, highest_note = ambitus_pitch_span
+    notes = part_data[DATA_NOTES]
+    lowest_note, highest_note = get_notes_ambitus(notes)
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
     highest_note_text = highest_note.nameWithOctave.replace("-", "b")
-    lowest_note_index = int(lowest_note.ps)
-    highest_note_index = int(highest_note.ps)
+    lowest_note_index = int(lowest_note.pitch.midi)
+    highest_note_index = int(highest_note.pitch.midi)
 
     ambitus_features = {
         LOWEST_NOTE: lowest_note_text,
@@ -33,6 +32,6 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         return
 
     for part_data, part_features in zip(parts_data, parts_features):
-        part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-        for feature_name in SCORE_FEATURES:
-            score_features[f"{part_prefix}{feature_name}"] = part_features[feature_name]
+        part = part_data[DATA_PART_ABBREVIATION]
+        # for feature_name in SCORE_FEATURES:
+        #     score_features[get_part_feature(part, feature_name)] = part_features[feature_name]
