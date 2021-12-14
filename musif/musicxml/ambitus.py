@@ -1,11 +1,15 @@
-from typing import Tuple
+from typing import List, Tuple
 
-from music21.analysis.discrete import Ambitus
-from music21.stream import Part
+from music21.note import Note
 
 
-def get_part_ambitus(part: Part) -> Tuple:
-    ambitus = Ambitus()
-    ambitus_solution = ambitus.getSolution(part)
-    ambitus_pitch_span = ambitus.getPitchSpan(part)
-    return ambitus_solution, ambitus_pitch_span
+def get_notes_ambitus(notes: List[Note]) -> Tuple[Note, Note]:
+    lowest_note = notes[0]
+    highest_note = notes[1]
+    for i in range(1, len(notes)):
+        note_index = notes[i].pitch.midi
+        if note_index < lowest_note.pitch.midi:
+            lowest_note = notes[i]
+        if note_index > highest_note.pitch.midi:
+            highest_note = notes[i]
+    return lowest_note, highest_note
