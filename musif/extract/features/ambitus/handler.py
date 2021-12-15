@@ -11,6 +11,8 @@ from ..prefix import get_part_feature
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]
+    if notes is None or len(notes) == 0:
+        return
     lowest_note, highest_note = get_notes_ambitus(notes)
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
     highest_note_text = highest_note.nameWithOctave.replace("-", "b")
