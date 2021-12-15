@@ -8,7 +8,7 @@ max_processes: 8
 log:
   file_path: logs/musif.log
   file_level: DEBUG
-  console_level: INFO
+  console_level: DEBUG
 features:
   - scoring
   - file_name
