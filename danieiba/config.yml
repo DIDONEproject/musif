@@ -1,14 +1,14 @@
 metadata_dir: ../metadata
 metadata_id_col: AriaId
-data_dir: arias
-musescore_dir:
+data_dir: ../../Corpus/xml
+musescore_dir: ../../Corpus/musescore
 expand_repeats: false
 parallel: false
 max_processes: 8
 log:
   file_path: logs/musif.log
   file_level: DEBUG
-  console_level: INFO
+  console_level: DEBUG
 features:
   - scoring
   - file_name
@@ -21,11 +21,11 @@ features:
   - interval
   - tempo
   - density
-#  - texture
+  - texture
   - harmony
   - lyrics
   - scale
-#  - scale_relative
+  - scale_relative
   - key
   - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name
