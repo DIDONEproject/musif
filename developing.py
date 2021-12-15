@@ -9,10 +9,10 @@ sys.path.insert(0, "../musif/musif")
 
 if __name__ == "__main__":
 # 
-    # data_dir = r'tests/data/static/features'
-    data_dir = r'../arias_error/'
+    data_dir = r'tests/data/static/features'
+    # data_dir = r'arias/error/'
     # 
-    df = FeaturesExtractor("martiser/myconfig.yml", data_dir=data_dir).extract()
+    df = FeaturesExtractor("martiser/config.yml", data_dir=data_dir).extract()
 
     df.to_csv('martiser/dataframe.csv', index=False)
     df=pd.read_csv('martiser/dataframe.csv')
