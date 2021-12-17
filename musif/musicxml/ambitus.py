@@ -5,7 +5,7 @@ from music21.note import Note
 
 
 def get_notes_ambitus(notes: List[Note]) -> Tuple[Note, Note]:
-    first_note = notes[0] if isinstance(notes[0], Chord) else notes[0]
+    first_note = notes[0][0] if isinstance(notes[0], Chord) else notes[0]
     lowest_note = first_note
     highest_note = first_note
     for note in notes[1:]:
