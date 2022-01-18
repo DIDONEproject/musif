@@ -75,7 +75,7 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     key_measures[last_key] += num_measures
 
     try:
-        assert not (new_measures[0] != 0 and round(sum(list(key_measures.values()))) != new_measures[i])
+            
         assert not (new_measures[0] == 0 and round(sum(list(key_measures.values()))) != new_measures[i] + 1)
     except AssertionError as e:
         perr('There was an error counting the measures!: ', e)
@@ -325,9 +325,9 @@ def get_additions(lausanne_table):
             additions_dict[OTHERS_NO_AUG] += c
 
     additions = {}
-    for a in additions_counter:
-        if additions_counter[a] != 0:
-            additions['Additions_'+str(a)] = additions_counter[a] / sum(list(additions_counter.values()))
+    for a in additions_dict.keys():
+        if additions_dict[a] != 0:
+            additions['Additions_'+str(a)] = additions_dict[a] / sum(list(additions_dict.values()))
     return additions
     
 def get_chord_types(lausanne_table):

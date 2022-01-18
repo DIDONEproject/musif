@@ -103,12 +103,13 @@ def include_beats(harmonic_analysis):
         
         harmonic_analysis['beats'][index]=beat
         
-def get_beat_position(beat_count, beat, pos):
-    if beat == beat_count:
+def get_beat_position(beats_timesignature, number_of_beats, pos):
+    if number_of_beats == beats_timesignature:
         return pos
     else:
-        return (pos / beat_count) + 1  # It could be better: (pos/beat_count)*beat and changes in dynamics
-
+        return (pos / beats_timesignature) + 1  # It could be better: (pos/beat_count)*beat and changes in dynamics
+    #TEST this with 3/8
+    
 def expand_repeat_bars(score):
     final_score = m21.stream.Score()
     final_score.metadata = score.metadata

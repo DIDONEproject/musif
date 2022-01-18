@@ -1,53 +1,67 @@
+from collections import Counter, defaultdict
 from statistics import mean
 from typing import List
 
-from musif.extract.constants import DATA_PART_ABBREVIATION
-
 from musif.config import Configuration
-from musif.extract.features.prefix import get_score_prefix, get_part_feature, get_score_feature
+from musif.extract.constants import DATA_PART_ABBREVIATION
+from musif.extract.features.prefix import (get_part_feature, get_score_feature,
+                                           get_score_prefix)
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
+
 from .constants import *
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+    
     notes_duration = [note.duration.quarterLength for note in part_data["notes"]]
-    beat = 1
+    beats = 1
+    beat_unit=1
     total_number_notes = 0
     number_notes = 0
-    rhythm_intensity_separated = 0
+    notes_dict= defaultdict(int)
+    rhythm_intensity_period = []
     rhythm_dot = 0
     rhythm_double_dot = 0
     positions = []
     total_beats = 0
-    for bar_section in part_data["measures"]:
-        for measure in bar_section.elements:
-            if measure.classes[0] == "Note":
-                number_notes += 1
-                total_number_notes += 1
-                pos = get_beat_position(beat_count, beat, measure.beat)
-                if pos in positions and measure.duration.dots > 0:
-                    rhythm_dot += 1
-                    if measure.duration.dots == 2:
-                        rhythm_double_dot += 1
-            elif measure.classes[0] == "TimeSignature":
-                rhythm_intensity_separated += number_notes / beat
-                number_notes = 0
-                beat_count = measure.beatCount
-                beat = get_number_of_beats(measure.ratioString)
-                positions = [get_beat_position(beat_count, beat, i + 1) for i in range(beat)]
-        total_beats += beat
+    total_sounding_beats = 0
 
-    rhythm_intensity_separated += number_notes / beat
+    for bar_section in part_data["measures"]:
+        for element in bar_section.elements:
+            if element.classes[0] == "Note":
+                number_notes += 1
+                notes_dict[element.duration.quarterLength] += 1
+                total_number_notes += 1
+                pos = get_beat_position(beat_count, beats, element.beat)
+                # if pos in positions and element.duration.dots > 0: #has dot
+                if element.duration.dots > 0 and element.duration.quarterLength < beat_unit: #has dot
+                    rhythm_dot += 1
+                    if element.duration.dots == 2:
+                        rhythm_double_dot += 1
+            elif element.classes[0] == "TimeSignature":
+                # rhythm_intensity_separated += number_notes / beat
+                rhythm_intensity_period.append(sum([i*j for i, j in Counter(notes_dict)]) / total_sounding_beats if total_sounding_beats !=0 else 0)
+                number_notes = 0
+                beat_count = element.beatCount
+                beats = get_number_of_beats(element.ratioString)
+                beat_unit=element.beatStrength
+                positions = [get_beat_position(beat_count, beats, i + 1) for i in range(beats)]
+        total_beats += beats
+        
+        if bar_section in part_data['sounding_measures']: 
+            total_sounding_beats += beats
+
+    rhythm_intensity_period.append(sum([j/i if i != 0.0 else 0 for i, j in Counter(notes_dict).items()] ) / total_sounding_beats)
+    notes_duration=[i for i in notes_duration if i != 0.0] # remove notes with duration equal to 0
 
     part_features.update({
         AVERAGE_DURATION: mean(notes_duration) if len(notes_duration) != 0 else 0,
-        #        RHYTHMINT: total_number_notes / part_features[NUMBER_OF_BEATS],
-        RHYTHMINT: rhythm_intensity_separated,
-        DOTTEDRHYTHM: (rhythm_dot / total_beats) * 100,
-        DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats) * 100
+        RHYTHMINT: sum(rhythm_intensity_period),
+        DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats),
+        DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats)
     })
-
+pass
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):

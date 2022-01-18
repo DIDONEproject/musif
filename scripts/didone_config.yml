@@ -1,31 +1,31 @@
-data_dir: .
-musescore_dir:
 metadata_dir: ../metadata
 metadata_id_col: AriaId
-parallel: false
+data_dir: ../../Corpus/xml
+musescore_dir: ../../Corpus/musescore
 expand_repeats: false
+parallel: true
 max_processes: 8
 log:
-  file_path: ./musif.log
+  file_path: logs/musif.log
   file_level: DEBUG
-  console_level: WARNING
+  console_level: INFO
 features:
   - scoring
   - file_name
   - metadata
   - themeA
   - core
-  # - composer
-  # - librettist
-  # - ambitus
-  # - interval
-  # - tempo
-  # - density
-  #  - texture
+  - composer
+  - librettist
+  - ambitus
+  - interval
+  - tempo
+  - density
+#  - texture
   - harmony
-  # - lyrics
-  # - scale
-  #  - scale_relative
+  - lyrics
+  - scale
+#  - scale_relative
   - key
   - dynamics
 split_keywords:  # Used to split the possible layers present depending on the instrument name

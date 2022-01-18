@@ -95,26 +95,24 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     try:
         msc3_score = ms3.score.Score(file_path, logger_cfg={'level': 'ERROR'})
         harmonic_analysis = msc3_score.mscx.expanded
+        harmonic_analysis.reset_index(inplace=True)
         if expand_repeats:
             mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
             mn = pd.Series(mn, name='mc_playthrough')
             # harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
             harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
-
         else:
             # harmonic_analysis['playthrough'] = harmonic_analysis.mn
             if harmonic_analysis.mn[0]==0:
                 harmonic_analysis['playthrough'] = harmonic_analysis.mc
             else:
                 harmonic_analysis['playthrough'] = harmonic_analysis.mn
-
         include_beats(harmonic_analysis)
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
         harmonic_analysis = None
         raise ParseFileError(file_path, str(e)) from e
     return harmonic_analysis
-
 
 def extract_files(obj: Union[str, List[str]]) -> List[str]:
     """Extracts the paths to musicxml files
