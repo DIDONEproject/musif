@@ -19,15 +19,15 @@ features:
   - librettist
   - key
   - tempo
-  # - interval
-  # - ambitus # Melody Values report depends on both ambitus and interval to work!
-  # - harmony
+  - interval
+  - ambitus # Melody Values report depends on both ambitus and interval to work!
+  - harmony
   - scale_relative
-  # - density
-  # - texture
-  # - lyrics
-  # - scale
-  # - dynamics
+  - density
+  - texture
+  - lyrics
+  - scale
+  - dynamics
 
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind

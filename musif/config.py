@@ -120,6 +120,8 @@ class Configuration:
         self.scores_metadata = {
             path.basename(file): read_dicts_from_csv(file) for file in glob(path.join(self.metadata_dir, "score", "*.csv"))
         }
+        if not self.scores_metadata:
+            print('\nMetadata could not be loaded properly!! Check metadata path in config file.\n')
         self.characters_gender = read_dicts_from_csv(path.join(self.internal_data_dir, "characters_gender.csv"))
         self.sound_to_abbreviation = read_object_from_json_file(path.join(self.internal_data_dir, "sound_abbreviation.json"))
         self.abbreviation_to_sound = {abbreviation: sound for sound, abbreviation in self.sound_to_abbreviation.items()}
