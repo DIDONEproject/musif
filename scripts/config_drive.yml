@@ -1,7 +1,5 @@
 metadata_dir: ./metadata
 metadata_id_col: AriaId
-# data_dir: ../../../_Ana/Music Analysis/xml/corpus_github/xml
-# musescore_dir: ../../../_Ana/Music Analysis/xml/corpus_github/musescore
 data_dir: ../../Corpus_drive400/xml
 musescore_dir: ../../Corpus_drive400/musescore
 expand_repeats: false
