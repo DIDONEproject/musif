@@ -1,10 +1,10 @@
-metadata_dir: ./metadata
+metadata_dir: ../metadata
 metadata_id_col: AriaId
-data_dir: ../../Corpus_drive400/xml
-musescore_dir: ../../Corpus_drive400/musescore
+data_dir: ../../Corpus_175/xml
+musescore_dir: ../../Corpus_175/musescore
 expand_repeats: false
 parallel: false
-max_processes: 1
+max_processes: 7
 log:
   file_path: logs/musif.log
   file_level: DEBUG

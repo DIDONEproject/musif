@@ -41,7 +41,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                         rhythm_double_dot += 1
             elif element.classes[0] == "TimeSignature":
                 # rhythm_intensity_separated += number_notes / beat
-                rhythm_intensity_period.append(sum([i*j for i, j in Counter(notes_dict)]) / total_sounding_beats if total_sounding_beats !=0 else 0)
+                rhythm_intensity_period.append(sum([float(i)*j for i, j in Counter(notes_dict).items()]) / total_sounding_beats if total_sounding_beats !=0 else 0)
                 number_notes = 0
                 beat_count = element.beatCount
                 beats = get_number_of_beats(element.ratioString)

@@ -29,7 +29,7 @@ from musif.extract.features.interval.constants import ABSOLUTE_INTERVALLIC_KURTO
     TRIMMED_ABSOLUTE_INTERVALLIC_STD, TRIMMED_INTERVALLIC_MEAN, TRIMMED_INTERVALLIC_STD
 # from musif.extract.features.key.constants import KEY, KEY_SIGNATURE_TYPE, MODE
 from musif.extract.features.lyrics.constants import SYLLABIC_RATIO, SYLLABLES
-from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import FAMILY_INSTRUMENTATION, INSTRUMENTATION, NUMBER_OF_PARTS, SCORING, \
     VOICES
 from musif.extract.features.tempo.constants import NUMERIC_TEMPO, TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2, \
@@ -38,8 +38,8 @@ from musif.extract.features.tempo.constants import NUMERIC_TEMPO, TEMPO, TEMPO_G
 
 if __name__ == "__main__":
     # FilesValidator("config_drive.yml").validate()
-    # df = FeaturesExtractor("config_drive.yml").extract()
-    # df.to_csv("features400.csv", index=False)
+    df = FeaturesExtractor("config_drive.yml").extract()
+    df.to_csv("features175.csv", index=False)
     label_by_col = {
         "Basic_passion": "Label_BasicPassion",
         "PassionA": "Label_PassionA",
@@ -53,8 +53,6 @@ if __name__ == "__main__":
     df.drop('Label_Passions', inplace=True, axis=1)
     cols = df.columns.tolist()
     passions2 = read_dicts_from_csv("Passions.csv")
-    # passions = read_dicts_from_csv("passions2.csv")
-    # data_by_aria_label = {label_data["Label"]: label_data for label_data in passions}
     data_by_aria_label2 = {label_data["Label"]: label_data for label_data in passions2}
 
     for col, label in label_by_col.items():
@@ -75,6 +73,7 @@ if __name__ == "__main__":
     for index, row in df.iterrows():
         if pd.isnull(row[COMPOSER]):
             print(row["Composer"])
+            print(row["FileName"])
             composer_counter.append(row["FileName"])
             continue
         voice = row[VOICES]
@@ -85,15 +84,16 @@ if __name__ == "__main__":
         if "," in voice:
             duetos_counter.append(row["FileName"])
             continue
-
         voice_prefix = get_part_prefix(voice)
-        generic_voice_prefix = get_part_prefix("Voice")
+        sound_voice_prefix = get_sound_prefix(voice)
+        # generic_voice_prefix = get_part_prefix("Voice")
+        generic_sound_voice_prefix = get_sound_prefix("Voice")
+
         data_item = {}
         for col in cols:
-            formatted_col = col.replace(voice_prefix, generic_voice_prefix)
+            formatted_col = col.replace(voice_prefix, generic_sound_voice_prefix)
             data_item[formatted_col] = row[col]
         data_list.append(data_item)
-    # data_list=data_list+labels
     df_analysis = pd.DataFrame(data_list)
     df_analysis.sort_values("AriaId", inplace=True)
 
