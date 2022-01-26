@@ -306,7 +306,7 @@ def get_additions(lausanne_table):
             additions_cleaned.append(str(a))
 
     additions_counter = Counter(additions_cleaned)
-    additions_dict = {ADDITIONS_4_6_64_74_94: 0, 
+    additions_dict = {ADDITIONS_4_6_94: 0, 
                         ADDITIONS_9: 0,
                         OTHERS_NO_AUG: 0, 
                         OTHERS_AUG: 0}
@@ -315,8 +315,8 @@ def get_additions(lausanne_table):
         a = str(a)
         if a == '+9':
             additions_dict[ADDITIONS_9] = c
-        elif a in ['4', '6', '64', '74', '94', '4.0', '6.0', '64.0', '74.0', '94.0']:
-            additions_dict[ADDITIONS_4_6_64_74_94] += c
+        elif a in ['4', '6', '94', '4.0', '6.0', '94.0']:
+            additions_dict[ADDITIONS_4_6_94] += c
         elif '+' in a:
             additions_dict[OTHERS_AUG] += c
         elif str(a) =='nan':

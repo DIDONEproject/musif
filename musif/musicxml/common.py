@@ -86,8 +86,9 @@ def split_layers(score: Score, split_keywords: List[str]):
                         not isinstance(e, Voice) for e in measure.elements
                     ):
                         not_voices_elements = [
-                            e for e in measure.elements if not isinstance(e, Voice)
+                            e for e in measure.elements if not isinstance(e, Voice) and not e.classes[0]=='Rest'
                         ]  # elements such as clefs, dynamics, text annotations...
+                        # Fix: not include silences
                         # introducimos esta información en cada voz:
                         for p in parts_splitted:
                             p.elements[num_measure].elements += tuple(

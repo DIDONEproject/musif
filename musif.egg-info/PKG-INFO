@@ -1,0 +1,108 @@
+Metadata-Version: 2.1
+Name: musif
+Version: 1.0.0
+Summary: Music feature extraction library
+Home-page: git@github.com:DIDONEproject/musiF.git
+Author: ICCMU Didone Project
+Author-email: didone@iccmu.es
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: testing
+
+# musiF
+
+Python library for **Music Feature Extraction and Analysis**, developed by [Didone Project](https://didone.eu/). 
+
+Main goals:
+
+* Extract different kind of features (melodic, harmonics, texture, operatic, ...) from score files
+* Reporting & Visualization tools
+
+## Installation
+
+musiF requires:
+
+* Python >= 3.7
+
+We recommend installing it with `pip`:
+
+```bash
+git clone https://github.com/DIDONEproject/musiF.git
+cd musiF
+pip install .
+```
+
+## Usage
+
+Assuming we have our scores persisted in a directories structure like this:
+ 
+```
+scores                                   others
+|                                        |
+|__ xml                                  |__ score3.xml
+|   |__ score1.xml                       |__ score3.mscx
+|   |__ score2.xml                       |
+|                                        |__ score4.xml
+|__ mscx                                 |__ score4.mscx
+    |__ score1.mscx                      
+    |__ score2.mscx
+
+```
+
+### Example 1 - Extract multiple scores features from directory
+
+```
+from musif.extract import FeaturesExtractor
+
+if __name__ == "__main__":
+
+    features_df = FeaturesExtractor().extract("scores/xml")
+
+```
+
+### Example 2 - Extract multiple scores features from specific files
+
+```
+from musif.extract import FeaturesExtractor
+
+if __name__ == "__main__":
+
+    xml_files = ["scores/xml/score1.xml", "others/score3.xml"]
+
+    features_df = FeaturesExtractor().extract(xml_files, ["obI", "obII"])
+
+```
+
+### Example 3 - Extract single score features
+
+```
+from musif.extract import FeaturesExtractor
+
+if __name__ == "__main__":
+
+    features_df = FeaturesExtractor().extract("scores/xml/score1.xml", ["obI", "obII"])
+
+```
+
+### Example 4 - Different Configuration Options
+
+```
+from musif.extract import FeaturesExtractor
+
+if __name__ == "__main__":
+
+    features1 = FeaturesExtractor().extract("myfile.xml", ["obI", "obII"])
+    features2 = FeaturesExtractor({"split": True, "data_dir": "data"}).extract("myfile.xml", ["obI", "obII"])
+    features3 = FeaturesExtractor(split=True, data_dir="data").extract("myfile.xml", ["obI", "obII"])
+    features4 = FeaturesExtractor("/home/daniel/clients/didone/projects/musiF/config.yml").extract("myfile.xml", ["obI", "obII"])
+    features5 = FeaturesExtractor("config.yml").extract("myfile.xml", ["obI", "obII"])
+
+```
+
+
+

@@ -1,0 +1,3 @@
+[console_scripts]
+melodic-analysis = musif.scripts.melodic_analysis:main
+

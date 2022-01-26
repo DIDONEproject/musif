@@ -108,6 +108,7 @@ def get_beat_position(beats_timesignature, number_of_beats, pos):
         return pos
     else:
         return (pos / beats_timesignature) + 1  # It could be better: (pos/beat_count)*beat and changes in dynamics
+        
     #TEST this with 3/8
     
 def expand_repeat_bars(score):
