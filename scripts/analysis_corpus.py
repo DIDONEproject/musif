@@ -1,9 +1,14 @@
 import pandas as pd
 
-from musif import FeaturesExtractor
+# from musif import FeaturesExtractor
+# from musif.extract.extract import FilesValidator
+import sys
+sys.path.insert(0, "../musif")
+sys.path.insert(0, "../musif/musif") 
+from musif.extract.extract import FeaturesExtractor, FilesValidator
+
 from musif.common.utils import read_dicts_from_csv
-from musif.extract.extract import FilesValidator
-from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
+# from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX,  LOWEST_NOTE_INDEX
 from musif.extract.features.composer.handler import COMPOSER
 # from musif.extract.features.core.constants import NOTES_MEAN, SOUNDING_MEASURES_MEAN
 from musif.extract.features.density.constants import DENSITY, SOUNDING_DENSITY
@@ -36,10 +41,16 @@ from musif.extract.features.tempo.constants import NUMERIC_TEMPO, TEMPO, TEMPO_G
     TIME_SIGNATURE, \
     TIME_SIGNATURE_GROUPED
 
+import os
+
+
 if __name__ == "__main__":
+    # os.system("python scripts/metadata_updater.py")
     # FilesValidator("config_drive.yml").validate()
-    df = FeaturesExtractor("config_drive.yml").extract()
-    df.to_csv("features175.csv", index=False)
+    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale01M-E_prezzo-1758-Piccinni[1.01][0870].xml'
+    # musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
+    # df = FeaturesExtractor("scripts/config_drive.yml").extract()
+    # df.to_csv("features_test.csv", index=False)
     label_by_col = {
         "Basic_passion": "Label_BasicPassion",
         "PassionA": "Label_PassionA",
@@ -48,13 +59,13 @@ if __name__ == "__main__":
         "Value2": "Label_Value2",
         "Time": "Label_Time",
     }
-    # df = pd.read_csv("analysis2.csv", low_memory=False)
-    df = pd.read_csv("211217-Data_Frame_Didone2.csv", low_memory=False, sep=';', encoding_errors='replace')
-    df.drop('Label_Passions', inplace=True, axis=1)
-    cols = df.columns.tolist()
-    passions2 = read_dicts_from_csv("Passions.csv")
+    df = pd.read_csv("features_test.csv", low_memory=False, sep=',', encoding_errors='replace')
+    # df.drop('Label_Passions', inplace=True, axis=1)
+    passions2 = read_dicts_from_csv("scripts/Passions.csv")
     data_by_aria_label2 = {label_data["Label"]: label_data for label_data in passions2}
 
+    data_list = []
+    cols = df.columns.tolist()
     for col, label in label_by_col.items():
         values = []
         for index, row in df.iterrows():
@@ -62,10 +73,8 @@ if __name__ == "__main__":
             label_value = data_by_aria[col] if data_by_aria else None
             values.append(label_value)
         df[label] = values
+
     df = df[~df["Label_BasicPassion"].isnull()]
-    cols = df.columns.tolist()
-    data_list = []
-    labels=[i for i in df.columns if 'Label' in i]
     composer_counter=[]
     novoices_counter= []
     duetos_counter=[]
@@ -91,10 +100,31 @@ if __name__ == "__main__":
 
         data_item = {}
         for col in cols:
-            formatted_col = col.replace(voice_prefix, generic_sound_voice_prefix)
+            if col.startswith('Part'+voice.capitalize()+'_Lowest') or col.startswith('Part'+voice.capitalize()+'_Highest'):
+                formatted_col=col
+            else:
+                formatted_col = col.replace(voice_prefix, generic_sound_voice_prefix)
+    
             data_item[formatted_col] = row[col]
+
         data_list.append(data_item)
     df_analysis = pd.DataFrame(data_list)
+    voices_list =  ['sop','ten','alt','bar','bbar']
+    voices_list=['Part'+i.capitalize() for i in voices_list]
+    lowest=[i + '_Lowest' for i in voices_list]
+    highest=[i + '_Highest' for i in voices_list]
+    
+    for col in df_analysis.columns:
+        # for voice in voices_list:
+            # if col.startswith('Part'+voice.capitalize()):
+                if col.startswith(tuple(lowest)) or col.startswith(tuple(highest)):
+                    continue
+                else:
+                    if col.startswith(tuple(voices_list)):
+                        if all(df_analysis[col].isnull().values):
+                            print('Removed: ', col)
+                            del df_analysis[col]
+                            
     df_analysis.sort_values("AriaId", inplace=True)
 
     print("\nTotal files skipped by composer: ", len(composer_counter))

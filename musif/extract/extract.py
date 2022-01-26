@@ -423,6 +423,7 @@ class FeaturesExtractor:
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         linfo(f"\nProcessing score {musicxml_file}")
+        print(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
@@ -510,9 +511,18 @@ class FeaturesExtractor:
         for part_data, part_features in zip(parts_data, parts_features):
             module_name=str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
             ldebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.")
-            module.update_part_objects(score_data, part_data, self._cfg, part_features)
+            try:
+                module.update_part_objects(score_data, part_data, self._cfg, part_features)
+            except Exception as e:
+                score_name=score_data['file']
+                perr(f'An ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
+                break
 
     def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict], score_features: dict):
         ldebug(f"Extracting score \"{score_data[DATA_FILE]}\" {module.__name__} features.")
-        module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
+        try:
+            module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
+        except Exception as e:
+            score_name=score_data['file']
+            perr(f'An ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')

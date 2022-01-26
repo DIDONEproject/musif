@@ -28,7 +28,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     total_sounding_beats = 0
 
     for bar_section in part_data["measures"]:
-        for element in bar_section.elements:
+        for i, element in enumerate(bar_section.elements):
             if element.classes[0] == "Note":
                 number_notes += 1
                 notes_dict[element.duration.quarterLength] += 1
@@ -36,7 +36,12 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                 pos = get_beat_position(beat_count, beats, element.beat)
                 # if pos in positions and element.duration.dots > 0: #has dot
                 if element.duration.dots > 0 and element.duration.quarterLength < beat_unit: #has dot
-                    rhythm_dot += 1
+                    if i+1 < len(bar_section.elements): #check next item
+                        if bar_section.elements[i+1].beatStr.split()[0] == element.beatStr.split()[0]:
+                            if bar_section.elements[i+1].duration.quarterLength < element.duration.quarterLength:
+
+                                rhythm_dot += 1
+
                     if element.duration.dots == 2:
                         rhythm_double_dot += 1
             elif element.classes[0] == "TimeSignature":
