@@ -79,22 +79,21 @@ def split_layers(score: Score, split_keywords: List[str]):
 
             if has_voices:  # recorrer los compases buscando las voices y separamos en dos parts
                 parts_splitted = part.voicesToParts().elements
-                num_measure = 0
+                # num_measure = -1
                 for measure in part.elements:
                     # add missing information to both parts (dynamics, text annotations, etc are missing)
                     if isinstance(measure, Measure) and any(
                         not isinstance(e, Voice) for e in measure.elements
                     ):
                         not_voices_elements = [
-                            e for e in measure.elements if not isinstance(e, Voice) and not e.classes[0]=='Rest'
+                            e for e in measure.elements if not isinstance(e, Voice)
                         ]  # elements such as clefs, dynamics, text annotations...
-                        # Fix: not include silences
                         # introducimos esta información en cada voz:
                         for p in parts_splitted:
-                            p.elements[num_measure].elements += tuple(
-                                e for e in not_voices_elements if e not in p.elements[num_measure].elements
+                            p.elements[measure.measureNumber].elements += tuple(
+                                e for e in not_voices_elements if e not in p.elements[measure.measureNumber].elements
                             )
-                        num_measure += 1
+                    # num_measure += 1
                 for num, p in enumerate(parts_splitted, 1):
                     p_copy = copy.deepcopy(part)
                     p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
