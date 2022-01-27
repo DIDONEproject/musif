@@ -23,7 +23,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     rhythm_intensity_period = []
     rhythm_dot = 0
     rhythm_double_dot = 0
-    positions = []
     total_beats = 0
     total_sounding_beats = 0
 

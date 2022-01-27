@@ -28,16 +28,16 @@ features:
   - scale_relative
   - key
   - dynamics
-  - rhythm
+  # - rhythm
 split_keywords:  # Used to split the possible layers present depending on the instrument name
-  # - woodwind
+  - woodwind
   - brass
   - wind
 parts_filter:
   - vnI
   - vnII
   - obI
-  # - obII
+  - obII
   - va
   - bs
   - sop

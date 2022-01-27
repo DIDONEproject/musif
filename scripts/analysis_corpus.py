@@ -45,12 +45,11 @@ import os
 
 
 if __name__ == "__main__":
-    # os.system("python scripts/metadata_updater.py")
-    # FilesValidator("config_drive.yml").validate()
-    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale01M-E_prezzo-1758-Piccinni[1.01][0870].xml'
-    # musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
-    # df = FeaturesExtractor("scripts/config_drive.yml").extract()
-    # df.to_csv("features_test.csv", index=False)
+    os.system("python scripts/metadata_updater.py")
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale01M-E_prezzo-1758-Piccinni[1.01][0870].xml'
+    musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
+    df = FeaturesExtractor("scripts/config_drive.yml").extract()
+    df.to_csv("features_test.csv", index=False)
     label_by_col = {
         "Basic_passion": "Label_BasicPassion",
         "PassionA": "Label_PassionA",
@@ -60,7 +59,6 @@ if __name__ == "__main__":
         "Time": "Label_Time",
     }
     df = pd.read_csv("features_test.csv", low_memory=False, sep=',', encoding_errors='replace')
-    # df.drop('Label_Passions', inplace=True, axis=1)
     passions2 = read_dicts_from_csv("scripts/Passions.csv")
     data_by_aria_label2 = {label_data["Label"]: label_data for label_data in passions2}
 
@@ -115,8 +113,6 @@ if __name__ == "__main__":
     highest=[i + '_Highest' for i in voices_list]
     
     for col in df_analysis.columns:
-        # for voice in voices_list:
-            # if col.startswith('Part'+voice.capitalize()):
                 if col.startswith(tuple(lowest)) or col.startswith(tuple(highest)):
                     continue
                 else:
