@@ -12,9 +12,12 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale06M-Se_mai-1762-Bach[1.06][0836].xml'
-    # musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
-   
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale12M-Non_sarei-nd-Anonymous[2.04][1239].xml'
+    musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
+
+    # data_dir = r'../Corpus_175/xml/Ale02M-Vedrai_con-1772-Anfossi[1.02][0811].xml'
+    # musescore_dir =  r'../Corpus_175/musescore'
+    
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
 

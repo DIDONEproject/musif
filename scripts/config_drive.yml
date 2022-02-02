@@ -3,7 +3,7 @@ metadata_id_col: AriaId
 data_dir: ../Corpus_Test/xml
 musescore_dir: ../Corpus_Test/musescore
 expand_repeats: false
-parallel: false
+parallel: true
 max_processes: 8
 log:
   file_path: logs/musif.log
@@ -28,21 +28,26 @@ features:
   - scale_relative
   - key
   - dynamics
-  # - rhythm
+  - rhythm
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
+  - viola 
 parts_filter:
-  - vnI
-  - vnII
-  - obI
-  - obII
-  - va
-  - bs
-  - sop
-  - ten
-  - alt
-  - bar
-  - bass
-  - bbar
+  # - vnI
+  # - vnII
+  # - obI
+  # - obII
+  # - hnI
+  # - hnII
+  # - tptI
+  # - tptII  
+  # - va
+  # - bs
+  # - sop
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar

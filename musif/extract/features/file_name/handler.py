@@ -30,12 +30,13 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         scene = ""
     composer_end_idx = act_scene_start_idx - 1
     composer_start_idx = file_name.rfind("-", 0, composer_end_idx - 1) + 1
-    composer = file_name[composer_start_idx: composer_end_idx]
+    # composer = file_name[composer_start_idx: composer_end_idx]
 
     year_end_idx = composer_start_idx - 1
     year_start_idx = file_name.rfind("-", 0, year_end_idx - 1) + 1
-    year = int(file_name[year_start_idx: year_end_idx])
-    decade = str(year // 10) + "0s"
+    year= file_name[year_start_idx: year_end_idx]
+    year = int(file_name[year_start_idx: year_end_idx]) if isinstance(year, int) else str(year)
+    decade = str(year // 10) + "0s" if isinstance(year, int) else "nd"
 
     title_end_idx = year_start_idx - 1
     title_start_idx = file_name.rfind("-", 0, title_end_idx - 1) + 1
