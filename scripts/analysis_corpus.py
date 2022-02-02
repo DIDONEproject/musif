@@ -4,6 +4,8 @@ import pandas as pd
 # from musif import FeaturesExtractor
 # from musif.extract.extract import FilesValidator
 import sys
+
+from tqdm import tqdm
 sys.path.insert(0, "../musif")
 sys.path.insert(0, "../musif/musif") 
 from musif.extract.extract import FeaturesExtractor, FilesValidator
@@ -133,7 +135,7 @@ if __name__ == "__main__":
     voices_list =  ['sop','ten','alt','bar','bbar']
     voices_list=['Part' + i.capitalize() for i in voices_list]
     
-    for col in df_analysis.columns.to_list():
+    for col in tqdm(df_analysis.columns.to_list()):
                 if 'HighestNote' in col or 'LowestNote' in col:
                     del df_analysis[col]
                     print('Removed highest/lowest note:', col)
