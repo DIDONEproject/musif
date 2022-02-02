@@ -18,12 +18,13 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     highest_note_text = highest_note.nameWithOctave.replace("-", "b")
     lowest_note_index = int(lowest_note.pitch.midi)
     highest_note_index = int(highest_note.pitch.midi)
-
+    total_ambitus = highest_note_index - lowest_note_index
     ambitus_features = {
         LOWEST_NOTE: lowest_note_text,
         HIGHEST_NOTE: highest_note_text,
         LOWEST_NOTE_INDEX: lowest_note_index,
         HIGHEST_NOTE_INDEX: highest_note_index,
+        AMBITUS: total_ambitus
     }
     part_features.update(ambitus_features)
 

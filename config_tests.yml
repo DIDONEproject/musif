@@ -1,9 +1,9 @@
 metadata_dir: ./metadata
 metadata_id_col: AriaId
-data_dir: ../../Corpus_175/xml
-musescore_dir: ../../Corpus_175/musescore
+data_dir: ../../Corpus_Test/xml
+musescore_dir: ../../Corpus_Test/musescore
 expand_repeats: false
-parallel: false
+parallel: true
 max_processes: 7
 log:
   file_path: logs/musif.log
@@ -15,18 +15,18 @@ features:
   - metadata
   - themeA
   - core
-  # - composer
-  # - librettist
-  # - ambitus
-  # - interval
-  # - tempo
-  # - density
-  # - texture
-  # - harmony
-  # - lyrics
-  # - scale
-  # - scale_relative
-  # - key
+  - composer
+  - librettist
+  - ambitus
+  - interval
+  - tempo
+  - density
+  - texture
+  - harmony
+  - lyrics
+  - scale
+  - scale_relative
+  - key
   - dynamics
   - rhythm
 
@@ -34,16 +34,18 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - woodwind
   - brass
   - wind
+  - viola
+  
 parts_filter:
-  - vnI
-  - vnII
-  - obI
-  - obII
-  - va
-  - bs
-  - sop
-  - ten
-  - alt
-  - bar
-  - bass
-  - bbar
+  # - vnI
+  # - vnII
+  # - obI
+  # - obII
+  # - va
+  # - bs
+  # - sop
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar

@@ -84,7 +84,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         # DYNABRUPTNESS: dyn_grad / (total_beats - beats_section) if (total_beats - beats_section) > 0 else 0
         DYNABRUPTNESS: dyn_grad / total_sounding_beats if total_sounding_beats != 0 else 0,
     })
-    pass
+    
 def calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn):
     if (beats_section + old_beat) > 0:
         dyn_grad += abs(new_dyn - last_dyn) / (beats_section + old_beat)

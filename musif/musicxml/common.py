@@ -90,8 +90,8 @@ def split_layers(score: Score, split_keywords: List[str]):
                         ]  # elements such as clefs, dynamics, text annotations...
                         # introducimos esta información en cada voz:
                         for p in parts_splitted:
-                            p.elements[measure.measureNumber].elements += tuple(
-                                e for e in not_voices_elements if e not in p.elements[measure.measureNumber].elements
+                            p.elements[measure.measureNumber-1].elements += tuple(
+                                e for e in not_voices_elements if e not in p.elements[measure.measureNumber-1].elements
                             )
                     # num_measure += 1
                 for num, p in enumerate(parts_splitted, 1):

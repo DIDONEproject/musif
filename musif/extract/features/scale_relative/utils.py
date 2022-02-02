@@ -157,10 +157,14 @@ def get_localTonalty(globalkey, degree):
     else:
         pitch_scale = scale.MinorScale(globalkey.split(' ')[0]).pitchFromDegree(degree_int).name 
     
-    modulation = pitch_scale + accidental
+    if ('#' or 'b') in [char for char in pitch_scale][-1:]: #checks for exceptions in which we already have an accidental
+        modulation= scale.MajorScale(globalkey.split()[0]).pitchFromDegree(degree_int-1).name if 'major' in globalkey else scale.MinorScale(globalkey.split(' ')[0]).pitchFromDegree(degree_int-1).name 
+
+    else:
+        modulation = pitch_scale + accidental
+
 
     return modulation.upper() if degree.isupper() else modulation.lower()
-
 
 def to_full_degree(degree: Union[int, str], accidental: str) -> str:
     return f"{accidental_abbreviation[accidental]}{degree}"
