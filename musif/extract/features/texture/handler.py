@@ -39,8 +39,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             notes[parts_features[f][FAMILY_ABBREVIATION].capitalize()] = int(
                     df_score['Family'+parts_features[f][FAMILY_ABBREVIATION].capitalize()+'_NotesMean'])
         else:
+                abbreviation=parts_features[f][SOUND_ABBREVIATION][0].upper()+parts_features[f][SOUND_ABBREVIATION][1:] #cheap capitalization
                 notes[parts_features[f][SOUND_ABBREVIATION].capitalize()] = int(
-                    df_score['Sound'+parts_features[f][SOUND_ABBREVIATION].capitalize()+'_NotesMean'])
+                    df_score['Sound'+abbreviation+'_NotesMean'])
 
     for i, (key, value) in enumerate(notes.items()):
         texture = value / np.asarray(list(notes.values())[i+1:])
