@@ -1,5 +1,8 @@
-An ocurred while extracting module musif.extract.features.texture.handler in ../Corpus_200/xml\Ale07M-Se_mai-1789-Guglielmi[1.06][1114].xml!!.
-Error: 'SoundCl(do)_NotesMean'
 
-An ocurred while extracting module musif.extract.features.texture.handler in ../Corpus_200/xml\Ale07M-Se_mai-1758-Piccinni[1.06][0875].xml!!.
-Error: 'SoundCl(sib)_NotesMean'
+Ale07M-Se_mai-1758-Piccinni[1.06][0875].xml
+
+
+
+n ocurred while extracting module musif.extract.features.texture.handler
+ in ../Corpus_200/xml\Ale07M-Se_mai-1789-Guglielmi[1.06][1114].xml!!.
+Error: 'SoundCl(do)_NotesMean'
