@@ -112,18 +112,18 @@ def delete_not_useful_columns(df_analysis):
             del df_analysis[col]
             continue
 
-        elif col.endswith(('_Notes', '_SoundingMeasures', '_Syllables', '_NumberOfFilteredParts', '_NumberOfParts', '_NotesMean', 'Librettist', '_LargestIntervalAsc', '_LargestIntervalAll','_LargestIntervalDesc', '_NotesMean', 'Semitones_Sum')):
+        elif col.endswith(('_Notes', '_SoundingMeasures', '_Syllables', '_NumberOfFilteredParts', '_NumberOfParts', '_NotesMean', 'Librettist', '_LargestIntervalAsc', '_LargestIntervalAll','_LargestIntervalDesc', '_NotesMean', 'Semitones_Sum', '_MeanInterval')):
             print('Removed Absolutes and others: ', col)
             del df_analysis[col]
             continue
 
-        elif col.startswith(('FamilyWw', 'FamilyBr', 'EndOfThemeA', 'Measures', 'NumberOfBeats')):
+        elif col.startswith(('FamilyWw', 'FamilyBr', 'EndOfThemeA', 'NumberOfBeats')):
             print('Removed others: ', col)
             del df_analysis[col]
             continue
         
-        elif col.startswith(('FamilyWw', 'FamilyBr', 'EndOfThemeA', 'Measures', 'NumberOfBeats')):
-            print('Removed others: ', col)
+        elif col.startswith('SoundVoice_Dyn'):
+            print('Removed dynamic: ', col)
             del df_analysis[col]
             continue
 
@@ -141,11 +141,12 @@ def delete_not_useful_columns(df_analysis):
 
 if __name__ == "__main__":
     os.system("python scripts/metadata_updater.py")
-    data_dir = r'../Corpus_200/xml'
-    musescore_dir = r'../Corpus_200/musescore'
+    data_dir = r'../Corpus_800/xml'
+    musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/xml'
+    musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
 
     check_file = 'parsed_files.csv'
-    name = "features_200"
+    name = "features_800"
     df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=None).extract()
     df.to_csv(name+"_extraction.csv", index=False)
     

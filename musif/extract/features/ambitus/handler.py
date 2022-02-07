@@ -12,6 +12,7 @@ from ..prefix import get_part_feature
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]
     if notes is None or len(notes) == 0:
+
         return
     lowest_note, highest_note = get_notes_ambitus(notes)
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
@@ -38,4 +39,4 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
         for feature_name in SCORE_FEATURES:
-            score_features[get_part_feature(part, feature_name)] = part_features[feature_name]
+            score_features[get_part_feature(part, feature_name)] = part_features.get(feature_name)

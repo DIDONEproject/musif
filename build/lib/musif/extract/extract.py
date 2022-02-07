@@ -102,7 +102,6 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
             # harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
             harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
         else:
-            # harmonic_analysis['playthrough'] = harmonic_analysis.mn
             if harmonic_analysis.mn[0]==0:
                 harmonic_analysis['playthrough'] = harmonic_analysis.mc
             else:

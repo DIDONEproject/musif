@@ -57,13 +57,13 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         if measure in part_data['sounding_measures']: 
             total_sounding_beats += beats
 
-    rhythm_intensity_period.append(sum([j/i if i != 0.0 else 0 for i, j in Counter(notes_dict).items()] ) / total_sounding_beats)
+    rhythm_intensity_period.append(sum([j/i if i != 0.0 else 0 for i, j in Counter(notes_dict).items()] ) / total_sounding_beats if total_sounding_beats else 0 )
     notes_duration=[i for i in notes_duration if i != 0.0] # remove notes with duration equal to 0
 
     part_features.update({
         AVERAGE_DURATION: mean(notes_duration) if len(notes_duration) != 0 else 0,
         RHYTHMINT: sum(rhythm_intensity_period),
-        DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats),
+        DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats) if total_sounding_beats else 0,
         DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats)
     })
 pass
