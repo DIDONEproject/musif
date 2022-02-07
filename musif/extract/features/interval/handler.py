@@ -308,10 +308,10 @@ def get_all_asc_desc_count(intervals: List[Interval]) -> Tuple[int, int, int]:
 def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
     numeric_intervals = np.array([interval.semitones for interval in intervals])
     absolute_numeric_intervals = abs(numeric_intervals)
-    intervals_skewness = skew(numeric_intervals, bias=False)
-    intervals_kurtosis = kurtosis(numeric_intervals, bias=False)
-    absolute_intervals_skewness = skew(absolute_numeric_intervals, bias=False)
-    absolute_intervals_kurtosis = kurtosis(absolute_numeric_intervals, bias=False)
+    intervals_skewness = skew(numeric_intervals, bias=False) if [i for i in numeric_intervals if i != 0] else None
+    intervals_kurtosis = kurtosis(numeric_intervals, bias=False)  if [i for i in numeric_intervals if i != 0] else None
+    absolute_intervals_skewness = skew(absolute_numeric_intervals, bias=False) if [i for i in absolute_numeric_intervals if i != 0] else None
+    absolute_intervals_kurtosis = kurtosis(absolute_numeric_intervals, bias=False) if [i for i in absolute_numeric_intervals if i != 0] else None
     return {
         f"{prefix}{INTERVALLIC_SKEWNESS}": intervals_skewness,
         f"{prefix}{INTERVALLIC_KURTOSIS}": intervals_kurtosis,

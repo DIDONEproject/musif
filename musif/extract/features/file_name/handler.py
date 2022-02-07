@@ -35,7 +35,10 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     year_end_idx = composer_start_idx - 1
     year_start_idx = file_name.rfind("-", 0, year_end_idx - 1) + 1
     year= file_name[year_start_idx: year_end_idx]
-    year = int(file_name[year_start_idx: year_end_idx]) if isinstance(year, int) else str(year)
+    try:
+        year = int(file_name[year_start_idx: year_end_idx])
+    except ValueError:
+        year = str(year)
     decade = str(year // 10) + "0s" if isinstance(year, int) else "nd"
 
     title_end_idx = year_start_idx - 1
