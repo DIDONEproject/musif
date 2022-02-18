@@ -5,7 +5,7 @@ HARMONIC_RHYTHM = "Harmonic_rhythm"
 HARMONIC_RHYTHM_BEATS= "Harmonic_rhythm_beats"
 
 ADDITIONS_prefix='Additions_'
-ADDITIONS_4_6_64_74_94='4_6_64_74_94' 
+ADDITIONS_4_6_64='4_6_64' 
 ADDITIONS_9='+9' 
 OTHERS_NO_AUG='Others_no_+'
 OTHERS_AUG='Others_+'

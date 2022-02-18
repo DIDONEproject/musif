@@ -57,7 +57,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         ARIA_DECADE: decade,
         ARIA_ACT: act,
         ARIA_SCENE: scene,
-        ARIA_ACT_AND_SCENE: act + scene,
+        ARIA_ACT_AND_SCENE: str(act + scene),
     })
 
 

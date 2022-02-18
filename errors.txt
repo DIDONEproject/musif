@@ -1,8 +1,0 @@
-Processing score ../Corpus_600_800/xml\Did02M-Diro_che-1742-Hasse[1.03][0186].xml
- 13%|████████████▌                                                                                  | 26/197 [05:33<25:34,  8.97s/itE 
-RROR    root -- utils.py (line 1776) split_scale_degree():
-        vIV is not a valid scale degree.
-
-
-An ocurred while extracting module musif.extract.features.scale_relative.handler in ../Corpus_600_800/xml\Did12M-Non_ha-1753-Perez[1.17][0017].xml!!.
-Error: 'float' object has no attribute 'strip'

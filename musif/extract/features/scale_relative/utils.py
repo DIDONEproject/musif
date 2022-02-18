@@ -7,11 +7,13 @@ import roman
 from music21 import pitch, scale
 from music21.note import Note
 from pandas.core.frame import DataFrame
+from build.lib.musif.musicxml.scoring import to_abbreviation
 from musif.common.sort import sort_dict
 
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import (get_function_first,
                                                   get_function_second)
+from musif.logs import pwarn
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 
@@ -37,8 +39,14 @@ def get_tonality_per_beat(harmonic_analysis, tonality):
     for index, degree in enumerate(harmonic_analysis.localkey):
         beat = harmonic_analysis.beats[index]
         tonality_map[beat] = get_localTonalty(tonality, degree.strip())
+        
 
-    # Fill measures without a value
+    fill_tonality_map(tonality_map)
+
+    tonality_map=sort_dict(tonality_map, sorted(tonality_map.keys()))
+    return tonality_map
+
+def fill_tonality_map(tonality_map):
     if 0 not in tonality_map:
         tonality_map[0]=tonality_map[1] if 1 in tonality_map else tonality_map[2]
         
@@ -46,15 +54,11 @@ def get_tonality_per_beat(harmonic_analysis, tonality):
         if beat not in tonality_map.keys():
             tonality_map[beat] = tonality_map[beat-1]
 
-    tonality_map=sort_dict(tonality_map, sorted(tonality_map.keys()))
-    return tonality_map
-
 
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
     harmonic_analysis, tonality = extract_harmony(score_data)
     tonality_map = get_tonality_per_beat(harmonic_analysis, tonality)
     emph_degrees = get_emphasized_degrees(notes_list, tonality_map)
-    
     return emph_degrees
 
 def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
@@ -64,7 +68,14 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
         for accidental in ["", "sharp", "flat"]
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
+    if notes_list[-1].offset > len(tonality_map):
+        pwarn('Misunderstanding between harmonic beats and notes beats! Fixed by redifining harmonic beats.\n')
+        rate=round(notes_list[-1].offset/len(tonality_map))
 
+        for beat in range(1, max(list(tonality_map.keys()))):
+            tonality_map[beat*rate]=tonality_map[beat]
+        fill_tonality_map(tonality_map)
+        
     for j, note in enumerate(notes_list):
         if note.isChord:
           note = note[0]

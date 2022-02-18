@@ -17,7 +17,7 @@ from musif.extract.common import filter_parts_data
 from musif.extract.constants import *
 from musif.extract.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import include_beats
-from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION,
                             split_layers)
 from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,
@@ -99,7 +99,6 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         if expand_repeats:
             mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
             mn = pd.Series(mn, name='mc_playthrough')
-            # harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
             harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
         else:
             if harmonic_analysis.mn[0]==0:
@@ -113,7 +112,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         raise ParseFileError(file_path, str(e)) from e
     return harmonic_analysis
 
-def extract_files(obj: Union[str, List[str]]) -> List[str]:
+def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
     """Extracts the paths to musicxml files
 
         Given a file path, a directory path, a list of files paths or a list of directories paths, returns a list of
@@ -143,12 +142,33 @@ def extract_files(obj: Union[str, List[str]]) -> List[str]:
         raise TypeError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     if isinstance(obj, str):
         if path.isdir(obj):
-            return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
+            if check_file:
+                files_to_extract = skip_files(obj, check_file)
+                return files_to_extract
+            else:
+                return sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
         elif path.isfile(obj):
             return [obj] if obj.rstrip().endswith(f".{MUSICXML_FILE_EXTENSION}") else []
         else:
             raise ValueError(f"File {obj} doesn't exist")
     return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
+
+def skip_files(obj, check_file):
+    skipped=[]
+    files_to_extract=[]
+    total_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
+    parsed_files = pd.read_csv(check_file, low_memory=False, sep=',', encoding_errors='replace',header=0)['FileName'].tolist()
+    for i in total_files:
+        if i.replace(obj,'').replace('\\', "") not in parsed_files:
+            files_to_extract.append(i)
+        else:
+            skipped.append(i.replace(obj,'').replace('\\', ""))
+    if skipped: 
+        pwarn('Some files were skipped because they have been already processed before: ')
+    # for i in skipped:
+        print(*skipped, sep = ",\n")
+        print('Total: ',len(skipped))
+    return files_to_extract
 
 
 def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> str:
@@ -206,7 +226,7 @@ class PartsExtractor:
         """
         self._cfg = Configuration(*args, **kwargs)
 
-    def extract(self, obj: Union[str, List[str]]) -> List[str]:
+    def extract(self, obj: Union[str, List[str]], check_file: Optional[str] = None) -> List[str]:
         """
         Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
         indicated in the configurations.
@@ -229,7 +249,7 @@ class PartsExtractor:
         ValueError
           If the provided string is neither a directory nor a file path
         """
-        musicxml_files = extract_files(obj)
+        musicxml_files = extract_files(obj, check_file = check_file)
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
@@ -345,7 +365,8 @@ class FeaturesExtractor:
           - If any of the files/directories path inside the expected configuration doesn't exit.
         """
         self._cfg = Configuration(*args, **kwargs)
-
+        self.check_file = kwargs.get('check_file')
+        
     def extract(self) -> DataFrame:
         """
         Extracts features given in the configuration data getting a file, directory or several files paths,
@@ -363,7 +384,7 @@ class FeaturesExtractor:
            If features aren't loaded in corrected order or dependencies
         """
         linfo('---Analyzing scores ---')
-        musicxml_files = extract_files(self._cfg.data_dir)
+        musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
         score_df, parts_df = self._process_corpora(musicxml_files)
         return score_df
 
@@ -422,6 +443,7 @@ class FeaturesExtractor:
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         linfo(f"\nProcessing score {musicxml_file}")
+        print(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
@@ -460,11 +482,20 @@ class FeaturesExtractor:
         return data
 
     def _filter_parts(self, score: Score) -> List[Part]:
-        if self._cfg.parts_filter is None:
-            return list(score.parts)
-        filter_set = set(self._cfg.parts_filter)
         parts = list(score.parts)
+
+        self.prepare_parts(parts)
+
+        if self._cfg.parts_filter is None:
+            return parts
+        filter_set = set(self._cfg.parts_filter)
         return [part for part in parts if to_abbreviation(part, parts, self._cfg) in filter_set]
+
+    def prepare_parts(self, parts):
+        for part in parts:
+            part.id=part.id.replace(' 1º', '')
+            if '2º' in part.id:
+                parts.remove(part)
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
@@ -509,9 +540,18 @@ class FeaturesExtractor:
         for part_data, part_features in zip(parts_data, parts_features):
             module_name=str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
             ldebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.")
-            module.update_part_objects(score_data, part_data, self._cfg, part_features)
+            try:
+                module.update_part_objects(score_data, part_data, self._cfg, part_features)
+            except Exception as e:
+                score_name=score_data['file']
+                perr(f'An ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
+                break
 
     def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict], score_features: dict):
         ldebug(f"Extracting score \"{score_data[DATA_FILE]}\" {module.__name__} features.")
-        module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
+        try:
+            module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
+        except Exception as e:
+            score_name=score_data['file']
+            perr(f'An ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
