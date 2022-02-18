@@ -1,5 +1,6 @@
 from statistics import mean
 from typing import List
+from xml.dom.minidom import Element
 
 from musif.config import Configuration
 from musif.extract.features.prefix import get_part_feature, get_score_prefix, get_score_feature
@@ -53,10 +54,11 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                     beats_section, dyn_grad, last_dyn = calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn)
                     name = ""
 
-            if dyn and not wait:
+            if dyn:# and not wait:
                 new_dyn = get_dynamic_numeric(name)
                 if new_dyn != last_dyn:
-                    position = get_beat_position(beats_timesignature, number_of_beats, element.beat)
+                    sub_beat = element.elements[0].beat if element.isStream else element.beat
+                    position = get_beat_position(beats_timesignature, number_of_beats,sub_beat )
                     old_beat = position - get_beat_position(beats_timesignature, number_of_beats, 1)
                     dyn_mean_weighted += (beats_section + old_beat) * last_dyn
                     dynamics.append(new_dyn)
@@ -64,12 +66,12 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                     name = ""
                     first_silence = False
                 dyn = False
-            wait = False
+            # wait = False
 
         beats_section += number_of_beats
         total_beats += number_of_beats
         if bar_section in part_data['sounding_measures']: 
-            total_sounding_beats += number_of_beats
+            total_sounding_beats += number_of_beats # - sum([i.duration.quarterLength for i in bar_section.elements if i.classes[0] == REST]) #all silences in the measure
 
 
     dyn_mean_weighted += beats_section * dynamics[-1] if len(dynamics) != 0 else 0
@@ -79,9 +81,10 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DYNMEAN: mean(dynamics) if len(dynamics) != 0 else 0,
         DYNMEAN_WEIGHTED: dyn_mean_weighted / total_sounding_beats if total_sounding_beats != 0 else 0,
         DYNGRAD: dyn_grad / (len(dynamics) - 1) if len(dynamics) > 1 else 0,
-        DYNABRUPTNESS: dyn_grad / (total_beats - beats_section) if (total_beats - beats_section) > 0 else 0
+        # DYNABRUPTNESS: dyn_grad / (total_beats - beats_section) if (total_beats - beats_section) > 0 else 0
+        DYNABRUPTNESS: dyn_grad / total_sounding_beats if total_sounding_beats != 0 else 0,
     })
-    pass
+    
 def calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn):
     if (beats_section + old_beat) > 0:
         dyn_grad += abs(new_dyn - last_dyn) / (beats_section + old_beat)
@@ -123,9 +126,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     #remove zeros from the mean calculation
     dyn_means = [i for i in dyn_means if i != 0.0]
-    dyn_means_weighted = [i for i in dyn_means if i != 0.0]
-    dyn_grads = [i for i in dyn_means if i != 0.0]
-    dyn_abruptness = [i for i in dyn_means if i != 0.0]
+    dyn_means_weighted = [i for i in dyn_means_weighted if i != 0.0]
+    dyn_grads = [i for i in dyn_grads if i != 0.0]
+    dyn_abruptness = [i for i in dyn_abruptness if i != 0.0]
 
     features.update({
         get_score_feature(DYNMEAN): mean(dyn_means) if dyn_means else 0,

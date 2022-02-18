@@ -94,12 +94,9 @@ def include_beats(harmonic_analysis):
     harmonic_analysis['beats']=0
     for index, measure in enumerate(harmonic_analysis.playthrough):
         if measure<=1:
-            # beat = int(measure + float(harmonic_analysis.mn_onset[index])*int(harmonic_analysis.timesig[index][0]))
-            beat = int(measure + float(harmonic_analysis.mc_onset[index])*int(harmonic_analysis.timesig[index][0]))
-
+            beat = int(measure + float(harmonic_analysis.mc_onset[index])*get_number_of_beats(harmonic_analysis.timesig[index]))
         else:
-            # beat = int((measure-1)*int(harmonic_analysis.timesig[index-1][0])+1  + harmonic_analysis.mn_onset[index]*int(harmonic_analysis.timesig[index][0]))
-            beat = int((measure-1)*int(harmonic_analysis.timesig[index-1][0])+1  + harmonic_analysis.mc_onset[index]*int(harmonic_analysis.timesig[index][0]))
+            beat = int((measure-1)*int(harmonic_analysis.timesig[index-1][0])+1  + harmonic_analysis.mc_onset[index]*get_number_of_beats(harmonic_analysis.timesig[index]))
         
         harmonic_analysis['beats'][index]=beat
         
@@ -108,6 +105,7 @@ def get_beat_position(beats_timesignature, number_of_beats, pos):
         return pos
     else:
         return (pos / beats_timesignature) + 1  # It could be better: (pos/beat_count)*beat and changes in dynamics
+        
     #TEST this with 3/8
     
 def expand_repeat_bars(score):

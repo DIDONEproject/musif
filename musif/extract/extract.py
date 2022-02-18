@@ -155,13 +155,19 @@ def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[st
 
 def skip_files(obj, check_file):
     skipped=[]
+    files_to_extract=[]
     total_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
-    parsed_files = list(pd.read_csv(check_file, low_memory=False, sep=',', encoding_errors='replace'))
-    files_to_extract = [i if i.replace(obj,'').replace('\\', "") not in parsed_files else skipped.append(i.replace(obj,'').replace('\\', "")) for i in total_files]
+    parsed_files = pd.read_csv(check_file, low_memory=False, sep=',', encoding_errors='replace',header=0)['FileName'].tolist()
+    for i in total_files:
+        if i.replace(obj,'').replace('\\', "") not in parsed_files:
+            files_to_extract.append(i)
+        else:
+            skipped.append(i.replace(obj,'').replace('\\', ""))
     if skipped: 
         pwarn('Some files were skipped because they have been already processed before: ')
     # for i in skipped:
-        print(*skipped, sep = ", ")
+        print(*skipped, sep = ",\n")
+        print('Total: ',len(skipped))
     return files_to_extract
 
 
