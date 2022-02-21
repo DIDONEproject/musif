@@ -12,7 +12,7 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale115X-E_maggiore-1752-Perez[1.17][1065].xml'
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale08M-Se_possono-1748-Wagenseil[1.08][0902].xml'
     # 
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
 

@@ -23,6 +23,14 @@ SPLIT_KEYWORDS = "split_keywords"
 PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 
+CHECK_FILE = "checking_file"
+DELETE_FILES = "delete_filed_files"
+GROUPED = "grouped_analysis"
+SPLIT_PASSSIONS = "split_passionA"
+INSTRUMENTS_TO_KEEP = "instruments_to_keep"
+INSTRUMENTS_TO_KILL = "instruments_to_kill"
+PRESENCE_TO_KILL = "presence_to_kill"
+
 _CONFIG_FALLBACK = {
     LOG: {
         LOG_FILE_PATH: "./musiF.log",
@@ -39,6 +47,18 @@ _CONFIG_FALLBACK = {
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
     EXPAND_REPEATS: False,
+    CHECK_FILE: "."
+}
+
+_CONFIG_POST_FALLBACK = {
+    DELETE_FILES: False,
+    GROUPED: False,
+    DELETE_FILES: False,
+    SPLIT_PASSSIONS: False,
+    CHECK_FILE: ".",
+    INSTRUMENTS_TO_KEEP: [],
+    INSTRUMENTS_TO_KILL: [],
+    PRESENCE_TO_KILL: [],
 }
 
 class Configuration:
@@ -73,6 +93,8 @@ class Configuration:
         self.parts_filter = config_data.get(PARTS_FILTER, _CONFIG_FALLBACK[PARTS_FILTER])
         self.expand_repeats = config_data.get(EXPAND_REPEATS, _CONFIG_FALLBACK[EXPAND_REPEATS])
         self.internal_data_dir = path.dirname(internal_data.__file__)
+        self.internal_data_dir = path.dirname(internal_data.__file__)
+        self.check = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
         self._load_metadata()
 
     def is_requested_musescore_file(self) -> bool:
@@ -134,3 +156,31 @@ class Configuration:
         self.cpu_workers = (
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
+
+class PostProcess_Configuration:
+    def __init__(self, *args, **kwargs):
+        config_data = {}
+        if len(args) > 1:
+            raise ValueError(f"Unexpected number of args passed to constructor: {len(args)}")
+        if len(args) > 0:
+            if isinstance(args[0], str):
+                config_data = read_object_from_yaml_file(args[0])
+            elif isinstance(args[0], dict):
+                config_data = args[0]
+            elif isinstance(args[0], Configuration):
+                config_data = args[0].to_dict()
+            else:
+                raise TypeError(f"The argument type is {type(args[0])}, and it was expected a dictionary, a Configuration or a string object")
+        config_data.update(kwargs)  # Override values
+        log_config = config_data.get(LOG, _CONFIG_FALLBACK[LOG])
+        self.log_file = log_config.get(LOG_FILE_PATH, _CONFIG_FALLBACK.get(LOG_FILE_PATH))
+        self.file_log_level = log_config.get(FILE_LOG_LEVEL, _CONFIG_FALLBACK.get(FILE_LOG_LEVEL))
+        self.console_log_level = log_config.get(CONSOLE_LOG_LEVEL, _CONFIG_FALLBACK.get(CONSOLE_LOG_LEVEL))
+        create_logger(LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level)
+        self.check_file = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
+        self.delete_files = config_data.get(DELETE_FILES, _CONFIG_POST_FALLBACK[DELETE_FILES])
+        self.grouped_analysis = config_data.get(GROUPED, _CONFIG_POST_FALLBACK[GROUPED])
+        self.split_passionA = config_data.get(SPLIT_PASSSIONS, _CONFIG_POST_FALLBACK[SPLIT_PASSSIONS])
+        self.instruments_to_keep = config_data.get(INSTRUMENTS_TO_KEEP, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KEEP])
+        self.instruments_to_kill = config_data.get(INSTRUMENTS_TO_KILL, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KILL])
+        self.presence_to_kill = config_data.get(PRESENCE_TO_KILL, _CONFIG_POST_FALLBACK[PRESENCE_TO_KILL])
