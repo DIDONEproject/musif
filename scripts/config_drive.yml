@@ -2,6 +2,7 @@ metadata_dir: ./metadata
 metadata_id_col: AriaId
 data_dir: ../Corpus_Test/xml
 musescore_dir: ../Corpus_Test/musescore
+checking_file: parsed_files.csv
 expand_repeats: false
 parallel: true
 max_processes: 12

@@ -1,0 +1,25 @@
+log:
+  file_path: logs/musif.log
+  file_level: DEBUG
+  console_level: WARN
+checking_file: parsed_files.csv
+delete_failed_files: False
+grouped_analysis: True
+split_passionA: True
+instruments_to_keep: 
+  - vnI
+  - bs
+intruments_to_kill: 
+  - Ob
+  - Cor
+  - Bn
+  - Va
+presence_to_kill: 
+  - VnII
+  - Vc
+  - Cl
+  - Tpt
+  - Hn
+  - Fl
+  - VnIV
+
