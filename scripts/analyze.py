@@ -2,7 +2,7 @@ import os
 
 from musif.extract.extract import FeaturesExtractor
 
-from musif.process.processor import DataFrameProcessor
+from musif.process.processor import DataProcessor
 
 
 if __name__ == "__main__":
@@ -21,4 +21,4 @@ if __name__ == "__main__":
     df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     dest_path=name+"_extraction.csv"
     df.to_csv(dest_path, index=False)
-    DataFrameProcessor("scripts/post_process.yml").process_corpora(dest_path)
+    DataProcessor("scripts/post_process.yml").process_corpora(dest_path)

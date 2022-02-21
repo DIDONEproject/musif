@@ -4,7 +4,7 @@ from typing import List
 import pandas as pd
 from pandas import DataFrame
 from musif.config import Configuration, PostProcess_Configuration
-from musif.process.utils import join_part_degrees, log_errors_and_shape, merge_voices, replace_nans
+from musif.process.utils import join_part_degrees, log_errors_and_shape, replace_nans
 
 sys.path.insert(0, "../musif")
 import os
@@ -151,13 +151,15 @@ class DataProcessor:
         join_part_degrees(total_degrees, get_sound_prefix('voice'), df)
         # df.drop(total_degrees, axis = 1, inplace=True)
     
-    def merge_voices(self, df: DataFrame):
+    def merge_voices(df):
         generic_sound_voice_prefix=get_sound_prefix('Voice')
-        for i, voice in enumerate(voices_list_prefixes):
-            voice_prefix = voice+'_'
-            for j, col in enumerate(df.columns.values):
-                if voice_prefix in col:
-                    formatted_col = col.replace(voice_prefix, generic_sound_voice_prefix)
+        # voices_prefixes = [i + '_' for i in voices_list]
+        # voice_prefix = voice+'_'
+        for col in df.columns.values:
+                if any(voice in col for voice in voices_list_prefixes):
+                    formatted_col=col
+                    for voice_prefix in voices_list_prefixes:
+                        formatted_col = formatted_col.replace(voice_prefix, generic_sound_voice_prefix)
                     if formatted_col in df:
                         df[formatted_col].fillna(df[col], inplace=True)
                     else:
