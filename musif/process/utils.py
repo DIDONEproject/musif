@@ -1,10 +1,14 @@
-from pandas import DataFrame
-from build.lib.musif.extract.features.interval.constants import INTERVAL_COUNT
+import re
+from typing import List
+
+from musif.extract.features.interval.constants import (
+    INTERVAL_COUNT, TRIMMED_INTERVALLIC_MEAN)
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.logs import pinfo
+from pandas import DataFrame
+
 from .constants import PRESENCE
-from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
-from typing import List
+
 
 def replace_nans(df):
     for col in df.columns:

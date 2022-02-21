@@ -5,13 +5,14 @@ from musif.extract.features import interval
 
 from musif.extract.features.scoring.constants import FAMILY_SCORING, SCORING
 from musif.extract.features.tempo.constants import TEMPO_GROUPED_1, TEMPO_GROUPED_2
+from musif.extract.features.metadata.constants import *
 
 ACT = 'Act'
-ACTANDSCENE = 'ActAndScene'
+# ACTANDSCENE = 'ActAndScene'
 ARIA_ID = 'AriaId'
 ARIA_LABEL = 'AriaLabel'
-CHARACTER = 'Character'
-CITY = 'City'
+# CHARACTER = 'Character'
+# CITY = 'City'
 CLEF1 = 'Clef1'
 CLEF2 = 'Clef2'
 CLEF3 = 'Clef3'
@@ -20,9 +21,9 @@ DATE = 'Date'
 DECADE = 'Decade'
 DRAMA='Drama'
 FINAL='Final'
-FORM = 'Form'
-GENDER ='Gender'
-GEOGRAPHY='Geography'
+# FORM = 'Form'
+# GENDER ='Gender'
+# GEOGRAPHY='Geography'
 KEY = 'Key'
 KEY_SIGNATURE_TYPE = 'KeySignatureType'
 KEYSIGNATURE = 'KeySignature'
@@ -34,14 +35,14 @@ OPERA = 'AriaOpera'
 ROLE = 'RoleType'
 SCENE = 'Scene'
 TEMPO = 'Tempo'
-TERRITORY = 'Territory'
+# TERRITORY = 'Territory'
 TIMESIGNATURE = 'TimeSignature'
 TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
 TITLE = 'AriaName'
 TOTAL_ANALYSED='Total analysed'
 YEAR = 'Year'
 
-metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
+metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, ARIA_CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
 singers_list=["sop", "ten", "alt", "bar", "bass", "bbar"]
 
 def get_melody_list(catch):
@@ -65,7 +66,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                    DECADE,
                ], ["Alphabetic", "Alphabetic"]),
                GEOGRAPHY: ([
-                   CITY,
+                   ARIA_CITY,
                    TERRITORY
                ], ["Alphabetic", "Alphabetic"]),
                DRAMA: ([
@@ -104,7 +105,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
 
 not_used_cols = [ARIA_ID, SCORING, TOTAL_ANALYSED , CLEF2, CLEF3]
 
-EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, CITY, SCENE, NAME]
+EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, ARIA_CITY, SCENE, NAME]
 
 alfa = "abcdefghijklmnopqrstuvwxyz"
 
@@ -115,7 +116,7 @@ forbiden_groups = {OPERA: [OPERA],
                    NAME: [NAME],
                    YEAR: [YEAR, DECADE],
                    DECADE: [DECADE],
-                   CITY: [CITY, TERRITORY],
+                   ARIA_CITY: [ARIA_CITY, TERRITORY],
                    TERRITORY: [TERRITORY],
                    ACT: [ACT, ACTANDSCENE],
                    SCENE: [SCENE, ACTANDSCENE],

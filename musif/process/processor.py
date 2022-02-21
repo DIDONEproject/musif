@@ -2,14 +2,14 @@ import sys
 from typing import List
 
 import pandas as pd
-from pandas import DataFrame
 from musif.config import Configuration, PostProcess_Configuration
-from musif.process.utils import join_part_degrees, log_errors_and_shape, replace_nans
+from musif.process.utils import (join_part_degrees, log_errors_and_shape,
+                                 replace_nans)
+from pandas import DataFrame
 
 sys.path.insert(0, "../musif")
 import os
 import re
-from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 import timeit
 
 import numpy as np
@@ -17,19 +17,25 @@ from musif.common.sort import sort_columns
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.extract import FeaturesExtractor, FilesValidator
 from musif.extract.features.composer.handler import COMPOSER
+from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PERCENTAGE,
                                                       CHORDS_GROUPING_prefix,
                                                       KEY_prefix)
-from musif.extract.features.scale.constants import DEGREE_PREFIX
-from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import (FAMILY_INSTRUMENTATION, FAMILY_SCORING, INSTRUMENTATION,
+from musif.extract.features.scale.constants import DEGREE_PREFIX
+from musif.extract.features.scoring.constants import (FAMILY_INSTRUMENTATION,
+                                                      FAMILY_SCORING,
+                                                      INSTRUMENTATION,
                                                       NUMBER_OF_PARTS, SCORING,
                                                       VOICES)
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
-from .constants import voices_list_prefixes, label_by_col, PRESENCE, columns_order
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
+
+from .constants import (PRESENCE, columns_order, label_by_col,
+                        voices_list_prefixes)
+
 
 def delete_previous_items(df):
     errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
@@ -89,7 +95,7 @@ class DataProcessor:
         self.disgrate_instrumentation(df)
 
         pinfo('\nScan and purge df ...')
-        composer_counter, novoices_counter, duetos_counter = _scan_dataframe(df)
+        composer_counter, novoices_counter, duetos_counter = self._scan_dataframe(df)
 
         pinfo('\nDeleting not useful columns...')
         self.delete_unwanted_columns(df)
@@ -102,8 +108,7 @@ class DataProcessor:
             self.group_keys(df)
             self.join_degrees(df)
 
-        self._final_data_processing(columns_order, path, composer_counter, novoices_counter, duetos_counter, df)
-            
+        self._final_data_processing(columns_order, path, composer_counter, novoices_counter, duetos_counter, df)            
         return df
     
     def group_keys_modulatory(self, df: DataFrame):
