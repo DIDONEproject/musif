@@ -21,6 +21,6 @@ label_by_col = {
     }
 
 voices_list = ['sop','ten','alt','bar','bbar', 'bass']
-voices_list_prefixes = ['Part' + i.capitalize() for i in voices_list_prefixes]
+voices_list_prefixes = ['Part' + i.capitalize() for i in voices_list]
 
 columns_order= [ARIA_ID, FILE_NAME, ARIA_OPERA, ARIA_LABEL, ARIA_NAME, ACT, SCENE, ACTANDSCENE, YEAR, DECADE, COMPOSER, CITY, TERRITORY, CHARACTER, ROLE_TYPE, GENDER, FORM, KEY, KEY_SIGNATURE, KEY_SIGNATURE_TYPE, INSTRUMENTATION, SCORING, TYPE, VOICES]
