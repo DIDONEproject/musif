@@ -3,7 +3,7 @@ from typing import List
 
 import pandas as pd
 from musif.config import Configuration, PostProcess_Configuration
-from musif.process.utils import (join_part_degrees, log_errors_and_shape,
+from musif.process.utils import (delete_previous_items, join_part_degrees, log_errors_and_shape,
                                  replace_nans)
 from pandas import DataFrame
 
@@ -19,6 +19,7 @@ from musif.extract.extract import FeaturesExtractor, FilesValidator
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
+from musif.extract.features.texture.constants import TEXTURE
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PERCENTAGE,
                                                       CHORDS_GROUPING_prefix,
@@ -37,21 +38,10 @@ from .constants import (PRESENCE, columns_order, label_by_col,
                         voices_list_prefixes)
 
 
-def delete_previous_items(df):
-    errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
-    for item in errors:
-        index = df.index[df['FileName']==item]
-        df.drop(index, axis=0, inplace=True)
-
-def disgrate_instrumentation(self, df):
-    for i, row in enumerate(df[INSTRUMENTATION]):
-        for element in row.split(','):
-            df.at[i, PRESENCE+'_'+element] = 1
-
 class DataProcessor:
     """
     Processes a corpus given a directory with xml and mscx files and saves
-    the obtained DataFrame into a .csv file. Deletes unseful columns and merges those that are needed
+    the obtained DataFrame into a .csv file. It deletes unseful columns and merges those that are needed
     to prepare the DataFrame for later analysis
     """
     def __init__(self, *args, **kwargs):
@@ -63,7 +53,8 @@ class DataProcessor:
         """
         self._post_config=PostProcess_Configuration(*args, **kwargs)
     
-    def process_corpora(self, path: DataFrame) -> DataFrame:
+
+    def process_corpora(self, info: DataFrame) -> DataFrame:
         
         """
         Extracts features given in the configuration data getting a file, directory or several files paths,
@@ -73,17 +64,29 @@ class DataProcessor:
         ------
             Score dataframe with the extracted features of given scores.
         """
+        
+        if isinstance(info, str):
+            pinfo('\nReading csv file...')
+            if not os.path.exists(info):
+                perr("The .csv file doesn't exists!")
+                return {}
+            self.destination_route=info.replace('.csv','')
+            df = pd.read_csv(info, low_memory=False, sep=',', encoding_errors='replace')
+            df[FILE_NAME].to_csv(self._post_config.check_file, index=False)
+            df = self.process_dataframe(df)
+            return df
 
-        linfo('\nProcessing DataFrame...')
-        df = self.process_dataframe(path)
-        return df
+        
+        elif isinstance(info, DataFrame):
+            pinfo('\nProcessing DataFrame...')
+            df = self.process_dataframe(info)
+            return df
+        else:
+            perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
 
-    def process_dataframe(self, path: str):
-        df = pd.read_csv(path, low_memory=False, sep=',', encoding_errors='replace')
-        check_file=self.self._post_config.check_file
-        df[FILE_NAME].to_csv(check_file, index=False)
 
-        if self.self._post_config.delete_files:
+    def process_dataframe(self, df: str):
+        if self._post_config.delete_files:
             delete_previous_items(df)
         
         self._assign_labels(df)
@@ -91,16 +94,16 @@ class DataProcessor:
         pinfo('\nPreprocessing data...')
         self.preprocess_data(df)
 
-        pinfo('\nDisecting Instrumentation column...')
-        self.disgrate_instrumentation(df)
+        pinfo('\nSeparating "Instrumentation" column...')
+        self.unbundle_instrumentation(df)
 
-        pinfo('\nScan and purge df ...')
+        pinfo('\nScaning df looking for errors...')
         composer_counter, novoices_counter, duetos_counter = self._scan_dataframe(df)
 
         pinfo('\nDeleting not useful columns...')
         self.delete_unwanted_columns(df)
 
-        if self._parameters.grouped_analysis:
+        if self._post_config.grouped_analysis:
             df.drop([i for i in df.columns if 'Degree' in i and not '_relative' in i], axis = 1, inplace=True)
             df.drop([i for i in df.columns if i.startswith(CHORDS_GROUPING_prefix+'1')], axis = 1, inplace=True)
 
@@ -108,9 +111,10 @@ class DataProcessor:
             self.group_keys(df)
             self.join_degrees(df)
 
-        self._final_data_processing(columns_order, path, composer_counter, novoices_counter, duetos_counter, df)            
+        self._final_data_processing(columns_order, composer_counter, novoices_counter, duetos_counter, df)            
         return df
     
+
     def group_keys_modulatory(self, df: DataFrame):
         df.update(df[[i for i in df.columns if KEY_prefix+KEY_MODULATORY in i]].fillna(0))
         key_SD=[KEY_prefix+KEY_MODULATORY+'IV',KEY_prefix+KEY_MODULATORY+'II', KEY_prefix+KEY_MODULATORY+'VI']
@@ -150,38 +154,41 @@ class DataProcessor:
     def join_degrees(self, df: DataFrame):
         total_degrees = [i for i in df.columns if '_Degree' in i]
 
-        for part in self._post_config.instroments_to_keep:
+        for part in self._post_config.instruments_to_keep:
             join_part_degrees(total_degrees, get_part_prefix(part), df)
 
         join_part_degrees(total_degrees, get_sound_prefix('voice'), df)
         # df.drop(total_degrees, axis = 1, inplace=True)
-    
-    def merge_voices(df):
+
+    def merge_voices(self, df):
         generic_sound_voice_prefix=get_sound_prefix('Voice')
         # voices_prefixes = [i + '_' for i in voices_list]
         # voice_prefix = voice+'_'
-        for col in df.columns.values:
+        for index, col in enumerate(df.columns.values):
                 if any(voice in col for voice in voices_list_prefixes):
-                    formatted_col=col
-                    for voice_prefix in voices_list_prefixes:
-                        formatted_col = formatted_col.replace(voice_prefix, generic_sound_voice_prefix)
-                    if formatted_col in df:
-                        df[formatted_col].fillna(df[col], inplace=True)
+                    if ',' in df[VOICES][index]: #two or more voices
+                        pass
                     else:
-                        df[formatted_col]=df[col]
-                    df.drop(col, axis=1, inplace=True)
-
-
-    def _final_data_processing(self, columns_order: List[str], path: str, composer_counter: list, novoices_counter: list, duetos_counter: list, df_analysis: DataFrame):
+                        formatted_col=col
+                        for voice_prefix in voices_list_prefixes:
+                            formatted_col = formatted_col.replace(voice_prefix, generic_sound_voice_prefix)
+                        if formatted_col in df:
+                            df[formatted_col].fillna(df[col], inplace=True)
+                        else:
+                            df[formatted_col]=df[col]
+                        df.drop(col, axis=1, inplace=True)
+    
+    def _final_data_processing(self, columns_order: List[str], composer_counter: list, novoices_counter: list, duetos_counter: list, df: DataFrame):
         df.sort_values(ARIA_ID, inplace=True)
         replace_nans(df)
         log_errors_and_shape(composer_counter, novoices_counter, duetos_counter, df)
         df = df.reindex(sorted(df.columns), axis=1)
         df = sort_columns(df, columns_order)
-        df.to_csv(path + ".csv", index=False)
-        pinfo('\nData saved as {}'.format(str(path + ".csv")))
+        dest_path=self.destination_route + "_processed" + ".csv"
+        df.to_csv(dest_path, index=False)
+        pinfo(f'\nData saved as {dest_path}')
    
-    def preprocess_data(df: DataFrame):
+    def preprocess_data(self, df: DataFrame):
         if 'Label_Passions' in df:
             del df['Label_Passions']
 
@@ -193,6 +200,11 @@ class DataProcessor:
         df.dropna(axis=1, how='all', inplace=True)
         df.reset_index(inplace=True)
 
+    def unbundle_instrumentation(self, df):
+        for i, row in enumerate(df[INSTRUMENTATION]):
+            for element in row.split(','):
+                df.at[i, PRESENCE+'_'+element] = 1
+
     def _assign_labels(self, df: DataFrame):
         passions = read_dicts_from_csv("Passions.csv")
         data_by_aria_label = {label_data["Label"]: label_data for label_data in passions}
@@ -203,7 +215,7 @@ class DataProcessor:
                 label_value = data_by_aria[col] if data_by_aria else None
                 values.append(label_value)
             df[label] = values
-        if self._parameters.split_passionA:
+        if self._post_config.split_passionA:
             df['Label_PassionA_primary']=df['Label_PassionA'].str.split(';', expand=True)[0]
             df['Label_PassionA_secundary']=df['Label_PassionA'].str.split(';', expand=True)[1]
             df['Label_PassionA_secundary'].fillna(df['Label_PassionA_primary'], inplace=True)
@@ -223,15 +235,15 @@ class DataProcessor:
                 novoices_counter.append(df[FILE_NAME][i])
                 df.drop(i, axis = 0, inplace=True)
 
-            if ',' in voice:
-                duetos_counter.append(df[FILE_NAME][i])
-                df.drop(i, axis = 0, inplace=True)
+            # if ',' in voice:
+            #     duetos_counter.append(df[FILE_NAME][i])
+            #     df.drop(i, axis = 0, inplace=True)
 
         self.merge_voices(df)
 
         return composer_counter,novoices_counter,duetos_counter
     
-    def _delete_unwanted_columns(self, df):
+    def delete_unwanted_columns(self, df):
         for inst in self._post_config.instruments_to_kill:
             df.drop([i for i in df.columns if 'Part'+inst in i], axis = 1, inplace=True)
         
@@ -256,9 +268,12 @@ class DataProcessor:
         df.drop(cols_to_remove, axis = 1, inplace=True)
         
         df.drop([i for i in df.columns if 'Sound' in i and not 'Voice' in i], axis = 1, inplace=True)
-        if 'PartVnI__PartVoice__Texture' in df:
-            del df['PartVnI__PartVoice__Texture']
+        if 'PartVnI__PartVoice__'+TEXTURE in df:
+            del df['PartVnI__PartVoice__'+TEXTURE]
+
         #remove empty voices
-        df.drop([col for col in df.columns if col.startswith(tuple(voices_list_prefixes)) and all(df[col].isnull().values)], axis = 1, inplace=True)
+        empty_voices=[col for col in df.columns if col.startswith(tuple(voices_list_prefixes)) and all(df[col].isnull().values)]
+        if empty_voices:
+            df.drop(empty_voices, axis = 1, inplace=True)
 
 

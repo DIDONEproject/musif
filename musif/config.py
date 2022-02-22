@@ -136,6 +136,7 @@ class Configuration:
             SPLIT_KEYWORDS: list(self.split_keywords),
             PARTS_FILTER: list(self.parts_filter),
             EXPAND_REPEATS: self.expand_repeats,
+            CHECK_FILE: self.check_file,
         }
 
     def _load_metadata(self) -> None:
@@ -168,7 +169,7 @@ class PostProcess_Configuration:
             elif isinstance(args[0], dict):
                 config_data = args[0]
             elif isinstance(args[0], Configuration):
-                config_data = args[0].to_dict()
+                config_data = args[0].to_dict_post()
             else:
                 raise TypeError(f"The argument type is {type(args[0])}, and it was expected a dictionary, a Configuration or a string object")
         config_data.update(kwargs)  # Override values
@@ -184,3 +185,19 @@ class PostProcess_Configuration:
         self.instruments_to_keep = config_data.get(INSTRUMENTS_TO_KEEP, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KEEP])
         self.instruments_to_kill = config_data.get(INSTRUMENTS_TO_KILL, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KILL])
         self.presence_to_kill = config_data.get(PRESENCE_TO_KILL, _CONFIG_POST_FALLBACK[PRESENCE_TO_KILL])
+    
+    def to_dict_post(self) -> dict:
+        return {
+            LOG: {
+                LOG_FILE_PATH: self.log_file,
+                FILE_LOG_LEVEL: self.file_log_level,
+                CONSOLE_LOG_LEVEL: self.console_log_level,
+            },
+            CHECK_FILE: self.check_file,
+            DELETE_FILES: self.delete_files,
+            GROUPED: self.grouped_analysis,
+            SPLIT_PASSSIONS: self.split_passionA,
+            INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
+            INSTRUMENTS_TO_KILL: self.instruments_to_kill,
+            PRESENCE_TO_KILL: self.presence_to_kill,
+        }
