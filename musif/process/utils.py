@@ -1,5 +1,6 @@
 import re
 from typing import List
+import pandas as pd
 
 from musif.extract.features.interval.constants import (
     INTERVAL_COUNT, TRIMMED_INTERVALLIC_MEAN)
@@ -36,13 +37,16 @@ def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame):
     df[part+DEGREE_PREFIX+'_Nonat']=df[degree_nonat].sum(axis=1)
 
 def log_errors_and_shape(composer_counter: list, novoices_counter: list, duetos_counter: list, df: DataFrame):
-    pinfo("\nTotal files skipped by composer: ", len(composer_counter))
-    pinfo(composer_counter)
-    pinfo("\nTotal files skipped by no-voices: ", len(novoices_counter))
-    pinfo(novoices_counter)
-    pinfo("\nTotal files skipped by duetos/trietos: ", len(duetos_counter))
-    pinfo(duetos_counter)
-    pinfo("\nFinal shape of the DataFrame: ", df.shape)
+    pinfo(f"\nTotal files skipped by composer: {len(composer_counter)}")
+    pinfo(str(composer_counter))
+    pinfo(f"\nTotal files skipped by no-voices: { len(novoices_counter)}")
+    pinfo(str(novoices_counter))
+    pinfo(f"\nTotal files skipped by duetos/trietos: {len(duetos_counter)}")
+    pinfo(str(duetos_counter))
+    pinfo(f"\nFinal shape of the DataFrame: {df.shape}")
 
-
-
+def delete_previous_items(df):
+    errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
+    for item in errors:
+        index = df.index[df['FileName']==item]
+        df.drop(index, axis=0, inplace=True)
