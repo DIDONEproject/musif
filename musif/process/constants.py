@@ -4,6 +4,7 @@ from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.metadata.constants import *
 from musif.extract.features.file_name.constants import *
 from musif.extract.features.key.constants import KEY, KEY_SIGNATURE, KEY_SIGNATURE_TYPE
+from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scoring.constants import ROLE_TYPE, VOICES, INSTRUMENTATION, SCORING
 #from musif.reports.constants import ARIA_ID, ARIA_LABEL, ARIA_SCENE, ACTANDSCENE
 
@@ -21,7 +22,7 @@ label_by_col = {
     }
 
 voices_list = ['sop','ten','alt','bar','bbar', 'bass']
-voices_list_prefixes = ['Part' + i.capitalize() for i in voices_list]
+voices_list_prefixes = [get_part_prefix(i) for i in voices_list]
 
 columns_order = [ARIA_ID, FILE_NAME, ARIA_OPERA, ARIA_LABEL, ARIA_NAME,
             ARIA_ACT, ARIA_SCENE, ACTANDSCENE, ARIA_YEAR, ARIA_DECADE, COMPOSER, ARIA_CITY, 

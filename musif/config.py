@@ -1,6 +1,7 @@
 import multiprocessing
 from glob import glob
 from os import path
+from pickle import FALSE
 
 from musif import internal_data
 from musif.common.logs import create_logger
@@ -30,6 +31,8 @@ SPLIT_PASSSIONS = "split_passionA"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
 INSTRUMENTS_TO_KILL = "instruments_to_kill"
 PRESENCE_TO_KILL = "presence_to_kill"
+UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
+MERGE_VOICES = "merge_voices"
 
 _CONFIG_FALLBACK = {
     LOG: {
@@ -55,6 +58,8 @@ _CONFIG_POST_FALLBACK = {
     GROUPED: False,
     DELETE_FILES: False,
     SPLIT_PASSSIONS: False,
+    UNBUNDLE_INSTRUMENTATION: False,
+    MERGE_VOICES: True,
     CHECK_FILE: ".",
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_KILL: [],
@@ -182,6 +187,8 @@ class PostProcess_Configuration:
         self.delete_files = config_data.get(DELETE_FILES, _CONFIG_POST_FALLBACK[DELETE_FILES])
         self.grouped_analysis = config_data.get(GROUPED, _CONFIG_POST_FALLBACK[GROUPED])
         self.split_passionA = config_data.get(SPLIT_PASSSIONS, _CONFIG_POST_FALLBACK[SPLIT_PASSSIONS])
+        self.unbundle_instrumentation = config_data.get(UNBUNDLE_INSTRUMENTATION, _CONFIG_POST_FALLBACK[UNBUNDLE_INSTRUMENTATION])
+        self.merge_voices = config_data.get(MERGE_VOICES, _CONFIG_POST_FALLBACK[MERGE_VOICES])
         self.instruments_to_keep = config_data.get(INSTRUMENTS_TO_KEEP, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KEEP])
         self.instruments_to_kill = config_data.get(INSTRUMENTS_TO_KILL, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KILL])
         self.presence_to_kill = config_data.get(PRESENCE_TO_KILL, _CONFIG_POST_FALLBACK[PRESENCE_TO_KILL])

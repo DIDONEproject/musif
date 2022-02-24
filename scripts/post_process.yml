@@ -4,12 +4,14 @@ log:
   console_level: WARN
 checking_file: parsed_files.csv
 delete_failed_files: False
+merge_voices: True
 grouped_analysis: True
 split_passionA: True
+separate_intrumentation_column: True
 instruments_to_keep: 
   - vnI
   - bs
-intruments_to_kill: 
+instruments_to_kill: 
   - Ob
   - Cor
   - Bn
@@ -24,5 +26,6 @@ presence_to_kill:
   - VnIV
 
 # columns_to_remove:
+# 
 
 
