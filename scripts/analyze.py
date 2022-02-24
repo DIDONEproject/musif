@@ -18,4 +18,7 @@ if __name__ == "__main__":
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     dest_path=name+"_extraction.csv"
     # df.to_csv(dest_path, index=False)
-    DataProcessor("scripts/post_process.yml").process_corpora(dest_path)
+    p=DataProcessor("scripts/post_process.yml", info=dest_path)
+    print(p.data.shape)
+    p.delete_unwanted_columns()
+    print(p.data.shape)

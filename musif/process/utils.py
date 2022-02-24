@@ -1,25 +1,30 @@
 import re
 from typing import List
+
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
-from musif.extract.features.harmony.constants import KEY_MODULATORY, KEY_PERCENTAGE, KEY_prefix
-
-from musif.extract.features.interval.constants import (
-    INTERVAL_COUNT, TRIMMED_INTERVALLIC_MEAN)
+from build.lib.musif.extract.features.harmony.constants import CHORD_prefix
+from musif.config import PostProcess_Configuration
+from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
+                                                      LOWEST_NOTE_INDEX)
+from musif.extract.features.harmony.constants import (KEY_MODULATORY,
+                                                      KEY_PERCENTAGE,
+                                                      KEY_prefix)
+from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
-from musif.extract.features.scoring.constants import VOICES
+from musif.extract.features.scoring.constants import (FAMILY_INSTRUMENTATION,
+                                                      FAMILY_SCORING, VOICES)
 from musif.logs import pinfo
 from pandas import DataFrame
+from tqdm import tqdm
+
 from .constants import PRESENCE, voices_list_prefixes
 
 
 def replace_nans(df):
     for col in df.columns:
-        INTERVAL_COUNT
-        if '_Interval' in col or col.startswith('Key_') or col.startswith('Chord_') or col.startswith('Chords_') or col.startswith('Additions_') or col.startswith('Numerals_') or col.endswith('_DottedRhythm') or col.endswith('_DoubleDottedRhythm')  or '_Degree' in col or TRIMMED_INTERVALLIC_MEAN in col or PRESENCE in col:
+        if '_Interval' in col or col.startswith('Key_') or col.startswith(CHORD_prefix) or col.startswith('Chords_') or col.startswith('Additions_') or col.startswith('Numerals_') or col.endswith('_DottedRhythm') or col.endswith('_DoubleDottedRhythm')  or '_Degree' in col or TRIMMED_INTERVALLIC_MEAN in col or PRESENCE in col:
             df[col]= df[col].fillna(0)
 
 def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
@@ -61,7 +66,7 @@ def merge_single_voices(df: DataFrame, generic_sound_voice_prefix: str) -> None:
                     df[formatted_col]=df[col]
                 df.drop(col, axis=1, inplace=True)
                 
-def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame):
+def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame) -> None:
     part_degrees=[i for i in total_degrees if part in i]
 
     aug=[i for i in part_degrees if '#' in i]
@@ -80,7 +85,7 @@ def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame):
     df[part+DEGREE_PREFIX+'_Nat']=df[degree_nat].sum(axis=1)
     df[part+DEGREE_PREFIX+'_Nonat']=df[degree_nonat].sum(axis=1)
 
-def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: DataFrame):
+def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: DataFrame) -> None:
     pinfo(f"\nTotal files skipped by composer: {len(composer_counter)}")
     pinfo(str(composer_counter))
     pinfo(f"\nTotal files skipped by no-voices: { len(novoices_counter)}")
@@ -89,13 +94,48 @@ def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: Dat
     # pinfo(str(duetos_counter))
     pinfo(f"\nFinal shape of the DataFrame: {df.shape}")
 
-def delete_previous_items(df):
+def delete_previous_items(df: DataFrame) -> None:
     errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
     for item in errors:
         index = df.index[df['FileName']==item]
         df.drop(index, axis=0, inplace=True)
 
-def join_keys(df: DataFrame):
+def delete_columns(data: DataFrame, config: PostProcess_Configuration) -> None:
+        for inst in config.instruments_to_kill:
+            data.drop([i for i in data.columns if 'Part'+inst in i], axis = 1, inplace=True)
+            
+        for substring in config.substring_to_kill:
+            data.drop([i for i in data.columns if substring in i], axis = 1, inplace=True)
+            
+            #Delete Vn when it is alone
+        data.drop(data.columns[data.columns.str.contains(get_part_prefix('Vn'))], axis = 1, inplace=True)
+
+        presence=['Presence_of_'+i for i in config.delete_presence]
+        if all(item in presence for item in data.columns):
+            data.drop(presence, axis = 1, inplace=True,  errors='ignore')
+
+            # Delete other unuseful columns
+        data.drop([i for i in data.columns if i.endswith(tuple(config.columns_endswith))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.startswith(tuple(config.columns_startswith))], axis = 1, inplace=True)
+        data.drop([col for col in data.columns if any(substring in col for substring in tuple(config.columns_contain))], axis = 1, inplace=True)
+
+        data.drop([i for i in data.columns if i.startswith('Sound') and not 'Voice' in i], axis = 1, inplace=True)
+        
+        if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
+            data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis = 1, inplace=True)
+
+            #remove empty voices
+        empty_voices=[col for col in data.columns if col.startswith(tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
+        if empty_voices:
+            data.drop(empty_voices, axis = 1, inplace=True)
+
+def split_passion_A(data: DataFrame) -> None:
+    data['Label_PassionA_primary']=data['Label_PassionA'].str.split(';', expand=True)[0]
+    data['Label_PassionA_secundary']=data['Label_PassionA'].str.split(';', expand=True)[1]
+    data['Label_PassionA_secundary'].fillna(data['Label_PassionA_primary'], inplace=True)
+    data.drop('Label_PassionA', axis = 1, inplace=True)
+  
+def join_keys(df: DataFrame) -> None:
         key_SD = [KEY_prefix+'IV'+KEY_PERCENTAGE, KEY_prefix+'II'+KEY_PERCENTAGE, KEY_prefix+'VI'+KEY_PERCENTAGE]
         key_sd = [KEY_prefix+'iv'+KEY_PERCENTAGE, KEY_prefix+'ii'+KEY_PERCENTAGE]
         key_tonic = [KEY_prefix+'I'+KEY_PERCENTAGE, KEY_prefix+'i'+KEY_PERCENTAGE]

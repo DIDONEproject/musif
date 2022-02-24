@@ -4,28 +4,62 @@ log:
   console_level: WARN
 checking_file: parsed_files.csv
 delete_failed_files: False
-merge_voices: True
+merge_voices: False
 grouped_analysis: True
 split_passionA: True
 separate_intrumentation_column: True
 instruments_to_keep: 
   - vnI
   - bs
-instruments_to_kill: 
+instruments_to_kill: #'Part'+inst in column
   - Ob
   - Cor
   - Bn
   - Va
-presence_to_kill: 
+substring_to_kill: #inst in column
   - VnII
+  - VnIV
   - Vc
   - Cl
   - Tpt
   - Hn
   - Fl
-  - VnIV
 
-# columns_to_remove:
-# 
+columns_endswith:
+  - HigestNote
+  - LowestNote
+  - _Notes
+  - _SoundingMeasures
+  - _Syllables
+  - _NumberOfFilteredParts
+  - NumberOfParts
+  - _NotesMean
+  - Librettist
+  - _LargestIntervalAsc
+  - _LargestIntervalAll
+  - _LargestIntervalDesc
+  - _NotesMean
+  - 'Semitones_Sum'    
+  - _MeanInterval'
+
+columns_startswith:
+  - FamilyWw
+  - FamilyBr
+  - EndOfThemeA
+  - NumberOfBeats
+  - SoundVoice_Dyn
+
+columns_contain:
+  - _Count
+  - _SoundingMeasuresMean
+  - _SmallestSemitones
+  - _SmallestAbsolute
+  - _SmallestInterval
+  
+delete_presence:
+  - vn
+  - bs
+  - vc
+  - va
 
 
