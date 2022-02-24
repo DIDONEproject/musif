@@ -3,7 +3,6 @@ import sys
 sys.path.insert(0, "../musif")
 
 from musif.extract.extract import FeaturesExtractor
-
 from musif.process.processor import DataProcessor
 
 if __name__ == "__main__":

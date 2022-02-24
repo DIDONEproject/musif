@@ -3,7 +3,7 @@ DYNMEAN_WEIGHTED = "DynMean_weighted"
 DYNABRUPTNESS = "DynAbruptness"
 DYNGRAD = "DynGrad"
 
-DYNAMIC = "Dynamic"  # all coulf be in a dictionary with this variables?
+DYNAMIC = "Dynamic"
 TEXTEXPRESSION = "TextExpression"
 TIMESIGNATURE = "TimeSignature"
 REST = "Rest"
