@@ -52,8 +52,7 @@ class DataProcessor:
 
     def process_info(self, info: Union[str, DataFrame] ) -> DataFrame:
         """
-        Extracts features given in the configuration data getting a file, directory or several files paths,
-        returning a DataFrame of the score.
+        Extracts the info from a directory to a csv file or from a Dataframe object. 
 
         Returns
         ------
