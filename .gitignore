@@ -14,3 +14,4 @@ logs
 failed_files.txt
 tests/data/static/features/expected_features.csv
 martiser/dataframe.csv
+build/

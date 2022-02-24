@@ -172,7 +172,6 @@ class TestFilesValidator:
 
     # PARALLEL MALFORMED TEST
 
-    # TODO Can't read stderr nor stdout error message in parallel validation
     # @pytest.mark.parallel_malformed
     # def test_validate_parallel_file(self, capsys):
     #     # Given

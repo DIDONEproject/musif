@@ -14,11 +14,19 @@ if __name__ == "__main__":
     # check_file = 'parsed_files_total.csv'
     check_file=None
     name = "features_new_total"
-
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     dest_path=name+"_extraction.csv"
     # df.to_csv(dest_path, index=False)
-    p=DataProcessor("scripts/post_process.yml", info=dest_path)
+    p=DataProcessor("scripts/post_process.yml", merge_voices=True, info=dest_path)
+    p.process()
+
+    
     print(p.data.shape)
-    p.delete_unwanted_columns()
+    print(p.data.columns[p.data.columns.str.contains('Key')])
+    p.group_keys()
+    print(p.data.columns[p.data.columns.str.contains('Key')])
+    p.delete_unwanted_columns(columns_endswith=['Per'])
+    p.to_csv('final_features_example.csv')
+    #TODO: compronar que el orden de los metodos es intercambiable y no ffuks everython up
     print(p.data.shape)
+

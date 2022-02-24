@@ -1,3 +1,4 @@
+from logging.config import dictConfig
 import re
 from typing import List
 
@@ -28,13 +29,15 @@ def replace_nans(df):
             df[col]= df[col].fillna(0)
 
 def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
-    pinfo('\nCalculating duetos and trietos:\n')
-    for index in df[df[VOICES].str.contains(',')].index:
+    multiple_voices=df[df[VOICES].str.contains(',')]
+    pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculatng averages.')
+    for index in multiple_voices.index:
         all_voices = df[VOICES][index].split(',')
         voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes) and not pd.isnull(df.iloc[index][col])]
         first_voice = all_voices[0]
         columns_to_merge=[i for i in voice_cols if first_voice in i.lower()]
-        for col in tqdm(columns_to_merge):
+        it=tqdm(columns_to_merge, desc='Merging dueto')
+        for col in it:
             formatted_col = col.replace(get_part_prefix(first_voice), generic_sound_voice_prefix)
             similar_cols = []
             for j in range(0, len(all_voices)):
@@ -100,24 +103,24 @@ def delete_previous_items(df: DataFrame) -> None:
         index = df.index[df['FileName']==item]
         df.drop(index, axis=0, inplace=True)
 
-def delete_columns(data: DataFrame, config: PostProcess_Configuration) -> None:
-        for inst in config.instruments_to_kill:
+def delete_columns(data: DataFrame, config: dictConfig) -> None:
+        for inst in config['instruments_to_kill']:
             data.drop([i for i in data.columns if 'Part'+inst in i], axis = 1, inplace=True)
             
-        for substring in config.substring_to_kill:
+        for substring in config['substring_to_kill']:
             data.drop([i for i in data.columns if substring in i], axis = 1, inplace=True)
             
             #Delete Vn when it is alone
         data.drop(data.columns[data.columns.str.contains(get_part_prefix('Vn'))], axis = 1, inplace=True)
 
-        presence=['Presence_of_'+i for i in config.delete_presence]
+        presence=['Presence_of_'+i for i in config['delete_presence']]
         if all(item in presence for item in data.columns):
             data.drop(presence, axis = 1, inplace=True,  errors='ignore')
 
             # Delete other unuseful columns
-        data.drop([i for i in data.columns if i.endswith(tuple(config.columns_endswith))], axis = 1, inplace=True)
-        data.drop([i for i in data.columns if i.startswith(tuple(config.columns_startswith))], axis = 1, inplace=True)
-        data.drop([col for col in data.columns if any(substring in col for substring in tuple(config.columns_contain))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.endswith(tuple(config['columns_endswith']))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.startswith(tuple(config['columns_startswith']))], axis = 1, inplace=True)
+        data.drop([col for col in data.columns if any(substring in col for substring in tuple(config['columns_contain']))], axis = 1, inplace=True)
 
         data.drop([i for i in data.columns if i.startswith('Sound') and not 'Voice' in i], axis = 1, inplace=True)
         
