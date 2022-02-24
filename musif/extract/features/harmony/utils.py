@@ -470,8 +470,6 @@ def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
 
 def get_chords_functions(chords, relativeroots, local_keys)-> list:
 
-    #TODO: review that the order is not changed.
-
     chords_localkeys = list(zip(chords, local_keys))
     functionalities_dict = {t: get_first_chord_local(*t) for t in set(chords_localkeys)}
 

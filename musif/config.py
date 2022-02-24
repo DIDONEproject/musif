@@ -217,7 +217,7 @@ class PostProcess_Configuration:
             SPLIT_PASSSIONS: self.split_passionA,
             INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
             INSTRUMENTS_TO_KILL: self.instruments_to_kill,
-            SUBSTRING_TO_KILL: self.presence_to_kill,
+            SUBSTRING_TO_KILL: self.substring_to_kill,
             ENDSWITH: self.columns_endswith,
             STARTSWITH: self.columns_startswith,
             CONTAIN: self.columns_contain,

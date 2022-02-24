@@ -7,7 +7,7 @@ from musif.process.utils import (delete_columns, delete_previous_items,
                                  join_keys, join_keys_modulatory,
                                  join_part_degrees, log_errors_and_shape,
                                  merge_duetos_trios, merge_single_voices,
-                                 replace_nans)
+                                 replace_nans, split_passion_A)
 from pandas import DataFrame
 
 sys.path.insert(0, "../musif")
@@ -31,19 +31,21 @@ from .constants import (PRESENCE, columns_order, label_by_col,
 
 
 class DataProcessor:
+    """Processor class that treats columns and information of a DataFrame
+
+    This operator processes information from a DataFrame or a .csv file. 
+    It deletes unseful columns and merges those that are required to clean the data.
+    The main method .process() returns a DataFrame and saves it into a .csv file.
     """
-    Processes a corpus given a directory with xml and mscx files and saves
-    the obtained DataFrame into a .csv file. It deletes unseful columns and merges those that are needed
-    to prepare the DataFrame for later analysis
-    """
+
     def __init__(self, *args, **kwargs):
         """
         Parameters
         ----------
         *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
-        **kwargs: Get keywords to construct Configuration.
+        **kwargs: Get keywords to construct PostProcess_Configuration object.
+        kwargs must include info key containing the data.
         """
-
         self._post_config=PostProcess_Configuration(*args, **kwargs)
         self.info=kwargs.get('info')
         self.data = self.process_info(self.info)
@@ -55,7 +57,7 @@ class DataProcessor:
 
         Returns
         ------
-            Score dataframe with the extracted features of given scores.
+            Dataframe with the information from either the file or the previous DataFrame.
         """
         
         if isinstance(info, str):
@@ -149,11 +151,17 @@ class DataProcessor:
             for element in row.split(','):
                 self.data.at[i, PRESENCE+'_'+element] = 1
 
-    def delete_unwanted_columns(self) -> None:
+    def delete_unwanted_columns(self, **kwargs) -> None:
+        config_data=self._post_config.to_dict_post()
+        config_data.update(kwargs)  # Override values
         try:
-            delete_columns(self.data, self._post_config)
+            delete_columns(self.data, config_data)
         except KeyError:
             perr('Some columns are already not present in the Dataframe')
+    
+    def to_csv(self, dest_path: str) -> None:
+        self.data.to_csv(dest_path, index=False)
+        pinfo(f'\nData succesfully saved as {dest_path} in current directory.')
     
     def _assign_labels(self) -> None:
         passions = read_dicts_from_csv("Passions.csv")
@@ -167,9 +175,8 @@ class DataProcessor:
             self.data[label] = values
 
         if self._post_config.split_passionA:
-            self.split_passion_A(self.data)
+            split_passion_A(self.data)
   
-
     def _scan_dataframe(self):
         self.composer_counter = []
         self.novoices_counter = []
@@ -191,6 +198,7 @@ class DataProcessor:
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         self.data = sort_columns(self.data, columns_order)
         dest_path=self.destination_route + "_processed" + ".csv"
-        self.data.to_csv(dest_path, index=False)
-        pinfo(f'\nData saved as {dest_path}')
+        self.to_csv(dest_path)
+
+
 

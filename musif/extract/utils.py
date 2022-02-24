@@ -153,7 +153,7 @@ def expand_repeat_bars(score):
                         offset = part_measures_expanded[-1][-1].offset
                     else:
                         offset = 0
-                    start_measures = measure_ranges(part_measures, start, rb[0] - 1, offset = offset + compass) #TODO works if the score doesn't start in 0?
+                    start_measures = measure_ranges(part_measures, start, rb[0] - 1, offset = offset + compass)
                     if len(start_measures) > 0:
                         part_measures_expanded.append(start_measures)
                     start = rb[0]
@@ -177,7 +177,7 @@ def expand_repeat_bars(score):
             if start < last_measure:
                 compass = measure_ranges(part_measures, start, start + 1)[0].quarterLength
                 offset = part_measures_expanded[-1][-1].offset
-                part_measures_expanded.append(measure_ranges(part_measures, start, last_measure + 1, offset = offset+ compass)) #TODO works when it's close to the end?
+                part_measures_expanded.append(measure_ranges(part_measures, start, last_measure + 1, offset = offset+ compass))
 
             p.elements = list(itertools.chain(*tuple(part_measures_expanded)))
             final_score.insert(0, p)
