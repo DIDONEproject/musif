@@ -28,11 +28,15 @@ CHECK_FILE = "checking_file"
 DELETE_FILES = "delete_filed_files"
 GROUPED = "grouped_analysis"
 SPLIT_PASSSIONS = "split_passionA"
+UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
 INSTRUMENTS_TO_KILL = "instruments_to_kill"
-PRESENCE_TO_KILL = "presence_to_kill"
-UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
+SUBSTRING_TO_KILL = "substring_to_kill"
+ENDSWITH = "columns_endswith"
+STARTSWITH = "columns_startswith"
+CONTAIN = "columns_contain"
 MERGE_VOICES = "merge_voices"
+PRESENCE = "delete_presence"
 
 _CONFIG_FALLBACK = {
     LOG: {
@@ -63,7 +67,11 @@ _CONFIG_POST_FALLBACK = {
     CHECK_FILE: ".",
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_KILL: [],
-    PRESENCE_TO_KILL: [],
+    SUBSTRING_TO_KILL: [],
+    PRESENCE: [],
+    ENDSWITH: [],
+    STARTSWITH: [],
+    CONTAIN: [],
 }
 
 class Configuration:
@@ -97,7 +105,6 @@ class Configuration:
         self.split_keywords = config_data.get(SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS])
         self.parts_filter = config_data.get(PARTS_FILTER, _CONFIG_FALLBACK[PARTS_FILTER])
         self.expand_repeats = config_data.get(EXPAND_REPEATS, _CONFIG_FALLBACK[EXPAND_REPEATS])
-        self.internal_data_dir = path.dirname(internal_data.__file__)
         self.internal_data_dir = path.dirname(internal_data.__file__)
         self.check = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
         self._load_metadata()
@@ -191,8 +198,12 @@ class PostProcess_Configuration:
         self.merge_voices = config_data.get(MERGE_VOICES, _CONFIG_POST_FALLBACK[MERGE_VOICES])
         self.instruments_to_keep = config_data.get(INSTRUMENTS_TO_KEEP, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KEEP])
         self.instruments_to_kill = config_data.get(INSTRUMENTS_TO_KILL, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KILL])
-        self.presence_to_kill = config_data.get(PRESENCE_TO_KILL, _CONFIG_POST_FALLBACK[PRESENCE_TO_KILL])
-    
+        self.substring_to_kill = config_data.get(SUBSTRING_TO_KILL, _CONFIG_POST_FALLBACK[SUBSTRING_TO_KILL])
+        self.delete_presence = config_data.get(PRESENCE, _CONFIG_POST_FALLBACK[PRESENCE])        
+        self.columns_endswith = config_data.get(ENDSWITH, _CONFIG_POST_FALLBACK[ENDSWITH])
+        self.columns_startswith = config_data.get(STARTSWITH, _CONFIG_POST_FALLBACK[STARTSWITH])
+        self.columns_contain = config_data.get(CONTAIN, _CONFIG_POST_FALLBACK[CONTAIN])
+
     def to_dict_post(self) -> dict:
         return {
             LOG: {
@@ -206,5 +217,9 @@ class PostProcess_Configuration:
             SPLIT_PASSSIONS: self.split_passionA,
             INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
             INSTRUMENTS_TO_KILL: self.instruments_to_kill,
-            PRESENCE_TO_KILL: self.presence_to_kill,
+            SUBSTRING_TO_KILL: self.presence_to_kill,
+            ENDSWITH: self.columns_endswith,
+            STARTSWITH: self.columns_startswith,
+            CONTAIN: self.columns_contain,
+            PRESENCE: self.delete_presence,
         }
