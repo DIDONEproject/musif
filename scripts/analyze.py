@@ -23,7 +23,7 @@ if __name__ == "__main__":
     
     print(p.data.shape)
     print(p.data.columns[p.data.columns.str.contains('Key')])
-    p.group_keys()
+    p._group_keys()
     print(p.data.columns[p.data.columns.str.contains('Key')])
     p.delete_unwanted_columns(columns_endswith=['Per'])
     p.to_csv('final_features_example.csv')
