@@ -26,8 +26,8 @@ substring_to_kill: #inst in column
   - Fl
 
 columns_endswith:
-  - HigestNote
-  - LowestNote
+  - _HighestNote
+  - _LowestNote
   - _Notes
   - _SoundingMeasures
   - _Syllables

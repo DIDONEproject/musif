@@ -31,28 +31,29 @@ def replace_nans(df):
 def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
     multiple_voices=df[df[VOICES].str.contains(',')]
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculatng averages.')
-    for index in multiple_voices.index:
+    voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
+    for index in tqdm(multiple_voices.index):
+        pinfo(f'\nMerging dueto/trieto at index {index}')
         all_voices = df[VOICES][index].split(',')
-        voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes) and not pd.isnull(df.iloc[index][col])]
+        for col in voice_cols:
+            if pd.isna(df[col][index]):
+                voice_cols.remove(col)
         first_voice = all_voices[0]
-        columns_to_merge=[i for i in voice_cols if first_voice in i.lower()]
-        it=tqdm(columns_to_merge, desc='Merging dueto')
-        for col in it:
-            formatted_col = col.replace(get_part_prefix(first_voice), generic_sound_voice_prefix)
+        columns_to_merge=(i for i in voice_cols if first_voice in i.lower())
+        for col in columns_to_merge:
             similar_cols = []
+            formatted_col = col.replace(get_part_prefix(first_voice), generic_sound_voice_prefix)
             for j in range(0, len(all_voices)):
                 similar_col=col.replace(get_part_prefix(first_voice),get_part_prefix(all_voices[j]))
                 if similar_col in df:
                     similar_cols.append(similar_col)
-            if isinstance(df.loc[index,similar_cols][0], (int, float)):
-                if HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
-                    df[formatted_col]=df.loc[index,similar_cols].max()
-                elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
-                    df[formatted_col]=df.loc[index,similar_cols].min()
-                else:
-                    df[formatted_col]=df.loc[index,similar_cols].mean()
+            df[formatted_col]=np.nan
+            if HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
+                df.loc[index,formatted_col]=df.loc[index,similar_cols].max()
+            elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
+                df.loc[index,formatted_col]=df.loc[index,similar_cols].min()
             else:
-                df[formatted_col]=np.nan
+                df.loc[index,formatted_col]=df.loc[index,similar_cols].mean()
                 
             df.loc[index,similar_cols]=np.nan
 
@@ -110,14 +111,15 @@ def delete_columns(data: DataFrame, config: dictConfig) -> None:
         for substring in config['substring_to_kill']:
             data.drop([i for i in data.columns if substring in i], axis = 1, inplace=True)
             
-            #Delete Vn when it is alone
+        #Delete Vn when it is alone
         data.drop(data.columns[data.columns.str.contains(get_part_prefix('Vn'))], axis = 1, inplace=True)
+        if 'PartVnI__PartVoice__Texture':
+            del data['PartVnI__PartVoice__Texture']
 
-        presence=['Presence_of_'+i for i in config['delete_presence']]
-        if all(item in presence for item in data.columns):
+        presence=['Presence_of_'+str(i) for i in config['delete_presence']]
+        if all(item in data.columns for item in presence):
             data.drop(presence, axis = 1, inplace=True,  errors='ignore')
 
-            # Delete other unuseful columns
         data.drop([i for i in data.columns if i.endswith(tuple(config['columns_endswith']))], axis = 1, inplace=True)
         data.drop([i for i in data.columns if i.startswith(tuple(config['columns_startswith']))], axis = 1, inplace=True)
         data.drop([col for col in data.columns if any(substring in col for substring in tuple(config['columns_contain']))], axis = 1, inplace=True)
@@ -127,7 +129,7 @@ def delete_columns(data: DataFrame, config: dictConfig) -> None:
         if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
             data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis = 1, inplace=True)
 
-            #remove empty voices
+        #remove empty voices
         empty_voices=[col for col in data.columns if col.startswith(tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
         if empty_voices:
             data.drop(empty_voices, axis = 1, inplace=True)
