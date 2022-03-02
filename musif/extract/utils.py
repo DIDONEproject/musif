@@ -96,10 +96,11 @@ def include_beats(harmonic_analysis):
         if measure<=1:
             beat = int(measure + float(harmonic_analysis.mc_onset[index])*get_number_of_beats(harmonic_analysis.timesig[index]))
         else:
-            beat = int((measure-1)*int(harmonic_analysis.timesig[index-1][0])+1  + harmonic_analysis.mc_onset[index]*get_number_of_beats(harmonic_analysis.timesig[index]))
+            #exception for 2/2 Time Signature
+            time_sig = 4 if harmonic_analysis.timesig[index]=='2/2' else int(harmonic_analysis.timesig[index-1][0]) 
+            beat = int((measure-1)*time_sig+1 + harmonic_analysis.mc_onset[index]*get_number_of_beats(harmonic_analysis.timesig[index]))
         
         harmonic_analysis['beats'][index]=beat
-        
 def get_beat_position(beats_timesignature, number_of_beats, pos):
     if number_of_beats == beats_timesignature:
         return pos

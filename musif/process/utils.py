@@ -25,7 +25,7 @@ from .constants import PRESENCE, voices_list_prefixes
 
 def replace_nans(df):
     for col in df.columns:
-        if '_Interval' in col or col.startswith('Key_') or col.startswith(CHORD_prefix) or col.startswith('Chords_') or col.startswith('Additions_') or col.startswith('Numerals_') or col.endswith('_DottedRhythm') or col.endswith('_DoubleDottedRhythm')  or '_Degree' in col or TRIMMED_INTERVALLIC_MEAN in col or PRESENCE in col:
+        if '_Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or '_Degree' in col or (TRIMMED_INTERVALLIC_MEAN and PRESENCE and '_Dyn') in col:
             df[col]= df[col].fillna(0)
 
 def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
@@ -82,7 +82,7 @@ def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame) -> Non
     degree_nat = [x for x in part_degrees if re.search(pattern, x)]
     degree_nonat = [i for i in part_degrees if i not in degree_nat]
 
-    df[part+DEGREE_PREFIX+'_Aug']=df[aug].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Asc']=df[aug].sum(axis=1)
     df[part+DEGREE_PREFIX+'_Desc']=df[desc].sum(axis=1)
     df[part+DEGREE_PREFIX+'_Dasc']=df[d_asc].sum(axis=1)
     df[part+DEGREE_PREFIX+'_Ddesc']=df[d_desc].sum(axis=1)

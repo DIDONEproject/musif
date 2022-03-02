@@ -7,9 +7,9 @@ import roman
 from music21 import pitch, scale
 from music21.note import Note
 from pandas.core.frame import DataFrame
-from build.lib.musif.musicxml.scoring import to_abbreviation
+from build.lib.musif.logs import pinfo
 from musif.common.sort import sort_dict
-
+from copy import deepcopy
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import (get_function_first,
                                                   get_function_second)
@@ -39,7 +39,6 @@ def get_tonality_per_beat(harmonic_analysis, tonality):
     for index, degree in enumerate(harmonic_analysis.localkey):
         beat = harmonic_analysis.beats[index]
         tonality_map[beat] = get_localTonalty(tonality, degree.strip())
-        
 
     fill_tonality_map(tonality_map)
 
@@ -71,7 +70,6 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
     if notes_list[-1].offset > len(tonality_map):
         pwarn('Misunderstanding between harmonic beats and notes beats! Fixed by redifining harmonic beats.\n')
         rate=round(notes_list[-1].offset/len(tonality_map))
-
         for beat in range(1, max(list(tonality_map.keys()))):
             tonality_map[beat*rate]=tonality_map[beat]
         fill_tonality_map(tonality_map)

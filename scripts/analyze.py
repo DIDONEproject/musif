@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # check_file = 'parsed_files_total.csv'
     check_file=None
     name = "features_new_total"
-    # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
+    df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     dest_path=name+"_extraction.csv"
     # df.to_csv(dest_path, index=False)
     p=DataProcessor("scripts/post_process.yml", merge_voices=True, info=dest_path)

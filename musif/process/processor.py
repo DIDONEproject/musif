@@ -23,7 +23,7 @@ from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       CHORDS_GROUPING_prefix,
                                                       KEY_prefix)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import INSTRUMENTATION, VOICES
+from musif.extract.features.scoring.constants import INSTRUMENTATION, SCORING, VOICES
 from musif.logs import perr, pinfo
 
 from .constants import (PRESENCE, columns_order, label_by_col,
@@ -135,15 +135,16 @@ class DataProcessor:
         self.assign_labels()
         pinfo('\nPreprocessing data...')
         self.preprocess_data()
+        pinfo('\nScanning info looking for errors...')
+        self._scan_dataframe()
+
         if self._post_config.unbundle_instrumentation:
             pinfo('\nSeparating "Instrumentation" column...')
             self.unbundle_instrumentation()
-
-        pinfo('\nScanning info looking for errors...')
-        self._scan_dataframe()
         
         if self._post_config.merge_voices:
             self.merge_voices()
+            
         pinfo('\nDeleting not useful columns...')
         self.delete_unwanted_columns()
 
@@ -216,6 +217,9 @@ class DataProcessor:
         for i, row in enumerate(self.data[INSTRUMENTATION]):
             for element in row.split(','):
                 self.data.at[i, PRESENCE+'_'+element] = 1
+        del self.data[INSTRUMENTATION]
+        del self.data[SCORING]
+
 
     def delete_unwanted_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
@@ -289,7 +293,9 @@ class DataProcessor:
         replace_nans(self.data)
         log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
-        self.data = sort_columns(self.data, columns_order)
+        columns_to_sort=columns_order+list(self.data.filter(like='Label_', axis=1))
+        self.data = sort_columns(self.data, columns_to_sort)
+        self.data.drop('index', axis = 1, inplace=True, errors='ignore')
         dest_path=self.destination_route + "_processed" + ".csv"
         self.to_csv(dest_path)
 
