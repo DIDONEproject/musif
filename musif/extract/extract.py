@@ -4,6 +4,7 @@ import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Optional, Tuple, Union
+from urllib.request import parse_keqv_list
 
 import ms3
 import pandas as pd
@@ -27,7 +28,6 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 _cache = Cache(10000)  # To cache scanned scores
-
 
 def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeats: bool = False) -> Score:
     """
@@ -67,7 +67,6 @@ def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeat
         raise ParseFileError(file_path, str(e)) from e
     return score
 
-
 def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.DataFrame:
     """
     This function parses a musescore file and returns a pandas dataframe. If the file has
@@ -83,7 +82,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         Returns
         -------
         resp : pd.DataFrame
-             The score saved in cache or the new score parsed in the form of a dataframe.
+            The score saved in cache or the new score parsed in the form of a dataframe.
         Raises
         ------
         ParseFileError
@@ -169,7 +168,6 @@ def skip_files(obj, check_file):
         print(*skipped, sep = ",\n")
         print('Total: ',len(skipped))
     return files_to_extract
-
 
 def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]) -> str:
     """
@@ -484,16 +482,18 @@ class FeaturesExtractor:
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
 
-        self.prepare_parts(parts)
+        self._deal_with_dupicated_parts(parts)
 
         if self._cfg.parts_filter is None:
             return parts
         filter_set = set(self._cfg.parts_filter)
         return [part for part in parts if to_abbreviation(part, parts, self._cfg) in filter_set]
 
-    def prepare_parts(self, parts):
+    def _deal_with_dupicated_parts(self, parts):
         for part in parts:
+            # Keeping onle solo and 1º part of duplicated instruments
             part.id=part.id.replace(' 1º', '')
+            part.partAbbreviation=part.partAbbreviation.replace(' 1º', '')
             if '2º' in part.id:
                 parts.remove(part)
 
@@ -523,7 +523,6 @@ class FeaturesExtractor:
             feature_dependencies = self._extract_feature_dependencies(module)
             for feature_dependency in feature_dependencies:
                 if feature_dependency not in found_features:
-                    # TODO Add here a custom exception
                     raise ValueError(
                         f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")
             found_features.add(feature)

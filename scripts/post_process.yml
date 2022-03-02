@@ -1,21 +1,23 @@
 log:
-  file_path: logs/musif.log
+  file_path: logs/pos_process.log
   file_level: DEBUG
   console_level: WARN
 checking_file: parsed_files.csv
 delete_failed_files: False
-merge_voices: False
+merge_voices: True
 grouped_analysis: True
 split_passionA: True
 separate_intrumentation_column: True
 instruments_to_keep: 
   - vnI
   - bs
+
 instruments_to_kill: #'Part'+inst in column
   - Ob
   - Cor
   - Bn
   - Va
+  
 substring_to_kill: #inst in column
   - VnII
   - VnIV
@@ -45,6 +47,7 @@ columns_endswith:
 columns_startswith:
   - FamilyWw
   - FamilyBr
+  - FamilyGen
   - EndOfThemeA
   - NumberOfBeats
   - SoundVoice_Dyn

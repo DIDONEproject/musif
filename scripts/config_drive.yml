@@ -7,7 +7,7 @@ expand_repeats: false
 parallel: true
 max_processes: 12
 log:
-  file_path: logs/musif.log
+  file_path: logs/musif_extraction.log
   file_level: DEBUG
   console_level: WARN
 features:
