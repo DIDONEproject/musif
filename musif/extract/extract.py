@@ -381,7 +381,8 @@ class FeaturesExtractor:
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
-        linfo('---Analyzing scores ---')
+        linfo('--- Analyzing scores ---')
+
         musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
         score_df, parts_df = self._process_corpora(musicxml_files)
         return score_df
@@ -430,8 +431,10 @@ class FeaturesExtractor:
 
         with tqdm(total=len(musicxml_files)) as pbar:
             with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
-                futures = [executor.submit(self._process_score, musicxml_file)
-                           for musicxml_file in musicxml_files]
+                # futures = [executor.submit(self._process_score, musicxml_file)
+                #            for musicxml_file in musicxml_files]
+                iterator = executor.map(self._process_score, musicxml_files)
+                futures=list(iterator)  # collect the results in a list
                 for future in as_completed(futures):
                     score_features, score_parts_features = future.result()
                     scores_features.append(score_features)

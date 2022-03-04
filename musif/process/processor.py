@@ -86,6 +86,7 @@ class DataProcessor:
     def process_info(self, info: Union[str, DataFrame]) -> DataFrame:
         """
         Extracts the info from a directory to a csv file or from a Dataframe object. 
+        
         Parameters
         ------
         info: str
