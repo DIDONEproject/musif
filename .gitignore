@@ -15,3 +15,4 @@ failed_files.txt
 tests/data/static/features/expected_features.csv
 martiser/dataframe.csv
 build/
+features_new_total_extraction_processed.gsheet
