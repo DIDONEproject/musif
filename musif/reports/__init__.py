@@ -1,1 +1,1 @@
-from musif.reports.generate import FeaturesGenerator
+from musif.reports.generate import ReportsGenerator

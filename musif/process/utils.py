@@ -4,8 +4,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from build.lib.musif.extract.features.harmony.constants import CHORD_prefix
-from musif.config import PostProcess_Configuration
+from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
                                                       LOWEST_NOTE_INDEX)
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,

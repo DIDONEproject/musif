@@ -12,6 +12,7 @@ from musif.common.constants import COLORS, COLOR_SEQ, CSV_DELIMITER, ENCODING, R
 
 def get_file_name(file_path: str) -> str:
     file_basename = path.basename(file_path)
+    file_basename = path.join('tests',file_path)
     extension_pos = file_basename.rfind('.')
     return file_basename if extension_pos < 0 else file_basename[extension_pos]
 

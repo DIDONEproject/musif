@@ -2,14 +2,17 @@ import itertools
 import os
 
 import music21 as m21
+import pandas as pd
+import ms3
+from pandas import DataFrame
+from musif.extract.constants import PLAYTHROUGH
 
 from musif.musicxml.tempo import get_number_of_beats
-
 file_names = []
 repeat_bracket = False
 
 
-def measure_ranges(instrument_measures, init, end, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks = False):
+def measure_ranges(instrument_measures: int, init: int, end: int, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks = False):
     measures = []
     o = offset
     last_offset = 0.0 if int(init) - 6 < 0 else instrument_measures[int(init) - 6].offset
@@ -90,18 +93,35 @@ def get_repeat_elements(score, v = True):
         print("The repeat elements found in this score are: " + str(repeat_elements))
     return repeat_elements
 
-def include_beats(harmonic_analysis):
+def process_musescore_file(file_path, expand_repeats):
+    msc3_score = ms3.score.Score(file_path, logger_cfg={'level': 'ERROR'})
+    harmonic_analysis = msc3_score.mscx.expanded
+    harmonic_analysis.reset_index(inplace=True)
+    if expand_repeats:
+        mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
+        mn = pd.Series(mn, name='mc_playthrough')
+        harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
+        harmonic_analysis.rename(columns={'mc_playthrough': PLAYTHROUGH}, inplace=True)
+    else:
+        if harmonic_analysis.mn[0]==0:
+            harmonic_analysis[PLAYTHROUGH] = harmonic_analysis['mc']
+        else:
+            harmonic_analysis[PLAYTHROUGH] = harmonic_analysis['mn']
+    include_beats(harmonic_analysis)
+    return harmonic_analysis
+    
+def include_beats(harmonic_analysis: DataFrame) -> None:
     harmonic_analysis['beats']=0
-    for index, measure in enumerate(harmonic_analysis.playthrough):
+    for index, measure in enumerate(harmonic_analysis[PLAYTHROUGH].values):
         if measure<=1:
             beat = int(measure + float(harmonic_analysis.mc_onset[index])*get_number_of_beats(harmonic_analysis.timesig[index]))
         else:
-            #exception for 2/2 Time Signature
-            time_sig = 4 if harmonic_analysis.timesig[index]=='2/2' else int(harmonic_analysis.timesig[index-1][0]) 
+            time_sig = get_number_of_beats(harmonic_analysis.timesig[index-1])
             beat = int((measure-1)*time_sig+1 + harmonic_analysis.mc_onset[index]*get_number_of_beats(harmonic_analysis.timesig[index]))
         
-        harmonic_analysis['beats'][index]=beat
-def get_beat_position(beats_timesignature, number_of_beats, pos):
+        harmonic_analysis.at[index,'beats']=beat
+        
+def get_beat_position(beats_timesignature: int, number_of_beats: int, pos: int) -> float:
     if number_of_beats == beats_timesignature:
         return pos
     else:

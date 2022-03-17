@@ -3,11 +3,12 @@ import pytest
 
 from musif.extract.exceptions import ParseFileError
 from musif.extract.extract import parse_musescore_file, _cache
+from .constants import BASE_PATH, INCOMPLETE_FILE, MALFORMED_FILE
 
-test_file = path.join("data", "static", "features", "Did03M-Son_regina-1730-Sarro[1.05][0006].mscx")
-test_file_repeats = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
-test_file_repeats_same_file_different_dir = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
-malformed_file = path.join("data", "arias_test", "malformed.mscx")
+test_file = path.join(BASE_PATH, "static", "features", "Did03M-Son_regina-1730-Sarro[1.05][0006].mscx")
+test_file_repeats = path.join(BASE_PATH, "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
+test_file_repeats_same_file_different_dir = path.join(BASE_PATH, "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].mscx")
+MALFORMED_FILE = path.join(BASE_PATH, "arias_test", "malformed.mscx")
 
 
 class TestParseMusescoreFile:
@@ -56,18 +57,18 @@ class TestParseMusescoreFile:
 
         # WHEN/THEN
         with pytest.raises(ParseFileError):
-            parse_musescore_file(malformed_file)
+            parse_musescore_file(MALFORMED_FILE)
 
     def test_parse_musescore_malformed_file_not_saved_cache(self):
         # GIVEN
         _cache.clear()
         try:
-            parse_musescore_file(malformed_file)
+            parse_musescore_file(MALFORMED_FILE)
         except ParseFileError:
             pass
 
         # WHEN/THEN
-        assert _cache.get(malformed_file) is None
+        assert _cache.get(MALFORMED_FILE) is None
 
     def test_parse_musicxml_score_in_cache(self):
         # GIVEN

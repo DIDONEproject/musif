@@ -17,8 +17,9 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.constants import *
 from musif.extract.exceptions import MissingFileError, ParseFileError
-from musif.extract.utils import include_beats
+from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
+
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION,
                             split_layers)
 from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,
@@ -92,20 +93,9 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     if harmonic_analysis is not None:
         return harmonic_analysis
     try:
-        msc3_score = ms3.score.Score(file_path, logger_cfg={'level': 'ERROR'})
-        harmonic_analysis = msc3_score.mscx.expanded
-        harmonic_analysis.reset_index(inplace=True)
-        if expand_repeats:
-            mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index('mc').next)
-            mn = pd.Series(mn, name='mc_playthrough')
-            harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
-        else:
-            if harmonic_analysis.mn[0]==0:
-                harmonic_analysis['playthrough'] = harmonic_analysis.mc
-            else:
-                harmonic_analysis['playthrough'] = harmonic_analysis.mn
-        include_beats(harmonic_analysis)
+        harmonic_analysis=process_musescore_file(file_path, expand_repeats)
         _cache.put(file_path, harmonic_analysis)
+        
     except Exception as e:
         harmonic_analysis = None
         raise ParseFileError(file_path, str(e)) from e
@@ -164,7 +154,6 @@ def skip_files(obj, check_file):
             skipped.append(i.replace(obj,'').replace('\\', ""))
     if skipped: 
         pwarn('Some files were skipped because they have been already processed before: ')
-    # for i in skipped:
         print(*skipped, sep = ",\n")
         print('Total: ',len(skipped))
     return files_to_extract
@@ -223,6 +212,7 @@ class PartsExtractor:
              If any of the files/directories path inside the expected configuration doesn't exit.
         """
         self._cfg = Configuration(*args, **kwargs)
+
 
     def extract(self, obj: Union[str, List[str]], check_file: Optional[str] = None) -> List[str]:
         """
@@ -289,7 +279,7 @@ class FilesValidator:
         """
 
         self._cfg = Configuration(*args, **kwargs)
-
+        
     def validate(self) -> None:
         """
         Checks, sequentially or in parallel, if the given files are parseable. If any file has a problem, at the end
@@ -364,6 +354,10 @@ class FeaturesExtractor:
         """
         self._cfg = Configuration(*args, **kwargs)
         self.check_file = kwargs.get('check_file')
+        
+        # log_aux.console_level=
+        # log_aux.file_level=self._cfg.file_log_level
+        # log_aux.file_path=self._cfg.log_file
         
     def extract(self) -> DataFrame:
         """
@@ -443,8 +437,9 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+        
         linfo(f"\nProcessing score {musicxml_file}")
-        print(f"\nProcessing score {musicxml_file}")
+        pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)

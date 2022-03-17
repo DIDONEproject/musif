@@ -30,8 +30,8 @@ GROUPED = "grouped_analysis"
 SPLIT_PASSSIONS = "split_passionA"
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
-INSTRUMENTS_TO_KILL = "instruments_to_kill"
-SUBSTRING_TO_KILL = "substring_to_kill"
+INSTRUMENTS_TO_DELETE = "instruments_to_delete"
+SUBSTRING_TO_DELETE = "substring_to_delete"
 ENDSWITH = "columns_endswith"
 STARTSWITH = "columns_startswith"
 CONTAIN = "columns_contain"
@@ -66,8 +66,8 @@ _CONFIG_POST_FALLBACK = {
     MERGE_VOICES: True,
     CHECK_FILE: ".",
     INSTRUMENTS_TO_KEEP: [],
-    INSTRUMENTS_TO_KILL: [],
-    SUBSTRING_TO_KILL: [],
+    INSTRUMENTS_TO_DELETE: [],
+    SUBSTRING_TO_DELETE: [],
     PRESENCE: [],
     ENDSWITH: [],
     STARTSWITH: [],
@@ -197,8 +197,8 @@ class PostProcess_Configuration:
         self.unbundle_instrumentation = config_data.get(UNBUNDLE_INSTRUMENTATION, _CONFIG_POST_FALLBACK[UNBUNDLE_INSTRUMENTATION])
         self.merge_voices = config_data.get(MERGE_VOICES, _CONFIG_POST_FALLBACK[MERGE_VOICES])
         self.instruments_to_keep = config_data.get(INSTRUMENTS_TO_KEEP, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KEEP])
-        self.instruments_to_kill = config_data.get(INSTRUMENTS_TO_KILL, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_KILL])
-        self.substring_to_kill = config_data.get(SUBSTRING_TO_KILL, _CONFIG_POST_FALLBACK[SUBSTRING_TO_KILL])
+        self.instruments_to_kill = config_data.get(INSTRUMENTS_TO_DELETE, _CONFIG_POST_FALLBACK[INSTRUMENTS_TO_DELETE])
+        self.substring_to_kill = config_data.get(SUBSTRING_TO_DELETE, _CONFIG_POST_FALLBACK[SUBSTRING_TO_DELETE])
         self.delete_presence = config_data.get(PRESENCE, _CONFIG_POST_FALLBACK[PRESENCE])        
         self.columns_endswith = config_data.get(ENDSWITH, _CONFIG_POST_FALLBACK[ENDSWITH])
         self.columns_startswith = config_data.get(STARTSWITH, _CONFIG_POST_FALLBACK[STARTSWITH])
@@ -216,8 +216,8 @@ class PostProcess_Configuration:
             GROUPED: self.grouped_analysis,
             SPLIT_PASSSIONS: self.split_passionA,
             INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
-            INSTRUMENTS_TO_KILL: self.instruments_to_kill,
-            SUBSTRING_TO_KILL: self.substring_to_kill,
+            INSTRUMENTS_TO_DELETE: self.instruments_to_kill,
+            SUBSTRING_TO_DELETE: self.substring_to_kill,
             ENDSWITH: self.columns_endswith,
             STARTSWITH: self.columns_startswith,
             CONTAIN: self.columns_contain,

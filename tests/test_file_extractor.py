@@ -2,11 +2,11 @@ from os import path
 
 import pytest
 from musif.extract.extract import extract_files
+from .constants import BASE_PATH
 
-data_dir = "data"
-files_dir_test = path.join(data_dir, "arias_test")
-files_dir_test1 = path.join(data_dir, "arias_tests1")
-files_dir_test_type = path.join(data_dir, "static")
+files_dir_test = path.join(BASE_PATH, "arias_test")
+files_dir_test1 = path.join(BASE_PATH, "arias_tests1")
+files_dir_test_type = path.join(BASE_PATH, "static")
 
 file_dem1_test = path.join(files_dir_test, "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
 file_dem2_test = path.join(files_dir_test, "Dem02M-In_te-1733-Caldara[1.02][0417].xml")
@@ -45,7 +45,7 @@ class TestExtractFiles:
 
     def test_extract_files_recursive_directory(self):
         # Given
-        files_dir = data_dir
+        files_dir = BASE_PATH
         expected_files = []  # It search for .xml files, It's not recursive
 
         # When

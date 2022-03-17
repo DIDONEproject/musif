@@ -12,3 +12,4 @@ DATA_FILTERED_PARTS = "parts"
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
 VOICES_LIST = ['sop','ten','alt','bar','bbar', 'bass']
+PLAYTHROUGH='playthrough'
