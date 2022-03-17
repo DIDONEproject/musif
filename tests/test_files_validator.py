@@ -7,28 +7,25 @@ from musif.config import Configuration
 
 from musif import FilesValidator
 from musif.extract.extract import extract_files
+from tests.constants import BASE_PATH, MALFORMED_FILE, INCOMPLETE_FILE
 
-config_file = path.join("data", "static", "config.yml")
-config_file_parallel = path.join("data", "config_test", "config_parallel.yml")
-test_file = path.join("data", "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
-malformed_file = path.join("data", "arias_test", "malformed.xml")
-incomplete_file = path.join("data", "arias_test", "incomplete.xml")
+
+config_file = path.join(BASE_PATH, "static", "config.yml")
+config_file_parallel = path.join(BASE_PATH, "config_test", "config_parallel.yml")
+test_file = path.join(BASE_PATH, "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 
 
 class TestFilesValidator:
 
     # configurations tests
+    # Given
+    expected = read_object_from_yaml_file(config_file)
 
+    # When
+    extractor = FilesValidator(config_file)
 
-    def test_config_passed_as_path(self):
-        # Given
-        expected = read_object_from_yaml_file(config_file)
-
-        # When
-        extractor = FilesValidator(config_file)
-
-        # Then
-        assert expected == extractor._cfg.to_dict()
+    # Then
+    assert expected == extractor._cfg.to_dict()
 
 
     def test_config_passed_as_keywords(self):
@@ -112,7 +109,7 @@ class TestFilesValidator:
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate(malformed_file)
+        validator.validate(MALFORMED_FILE)
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
@@ -122,7 +119,7 @@ class TestFilesValidator:
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate([malformed_file, test_file])
+        validator.validate([MALFORMED_FILE, test_file])
         out, err = capsys.readouterr()
 
         # Then
@@ -133,7 +130,7 @@ class TestFilesValidator:
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate([malformed_file, malformed_file])
+        validator.validate([MALFORMED_FILE, MALFORMED_FILE])
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 2
@@ -145,7 +142,7 @@ class TestFilesValidator:
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate(incomplete_file)
+        validator.validate(INCOMPLETE_FILE)
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
@@ -155,7 +152,7 @@ class TestFilesValidator:
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate([incomplete_file, test_file])
+        validator.validate([INCOMPLETE_FILE, test_file])
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 1
@@ -165,7 +162,7 @@ class TestFilesValidator:
         validator = FilesValidator(config_file)
 
         # When
-        validator.validate([incomplete_file, incomplete_file])
+        validator.validate([INCOMPLETE_FILE, INCOMPLETE_FILE])
         out, err = capsys.readouterr()
         # Then
         assert err.count('\nERROR:\tThat seems to be an invalid path!') == 2

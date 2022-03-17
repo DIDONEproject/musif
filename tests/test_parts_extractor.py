@@ -7,16 +7,14 @@ from musif.config import Configuration
 from musif.extract.exceptions import ParseFileError
 from musif.extract.extract import PartsExtractor, _cache
 
-config_file = path.join("data", "static", "config.yml")
-empty_dir = path.join("data", "config_test")
+from .constants import BASE_PATH, CONFIG_FILE, INCOMPLETE_FILE, MALFORMED_FILE
 
-directory_tests = path.join("data", "arias_tests1")
-first_file_dir = path.join("data", "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
-first_file_same_file_different_dir = path.join("data", "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
-second_file_dir = path.join("data", "arias_test", "Dem02M-In_te-1733-Caldara[1.02][0417].xml")
+empty_dir = path.join(BASE_PATH, "config_test")
 
-incomplete_file = path.join("data", "arias_test", "incomplete.xml")
-malformed_file = path.join("data", "arias_test", "malformed.xml")
+directory_tests = path.join(BASE_PATH, "arias_tests1")
+first_file_dir = path.join(BASE_PATH, "arias_test", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
+first_file_same_file_different_dir = path.join(BASE_PATH, "arias_tests1", "Dem01M-O_piu-1735-Leo[1.01][0430].xml")
+second_file_dir = path.join(BASE_PATH, "arias_test", "Dem02M-In_te-1733-Caldara[1.02][0417].xml")
 
 first_content = ['obI', 'obII', 'hnI', 'hnII', 'ten', 'vnI', 'vnII', 'va', 'bs']
 first_content_no_split = ['ob', 'hn', 'ten', 'vnI', 'vnII', 'va', 'bs']
@@ -29,18 +27,18 @@ class TestPartsExtractor:
 
     def test_config_passed_as_path(self):
         # GIVEN
-        expected = read_object_from_yaml_file(config_file)
+        expected = read_object_from_yaml_file(CONFIG_FILE)
 
         # WHEN
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # THEN
         assert expected == extractor._cfg.to_dict()
 
     def test_config_passed_as_keywords(self):
         # GIVEN
-        config_dict = Configuration(config_file).to_dict()
-        expected = read_object_from_yaml_file(config_file)
+        config_dict = Configuration(CONFIG_FILE).to_dict()
+        expected = read_object_from_yaml_file(CONFIG_FILE)
 
         # WHEN
         extractor = PartsExtractor(**config_dict)
@@ -50,8 +48,8 @@ class TestPartsExtractor:
 
     def test_config_passed_as_configuration_object(self):
         # GIVEN
-        config = Configuration(config_file)
-        expected = read_object_from_yaml_file(config_file)
+        config = Configuration(CONFIG_FILE)
+        expected = read_object_from_yaml_file(CONFIG_FILE)
 
         # WHEN
         extractor = PartsExtractor(config)
@@ -61,8 +59,8 @@ class TestPartsExtractor:
 
     def test_config_passed_as_dict(self):
         # GIVEN
-        config_dict = Configuration(config_file).to_dict()
-        expected = read_object_from_yaml_file(config_file)
+        config_dict = Configuration(CONFIG_FILE).to_dict()
+        expected = read_object_from_yaml_file(CONFIG_FILE)
 
         # WHEN
         extractor = PartsExtractor(config_dict)
@@ -82,7 +80,7 @@ class TestPartsExtractor:
 
         # WHEN / THEN
         with pytest.raises(ValueError):
-            PartsExtractor(config_file, "another argument")
+            PartsExtractor(CONFIG_FILE, "another argument")
 
     def test_config_wrong_type_argument(self):
         # GIVEN
@@ -106,7 +104,7 @@ class TestPartsExtractor:
     def test_basic_parts_extractor(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # WHEN
         parts = extractor.extract(first_file_dir)
@@ -117,7 +115,7 @@ class TestPartsExtractor:
     def test_basic_parts_extractor_without_split(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file, split_keywords=[])
+        extractor = PartsExtractor(CONFIG_FILE, split_keywords=[])
 
         # WHEN
         parts = extractor.extract(first_file_dir)
@@ -128,7 +126,7 @@ class TestPartsExtractor:
     def test_extract_directory(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # WHEN
         parts = extractor.extract(directory_tests)
@@ -139,7 +137,7 @@ class TestPartsExtractor:
     def test_extract_files_same_parts(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
         files = [first_file_dir, first_file_same_file_different_dir]
         # If it's given the same path it will just load from cache the first one
 
@@ -152,7 +150,7 @@ class TestPartsExtractor:
     def test_extract_different_parts(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
         files = [first_file_dir, second_file_dir]
 
         # WHEN
@@ -164,7 +162,7 @@ class TestPartsExtractor:
     def test_extract_empty_directory(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # WHEN
         parts = extractor.extract(empty_dir)
@@ -175,26 +173,26 @@ class TestPartsExtractor:
     def test_extract_malformed_file(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # WHEN/THEN
         with pytest.raises(ParseFileError):
-            extractor.extract(malformed_file)
+            extractor.extract(MALFORMED_FILE)
 
     def test_extract_incomplete_file(self):
         # GIVEN
         _cache.clear()
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # WHEN/THEN
         with pytest.raises(ParseFileError):
-            extractor.extract(incomplete_file)
+            extractor.extract(INCOMPLETE_FILE)
 
     # ---------------PATHS VALUES---------------
 
     def test_extract_wrong_type(self):
         # GIVEN
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
         files = 0
 
         # WHEN/THEN
@@ -203,7 +201,7 @@ class TestPartsExtractor:
 
     def test_extract_wrong_type_empty(self):
         # GIVEN
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
 
         # WHEN/THEN
         with pytest.raises(TypeError):
@@ -211,7 +209,7 @@ class TestPartsExtractor:
 
     def test_extract_wrong_file(self):
         # GIVEN
-        extractor = PartsExtractor(config_file)
+        extractor = PartsExtractor(CONFIG_FILE)
         files = "wrong_file"
 
         # WHEN/THEN

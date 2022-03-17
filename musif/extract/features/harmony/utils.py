@@ -58,11 +58,10 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     for i, key in enumerate(keys):
         if key != last_key and i < numberofmeasures:
             #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
-            n_beats = get_number_of_beats(time_signatures[i - 1])
+            n_beats = int(get_number_of_beats(time_signatures[i - 1]))
 
             if last_key in key_measures :
-                # num_measures, done = compute_number_of_measures(done, starting_measure, measures[i - 1], measures[i], mc_onsets[i - 1], n_beats)
-                num_measures, done = compute_number_of_measures(done, starting_measure, new_measures[i - 1], new_measures[i], mc_onsets[i - 1], n_beats)
+                num_measures, done = compute_number_of_measures(done, starting_measure, new_measures[i - 1], new_measures[i], mc_onsets[i], n_beats)
                 key_measures[last_key] += num_measures
 
             last_key = key
@@ -75,7 +74,6 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     key_measures[last_key] += num_measures
 
     try:
-            
         assert not (new_measures[0] == 0 and round(sum(list(key_measures.values()))) != new_measures[i] + 1)
     except AssertionError as e:
         perr('There was an error counting the measures!: ', e)
@@ -102,18 +100,19 @@ def compute_number_of_measures(done, starting_measure, previous_measure, measure
     starting_measure += done
     if measure == previous_measure: #We are in the same measure, inside of it
 
-        #TODO: hacer el cálculo concreto con el número de beats(?)
+        #
         measures = previous_measure - 1 - starting_measure
-
+        beat=current_onset.numerator
         # habrá que sumarle current_beat / max_beats. Antes convertir current_beat en numérico
         if type(current_onset) == str:
             numbers = current_onset.split('.')
             first = int(numbers[0])
             second = numbers[1].split('/')
             second = int(second[0]) / int(second[1])
-            current_onset = first + second
+            beat = first + second
 
-        return measures + (current_onset / num_beats), (current_onset / num_beats)
+        return measures + beat/num_beats, beat/num_beats
+    
     else:
         if measure - previous_measure > 1: #Change occurs in a change of measures
             return previous_measure - starting_measure + (measure - 1 - previous_measure), 0 ###WTF IS DIS
@@ -181,9 +180,9 @@ def get_keyareas(lausanne_table, major = True):
 
     key_measures = get_measures_per_key(list(set(keys)), measures, keys, beats, time_signatures)
 
-    total_measures = sum(list(key_measures.values()))
-    key_measures_percentage = {kc:float(key_measures[kc]/total_measures) for kc in key_measures} #ASI mejor?
-    # key_measures = {kc:key_measures[kc]/total_measures for kc in key_measures}
+    total_measures = float(sum(list(key_measures.values())))
+    key_measures_percentage = {kc:float(key_measures[kc]/total_measures) for kc in key_measures} 
+    # 
     
     keyGrouping1_measures = get_measures_per_key(list(set(g1)), measures, g1, beats, time_signatures)
     keyGrouping1_measures = {kc:keyGrouping1_measures[kc]/sum(list(keyGrouping1_measures.values())) for kc in keyGrouping1_measures}
@@ -197,7 +196,7 @@ def get_keyareas(lausanne_table, major = True):
     # keyareas = {'TotalNumberKeyAreas': total_key_areas, 'TotalNumberMeasures': int(total_measures) }
     keyareas={}
     for key in number_blocks_keys:
-        keyareas[KEY_prefix + key + KEY_PERCENTAGE ] = float(key_measures_percentage[key]) #procentaje de compases de cada I, i, etc. en el total
+        keyareas[KEY_prefix + key + KEY_PERCENTAGE] = float(key_measures_percentage[key]) #procentaje de compases de cada I, i, etc. en el total
         keyareas[KEY_prefix + KEY_MODULATORY + key] = number_blocks_keys[key]/total_key_areas
 
     return keyareas
@@ -315,7 +314,7 @@ def get_additions(lausanne_table):
         a = str(a)
         if a == '+9':
             additions_dict[ADDITIONS_9] = c
-        elif a in ['4', '6', '94', '4.0', '6.0', '94.0']:
+        elif a in ['4', '6', '64', '4.0', '6.0', '64.0']:
             additions_dict[ADDITIONS_4_6_64] += c
         elif '+' in a:
             additions_dict[OTHERS_AUG] += c

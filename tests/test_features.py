@@ -9,10 +9,10 @@ from musif import FeaturesExtractor
 from musif.common.utils import read_dicts_from_csv
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, NUMBER_OF_PARTS
+from tests.constants import BASE_PATH, DATA_STATIC_DIR
 
-data_static_dir = path.join("data", "static")
-config_path = path.join(data_static_dir, "config.yml")
-data_features_dir = path.join(data_static_dir, "features")
+config_path = path.join(DATA_STATIC_DIR, "config.yml")
+data_features_dir = path.join(DATA_STATIC_DIR, "features")
 reference_file_path = path.join(data_features_dir, "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 expected_features_file_path = path.join(data_features_dir, "expected_features.csv")
 
@@ -28,12 +28,11 @@ def expected_data():
     expected_data = read_dicts_from_csv(expected_features_file_path)[0]
     yield expected_data
 
-
 class TestFeatures:
 
     def test_columns_match(self, actual_data: pd.DataFrame, expected_data: dict):
         # Given
-
+        
         # When
         errors = ""
         not_in_actual_data = ""
@@ -54,9 +53,6 @@ class TestFeatures:
         assert len(errors) == 0, errors
 
     def test_values_match(self, actual_data: pd.DataFrame, expected_data: dict):
-        # Given
-
-        # When
         errors = ""
         for col in actual_data.columns:
             data_type = str(actual_data.dtypes[col])
@@ -83,6 +79,7 @@ def format_value(value, data_type: str):
         ...
     return None
 
+
 def remove_columns_not_being_tested(df: pd.DataFrame) -> None:
     cols_to_remove = []
     part_feature_pattern = ".*" + get_part_prefix(".+")
@@ -91,6 +88,9 @@ def remove_columns_not_being_tested(df: pd.DataFrame) -> None:
     for col in df.columns:
         # Keep all scoring features
         if col.endswith(NUMBER_OF_FILTERED_PARTS) or col.endswith(NUMBER_OF_PARTS):
+            continue
+        #Exception for texture
+        if col=='PartVoice__PartVnI__Texture':
             continue
         col_without_part = col.replace(get_part_prefix("VnI"), "")
         col_without_part = col_without_part.replace(get_part_prefix("Sop"), "")

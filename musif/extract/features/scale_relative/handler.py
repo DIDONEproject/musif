@@ -5,7 +5,6 @@ from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale_relative.utils import get_emphasised_scale_degrees_relative
-from musif.logs import lerr
 from .constants import *
 from ..core.constants import DATA_NOTES
 

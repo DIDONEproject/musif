@@ -1,5 +1,5 @@
 import sys
-from typing import Optional, Union
+from typing import Union
 
 import pandas as pd
 from musif.config import PostProcess_Configuration
@@ -68,7 +68,7 @@ class DataProcessor:
         Saves final information to a csv file 
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, info: Union[str, DataFrame], *args, **kwargs):
         """
         Parameters
         ----------
@@ -80,7 +80,9 @@ class DataProcessor:
             Either a path to a .csv file containing the information either a DataFrame object fromm FeaturesExtractor
         """
         self._post_config=PostProcess_Configuration(*args, **kwargs)
-        self.info=kwargs.get('info')
+        # self.info=kwargs.get('info')
+        self.info=info
+    
         self.data = self.process_info(self.info)
 
     def process_info(self, info: Union[str, DataFrame]) -> DataFrame:
@@ -101,6 +103,7 @@ class DataProcessor:
         ------
             Dataframe with the information from either the file or the previous DataFrame.
         """
+        
         try:
             if isinstance(info, str):
                 pinfo('\nReading csv file...')
@@ -114,10 +117,10 @@ class DataProcessor:
             elif isinstance(info, DataFrame):
                 pinfo('\nProcessing DataFrame...')
                 return df
+            else:
+                perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
         except FileNotFoundError:
             return pd.DataFrame()
-        else:
-            perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
 
     def process(self) -> DataFrame:
         """

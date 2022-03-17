@@ -1,30 +1,29 @@
 from collections import Counter
 from itertools import chain
-from typing import List, Union
+from typing import List, Union, Tuple	
 
 import pandas as pd
 import roman
 from music21 import pitch, scale
 from music21.note import Note
 from pandas.core.frame import DataFrame
-from build.lib.musif.logs import pinfo
 from musif.common.sort import sort_dict
-from copy import deepcopy
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import (get_function_first,
                                                   get_function_second)
 from musif.logs import pwarn
+from musif.musicxml.tempo import get_number_of_beats
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 
 
-def get_keys_functions(list_keys, mode):
+def get_keys_functions(list_keys: list, mode: str) -> Tuple[str, str]:
     result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
     first_function = [result_dict[t] for t in list_keys]
     second_function = [get_function_second(g1) for g1 in first_function]
     return first_function, second_function
     
-def continued_sections(sections: list, mc):
+def continued_sections(sections: list, mc: dict) -> list:
     extended_sections = []
     repeated_measures = Counter(mc)
     for i, c in enumerate(repeated_measures):
@@ -34,7 +33,7 @@ def continued_sections(sections: list, mc):
 def IsAnacrusis(harmonic_analysis):
     return harmonic_analysis.mn.dropna().tolist()[0] == 0
     
-def get_tonality_per_beat(harmonic_analysis, tonality):
+def get_tonality_per_beat(harmonic_analysis: DataFrame, tonality: str):
     tonality_map = {}
     for index, degree in enumerate(harmonic_analysis.localkey):
         beat = harmonic_analysis.beats[index]
@@ -57,29 +56,31 @@ def fill_tonality_map(tonality_map):
 def get_emphasised_scale_degrees_relative(notes_list: list, score_data: dict) -> List[list]:
     harmonic_analysis, tonality = extract_harmony(score_data)
     tonality_map = get_tonality_per_beat(harmonic_analysis, tonality)
-    emph_degrees = get_emphasized_degrees(notes_list, tonality_map)
+    emph_degrees = get_emphasized_degrees(notes_list, tonality_map, harmonic_analysis)
     return emph_degrees
 
-def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
+def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict, harmonic_analysis)-> dict:
     local_tonality=''
     notes_per_degree_relative = {
         to_full_degree(degree, accidental): 0
         for accidental in ["", "sharp", "flat"]
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
-    if notes_list[-1].offset > len(tonality_map):
-        pwarn('Misunderstanding between harmonic beats and notes beats! Fixed by redifining harmonic beats.\n')
-        rate=round(notes_list[-1].offset/len(tonality_map))
-        for beat in range(1, max(list(tonality_map.keys()))):
-            tonality_map[beat*rate]=tonality_map[beat]
-        fill_tonality_map(tonality_map)
-        
+    # if notes_list[-1].offset > len(tonality_map):
+        # # pwarn('Misunderstanding between harmonic beats and notes beats! Fixed by redifining harmonic beats.\n')
+        # rate=round(notes_list[-1].offset/len(tonality_map))
+        # for beat in range(1, max(list(tonality_map.keys()))):
+        #     tonality_map[beat*rate]=tonality_map[beat]
+        # fill_tonality_map(tonality_map)
+
     for j, note in enumerate(notes_list):
         if note.isChord:
           note = note[0]
 
-        note_name = note.name
-        note_offset = int(note.offset) + 1 #music21 starts offsets in 0
+        if note.measureNumber:
+            note_offset=round(list(harmonic_analysis[harmonic_analysis['playthrough']==note.measureNumber].beats)[0]-1 + note.beat)
+        else:
+            note_offset=note.offset
 
         if note_offset is None:
             note_offset = notes_list[j-1].offset
@@ -87,7 +88,7 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict)-> dict:
         if note_offset in tonality_map:
             local_tonality = tonality_map[note_offset]
 
-        degree_value = get_note_degree(local_tonality, note_name)
+        degree_value = get_note_degree(local_tonality, note.name)
 
         if str(degree_value) not in notes_per_degree_relative:
             notes_per_degree_relative[str(degree_value)] = 1
