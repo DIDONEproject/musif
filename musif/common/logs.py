@@ -63,7 +63,8 @@ def create_logger(
     file_log_level: str = None,
     console_log_level: str = None
 ) -> Logger:
-    logger = logging.getLogger(logger_name)
+    # logger = logging.getLogger(logger_name)
+    logger = logging.getLogger()
     logger.setLevel(LEVEL_DEBUG)
     logger.propagate = False
     for handler in logger.handlers:

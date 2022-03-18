@@ -10,7 +10,6 @@ if __name__ == "__main__":
 
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
-    print(sys.path)
 
     # data_dir = r'../Corpus_175/xml/Ale02M-Vedrai_con-1772-Anfossi[1.02][0811].xml'
     # musescore_dir =  r'../Corpus_175/musescore'
