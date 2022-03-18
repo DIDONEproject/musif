@@ -4,6 +4,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+from musif.config import INSTRUMENTS_TO_DELETE, SUBSTRING_TO_DELETE
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
                                                       LOWEST_NOTE_INDEX)
@@ -28,7 +29,7 @@ def replace_nans(df):
             df[col]= df[col].fillna(0)
 
 def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
-    multiple_voices=df[df[VOICES].str.contains(',')]
+    multiple_voices = df[df[VOICES].str.contains(',').notna()]
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculatng averages.')
     voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
     for index in tqdm(multiple_voices.index):
@@ -104,10 +105,11 @@ def delete_previous_items(df: DataFrame) -> None:
         df.drop(index, axis=0, inplace=True)
 
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
-        for inst in config['instruments_to_kill']:
+        for inst in config[INSTRUMENTS_TO_DELETE]:
+            
             data.drop([i for i in data.columns if 'Part'+inst in i], axis = 1, inplace=True)
             
-        for substring in config['substring_to_kill']:
+        for substring in config[SUBSTRING_TO_DELETE]:
             data.drop([i for i in data.columns if substring in i], axis = 1, inplace=True)
             
         #Delete Vn when it is alone

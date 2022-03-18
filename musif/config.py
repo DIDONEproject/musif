@@ -1,7 +1,6 @@
 import multiprocessing
 from glob import glob
 from os import path
-from pickle import FALSE
 
 from musif import internal_data
 from musif.common.logs import create_logger

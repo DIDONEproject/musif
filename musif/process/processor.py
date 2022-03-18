@@ -80,9 +80,7 @@ class DataProcessor:
             Either a path to a .csv file containing the information either a DataFrame object fromm FeaturesExtractor
         """
         self._post_config=PostProcess_Configuration(*args, **kwargs)
-        # self.info=kwargs.get('info')
         self.info=info
-    
         self.data = self.process_info(self.info)
 
     def process_info(self, info: Union[str, DataFrame]) -> DataFrame:
@@ -108,7 +106,7 @@ class DataProcessor:
             if isinstance(info, str):
                 pinfo('\nReading csv file...')
                 if not os.path.exists(info):
-                    raise FileNotFoundError("The .csv file doesn't exists!")
+                    raise FileNotFoundError(f"The {info}.csv file doesn't exists!")
                 self.destination_route=info.replace('.csv','')
                 df = pd.read_csv(info, low_memory=False, sep=',', encoding_errors='replace')
                 df[FILE_NAME].to_csv(self._post_config.check_file, index=False)
@@ -119,6 +117,7 @@ class DataProcessor:
                 return df
             else:
                 perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
+                raise FileNotFoundError
         except FileNotFoundError:
             return pd.DataFrame()
 
