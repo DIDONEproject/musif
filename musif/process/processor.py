@@ -106,7 +106,7 @@ class DataProcessor:
             if isinstance(info, str):
                 pinfo('\nReading csv file...')
                 if not os.path.exists(info):
-                    raise FileNotFoundError(f"The {info}.csv file doesn't exists!")
+                    raise FileNotFoundError(f"The {info} file doesn't exists!")
                 self.destination_route=info.replace('.csv','')
                 df = pd.read_csv(info, low_memory=False, sep=',', encoding_errors='replace')
                 df[FILE_NAME].to_csv(self._post_config.check_file, index=False)

@@ -18,7 +18,7 @@ from musif.extract.common import filter_parts_data
 from musif.extract.constants import *
 from musif.extract.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import process_musescore_file
-from musif.logs import ldebug, lerr, linfo, llog, lwarn, pdebug, perr, pinfo, pwarn
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION,
                             split_layers)
@@ -356,11 +356,9 @@ class FeaturesExtractor:
         """
         self._cfg = Configuration(*args, **kwargs)
         self.check_file = kwargs.get('check_file')
-        self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
-        self.logger.start()
-        # log_aux.console_level=
-        # log_aux.file_level=self._cfg.file_log_level
-        # log_aux.file_path=self._cfg.log_file
+        # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
+        # self.logger.start()
+
         
     def extract(self) -> DataFrame:
         """
@@ -440,7 +438,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        self.logger.log(f"\nProcessing score {musicxml_file}", self._cfg.file_log_level)  
+        linfo(f"\nProcessing score {musicxml_file}", self._cfg.file_log_level)  
         pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
