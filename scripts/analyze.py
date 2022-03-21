@@ -12,10 +12,10 @@ if __name__ == "__main__":
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     # check_file = 'parsed_files_total.csv'
     check_file=None
-    name = "features"
+    name = "features_new_total"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     
-    dest_path=name+"_extraction.csv"
+    dest_path=name+"_extraction_rotooo.csv"
     # df.to_csv(dest_path, index=False)
     p=DataProcessor(dest_path, "scripts/post_process.yml", merge_voices=True)
     p.process()

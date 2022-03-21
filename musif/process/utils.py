@@ -25,12 +25,13 @@ from .constants import PRESENCE, voices_list_prefixes
 
 def replace_nans(df):
     for col in df.columns:
-        if '_Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or '_Degree' in col or (TRIMMED_INTERVALLIC_MEAN and PRESENCE and '_Dyn') in col:
+        if 'Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or '_Degree' in col or (TRIMMED_INTERVALLIC_MEAN and PRESENCE and '_Dyn') in col:
             df[col]= df[col].fillna(0)
 
 def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
-    multiple_voices = df[df[VOICES].str.contains(',').notna()]
-    pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculatng averages.')
+    df = df[df[VOICES].notna()]
+    multiple_voices = df[df[VOICES].str.contains(',')]
+    pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages.')
     voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
     for index in tqdm(multiple_voices.index):
         pinfo(f'\nMerging dueto/trieto at index {index}')
@@ -67,7 +68,7 @@ def merge_single_voices(df: DataFrame, generic_sound_voice_prefix: str) -> None:
                 if formatted_col in df:
                     df[formatted_col].fillna(df[col], inplace=True)
                 else:
-                    df[formatted_col]=df[col]
+                    df[formatted_col] = df[col]
                 df.drop(col, axis=1, inplace=True)
                 
 def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame) -> None:

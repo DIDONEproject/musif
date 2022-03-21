@@ -1,7 +1,5 @@
 import logging
-from logging import Logger#, getLogger
-from multiprocessing import get_logger
-
+from logging import Logger, getLogger
 
 from musif.common.constants import LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEVEL_INFO, \
     LEVEL_WARNING
