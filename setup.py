@@ -31,7 +31,7 @@ setup(
         "roman==3.3",
         "pandas",
         "numpy",
-        "music21==6.7.1",
+        "music21>=6.7.1",
         "nltk==3.5",
         "tqdm==4.56.0",
         "xlrd==2.0.1",
@@ -50,5 +50,6 @@ setup(
             "melodic-analysis=musif.scripts.melodic_analysis:main",
         ],
     },
-    python_requires=">=3.6",
+    python_requires=">=3.7",
+    packages=['internal_data']
 )
