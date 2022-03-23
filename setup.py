@@ -15,6 +15,8 @@ setup(
     long_description_content_type="text/markdown",
     url="git@github.com:DIDONEproject/musiF.git",
     packages=find_packages(),
+    package_dir={'internal_data': 'musif/internal_data'},
+    package_data={'': [ '*.json', '*.csv']},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -51,5 +53,4 @@ setup(
         ],
     },
     python_requires=">=3.7",
-    packages=['internal_data']
 )
