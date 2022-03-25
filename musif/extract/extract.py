@@ -426,10 +426,9 @@ class FeaturesExtractor:
 
         with tqdm(total=len(musicxml_files)) as pbar:
             with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
-                # futures = [executor.submit(self._process_score,  musicxml_file)
-                #            for musicxml_file in musicxml_files]
-                iterator = executor.map(self._process_score, musicxml_files)
-                futures=list(iterator)  # collect the results in a list
+                futures = [executor.submit(self._process_score,  musicxml_file) for musicxml_file in musicxml_files]
+                # iterator = executor.map(self._process_score, musicxml_files)
+                # futures=list(iterator)  # collect the results in a list
                 for future in as_completed(futures):
                     score_features, score_parts_features = future.result()
                     scores_features.append(score_features)
@@ -438,7 +437,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        linfo(f"\nProcessing score {musicxml_file}", self._cfg.file_log_level)  
+        # linfo(f"\nProcessing score {musicxml_file}")  
         pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
