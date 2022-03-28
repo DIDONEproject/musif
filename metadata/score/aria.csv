@@ -1300,23 +1300,163 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1299,AB,Erissena,Female,Female lover 2,Mannheim,Empire
 1300,Dal segno,Timagene,Male,Antagonist,Mannheim,Empire
 1301,ABAB,Poro,Male,Male lover 1,Venice,Italy
-1302,,,Male,,,
-1303,,,Male,,,
-1304,,,Male,,,
-1305,,,Male,,,
-1306,,,Male,,,
-1307,,,Male,,,
-1308,,,Male,,,
-1309,,,Male,,,
-1310,,,Male,,,
-1311,,,Male,,,
-1312,,,Male,,,
-1313,,,Male,,,
-1314,,,Male,,,
-1315,,,Male,,,
-1316,,,Male,,,
-1317,,,Male,,,
-1318,,,Male,,,
+1302,ABA,Cleofide,Female,Female lover 1,Mannheim,Empire
+1303,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Mannheim,Empire
+1304,Dal segno,Poro,Male,Male lover 1,Mannheim,Empire
+1305,ABA,Alessandro,Male,Male lover 2,Venice,Italy
+1306,Dal segno,Erissena,Female,Female lover 2,Venice,Italy
+1307,A,Poro,Male,Male lover 1,Venice,Italy
+1308,ABA,Cleofide,Female,Female lover 1,Venice,Italy
+1309,AB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Venice,Italy
+1310,AA,Erissena,Female,Female lover 2,Venice,Italy
+1311,Da capo,Gandarte,Male,Male lover 3,Brunswich,Empire
+1312,Dal segno,Poro,Male,Male lover 1,Brunswich,Empire
+1313,Dal segno,Timagene,Male,Antagonist,Brunswich,Empire
+1314,Da capo,Gandarte,Male,Male lover 3,Brunswich,Empire
+1315,Dal segno,Poro,Male,Male lover 1,Mannheim,Empire
+1316,Dal segno,Poro,Male,Male lover 1,Reggio Emilia,Italy
+1317,A,Poro,Male,Male lover 1,Reggio Emilia,Italy
+1318,ABA,Cleofide,Female,Female lover 1,Mannheim,Empire
+1319,AA,Cleofide,Female,Female lover 1,Mannheim,Empire
+1320,ABA,Gandarte,Male,Male lover 3,Mannheim,Empire
+1321,ABA,Poro,Male,Male lover 1,Venice,Italy
+1322,AA,Cleofide,Female,Female lover 1,Venice,Italy
+1323,Dal segno,Poro,Male,Male lover 1,Venice,Italy
+1324,ABA,Alessandro,Male,Male lover 2,Venice,Italy
+1325,AA,Alessandro,Male,Male lover 2,Venice,Italy
+1326,ABA,Poro,Male,Male lover 1,Venice,Italy
+1327,Dal segno,Alessandro,Male,Male lover 2,Reggio Emilia,Italy
+1328,Dal segno,Timagene,Male,Antagonist,Reggio Emilia,Italy
+1329,Dal segno,Poro,Male,Male lover 1,Reggio Emilia,Italy
+1330,Dal segno,Cherinto,Male,Male lover 2,-,-
+1331,Dal segno,Alessandro,Male,Male lover 2,Brunswich,Empire
+1332,Da capo,Poro,Male,Male lover 1,Brunswich,Empire
+1333,Da capo,Alessandro,Male,Male lover 2,Brunswich,Empire
+1334,Da capo,Alessandro,Male,Male lover 2,Brunswich,Empire
+1335,Da capo,Poro,Male,Male lover 1,Brunswich,Empire
+1336,Da capo,Gandarte,Male,Male lover 3,Brunswich,Empire
+1337,Da capo,Erissena,Female,Female lover 2,Brunswich,Empire
+1338,A-B,Cleofide,Female,Female lover 1,Venice,Italy
+1339,AA,Poro,Male,Male lover 1,Reggio Emilia,Italy
+1340,ABA,Erissena,Female,Female lover 2,Reggio Emilia,Italy
+1341,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
+1342,Dal segno,Poro,Male,Male lover 1,Naples,Italy
+1343,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
+1344,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
+1345,Dal segno,Poro,Male,Male lover 1,Reggio Emilia,Italy
+1346,Dal segno,Erissena,Female,Female lover 2,Reggio Emilia,Italy
+1347,Da capo,Timagene,Male,Antagonist,Brunswich,Empire
+1348,Dal segno,Erissena,Female,Female lover 2,Mannheim,Empire
+1349,Dal segno,Timagene,Male,Antagonist,Naples,Italy
+1350,A,Poro,Male,Male lover 1,Naples,Italy
+1351,Dal segno,Poro,Male,Male lover 1,Naples,Italy
+1352,Da capo,Cleofide,Female,Female lover 1,Reggio Emilia,Italy
+1353,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Reggio Emilia,Italy
+1354,Dal segno,Alessandro,Male,Male lover 2,Reggio Emilia,Italy
+1355,Dal segno,Timagene,Male,Antagonist,Reggio Emilia,Italy
+1356,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Brunswich,Empire
+1357,,,Male,,,
+1358,,,Male,,,
+1359,,,Male,,,
+1360,,,Male,,,
+1361,,,Male,,,
+1362,,,Male,,,
+1363,,,Male,,,
+1364,,,Male,,,
+1365,,,Male,,,
+1366,,,Male,,,
+1367,,,Male,,,
+1368,,,Male,,,
+1369,,,Male,,,
+1370,,,Male,,,
+1371,,,Male,,,
+1372,,,Male,,,
+1373,,,Male,,,
+1374,,,Male,,,
+1375,,,Male,,,
+1376,,,Male,,,
+1377,,,Male,,,
+1378,,,Male,,,
+1379,,,Male,,,
+1380,,,Male,,,
+1381,,,Male,,,
+1382,,,Male,,,
+1383,,,Male,,,
+1384,,,Male,,,
+1385,,,Male,,,
+1386,,,Male,,,
+1387,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
 ,,,Male,,,
 ,,,Male,,,
 ,,,Male,,,
