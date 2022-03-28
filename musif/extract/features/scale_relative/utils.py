@@ -77,7 +77,7 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict, harmonic_
         if note.isChord:
           note = note[0]
 
-        if note.measureNumber:
+        if note.measureNumber in list(harmonic_analysis['playthrough']):
             note_offset=round(list(harmonic_analysis[harmonic_analysis['playthrough']==note.measureNumber].beats)[0]-1 + note.beat)
         else:
             note_offset=note.offset
