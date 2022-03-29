@@ -25,6 +25,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     old_beat=0
     dyn = False
     first_silence=False
+    beats_timesignature='4/4'
 
     for measure in part_data["measures"]:
         measure_elements = list(measure.elements)
