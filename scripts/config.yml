@@ -3,8 +3,8 @@ metadata_id_col: AriaId
 data_dir: ../../Corpus/xml
 musescore_dir: ../../Corpus/musescore
 expand_repeats: false
-parallel: true
-max_processes: 8
+parallel: false
+max_processes: 12
 log:
   file_path: logs/musif.log
   file_level: DEBUG
@@ -32,14 +32,15 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - woodwind
   - brass
   - wind
+  - flute
 parts_filter:
-  - vnI
-  - vnII
-  - va
-  - bs
-  - sop
-  - ten
-  - alt
-  - bar
-  - bass
-  - bbar
+  # - vnI
+  # - vnII
+  # - va
+  # - bs
+  # - sop
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar
