@@ -11,7 +11,7 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale02M-Vedrai_con-1768-Sacchini[1.02][1189].xml'
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale05M-O_sugli-1740-Caballone[1.05][1139].xml'
     
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
