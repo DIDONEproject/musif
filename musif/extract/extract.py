@@ -540,7 +540,7 @@ class FeaturesExtractor:
                 module.update_part_objects(score_data, part_data, self._cfg, part_features)
             except Exception as e:
                 score_name=score_data['file']
-                perr(f'An ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
+                perr(f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
                 break
 
     def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict],
@@ -550,4 +550,4 @@ class FeaturesExtractor:
             module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
         except Exception as e:
             score_name=score_data['file']
-            perr(f'An ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
+            perr(f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
