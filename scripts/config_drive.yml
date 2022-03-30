@@ -8,7 +8,7 @@ parallel: true
 max_processes: 12
 log:
   file_path: logs/musif_extraction.log
-  file_level: DEBUG
+  file_level: INFO
   console_level: WARN
 features:
   - scoring
@@ -18,18 +18,18 @@ features:
   - core
   - composer
   - librettist
-  - ambitus
-  - interval
-  - tempo
-  - density
-  - texture
-  - harmony
-  - lyrics
-  - scale
-  - scale_relative
-  - key
+  # - ambitus
+  # - interval
+  # - tempo
+  # - density
+  # - texture
+  # - harmony
+  # - lyrics
+  # - scale
+  # - scale_relative
+  # - key
   - dynamics
-  - rhythm
+  # - rhythm
   
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
