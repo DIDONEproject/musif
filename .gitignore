@@ -9,8 +9,14 @@ reports
 ./*.csv
 __pycache__
 raw_files
-logs
 failed_files.txt
-martiser/dataframe.csv
-build/
 features_new_total_extraction_processed.gsheet
+logs/musif_extraction.log.2022-03-07
+logs/musif_test.log.2022-03-03
+logs/musif_test.log.2022-03-04
+logs/musif_test.log.2022-03-07
+logs/musif.log.2022-03-18
+logs/musif.log.2022-03-21
+logs/musif.log.2022-03-22
+logs/musif.log.2022-03-25
+logs/musif.log.2022-03-28

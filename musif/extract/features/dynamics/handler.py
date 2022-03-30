@@ -69,7 +69,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                     name=name[0]
                 if name=='other-dynamics':
                     file_name=score_data['file']
-                    print(f'fsf found in measure {measure.measureNumber} in file {file_name}')
+                    lwarn(f'fsf found in measure {measure.measureNumber} in file {file_name}')
                     name='f'
 
                 new_dyn = get_dynamic_numeric(name.strip())
