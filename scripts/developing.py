@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     
-    df = FeaturesExtractor("scripts/config.yml", data_dir=data_dir, musescore_dir=musescore_dir).extract()
+    df = FeaturesExtractor("scripts/config_tests.yml", data_dir=data_dir, musescore_dir=musescore_dir).extract()
     # df.to_csv('testew.csv', index=False)
     # df=pd.read_csv('martiser/dataframe.csv')
     # path = './'

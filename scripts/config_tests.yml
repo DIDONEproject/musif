@@ -3,7 +3,7 @@ metadata_id_col: AriaId
 data_dir: ../../Corpus_Test/xml
 musescore_dir: ../../Corpus_Test/musescore
 expand_repeats: false
-parallel: true
+parallel: false
 max_processes: 7
 log:
   file_path: logs/musif_test.log
