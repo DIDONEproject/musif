@@ -18,18 +18,18 @@ features:
   - core
   - composer
   - librettist
-  # - ambitus
-  # - interval
-  # - tempo
-  # - density
-  # - texture
-  # - harmony
-  # - lyrics
-  # - scale
-  # - scale_relative
-  # - key
+  - ambitus
+  - interval
+  - tempo
+  - density
+  - texture
+  - harmony
+  - lyrics
+  - scale
+  - scale_relative
+  - key
   - dynamics
-  # - rhythm
+  - rhythm
   
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind

@@ -418,7 +418,7 @@ def get_chord_type(chord_type):
     elif chord_type in ['+', '+M7', '+m7']:
         return 'aug'
     else:
-        pwarn("Chord type ", str(chord_type), 'not observed')
+        pwarn(f"Chord type {chord_type} not observed")
         return ''
 
 def get_chord_types_groupings(chordtype_list):
