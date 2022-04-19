@@ -3,18 +3,18 @@ import os
 from multiprocessing import Lock
 from os import path
 
-from pandas.core.frame import DataFrame
-
-from musif.common.constants import RESET_SEQ
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.logs import lwarn
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel, columns_alike_our_data, get_excel_name, save_workbook
-from musif.reports.visualisations import bar_plot, double_bar_plot, pie_plot
+from musif.reports.utils import (columns_alike_our_data, create_excel,
+                                 get_excel_name, save_workbook)
+from musif.reports.visualizations import (bar_plot_percentage, double_bar_plot,
+                                          pie_plot)
+from pandas.core.frame import DataFrame
 
 
-def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string: str, name: str, sorting_list: list, results_path: str, visualizations: Lock, additional_info: list=[], groups: list=None):
+def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, pre_string: str, name: str, sorting_list: list, results_path: str, visualizations: bool, additional_info: list=[], groups: list=None):
     try:
         workbook = openpyxl.Workbook()
         all_columns = data.columns.tolist()
@@ -28,15 +28,13 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         third_columns_names_origin, third_columns = fix_column_names(sorting_list, all_columns, general_cols)
     
         computations = ["sum"]*len(third_columns)
-
-        #ERROR AriaOpera is nor unique
-        Create_excel(workbook.create_sheet("Weighted"), rows_groups, third_columns, data, third_columns, computations, _cfg.sorting_lists,
+        create_excel(workbook.create_sheet("Weighted"), rows_groups, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, average=True, last_column=True, last_column_average=False, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal Per"), rows_groups, third_columns, data, third_columns, computations, _cfg.sorting_lists,
+            create_excel(workbook.create_sheet("Horizontal Per"), rows_groups, third_columns, data, third_columns, computations, _cfg.sorting_lists,
                      groups=groups, per=True, average=True, last_column=True, last_column_average=False, additional_info=additional_info)
 
-        save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
+        save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NARROW)
 
         if visualizations:
             if 'Clefs' in name:
@@ -45,7 +43,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                 title = 'Presence of intervals (direction dismissed)'
             else:
                 title = 'Presence of intervals (ascending and descending)'
-
+            visualizations_path=path.join(results_path, VISUALIZATIONS)
             if groups:
                 data_grouped = data.groupby(list(groups))
                 for g, datag in data_grouped:
@@ -54,14 +52,14 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                         os.mkdir(result_visualisations)
                     name_bar = path.join(
                         result_visualisations, name.replace('.xlsx', IMAGE_EXTENSION))
-                    bar_plot(name_bar, datag, third_columns_names_origin,
+                    bar_plot_percentage(name_bar, datag, third_columns_names_origin,
                                 'Intervals' if 'Clef' not in name else 'Clefs', title, second_title=str(g))
             elif factor == 1:
                 for row in rows_groups:
                     if row not in not_used_cols:
                         plot_name = name.replace(
                                 '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper())
-                        name_bar=path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
+                        name_bar=path.join(visualizations_path,'Per_'+row.replace('Aria','').upper())
                         if not os.path.exists(name_bar):
                             os.makedirs(name_bar)
 
@@ -70,18 +68,18 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                         if len(rows_groups[row][0]) == 0:  # no subgroups
                             data_grouped = data.groupby(row, sort=True)
                             if data_grouped:
-                                bar_plot(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
+                                bar_plot_percentage(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
                                             'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
                         else: #w ith subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in EXCEPTIONS:
                                     data_grouped = data.groupby(subrow)
-                                    bar_plot(name_bar+'_'+subrow + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
+                                    bar_plot_percentage(name_bar+'_'+subrow + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
                                             'Intervals' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
             else:
-                name_bar = path.join(
-                    results_path, 'visualisations', name.replace('.xlsx', IMAGE_EXTENSION))
-                bar_plot(name_bar, data, third_columns_names_origin,
+                name_bar = path.join(visualizations_path, name.replace('.xlsx', IMAGE_EXTENSION))
+                
+                bar_plot_percentage(name_bar, data, third_columns_names_origin,
                             'Intervals' if 'Clef' not in name else 'Clefs', title)
     except Exception as e:
         lwarn('{} Problem found: {}'.format(name, e))
@@ -111,23 +109,26 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
         columns2 = columns_alike_our_data(
             third_columns_names2, second_column_names2)
 
-        Create_excel(workbook.create_sheet("Weighted"), rows_groups,
+        create_excel(workbook.create_sheet("Weighted"), rows_groups,
          columns, data, third_columns_names,
           computations, _cfg.sorting_lists, groups=groups, 
           last_column=True, last_column_average=False, second_columns=second_column_names,
            average=True, columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info, ponderate=True)
         if factor>=1:
-            Create_excel(workbook.create_sheet("Horizontal Per"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
+            create_excel(workbook.create_sheet("Horizontal Per"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, second_columns=second_column_names, per=True, average=True, last_column=True, last_column_average=False,
                      columns2=columns2,  third_columns2=third_columns_names2, computations_columns2=computations2, second_columns2=second_column_names2, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, get_excel_name(pre_string, name)), workbook, cells_size=NORMAL_WIDTH)
 
         if visualizations:
+            visualizations_path=path.join(results_path, VISUALIZATIONS)
+            if not path.exists(visualizations_path):
+                os.makedirs(visualizations_path)
             if groups:
                 data_grouped = data.groupby(list(groups))
                 for g, datag in data_grouped:
                     result_visualisations = path.join(
-                        results_path, 'visualisations', g)
+                        visualizations_path, g)
                     if not os.path.exists(result_visualisations):
                         os.mkdir(result_visualisations)
 
@@ -140,8 +141,7 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
 
             elif factor == 1:
                 for row in rows_groups:
-                    name_folder=path.join(results_path,'visualisations','Per_'+row.replace('Aria','').upper())
-
+                    name_folder=path.join(visualizations_path,'Per_'+row.replace('Aria','').upper())
                     name_cakes = name.replace(
                                 '.xlsx', '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper())  + '_AD.png'
                     name_bars = name.replace('.xlsx',  '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
@@ -165,9 +165,9 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
                         else: #subgroups
                                 for subrow in rows_groups[row][0]:
                                     if subrow not in EXCEPTIONS:
-                                        name_cakes = path.join(results_path, 'visualisations',
+                                        name_cakes = path.join(visualizations_path,
                                         name.replace('.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '_AD.png')
-                                        name_bars = path.join(results_path, 'visualisations',
+                                        name_bars = path.join(visualizations_path,
                                         name.replace('.xlsx',  '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION)
 
                                         data_grouped = data.groupby(subrow)
@@ -175,11 +175,9 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
                                         double_bar_plot(name_bars, data_grouped, 'Per ' + str(row.replace('Aria','').upper()))
 
             else:
-                name_cakes = path.join(results_path, 'visualisations',
-                                    name.replace('.xlsx', '') + '_AD.png')
+                name_cakes = path.join(visualizations_path, name.replace('.xlsx', '') + '_AD.png')
                 pie_plot(name_cakes, data)
-                name_bars = path.join(results_path, 'visualisations',
-                                    name.replace('.xlsx',  IMAGE_EXTENSION))
+                name_bars = path.join(visualizations_path, name.replace('.xlsx',  IMAGE_EXTENSION))
                 double_bar_plot(name_bars, data)
     except Exception as e:
         lwarn('{}  Problem found: {}'.format(name, e))

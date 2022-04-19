@@ -3,7 +3,7 @@ log:
   file_level: DEBUG
   console_level: WARN
 checking_file: parsed_files.csv
-delete_failed_files: False
+delete_failed_files: True
 merge_voices: True
 grouped_analysis: True
 split_passionA: True

@@ -24,7 +24,7 @@ PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 
 CHECK_FILE = "checking_file"
-DELETE_FILES = "delete_filed_files"
+DELETE_FILES = "delete_failed_files"
 GROUPED = "grouped_analysis"
 SPLIT_PASSSIONS = "split_passionA"
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"

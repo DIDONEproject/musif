@@ -10,7 +10,7 @@ ADDITIONS_9='+9'
 OTHERS_NO_AUG='Others_no_+'
 OTHERS_AUG='Others_+'
 
-KEY_prefix='Key_'
+KEY_PREFIX='Key_'
 KEY_GROUPING='KeyGrouping'
 KEY_MEASURES='Measures_'
 KEY_PERCENTAGE='_PercentageMeasures'

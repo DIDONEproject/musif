@@ -12,8 +12,8 @@ from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.logs import lwarn
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel, get_excel_name, get_general_cols, save_workbook
-from musif.reports.visualisations import customized_plot
+from musif.reports.utils import create_excel, get_excel_name, get_general_cols, save_workbook
+from musif.reports.visualizations import customized_plot
 
 
 ########################################################################
@@ -21,7 +21,7 @@ from musif.reports.visualisations import customized_plot
 ########################################################################
 
 def Emphasised_scale_degrees(rows_groups, not_used_cols, factor, _cfg: Configuration, data: DataFrame, pre_string, name: str, 
-results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[]):
+results_path: str, visualizations: Lock, groups: list=None, additional_info=[]) -> None:
     try:
         workbook = openpyxl.Workbook()
         relative = True if 'relative' in name else False
@@ -49,46 +49,36 @@ results_path: str, visualiser_lock: Lock, groups: list=None, additional_info=[])
         _, unique_columns = np.unique(data2.columns, return_index=True)
         data2 = data2.iloc[:, unique_columns]
 
-        Create_excel(workbook.create_sheet("Weighted"), rows_groups, third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
+        create_excel(workbook.create_sheet("Weighted"), rows_groups, third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True, last_column_average=False, average=True,
                      columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info, ponderate=True)
         
-        # if factor>=1:
-        #     Create_excel(workbook.create_sheet("Horizontal Per"), third_columns_names, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, per=True, average=True, last_column=True, last_column_average=False,
-        #              columns2=third_columns_names2,  data2=data2, third_columns2=third_columns_names2, computations_columns2=computations2, additional_info=additional_info)
-
         save_workbook(os.path.join(results_path, excel_name) , workbook, cells_size=NARROW)
 
         # with visualiser_lock:
-        Subtitle = 'in relation to the global key' if not relative else 'in relation to the local key'
+        if visualizations:
+            subtitle = 'in relation to the global key' if not relative else 'in relation to the local key'
+            visualizations_path=path.join(results_path,VISUALIZATIONS)
+            if groups:
+                data_grouped = data.groupby(list(groups))
+                for g, datag in data_grouped:
+                    result_visualisations = path.join(visualizations_path, g)
+                    if not os.path.exists(result_visualisations):
+                        os.mkdir(result_visualisations)
 
-            # VISUALISATIONS
-        if groups:
-            data_grouped = data.groupby(list(groups))
-            for g, datag in data_grouped:
-                result_visualisations = path.join(
-                    results_path, 'visualisations', g)
-                if not os.path.exists(result_visualisations):
-                    os.mkdir(result_visualisations)
-
-                name1 = path.join(
-                    result_visualisations, 'Scale_degrees_GlobalKey.png' if not relative else 'Scale_degrees_LocalKey.png')
+                    name1 = path.join(
+                        result_visualisations, 'Scale_degrees_GlobalKey.png' if not relative else 'Scale_degrees_LocalKey.png')
+                    customized_plot(
+                        name1, data, third_columns_names_origin, subtitle, second_title=g)
+            else:
+                name1 = path.join(visualizations_path,
+                                    'Scale_degrees_GlobalKey.png' if 'A' in name else 'Scale_degrees_LocalKey.png')
                 customized_plot(
-                    name1, data, third_columns_names_origin, Subtitle, second_title=g)
-        else:
-            name1 = path.join(results_path, 'visualisations',
-                                'Scale_degrees_GlobalKey.png' if 'A' in name else 'Scale_degrees_LocalKey.png')
-            customized_plot(
-                name1, data, third_columns_names_origin, Subtitle)
+                    name1, data, third_columns_names_origin, subtitle)
 
     except Exception as e:
         lwarn('{}  Problem found: {}'.format(name, e))
 
-
-########################################################################################################
-# This function returns the second group of data that we need to show, regarding third_columns_names2  #
-########################################################################################################
-
-def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_names: List[str], third_columns_names2: List[str]):
+def prepare_data_emphasised_scale_degrees_second(data: DataFrame, third_columns_names: List[str], third_columns_names2: List[str])-> None:
     data2 = {}
     rest_data = set(third_columns_names) - set(third_columns_names2 + ['#7'])
 

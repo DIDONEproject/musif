@@ -5,15 +5,20 @@ from itertools import permutations
 from os import path
 
 from typing import Dict, List, Set, Tuple
+from musif.common.utils import colorize
 
 import numpy as np
 import pandas as pd
-from musif.common.constants import VOICE_FAMILY
+from musif.common.constants import LEVEL_DEBUG, LEVEL_ERROR, VOICE_FAMILY
 from musif.config import Configuration
+from musif.extract.constants import VOICES_LIST
 from musif.extract.features import (density, harmony, lyrics, scale,
                                     scale_relative, texture)
+from musif.extract.features.harmony.constants import KEY_GROUPING, KEY_PREFIX, ADDITIONS_prefix, CHORD_TYPES_prefix, CHORD_prefix, CHORDS_GROUPING_prefix, HARMONIC_prefix, NUMERALS_prefix
+from musif.extract.features.scoring.constants import VOICES
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
 from musif.logs import lerr, perr
+from musif.process.utils import merge_single_voices
 from musif.reports.calculations import make_intervals_absolute
 from musif.reports.utils import (capitalize_instruments,
                                  remove_folder_contents)
@@ -87,7 +92,7 @@ class ReportsGenerator:
         pinfo('\n'+'--- Starting reports generation ---\n'.center(120, ' '))
         self.parts_list = [] if self._cfg.parts_filter is None else self._cfg.parts_filter
         self.visualizations = visualizations
-        pinfo('Visualizations are enabled' if self.visualizations else 'Visualizations are disabled'+'.\n')
+        pinfo(colorize('Visualizations are enabled', LEVEL_DEBUG) if self.visualizations else colorize('Visualizations are disabled', LEVEL_ERROR)+'.\n')
         
         self.global_features = data
         self.num_factors_max = num_factors
@@ -96,10 +101,10 @@ class ReportsGenerator:
         self._write()
 
     def _write(self) -> None:
-        for factor in range(0, self.num_factors_max + 1):
-            self._Factor_Execution(factor)
+        for factor in range(1, self.num_factors_max + 1):
+            self._factor_execution(factor)
            
-    def _Factor_Execution(self, num_factors: int = 0) -> None:
+    def _factor_execution(self, num_factors: int = 0) -> None:
         global rows_groups
         global not_used_cols
         self.not_used_cols = not_used_cols
@@ -109,27 +114,32 @@ class ReportsGenerator:
 
         self.metadata_columns=metadata_columns
         all_info = self.global_features
-        self.voices = all_info.Voices
         
-        tasks={}
         common_columns_df = self._find_common_columns(all_info)
 
         pinfo('\n' + str(num_factors) + " factor" + "\n")
         instruments = self._extract_instruments(all_info)
-        self._rename_singers(all_info)
+        merge_single_voices(all_info)
+        
 
         common_tasks, harmony_tasks=self._prepare_common_dataframes(all_info, instruments)
 
-        additional_info, rg_groups = self._get_additional_info_and_groups(num_factors, self.rows_groups) 
+        additional_info, rg_groups = self._get_additional_info_and_groups(num_factors) 
 
         self._run_common_tasks(num_factors, common_columns_df, common_tasks, harmony_tasks, additional_info, rg_groups)
 
         for instrument in tqdm(list(instruments), desc='Instruments'):
-            if instrument.lower() in singers_list:
-                instrument = 'Voice'
-            pinfo(f'\nInstrument:\t{instrument}' + '\n')
+            tasks={}
+
+            # if instrument.lower() in VOICES_LIST:
+            #     instrument = 'Voice'
+            pinfo(f'\nGenerating report:\t{instrument}' + '\n')
 
             instrument_level = 'Part' + instrument + '_'
+            
+            if instrument=='Voice':
+                instrument_level = 'Sound' + instrument + '_'
+
             
             self._prepare_part_dataframes(all_info, common_columns_df, tasks, instrument_level, instrument)
             
@@ -143,7 +153,6 @@ class ReportsGenerator:
                 try:
                     self._tasks_execution(self.rows_groups, self.not_used_cols, self._cfg, 
                         groups, additional_info, num_factors, common_columns_df, **tasks)
-                    pass
                     # self.rows_groups = rg
                     # self.not_used_cols = nuc
                 except KeyError as e:
@@ -196,7 +205,6 @@ class ReportsGenerator:
                 tasks['intervals_types'] = intervals_types
 
         if self._cfg.is_requested_module(ambitus):      
-                 
             try:     
                 if not self._cfg.is_requested_module(interval):
                     perr('Interval module is needed to generate Melody Values report!')
@@ -206,7 +214,7 @@ class ReportsGenerator:
             except KeyError as e:                 
                 perr('Melody Values information could not be extracted'.format(e))
 
-        if self._IsVoice(instrument):
+        if instrument=='Voice':
             if self._cfg.is_requested_module(scale):            
                 tasks['scale'] = self._find_scale_degrees_columns(all_info, instrument_level, degrees_list).dropna(how='all', axis=1)
             if self._cfg.is_requested_module(scale_relative):            
@@ -261,28 +269,24 @@ class ReportsGenerator:
                 self._tasks_execution(self.rows_groups, self.not_used_cols, self._cfg,
                              groups, additional_info, factor, common_columns_df,results_path=harmony_data_path, **harmony_tasks)
     
-    def _rename_singers(self, all_info: DataFrame) -> None:
-        for c in all_info.columns:
-            if any(i.capitalize() in c for i in singers_list):
-                for s in singers_list:
-                    all_info.rename(columns={c:c.replace(s.capitalize(),'Voice')}, inplace=True)
-            
     def _IsVoice(self, instrument: str) -> bool:
         if instrument.lower()=='voice':
             return True
-        return instrument.lower() in self.voices
+        return instrument.lower() in VOICES_LIST
+    
 
     def _get_clefs(self, all_info: DataFrame, common_columns_df: DataFrame) -> DataFrame:
         if ('Clef2' and 'Clef3') in common_columns_df.columns:
-            common_columns_df.Clef2.replace('', np.nan, inplace=True)
-            common_columns_df.Clef3.replace('', np.nan, inplace=True)
+            common_columns_df.Clef2.replace('', 'NA', inplace=True)
+            common_columns_df.Clef3.replace('', 'NA', inplace=True)
         clefs_info=copy.deepcopy(common_columns_df)
-        clefs_set= {i for i in all_info.Clef1 + all_info.Clef2 + all_info.Clef3}
+        clefs_set = set([str(all_info['Clef1'][0]),str(all_info['Clef2'][0]), str(all_info['Clef3'][0])])
+        clefs_set.remove('nan')
         for clef in clefs_set:
             clefs_info[clef] = 0
             for r, j in enumerate(clefs_info.iterrows()):
                 clefs_info[clef].iloc[r] = float(len([i for i in clefs_info[['Clef1','Clef2','Clef3']].iloc[r] if i == clef]))
-        clefs_info.replace('', np.nan, inplace=True)
+        clefs_info.replace('', 'NA', inplace=True)
         clefs_info.dropna(how='all', axis=1, inplace=True)
         return clefs_info
 
@@ -297,8 +301,12 @@ class ReportsGenerator:
         else:
             instruments = all_instruments
 
+        for inst in instruments.copy():
+            if inst in VOICES_LIST:
+                instruments.add('voice')
+                instruments.remove(inst)
+            
         instruments = capitalize_instruments(instruments)
-        
         return instruments
 
     def _find_density_columns(self, all_info, instruments):
@@ -316,13 +324,13 @@ class ReportsGenerator:
 
     def _find_harmony_columns(self, all_info):
         harmony_df=all_info[(
-            [i for i in all_info.columns if harmony.constants.HARMONIC_prefix in i] +
-            [i for i in all_info.columns if harmony.constants.CHORD_TYPES_prefix in i] +
-            [i for i in all_info.columns if harmony.constants.ADDITIONS_prefix in i]
+            [i for i in all_info.columns if HARMONIC_prefix in i] +
+            [i for i in all_info.columns if CHORD_TYPES_prefix in i] +
+            [i for i in all_info.columns if ADDITIONS_prefix in i]
             )]
-        key_areas_df=all_info[[i for i in all_info.columns if harmony.constants.KEY_prefix in i or harmony.constants.KEY_GROUPING in i ]]
-        functions_dfs = all_info[[i for i in all_info.columns if harmony.constants.NUMERALS_prefix in i and i.endswith('_Count')] + [i for i in all_info.columns if harmony.constants.CHORDS_GROUPING_prefix in i and i.endswith('_Count')]]
-        chords_df = all_info[[i for i in all_info.columns if harmony.constants.CHORD_prefix in i and harmony.constants.CHORD_TYPES_prefix not in i and i.endswith('_Count')]]
+        key_areas_df=all_info[[i for i in all_info.columns if KEY_PREFIX in i or KEY_GROUPING in i ]]
+        functions_dfs = all_info[[i for i in all_info.columns if NUMERALS_prefix in i and i.endswith('_Count')] + [i for i in all_info.columns if CHORDS_GROUPING_prefix in i and i.endswith('_Count')]]
+        chords_df = all_info[[i for i in all_info.columns if CHORD_prefix in i and CHORD_TYPES_prefix not in i and i.endswith('_Count')]]
         return harmony_df,key_areas_df,chords_df,functions_dfs
 
     def _find_scale_degrees_columns(self, all_info, catch, degrees_list):
@@ -336,7 +344,7 @@ class ReportsGenerator:
         degrees_list = []
         degrees_relative_list = []
 
-        for col in all_info.columns:
+        for col in all_info.columns.values:
             if (col.startswith(Instr_level+'Intervals') or col.startswith(Instr_level+'Leaps') or col.startswith(Instr_level+'Stepwise')) and col.endswith('_Count'):
                 intervals_types_list.append(col)
             elif col.startswith(Instr_level+'Interval') and 'Intervals' not in col and not col.endswith('Per') and 'Intervallic' not in col:
@@ -372,18 +380,14 @@ class ReportsGenerator:
     def _get_instrument_prefix(self, instrument: list):
             if instrument.lower().startswith('vn'):  # Violins are the exception in which we don't take Sound level data
                 prefix = 'Part'
-            elif self._IsVoice(instrument):
-                prefix = 'Family'
-                instrument=VOICE_FAMILY.capitalize()
+            elif instrument=='Voice':  
+                return 'Family'+instrument
             else:
                 prefix = 'Sound'
                 instrument=instrument.replace('I','')
-            
-            inst=prefix+instrument
-            return inst
+            return prefix+instrument
 
-
-    def _get_additional_info_and_groups(self, factor, rows_groups):
+    def _get_additional_info_and_groups(self, factor: int) -> Dict[str, str]:
         additional_info = {ARIA_LABEL: [TITLE],
                                 TITLE: [ARIA_LABEL]}
 
@@ -429,11 +433,11 @@ class ReportsGenerator:
             results_path = self._rename_path(groups)
 
         if self.visualizations: 
-            if os.path.exists(path.join(results_path, 'visualizations')):
+            if os.path.exists(path.join(results_path, VISUALIZATIONS)):
                 remove_folder_contents(
-                    path.join(results_path, 'visualizations'))
+                    path.join(results_path, VISUALIZATIONS))
             else:
-                os.makedirs(path.join(results_path, 'visualizations'))
+                os.makedirs(path.join(results_path, VISUALIZATIONS))
 
         try:
             # executor = concurrent.futures.ThreadPoolExecutor()
@@ -479,7 +483,8 @@ class ReportsGenerator:
                 Emphasised_scale_degrees(self.rows_groups, self.not_used_cols, factor, _cfg, emphasised_scale_degrees_info_B, pre_string, "Scale_degrees_relative", results_path, self.visualizations, groups if groups != [] else None, additional_info)
            
             if 'clefs' in kwargs:
-                clefs_info= pd.concat([common_columns_df,kwargs['clefs']], axis=1)
+                # clefs_info = pd.concat([common_columns_df,kwargs['clefs']], axis=1)
+                clefs_info = kwargs['clefs']
                 Intervals(self.rows_groups, self.not_used_cols, factor, _cfg, clefs_info, pre_string, "Clefs_in_voice",
                                 _cfg.sorting_lists["Clefs"], results_path, self.visualizations, additional_info, groups if groups != [] else None)
             
@@ -503,7 +508,6 @@ class ReportsGenerator:
 
     def _rename_path(self, groups: bool) -> str:
         if groups:
-                # if sequential:
             results_path = path.join(self.results_path_factorx, '_'.join(groups))
             if not os.path.exists(results_path):
                 os.mkdir(results_path)

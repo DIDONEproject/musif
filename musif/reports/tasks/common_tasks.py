@@ -3,14 +3,13 @@ from multiprocessing import Lock
 
 import numpy as np
 import pandas as pd
-from pandas.core.frame import DataFrame
-
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.logs import linfo, lwarn
 from musif.reports.constants import *
-from musif.reports.utils import Create_excel, get_excel_name, save_workbook
-from musif.reports.visualisations import bar_plot_extended, line_plot_extended
+from musif.reports.utils import create_excel, get_excel_name, save_workbook
+from musif.reports.visualizations import bar_plot_extended, line_plot_extended
+from pandas.core.frame import DataFrame
 
 
 def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration, data: DataFrame, results_path: str, pre_string, name: str, visualiser_lock: Lock, groups: list=None, additional_info: list=[]):
@@ -41,23 +40,22 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
         computations2 = ["sum"] + ["mean_density"] * \
             (len(third_columns_names)-1)
         columns = third_columns_names
-        Create_excel(workbook.create_sheet("Weighted"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True,
+        create_excel(workbook.create_sheet("Weighted"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups, last_column=True,
                      last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
+        
         if factor >=1:
-            Create_excel(workbook.create_sheet("Horizontal"), rows_groups, columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
+            create_excel(workbook.create_sheet("Horizontal"), rows_groups, columns, data_total, third_columns_names, computations2,  _cfg.sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
         save_workbook(os.path.join(results_path, excel_name), workbook,cells_size= NORMAL_WIDTH)
 
-        # with visualiser_lock: #Apply when threads are usedwith visualizer_lock=threading.Lock()
         columns.remove('Total analysed')
         title = 'Instrumental densities'
-        # VISUALISATIONS
+        
         if groups:
             data_grouped = data.groupby(list(groups))
             for g, datag in data_grouped:
-                result_visualisations = results_path + \
-                    '\\visualisations\\' + str(g.replace('/', '_'))
+                result_visualisations = os.path.join(results_path, VISUALIZATIONS, str(g.replace('/', '_')))
                 if not os.path.exists(result_visualisations):
                     os.mkdir(result_visualisations)
                 name_bar = result_visualisations + \
@@ -66,11 +64,16 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                                   'Density', title, second_title=str(g))
 
         elif factor == 1:
+            folder = os.path.join(results_path,VISUALIZATIONS)
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+            
             groups = [i for i in rows_groups]
             for row in rows_groups:
                 plot_name = name.replace(
                     '.xlsx', '') + '_Per_' + str(row.upper()) + IMAGE_EXTENSION
-                name_bar = results_path + '\\visualisations\\' + plot_name
+                name_bar = os.path.join(folder, plot_name)
+                
                 if row not in not_used_cols:
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
@@ -82,15 +85,17 @@ def Densities(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                             if subrow not in EXCEPTIONS:
                                 plot_name = name.replace(
                                     '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION
-                                name_bar = results_path + '\\visualisations\\' + plot_name
+                                name_bar = os.path.join(results_path, VISUALIZATIONS, plot_name)
                                 data_grouped = data.groupby(subrow)
                                 line_plot_extended(
                                     name_bar, data_grouped, columns, 'Instrument', 'Density', title, second_title= 'Per ' + str(subrow))
         else:
             for instr in third_columns_names:
+                folder = os.path.join(results_path,VISUALIZATIONS,instr)
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
                 columns=data['AriaName']
-                name_bar = results_path + '\\visualisations\\' + instr + \
-                    name.replace('.xlsx', IMAGE_EXTENSION)
+                name_bar=os.path.join(folder,name) + IMAGE_EXTENSION
                 bar_plot_extended(name_bar, data, columns,
                                 'Density', 'Density', title + ' ' + instr, instr=instr)
     except Exception as e:
@@ -140,10 +145,10 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
         data = pd.concat([data_general, textures_df], axis=1)
         notes_df = pd.concat([data_general, notes_df], axis=1)
 
-        Create_excel(workbook.create_sheet("Weighted_textures"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
+        create_excel(workbook.create_sheet("Weighted_textures"), rows_groups, columns, data, third_columns_names, computations, _cfg.sorting_lists, groups=groups,
                      last_column=True, last_column_average=True, second_columns=second_column_names, average=True, additional_info=additional_info, ponderate=False)
         if factor >=1:
-            Create_excel(workbook.create_sheet("Horizontal_textures"), rows_groups, columns, notes_df, third_columns_names, computations2,   _cfg.sorting_lists, groups=groups,
+            create_excel(workbook.create_sheet("Horizontal_textures"), rows_groups, columns, notes_df, third_columns_names, computations2,   _cfg.sorting_lists, groups=groups,
                      second_columns=second_column_names, per=False, average=True, last_column=True, last_column_average=True, additional_info=additional_info)
 
 
@@ -156,11 +161,10 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
         if groups:
             data_grouped = data.groupby(list(groups))
             for g, datag in data_grouped:
-                result_visualisations = results_path + \
-                    '\\visualisations\\' + str(g)
-                if not os.path.exists(result_visualisations):
-                    os.mkdir(result_visualisations)
-                name_bar = result_visualisations + \
+                result_visualizations = os.path.join(results_path,VISUALIZATIONS,str(g))
+                if not os.path.exists(result_visualizations):
+                    os.mkdir(result_visualizations)
+                name_bar = result_visualizations + \
                     '\\' + name.replace('.xlsx', IMAGE_EXTENSION)
                 bar_plot_extended(
                     name_bar, datag, columns, 'Instrumental Textures', title, second_title=str(g))
@@ -170,7 +174,8 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
             for row in rows_groups:
                 plot_name = name.replace(
                     '.xlsx', '') + '_Per_' + str(row.upper()) + IMAGE_EXTENSION
-                name_bar = results_path + '\\visualisations\\' + plot_name
+                name_bar = os.path.join(results_path, VISUALIZATIONS, plot_name)
+                
                 if row not in not_used_cols:
                     if len(rows_groups[row][0]) == 0:  # no sub-groups
                         data_grouped = data.groupby(row, sort=True)
@@ -181,7 +186,7 @@ def Textures(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuration
                             if subrow not in EXCEPTIONS:
                                 plot_name = name.replace(
                                     '.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION
-                                name_bar = results_path + '\\visualisations\\' + plot_name
+                                name_bar = os.path.join(results_path, VISUALIZATIONS, plot_name)
                                 data_grouped = data.groupby(subrow)
                                 line_plot_extended(
                                     name_bar, data_grouped, columns, 'Texture', 'Ratio', title, second_title='Per ' + str(subrow))

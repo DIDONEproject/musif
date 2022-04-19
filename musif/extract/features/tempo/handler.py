@@ -91,7 +91,7 @@ def ExtractTempo(score_data, part):
         if isinstance(measure, Measure):
             for element in measure:
                 if isinstance(element, TextExpression):
-                    if get_tempo_grouped_1(element.content) != "ND":
+                    if get_tempo_grouped_1(element.content) != "NA":
                         tempo_mark = element.content
             break  # only take into account the first bar!
     return numeric_tempo,tempo_mark

@@ -6,7 +6,6 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from ms3.expand_dcml import features2type, split_labels
-from musif.common.sort import sort_dict, sort_list
 from musif.logs import perr, pwarn
 from urllib.request import urlopen
 from musif.musicxml.tempo import get_number_of_beats
@@ -196,8 +195,8 @@ def get_keyareas(lausanne_table, major = True):
     # keyareas = {'TotalNumberKeyAreas': total_key_areas, 'TotalNumberMeasures': int(total_measures) }
     keyareas={}
     for key in number_blocks_keys:
-        keyareas[KEY_prefix + key + KEY_PERCENTAGE] = float(key_measures_percentage[key]) #procentaje de compases de cada I, i, etc. en el total
-        keyareas[KEY_prefix + KEY_MODULATORY + key] = number_blocks_keys[key]/total_key_areas
+        keyareas[KEY_PREFIX + key + KEY_PERCENTAGE] = float(key_measures_percentage[key]) #procentaje de compases de cada I, i, etc. en el total
+        keyareas[KEY_PREFIX + KEY_MODULATORY + key] = number_blocks_keys[key]/total_key_areas
 
     return keyareas
 
