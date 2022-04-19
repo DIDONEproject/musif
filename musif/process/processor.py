@@ -3,7 +3,7 @@ from typing import Union
 
 import pandas as pd
 from musif.config import PostProcess_Configuration
-from musif.process.utils import (delete_columns, delete_previous_items,
+from musif.process.utils import (delete_columns,
                                  join_keys, join_keys_modulatory,
                                  join_part_degrees, log_errors_and_shape,
                                  merge_duetos_trios, merge_single_voices,
@@ -21,10 +21,10 @@ from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       CHORDS_GROUPING_prefix,
-                                                      KEY_prefix)
+                                                      KEY_PREFIX)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import INSTRUMENTATION, SCORING, VOICES
-from musif.logs import perr, pinfo
+from musif.logs import perr, pinfo, pwarn
 
 from .constants import (PRESENCE, columns_order, label_by_col,
                         voices_list_prefixes)
@@ -36,7 +36,8 @@ class DataProcessor:
     This operator processes information from a DataFrame or a .csv file. 
     It deletes unseful columns and merges those that are required to clean the data.
     The main method .process() returns a DataFrame and saves it into a .csv file.
-
+    Requires to have a Passions.csv file in the current working directory containing each passion
+    for each aria.
     ...
 
     Attributes
@@ -123,7 +124,7 @@ class DataProcessor:
 
     def process(self) -> DataFrame:
         """
-        Removes nan values, deletes unuseful columns
+        Main method tof the class. Removes NaN values, deletes unuseful columns
         and merges those that are needed according to config.yml file. Saves processed DataFrame 
         into a csv file.
 
@@ -133,7 +134,8 @@ class DataProcessor:
         """
 
         if self._post_config.delete_files:
-            delete_previous_items()
+            pinfo('\nDeleting items with errors...')
+            self.delete_previous_items()
         
         self.assign_labels()
         pinfo('\nPreprocessing data...')
@@ -161,7 +163,6 @@ class DataProcessor:
         """Crosses passions labels from Passions.csv file with the DataFrame so every row (aria)
         gets assigned to its own Label
         """
-
         passions = read_dicts_from_csv("Passions.csv")
         data_by_aria_label = {label_data["Label"]: label_data for label_data in passions}
         for col, label in label_by_col.items():
@@ -184,7 +185,9 @@ class DataProcessor:
             del self.data['Label_Sentiment']
 
         self.data = self.data[~self.data["Label_BasicPassion"].isnull()]
-        self.data.replace(0.0, np.nan, inplace=True)
+        self.data.replace(0.0, 'NA', inplace=True)
+        # self.data.replace(0.0, np.nan, inplace=True)
+        
         self.data.dropna(axis=1, how='all', inplace=True)
         self.data.reset_index(inplace=True)
 
@@ -204,13 +207,12 @@ class DataProcessor:
         Unifies all voices columns into SoundVoice_ columns.  
         """
         pinfo('\nScaning voice columns...')
-        generic_sound_voice_prefix = get_sound_prefix('Voice') 
         # Delete columns that contain strings 
         df_voices=self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
         cols_to_delete=df_voices.select_dtypes(include=['object']).columns
         self.data.drop(cols_to_delete, axis = 1, inplace=True)
-        merge_duetos_trios(self.data, generic_sound_voice_prefix)
-        merge_single_voices(self.data, generic_sound_voice_prefix)
+        merge_duetos_trios(self.data)
+        merge_single_voices(self.data)
 
     def unbundle_instrumentation(self) -> None:
         """Separates Instrumentation column into as many columns as instruments present in Instrumentation,
@@ -223,7 +225,16 @@ class DataProcessor:
         del self.data[INSTRUMENTATION]
         del self.data[SCORING]
 
-
+    def delete_previous_items(self) -> None:
+        """Deletes items from 'errors.csv' file in case they were not extracted properly"""
+        
+        errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
+        for item in errors:
+            index = self.data.index[self.data['FileName']==item+'.xml']
+            if not index.empty:
+                self.data.drop(index, axis=0, inplace=True)
+                pwarn('Item {0} from errors.csv was deleted.'.format(item))
+            
     def delete_unwanted_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
 
@@ -262,11 +273,11 @@ class DataProcessor:
         pinfo(f'\nData succesfully saved as {dest_path} in current directory.')
 
     def _group_keys_modulatory(self) -> None:
-        self.data.update(self.data[[i for i in self.data.columns if KEY_prefix+KEY_MODULATORY in i]].fillna(0))
+        self.data.update(self.data[[i for i in self.data.columns if KEY_PREFIX+KEY_MODULATORY in i]].fillna(0))
         join_keys_modulatory(self.data)
 
     def _group_keys(self) -> None:
-        self.data.update(self.data[[i for i in self.data.columns if KEY_prefix in i]].fillna(0))
+        self.data.update(self.data[[i for i in self.data.columns if KEY_PREFIX in i]].fillna(0))
         join_keys(self.data)
 
     def _join_degrees(self) -> None:
@@ -294,12 +305,12 @@ class DataProcessor:
     def _final_data_processing(self) -> None:
         self.data.sort_values(ARIA_ID, inplace=True)
         replace_nans(self.data)
-        log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         columns_to_sort=columns_order+list(self.data.filter(like='Label_', axis=1))
         self.data = sort_columns(self.data, columns_to_sort)
         self.data.drop('index', axis = 1, inplace=True, errors='ignore')
         dest_path=self.destination_route + "_processed" + ".csv"
+        log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
         self.to_csv(dest_path)
 
 

@@ -21,7 +21,7 @@ from .calculations import compute_value
 WIDTH = 35
 HEIGHT = 20
 
-def Create_excel(sheet: ExcelWriter, rows_groups: Dict[str, list], columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None,
+def create_excel(sheet: ExcelWriter, rows_groups: Dict[str, list], columns: list, data: DataFrame, third_columns: list, computations_columns: list, sorting_lists: list, groups: list=None, first_columns: list=None,
                 second_columns: list=None, per: bool=False, average: bool=False, last_column: bool=False, last_column_average: bool=False,
                 columns2: list=None, data2: DataFrame=None, third_columns2: list=None, computations_columns2: list=None, first_columns2: list=None, second_columns2: list=None, 
                 columns3: list=None, data3: DataFrame=None, third_columns3: list=None, computations_columns3: list=None, first_columns3: list=None, second_columns3: list=None, 
@@ -104,7 +104,7 @@ def print_basic_sheet(_cfg, rows_groups, name, data, additional_info, groups, wo
     columns = remove_underscore(third_columns_names)
     data = data.round(decimals = 2)
     computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
-    Create_excel(workbook.create_sheet(name), rows_groups, third_columns_names, data, columns, computations, _cfg.sorting_lists,
+    create_excel(workbook.create_sheet(name), rows_groups, third_columns_names, data, columns, computations, _cfg.sorting_lists,
                     second_columns=second_column_names,
                     groups=groups, per = False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
 

@@ -15,7 +15,7 @@ from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PERCENTAGE,
                                                       CHORDS_GROUPING_prefix,
-                                                      KEY_prefix)
+                                                      KEY_PREFIX)
 from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.extract.features.core.constants import FILE_NAME
@@ -208,39 +208,39 @@ def final_process_data(columns_order, name, composer_counter, novoices_counter, 
     print('Data saved as {}'.format(str(name + ".csv")))
 def group_keys_modulatory(df):
 
-    df.update(df[[i for i in df.columns if KEY_prefix+KEY_MODULATORY in i]].fillna(0))
-    key_SD=[KEY_prefix+KEY_MODULATORY+'IV',KEY_prefix+KEY_MODULATORY+'II', KEY_prefix+KEY_MODULATORY+'VI']
-    key_sd=[KEY_prefix+KEY_MODULATORY+'iv',KEY_prefix+KEY_MODULATORY+'ii']
-    key_tonic=[KEY_prefix+KEY_MODULATORY+'I',KEY_prefix+KEY_MODULATORY+'i']
-    key_rel=[KEY_prefix+KEY_MODULATORY+'III',KEY_prefix+KEY_MODULATORY+'vi']
+    df.update(df[[i for i in df.columns if KEY_PREFIX+KEY_MODULATORY in i]].fillna(0))
+    key_SD=[KEY_PREFIX+KEY_MODULATORY+'IV',KEY_PREFIX+KEY_MODULATORY+'II', KEY_PREFIX+KEY_MODULATORY+'VI']
+    key_sd=[KEY_PREFIX+KEY_MODULATORY+'iv',KEY_PREFIX+KEY_MODULATORY+'ii']
+    key_tonic=[KEY_PREFIX+KEY_MODULATORY+'I',KEY_PREFIX+KEY_MODULATORY+'i']
+    key_rel=[KEY_PREFIX+KEY_MODULATORY+'III',KEY_PREFIX+KEY_MODULATORY+'vi']
 
     total_key_mod=key_rel+key_tonic+key_sd+key_SD
-    others_key_mod=[i for i in df.columns if KEY_prefix+KEY_MODULATORY in i and i not in total_key_mod]
+    others_key_mod=[i for i in df.columns if KEY_PREFIX+KEY_MODULATORY in i and i not in total_key_mod]
 
-    df[KEY_prefix+KEY_MODULATORY+'SD']=df[key_SD].sum(axis=1)
-    df[KEY_prefix+KEY_MODULATORY+'sd']=df[key_sd].sum(axis=1)
-    df[KEY_prefix+KEY_MODULATORY+'SubD']=df[KEY_prefix+KEY_MODULATORY+'sd'] + df[KEY_prefix+KEY_MODULATORY+'SD']
-    df[KEY_prefix+KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
-    df[KEY_prefix+KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
-    df[KEY_prefix+KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
+    df[KEY_PREFIX+KEY_MODULATORY+'SD']=df[key_SD].sum(axis=1)
+    df[KEY_PREFIX+KEY_MODULATORY+'sd']=df[key_sd].sum(axis=1)
+    df[KEY_PREFIX+KEY_MODULATORY+'SubD']=df[KEY_PREFIX+KEY_MODULATORY+'sd'] + df[KEY_PREFIX+KEY_MODULATORY+'SD']
+    df[KEY_PREFIX+KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
+    df[KEY_PREFIX+KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
+    df[KEY_PREFIX+KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
     # df.drop(total_key_mod+others_key_mod, axis = 1, inplace=True)
 
 def group_keys(df):
-    df.update(df[[i for i in df.columns if KEY_prefix in i]].fillna(0))
-    key_SD = [KEY_prefix+'IV'+KEY_PERCENTAGE, KEY_prefix+'II'+KEY_PERCENTAGE, KEY_prefix+'VI'+KEY_PERCENTAGE]
-    key_sd = [KEY_prefix+'iv'+KEY_PERCENTAGE, KEY_prefix+'ii'+KEY_PERCENTAGE]
-    key_tonic = [KEY_prefix+'I'+KEY_PERCENTAGE, KEY_prefix+'i'+KEY_PERCENTAGE]
-    key_rel = [KEY_prefix+'III'+KEY_PERCENTAGE, KEY_prefix+'vi'+KEY_PERCENTAGE]
+    df.update(df[[i for i in df.columns if KEY_PREFIX in i]].fillna(0))
+    key_SD = [KEY_PREFIX+'IV'+KEY_PERCENTAGE, KEY_PREFIX+'II'+KEY_PERCENTAGE, KEY_PREFIX+'VI'+KEY_PERCENTAGE]
+    key_sd = [KEY_PREFIX+'iv'+KEY_PERCENTAGE, KEY_PREFIX+'ii'+KEY_PERCENTAGE]
+    key_tonic = [KEY_PREFIX+'I'+KEY_PERCENTAGE, KEY_PREFIX+'i'+KEY_PERCENTAGE]
+    key_rel = [KEY_PREFIX+'III'+KEY_PERCENTAGE, KEY_PREFIX+'vi'+KEY_PERCENTAGE]
 
     total_key=key_rel+key_tonic+key_sd+key_SD
-    others_key=[i for i in df.columns if KEY_prefix in i and i not in total_key and KEY_MODULATORY not in i]
+    others_key=[i for i in df.columns if KEY_PREFIX in i and i not in total_key and KEY_MODULATORY not in i]
 
-    df[KEY_prefix+'SD'+KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
-    df[KEY_prefix+'sd'+KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
-    df[KEY_prefix+'SubD'+KEY_PERCENTAGE]=df[KEY_prefix+'sd'+KEY_PERCENTAGE] + df[KEY_prefix+'SD'+KEY_PERCENTAGE]
-    df[KEY_prefix+'T'+KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
-    df[KEY_prefix+'rel'+KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
-    df[KEY_prefix+'Other'+KEY_PERCENTAGE] = df[others_key].sum(axis=1)
+    df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
+    df[KEY_PREFIX+'sd'+KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
+    df[KEY_PREFIX+'SubD'+KEY_PERCENTAGE]=df[KEY_PREFIX+'sd'+KEY_PERCENTAGE] + df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]
+    df[KEY_PREFIX+'T'+KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
+    df[KEY_PREFIX+'rel'+KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
+    df[KEY_PREFIX+'Other'+KEY_PERCENTAGE] = df[others_key].sum(axis=1)
     # df.drop(total_key+others_key, axis = 1, inplace=True)
 
 def join_degrees(total_degrees, part, df):

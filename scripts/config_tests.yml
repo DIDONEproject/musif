@@ -17,18 +17,18 @@ features:
   - core
   - composer
   - librettist
-  - ambitus
-  - interval
-  - tempo
-  - density
-  - texture
-  - harmony
+  # - ambitus
+  # - interval
+  # - tempo
+  # - density
+  # - texture
+  # - harmony
   - lyrics
-  - scale
-  - scale_relative
-  - key
-  - dynamics
-  - rhythm
+  # - scale
+  # - scale_relative
+  # - key
+  # - dynamics
+  # - rhythm
 
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
@@ -37,15 +37,15 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - viola
   
 parts_filter:
-  # - vnI
+  - vnI
   # - vnII
-  # - obI
+  - obI
   # - obII
   # - va
   # - bs
-  # - sop
-  # - ten
-  # - alt
+  - sop
+  - ten
+  - alt
   # - bar
   # - bass
   # - bbar

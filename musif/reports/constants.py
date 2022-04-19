@@ -3,7 +3,7 @@ from openpyxl.styles.fonts import Font
 from musif.extract.features import ambitus
 from musif.extract.features import interval
 
-from musif.extract.features.scoring.constants import FAMILY_SCORING, SCORING
+from musif.extract.features.scoring.constants import FAMILY_SCORING, SCORING, VOICES
 from musif.extract.features.tempo.constants import TEMPO_GROUPED_1, TEMPO_GROUPED_2
 from musif.extract.features.metadata.constants import *
 
@@ -43,7 +43,6 @@ TOTAL_ANALYSED='Total analysed'
 YEAR = 'Year'
 
 metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, ARIA_CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
-singers_list=["sop", "ten", "alt", "bar", "bass", "bbar"]
 
 def get_melody_list(catch):
     return [catch + interval.constants.INTERVALLIC_MEAN, catch + interval.constants.INTERVALLIC_STD, catch + interval.constants.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.constants.ABSOLUTE_INTERVALLIC_STD, catch + interval.constants.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.constants.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
@@ -53,9 +52,48 @@ def get_melody_list(catch):
         catch + interval.constants.LARGEST_INTERVAL_ALL, catch + interval.constants.LARGEST_SEMITONES_ALL,
         catch + interval.constants.SMALLEST_INTERVAL_ALL, catch + interval.constants.SMALLEST_SEMITONES_ALL,
         catch + interval.constants.MEAN_INTERVAL,
-         catch + interval.constants.DESCENDING_INTERVALLIC_MEAN, 
+        catch + interval.constants.DESCENDING_INTERVALLIC_MEAN, 
         catch + interval.constants.ASCENDING_INTERVALLIC_MEAN]
-          
+
+not_used_cols = [ARIA_ID, SCORING, TOTAL_ANALYSED , CLEF2, CLEF3]
+
+EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, ARIA_CITY, SCENE, NAME]
+
+alfa = "abcdefghijklmnopqrstuvwxyz"
+COMMON_DF='common_df'
+VISUALIZATIONS='visualizations'
+forbiden_groups = {OPERA: [OPERA],
+                   ARIA_LABEL: [OPERA, ARIA_LABEL],
+                   TITLE: [TITLE, OPERA],
+                   COMPOSER: [COMPOSER],
+                   NAME: [NAME],
+                   YEAR: [YEAR, DECADE],
+                   DECADE: [DECADE],
+                   ARIA_CITY: [ARIA_CITY, TERRITORY],
+                   TERRITORY: [TERRITORY],
+                   ACT: [ACT, ACTANDSCENE],
+                   SCENE: [SCENE, ACTANDSCENE],
+                   ACTANDSCENE: [ACT, SCENE, ACTANDSCENE],
+                   ROLE: [ROLE, GENDER],
+                   GENDER: [GENDER],
+                   FORM: [FORM],
+                   CLEF1: [CLEF1],
+                   CLEF2: [CLEF2],
+                   CLEF3: [CLEF3],
+                   KEY: [FORM, MODE, FINAL, KEYSIGNATURE, KEY_SIGNATURE_TYPE],
+                   MODE: [MODE, FINAL],
+                   FINAL: [FINAL, KEY, KEYSIGNATURE],
+                   KEYSIGNATURE: [KEY, FINAL, KEYSIGNATURE, KEY_SIGNATURE_TYPE],
+                   KEY_SIGNATURE_TYPE: [KEY_SIGNATURE_TYPE],
+                   TIMESIGNATURE: [TIMESIGNATURE, TIMESIGNATUREGROUPED],
+                   TIMESIGNATUREGROUPED: [TIMESIGNATUREGROUPED],
+                   TEMPO: [TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2],
+                   TEMPO_GROUPED_1: [TEMPO_GROUPED_1, TEMPO_GROUPED_2],
+                   TEMPO_GROUPED_2: [TEMPO_GROUPED_2],
+                   "AbrScoring": ["AbrScoring", "RealScoringGrouped"],
+                   "RealScoringGrouped": ["RealScoringGrouped"]
+                   }
+
 rows_groups = {OPERA: ([], "Alphabetic"),
                ARIA_LABEL: ([], "Alphabetic"),
                TITLE: ([], "Alphabetic"),
@@ -103,44 +141,6 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                ], ["InstrumentSorting", "ScoringFamilySorting"])
                }
 
-not_used_cols = [ARIA_ID, SCORING, TOTAL_ANALYSED , CLEF2, CLEF3]
-
-EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, ARIA_CITY, SCENE, NAME]
-
-alfa = "abcdefghijklmnopqrstuvwxyz"
-
-forbiden_groups = {OPERA: [OPERA],
-                   ARIA_LABEL: [OPERA, ARIA_LABEL],
-                   TITLE: [TITLE, OPERA],
-                   COMPOSER: [COMPOSER],
-                   NAME: [NAME],
-                   YEAR: [YEAR, DECADE],
-                   DECADE: [DECADE],
-                   ARIA_CITY: [ARIA_CITY, TERRITORY],
-                   TERRITORY: [TERRITORY],
-                   ACT: [ACT, ACTANDSCENE],
-                   SCENE: [SCENE, ACTANDSCENE],
-                   ACTANDSCENE: [ACT, SCENE, ACTANDSCENE],
-                   ROLE: [ROLE, GENDER],
-                   GENDER: [GENDER],
-                   FORM: [FORM],
-                   CLEF1: [CLEF1],
-                   CLEF2: [CLEF2],
-                   CLEF3: [CLEF3],
-                   KEY: [FORM, MODE, FINAL, KEYSIGNATURE, KEY_SIGNATURE_TYPE],
-                   MODE: [MODE, FINAL],
-                   FINAL: [FINAL, KEY, KEYSIGNATURE],
-                   KEYSIGNATURE: [KEY, FINAL, KEYSIGNATURE, KEY_SIGNATURE_TYPE],
-                   KEY_SIGNATURE_TYPE: [KEY_SIGNATURE_TYPE],
-                   TIMESIGNATURE: [TIMESIGNATURE, TIMESIGNATUREGROUPED],
-                   TIMESIGNATUREGROUPED: [TIMESIGNATUREGROUPED],
-                   TEMPO: [TEMPO, TEMPO_GROUPED_1, TEMPO_GROUPED_2],
-                   TEMPO_GROUPED_1: [TEMPO_GROUPED_1, TEMPO_GROUPED_2],
-                   TEMPO_GROUPED_2: [TEMPO_GROUPED_2],
-                   "AbrScoring": ["AbrScoring", "RealScoringGrouped"],
-                   "RealScoringGrouped": ["RealScoringGrouped"]
-                   }
-COMMON_DF='common_df'
 
 YELLOWFILL = openpyxl.styles.PatternFill(
     start_color='F9E220', end_color='F9E220', fill_type='solid')

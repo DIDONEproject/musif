@@ -10,9 +10,9 @@ from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
                                                       LOWEST_NOTE_INDEX)
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PERCENTAGE,
-                                                      KEY_prefix)
+                                                      KEY_PREFIX)
 from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
-from musif.extract.features.prefix import get_part_prefix
+from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.extract.features.scoring.constants import (FAMILY_INSTRUMENTATION,
                                                       FAMILY_SCORING, VOICES)
@@ -26,9 +26,12 @@ from .constants import PRESENCE, voices_list_prefixes
 def replace_nans(df):
     for col in df.columns:
         if 'Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or '_Degree' in col or (TRIMMED_INTERVALLIC_MEAN and PRESENCE and '_Dyn') in col:
-            df[col]= df[col].fillna(0)
+            df[col]= df[col].fillna('NA')
+            
 
-def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
+def merge_duetos_trios(df: DataFrame)-> None:
+    generic_sound_voice_prefix = get_sound_prefix('Voice')
+    
     df = df[df[VOICES].notna()]
     multiple_voices = df[df[VOICES].str.contains(',')]
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages.')
@@ -48,7 +51,7 @@ def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
                 similar_col=col.replace(get_part_prefix(first_voice),get_part_prefix(all_voices[j]))
                 if similar_col in df:
                     similar_cols.append(similar_col)
-            df[formatted_col]=np.nan
+            df.loc[:,formatted_col]='NA' #np.nan
             if HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
                 df.loc[index,formatted_col]=df.loc[index,similar_cols].max()
             elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
@@ -56,9 +59,11 @@ def merge_duetos_trios(df: DataFrame, generic_sound_voice_prefix: str)-> None:
             else:
                 df.loc[index,formatted_col]=df.loc[index,similar_cols].mean()
                 
-            df.loc[index,similar_cols]=np.nan
+            df.loc[index,similar_cols]='NA' #np.nan
 
-def merge_single_voices(df: DataFrame, generic_sound_voice_prefix: str) -> None:
+def merge_single_voices(df: DataFrame) -> None:
+    generic_sound_voice_prefix = get_sound_prefix('Voice')
+    
     pinfo('\nJoining voice parts...')
     for col in df.columns.values:
             if any(voice in col for voice in voices_list_prefixes):
@@ -99,11 +104,6 @@ def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: Dat
     # pinfo(str(duetos_counter))
     pinfo(f"\nFinal shape of the DataFrame: {df.shape}")
 
-def delete_previous_items(df: DataFrame) -> None:
-    errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
-    for item in errors:
-        index = df.index[df['FileName']==item]
-        df.drop(index, axis=0, inplace=True)
 
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
         for inst in config[INSTRUMENTS_TO_DELETE]:
@@ -115,7 +115,7 @@ def delete_columns(data: DataFrame, config: dictConfig) -> None:
             
         #Delete Vn when it is alone
         data.drop(data.columns[data.columns.str.contains(get_part_prefix('Vn'))], axis = 1, inplace=True)
-        if 'PartVnI__PartVoice__Texture':
+        if 'PartVnI__PartVoice__Texture' in data:
             del data['PartVnI__PartVoice__Texture']
 
         presence=['Presence_of_'+str(i) for i in config['delete_presence']]
@@ -143,36 +143,36 @@ def split_passion_A(data: DataFrame) -> None:
     data.drop('Label_PassionA', axis = 1, inplace=True)
   
 def join_keys(df: DataFrame) -> None:
-        key_SD = [KEY_prefix+'IV'+KEY_PERCENTAGE, KEY_prefix+'II'+KEY_PERCENTAGE, KEY_prefix+'VI'+KEY_PERCENTAGE]
-        key_sd = [KEY_prefix+'iv'+KEY_PERCENTAGE, KEY_prefix+'ii'+KEY_PERCENTAGE]
-        key_tonic = [KEY_prefix+'I'+KEY_PERCENTAGE, KEY_prefix+'i'+KEY_PERCENTAGE]
-        key_rel = [KEY_prefix+'III'+KEY_PERCENTAGE, KEY_prefix+'vi'+KEY_PERCENTAGE]
+        key_SD = [KEY_PREFIX+'IV'+KEY_PERCENTAGE, KEY_PREFIX+'II'+KEY_PERCENTAGE, KEY_PREFIX+'VI'+KEY_PERCENTAGE]
+        key_sd = [KEY_PREFIX+'iv'+KEY_PERCENTAGE, KEY_PREFIX+'ii'+KEY_PERCENTAGE]
+        key_tonic = [KEY_PREFIX+'I'+KEY_PERCENTAGE, KEY_PREFIX+'i'+KEY_PERCENTAGE]
+        key_rel = [KEY_PREFIX+'III'+KEY_PERCENTAGE, KEY_PREFIX+'vi'+KEY_PERCENTAGE]
 
         total_key=key_rel+key_tonic+key_sd+key_SD
-        others_key=[i for i in df.columns if KEY_prefix in i and i not in total_key and KEY_MODULATORY not in i]
+        others_key=[i for i in df.columns if KEY_PREFIX in i and i not in total_key and KEY_MODULATORY not in i]
 
-        df[KEY_prefix+'SD'+KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
-        df[KEY_prefix+'sd'+KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
-        df[KEY_prefix+'SubD'+KEY_PERCENTAGE]=df[KEY_prefix+'sd'+KEY_PERCENTAGE] + df[KEY_prefix+'SD'+KEY_PERCENTAGE]
-        df[KEY_prefix+'T'+KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
-        df[KEY_prefix+'rel'+KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
-        df[KEY_prefix+'Other'+KEY_PERCENTAGE] = df[others_key].sum(axis=1)
+        df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
+        df[KEY_PREFIX+'sd'+KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
+        df[KEY_PREFIX+'SubD'+KEY_PERCENTAGE]=df[KEY_PREFIX+'sd'+KEY_PERCENTAGE] + df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]
+        df[KEY_PREFIX+'T'+KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
+        df[KEY_PREFIX+'rel'+KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
+        df[KEY_PREFIX+'Other'+KEY_PERCENTAGE] = df[others_key].sum(axis=1)
         # df.drop(total_key+others_key, axis = 1, inplace=True)
 
 def join_keys_modulatory(df: DataFrame):
-        key_SD=[KEY_prefix+KEY_MODULATORY+'IV',KEY_prefix+KEY_MODULATORY+'II', KEY_prefix+KEY_MODULATORY+'VI']
-        key_sd=[KEY_prefix+KEY_MODULATORY+'iv',KEY_prefix+KEY_MODULATORY+'ii']
-        key_tonic=[KEY_prefix+KEY_MODULATORY+'I',KEY_prefix+KEY_MODULATORY+'i']
-        key_rel=[KEY_prefix+KEY_MODULATORY+'III',KEY_prefix+KEY_MODULATORY+'vi']
+        key_SD=[KEY_PREFIX+KEY_MODULATORY+'IV',KEY_PREFIX+KEY_MODULATORY+'II', KEY_PREFIX+KEY_MODULATORY+'VI']
+        key_sd=[KEY_PREFIX+KEY_MODULATORY+'iv',KEY_PREFIX+KEY_MODULATORY+'ii']
+        key_tonic=[KEY_PREFIX+KEY_MODULATORY+'I',KEY_PREFIX+KEY_MODULATORY+'i']
+        key_rel=[KEY_PREFIX+KEY_MODULATORY+'III',KEY_PREFIX+KEY_MODULATORY+'vi']
 
         total_key_mod=key_rel+key_tonic+key_sd+key_SD
-        others_key_mod=[i for i in df.columns if KEY_prefix+KEY_MODULATORY in i and i not in total_key_mod]
+        others_key_mod=[i for i in df.columns if KEY_PREFIX+KEY_MODULATORY in i and i not in total_key_mod]
 
-        df[KEY_prefix+KEY_MODULATORY+'SD']=df[key_SD].sum(axis=1)
-        df[KEY_prefix+KEY_MODULATORY+'sd']=df[key_sd].sum(axis=1)
-        df[KEY_prefix+KEY_MODULATORY+'SubD']=df[KEY_prefix+KEY_MODULATORY+'sd'] + df[KEY_prefix+KEY_MODULATORY+'SD']
-        df[KEY_prefix+KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
-        df[KEY_prefix+KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
-        df[KEY_prefix+KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'SD']=df[key_SD].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'sd']=df[key_sd].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'SubD']=df[KEY_PREFIX+KEY_MODULATORY+'sd'] + df[KEY_PREFIX+KEY_MODULATORY+'SD']
+        df[KEY_PREFIX+KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
         # df.drop(total_key_mod+others_key_mod, axis = 1, inplace=True)
 
