@@ -176,7 +176,7 @@ def bar_plot_percentage(name, data, column_names, x_label, title, second_title=N
         plt.xticks(ticks=range(0, size, 1), labels=longest_columns, fontsize=30)
         plt.xlabel(x_label)
     else:
-        list_sum = group[column_names].sum(axis=0, skipna=True)
+        list_sum = data[column_names].sum(axis=0, skipna=True)
         data[column_names] = list((list_sum / sum(list_sum)) * 100)
         
         # Only elements with more than 2% presence
@@ -185,7 +185,7 @@ def bar_plot_percentage(name, data, column_names, x_label, title, second_title=N
 
         fig, ax = plt.subplots(figsize=(size if size > 6 else 6, size if size > 6 else 6))
 
-        plt.bar(x=range(0, size, 1), height=valid_results, color=CSS_COLORS[np.random.randint(len(CSS_COLORS))], edgecolor='k')
+        plt.bar(x=range(0, size, 1), height=valid_results.columns, color=CSS_COLORS[np.random.randint(len(CSS_COLORS))], edgecolor='k')
         plt.draw()
         labels = [x.get_text() for x in ax.get_yticklabels()]
         ax.set_yticklabels([l + '%' for l in labels])
