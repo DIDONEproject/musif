@@ -18,12 +18,12 @@ features:
   - composer
   - librettist
   # - ambitus
-  # - interval
+  - interval
   # - tempo
   # - density
   # - texture
   # - harmony
-  - lyrics
+  # - lyrics
   # - scale
   # - scale_relative
   # - key

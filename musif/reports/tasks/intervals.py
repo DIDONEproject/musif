@@ -70,7 +70,7 @@ def Intervals(rows_groups: dict, not_used_cols: dict, factor, _cfg: Configuratio
                             if data_grouped:
                                 bar_plot_percentage(name_bar + IMAGE_EXTENSION, data_grouped, third_columns_names_origin,
                                             'Intervals' + '\n' + str(row).replace('Aria','').upper() if 'Clef' not in name else 'Clefs' + str(row).replace('Aria','').upper(), title)
-                        else: #w ith subgroups
+                        else: #with subgroups
                             for i, subrow in enumerate(rows_groups[row][0]):
                                 if subrow not in EXCEPTIONS:
                                     data_grouped = data.groupby(subrow)
@@ -142,32 +142,32 @@ def Intervals_types(rows_groups: dict, not_used_cols: dict, factor, _cfg: Config
             elif factor == 1:
                 for row in rows_groups:
                     name_folder=path.join(visualizations_path,'Per_'+row.replace('Aria','').upper())
-                    name_cakes = name.replace(
-                                '.xlsx', '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper())  + '_AD.png'
-                    name_bars = name.replace('.xlsx',  '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
-                
+                    
                     if not os.path.exists(name_folder):
                         os.makedirs(name_folder)
+                        
+                    name_cakes = name.replace(
+                                '.xlsx', '').replace('1_factor','') + '_Per_' + str(row.replace('Aria','').upper())  + '_AD' + IMAGE_EXTENSION
+                    name_bars = name.replace('.xlsx',  '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
+                
 
                     name_cakes=path.join(name_folder,name_cakes)
                     name_bars=path.join(name_folder,name_bars)
 
-                    
                     if row not in not_used_cols:
                         if len(rows_groups[row][0]) == 0:  # no sub-groups
                             data_grouped = data.groupby(row, sort=True)
                             if data_grouped:
                                 # melody_bar_plot(name_bar, data_grouped, columns_visualisation, second_title='Per ' + str(subrow.replace('Aria','').upper()))
-
                                 pie_plot(name_cakes, data_grouped, second_title='Per ' + str(row.replace('Aria','').upper()))
                                 double_bar_plot(name_bars, data_grouped, 'Per ' + str(row.replace('Aria','').upper()))
 
                         else: #subgroups
                                 for subrow in rows_groups[row][0]:
                                     if subrow not in EXCEPTIONS:
-                                        name_cakes = path.join(visualizations_path,
-                                        name.replace('.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '_AD.png')
-                                        name_bars = path.join(visualizations_path,
+                                        name_cakes = path.join(name_folder,
+                                        name.replace('.xlsx', '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + '_AD'+IMAGE_EXTENSION )
+                                        name_bars = path.join(name_folder,
                                         name.replace('.xlsx',  '') + '_Per_' + str(row.upper()) + '_' + str(subrow) + IMAGE_EXTENSION)
 
                                         data_grouped = data.groupby(subrow)
