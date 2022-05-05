@@ -1,4 +1,5 @@
 DATA_NOTES = "notes"
+DATA_NOTES_AND_RESTS = "notes_and_rests"
 DATA_LYRICS = "lyrics"
 DATA_SOUNDING_MEASURES = "sounding_measures"
 DATA_MEASURES = "measures"

@@ -27,7 +27,7 @@ ABSOLUTE_INTERVALLIC_MEAN = 'Absolute Intervallic Mean'
 ABSOLUTE_STD = "Absolute Std"
 TRIM_RATIO = "% Trimmed"
 
-def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info: Dict[str, DataFrame], results_path: str, pre_string, name: str, visualizations: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
+def melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info: Dict[str, DataFrame], results_path: str, pre_string, name: str, visualizations: Lock, additional_info: list=[], remove_columns: bool=False, groups: list=None):
     try:
         excel_name = get_excel_name(pre_string, name)
         workbook = openpyxl.Workbook()
@@ -71,11 +71,11 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info:
                 for row in rows_groups:
                     plot_name = name.replace(
                         '.xlsx', '') + '_Per_' + str(row.replace('Aria','').upper()) + IMAGE_EXTENSION
-                    name_bar =path.join(path_visualizations,'Per_'+row.replace('Aria','').upper())
-                    if not os.path.exists(name_bar):
-                        os.makedirs(name_bar)
-                    name_bar=path.join(name_bar,plot_name)
+                    name_bar = path.join(path_visualizations,'Per_'+row.replace('Aria','').upper())
                     if row not in not_used_cols:
+                        if not os.path.exists(name_bar):
+                            os.makedirs(name_bar)
+                        name_bar=path.join(name_bar,plot_name)
                         if len(rows_groups[row][0]) == 0:  # no sub-groups
                             data_grouped = data.groupby(row, sort=True)
                             if data_grouped:
@@ -84,13 +84,13 @@ def Melody_values(rows_groups, not_used_cols, factor, _cfg: Configuration, info:
                                     name_box = name_bar.replace('Melody_Values', 'Ambitus')
                                     box_plot(name_box, data_grouped, second_title='Per '+ str(row.replace('Aria','').upper()))
                         else: #subgroups
-                                for i, subrow in enumerate(rows_groups[row][0]):
+                                for _, subrow in enumerate(rows_groups[row][0]):
                                     if subrow not in EXCEPTIONS:
-                                        name_bar=name_bar.replace(IMAGE_EXTENSION,'')+'_'+subrow+IMAGE_EXTENSION
+                                        name_bar = name_bar.replace(IMAGE_EXTENSION,'')+'_'+subrow+IMAGE_EXTENSION
                                         data_grouped = data.groupby(subrow)
                                         melody_bar_plot(name_bar, data_grouped, columns_visualizations, second_title='Per ' + str(subrow.replace('Aria','').upper()))
                                         name_box = path.join(
-                                        path_visualizations, 'Ambitus' + name.replace('.xlsx', IMAGE_EXTENSION))
+                                        path_visualizations, 'Ambitus', name.replace('.xlsx', IMAGE_EXTENSION))
                                         
                                         if subrow == ROLE:
                                             box_plot(name_box, data_grouped, second_title='Per '+ str(subrow.replace('Aria','').upper()))

@@ -1,16 +1,18 @@
 from collections import Counter, defaultdict
+from itertools import groupby
 from statistics import mean
 from typing import List
 
+import numpy as np
+import pandas as pd
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION
-from musif.extract.features.prefix import (get_part_feature, get_score_feature,
-                                           get_score_prefix)
+from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 
-from .constants import *
 from ..core.constants import DATA_NOTES
+from .constants import *
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -26,7 +28,10 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     rhythm_double_dot = 0
     total_beats = 0
     total_sounding_beats = 0
-
+    
+    motion_features= get_motion_features(part_data)
+    part_features.update(motion_features)
+    
     for measure in part_data["measures"]:
         for i, element in enumerate(measure.elements):
             if element.classes[0] == "Note":
@@ -71,7 +76,6 @@ pass
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
     features = {}
-
     average_durations = []
     rhythm_intensities = []
     dotted_rhythm = []
@@ -107,3 +111,52 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     })
 
     score_features.update(features)
+
+def get_motion_features(part_data) -> dict:
+    notes_duration = [note.duration.quarterLength for note in part_data["notes_and_rests"]]
+    notes_midi = np.array([note.pitch.midi if hasattr(note, 'pitch') else np.nan for note in part_data["notes_and_rests"]])
+    step = 0.125
+    midis_raw = np.repeat(notes_midi, [i/step for i in notes_duration], axis=0)
+    spe_raw= np.diff(midis_raw) / step
+    acc_raw= np.diff(spe_raw) / step
+    
+    
+    # Absolute means of speed and acceleration
+    spe_avg_abs = np.nanmean(abs(spe_raw))
+    acc_avg_abs = np.nanmean(abs(acc_raw))
+        
+    # Rolling mean to smooth the midis by +-1 compasses -- not required for
+    # statistics based on means but important for detecting increasing sequences
+    # with a tolerance.
+    measure = 4
+    midis_smo_series = pd.Series(midis_raw)
+    midis_smo = [np.nanmean(i.to_list()) for i in midis_smo_series.rolling( 2 * measure + 1, center=True)]
+    
+    # midis_smo = np.rollmean(midis_raw, k = 2 * compass + 1, align = "center")
+    
+    spe_smo = np.diff(midis_smo) / step
+    acc_smo = np.diff(spe_smo) / step
+    
+    # Prolonged ascent/descent chunks in smoothed midis of the aria (allows for
+    # small violations in the form of decrements/increments that do not
+    # decrease/increase the rolling mean).
+    
+    dife = np.diff(midis_smo)
+    
+    asc= [(k, sum(1 for i in g)) for k,g in groupby(dife>0)]
+    dsc = [(k, sum(1 for i in g)) for k,g in groupby(dife<0)]
+    
+    asc=[i for b, i in asc if b]
+    dsc=[i for b, i in dsc if b]    
+    
+    # Average length of ascent/descent chunks of the aria
+    asc_avg = mean(asc)
+    dsc_avg = mean(dsc)
+
+    # Proportion of ascent/descent chunks over the total of the aria
+    asc_prp = sum(asc) / (len(dife) - 1)
+    dsc_prp = sum(dsc) / (len(dife) - 1)
+  
+    return {"spe_avg_abs" : spe_avg_abs, "acc_avg_abs" : acc_avg_abs,
+            "asc_avg": asc_avg, "dsc_avg" : dsc_avg,
+            "asc_prp" : asc_prp, "dsc_prp" : dsc_prp}
