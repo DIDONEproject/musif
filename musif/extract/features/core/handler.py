@@ -15,7 +15,7 @@ from ..scoring.constants import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, S
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data[DATA_PART]
-    notes, tied_notes, measures, sounding_measures = get_notes_and_measures(part)
+    notes, tied_notes, measures, sounding_measures, notes_and_rests = get_notes_and_measures(part)
     lyrics = get_notes_lyrics(notes)
     intervals = get_intervals(notes)
     part_data.update({
@@ -24,6 +24,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DATA_SOUNDING_MEASURES: sounding_measures,
         DATA_MEASURES: measures,
         DATA_INTERVALS: intervals,
+        DATA_NOTES_AND_RESTS: notes_and_rests
     })
     part_features.update({
         NUM_NOTES: len(notes),

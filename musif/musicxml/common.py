@@ -24,8 +24,9 @@ def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Note], List[Mea
     measures = list(part.getElementsByClass(Measure))
     sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
     original_notes = [note for measure in measures for note in measure.notes]
+    notes_and_rests = [note for measure in measures for note in measure.notesAndRests]
     tied_notes = tie_notes(original_notes)
-    return original_notes, tied_notes, measures, sounding_measures
+    return original_notes, tied_notes, measures, sounding_measures, notes_and_rests
 
 
 def tie_notes(original_notes: List[Note]) -> List[Note]:

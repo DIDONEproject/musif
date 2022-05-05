@@ -11,3 +11,4 @@ logs
 __pycache__
 raw_files
 failed_files.txt
+.Rproj.user

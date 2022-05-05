@@ -5,6 +5,7 @@ from typing import Dict, List
 import numpy as np
 from musif.common.constants import VOICE_FAMILY
 from musif.common.sort import sort_dataframe
+from musif.config import Configuration
 from musif.reports.calculations import compute_average
 from musif.reports.constants import (ARIA_ID, BOLD, CHARACTER, FONT,
                                      FONT_TITLE, GENDER, NAME, NORMAL_WIDTH,
@@ -83,24 +84,24 @@ def create_excel(sheet: ExcelWriter, rows_groups: Dict[str, list], columns: list
                     start_row=last_printed[i][1], start_column=i + 1, end_row=row_number - 2, end_column=i + 1)
                 sheet.cell(last_printed[i][1],  i + 1).fill = factors_Fill[i]
 
-def save_workbook(path, workbook, cells_size = NORMAL_WIDTH):
+def save_workbook(path: str, workbook: ExcelWriter, cells_size: str = NORMAL_WIDTH) -> None:
     if "Sheet" in workbook.get_sheet_names():
         std = workbook.get_sheet_by_name('Sheet')
         workbook.remove_sheet(std)
-    Adjust_excel_width_height(workbook, cells_size)
+    adjust_excel_width_height(workbook, cells_size)
     workbook.save(path)
     
 def remove_underscore(one_list: List) -> List:
     return [i.replace("_", " ") for i in one_list]
 
-def get_general_cols(rows_groups, general_cols):
+def get_general_cols(rows_groups: dict, general_cols: list) -> None:
     for row in rows_groups:
         if len(rows_groups[row][0]) == 0:
             general_cols.append(row)
         else:
             general_cols += rows_groups[row][0]
 
-def print_basic_sheet(_cfg, rows_groups, name, data, additional_info, groups, workbook, second_column_names, third_columns_names):
+def print_basic_sheet(_cfg: Configuration, rows_groups: dict, name: str, data: DataFrame, additional_info: dict, groups: dict, workbook: ExcelWriter, second_column_names: list, third_columns_names: list) -> None:
     columns = remove_underscore(third_columns_names)
     data = data.round(decimals = 2)
     computations = ["sum"]+ ["mean"]*(len(third_columns_names) - 1)
@@ -108,7 +109,7 @@ def print_basic_sheet(_cfg, rows_groups, name, data, additional_info, groups, wo
                     second_columns=second_column_names,
                     groups=groups, per = False, average=True, last_column=False, last_column_average=False, additional_info=additional_info)
 
-def Adjust_excel_width_height(workbook: ExcelWriter, multiplier):
+def adjust_excel_width_height(workbook: ExcelWriter, multiplier: float):
         for sheet in workbook.worksheets:
             col_range = sheet[sheet.min_column : sheet.max_column]
             for col in range(1, len(col_range)+1):
@@ -118,7 +119,7 @@ def Adjust_excel_width_height(workbook: ExcelWriter, multiplier):
             for row in range(1, len(row_range)+1):
                 sheet.row_dimensions[row].height = HEIGHT
 
-def get_groups_add_info(data: DataFrame, row: int, additional_info):
+def get_groups_add_info(data: DataFrame, row: int, additional_info: dict):
     if type(additional_info) == list:
         additional_info = [ai for ai in additional_info if ai in list(
             data.columns) and ai != row]
@@ -197,7 +198,7 @@ def write_columns_titles_variable_length(sheet: ExcelWriter, row: int, column: i
                          end_row=row, end_column=column + c[1] - 1)
         column += c[1]
 
-def split_voices(data: DataFrame):
+def split_voices(data: DataFrame) -> DataFrame:
     # Voices splitting for duetos in Character classification
     data = data.reset_index(drop=True)
     for ind in data.index:
@@ -513,7 +514,6 @@ def write_title(sheet, rows_groups, row_number, column_number, row):
 def capitalize_instruments(instruments):
     return [instrument[0].upper()+instrument[1:]
                     for instrument in instruments]
-
 
 def get_excel_name(pre_string, name):
     return pre_string + name + '.xlsx'

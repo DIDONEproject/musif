@@ -32,7 +32,7 @@ from .constants import *
 from .tasks.common_tasks import Densities, Textures
 from .tasks.harmony import Harmonic_analysis
 from .tasks.intervals import Intervals, Intervals_types
-from .tasks.melody_values import Melody_values
+from .tasks.melody_values import melody_values
 from .tasks.scale_degrees import Emphasised_scale_degrees
 
 
@@ -120,7 +120,7 @@ class ReportsGenerator:
 
         pinfo('\n' + str(num_factors) + " factor" + "\n")
         instruments = self._extract_instruments()
-        merge_single_voices()
+        merge_single_voices(self.all_info)
         
 
         common_tasks, harmony_tasks=self._prepare_common_dataframes(instruments)
@@ -128,7 +128,7 @@ class ReportsGenerator:
         additional_info, rg_groups = self._get_additional_info_and_groups(num_factors) 
 
         self._run_common_tasks(num_factors, common_columns_df, common_tasks, harmony_tasks, additional_info, rg_groups)
-        self._run_tasks_per_instrument(instruments, common_columns_df, num_factors)
+        self._run_tasks_per_instrument(instruments, common_columns_df, num_factors, rg_groups, additional_info)
         
 
         
@@ -160,10 +160,10 @@ class ReportsGenerator:
         return notes_set
 
     def _prepare_part_dataframes(self, common_columns_df: DataFrame, tasks: list, instrument_level: str, instrument: str) -> None:
-        intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self._find_interval_degree_columns(self.all_info, instrument_level)
+        intervals_list, intervals_types_list, degrees_list, degrees_relative_list = self._find_interval_degree_columns(instrument_level)
         
         if self._cfg.is_requested_module(interval):            
-            intervals_info, intervals_types = self._find_interval_columns(self.all_info, instrument_level, intervals_list, intervals_types_list)
+            intervals_info, intervals_types = self._find_interval_columns(instrument_level, intervals_list, intervals_types_list)
             intervals_info.dropna(how='all', axis=1, inplace=True)
             intervals_types.dropna(how='all', axis=1, inplace=True)
             if not intervals_info.empty:
@@ -174,19 +174,19 @@ class ReportsGenerator:
         if self._cfg.is_requested_module(ambitus):      
             try:     
                 if not self._cfg.is_requested_module(interval):
-                    perr('Interval module is needed to generate Melody Values report!')
+                    perr('Interval module is needed to generate Melody values report!')
                     tasks['melody_values']=pd.DataFrame()
                 else:
-                    tasks['melody_values'] = self._find_melody_columns(self.all_info, instrument_level).dropna(how='all', axis=1)
+                    tasks['melody_values'] = self._find_melody_columns(instrument_level).dropna(how='all', axis=1)
             except KeyError as e:                 
                 perr('Melody Values information could not be extracted'.format(e))
 
         if instrument=='Voice':
             if self._cfg.is_requested_module(scale):            
-                tasks['scale'] = self._find_scale_degrees_columns(self.all_info, instrument_level, degrees_list).dropna(how='all', axis=1)
+                tasks['scale'] = self._find_scale_degrees_columns(instrument_level, degrees_list).dropna(how='all', axis=1)
             if self._cfg.is_requested_module(scale_relative):            
-                tasks['scale_relative'] = self._find_scale_degrees_columns(self.all_info, instrument_level, degrees_relative_list).dropna(how='all', axis=1)
-            tasks['clefs'] = self._get_clefs(self.all_info, common_columns_df)
+                tasks['scale_relative'] = self._find_scale_degrees_columns(instrument_level, degrees_relative_list).dropna(how='all', axis=1)
+            tasks['clefs'] = self._get_clefs(common_columns_df)
 
     def _prepare_common_dataframes(self, instruments: List[str]) -> Tuple[Dict, Dict]:
         common_tasks={}
@@ -197,7 +197,7 @@ class ReportsGenerator:
             common_tasks['notes']=notes_df
         
         if self._cfg.is_requested_module(density):
-            density_df = self._find_density_columns(self.all_info, instruments)
+            density_df = self._find_density_columns(instruments)
             common_tasks['density']=density_df
 
         if self._cfg.is_requested_module(texture):
@@ -205,7 +205,7 @@ class ReportsGenerator:
             common_tasks['textures'] = textures_df
 
         if self._cfg.is_requested_module(harmony):
-            harmony_df, key_areas_df, chords_df, functions_dfs = self._find_harmony_columns(self.all_info)
+            harmony_df, key_areas_df, chords_df, functions_dfs = self._find_harmony_columns()
             harmony_tasks['harmonic_data']=harmony_df
             harmony_tasks['key_areas']=key_areas_df
             harmony_tasks['chords']=chords_df
@@ -280,7 +280,8 @@ class ReportsGenerator:
             common_columns_df.Clef3.replace('', 'NA', inplace=True)
         clefs_info=copy.deepcopy(common_columns_df)
         clefs_set = set([str(self.all_info['Clef1'][0]),str(self.all_info['Clef2'][0]), str(self.all_info['Clef3'][0])])
-        clefs_set.remove('nan')
+        if 'nan' in clefs_set:
+            clefs_set.remove('nan')
         for clef in clefs_set:
             clefs_info[clef] = 0
             for r, j in enumerate(clefs_info.iterrows()):
@@ -447,7 +448,7 @@ class ReportsGenerator:
             kwargs['common_df'] = common_columns_df
 
             if 'melody_values' in kwargs:
-                Melody_values(self.rows_groups, self.not_used_cols, factor, _cfg, kwargs, results_path, pre_string , "Melody_Values",
+                melody_values(self.rows_groups, self.not_used_cols, factor, _cfg, kwargs, results_path, pre_string , "Melody_Values",
                         self.visualizations, additional_info, True if factor == 0 else False, groups if groups != [] else None)
             
             if 'density' in kwargs:

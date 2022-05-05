@@ -376,7 +376,7 @@ class FeaturesExtractor:
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
-        linfo('--- Analyzing scores ---')
+        linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
         score_df, parts_df = self._process_corpora(musicxml_files)
