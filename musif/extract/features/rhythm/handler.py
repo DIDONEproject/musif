@@ -29,7 +29,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     total_beats = 0
     total_sounding_beats = 0
     
-    motion_features= get_motion_features(part_data)
+    motion_features = get_motion_features(part_data)
     part_features.update(motion_features)
     
     for measure in part_data["measures"]:
@@ -71,7 +71,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats) if total_sounding_beats else 0,
         DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats)
     })
-pass
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
@@ -98,9 +97,17 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
         features[get_part_feature(part, DOUBLE_DOTTEDRHYTHM)] = part_features[DOUBLE_DOTTEDRHYTHM]
         double_dotted_rhythm.append(part_features[DOUBLE_DOTTEDRHYTHM])
-
+        
+        features[get_part_feature(part, SPEED_AVG_ABS)] = part_features[SPEED_AVG_ABS]
+        features[get_part_feature(part, ACCELERATION_AVG_ABS)] = part_features[ACCELERATION_AVG_ABS]
+        features[get_part_feature(part, ASCENDENT_AVERAGE)] = part_features[ASCENDENT_AVERAGE]
+        features[get_part_feature(part, DESCENDENT_AVERAGE)] = part_features[DESCENDENT_AVERAGE]
+        features[get_part_feature(part, ASCENDENT_PROPORTION)] = part_features[ASCENDENT_PROPORTION]
+        features[get_part_feature(part, DESCENDENT_PROPORTION)] = part_features[DESCENDENT_PROPORTION]
+        
+        
+        
     dotted_rhythm = [i for i in dotted_rhythm if i != 0.0]
-    
     features.update({
         # get_score_feature(AVERAGE_DURATION): mean(average_durations),
         get_score_feature(AVERAGE_DURATION): mean([note for instrument in total_notes_duration for note in instrument]),
@@ -157,6 +164,6 @@ def get_motion_features(part_data) -> dict:
     asc_prp = sum(asc) / (len(dife) - 1)
     dsc_prp = sum(dsc) / (len(dife) - 1)
   
-    return {"spe_avg_abs" : spe_avg_abs, "acc_avg_abs" : acc_avg_abs,
-            "asc_avg": asc_avg, "dsc_avg" : dsc_avg,
-            "asc_prp" : asc_prp, "dsc_prp" : dsc_prp}
+    return {SPEED_AVG_ABS : spe_avg_abs, ACCELERATION_AVG_ABS: acc_avg_abs,
+            ASCENDENT_AVERAGE: asc_avg, DESCENDENT_AVERAGE : dsc_avg,
+            ASCENDENT_PROPORTION : asc_prp, DESCENDENT_PROPORTION : dsc_prp}

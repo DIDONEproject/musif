@@ -11,18 +11,18 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale05M-O_sugli-1740-Caballone[1.05][1139].xml'
-    data_dir = r'arias/'
+    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale05M-O_sugli-1740-Caballone[1.05][1139].xml'
+    data_dir = r'../Half_Corpus/'
     
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
     #test
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
+    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
     
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     
-    df = FeaturesExtractor("scripts/config_tests.yml", data_dir=data_dir, musescore_dir=musescore_dir).extract()
-    # df.to_csv('arias_test.csv', index=False)
-    df=pd.read_csv('arias_test.csv')
+    df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir).extract()
+    df.to_csv('features_extraction_06_05.csv', index=False)
+    # df=pd.read_csv('arias_test.csv')
     path = '.'
     # ReportsGenerator("scripts/config_tests.yml").generate_reports(df, path, num_factors=0, visualizations=True)
