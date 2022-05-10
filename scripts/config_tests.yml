@@ -17,17 +17,17 @@ features:
   - core
   - composer
   - librettist
-  # - ambitus
-  # - interval
-  # - tempo
-  # - density
-  # - texture
-  # - harmony
-  # - lyrics
-  # - scale
-  # - scale_relative
-  # - key
-  # - dynamics
+  - ambitus
+  - interval
+  - tempo
+  - density
+  - texture
+  - harmony
+  - lyrics
+  - scale
+  - scale_relative
+  - key
+  - dynamics
   - rhythm
 
 split_keywords:  # Used to split the possible layers present depending on the instrument name
