@@ -1,0 +1,65 @@
+---MIRAR LOGGER PARA PREVIAS--
+
+
+
+Processing score ../Corpus/Half_Corpus/Ale22M-Di_rendermi-1762-Bach[2.13][0848].xml
+ 57%|████████████████████▌               | 343/600 [1:43:00<45:59, 10.74s/it]An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale20M-Se_il-1791-Tarchi[2.10][1031].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale20M-Se_il-1791-Tarchi[2.10][1031].xml!!.
+Error: 'AverageDuration'
+
+
+Processing score ../Corpus/Half_Corpus/Ale35X-Appena_amore-1731-Hasse[2.02][0732].xml
+ 74%|██████████████████████████▋         | 444/600 
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale20M-Se_il-1769-Kozeluch[2.15][0761].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale20M-Se_il-1769-Kozeluch[2.15][0761].xml!!.
+Error: 'AverageDuration'
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale28M-Dove_si-1740-Caballone[3.09][1140].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale28M-Dove_si-1740-Caballone[3.09][1140].xml!!.
+Error: 'AverageDuration'
+
+[2:07:41<29:03, 11.18s/it]
+Processing score ../Corpus/Half_Corpus/Ale36X-Generoso_resvegliarti-1731-Hasse[2.04][0733].xml
+An error ocurred while extracting module musif.extract.features.lyrics.handler in ../Corpus/Half_Corpus/Ale31M-Ombra_dell-1771-Bertoni[3.07][1338].xml!!.
+Error: list index out of range
+
+
+ 74%|██████████████████████████▋         | 445/600 [2:07:49<26:25, 10.23s/it].xml
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale31M-Ombra_dell-1771-Bertoni[3.07][1338].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale31M-Ombra_dell-1771-Bertoni[3.07][1338].xml!!.
+Error: 'AverageDuration'
+
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale47X-Il_regno-1738-Galuppi[2.14][0701].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale47X-Il_regno-1738-Galuppi[2.14][0701].xml!!.
+Error: 'AverageDuration'
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale68X-Trafiggero_quel-1762-Bach[3.09][0851].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale68X-Trafiggero_quel-1762-Bach[3.09][0851].xml!!.
+Error: 'AverageDuration'
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale94X-Barbaro_discortese-1971-Tarchi[2.07][1030].xml!!.
+Error: mean requires at least one data point
+
+An error ocurred while extracting module musif.extract.features.rhythm.handler in ../Corpus/Half_Corpus/Ale94X-Barbaro_discortese-1971-Tarchi[2.07][1030].xml!!.
+Error: 'AverageDuration'
+
+ 
+
+98%|███████████████████████████████████ | 585/600 [2:50:41<04:17, 17.19s/it]ERROR    Dem08M-Padre_perdona-1748-Hasse[112][0857]:annotations -- expand_dcml.py (line 157) expand_labels():
+        propagate_pedal() failed with
+        0 organ points started, 1 ended:
+             mc pedal  mc pedalend
+        0  <NA>   NaN  44        ]

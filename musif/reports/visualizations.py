@@ -44,7 +44,7 @@ LINESTYLES = [i for i in Line2D.lineStyles.keys() if str(i) not in [
     'None', '', ' ']]
 
 
-def box_plot(name, data, second_title=None):
+def box_plot(name: str, data: DataFrame, second_title: str =None)-> None:
 
         columns_box = [['LowestIndex', 'HighestIndex'],
                        [LARGEST_SEMITONES_ALL.replace('All','')]]
@@ -148,8 +148,7 @@ def melody_bar_plot(name: str, data: DataFrame, column_names: List[str], second_
     plt.savefig(name)
     plt.close(fig)
 
-
-def bar_plot_percentage(name, data, column_names, x_label, title, second_title=None):
+def bar_plot_percentage(name: str, data: DataFrame, column_names: List[str], x_label: list, title: str, second_title:str=None) -> None:
     if hasattr(data, 'groups'):
         size = len([i for i in column_names])
         fig = plt.figure(figsize=(size if len(column_names) >
@@ -199,8 +198,7 @@ def bar_plot_percentage(name, data, column_names, x_label, title, second_title=N
     plt.savefig(name)
     plt.close(fig)
 
-
-def double_bar_plot(name, data, second_title=None):
+def double_bar_plot(name: str, data: DataFrame, second_title: str = None):
     plots = [['LeapsAll', 'StepwiseMotionAll'], ['PerfectAll',
                                                  'MajorAll', 'MinorAll', 'AugmentedAll', 'DiminishedAll']]
     fig, ax = plt.subplots(nrows=1, ncols=2)
@@ -238,7 +236,6 @@ def double_bar_plot(name, data, second_title=None):
     plt.subplots_adjust(top=0.9)
     plt.savefig(name)
     plt.close(fig)
-
 
 def pie_plot(name, data, second_title=None):
     main_division = ['Ascending', 'Descending']
@@ -337,8 +334,7 @@ def customized_plot(name, data, column_names, subtitile, second_title=None):
     fig.savefig(name)
     plt.close(fig)
 
-
-def bar_plot_extended(name: str, data: DataFrame, column_names: list, x_label: str, y_label: str, title: str, second_title: str=None, instr: str = None):
+def bar_plot_extended(name: str, data: DataFrame, column_names: list, x_label: str, y_label: str, title: str, second_title: str=None, instr: str = None) -> None:
     size = len(column_names)
     fig = plt.figure(figsize=(size if len(column_names) >
                               6 else 10, size if len(column_names) > 6 else 10))
@@ -377,8 +373,7 @@ def bar_plot_extended(name: str, data: DataFrame, column_names: list, x_label: s
     plt.savefig(name)
     plt.close(fig)
 
-
-def line_plot_extended(name, data, column_names, x_label, y_label, title, second_title=None):
+def line_plot_extended(name: str, data: DataFrame, column_names: List[str], x_label: list, y_label: list, title: str, second_title: str=None) -> None:
     size = len(column_names)
     fig = plt.figure(figsize=(size if len(column_names) >
                               6 else 10, size if len(column_names) > 6 else 10))
