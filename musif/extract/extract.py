@@ -4,9 +4,9 @@ import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Optional, Tuple, Union
-from urllib.request import parse_keqv_list
+from urllib.request import parse_keqv_list # TODO: imported but not used!
 
-import ms3
+import ms3 # TODO: imported but not used!
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -15,6 +15,9 @@ from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
+# TODO: I would suggest:
+# from musif.extract import constants as C
+# because it better allows type checking and autocompletion in editors
 from musif.extract.constants import *
 from musif.extract.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import process_musescore_file
