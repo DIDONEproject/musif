@@ -7,6 +7,7 @@ from musif.common.logs import create_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
 
+# TODO: add documentation for these variables
 LOGGER_NAME = "musiF"
 LOG = "log"
 LOG_FILE_PATH = "file_path"
@@ -74,6 +75,7 @@ _CONFIG_POST_FALLBACK = {
 }
 
 class Configuration:
+    # TODO: add documentation
 
     def __init__(self, *args, **kwargs):
         config_data = {}
@@ -170,6 +172,8 @@ class Configuration:
         )
 
 class PostProcess_Configuration:
+    # TODO: docuemtn this class
+
     def __init__(self, *args, **kwargs):
         config_data = {}
         if len(args) > 1:
