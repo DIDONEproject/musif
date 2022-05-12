@@ -530,6 +530,11 @@ class FeaturesExtractor:
             module = __import__(module_name, fromlist=[''])
             feature_dependencies = self._extract_feature_dependencies(module)
             for feature_dependency in feature_dependencies:
+                # TODO: this not in may be slow!
+                # TODO: I would change the whole architecture of the dependency management:
+                # first it computes the order of the features based on the declared dependencies
+                # then it computes the features in that order
+                # TODO: the user must be able to declare the dependencies of its own features
                 if feature_dependency not in found_features:
                     raise ValueError(
                         f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")
