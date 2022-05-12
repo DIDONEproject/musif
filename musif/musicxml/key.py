@@ -3,6 +3,8 @@ from typing import Tuple
 from music21.key import Key
 from music21.stream import Score
 
+# TODO: document all these functions
+
 
 def get_key(score: Score) -> str:
     return str(score.analyze("key"))

@@ -4,6 +4,8 @@ from enum import Enum
 from typing import Optional
 
 
+# TODO: document this module
+
 class TempoGroup2(Enum):
     ND = "nd"
     SLOW = "Slow"
