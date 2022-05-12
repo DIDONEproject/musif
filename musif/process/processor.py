@@ -10,6 +10,7 @@ from musif.process.utils import (delete_columns,
                                  replace_nans, split_passion_A)
 from pandas import DataFrame
 
+# TODO: why do we need this?
 sys.path.insert(0, "../musif")
 import os
 
@@ -30,6 +31,8 @@ from .constants import (PRESENCE, columns_order, label_by_col,
                         voices_list_prefixes)
 
 
+# TODO: solve the requirement of `Passion.csv` if possible
+# TODO: documentation should be more precise here and there, reread
 class DataProcessor:
     """Processor class that treats columns and information of a DataFrame
 
@@ -312,6 +315,3 @@ class DataProcessor:
         dest_path=self.destination_route + "_processed" + ".csv"
         log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
         self.to_csv(dest_path)
-
-
-

@@ -10,6 +10,8 @@ from musif.extract.features.scoring.constants import ROLE_TYPE, VOICES, INSTRUME
 
 # from musif.extract.features.scoring.constants import *
 
+# TODO: document these constants
+
 PRESENCE='Presence_of'
 
 label_by_col = {
