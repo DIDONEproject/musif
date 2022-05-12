@@ -94,13 +94,7 @@ if __name__ == "__main__":
 
 [ ] The above examples where put the features?
 [ ] The format of the feature file
-[ ] Documentation for each single feature
-[ ] Detailed comparison with jsymbolic features
-[ ] How to add a new custom feature from scratch?
-[ ] How to add a new custom feature based on the others?
 [ ] Document configuration files
-[ ] Various TODO in code (mainly documentation)
-[ ] Reformat everything with standard formatting
 [ ] Links to the documentation
 [ ] Links to related modules
 [ ] Links to jupyter notebooks
