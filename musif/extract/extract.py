@@ -106,6 +106,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         raise ParseFileError(file_path, str(e)) from e
     return harmonic_analysis
 
+# TODO: change name for this function (it looks like it extracts something from musicxml files)
 def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
     """Extracts the paths to musicxml files
 
@@ -136,6 +137,7 @@ def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[st
         raise TypeError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     if isinstance(obj, str):
         if path.isdir(obj):
+            # TODO: document check_file
             if check_file:
                 files_to_extract = skip_files(obj, check_file)
                 return files_to_extract
@@ -148,6 +150,7 @@ def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[st
     return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
 
 def skip_files(obj, check_file):
+    # TODO: document this function or make it private
     skipped=[]
     files_to_extract=[]
     total_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
