@@ -8,6 +8,7 @@ from musif.config import Configuration
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 
+# TODO: document this module
 
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
     sound = extract_sound(part, cfg)
@@ -67,6 +68,7 @@ def extract_part_roman_number_by_position(part: Part, parts: List[Part]) -> Opti
     return None
 
 
+# TODO: these exceptions should stay in some configuration?
 def replace_naming_exceptions(sound: str, part: Part) -> str:
     if 'da caccia' in sound:
         sound = sound.replace('da caccia', '')
