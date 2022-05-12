@@ -198,6 +198,7 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
     return musescore_file_path
 
 
+# TODO: the documentation of this class can be improved (the english is not the best...)
 class PartsExtractor:
     """
     Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
@@ -264,6 +265,7 @@ class PartsExtractor:
         return part_abbreviation
 
 
+# TODO: the documentation of this class can be improved (the english is not the best...)
 class FilesValidator:
     """
     Checks if each file can be parsed. If any file can't be parsed, at the end it will print a list of the file paths
@@ -339,6 +341,8 @@ class FilesValidator:
         return None
 
 
+# TODO: the documentation of this class can be improved (the english is not the best...)
+# TODO: describe how this class works behind the scenes in the documentation
 class FeaturesExtractor:
     """
     Extract features given in the configuration data getting a file, directory or several files paths,
@@ -382,6 +386,7 @@ class FeaturesExtractor:
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
+        # TODO: Explain what this function returns if ony one score is requested
         linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)

@@ -2,6 +2,9 @@ from typing import List, Optional
 
 from musif.extract.constants import DATA_PART_ABBREVIATION, VOICES_LIST
 
+# TODO: docs
+# TODO: cannot understand what these two functions do. Dow we need them public? 
+
 
 def filter_parts_data(parts_data: List[dict], parts_filter: Optional[List[str]]) -> List[dict]:
     if parts_filter is None:
@@ -20,4 +23,3 @@ def part_matches_filter(part_abbreviation: str, parts_filter: Optional[List[str]
         return True
     parts_filter_set = set(parts_filter)
     return part_abbreviation in parts_filter_set
-
