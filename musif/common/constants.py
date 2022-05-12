@@ -1,5 +1,7 @@
 import logging
 
+# TODO: document the variables that are needed
+# TODO: put the others in a private module (e.g. `_constants.py`)
 ENCODING = 'utf-8'
 VERSION = "1.0.0"
 CSV_DELIMITER = ","

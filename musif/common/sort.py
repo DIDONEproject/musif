@@ -4,6 +4,8 @@ from typing import List
 
 from musif.config import LOGGER_NAME
 
+# TODO: None of this functions is documented... at least afew lines of code would be nice.
+
 
 def sort_list(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     sort_dictionary = {elem: i for i, elem in enumerate(reference_list)}
@@ -58,6 +60,7 @@ def sort_dataframe(data, column, sorting_lists, key_to_sort):
         dataSorted.drop("Ranks", 1, inplace=True)
     return dataSorted
 
+# TODO: should the following code be removed?
 # class Sorting:
 #     """
 #     This class contains the most appropriate sortings for piece grouping criteria (1st columns in reports)

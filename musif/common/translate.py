@@ -6,6 +6,8 @@ from googletrans import Translator
 nltk.download('wordnet', quiet=True)
 from nltk.corpus import wordnet as wn
 
+# TODO: do we really need the whole nltk? it's a rather huge library...
+# TODO: do we also need googletrans?
 
 def translate_word(word: str, language: str = None, translations_cache: Dict[str, str] = None):
     t = Translator()
