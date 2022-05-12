@@ -1,3 +1,4 @@
+# TODO: document these variables
 DATA_PART = "part"
 DATA_PART_NUMBER = "part_number"
 DATA_PART_ABBREVIATION = "abbreviation"
