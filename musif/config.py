@@ -111,6 +111,8 @@ class Configuration:
         self._load_metadata()
 
     def is_requested_musescore_file(self) -> bool:
+        # TODO: doc
+
         if self.is_requested_feature_category(HARMONY_FEATURES):
             return True
         if self.is_requested_feature_category(SCALE_RELATIVE_FEATURES):
@@ -118,11 +120,15 @@ class Configuration:
         return False
 
     def is_requested_feature_category(self, feature) -> bool:
+        # TODO: doc
+
         if self.features is None:
             return True
         return feature in self.features
 
     def is_requested_module(self, module) -> bool:
+        # TODO: doc
+
         if self.features is None:
             return True
         module_path = module.__name__
@@ -133,6 +139,8 @@ class Configuration:
         return False
 
     def to_dict(self) -> dict:
+        # TODO: doc
+
         return {
             LOG: {
                 LOG_FILE_PATH: self.log_file,
@@ -173,6 +181,7 @@ class Configuration:
 
 class PostProcess_Configuration:
     # TODO: docuemtn this class
+    # TODO: rename class without underscore
 
     def __init__(self, *args, **kwargs):
         config_data = {}

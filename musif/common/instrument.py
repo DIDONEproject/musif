@@ -11,6 +11,7 @@ def create_instrument_abbreviations_file(file_path: str):
     all the instruments present in the score and their abbreviations.
     New Grove abbreviations
     """
+    # TODO: put an example in the docs and add return types
     instrumentName_abbreviation = {}
 
     url = 'https://imslp.org/wiki/IMSLP:Abbreviations_for_Instruments'
@@ -40,6 +41,7 @@ def create_instrument_families_file(file_path: str):
     all the instruments present in the score (IN ENGLISH) and their families,
     i.e. str (strings), ww (woodwinds), etc.
     """
+    # TODO: put an example in the docs and add return types
     instrumentName_family = {}
 
     url = 'https://opac.rism.info/index.php?id=15'

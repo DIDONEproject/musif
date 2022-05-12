@@ -1,6 +1,8 @@
 from typing import Any, Optional
 
 
+# TODO: do we really need a class containing a list of dictionaries? wouldn't a list of tuples be enough?
+# consider this comment only if it is computationally critical, it is a well written class actually
 class Cache:
 
     def __init__(self, capacity: int):
