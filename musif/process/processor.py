@@ -107,9 +107,11 @@ class DataProcessor:
             if isinstance(info, str):
                 pinfo('\nReading csv file...')
                 if not os.path.exists(info):
-                    raise FileNotFoundError(f"The {info} file doesn't exists!")
+                    raise FileNotFoundError
                 self.destination_route=info.replace('.csv','')
                 df = pd.read_csv(info, low_memory=False, sep=',', encoding_errors='replace')
+                if df.empty:
+                    raise FileNotFoundError
                 df[FILE_NAME].to_csv(self._post_config.check_file, index=False)
                 return df
             
@@ -118,8 +120,10 @@ class DataProcessor:
                 return df
             else:
                 perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
-                raise FileNotFoundError
+                return pd.DataFrame()
+            
         except FileNotFoundError:
+            perr('Data could not be loaded. Either wrong path or an empty file was found.')
             return pd.DataFrame()
 
     def process(self) -> DataFrame:
@@ -227,13 +231,13 @@ class DataProcessor:
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
-        
-        errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
-        for item in errors:
-            index = self.data.index[self.data['FileName']==item+'.xml']
-            if not index.empty:
-                self.data.drop(index, axis=0, inplace=True)
-                pwarn('Item {0} from errors.csv was deleted.'.format(item))
+        if os.path.exists('errors.csv'):
+            errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
+            for item in errors:
+                index = self.data.index[self.data['FileName']==item+'.xml']
+                if not index.empty:
+                    self.data.drop(index, axis=0, inplace=True)
+                    pwarn('Item {0} from errors.csv was deleted.'.format(item))
             
     def delete_unwanted_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
