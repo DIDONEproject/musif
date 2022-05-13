@@ -66,9 +66,9 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     notes_duration=[i for i in notes_duration if i != 0.0] # remove notes with duration equal to 0
 
     part_features.update({
-        AVERAGE_DURATION: mean(notes_duration) if len(notes_duration) != 0 else 0,
+        AVERAGE_DURATION: mean(notes_duration) if len(notes_duration) != 0 else 'NA',
         RHYTHMINT: sum(rhythm_intensity_period),
-        DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats) if total_sounding_beats else 0,
+        DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats) if total_sounding_beats else 'NA',
         DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats)
     })
 
@@ -157,12 +157,12 @@ def get_motion_features(part_data) -> dict:
     dsc=[i for b, i in dsc if b]    
     
     # Average length of ascent/descent chunks of the aria
-    asc_avg = mean(asc)
-    dsc_avg = mean(dsc)
+    asc_avg = mean(asc) if asc else np.nan
+    dsc_avg = mean(dsc) if dsc else np.nan
 
     # Proportion of ascent/descent chunks over the total of the aria
-    asc_prp = sum(asc) / (len(dife) - 1)
-    dsc_prp = sum(dsc) / (len(dife) - 1)
+    asc_prp = sum(asc) / (len(dife) - 1) if asc else np.nan
+    dsc_prp = sum(dsc) / (len(dife) - 1)if dsc else np.nan
   
     return {SPEED_AVG_ABS : spe_avg_abs, ACCELERATION_AVG_ABS: acc_avg_abs,
             ASCENDENT_AVERAGE: asc_avg, DESCENDENT_AVERAGE : dsc_avg,
