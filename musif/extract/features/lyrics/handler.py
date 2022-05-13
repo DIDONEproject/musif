@@ -61,7 +61,10 @@ def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:
 
 
 def get_voice_reg(notes):
-    last_note = notes[-1].notes[0].pitch.midi if notes[-1].isChord else notes[-1].pitch.midi
-    # If we wave 2 or more notes at once, we just take the lowest one
-    distances = [note[0].pitch.midi if note.isChord else (note.pitch.midi - last_note) for note in notes]
-    return mean(distances)  
+    if notes:
+        last_note = notes[-1].notes[0].pitch.midi if notes[-1].isChord else notes[-1].pitch.midi
+        # If we wave 2 or more notes at once, we just take the lowest one
+        distances = [note[0].pitch.midi if note.isChord else (note.pitch.midi - last_note) for note in notes]
+        return mean(distances)  
+    else:
+        return 'NA'
