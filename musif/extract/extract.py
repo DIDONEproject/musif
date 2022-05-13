@@ -4,9 +4,9 @@ import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Optional, Tuple, Union
-from urllib.request import parse_keqv_list
+from urllib.request import parse_keqv_list # TODO: imported but not used!
 
-import ms3
+import ms3 # TODO: imported but not used!
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -15,6 +15,9 @@ from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import filter_parts_data
+# TODO: I would suggest:
+# from musif.extract import constants as C
+# because it better allows type checking and autocompletion in editors
 from musif.extract.constants import *
 from musif.extract.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import process_musescore_file
@@ -103,6 +106,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         raise ParseFileError(file_path, str(e)) from e
     return harmonic_analysis
 
+# TODO: change name for this function (it looks like it extracts something from musicxml files)
 def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
     """Extracts the paths to musicxml files
 
@@ -133,6 +137,7 @@ def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[st
         raise TypeError(f"Unexpected argument {obj} should be a directory, a file path or a list of files paths")
     if isinstance(obj, str):
         if path.isdir(obj):
+            # TODO: document check_file
             if check_file:
                 files_to_extract = skip_files(obj, check_file)
                 return files_to_extract
@@ -145,6 +150,7 @@ def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[st
     return sorted([mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)])
 
 def skip_files(obj, check_file):
+    # TODO: document this function or make it private
     skipped=[]
     files_to_extract=[]
     total_files = sorted(glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower)
@@ -192,6 +198,7 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
     return musescore_file_path
 
 
+# TODO: the documentation of this class can be improved (the english is not the best...)
 class PartsExtractor:
     """
     Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
@@ -258,6 +265,7 @@ class PartsExtractor:
         return part_abbreviation
 
 
+# TODO: the documentation of this class can be improved (the english is not the best...)
 class FilesValidator:
     """
     Checks if each file can be parsed. If any file can't be parsed, at the end it will print a list of the file paths
@@ -333,6 +341,8 @@ class FilesValidator:
         return None
 
 
+# TODO: the documentation of this class can be improved (the english is not the best...)
+# TODO: describe how this class works behind the scenes in the documentation
 class FeaturesExtractor:
     """
     Extract features given in the configuration data getting a file, directory or several files paths,
@@ -376,6 +386,7 @@ class FeaturesExtractor:
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
+        # TODO: Explain what this function returns if ony one score is requested
         linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
@@ -519,6 +530,11 @@ class FeaturesExtractor:
             module = __import__(module_name, fromlist=[''])
             feature_dependencies = self._extract_feature_dependencies(module)
             for feature_dependency in feature_dependencies:
+                # TODO: this not in may be slow!
+                # TODO: I would change the whole architecture of the dependency management:
+                # first it computes the order of the features based on the declared dependencies
+                # then it computes the features in that order
+                # TODO: the user must be able to declare the dependencies of its own features
                 if feature_dependency not in found_features:
                     raise ValueError(
                         f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")

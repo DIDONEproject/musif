@@ -1,5 +1,7 @@
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 
+# TODO documet these functions or make them private
+# TODO: wouldn't it be better to create MultiIndex dataframes?
 
 def get_part_prefix(part_abbreviation: str) -> str:
     if part_abbreviation is None or len(part_abbreviation) == 0:

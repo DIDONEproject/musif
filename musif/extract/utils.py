@@ -11,6 +11,7 @@ from musif.musicxml.tempo import get_number_of_beats
 file_names = []
 repeat_bracket = False
 
+# TODO: document all these functions... are they needed, isn't it?
 
 def measure_ranges(instrument_measures: int, init: int, end: int, iteration=None, offset=None, twoCompasses=False, remove_repetition_marks = False):
     measures = []
@@ -129,6 +130,7 @@ def get_beat_position(beats_timesignature: int, number_of_beats: int, pos: int) 
         
     #TEST this with 3/8
     
+# TODO: refactor this function, it's a bit long
 def expand_repeat_bars(score):
     final_score = m21.stream.Score()
     final_score.metadata = score.metadata
@@ -307,6 +309,7 @@ def remove_folder_contents(path: str):
         elif os.path.isdir(file_path):
             remove_folder_contents(file_path)
 
+# TODO: rename without the capital G
 def Get_TimeSignature_periods(time_signatures):
     # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
     periods = [0]

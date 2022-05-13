@@ -7,6 +7,7 @@ from musif.common.logs import create_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
 
+# TODO: add documentation for these variables
 LOGGER_NAME = "musiF"
 LOG = "log"
 LOG_FILE_PATH = "file_path"
@@ -74,6 +75,7 @@ _CONFIG_POST_FALLBACK = {
 }
 
 class Configuration:
+    # TODO: add documentation
 
     def __init__(self, *args, **kwargs):
         config_data = {}
@@ -109,6 +111,8 @@ class Configuration:
         self._load_metadata()
 
     def is_requested_musescore_file(self) -> bool:
+        # TODO: doc
+
         if self.is_requested_feature_category(HARMONY_FEATURES):
             return True
         if self.is_requested_feature_category(SCALE_RELATIVE_FEATURES):
@@ -116,11 +120,15 @@ class Configuration:
         return False
 
     def is_requested_feature_category(self, feature) -> bool:
+        # TODO: doc
+
         if self.features is None:
             return True
         return feature in self.features
 
     def is_requested_module(self, module) -> bool:
+        # TODO: doc
+
         if self.features is None:
             return True
         module_path = module.__name__
@@ -131,6 +139,8 @@ class Configuration:
         return False
 
     def to_dict(self) -> dict:
+        # TODO: doc
+
         return {
             LOG: {
                 LOG_FILE_PATH: self.log_file,
@@ -170,6 +180,9 @@ class Configuration:
         )
 
 class PostProcess_Configuration:
+    # TODO: docuemtn this class
+    # TODO: rename class without underscore
+
     def __init__(self, *args, **kwargs):
         config_data = {}
         if len(args) > 1:

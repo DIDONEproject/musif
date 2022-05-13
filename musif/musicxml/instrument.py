@@ -7,6 +7,9 @@ from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20
 
+# TODO: document all these functions
+# TODO: function names may be improved?
+
 
 def extract_instrument_and_number_from_part(part: str) -> Tuple[str, Optional[str]]:
     for i in range(100, 0, -1):

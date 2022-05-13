@@ -21,11 +21,19 @@ def sort(list_to_sort, main_list):
     """
     Function that sorts the first list based on the second one
     """
+    # TODO: would it be better using numpy?
+    # TODO: if list_to_sort may be a set (a dict with only keys) the `in` operation is much faster
+    # TODO: btw, in pure python: return [i for i in main_list if i in list_to_sort]
+    # TODO: the previous one may not be identical... test it!
+    # TODO: also, if the two lists have the same length: https://www.adamsmith.haus/python/answers/how-to-sort-a-list-based-on-another-list-in-python
     indexes = []
     huerfanos = []
     for i in list_to_sort:
+        # this may be very slow (it contains a full for)
         if i in main_list:
+            # again, the following is another full for
             indexes.append(main_list.index(i))  # an error indicates that the elements are not present in the main_list; please get in touch with us if so.
+            # TODO: throw an exception with this message and give some info on how to solve it (at least)
         else:
             huerfanos.append(i)
 
@@ -37,6 +45,8 @@ def sort(list_to_sort, main_list):
 
 def get_gender(character):
     # returns characters' gender; for our arias only
+    # TODO: put these values in config?
+    # TODO: document this function
     if character in ['Didone', 'Selene', 'Dircea', 'Creusa', 'Semira', 'Mandane']:
         return 'female'
     else:
@@ -45,6 +55,8 @@ def get_gender(character):
 
 def get_role(character):
     # returns general role type for specific operatic characters (for our arias only)
+    # TODO: put these values in config?
+    # TODO: document this function
     if character in ['Demofoonte', 'Licomede', 'Tito', 'Catone', 'Fenicio']:
         return 'Senior ruler'
     elif character in ['Didone', 'Dircea', 'Cleofide', 'Mandane', 'Deidamia', 'Sabina', 'Vitellia', 'Marzia', 'Cleonice']:
@@ -67,12 +79,14 @@ def get_note_degree(key, note):
     """
     Function created to obtain the scale degree of a note in a given key #
     """
+    # TODO: add return types
     if 'major' in key:
         scl = scale.MajorScale(key.split(' ')[0])
     else:
         scl = scale.MinorScale(key.split(' ')[0])
 
     degree = scl.getScaleDegreeAndAccidentalFromPitch(pitch.Pitch(note))
+    # TODO: always use `is not None` because != does a different thing
     accidental = degree[1].fullName if degree[1] != None else ''
 
     acc = ''
@@ -91,6 +105,8 @@ def get_localTonalty(globalkey, degree):
     """
     Function created to obtain the local key of a note degree #
     """
+    # TODO: can't understand this documentation
+    # TODO: add return types
     accidental = ''
     if '#' in degree:
         accidental = '#'

@@ -12,6 +12,8 @@ from musif.common import group
 
 MUSICXML_FILE_EXTENSION = "xml"
 
+# TODO: Documennt all this module
+
 
 def is_voice(part: Part) -> bool:
     instrument = part.getInstrument(returnDefault=False)
@@ -56,11 +58,13 @@ def must_be_tied(elem, last_elem) -> bool:
     return True
 
 
+# TODO: this function is a little long...
 def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split the possible layers present on wind instruments
 
     """
+
     final_parts = []
     for part_index, part in enumerate(score.parts):
         instrument = part.getInstrument(returnDefault=False)
