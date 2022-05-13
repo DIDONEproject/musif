@@ -3,6 +3,7 @@ from ms3.score import MSCX
 from musif.logs import ldebug, lerr
 
 
+# TODO: document this function
 def extract_harmonic_analysis(mscx_file: str):
     ldebug(f"Extracting harmonic analysis from musescore file '{mscx_file}'")
     harmonic_analysis = None

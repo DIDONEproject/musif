@@ -6,6 +6,8 @@ from musif.common.constants import LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEV
 from musif.common.utils import colorize
 from musif.config import LOGGER_NAME
 
+# TODO: document this module with a simple page (no needed per-fucntion documentation I think)
+
 def linfo(text: str, exc_info: bool = False) -> None:
     llog(text, logger(), LEVEL_INFO, exc_info)
 

@@ -25,6 +25,8 @@ pip install .
 
 Assuming we have our scores persisted in a directories structure like this:
  
+TODO: which one of the two?
+
 ```
 scores                                   others
 |                                        |
@@ -88,3 +90,11 @@ if __name__ == "__main__":
 
 ```
 
+### TODO
+
+[ ] The above examples where put the features?
+[ ] The format of the feature file
+[ ] Document configuration files
+[ ] Links to the documentation
+[ ] Links to related modules
+[ ] Links to jupyter notebooks
