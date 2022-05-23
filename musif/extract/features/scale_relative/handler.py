@@ -1,7 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale_relative.utils import get_emphasised_scale_degrees_relative
@@ -19,7 +19,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     
     if len(parts_data) == 0:
         return

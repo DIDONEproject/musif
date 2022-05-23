@@ -5,7 +5,7 @@ from numpy import mean
 
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_LYRICS, DATA_NOTES
 from musif.extract.features.prefix import get_part_feature, get_score_feature
@@ -29,7 +29,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 

@@ -4,9 +4,7 @@ import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Optional, Tuple, Union
-from urllib.request import parse_keqv_list # TODO: imported but not used!
 
-import ms3 # TODO: imported but not used!
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
@@ -14,7 +12,7 @@ from musif.common.cache import Cache
 from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import _filter_parts_data
 # TODO: I would suggest:
 # from musif.extract import constants as C
 # because it better allows type checking and autocompletion in editors
@@ -30,8 +28,6 @@ from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,
                                     to_abbreviation)
 from pandas import DataFrame
 from tqdm import tqdm
-
-from musif.mlogger import MPLogger
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -452,7 +448,7 @@ class FeaturesExtractor:
         pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
-        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
+        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for module in self._extract_feature_modules():

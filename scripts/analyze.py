@@ -1,6 +1,6 @@
 # import os
 import sys
-sys.path.insert(0, "../musif/")
+# sys.path.insert(0, "../musif/")
 
 from musif.extract.extract import FeaturesExtractor
 from musif.process.processor import DataProcessor
@@ -16,14 +16,14 @@ if __name__ == "__main__":
     name = "features_09_05"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     
-    dest_path = name+"_extraction.csv"
+    dest_path = name+"_total.csv"
     # df.to_csv(dest_path, index=False)
     
     p = DataProcessor(dest_path, "scripts/post_process.yml", merge_voices=True)
+    print(p.data.shape)
     p.process()
 
     # Methods to test
-    # print(p.data.shape)
     # p.delete_previous_items()
     # print(p.data.columns[p.data.columns.str.contains('Key')])
     # print(p.data.columns[p.data.columns.str.contains('Key')].shape)

@@ -3,7 +3,7 @@ from typing import List
 from musif.common.constants import GENERAL_FAMILY, VOICE_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
-from musif.extract.common import part_matches_filter
+from musif.extract.common import _part_matches_filter
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART, \
     DATA_PART_ABBREVIATION, DATA_PART_NUMBER, DATA_SCORE, DATA_SOUND, DATA_SOUND_ABBREVIATION
 from musif.extract.features.prefix import get_family_feature, get_family_prefix, get_score_feature, get_sound_feature, \
@@ -45,7 +45,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         sound = extract_sound(part, cfg)
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
             sound, part, score_data[DATA_FILTERED_PARTS], cfg)
-        is_matching_part = part_matches_filter(part_abbreviation, cfg.parts_filter)
+        is_matching_part = _part_matches_filter(part_abbreviation, cfg.parts_filter)
         family = cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = cfg.family_to_abbreviation[family]
         abbreviated_parts.append(part_abbreviation)
