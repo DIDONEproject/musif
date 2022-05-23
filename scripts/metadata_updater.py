@@ -33,7 +33,6 @@ if __name__ == "__main__":
     columns=['AriaId','Character','Clef1', 'Clef2', 'Clef3']
     df_clefs=df_clefs[columns]
     df_clefs.to_csv(des_path + 'clefs.csv', index=False)
-    pass    
     
     # themeA
     themeA_route = base_path + 'Arias_proportions.xlsx'

@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from musif.common.sort import sort_dict
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data, part_matches_filter
+from musif.extract.common import _filter_parts_data, _part_matches_filter
 from musif.extract.constants import DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PARTS, DATA_PART_ABBREVIATION, \
     DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.handler import DATA_MEASURES, DATA_NOTES, DATA_SOUNDING_MEASURES
@@ -22,7 +22,7 @@ from ..core.constants import NUM_MEASURES, NUM_NOTES, NUM_SOUNDING_MEASURES
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
+    if not _part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
         return {}
     notes = part_data[DATA_NOTES]
     sounding_measures = part_data[DATA_SOUNDING_MEASURES]
@@ -53,7 +53,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_features) == 0:
         return
 

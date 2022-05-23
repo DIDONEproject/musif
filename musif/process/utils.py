@@ -21,13 +21,13 @@ from musif.logs import pinfo
 from pandas import DataFrame
 from tqdm import tqdm
 
-from .constants import PRESENCE, voices_list_prefixes
+from .constants import voices_list_prefixes
 
 
 def replace_nans(df):
     for col in df.columns:
-        if 'Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or '_Degree' in col or (TRIMMED_INTERVALLIC_MEAN and PRESENCE and '_Dyn') in col:
-            df[col]= df[col].fillna('NA')
+            if 'Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or ('_Degree' and TRIMMED_INTERVALLIC_MEAN and '_Dyn') in col:
+                df[col]= df[col].fillna('NA')
             
 
 def merge_duetos_trios(df: DataFrame)-> None:

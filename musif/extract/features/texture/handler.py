@@ -5,7 +5,7 @@ from pandas import DataFrame
 
 from musif.common.constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data, part_matches_filter
+from musif.extract.common import _filter_parts_data, _part_matches_filter
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_NOTES
 from musif.extract.features.prefix import get_part_feature, get_part_prefix
@@ -17,7 +17,7 @@ from ..core.constants import NUM_NOTES
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
     features = {}
@@ -54,7 +54,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
-    if not part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
+    if not _part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
         return {}
     notes = part_data[DATA_NOTES]
     part_features.update({

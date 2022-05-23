@@ -1405,63 +1405,64 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1404,Dal segno,Timante,Male,Male lover 1,Copenhagen,Empire
 1405,ABB',"Dircea,Timante",Female,"Female lover 1,Male lover 1",Forli,Italy
 1406,Dal segno,Cleofide,Female,Female lover 1,Genoa,Italy
-1407,,,Male,,,
-1408,,,Male,,,
-1409,,,Male,,,
-1410,,,Male,,,
-1411,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
+1407,Da capo,Poro,Male,Male lover 1,Milan,Italy
+1408,Da capo,Cleofide,Female,Female lover 1,Milan,Italy
+1409,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Milan,Italy
+1410,Da capo,Erissena,Female,Female lover 2,Milan,Italy
+1411,Da capo,Poro,Male,Male lover 1,Milan,Italy
+1412,Da capo,Gandarte,Male,Male lover 3,Milan,Italy
+1413,Da capo,Cleofide,Female,Female lover 1,Milan,Italy
+1414,ABA,Timagene,Male,Antagonist,Milan,Italy
+1415,Dal segno,Cleofide,Female,Female lover 1,Mannheim,Empire
+1416,ABA,Alessandro,Male,Male lover 2,Mannheim,Empire
+1417,ABA,Timagene,Male,Antagonist,Mannheim,Empire
+1418,Dal segno,Erissena,Female,Female lover 2,Mannheim,Empire
+1419,Dal segno,Poro,Male,Male lover 1,Ancona,Italy
+1420,Da capo,Alessandro,Male,Male lover 2,Ancona,Italy
+1421,Dal segno,Alessandro,Male,Male lover 2,Ancona,Italy
+1422,Dal segno,Cleofide,Female,Female lover 1,Ancona,Italy
+1423,Dal segno,Poro,Male,Male lover 1,Ancona,Italy
+1424,Dal segno,Cleofide,Female,Female lover 1,Ancona,Italy
+1425,Da capo,Alessandro,Male,Male lover 2,Milan,Italy
+1426,Da capo,Gandarte,Male,Male lover 3,Milan,Italy
+1427,Dal segno,Poro,Male,Male lover 1,Munich,Empire
+1428,Dal segno,Alessandro,Male,Male lover 2,Munich,Empire
+1429,Da capo,Poro,Male,Male lover 1,Munich,Empire
+1430,AB,Gandarte,Male,Male lover 3,Mannheim,Empire
+1431,Da capo,Poro,Male,Male lover 1,Padua,Italy
+1432,Dal segno,Alessandro,Male,Male lover 2,Padua,Italy
+1433,ABA,Erissena,Female,Female lover 2,Padua,Italy
+1434,A,Poro,Male,Male lover 1,Padua,Italy
+1435,Dal segno,Cleofide,Female,Female lover 1,Padua,Italy
+1436,ABAB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Padua,Italy
+1437,Dal segno,Gandarte,Male,Male lover 3,Padua,Italy
+1438,Dal segno,Erissena,Female,Female lover 2,Padua,Italy
+1439,Dal segno,Poro,Male,Male lover 1,Padua,Italy
+1440,Dal segno,Cleofide,Female,Female lover 1,Padua,Italy
+1441,Dal segno,Poro,Male,Male lover 1,Padua,Italy
+1442,Dal segno,Alessandro,Male,Male lover 2,Padua,Italy
+1443,AA,Enea,Male,Male lover 1,Brunswich,Empire
+1444,Da capo,Selene,Female,Female lover 2,Brunswich,Empire
+1445,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
+1446,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
+1447,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
+1448,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
+1449,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
+1450,,,Male,,,
+1451,,,Male,,,
+1452,,,Male,,,
+1453,,,Male,,,
+1454,,,Male,,,
+1455,,,Male,,,
+1456,,,Male,,,
+1457,,,Male,,,
+1458,,,Male,,,
+1459,,,Male,,,
+1460,,,Male,,,
+1461,,,Male,,,
+1462,,,Male,,,
+1463,,,Male,,,
+1464,,,Male,,,
+1465,,,Male,,,
+1466,,,Male,,,
+1467,,,Male,,,
