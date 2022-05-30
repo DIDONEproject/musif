@@ -10,9 +10,11 @@ from musif import FeaturesExtractor
 from musif.process.processor import DataProcessor
 from tests.constants import TEST_FILE, DATA_STATIC_DIR,CONFIG_PATH
 
-processed_file='features_total_1_04_extraction_processed'
+extracted_file='total'
+processed_file=extracted_file+'_processed'
+
 postconfig_path = path.join(CONFIG_PATH, "post_process.yml")
-extracted_csv = path.join(DATA_STATIC_DIR, "features_extraction.csv")
+extracted_csv = path.join(DATA_STATIC_DIR, extracted_file+'.csv')
 
 data_features_dir = path.join(DATA_STATIC_DIR, "features")
 reference_file_path = path.join(data_features_dir, TEST_FILE)

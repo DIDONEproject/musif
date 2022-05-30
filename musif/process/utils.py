@@ -53,29 +53,41 @@ def merge_duetos_trios(df: DataFrame)-> None:
                 if similar_col in df:
                     similar_cols.append(similar_col)
             df.loc[:,formatted_col]='NA' #np.nan
-            if HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
+            if all(isinstance(x,str) for x in df.loc[index,similar_cols]):
+                # df.loc[index,formatted_col] = 'NA'
+                df.drop(similar_cols, inplace=True, axis=1)
+            elif HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
                 df.loc[index,formatted_col]=df.loc[index,similar_cols].max()
             elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
                 df.loc[index,formatted_col]=df.loc[index,similar_cols].min()
             else:
-                df.loc[index,formatted_col]=df.loc[index,similar_cols].mean()
+                df.loc[index,formatted_col] = df.loc[index,similar_cols].mean()
                 
-            df.loc[index,similar_cols]='NA' #np.nan
+            df.loc[index,similar_cols] = 'NA' 
 
 def merge_single_voices(df: DataFrame) -> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
-    
+    df_copy=df.copy()
     pinfo('\nJoining voice parts...')
-    for col in df.columns.values:
-            if any(voice in col for voice in voices_list_prefixes):
-                formatted_col=col
-                for voice_prefix in voices_list_prefixes:
-                    formatted_col = formatted_col.replace(voice_prefix, generic_sound_voice_prefix)
-                if formatted_col in df:
-                    df[formatted_col].fillna(df[col], inplace=True)
-                else:
-                    df[formatted_col] = df[col]
-                df.drop(col, axis=1, inplace=True)
+    singer_columns = [i for i in df.columns.values if any(voice in i for voice in voices_list_prefixes)]
+    for col in singer_columns:
+        singer_part=col.split('_')[0]
+        generic_col="_".join(col.split('_')[1:])
+            # for voice_prefix in voices_list_prefixes:
+        formatted_col = col.replace(singer_part+'_', generic_sound_voice_prefix)
+        if formatted_col in df:
+            continue
+        columns_to_merge = [i for i in singer_columns if "_".join(i.split('_')[1:])==generic_col]
+        for colum in columns_to_merge:
+            df[colum].fillna(0)
+        df[formatted_col] = df[columns_to_merge].sum(axis=1)
+        df.drop(columns_to_merge, inplace = True, axis=1)
+            # if formatted_col in df:
+            #     # df[formatted_col].fillna(df[col], inplace=True)
+            # else:
+            #     df[formatted_col] = df[col]
+            # df.drop(col, axis=1, inplace=True)
+    i=1
                 
 def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame) -> None:
     part_degrees=[i for i in total_degrees if part in i]
@@ -104,7 +116,6 @@ def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: Dat
     # pinfo(f"\nTotal files skipped by duetos/trietos: {len(duetos_counter)}")
     # pinfo(str(duetos_counter))
     pinfo(f"\nFinal shape of the DataFrame: {df.shape}")
-
 
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
         for inst in config[INSTRUMENTS_TO_DELETE]:

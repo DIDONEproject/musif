@@ -1,5 +1,5 @@
 log:
-  file_path: logs/pos_process.log
+  file_path: logs/post_process.log
   file_level: DEBUG
   console_level: WARN
 checking_file: parsed_files.csv
@@ -53,7 +53,7 @@ columns_startswith:
   - SoundVoice_Dyn
 
 columns_contain:
-  - _Count
+  # - _Count
   - _SoundingMeasuresMean
   - _SmallestSemitones
   - _SmallestAbsolute
