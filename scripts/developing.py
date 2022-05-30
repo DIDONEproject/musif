@@ -13,13 +13,14 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Dem15M-No_non-1758-Galuppi[2.07][1215].xml'
-    
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Dem21M-Ah_che-1752-Perez[3.03][0794].xml'
+    # Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml!!.
+    # Error: don't know how to coerce float and str
+
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
     #test
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
-    
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     
     df = FeaturesExtractor("scripts/config_tests.yml", data_dir=data_dir, musescore_dir=musescore_dir).extract()

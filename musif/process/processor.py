@@ -11,7 +11,7 @@ from musif.process.utils import (delete_columns,
 from pandas import DataFrame
 
 # TODO: why do we need this?
-sys.path.insert(0, "../musif")
+# sys.path.insert(0, "../musif")
 import os
 
 import numpy as np
@@ -120,7 +120,7 @@ class DataProcessor:
             
             elif isinstance(info, DataFrame):
                 pinfo('\nProcessing DataFrame...')
-                return df
+                return info
             else:
                 perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
                 return pd.DataFrame()
@@ -144,7 +144,6 @@ class DataProcessor:
             pinfo('\nDeleting items with errors...')
             self.delete_previous_items()
         
-        self.assign_labels()
         pinfo('\nPreprocessing data...')
         self.preprocess_data()
         pinfo('\nScanning info looking for errors...')
@@ -184,16 +183,17 @@ class DataProcessor:
             split_passion_A(self.data)
   
     def preprocess_data(self) -> None:
-        """ Cleans data and removes columns with no information or rows without assigned Label
+        """ Adds labels to arias.Cleans data and removes columns with no information or rows without assigned Label
         """
+        self.assign_labels()
         if 'Label_Passions' in self.data:
             del self.data['Label_Passions']
         if 'Label_Sentiment' in self.data:
             del self.data['Label_Sentiment']
-
+            
+        print('Deleted arias without passion: ', self.data[self.data["Label_BasicPassion"].isnull()].shape[0])
         self.data = self.data[~self.data["Label_BasicPassion"].isnull()]
         self.data.replace(0.0, 'NA', inplace=True)
-        # self.data.replace(0.0, np.nan, inplace=True)
         
         self.data.dropna(axis=1, how='all', inplace=True)
         self.data.reset_index(inplace=True)
@@ -216,8 +216,13 @@ class DataProcessor:
         pinfo('\nScaning voice columns...')
         # Delete columns that contain strings 
         df_voices=self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
-        cols_to_delete=df_voices.select_dtypes(include=['object']).columns
-        self.data.drop(cols_to_delete, axis = 1, inplace=True)
+        
+        # cols_to_delete = [i for i in df_voices if df_voices[i].isnull().values.all()]
+        
+        # cols_to_delete=df_voices.select_dtypes(include=['object']).columns
+        
+        # self.data.drop(cols_to_delete, axis = 1, inplace=True)
+        self.data[df_voices.columns]=self.data[df_voices.columns].replace('NA', np.nan)
         merge_duetos_trios(self.data)
         merge_single_voices(self.data)
 
@@ -229,8 +234,11 @@ class DataProcessor:
         for i, row in enumerate(self.data[INSTRUMENTATION]):
             for element in row.split(','):
                 self.data.at[i, PRESENCE+'_'+element] = 1
-        del self.data[INSTRUMENTATION]
-        del self.data[SCORING]
+                
+        self.data[[i for i in self.data if PRESENCE+'_'in i]]=self.data[[i for i in self.data if PRESENCE+'_'in i]].fillna('0')
+        
+        # del self.data[INSTRUMENTATION]
+        # del self.data[SCORING]
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
