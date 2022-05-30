@@ -222,9 +222,11 @@ class DataProcessor:
         # cols_to_delete=df_voices.select_dtypes(include=['object']).columns
         
         # self.data.drop(cols_to_delete, axis = 1, inplace=True)
-        self.data[df_voices.columns]=self.data[df_voices.columns].replace('NA', np.nan)
-        merge_duetos_trios(self.data)
+        self.data[df_voices.columns] = self.data[df_voices.columns].replace('NA', np.nan)
         merge_single_voices(self.data)
+        self.data = merge_duetos_trios(self.data)
+        columns_to_delete=[i for i in self.data.columns.values if any(voice in i for voice in voices_list_prefixes)]
+        self.data.drop(columns_to_delete, axis=1, inplace=True)
 
     def unbundle_instrumentation(self) -> None:
         """Separates Instrumentation column into as many columns as instruments present in Instrumentation,

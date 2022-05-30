@@ -103,6 +103,7 @@ class DataFilter:
         percentages_intervals = self.post_process_intervals(by, instrument, percentages_intervals)
 
         print(percentages_intervals)
+        return percentages_intervals
 
     def post_process_intervals(self, by, instrument, percentages_intervals: DataFrame):
         for column in percentages_intervals.filter(like='Interval').columns:
