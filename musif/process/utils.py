@@ -6,6 +6,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 from musif.config import INSTRUMENTS_TO_DELETE, SUBSTRING_TO_DELETE
+from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
                                                       LOWEST_NOTE_INDEX)
@@ -37,43 +38,42 @@ def merge_duetos_trios(df: DataFrame)-> None:
     multiple_voices = df[df[VOICES].str.contains(',')]
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages.')
     voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
+    
+    
     for index in tqdm(multiple_voices.index):
-        pinfo(f'\nMerging dueto/trieto at index {index}')
+        name = df[FILE_NAME][index]
+        pinfo(f'\nMerging dueto/trieto {name}')
         all_voices = df[VOICES][index].split(',')
-        for col in voice_cols:
-            if pd.isna(df[col][index]):
-                voice_cols.remove(col)
+
         first_voice = all_voices[0]
-        columns_to_merge=(i for i in voice_cols if first_voice in i.lower())
+        columns_to_merge = [i for i in voice_cols if first_voice in i.lower()]
         for col in columns_to_merge:
             similar_cols = []
             formatted_col = col.replace(get_part_prefix(first_voice), generic_sound_voice_prefix)
             for j in range(0, len(all_voices)):
-                similar_col=col.replace(get_part_prefix(first_voice),get_part_prefix(all_voices[j]))
+                similar_col = col.replace(get_part_prefix(first_voice), get_part_prefix(all_voices[j]))
                 if similar_col in df:
                     similar_cols.append(similar_col)
-            df.loc[:,formatted_col]='NA' #np.nan
-            if all(isinstance(x,str) for x in df.loc[index,similar_cols]):
-                # df.loc[index,formatted_col] = 'NA'
-                df.drop(similar_cols, inplace=True, axis=1)
+            if all(isinstance(x,str) or np.isnan(x) for x in df.loc[index,similar_cols]):
+                df.drop(similar_cols, inplace = True, axis=1)
             elif HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
-                df.loc[index,formatted_col]=df.loc[index,similar_cols].max()
+                df.loc[index,formatted_col] = df.loc[index, similar_cols].max()
             elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
-                df.loc[index,formatted_col]=df.loc[index,similar_cols].min()
+                df.loc[index,formatted_col] = df.loc[index, similar_cols].min()
             else:
-                df.loc[index,formatted_col] = df.loc[index,similar_cols].mean()
+                df.loc[index,formatted_col] = df.loc[index, similar_cols].mean()
                 
-            df.loc[index,similar_cols] = 'NA' 
+    return df
+    # i=1
 
 def merge_single_voices(df: DataFrame) -> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
-    df_copy=df.copy()
+    df_copy = df.copy()
     pinfo('\nJoining voice parts...')
     singer_columns = [i for i in df.columns.values if any(voice in i for voice in voices_list_prefixes)]
     for col in singer_columns:
         singer_part=col.split('_')[0]
         generic_col="_".join(col.split('_')[1:])
-            # for voice_prefix in voices_list_prefixes:
         formatted_col = col.replace(singer_part+'_', generic_sound_voice_prefix)
         if formatted_col in df:
             continue
@@ -81,13 +81,7 @@ def merge_single_voices(df: DataFrame) -> None:
         for colum in columns_to_merge:
             df[colum].fillna(0)
         df[formatted_col] = df[columns_to_merge].sum(axis=1)
-        df.drop(columns_to_merge, inplace = True, axis=1)
-            # if formatted_col in df:
-            #     # df[formatted_col].fillna(df[col], inplace=True)
-            # else:
-            #     df[formatted_col] = df[col]
-            # df.drop(col, axis=1, inplace=True)
-    i=1
+
                 
 def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame) -> None:
     part_degrees=[i for i in total_degrees if part in i]

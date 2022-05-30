@@ -13,11 +13,11 @@ if __name__ == "__main__":
     data_dir = r'../Half_Corpus/xml'
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     # check_file = 'parsed_files_total.csv'
-    check_file=None
+    check_file = None
     name = "features_23_05"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     
-    dest_path = name+"_total.csv"
+    dest_path = name + "_total.csv"
     # df.to_csv(dest_path, index=False)
     dest_path = "total.csv"
     
@@ -37,3 +37,4 @@ if __name__ == "__main__":
     # print(p.data.columns[p.data.columns.str.contains('Key')])
     # p.delete_unwanted_columns(columns_endswith=['Per'])
     # p.to_csv('final_features.csv')
+    i=1
