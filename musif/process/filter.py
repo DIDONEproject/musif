@@ -96,7 +96,6 @@ class DataFilter:
             aria_data=data[data[by]==aria]
             percentages=self._filter_intervals(aria_data, instrument)
             # percentages=self._filter_stepwise(aria_data, instrument)
-            
             # percentages_intervals[aria]=percentages
             percentages[by] = aria
             percentages_intervals = percentages_intervals.append(percentages, ignore_index=True)
@@ -107,11 +106,13 @@ class DataFilter:
 
     def post_process_intervals(self, by, instrument, percentages_intervals: DataFrame):
         for column in percentages_intervals.filter(like='Interval').columns:
-            if max(percentages_intervals[column])<1:
+            if max(percentages_intervals[column])==0.0:
                 del percentages_intervals[column] 
         percentages_intervals=percentages_intervals.reindex(sorted(percentages_intervals.columns), axis=1)
         percentages_intervals.columns = [i.replace(instrument, '').replace('_Percentage','').replace('_',' ').replace('Interval','') for i in percentages_intervals.columns]
-        percentages_intervals.to_excel('intervals_per_aria.xlsx')
+        excel_name = 'intervals_per_aria.xlsx'
+        percentages_intervals.to_excel(excel_name)
+        pinfo(f'File saved succesfully as: {excel_name}')
         percentages_intervals.plot(x=by,kind='bar')
         plt.savefig('intervals.png')
         plt.show()
