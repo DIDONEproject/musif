@@ -41,9 +41,9 @@ def merge_duetos_trios(df: DataFrame)-> None:
     
     
     for index in tqdm(multiple_voices.index):
-        name = df[FILE_NAME][index]
+        name = df.at[index, FILE_NAME]
         pinfo(f'\nMerging dueto/trieto {name}')
-        all_voices = df[VOICES][index].split(',')
+        all_voices = df.at[index, VOICES].split(',')
 
         first_voice = all_voices[0]
         columns_to_merge = [i for i in voice_cols if first_voice in i.lower()]
@@ -57,18 +57,18 @@ def merge_duetos_trios(df: DataFrame)-> None:
             if all(isinstance(x,str) or np.isnan(x) for x in df.loc[index,similar_cols]):
                 df.drop(similar_cols, inplace = True, axis=1)
             elif HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
-                df.loc[index,formatted_col] = df.loc[index, similar_cols].max()
+                df.at[index,formatted_col] = df.loc[index, similar_cols].max()
+                
             elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
-                df.loc[index,formatted_col] = df.loc[index, similar_cols].min()
+                df.at[index,formatted_col] = df.loc[index, similar_cols].min()
+                
             else:
-                df.loc[index,formatted_col] = df.loc[index, similar_cols].mean()
+                df.at[index,formatted_col] = df.loc[index, similar_cols].mean()
                 
     return df
-    # i=1
 
 def merge_single_voices(df: DataFrame) -> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
-    df_copy = df.copy()
     pinfo('\nJoining voice parts...')
     singer_columns = [i for i in df.columns.values if any(voice in i for voice in voices_list_prefixes)]
     for col in singer_columns:

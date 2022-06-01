@@ -14,8 +14,9 @@ if __name__ == "__main__":
     musescore_dir=data_dir
 
     data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Dem21M-Ah_che-1752-Perez[3.03][0794].xml'
-    # Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml!!.
-    # Error: don't know how to coerce float and str
+    # Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml!!
+
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Dem17M-Perfidi_gia-1734-Schiassi[2.10][0549].xml'
 
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'

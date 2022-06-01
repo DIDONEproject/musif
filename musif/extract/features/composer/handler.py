@@ -10,7 +10,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     score = score_data[DATA_SCORE]
     composer = score.metadata.composer
     score_features.update({
-        COMPOSER: composer
+        COMPOSER: composer.title()
     })
 
 

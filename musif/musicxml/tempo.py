@@ -7,7 +7,7 @@ from typing import Optional
 # TODO: document this module
 
 class TempoGroup2(Enum):
-    ND = "nd"
+    NA = "na"
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
@@ -34,7 +34,7 @@ def get_tempo_grouped_1(tempo):
     replacements = [(w, '') for w in ['molto', 'poco', 'un poco', 'tanto', 'un tanto', 'assai', 'meno', 'più', 'piuttosto']]
     # tempo = tempo.strip()
     if not tempo:
-        return 'ND'
+        return 'NA'
 
     for r in replacements:
         tempo = tempo.replace(*r)
@@ -84,13 +84,13 @@ def get_tempo_grouped_1(tempo):
         else:
             return 'Con brio'
 
-    return 'ND'
+    return 'NA'
 
 
 def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
 
-    if tempo_grouped_1 is None or tempo_grouped_1.lower() == 'nd':
-        return TempoGroup2.ND
+    if tempo_grouped_1 is None or tempo_grouped_1.lower() == TempoGroup2.NA:
+        return TempoGroup2.NA
     possible_terminations = ['ino', 'etto', 'ietto', 'ssimo', 'issimo', 'hetto']
     slow_basis = ['Adagio', 'Affettuoso', 'Grave', 'Sostenuto', 'Largo', 'Lento', 'Sostenuto']
     slow = slow_basis + [w[:-1] + t for w in slow_basis for t in possible_terminations]
@@ -101,7 +101,7 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
     if tempo_grouped_1 in ['A tempo', 'Giusto']:
-        return TempoGroup2.ND
+        return TempoGroup2.NA
     elif tempo_grouped_1 in slow:
         return TempoGroup2.SLOW
     elif tempo_grouped_1 in moderate:
