@@ -218,13 +218,14 @@ class DataProcessor:
         df_voices=self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
         
         # cols_to_delete = [i for i in df_voices if df_voices[i].isnull().values.all()]
-        
         # cols_to_delete=df_voices.select_dtypes(include=['object']).columns
-        
         # self.data.drop(cols_to_delete, axis = 1, inplace=True)
+        
         self.data[df_voices.columns] = self.data[df_voices.columns].replace('NA', np.nan)
+        
         merge_single_voices(self.data)
         self.data = merge_duetos_trios(self.data)
+        
         columns_to_delete=[i for i in self.data.columns.values if any(voice in i for voice in voices_list_prefixes)]
         self.data.drop(columns_to_delete, axis=1, inplace=True)
 

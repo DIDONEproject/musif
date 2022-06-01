@@ -12,7 +12,7 @@ from .constants import *
 
 
 class TempoGroup2(Enum):
-    ND = "NA"
+    NA = "NA"
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
@@ -86,7 +86,7 @@ def Extract_Time_Signatures(measures):
 
 def ExtractTempo(score_data, part):
     numeric_tempo = extract_numeric_tempo(score_data[DATA_FILE])
-    tempo_mark = "NA"
+    tempo_mark = TempoGroup2.NA
     for measure in part:
         if isinstance(measure, Measure):
             for element in measure:

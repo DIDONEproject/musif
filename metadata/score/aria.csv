@@ -331,7 +331,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0332,Dal segno,Araspe,Male,Male lover 3,Venice,Italy
 0333,Dal segno,Osmida,Male,Antagonist,Venice,Italy
 0334,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
-0335,AB,Selene,Female,Female lover 2,Hamburg,Empire
+0335,AB,Didone,Female,Female lover 1,Hamburg,Empire
 0336,Dal segno,Araspe,Male,Male lover 3,Hamburg,Empire
 0337,ABA,Selene,Female,Female lover 2,Naples,Italy
 0338,ABAB,Iarba,Male,Male lover 2,Naples,Italy
@@ -436,7 +436,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0437,AA,Selene,Female,Female lover 2,Bratislava,Empire
 0438,ABCA,Iarba,Male,Male lover 2,Bratislava,Empire
 0439,Da capo,Araspe,Male,Male lover 3,Rome,Italy
-0440,Da capo,Selene,Female,Female lover 2,Rome,Italy
+0440,Da capo,Araspe,Male,Male lover 3,Rome,Italy
 0441,Da capo,Iarba,Male,Male lover 2,Rome,Italy
 0442,ABCA,Araspe,Male,Male lover 3,Bratislava,Empire
 0443,ABA,Matusio,Male,Antagonist,Naples,Italy
@@ -1448,21 +1448,40 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1447,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
 1448,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
 1449,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
-1450,,,Male,,,
-1451,,,Male,,,
-1452,,,Male,,,
-1453,,,Male,,,
-1454,,,Male,,,
-1455,,,Male,,,
-1456,,,Male,,,
-1457,,,Male,,,
-1458,,,Male,,,
-1459,,,Male,,,
-1460,,,Male,,,
-1461,,,Male,,,
-1462,,,Male,,,
-1463,,,Male,,,
-1464,,,Male,,,
-1465,,,Male,,,
-1466,,,Male,,,
-1467,,,Male,,,
+1450,ABA,Cleofide,Female,Female lover 1,Padua,Italy
+1451,Dal segno,Erissena,Female,Female lover 2,Milan,Italy
+1452,ABAB,"Dircea,Timante,Demofoonte",Female,"Female lover 1,Male lover 1,Senior ruler",Copenhagen,Empire
+1453,ABA,Poro,Male,Male lover 1,Padua,Italy
+1454,AB,Alessandro,Male,Male lover 2,Padua,Italy
+1455,ABA,Timagene,Male,Antagonist,Padua,Italy
+1456,ABA,Poro,Male,Male lover 1,Padua,Italy
+1457,Dal segno,Poro,Male,Male lover 1,London,England
+1458,Dal segno,Cleofide,Female,Female lover 1,Milan,Italy
+1459,Dal segno,Alessandro,Male,Male lover 2,Milan,Italy
+1460,ABA,Poro,Male,Male lover 1,Milan,Italy
+1461,Da capo,Selene,Female,Female lover 2,Brunswich,Empire
+1462,Dal segno,Selene,Female,Female lover 2,Brunswich,Empire
+1463,Dal segno,Selene,Female,Female lover 2,Brunswich,Empire
+1464,Da capo,Alessandro,Male,Male lover 2,Mannheim,Empire
+1465,Da capo,Gandarte,Male,Male lover 3,Milan,Italy
+1466,Da capo,Iarba,Male,Male lover 2,Brunswich,Empire
+1467,Da capo,Selene,Female,Female lover 2,Brunswich,Empire
+1468,Da capo,Iarba,Male,Male lover 2,Brunswich,Empire
+1469,,,Male,,,
+1470,,,Male,,,
+1471,,,Male,,,
+1472,,,Male,,,
+1473,,,Male,,,
+1474,,,Male,,,
+1475,,,Male,,,
+1476,,,Male,,,
+1477,,,Male,,,
+1478,,,Male,,,
+1479,,,Male,,,
+1480,,,Male,,,
+1481,,,Male,,,
+1482,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
+,,,Male,,,
