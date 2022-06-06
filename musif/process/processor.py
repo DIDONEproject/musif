@@ -311,9 +311,13 @@ class DataProcessor:
         self.novoices_counter = []
 
         for i, comp in enumerate(self.data[COMPOSER].values):
+            composers=pd.read_csv('composers.csv')
             if pd.isnull(comp):
                 self.composer_counter.append(self.data[FILE_NAME][i])
                 self.data.drop(i, axis = 0, inplace=True)
+            elif comp not in composers:
+                aria_name=self.data.iat[FILE_NAME,i]
+                pwarn(f'Composer {comp} in aria {aria_name} was not found')
 
         for i, voice in enumerate(self.data[VOICES].values):
             if pd.isnull(voice):
