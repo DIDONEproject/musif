@@ -30,7 +30,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 def extract_character(score_data, score_features, features):
     num_voices=len(score_features['Voices'].split(',')) 
     if num_voices==1:
-        features[CHARACTER] = score_data['parts'].parts[0].partName.capitalize()
+        features[CHARACTER] = score_data['parts'][0].partName.capitalize()
     else:
         features[CHARACTER] = "&".join([score_data['parts'][i].partName.capitalize() for i in range(num_voices)])
 
