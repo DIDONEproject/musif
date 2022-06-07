@@ -89,8 +89,8 @@ def get_tempo_grouped_1(tempo):
 
 def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
 
-    if tempo_grouped_1 is None or tempo_grouped_1.lower() == TempoGroup2.NA:
-        return TempoGroup2.NA
+    if tempo_grouped_1 is None or tempo_grouped_1.lower() == TempoGroup2.NA.value:
+        return TempoGroup2.NA.value
     possible_terminations = ['ino', 'etto', 'ietto', 'ssimo', 'issimo', 'hetto']
     slow_basis = ['Adagio', 'Affettuoso', 'Grave', 'Sostenuto', 'Largo', 'Lento', 'Sostenuto']
     slow = slow_basis + [w[:-1] + t for w in slow_basis for t in possible_terminations]
@@ -101,13 +101,13 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
     if tempo_grouped_1 in ['A tempo', 'Giusto']:
-        return TempoGroup2.NA
+        return TempoGroup2.NA.value
     elif tempo_grouped_1 in slow:
-        return TempoGroup2.SLOW
+        return TempoGroup2.SLOW.value
     elif tempo_grouped_1 in moderate:
-        return TempoGroup2.MODERATE
+        return TempoGroup2.MODERATE.value
     elif tempo_grouped_1 in fast:
-        return TempoGroup2.FAST
+        return TempoGroup2.FAST.value
 
 
 def get_number_of_beats(time_signature: str) -> int:
