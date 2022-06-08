@@ -16,7 +16,7 @@ if __name__ == "__main__":
     data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Dem21M-Ah_che-1752-Perez[3.03][0794].xml'
     # Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml!!
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale31M-Ombra_dell-1773-Paisiello[3.12][1235].xml'
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale31M-Ombra_dell-1740-Caballone[3.12][1108].xml'
 
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'

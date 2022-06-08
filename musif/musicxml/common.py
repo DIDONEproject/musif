@@ -96,10 +96,11 @@ def split_layers(score: Score, split_keywords: List[str]):
                         # introducimos esta información en cada voz:
                         for p in parts_splitted:
                             if measure.measureNumber-1 > 0:
+                                if not isinstance(p.elements[measure.measureNumber-1], Measure):
+                                    continue
                                 p.elements[measure.measureNumber-1].elements += tuple(
                                     e for e in not_voices_elements if e not in p.elements[measure.measureNumber-1].elements
                                 )
-                    # num_measure += 1
                 for num, p in enumerate(parts_splitted, 1):
                     p_copy = copy.deepcopy(part)
                     p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II

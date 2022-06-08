@@ -77,7 +77,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         Parameters
         ----------
         file_path: str
-            A path to a music xml path.
+            A path to a music mscx path.
         expand_repeats: bool
             Determines whether to expand or not the repetitions. Default value is False.
 
@@ -480,6 +480,7 @@ class FeaturesExtractor:
             try:
                 data[DATA_MUSESCORE_SCORE] = parse_musescore_file(musescore_file_path, self._cfg.expand_repeats)
             except ParseFileError as e:
+                data[DATA_MUSESCORE_SCORE] = None
                 lerr(str(e))
         return data
 

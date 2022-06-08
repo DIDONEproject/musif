@@ -183,7 +183,7 @@ class DataProcessor:
             split_passion_A(self.data)
   
     def preprocess_data(self) -> None:
-        """ Adds labels to arias.Cleans data and removes columns with no information or rows without assigned Label
+        """ Adds labels to arias. Cleans data and removes columns with no information or rows without assigned Label
         """
         self.assign_labels()
         if 'Label_Passions' in self.data:

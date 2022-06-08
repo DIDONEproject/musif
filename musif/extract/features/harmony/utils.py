@@ -21,10 +21,10 @@ def get_harmonic_rhythm(ms3_table)-> dict:
     numerals = ms3_table.numeral.dropna().tolist()
     number_of_chords = sum(Counter(numerals).values())
     time_signatures = ms3_table.timesig.tolist()
-    harmonic_rhythm = number_of_chords/len(measures_compressed)
+    harmonic_rhythm = number_of_chords/len(measures_compressed) if len(measures_compressed) != 0 else 0.0
 
     if len(Counter(time_signatures)) == 1:
-        harmonic_rhythm_beats = number_of_chords/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
+        harmonic_rhythm_beats = number_of_chords/(get_number_of_beats(time_signatures[0])*len(measures_compressed)) if len(measures_compressed) != 0 else 0.0
     else:
         playthrough = ms3_table.playthrough.dropna().tolist()
         periods_ts=[]
