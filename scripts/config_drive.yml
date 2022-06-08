@@ -4,7 +4,7 @@ data_dir: ../Corpus_Test/xml
 musescore_dir: ../Corpus_Test/musescore
 checking_file: parsed_files.csv
 expand_repeats: false
-parallel: false
+parallel: true
 max_processes: 10
 log:
   file_path: logs/musif_extraction.log
