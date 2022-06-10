@@ -19,6 +19,7 @@ instruments_to_delete: #'Part'+inst in column
   - Va
   - Eh
   - Tbn
+  - Timp
   
 substring_to_delete: #inst in column
   - VnII

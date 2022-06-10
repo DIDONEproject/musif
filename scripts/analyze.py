@@ -20,27 +20,27 @@ def merge_dataframes(name):
 if __name__ == "__main__":
     print('\nUpdating metadata files...')
     os.system("python scripts/metadata_updater.py")
+    
     data_dir = r'../Half_Corpus/xml'
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     # check_file = 'parsed_files_total.csv'
     check_file = None
-    name = "features_23_05"
+    name = "features_06_06"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
-    
-    
     
     # merge_dataframes(name)
     
     dest_path = name + "_total.csv"
-    # df.to_csv(dest_path, index=False)
-    dest_path = "total.csv"
     
     p = DataProcessor(dest_path, "scripts/post_process.yml", merge_voices=True)
-    print(p.data.shape)
+    print('Initial shape is: ', p.data.shape)
     p.process()
+    print('Final shape is: ', p.data.shape)
+    
+    
+    
     filter_list=['Misero_pargoletto', 'Se_tutti', 'Son_regina', 'Non_ha', 'Se_resto', 'Ah_non_lasciarmi', 'Cadra_fra']
     f = DataFilter('total_processed.csv').filter_data(by='AriaName', equal_to=filter_list, instrument='SoundVoice')
-    
     
     # Methods to test
     # p.delete_previous_items()
