@@ -1,3 +1,5 @@
+from collections import Counter
+import difflib
 import sys
 from typing import Union
 
@@ -10,8 +12,6 @@ from musif.process.utils import (delete_columns,
                                  replace_nans, split_passion_A)
 from pandas import DataFrame
 
-# TODO: why do we need this?
-# sys.path.insert(0, "../musif")
 import os
 
 import numpy as np
@@ -148,7 +148,7 @@ class DataProcessor:
         self.preprocess_data()
         pinfo('\nScanning info looking for errors...')
         self._scan_dataframe()
-
+        
         if self._post_config.unbundle_instrumentation:
             pinfo('\nSeparating "Instrumentation" column...')
             self.unbundle_instrumentation()
@@ -193,10 +193,10 @@ class DataProcessor:
             
         print('Deleted arias without passion: ', self.data[self.data["Label_BasicPassion"].isnull()].shape[0])
         self.data = self.data[~self.data["Label_BasicPassion"].isnull()]
-        self.data.replace(0.0, 'NA', inplace=True)
+        # self.data.replace(0.0, 'NA', inplace=True)
         
         self.data.dropna(axis=1, how='all', inplace=True)
-        self.data.reset_index(inplace=True)
+        self.data.reset_index(inplace=True,drop=True)
 
     def group_columns(self) -> None:
         """Groups Key_*_PercentageMeasures, Key_Modulatory and Degrees columns. Into bigger groups
@@ -214,13 +214,7 @@ class DataProcessor:
         Unifies all voices columns into SoundVoice_ columns.  
         """
         pinfo('\nScaning voice columns...')
-        # Delete columns that contain strings 
         df_voices=self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
-        
-        # cols_to_delete = [i for i in df_voices if df_voices[i].isnull().values.all()]
-        # cols_to_delete=df_voices.select_dtypes(include=['object']).columns
-        # self.data.drop(cols_to_delete, axis = 1, inplace=True)
-        
         self.data[df_voices.columns] = self.data[df_voices.columns].replace('NA', np.nan)
         
         merge_single_voices(self.data)
@@ -310,23 +304,38 @@ class DataProcessor:
         self.composer_counter = []
         self.novoices_counter = []
 
-        for i, comp in enumerate(self.data[COMPOSER].values):
-            composers=pd.read_csv('composers.csv')
-            if pd.isnull(comp):
-                self.composer_counter.append(self.data[FILE_NAME][i])
-                self.data.drop(i, axis = 0, inplace=True)
-            elif comp not in composers:
-                aria_name=self.data.iat[FILE_NAME,i]
-                pwarn(f'Composer {comp} in aria {aria_name} was not found')
+        self._scan_composers()
 
+        self._scan_voices()
+
+    def _scan_voices(self):
         for i, voice in enumerate(self.data[VOICES].values):
             if pd.isnull(voice):
                 self.novoices_counter.append(self.data[FILE_NAME][i])
                 self.data.drop(i, axis = 0, inplace=True)
 
+    def _scan_composers(self):
+        composers_path=os.path.join('musif','internal_data', 'composers.csv')
+        if os.path.exists(composers_path):
+            composers = pd.read_csv(composers_path)
+            composers = [i for i in composers.iloc[:, 0].to_list() if str(i) != 'nan']
+            
+            for i, comp in enumerate(self.data[COMPOSER].values):
+                if pd.isnull(comp):
+                    self.composer_counter.append(self.data[FILE_NAME][i])
+                    self.data.drop(i, axis = 0, inplace=True)
+                elif comp not in composers:
+                    aria_name=self.data.at[i,FILE_NAME]
+                    correction = difflib.get_close_matches(comp, composers)
+                    correction = correction[0] if correction else 'NA'
+                    self.data.at[i, COMPOSER] = correction[0]
+                    pwarn(f'Composer {comp} in aria {aria_name} was not found. Replaced with: {correction}')
+        else:
+            perr('Composers file could not be found.')
+
     def _final_data_processing(self) -> None:
         self.data.sort_values(ARIA_ID, inplace=True)
-        replace_nans(self.data)
+        self._check_columns_type()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         columns_to_sort=columns_order+list(self.data.filter(like='Label_', axis=1))
         self.data = sort_columns(self.data, columns_to_sort)
@@ -334,3 +343,13 @@ class DataProcessor:
         dest_path=self.destination_route + "_processed" + ".csv"
         log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
         self.to_csv(dest_path)
+
+    def _check_columns_type(self):
+        for column in self.data.columns:
+                column_type = Counter(self.data[self.data[column].notna()][column].map(type)).most_common(1)[0][0]
+                if column_type == str:
+                    self.data[column]= self.data[column].fillna('NA')
+                else:
+                    self.data[column]= self.data[column].replace('NA', np.nan)
+                    
+                                                        

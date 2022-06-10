@@ -16,7 +16,6 @@ from musif.musicxml.tempo import get_number_of_beats
 
 accidental_abbreviation = {"": "", "sharp": "#", "flat": "b", "double-sharp": "x", "double-flat": "bb"}
 
-
 def get_keys_functions(list_keys: list, mode: str) -> Tuple[str, str]:
     result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
     first_function = [result_dict[t] for t in list_keys]
@@ -66,13 +65,6 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict, harmonic_
         for accidental in ["", "sharp", "flat"]
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
-    # if notes_list[-1].offset > len(tonality_map):
-        # # pwarn('Misunderstanding between harmonic beats and notes beats! Fixed by redifining harmonic beats.\n')
-        # rate=round(notes_list[-1].offset/len(tonality_map))
-        # for beat in range(1, max(list(tonality_map.keys()))):
-        #     tonality_map[beat*rate]=tonality_map[beat]
-        # fill_tonality_map(tonality_map)
-
     for j, note in enumerate(notes_list):
         if note.isChord:
           note = note[0]
@@ -172,7 +164,6 @@ def get_localTonalty(globalkey, degree):
 
     else:
         modulation = pitch_scale + accidental
-
 
     return modulation.upper() if degree.isupper() else modulation.lower()
 

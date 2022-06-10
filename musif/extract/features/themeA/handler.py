@@ -21,7 +21,7 @@ def update_score_objects(
             if read_measures > last_measure:
                 elements_to_remove.append(measure)
         part.remove(targetOrList=elements_to_remove)
-    if cfg.is_requested_musescore_file():
+    if cfg.is_requested_musescore_file() and score_data[DATA_MUSESCORE_SCORE] is not None:
         score_data[DATA_MUSESCORE_SCORE] = score_data[DATA_MUSESCORE_SCORE].loc[score_data[DATA_MUSESCORE_SCORE]['mn'] <= last_measure]
 
 
