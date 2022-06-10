@@ -42,11 +42,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     score = score_data[DATA_SCORE]
     part = score.parts[0]
-    numeric_tempo, tempo_mark = ExtractTempo(score_data, part)
+    numeric_tempo, tempo_mark = extract_tempo(score_data, part)
     tg1 = get_tempo_grouped_1(tempo_mark)
     tg2 = get_tempo_grouped_2(tg1)
 
-    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = Extract_Time_Signatures(list(part.getElementsByClass(Measure)))
+    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = extract_time_signatures(list(part.getElementsByClass(Measure)))
     
     score_data.update({
         TIME_SIGNATURE: time_signature,
@@ -64,7 +64,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         NUMBER_OF_BEATS: number_of_beats,
     })
 
-def Extract_Time_Signatures(measures):
+def extract_time_signatures(measures):
     ts_measures=[]
     time_signatures = []
     for i, element in enumerate(measures):
@@ -84,7 +84,7 @@ def Extract_Time_Signatures(measures):
     return time_signature, ts_measures, time_signatures, time_signature_grouped, number_of_beats
 
 
-def ExtractTempo(score_data, part):
+def extract_tempo(score_data, part):
     numeric_tempo = extract_numeric_tempo(score_data[DATA_FILE])
     tempo_mark = TempoGroup2.NA.value
     for measure in part:
