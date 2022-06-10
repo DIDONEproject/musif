@@ -94,11 +94,9 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     if harmonic_analysis is not None:
         return harmonic_analysis
     try:
-        if path.exists(file_path):
-            harmonic_analysis=process_musescore_file(file_path, expand_repeats)
-            _cache.put(file_path, harmonic_analysis)
-        else:
-            raise FileNotFoundError('.mscx file was not found.')
+        harmonic_analysis=process_musescore_file(file_path, expand_repeats)
+        _cache.put(file_path, harmonic_analysis)
+        
     except Exception as e:
         harmonic_analysis = None
         raise ParseFileError(file_path, str(e)) from e
@@ -333,6 +331,7 @@ class FilesValidator:
                 musescore_file = compose_musescore_file_path(musicxml_file, self._cfg.musescore_dir)
                 if not path.isfile(musescore_file):
                     raise MissingFileError(musescore_file)
+                parse_musescore_file(musescore_file)
         except (ParseFileError, MissingFileError) as e:
             return str(e)
         return None
