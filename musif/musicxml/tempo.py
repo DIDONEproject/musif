@@ -7,7 +7,7 @@ from typing import Optional
 # TODO: document this module
 
 class TempoGroup2(Enum):
-    NA = "na"
+    NA = "NA"
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
