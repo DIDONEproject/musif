@@ -8,6 +8,7 @@ import roman
 from music21 import pitch, scale
 
 from musif.common.translate import translate_word
+from musif.logs import pwarn
 
 
 def get_musescoreInstrument_nameAndFamily(i, instrument_familiy, p):
@@ -17,31 +18,25 @@ def get_musescoreInstrument_nameAndFamily(i, instrument_familiy, p):
     family = instrument_familiy[name]
     return name, family
 
-def sort(list_to_sort, main_list):
+def sort(list_to_sort: list, reference_list: list) -> list:
     """
     Function that sorts the first list based on the second one
     """
     # TODO: would it be better using numpy?
-    # TODO: if list_to_sort may be a set (a dict with only keys) the `in` operation is much faster
-    # TODO: btw, in pure python: return [i for i in main_list if i in list_to_sort]
-    # TODO: the previous one may not be identical... test it!
-    # TODO: also, if the two lists have the same length: https://www.adamsmith.haus/python/answers/how-to-sort-a-list-based-on-another-list-in-python
     indexes = []
-    huerfanos = []
+    others = []
+    reference_list=set(reference_list)
     for i in list_to_sort:
-        # this may be very slow (it contains a full for)
-        if i in main_list:
-            # again, the following is another full for
-            indexes.append(main_list.index(i))  # an error indicates that the elements are not present in the main_list; please get in touch with us if so.
-            # TODO: throw an exception with this message and give some info on how to solve it (at least)
+        if i in reference_list:
+            indexes.append(reference_list.index(i))  
+            # an error indicates that the elements are not present in the main_list; please get in touch with us if so.
         else:
-            huerfanos.append(i)
-
+            others.append(i)
+    if others:
+        pwarn('Some elements to be sorted where not present in the reference list.\nThey are placed at the end, update the reference list for better sorting.')
     indexes = sorted(indexes)
-    list_sorted = [main_list[i] for i in indexes]
-    return list_sorted + huerfanos
-
-
+    list_sorted = [reference_list[i] for i in indexes]
+    return list_sorted + others
 
 def get_gender(character):
     # returns characters' gender; for our arias only

@@ -9,7 +9,7 @@ import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
 from musif.common.cache import Cache
-from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
+from musif.common._constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data

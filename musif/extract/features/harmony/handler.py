@@ -25,8 +25,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         harmonic_analysis = score_data.get(DATA_MUSESCORE_SCORE)
 
         if harmonic_analysis is None:
-            return {}
-
+            features[HARMONY_PRESENT] = 0
+            return features
+        else:
+            features[HARMONY_PRESENT] = 1
+            
         all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
         keyareas = get_keyareas(harmonic_analysis, major = score_data[DATA_MODE] == 'major')
         chords, chords_grouping1, chords_grouping2 = get_chords(harmonic_analysis)

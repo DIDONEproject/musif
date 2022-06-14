@@ -5,7 +5,7 @@ from musif.common.translate import translate_word
 from musif.common.utils import write_object_to_json_file
 
 
-def create_instrument_abbreviations_file(file_path: str):
+def create_instrument_abbreviations_file(file_path: str) -> str:
     """
     Function to generate a JSON file indicating the relationshipe between
     all the instruments present in the score and their abbreviations.
