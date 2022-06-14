@@ -126,6 +126,7 @@ _CONFIG_POST_FALLBACK = {
     ENDSWITH: [],
     STARTSWITH: [],
     CONTAIN: [],
+    REPLACE_NANS: []
 }
 
 class Configuration:
@@ -280,6 +281,8 @@ class PostProcess_Configuration:
         self.columns_endswith = config_data.get(ENDSWITH, _CONFIG_POST_FALLBACK[ENDSWITH])
         self.columns_startswith = config_data.get(STARTSWITH, _CONFIG_POST_FALLBACK[STARTSWITH])
         self.columns_contain = config_data.get(CONTAIN, _CONFIG_POST_FALLBACK[CONTAIN])
+        self.replace_nans = config_data.get(REPLACE_NANS, _CONFIG_POST_FALLBACK[REPLACE_NANS])
+        
 
     def to_dict_post(self) -> dict:
         return {

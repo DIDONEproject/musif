@@ -1,3 +1,4 @@
+from asyncio import constants
 import re
 from collections import Counter
 from statistics import mean, stdev
@@ -94,9 +95,9 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     ascending_intervals_percentage = num_ascending_intervals / len(intervals) if len(intervals) > 0 else 0
     descending_intervals_percentage = num_descending_intervals / len(intervals) if len(intervals) > 0 else 0
 
-    largest_semitones = max(numeric_intervals) if len(intervals) > 0 else None
-    largest = Interval(largest_semitones).directedName if len(intervals) > 0 else None
-    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(intervals) > 0 else None
+    largest_semitones = max(numeric_intervals) if len(numeric_intervals) > 0 else None
+    largest = Interval(largest_semitones).directedName if len(numeric_intervals) > 0 else None
+    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(numeric_intervals) > 0 else None
     smallest = Interval(smallest_semitones).directedName if len(intervals) > 0 else None
     largest_ascending_semitones = max(ascending_intervals) if len(ascending_intervals) > 0 else None
     largest_ascending = Interval(largest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
@@ -106,7 +107,7 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     smallest_ascending = Interval(smallest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
     smallest_descending_semitones = max(descending_intervals) if len(descending_intervals) > 0 else None
     smallest_descending = Interval(smallest_descending_semitones).directedName if len(descending_intervals) > 0 else None
-
+    
     features = {
         f"{prefix}{MEAN_INTERVAL}": mean_interval,
         f"{prefix}{INTERVALLIC_MEAN}": intervallic_mean,
@@ -159,7 +160,7 @@ def get_interval_count_features(intervals: List[Interval], prefix: str = "") -> 
     interval_features = {}
     for interval, count in interval_counts.items():
         interval_features[INTERVAL_COUNT.format(prefix=prefix, interval=interval)] = count
-        interval_features[INTERVAL_PER.format(prefix=prefix, interval=interval)] = count / total_count
+        interval_features[INTERVAL_PER.format(prefix=prefix, interval=interval)] = count / total_count if total_count else 0
     return interval_features
 
 
