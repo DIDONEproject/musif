@@ -4,12 +4,11 @@ import sys
 from typing import Union
 
 import pandas as pd
-from musif.config import PostProcess_Configuration
+from musif.config import REPLACE_NANS, PostProcess_Configuration
 from musif.process.utils import (delete_columns,
                                  join_keys, join_keys_modulatory,
                                  join_part_degrees, log_errors_and_shape,
-                                 merge_duetos_trios, merge_single_voices,
-                                 replace_nans, split_passion_A)
+                                 merge_duetos_trios, merge_single_voices, split_passion_A)
 from pandas import DataFrame
 
 import os
@@ -83,7 +82,7 @@ class DataProcessor:
         kwargs[info]: Union[str, DataFrame]
             Either a path to a .csv file containing the information either a DataFrame object fromm FeaturesExtractor
         """
-        self._post_config=PostProcess_Configuration(*args, **kwargs)
+        self._post_config = PostProcess_Configuration(*args, **kwargs)
         self.info=info
         self.data = self.process_info(self.info)
 
@@ -205,10 +204,13 @@ class DataProcessor:
 
         self.data.drop([i for i in self.data.columns if 'Degree' in i and not '_relative' in i], axis = 1, inplace=True)
         self.data.drop([i for i in self.data.columns if i.startswith(CHORDS_GROUPING_prefix+'1')], axis = 1, inplace=True)
-        self._group_keys_modulatory()
-        self._group_keys()
-        self._join_degrees()
-
+        try:
+            self._group_keys_modulatory()
+            self._group_keys()
+            self._join_degrees()
+        except KeyError:
+            perr('Some columns to group could not be found.')
+            
     def merge_voices(self) -> None:
         """Finds multiple singers arias (duetos/trietos) and calculates mean, max or min between them.
         Unifies all voices columns into SoundVoice_ columns.  
@@ -233,9 +235,6 @@ class DataProcessor:
                 self.data.at[i, PRESENCE+'_'+element] = 1
                 
         self.data[[i for i in self.data if PRESENCE+'_'in i]]=self.data[[i for i in self.data if PRESENCE+'_'in i]].fillna('0')
-        
-        # del self.data[INSTRUMENTATION]
-        # del self.data[SCORING]
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
@@ -272,6 +271,13 @@ class DataProcessor:
         except KeyError:
             perr('Some columns are already not present in the Dataframe')
     
+    def replace_nans(self) -> None:
+        pinfo('\nReplacing NaN values in selected columns...')
+        for col in self.data.columns:
+        # self.data.drop([col for col in self.data.columns if , axis = 1, inplace=True)
+            if any(substring in col for substring in tuple(self._post_config.replace_nans)):
+                self.data[col]= self.data[col].fillna('0')
+            
     def to_csv(self, dest_path: str) -> None:
         """Saves current information into a .csv file given the name onf dest_path
         
@@ -324,17 +330,18 @@ class DataProcessor:
                 if pd.isnull(comp):
                     self.composer_counter.append(self.data[FILE_NAME][i])
                     self.data.drop(i, axis = 0, inplace=True)
-                elif comp not in composers:
+                elif comp.strip() not in composers:
                     aria_name=self.data.at[i,FILE_NAME]
                     correction = difflib.get_close_matches(comp, composers)
                     correction = correction[0] if correction else 'NA'
-                    self.data.at[i, COMPOSER] = correction[0]
+                    self.data.at[i, COMPOSER] = correction
                     pwarn(f'Composer {comp} in aria {aria_name} was not found. Replaced with: {correction}')
         else:
             perr('Composers file could not be found.')
 
     def _final_data_processing(self) -> None:
         self.data.sort_values(ARIA_ID, inplace=True)
+        self.replace_nans()
         self._check_columns_type()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         columns_to_sort=columns_order+list(self.data.filter(like='Label_', axis=1))

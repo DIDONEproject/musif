@@ -61,7 +61,12 @@ columns_contain:
   - _SmallestSemitones
   - _SmallestAbsolute
   - _SmallestInterval
-  
+
+replace_nans:
+  - Interval
+  - Degree
+  - Chord
+
 delete_presence:
   - vn
   - bs

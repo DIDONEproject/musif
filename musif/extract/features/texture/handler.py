@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 from pandas import DataFrame
 
-from musif.common.constants import VOICE_FAMILY
+from musif.common._constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data, _part_matches_filter
 from musif.extract.constants import DATA_PART_ABBREVIATION

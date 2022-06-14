@@ -3,7 +3,7 @@ from typing import List
 from music21.note import Note
 from numpy import mean
 
-from musif.common.constants import VOICE_FAMILY
+from musif.common._constants import VOICE_FAMILY
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
