@@ -26,6 +26,7 @@ from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import INSTRUMENTATION, SCORING, VOICES
 from musif.logs import perr, pinfo, pwarn
 
+
 from .constants import (PRESENCE, columns_order, label_by_col,
                         voices_list_prefixes)
 
