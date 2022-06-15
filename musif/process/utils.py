@@ -149,15 +149,15 @@ def split_passion_A(data: DataFrame) -> None:
     data.drop('Label_PassionA', axis = 1, inplace=True)
   
 def join_keys(df: DataFrame) -> None:
-        key_SD = [KEY_PREFIX+'IV'+KEY_PERCENTAGE, KEY_PREFIX+'II'+KEY_PERCENTAGE, KEY_PREFIX+'VI'+KEY_PERCENTAGE]
-        key_sd = [KEY_PREFIX+'iv'+KEY_PERCENTAGE, KEY_PREFIX+'ii'+KEY_PERCENTAGE]
-        key_tonic = [KEY_PREFIX+'I'+KEY_PERCENTAGE, KEY_PREFIX+'i'+KEY_PERCENTAGE]
-        key_rel = [KEY_PREFIX+'III'+KEY_PERCENTAGE, KEY_PREFIX+'vi'+KEY_PERCENTAGE]
+        key_SD = [i for i in [KEY_PREFIX+'IV'+KEY_PERCENTAGE, KEY_PREFIX+'II'+KEY_PERCENTAGE, KEY_PREFIX+'VI'+KEY_PERCENTAGE] if i in df]
+        key_sd =  [i for i in [KEY_PREFIX+'iv'+KEY_PERCENTAGE, KEY_PREFIX+'ii'+KEY_PERCENTAGE] if i in df]
+        key_tonic =  [i for i in [KEY_PREFIX+'I'+KEY_PERCENTAGE, KEY_PREFIX+'i'+KEY_PERCENTAGE] if i in df]
+        key_rel =  [i for i in [KEY_PREFIX+'III'+KEY_PERCENTAGE, KEY_PREFIX+'vi'+KEY_PERCENTAGE] if i in df]
 
         total_key=key_rel+key_tonic+key_sd+key_SD
         others_key=[i for i in df.columns if KEY_PREFIX in i and i not in total_key and KEY_MODULATORY not in i]
 
-        df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
+        df[KEY_PREFIX + 'SD' + KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
         df[KEY_PREFIX+'sd'+KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
         df[KEY_PREFIX+'SubD'+KEY_PERCENTAGE]=df[KEY_PREFIX+'sd'+KEY_PERCENTAGE] + df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]
         df[KEY_PREFIX+'T'+KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
@@ -166,10 +166,10 @@ def join_keys(df: DataFrame) -> None:
         # df.drop(total_key+others_key, axis = 1, inplace=True)
 
 def join_keys_modulatory(df: DataFrame):
-        key_SD=[KEY_PREFIX+KEY_MODULATORY+'IV',KEY_PREFIX+KEY_MODULATORY+'II', KEY_PREFIX+KEY_MODULATORY+'VI']
-        key_sd=[KEY_PREFIX+KEY_MODULATORY+'iv',KEY_PREFIX+KEY_MODULATORY+'ii']
-        key_tonic=[KEY_PREFIX+KEY_MODULATORY+'I',KEY_PREFIX+KEY_MODULATORY+'i']
-        key_rel=[KEY_PREFIX+KEY_MODULATORY+'III',KEY_PREFIX+KEY_MODULATORY+'vi']
+        key_SD = [i for i in [KEY_PREFIX+KEY_MODULATORY+'IV',KEY_PREFIX+KEY_MODULATORY+'II', KEY_PREFIX+KEY_MODULATORY+'VI'] if i in df]
+        key_sd = [i for i in [KEY_PREFIX+KEY_MODULATORY+'iv',KEY_PREFIX+KEY_MODULATORY+'ii'] if i in df]
+        key_tonic = [i for i in [KEY_PREFIX+KEY_MODULATORY+'I',KEY_PREFIX+KEY_MODULATORY+'i'] if i in df]
+        key_rel = [i for i in [KEY_PREFIX+KEY_MODULATORY+'III',KEY_PREFIX+KEY_MODULATORY+'vi'] if i in df]
 
         total_key_mod=key_rel+key_tonic+key_sd+key_SD
         others_key_mod=[i for i in df.columns if KEY_PREFIX+KEY_MODULATORY in i and i not in total_key_mod]
@@ -180,14 +180,13 @@ def join_keys_modulatory(df: DataFrame):
         df[KEY_PREFIX+KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
         df[KEY_PREFIX+KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
         df[KEY_PREFIX+KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
-        # df.drop(total_key_mod+others_key_mod, axis = 1, inplace=True)
         
-def merge_dataframes(name):
+def merge_dataframes(name: str, dest_path: str) -> None:
     csv='.csv'
-    name1 = name+'extraction'+csv
-    name2 = name+'extraction_2'+csv
+    name1 = name+'_extraction'+csv
+    name2 = name+'_extraction2'+csv
     
-    df1=pd.read_csv(name1)
-    df2=pd.read_csv(name2)
-    total_dataframe=pd.concat((df1, df2), axis=1)
-    total_dataframe.to_csv(name+'_total'+csv, index=False)
+    df1 = pd.read_csv(name1)
+    df2 = pd.read_csv(name2)
+    total_dataframe = pd.concat((df1, df2), axis=0)
+    total_dataframe.to_csv(dest_path, index=False)
