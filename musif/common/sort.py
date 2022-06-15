@@ -8,6 +8,22 @@ from musif.config import LOGGER_NAME
 
 
 def sort_list(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
+    """
+    EXAMPLE:
+    
+    Changes person's date(year of birth or death) from old_date to new_date and saves it in the original file.
+
+    Parameters
+    ----------
+    person : str
+      Name of person wich year of death or birt want to be changed
+    old_date : str
+      Year that will be changed
+    new_date : str
+      New year that will replace the old one
+    origin_paths : Union[str, List[str]]
+      A path or a list of paths
+    """
     sort_dictionary = {elem: i for i, elem in enumerate(reference_list)}
     found = [elem for elem in list_to_sort if elem in sort_dictionary]
     orphans = [elem for elem in list_to_sort if elem not in sort_dictionary]

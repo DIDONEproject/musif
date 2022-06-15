@@ -1,3 +1,4 @@
+from typing import Dict
 import requests
 from bs4 import BeautifulSoup
 
@@ -5,13 +6,17 @@ from musif.common.translate import translate_word
 from musif.common.utils import write_object_to_json_file
 
 
-def create_instrument_abbreviations_file(file_path: str):
+def create_instrument_abbreviations_file(file_path: str) -> Dict[str,str]:
     """
     Function to generate a JSON file indicating the relationshipe between
     all the instruments present in the score and their abbreviations.
     New Grove abbreviations
+    
+    Examples
+    
+    {"violoncello": "vc",
+    "violino": "vn"}
     """
-    # TODO: put an example in the docs and add return types
     instrumentName_abbreviation = {}
 
     url = 'https://imslp.org/wiki/IMSLP:Abbreviations_for_Instruments'
@@ -35,13 +40,16 @@ def create_instrument_abbreviations_file(file_path: str):
     return instrumentName_abbreviation
 
 
-def create_instrument_families_file(file_path: str):
+def create_instrument_families_file(file_path: str) -> Dict[str,str]:
     """
     Function to generate a JSON file indicating the relationships between
     all the instruments present in the score (IN ENGLISH) and their families,
     i.e. str (strings), ww (woodwinds), etc.
+    
+    Example
+    {"woodwind instruments": "ww"}
+    
     """
-    # TODO: put an example in the docs and add return types
     instrumentName_family = {}
 
     url = 'https://opac.rism.info/index.php?id=15'
