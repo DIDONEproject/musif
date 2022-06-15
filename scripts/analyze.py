@@ -1,8 +1,8 @@
 # import os
 import sys
 
-from musif.process.utils import merge_dataframes
 sys.path.insert(0, "../musif/")
+from musif.process.utils import merge_dataframes
 import os
 import pandas as pd
 from musif.extract.extract import FeaturesExtractor
@@ -18,18 +18,17 @@ if __name__ == "__main__":
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     # check_file = 'parsed_files_total.csv'
     check_file = None
-    name = "features_23_05"
+    name = "features_14_06"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     
-    merge_dataframes(name)
-    
     dest_path = name + "_total.csv"
-    # df.to_csv(dest_path, index=False)
-    dest_path = "total.csv"
+    merge_dataframes(name, dest_path)
+    
     
     p = DataProcessor(dest_path, "scripts/post_process.yml", merge_voices=True)
     print(p.data.shape)
     p.process()
+
     filter_list=['Misero_pargoletto', 'Se_tutti', 'Son_regina', 'Non_ha', 'Se_resto', 'Ah_non_lasciarmi', 'Cadra_fra']
     f = DataFilter('total_processed.csv').filter_data(by='AriaName', equal_to=filter_list, instrument='SoundVoice')
     
