@@ -9,10 +9,11 @@ if __name__ == "__main__":
 
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
+    
     prev=r'../Corpus'
-
-    data_dir = prev+r'/xml/Ale02M-Vedrai_con-1730-Vinci[1.02][0636].xml'
-    # Ale02M-Vedrai_con-1768-Sacchini[1.02][1189].xml
+    data_dir = prev+r'/xml/'
+    # test this file for not found mscsx: Ale61X-Paventa_del-1792-Piccinni[2.08][0880]
+    
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
 

@@ -5,7 +5,7 @@ from typing import List
 # TODO: not needed
 import numpy as np
 import pandas as pd
-from musif.config import CONTAIN, ENDSWITH, INSTRUMENTS_TO_DELETE, PRESENCE, STARTSWITH, SUBSTRING_TO_DELETE
+from musif.config import INSTRUMENTS_TO_DELETE, SUBSTRING_TO_DELETE
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
@@ -24,7 +24,14 @@ from tqdm import tqdm
 
 from .constants import voices_list_prefixes
 
-def merge_duetos_trios(df: DataFrame)-> DataFrame:
+
+def replace_nans(df):
+    for col in df.columns:
+            if 'Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or ('_Degree' and TRIMMED_INTERVALLIC_MEAN and '_Dyn') in col:
+                df[col]= df[col].fillna('NA')
+            
+
+def merge_duetos_trios(df: DataFrame)-> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
     
     df = df[df[VOICES].notna()]
@@ -57,6 +64,7 @@ def merge_duetos_trios(df: DataFrame)-> DataFrame:
                 
             else:
                 df.at[index,formatted_col] = df.loc[index, similar_cols].mean()
+                
     return df
 
 def merge_single_voices(df: DataFrame) -> None:
@@ -116,13 +124,13 @@ def delete_columns(data: DataFrame, config: dictConfig) -> None:
         if 'PartVnI__PartVoice__Texture' in data:
             del data['PartVnI__PartVoice__Texture']
 
-        presence=['Presence_of_' + str(i) for i in config[PRESENCE]]
+        presence=['Presence_of_'+str(i) for i in config['delete_presence']]
         if all(item in data.columns for item in presence):
             data.drop(presence, axis = 1, inplace=True,  errors='ignore')
 
-        data.drop([i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))], axis = 1, inplace=True)
-        data.drop([i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))], axis = 1, inplace=True)
-        data.drop([col for col in data.columns if any(substring in col for substring in tuple(config[CONTAIN]))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.endswith(tuple(config['columns_endswith']))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.startswith(tuple(config['columns_startswith']))], axis = 1, inplace=True)
+        data.drop([col for col in data.columns if any(substring in col for substring in tuple(config['columns_contain']))], axis = 1, inplace=True)
 
         data.drop([i for i in data.columns if i.startswith('Sound') and not 'Voice' in i], axis = 1, inplace=True)
         
@@ -166,11 +174,20 @@ def join_keys_modulatory(df: DataFrame):
         total_key_mod=key_rel+key_tonic+key_sd+key_SD
         others_key_mod=[i for i in df.columns if KEY_PREFIX+KEY_MODULATORY in i and i not in total_key_mod]
 
-        df[KEY_PREFIX + KEY_MODULATORY+'SD']=df[key_SD].sum(axis=1)
-        df[KEY_PREFIX + KEY_MODULATORY+'sd']=df[key_sd].sum(axis=1)
-        df[KEY_PREFIX + KEY_MODULATORY+'SubD']=df[KEY_PREFIX+KEY_MODULATORY+'sd'] + df[KEY_PREFIX+KEY_MODULATORY+'SD']
-        df[KEY_PREFIX + KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
-        df[KEY_PREFIX + KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
-        df[KEY_PREFIX + KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'SD']=df[key_SD].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'sd']=df[key_sd].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'SubD']=df[KEY_PREFIX+KEY_MODULATORY+'sd'] + df[KEY_PREFIX+KEY_MODULATORY+'SD']
+        df[KEY_PREFIX+KEY_MODULATORY+'T'] = df[key_tonic].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'rel'] = df[key_rel].sum(axis=1)
+        df[KEY_PREFIX+KEY_MODULATORY+'Other'] = df[others_key_mod].sum(axis=1)
         # df.drop(total_key_mod+others_key_mod, axis = 1, inplace=True)
-
+        
+def merge_dataframes(name):
+    csv='.csv'
+    name1 = name+'extraction'+csv
+    name2 = name+'extraction_2'+csv
+    
+    df1=pd.read_csv(name1)
+    df2=pd.read_csv(name2)
+    total_dataframe=pd.concat((df1, df2), axis=1)
+    total_dataframe.to_csv(name+'_total'+csv, index=False)
