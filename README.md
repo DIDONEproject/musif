@@ -25,10 +25,8 @@ pip install .
 
 Assuming we have our scores persisted in a directories structure like this:
  
-TODO: which one of the two?
-
 ```
-scores                                   others
+scores                    or               scores
 |                                        |
 |__ xml                                  |__ score3.xml
 |   |__ score1.xml                       |__ score3.mscx

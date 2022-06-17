@@ -12,7 +12,7 @@ from musif.common.utils import extract_digits
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_INTERVALS
-from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_part_prefix, _get_score_prefix, get_sound_prefix
 from .constants import *
 
 
@@ -52,7 +52,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         features.update(get_interval_stats_features(intervals, sound_prefix))
 
     score_intervals = [interval for part_data in parts_data for interval in part_data[DATA_INTERVALS]]
-    score_prefix = get_score_prefix()
+    score_prefix = _get_score_prefix()
     features.update(get_interval_features(score_intervals, score_prefix))
     features.update(get_interval_count_features(score_intervals, score_prefix))
     features.update(get_interval_type_features(score_intervals, score_prefix))

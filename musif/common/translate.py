@@ -28,7 +28,6 @@ def translate_word(word: str, language: str = None, translations_cache: Dict[str
             translator_x_eng_text = word
     # from the list of possible translations -> take nouns only
     main_possibility = translator_x_eng_text.replace('-', ' ').lower()
-    # singularize(main_possibility)
     if len(wn.synsets(main_possibility)) > 0 and wn.synsets(main_possibility)[0].pos() != 'n':  # if not noun: look for a noun translation
         try:
             # if there is more than one possible translation:

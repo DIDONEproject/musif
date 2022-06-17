@@ -6,7 +6,7 @@ from musif.common.translate import translate_word
 from musif.common.utils import write_object_to_json_file
 
 
-def create_instrument_abbreviations_file(file_path: str) -> Dict[str,str]:
+def create_instrument_abbreviations_file(file_path: str) -> Dict[str, str]:
     """
     Function to generate a JSON file indicating the relationshipe between
     all the instruments present in the score and their abbreviations.
@@ -17,6 +17,7 @@ def create_instrument_abbreviations_file(file_path: str) -> Dict[str,str]:
     {"violoncello": "vc",
     "violino": "vn"}
     """
+    
     instrumentName_abbreviation = {}
 
     url = 'https://imslp.org/wiki/IMSLP:Abbreviations_for_Instruments'
@@ -40,7 +41,7 @@ def create_instrument_abbreviations_file(file_path: str) -> Dict[str,str]:
     return instrumentName_abbreviation
 
 
-def create_instrument_families_file(file_path: str) -> Dict[str,str]:
+def create_instrument_families_file(file_path: str) -> Dict[str, str]:
     """
     Function to generate a JSON file indicating the relationships between
     all the instruments present in the score (IN ENGLISH) and their families,

@@ -11,6 +11,20 @@ ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 # TODO: document this module
 
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
+    """
+        Returns abbreviation name for a specific
+        
+        # Example
+        # 'vnI' -> 'SoundVn_'    
+        
+        Parameters
+        ----------
+        part:  str
+            Name of the part
+        parts: List[part]
+            
+    """
+    
     sound = extract_sound(part, cfg)
     return list(extract_abbreviated_part(sound, part, parts, cfg))[0]
 

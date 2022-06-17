@@ -7,36 +7,90 @@ from musif.common._logs import create_logger
 from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
 
-# TODO: add documentation for these variables
+"""Name of the logger and folder where it will be placed."""
 LOGGER_NAME = "musiF"
+
+"""Name of they key for logger info"""
 LOG = "log"
+
+"""Path where logs will be stored"""
 LOG_FILE_PATH = "file_path"
+
+"""Constant name for the level of file logging"""
 FILE_LOG_LEVEL = "file_level"
+
+"""Constant name for the level of console logging"""
 CONSOLE_LOG_LEVEL = "console_level"
+
+"""Constant name for the folder containing metadata"""
 METADATA_DIR = "metadata_dir"
+
+"""Constant name for id metadata"""
 METADATA_ID_COL = "metadata_id_col"
+
+"""Constant name for folder containing xml files"""
 DATA_DIR = "data_dir"
+
+"""Constant name for folder containing mscx files"""
 MUSESCORE_DIR = "musescore_dir"
+
+"""Constant name for parallelization info"""
 PARALLEL = "parallel"
+
+"""Constant name maximum number of processes allowed"""
 MAX_PROCESSES = "max_processes"
+
+"""Constant name for features to be extracted"""
 FEATURES = "features"
+
+"""Keywords for parts that need to be splitted when sharing same staff"""
 SPLIT_KEYWORDS = "split_keywords"
+
+"""Constant name for features to be extracted"""
 PARTS_FILTER = "parts_filter"
+
+"""Constant name to expand repetitions or not"""
 EXPAND_REPEATS = "expand_repeats"
 
+"""Post-Processing constants---"""
+
+"""File that keeps previously extracted files"""
 CHECK_FILE = "checking_file"
+
+"""If delete files present in errors.csv file or not"""
 DELETE_FILES = "delete_failed_files"
+
+"""If grouped features need to be created or not"""
 GROUPED = "grouped_analysis"
+
+"""Separate passions for theme A in arias"""
 SPLIT_PASSSIONS = "split_passionA"
+
+"""If Instrumentation column needs to be unbundled into several columns or not"""
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
+
+"""Constant name for instruments that need to be kept"""
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
+
+"""Constant name for instruments that need to be deleted"""
 INSTRUMENTS_TO_DELETE = "instruments_to_delete"
+
+"""Constant name for substring present in column names to drop those columns"""
 SUBSTRING_TO_DELETE = "substring_to_delete"
+
+"""Constant name for substring ending in column names to drop those columns"""
 ENDSWITH = "columns_endswith"
+
+"""Constant name for substring start in column names to drop those columns"""
 STARTSWITH = "columns_startswith"
+
+"""Constant name for string contained by column names to drop those columns"""
 CONTAIN = "columns_contain"
-MERGE_VOICES = "merge_voices"
+
+"""Constant name for Presence_ column names that need to be droppped"""
 PRESENCE = "delete_presence"
+"""If the different singers names features are needed to be grouped into a single 'SoundVoice' column or not"""
+MERGE_VOICES = "merge_voices"
 
 _CONFIG_FALLBACK = {
     LOG: {
@@ -111,8 +165,11 @@ class Configuration:
         self._load_metadata()
 
     def is_requested_musescore_file(self) -> bool:
-        # TODO: doc
-
+        """
+        Returns True or False to extract harmonic information depending on the modules that
+        need to be analyzed, if they depend on harmonic information or not.
+        """
+        
         if self.is_requested_feature_category(HARMONY_FEATURES):
             return True
         if self.is_requested_feature_category(SCALE_RELATIVE_FEATURES):
@@ -120,15 +177,21 @@ class Configuration:
         return False
 
     def is_requested_feature_category(self, feature) -> bool:
-        # TODO: doc
+        """
+        Returns True or False to inform if a feature has been required to be analyzed.
+        If the list of required features is None, any feature will be marked as True.
+        """
 
         if self.features is None:
             return True
         return feature in self.features
 
     def is_requested_module(self, module) -> bool:
-        # TODO: doc
-
+        """
+        Returns True or False to inform if a module has been required to be analyzed.
+        If the list of required features is None, any feature will be marked as True.
+        """
+        
         if self.features is None:
             return True
         module_path = module.__name__
@@ -139,7 +202,9 @@ class Configuration:
         return False
 
     def to_dict(self) -> dict:
-        # TODO: doc
+        """        
+        Method to throw the information of a Configuration object on a dictionary
+        """
 
         return {
             LOG: {

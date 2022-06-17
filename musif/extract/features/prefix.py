@@ -1,31 +1,66 @@
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 
-# TODO documet these functions or make them private
 # TODO: wouldn't it be better to create MultiIndex dataframes?
 
 def get_part_prefix(part_abbreviation: str) -> str:
+    """
+        Returns prefix name for a specific part given instrument's abbreviation
+        
+        Example
+        'vnI' -> 'PartVnI_'    
+        
+        Parameters
+        ----------
+        part_abbreviation:  str
+            String that represents the abbreviated name of an instrument
+    """
+        
     if part_abbreviation is None or len(part_abbreviation) == 0:
         return "Part"
     return f"Part{part_abbreviation[0].upper() + part_abbreviation[1:]}_"
 
 
 def get_sound_prefix(sound_abbreviation: str) -> str:
+    """
+        Returns prefix name for a specific part given sound's abbreviation
+        
+        Example
+        'vnI' -> 'SoundVn_'    
+        
+        Parameters
+        ----------
+        part_abbreviation:  str
+            String that represents the abbreviated name of a sound
+    """
+    
     if sound_abbreviation is None or len(sound_abbreviation) == 0:
         return "Sound"
     return f"Sound{sound_abbreviation[0].upper() + sound_abbreviation[1:]}_"
 
 
 def get_family_prefix(family_abbreviation: str) -> str:
+    """
+        Returns prefix name for a specific part given sound's abbreviation
+        
+        Example
+        'vnI' -> 'SoundVn_'    
+        
+        Parameters
+        ----------
+        part_abbreviation:  str
+            String that represents the abbreviated name of a sound
+    """
+    
     if family_abbreviation is None or len(family_abbreviation) == 0:
         return "Family"
     return f"Family{family_abbreviation[0].upper() + family_abbreviation[1:]}_"
 
 
-def get_score_prefix() -> str:
+def _get_score_prefix() -> str:
     return "Score_"
 
 
-def get_corpus_prefix() -> str:
+def _get_corpus_prefix() -> str:
     return "Corpus_"
 
 
@@ -93,6 +128,6 @@ def get_score_feature(feature: str) -> str:
     Returns:
         str: The feature properly prefixed for score scope.
     """
-    return get_score_prefix() + feature
+    return _get_score_prefix() + feature
 
 

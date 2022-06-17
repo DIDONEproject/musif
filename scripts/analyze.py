@@ -37,8 +37,6 @@ if __name__ == "__main__":
     p.process()
     print('Final shape is: ', p.data.shape)
     
-    
-    
     filter_list=['Misero_pargoletto', 'Se_tutti', 'Son_regina', 'Non_ha', 'Se_resto', 'Ah_non_lasciarmi', 'Cadra_fra']
     f = DataFilter('total_processed.csv').filter_data(by='AriaName', equal_to=filter_list, instrument='SoundVoice')
     

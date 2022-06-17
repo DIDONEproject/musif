@@ -8,7 +8,7 @@ from musif.extract.constants import DATA_FAMILY_ABBREVIATION, DATA_FILTERED_PART
 from musif.extract.features.core.handler import DATA_MEASURES, DATA_NOTES, DATA_SOUNDING_MEASURES
 from musif.extract.features.prefix import get_family_feature, get_family_prefix, get_part_feature, get_part_prefix, \
     get_score_feature, \
-    get_score_prefix, \
+    _get_score_prefix, \
     get_sound_feature, \
     get_sound_prefix
 from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, PART_ABBREVIATION
