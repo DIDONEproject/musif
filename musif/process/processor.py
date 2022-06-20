@@ -1,33 +1,31 @@
-from collections import Counter
 import difflib
-import sys
+import os
+from collections import Counter
 from typing import Union
 
-import pandas as pd
-from musif.config import REPLACE_NANS, PostProcess_Configuration
-from musif.process.utils import (delete_columns,
-                                 join_keys, join_keys_modulatory,
-                                 join_part_degrees, log_errors_and_shape,
-                                 merge_duetos_trios, merge_single_voices, split_passion_A)
-from pandas import DataFrame
-
-import os
-
 import numpy as np
+import pandas as pd
 from musif.common.sort import sort_columns
 from musif.common.utils import read_dicts_from_csv
+from musif.config import PostProcess_Configuration
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
-                                                      CHORDS_GROUPING_prefix,
-                                                      KEY_PREFIX)
+                                                      KEY_PREFIX,
+                                                      CHORDS_GROUPING_prefix)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import INSTRUMENTATION, SCORING, VOICES
+from musif.extract.features.scoring.constants import (INSTRUMENTATION, SCORING,
+                                                      VOICES)
 from musif.logs import perr, pinfo, pwarn
+from musif.process.utils import (delete_columns, join_keys,
+                                 join_keys_modulatory, join_part_degrees,
+                                 log_errors_and_shape, merge_duetos_trios,
+                                 merge_single_voices, split_passion_A)
+from pandas import DataFrame
+from tqdm import tqdm
 
-
-from .constants import (PRESENCE, columns_order, label_by_col,
+from .constants import (PRESENCE, metadata_columns, label_by_col,
                         voices_list_prefixes)
 
 
@@ -156,7 +154,6 @@ class DataProcessor:
         if self._post_config.merge_voices:
             self.merge_voices()
             
-        pinfo('\nDeleting not useful columns...')
         self.delete_unwanted_columns()
 
         if self._post_config.grouped_analysis:
@@ -235,7 +232,7 @@ class DataProcessor:
             for element in row.split(','):
                 self.data.at[i, PRESENCE+'_'+element] = 1
                 
-        self.data[[i for i in self.data if PRESENCE+'_'in i]]=self.data[[i for i in self.data if PRESENCE+'_'in i]].fillna('0')
+        self.data[[i for i in self.data if PRESENCE+'_'in i]]=self.data[[i for i in self.data if PRESENCE+'_'in i]].fillna(0)
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
@@ -273,13 +270,11 @@ class DataProcessor:
             perr('Some columns are already not present in the Dataframe')
     
     def replace_nans(self) -> None:
-        pinfo('\nReplacing NaN values in selected columns...')
-        for col in self.data.columns:
-        # self.data.drop([col for col in self.data.columns if , axis = 1, inplace=True)
+        for col in tqdm(self.data.columns, desc='Replacing NaN values in selected columns...'):
             if any(substring in col for substring in tuple(self._post_config.replace_nans)):
-                self.data[col]= self.data[col].fillna('0')
+                self.data[col]= self.data[col].fillna(0)
             
-    def to_csv(self, dest_path: str) -> None:
+    def to_csv(self, dest_path: str, df: DataFrame) -> None:
         """Saves current information into a .csv file given the name onf dest_path
         
         Parameters
@@ -287,8 +282,8 @@ class DataProcessor:
         dest_path : str
             Path to the route where the .csv file needs to be stored.
         """
-
-        self.data.to_csv(dest_path, index=False)
+        dest_path = dest_path + '.csv'
+        df.to_csv(dest_path, index=False)
         pinfo(f'\nData succesfully saved as {dest_path} in current directory.')
 
     def _group_keys_modulatory(self) -> None:
@@ -310,9 +305,7 @@ class DataProcessor:
     def _scan_dataframe(self):
         self.composer_counter = []
         self.novoices_counter = []
-
         self._scan_composers()
-
         self._scan_voices()
 
     def _scan_voices(self):
@@ -337,27 +330,58 @@ class DataProcessor:
                     correction = correction[0] if correction else 'NA'
                     self.data.at[i, COMPOSER] = correction
                     pwarn(f'Composer {comp} in aria {aria_name} was not found. Replaced with: {correction}')
+                    if correction == 'NA':
+                        self.composer_counter.append(self.data[FILE_NAME][i])
+                        self.data.drop(i, axis = 0, inplace=True) # ?
+                        
         else:
             perr('Composers file could not be found.')
 
     def _final_data_processing(self) -> None:
         self.data.sort_values(ARIA_ID, inplace=True)
         self.replace_nans()
-        self._check_columns_type()
-        self.data = self.data.reindex(sorted(self.data.columns), axis=1)
-        columns_to_sort=columns_order+list(self.data.filter(like='Label_', axis=1))
-        self.data = sort_columns(self.data, columns_to_sort)
-        self.data.drop('index', axis = 1, inplace=True, errors='ignore')
-        dest_path=self.destination_route + "_processed" + ".csv"
-        log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
-        self.to_csv(dest_path)
 
-    def _check_columns_type(self):
-        for column in self.data.columns:
-                column_type = Counter(self.data[self.data[column].notna()][column].map(type)).most_common(1)[0][0]
+        self.data = self._check_columns_type(self.data)
+        self.data = self.data.reindex(sorted(self.data.columns), axis=1)
+        
+        self.data.drop('index', axis = 1, inplace=True, errors='ignore')
+        log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
+        self._split_metadata_and_labels()
+        
+        dest_path = self.destination_route + "_features"
+        self.to_csv(dest_path, self.data)
+
+    def _split_metadata_and_labels(self) -> None:
+        label_columns = list(self.data.filter(like='Label_', axis=1))
+        label_dataframe = self.data[[ARIA_ID]+label_columns]
+        self.data.drop(label_columns, inplace=True, axis=1, errors='ignore')
+        
+        metadata_dataframe = self.data[[ARIA_ID]+metadata_columns]
+        self.data.drop(metadata_columns, inplace=True, axis=1, errors='ignore')
+        
+        # self.data = sort_columns(self.data, columns_to_sort)
+        self.to_csv(self.destination_route + "_labels", label_dataframe)
+        self.to_csv(self.destination_route + "_metadata", metadata_dataframe)
+        
+        self.data.drop(metadata_columns+label_columns, inplace=True, axis=1, errors='ignore')
+
+    def _check_columns_type(self, df) -> DataFrame:
+        for column in tqdm(df.columns, desc= 'Adjusting proper type for every column'):
+                column_type = Counter(df[df[column].notna()][column].map(type)).most_common(1)[0][0]
                 if column_type == str:
-                    self.data[column]= self.data[column].fillna('NA')
+                    df[column]= df[column].fillna('NA')
+                    df[column]= df[column].replace(0, '0')
+                    df[column]= df[column].replace(np.nan, 'NA')
+                    
                 else:
-                    self.data[column]= self.data[column].replace('NA', np.nan)
+                    df[column]= df[column].fillna(0)
+                    df[column]= df[column].replace('0', 0)
+                    # if column_type == float:
+                    #     df = df.astype({column: float})
+                    # elif column_type == int:
+                    #     df = df.astype({column: int})
+        return df
+                        
+                        
                     
                                                         
