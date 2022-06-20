@@ -5,13 +5,12 @@ from os import path
 import pandas as pd
 import pytest
 from musif.extract.features.prefix import get_part_prefix
-from musif import FeaturesExtractor
 
 from musif.process.processor import DataProcessor
 from tests.constants import TEST_FILE, DATA_STATIC_DIR,CONFIG_PATH
 
-extracted_file='total'
-processed_file=extracted_file+'_processed'
+extracted_file = 'features_14_06'
+processed_file = extracted_file+'_features'
 
 postconfig_path = path.join(CONFIG_PATH, "post_process.yml")
 extracted_csv = path.join(DATA_STATIC_DIR, extracted_file+'.csv')
@@ -21,17 +20,15 @@ reference_file_path = path.join(data_features_dir, TEST_FILE)
 
 processed_file_path= path.join(processed_file+'.csv')
 
-# 5. asdsegurar que hay valores en las intervalos de partvnI y partbs que no sean nan
-
 @pytest.fixture(scope="session")
 def processed_data():
-    processed_df=DataProcessor(extracted_csv, postconfig_path).process()
-    processed_df=processed_df[processed_df['AriaId'].notna()]
+    processed_df = DataProcessor(extracted_csv, postconfig_path).process()
+    processed_df = processed_df[processed_df['AriaId'].notna()]
     yield processed_df
     
 @pytest.fixture(scope="session")
 def process_object():
-    processed_df=DataProcessor(extracted_csv, postconfig_path)
+    processed_df = DataProcessor(extracted_csv, postconfig_path)
     yield processed_df
     
 @pytest.fixture(scope="session")
@@ -59,22 +56,16 @@ class TestPostProcess:
     def test_ensure_violin_solo_not_present(self, processed_data: pd.DataFrame):
         assert len([i for i in processed_data if i.startswith('PartVn_')])==0
         
-    def test_dynamics_have_values(self, processed_data: pd.DataFrame):
-        columns_to_examine = [i for i in processed_data if 'Dyn' in i]
-        assert not processed_data[columns_to_examine].isnull().values.any()
-
-    def test_intervals_have_values(self, processed_data: pd.DataFrame):
-        columns_to_examine = [i for i in processed_data if 'Intervals' in i]
-        assert not processed_data[columns_to_examine].isnull().values.any()
-
-def format_value(value, data_type: str):
-    try:
-        if data_type == 'object':
-            return str(value) if value is not None else ""
-        if data_type.startswith("float"):
-            return round(float(value), 3) if value is not None else 0.0
-        if data_type.startswith("int"):
-            return math.floor(float(value)) if value is not None else 0
-    except:
-        ...
-    return None
+    def test_column_types_match(self, processed_data: pd.DataFrame):
+        found_cols = []
+        for col in processed_data.columns:
+            if col in found_cols:
+                continue
+            weird = (processed_data[[col]].applymap(type) != processed_data[[col]].iloc[0].apply(type)).any(axis=1)
+            if len(processed_data[weird]) > 0:
+                found_cols.append(col)
+                print('\n---\n')
+                print(col)
+                indices = weird[weird]
+                print(indices.index)
+        assert not found_cols

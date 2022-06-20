@@ -2,12 +2,12 @@ from logging.config import dictConfig
 import re
 from typing import List
 
-# TODO: not needed
 import numpy as np
 import pandas as pd
 from musif.config import INSTRUMENTS_TO_DELETE, SUBSTRING_TO_DELETE
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import CHORD_prefix
+from musif.extract.features.texture.constants import TEXTURE
 from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
                                                       LOWEST_NOTE_INDEX)
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
@@ -109,38 +109,42 @@ def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: Dat
     pinfo(str(novoices_counter))
     # pinfo(f"\nTotal files skipped by duetos/trietos: {len(duetos_counter)}")
     # pinfo(str(duetos_counter))
-    pinfo(f"\nFinal shape of the DataFrame: {df.shape}")
+    pinfo(f"\nFinal shape of the DataFrame: {df.shape[0]} scores, {df.shape[1]} features")
 
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
+        pinfo('\nDeleting not useful columns...')
         for inst in config[INSTRUMENTS_TO_DELETE]:
-            
             data.drop([i for i in data.columns if 'Part'+inst in i], axis = 1, inplace=True)
             
         for substring in config[SUBSTRING_TO_DELETE]:
             data.drop([i for i in data.columns if substring in i], axis = 1, inplace=True)
             
-        #Delete Vn when it is alone
-        data.drop(data.columns[data.columns.str.contains(get_part_prefix('Vn'))], axis = 1, inplace=True)
-        if 'PartVnI__PartVoice__Texture' in data:
-            del data['PartVnI__PartVoice__Texture']
-
-        presence=['Presence_of_'+str(i) for i in config['delete_presence']]
-        if all(item in data.columns for item in presence):
-            data.drop(presence, axis = 1, inplace=True,  errors='ignore')
-
         data.drop([i for i in data.columns if i.endswith(tuple(config['columns_endswith']))], axis = 1, inplace=True)
         data.drop([i for i in data.columns if i.startswith(tuple(config['columns_startswith']))], axis = 1, inplace=True)
         data.drop([col for col in data.columns if any(substring in col for substring in tuple(config['columns_contain']))], axis = 1, inplace=True)
-
+       
+        presence = ['Presence_of_'+str(i) for i in config['delete_presence']]
+        if all(item in data.columns for item in presence):
+            data.drop(presence, axis = 1, inplace=True,  errors='ignore')
+        
+        # Sound features 
         data.drop([i for i in data.columns if i.startswith('Sound') and not 'Voice' in i], axis = 1, inplace=True)
         
-        if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
-            data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis = 1, inplace=True)
+        delete_exceptions(data)
 
-        #remove empty voices
-        empty_voices=[col for col in data.columns if col.startswith(tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
-        if empty_voices:
-            data.drop(empty_voices, axis = 1, inplace=True)
+def delete_exceptions(data) -> None:
+    # Delete Vn when it is alone
+    data.drop(data.columns[data.columns.str.contains(get_part_prefix('Vn'))], axis = 1, inplace=True)
+    if 'PartVnI__PartVoice__'+TEXTURE in data:
+        del data['PartVnI__PartVoice__Texture']
+
+    if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
+        data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis = 1, inplace=True)
+
+        # remove empty voices
+    empty_voices = [col for col in data.columns if col.startswith(tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
+    if empty_voices:
+        data.drop(empty_voices, axis = 1, inplace=True)
 
 def split_passion_A(data: DataFrame) -> None:
     data['Label_PassionA_primary']=data['Label_PassionA'].str.split(';', expand=True)[0]
