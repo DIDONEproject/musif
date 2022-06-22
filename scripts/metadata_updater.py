@@ -15,7 +15,7 @@ if __name__ == "__main__":
    # passions
     passions_route= '../../_AlDaniMartiAnni/' + 'Passions.xlsx'
     df_passions = pd.read_excel(passions_route, header=0)
-    df_passions.to_csv('scripts/Passions.csv',  index=False)
+    df_passions.to_csv('musif/internal_data/Passions.csv',  index=False)
 
     # arias.csv
     arias_route=base_path+'Arias_change.xlsx'

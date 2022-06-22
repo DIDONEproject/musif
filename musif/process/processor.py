@@ -29,7 +29,6 @@ from musif.process.constants import (PRESENCE, metadata_columns, label_by_col,
                         voices_list_prefixes)
 
 
-# TODO: solve the requirement of `Passion.csv` if possible
 # TODO: documentation should be more precise here and there, reread
 class DataProcessor:
     """Processor class that treats columns and information of a DataFrame
@@ -84,7 +83,8 @@ class DataProcessor:
         self._post_config = PostProcess_Configuration(*args, **kwargs)
         self.info = info
         self.data = self._process_info(self.info)
-
+        self.internal_data_dir = self._post_config.internal_data
+        
     def _process_info(self, info: Union[str, DataFrame]) -> DataFrame:
         """
         Extracts the info from a directory to a csv file or from a Dataframe object. 
@@ -167,7 +167,8 @@ class DataProcessor:
         """Crosses passions labels from Passions.csv file with the DataFrame so every row (aria)
         gets assigned to its own Label
         """
-        passions = read_dicts_from_csv("Passions.csv")
+        passions = read_dicts_from_csv(os.path.join(self.internal_data_dir,"Passions.csv"))
+        
         data_by_aria_label = {label_data["Label"]: label_data for label_data in passions}
         for col, label in label_by_col.items():
             values = []
@@ -319,7 +320,8 @@ class DataProcessor:
                 self.data.drop(i, axis = 0, inplace=True)
 
     def _scan_composers(self):
-        composers_path=os.path.join('musif','internal_data', 'composers.csv')
+        composers_path=os.path.join(self.internal_data_dir, 'composers.csv')
+        
         if os.path.exists(composers_path):
             composers = pd.read_csv(composers_path)
             composers = [i for i in composers.iloc[:, 0].to_list() if str(i) != 'nan']

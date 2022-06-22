@@ -18,7 +18,7 @@ processed_file_path = path.join(dest_path+'.csv')
 postconfig_path = path.join(CONFIG_PATH, "post_process.yml")
 
 data_features_dir = path.join(DATA_STATIC_DIR, "features")
-reference_file_path = path.join(data_features_dir, TEST_FILE)
+reference_file_path = path.join(data_features_dir, 'features_example.csv')
 
 
 @pytest.fixture(scope="session")
@@ -41,17 +41,17 @@ def post_process_configuration():
 
 
 class TestPostProcess:
-    def test_no_part_texture(self, process_object: pd.DataFrame, processed_data: pd.DataFrame):
-        config = process_object._post_config
-        columns_to_examine = [i for i in processed_data if 'Part' in i and not 'Texture' in i]
-        prefixes = tuple(get_part_prefix(x) for x in config.instruments_to_keep)
-        assert all([i.startswith(prefixes) for i in columns_to_examine if i])
-        
     def test_wrong_path(self):
         # with pytest.raises(Exception) as excinfo:
         with pytest.raises(FileNotFoundError, match='The .csv file could not be found.'):
             DataProcessor('wrong_path.csv')._process_info
             raise FileNotFoundError('The .csv file could not be found.')
+    
+    # def test_no_config_file(self):
+    #     with pytest.raises(FileNotFoundError, match='A post_config.yml file or a dictionary is needed to instantate the class'):
+    #         DataProcessor(reference_file_path, 'no_config.yml')
+    #         raise FileNotFoundError('A post_config.yml file or a dictionary is needed to instantate the class')
+        
 
 class TestProcessedFile:
     def test_column_types_match(self, processed_data: pd.DataFrame):
@@ -83,3 +83,9 @@ class TestProcessedFile:
         
     def test_tonic_chord_not_empty(self, processed_data: pd.DataFrame):
         assert not all([i<0.1 for i in processed_data[CHORD_prefix+'I_Per']])
+        
+    def test_no_part_texture(self, process_object: pd.DataFrame, processed_data: pd.DataFrame):
+        config = process_object._post_config
+        columns_to_examine = [i for i in processed_data if 'Part' in i and not 'Texture' in i]
+        prefixes = tuple(get_part_prefix(x) for x in config.instruments_to_keep)
+        assert all([i.startswith(prefixes) for i in columns_to_examine if i])

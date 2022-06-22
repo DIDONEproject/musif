@@ -24,6 +24,7 @@ SPLIT_KEYWORDS = "split_keywords"
 PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 
+INTERNAL_DATA = "internal_data_dir"
 CHECK_FILE = "checking_file"
 DELETE_FILES = "delete_failed_files"
 GROUPED = "grouped_analysis"
@@ -59,6 +60,7 @@ _CONFIG_FALLBACK = {
 }
 
 _CONFIG_POST_FALLBACK = {
+    INTERNAL_DATA: 'musif/internal_data',
     DELETE_FILES: False,
     GROUPED: False,
     DELETE_FILES: False,
@@ -78,7 +80,6 @@ _CONFIG_POST_FALLBACK = {
 
 class Configuration:
     # TODO: add documentation
-
     def __init__(self, *args, **kwargs):
         config_data = {}
         if len(args) > 1:
@@ -203,7 +204,9 @@ class PostProcess_Configuration:
         self.file_log_level = log_config.get(FILE_LOG_LEVEL, _CONFIG_FALLBACK.get(FILE_LOG_LEVEL))
         self.console_log_level = log_config.get(CONSOLE_LOG_LEVEL, _CONFIG_FALLBACK.get(CONSOLE_LOG_LEVEL))
         create_logger(LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level)
-        self.check_file = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
+        
+        self.internal_data = config_data.get(INTERNAL_DATA, _CONFIG_POST_FALLBACK[INTERNAL_DATA])
+        self.check_file = config_data.get(CHECK_FILE, _CONFIG_POST_FALLBACK[CHECK_FILE])
         self.delete_files = config_data.get(DELETE_FILES, _CONFIG_POST_FALLBACK[DELETE_FILES])
         self.grouped_analysis = config_data.get(GROUPED, _CONFIG_POST_FALLBACK[GROUPED])
         self.split_passionA = config_data.get(SPLIT_PASSSIONS, _CONFIG_POST_FALLBACK[SPLIT_PASSSIONS])

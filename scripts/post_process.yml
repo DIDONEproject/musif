@@ -2,6 +2,7 @@ log:
   file_path: logs/post_process.log
   file_level: DEBUG
   console_level: WARN
+internal_data_dir: musif/internal_data
 checking_file: parsed_files.csv
 delete_failed_files: False
 merge_voices: True
