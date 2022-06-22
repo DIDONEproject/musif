@@ -190,7 +190,7 @@ def merge_dataframes(name: str, dest_path: str) -> None:
     name1 = name+'_extraction'+csv
     name2 = name+'_extraction2'+csv
     
-    df1 = pd.read_csv(name1)
     df2 = pd.read_csv(name2)
+    df1 = pd.read_csv(name1)
     total_dataframe = pd.concat((df1, df2), axis=0)
     total_dataframe.to_csv(dest_path, index=False)

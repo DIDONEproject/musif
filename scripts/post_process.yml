@@ -3,11 +3,12 @@ log:
   file_level: DEBUG
   console_level: WARN
 checking_file: parsed_files.csv
-delete_failed_files: True
+delete_failed_files: False
 merge_voices: True
 grouped_analysis: True
 split_passionA: True
 separate_intrumentation_column: True
+
 instruments_to_keep: 
   - vnI
   - bs

@@ -159,7 +159,6 @@ class Configuration:
             SPLIT_KEYWORDS: list(self.split_keywords),
             PARTS_FILTER: list(self.parts_filter),
             EXPAND_REPEATS: self.expand_repeats,
-            CHECK_FILE: self.check_file,
         }
 
     def _load_metadata(self) -> None:
@@ -238,4 +237,6 @@ class PostProcess_Configuration:
             STARTSWITH: self.columns_startswith,
             CONTAIN: self.columns_contain,
             PRESENCE: self.delete_presence,
+            REPLACE_NANS: self.replace_nans,
+
         }
