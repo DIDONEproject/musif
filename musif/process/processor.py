@@ -24,7 +24,7 @@ from musif.process.utils import (delete_columns, join_keys,
 from pandas import DataFrame
 from tqdm import tqdm
 
-from .constants import (PRESENCE, metadata_columns, label_by_col,
+from musif.process.constants import (PRESENCE, metadata_columns, label_by_col,
                         voices_list_prefixes)
 
 
@@ -81,10 +81,10 @@ class DataProcessor:
             Either a path to a .csv file containing the information either a DataFrame object fromm FeaturesExtractor
         """
         self._post_config = PostProcess_Configuration(*args, **kwargs)
-        self.info=info
-        self.data = self.process_info(self.info)
+        self.info = info
+        self.data = self._process_info(self.info)
 
-    def process_info(self, info: Union[str, DataFrame]) -> DataFrame:
+    def _process_info(self, info: Union[str, DataFrame]) -> DataFrame:
         """
         Extracts the info from a directory to a csv file or from a Dataframe object. 
         
@@ -107,12 +107,11 @@ class DataProcessor:
             if isinstance(info, str):
                 pinfo('\nReading csv file...')
                 if not os.path.exists(info):
-                    raise FileNotFoundError
-                self.destination_route=info.replace('.csv','')
+                    raise FileNotFoundError('A .csv file could not be found')
+                self.destination_route = info.replace('.csv','')
                 df = pd.read_csv(info, low_memory=False, sep=',', encoding_errors='replace')
                 if df.empty:
-                    raise FileNotFoundError
-                df[FILE_NAME].to_csv(self._post_config.check_file, index=False)
+                    raise FileNotFoundError('The .csv file could not be found.')
                 return df
             
             elif isinstance(info, DataFrame):
@@ -121,10 +120,10 @@ class DataProcessor:
             else:
                 perr('Wrong info type! You must introduce either a DataFrame either the name of a .csv file.')
                 return pd.DataFrame()
-            
-        except FileNotFoundError:
-            perr('Data could not be loaded. Either wrong path or an empty file was found.')
-            return pd.DataFrame()
+                
+        except OSError as e:
+            perr(f'Data could not be loaded. Either wrong path or an empty file was found. {e}')
+            return e
 
     def process(self) -> DataFrame:
         """
@@ -136,9 +135,11 @@ class DataProcessor:
         ------
         Dataframe object        
         """
+        if FILE_NAME in self.data:
+            self.data[FILE_NAME].to_csv(self._post_config.check_file, index=False)
 
         if self._post_config.delete_files:
-            pinfo('\nDeleting items with errors...')
+            
             self.delete_previous_items()
         
         pinfo('\nPreprocessing data...')
@@ -235,6 +236,7 @@ class DataProcessor:
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
+        pinfo('\nDeleting items with errors...')
         if os.path.exists('errors.csv'):
             errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
             for item in errors:
@@ -242,6 +244,8 @@ class DataProcessor:
                 if not index.empty:
                     self.data.drop(index, axis=0, inplace=True)
                     pwarn('Item {0} from errors.csv was deleted.'.format(item))
+        else:
+            perr('\nA file called "errors.csv" must be created containing File names to be deleted from the dataframe.')
             
     def delete_unwanted_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
@@ -342,8 +346,8 @@ class DataProcessor:
 
         self.data = self._check_columns_type(self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
-        
         self.data.drop('index', axis = 1, inplace=True, errors='ignore')
+        
         log_errors_and_shape(self.composer_counter, self.novoices_counter, self.data)
         self._split_metadata_and_labels()
         
@@ -368,9 +372,9 @@ class DataProcessor:
         for column in tqdm(df.columns, desc= 'Adjusting proper type for every column'):
                 column_type = Counter(df[df[column].notna()][column].map(type)).most_common(1)[0][0]
                 if column_type == str:
-                    df[column]= df[column].fillna('NA')
+                    # df[column]= df[column].fillna('NA')
                     df[column]= df[column].replace(0, '0')
-                    df[column]= df[column].replace(np.nan, 'NA')
+                    df[column]= df[column].replace(np.nan, 'Unknown')
                     
                 else:
                     df[column]= df[column].fillna(0)

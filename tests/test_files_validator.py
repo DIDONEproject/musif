@@ -4,19 +4,18 @@ import pytest
 
 from musif.common._utils import read_object_from_yaml_file
 from musif.config import Configuration
+from musif.extract.extract import FilesValidator
 
 from musif import FilesValidator
 from musif.extract.extract import find_xml_files
 from tests.constants import BASE_PATH, MALFORMED_FILE, INCOMPLETE_FILE
 
-
-config_file = path.join(BASE_PATH, "static", "config.yml")
+config_file = path.join(BASE_PATH, "config_test", "config.yml")
 config_file_parallel = path.join(BASE_PATH, "config_test", "config_parallel.yml")
 test_file = path.join(BASE_PATH, "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 
 
 class TestFilesValidator:
-
     # configurations tests
     # Given
     expected = read_object_from_yaml_file(config_file)

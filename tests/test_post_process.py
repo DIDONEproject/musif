@@ -1,61 +1,59 @@
-import math
-import re
 from os import path
 
 import pandas as pd
 import pytest
+from musif.config import PostProcess_Configuration
+from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.prefix import get_part_prefix
-
 from musif.process.processor import DataProcessor
-from tests.constants import TEST_FILE, DATA_STATIC_DIR,CONFIG_PATH
 
-extracted_file = 'features_14_06'
-processed_file = extracted_file+'_features'
+from tests.constants import CONFIG_PATH, DATA_STATIC_DIR, TEST_FILE
+import os
+
+name = "features_14_06"
+dest_path = 'martiser/' + name + "_total" + '_features'
+
+processed_file_path = path.join(dest_path+'.csv')
 
 postconfig_path = path.join(CONFIG_PATH, "post_process.yml")
-extracted_csv = path.join(DATA_STATIC_DIR, extracted_file+'.csv')
 
 data_features_dir = path.join(DATA_STATIC_DIR, "features")
 reference_file_path = path.join(data_features_dir, TEST_FILE)
 
-processed_file_path= path.join(processed_file+'.csv')
 
 @pytest.fixture(scope="session")
 def processed_data():
-    processed_df = DataProcessor(extracted_csv, postconfig_path).process()
-    processed_df = processed_df[processed_df['AriaId'].notna()]
-    yield processed_df
+    if os.path.exists(processed_file_path):
+        processed = DataProcessor(processed_file_path, postconfig_path)
+        # processed_df = processed_df[processed_df['AriaId'].notna()]
+        yield processed.data
+    else:
+        raise Exception('Extracted file could not be found.')
     
 @pytest.fixture(scope="session")
 def process_object():
-    processed_df = DataProcessor(extracted_csv, postconfig_path)
-    yield processed_df
+    processor = DataProcessor(processed_file_path, postconfig_path)
+    yield processor
     
 @pytest.fixture(scope="session")
-def extracted_file():
-    analyzed_file = pd.read_csv(processed_file_path)
-    yield analyzed_file
+def post_process_configuration():
+    yield DataProcessor(processed_file_path, postconfig_path)._post_config
+
 
 class TestPostProcess:
-    def test_tonic_chord_not_empty(self, extracted_file: pd.DataFrame):
-        assert not all([i<0.1 for i in extracted_file['Chord_I_Per']])
-        
-    def test_intruders_in_df(self, processed_data: pd.DataFrame):
-        intruders = []
-        for i in ['FamilyGen', 'Instrumentation', 'Scoring']:
-            if i in processed_data:
-                    intruders.append(i)
-        assert len(intruders) == 0, intruders
-            
-    def test_only_desired_instruments(self, process_object: pd.DataFrame, processed_data: pd.DataFrame):
-        config=process_object._post_config
+    def test_no_part_texture(self, process_object: pd.DataFrame, processed_data: pd.DataFrame):
+        config = process_object._post_config
         columns_to_examine = [i for i in processed_data if 'Part' in i and not 'Texture' in i]
-        prefixes=tuple(get_part_prefix(x) for x in config.instruments_to_keep)
+        prefixes = tuple(get_part_prefix(x) for x in config.instruments_to_keep)
         assert all([i.startswith(prefixes) for i in columns_to_examine if i])
-
-    def test_ensure_violin_solo_not_present(self, processed_data: pd.DataFrame):
-        assert len([i for i in processed_data if i.startswith('PartVn_')])==0
         
+    def test_wrong_path(self):
+        # with pytest.raises(Exception) as excinfo:
+        with pytest.raises(FileNotFoundError, match='The .csv file could not be found.'):
+            DataProcessor('wrong_path.csv')._process_info
+            raise FileNotFoundError('The .csv file could not be found.')
+
+class TestProcessedFile:
     def test_column_types_match(self, processed_data: pd.DataFrame):
         found_cols = []
         for col in processed_data.columns:
@@ -69,3 +67,19 @@ class TestPostProcess:
                 indices = weird[weird]
                 print(indices.index)
         assert not found_cols
+        
+    def test_not_nan_values(self, processed_data: pd.DataFrame):
+        assert not processed_data.isnull().values.any()
+        
+    def test_ensure_violin_solo_not_present(self, processed_data: pd.DataFrame):
+        assert len([i for i in processed_data if i.startswith('PartVn_')])==0
+        
+    def test_intruders_in_df(self, processed_data: pd.DataFrame, post_process_configuration: PostProcess_Configuration):
+        intruders = []
+        for i in processed_data.columns:
+            if i.endswith(tuple(post_process_configuration.columns_endswith)):
+                intruders.append(i)
+        assert len(intruders) == 0
+        
+    def test_tonic_chord_not_empty(self, processed_data: pd.DataFrame):
+        assert not all([i<0.1 for i in processed_data[CHORD_prefix+'I_Per']])
