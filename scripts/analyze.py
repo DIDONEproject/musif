@@ -32,7 +32,7 @@ if __name__ == "__main__":
     filter_list=['Misero_pargoletto', 'Se_tutti', 'Son_regina', 'Non_ha', 'Se_resto', 'Ah_non_lasciarmi', 'Cadra_fra']
     f = DataFilter('total_processed.csv').filter_data(by='AriaName', equal_to=filter_list, instrument='SoundVoice')
     
-    # Methods to test
+    # TODO: Methods to test
     # p.delete_previous_items()
     # print(p.data.columns[p.data.columns.str.contains('Key')])
     # print(p.data.columns[p.data.columns.str.contains('Key')].shape)
