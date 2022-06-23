@@ -6,7 +6,7 @@ from music21.note import Rest
 from music21.stream import Measure
 from tqdm import tqdm
 
-from musif.common.utils import read_lines_from_txt_file, write_dicts_to_csv
+from musif.common._utils import read_lines_from_txt_file, write_dicts_to_csv
 
 if __name__ == "__main__":
     aria_ids = list(read_lines_from_txt_file("arias.csv"))

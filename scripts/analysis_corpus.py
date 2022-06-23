@@ -8,7 +8,7 @@ import re
 
 import numpy as np
 from musif.common.sort import sort_columns
-from musif.common.utils import read_dicts_from_csv
+from musif.common._utils import read_dicts_from_csv
 from musif.extract.extract import FeaturesExtractor, FilesValidator
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL

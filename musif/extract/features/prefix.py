@@ -1,5 +1,3 @@
-from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
-
 # TODO: wouldn't it be better to create MultiIndex dataframes?
 
 def get_part_prefix(part_abbreviation: str) -> str:

@@ -2,7 +2,7 @@ from os import path
 
 import pytest
 
-from musif.common.utils import read_object_from_yaml_file
+from musif.common._utils import read_object_from_yaml_file
 from musif.config import Configuration
 from musif.extract.exceptions import ParseFileError
 from musif.extract.extract import PartsExtractor, _cache

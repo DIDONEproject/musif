@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 
 from musif import FeaturesExtractor
-from musif.common.utils import read_dicts_from_csv
+from musif.common._utils import read_dicts_from_csv
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, NUMBER_OF_PARTS
 from tests.constants import BASE_PATH, DATA_STATIC_DIR

@@ -9,9 +9,6 @@ from pandas import DataFrame
 
 from musif.common.constants import COLORS, COLOR_SEQ, CSV_DELIMITER, ENCODING, RESET_SEQ
 
-# TODO: should this module be public?
-
-
 def get_file_name(file_path: str) -> str:
     file_basename = path.basename(file_path)
     file_basename = path.join('tests',file_path)

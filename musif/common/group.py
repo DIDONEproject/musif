@@ -1,7 +1,3 @@
-##################################################################################
-# This file contains the functions to create the groupings for their general
-# analysis (A column in reports)
-##################################################################################
 import re
 
 import roman
@@ -10,11 +6,12 @@ from music21 import pitch, scale
 from musif.common.translate import translate_word
 
 
-def get_musescoreInstrument_nameAndFamily(i, instrument_familiy, p):
+def get_musescore_Instrumentname_And_Family(i, instrument_familiy, p):
     i_name = re.sub('\W+', ' ', i.instrumentName)
     name = translate_word(i_name)
     family = instrument_familiy[name]
     return name, family
+
 
 def sort(list_to_sort, main_list):
     """

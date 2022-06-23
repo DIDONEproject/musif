@@ -1,6 +1,6 @@
 import pandas as pd
 
-from musif.common.utils import read_dicts_from_csv
+from musif.common._utils import read_dicts_from_csv
 from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
 from musif.extract.features.core.constants import FILE_NAME, SOUNDING_MEASURES_MEAN
 from musif.extract.features.density.constants import DENSITY, SOUNDING_DENSITY

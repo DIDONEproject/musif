@@ -1,7 +1,7 @@
 from os import path
 
 import pytest
-from musif.extract.extract import extract_files
+from musif.extract.extract import find_xml_files
 from .constants import BASE_PATH
 
 files_dir_test = path.join(BASE_PATH, "arias_test")
@@ -27,7 +27,7 @@ class TestExtractFiles:
         expected_files = [files_dir]
 
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
 
         # Then
         assert expected_files == actual_files
@@ -38,7 +38,7 @@ class TestExtractFiles:
         expected_files = [file_dem1_test, file_dem2_test]
 
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
 
         # Then
         assert expected_files == actual_files
@@ -49,7 +49,7 @@ class TestExtractFiles:
         expected_files = []  # It search for .xml files, It's not recursive
 
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
 
         # Then
         assert expected_files == actual_files
@@ -62,7 +62,7 @@ class TestExtractFiles:
         expected_files = files_dir
 
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
 
         # Then
         assert expected_files == actual_files
@@ -73,7 +73,7 @@ class TestExtractFiles:
         expected_files = [file_dem1_test, file_dem2_test, file_dem1_test1, file_dem2_test1]
 
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
 
         # then
         assert expected_files == actual_files
@@ -83,7 +83,7 @@ class TestExtractFiles:
     def test_extract_files_incorrect_type(self):
         # Given
         with pytest.raises(TypeError):
-            extract_files(0)
+            find_xml_files(0)
 
     def test_extract_non_existing_file(self):
         # Given
@@ -91,7 +91,7 @@ class TestExtractFiles:
 
         # Then
         with pytest.raises(ValueError):
-            extract_files(files_dir)
+            find_xml_files(files_dir)
 
     # TYPE OF FILE
 
@@ -100,7 +100,7 @@ class TestExtractFiles:
         files_dir = files_dir_test_type
         expected_files = [file_dem3]
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
         # Then
         assert expected_files == actual_files
 
@@ -109,7 +109,7 @@ class TestExtractFiles:
         files_dir = path.join(files_dir_test_type, "config.yml")
         expected_files = []
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
         # Then
         assert expected_files == actual_files
 
@@ -118,6 +118,6 @@ class TestExtractFiles:
         files_dir = [path.join(files_dir_test_type, "config.yml"), file_dem3]
         expected_files = [file_dem3]
         # When
-        actual_files = extract_files(files_dir)
+        actual_files = find_xml_files(files_dir)
         # Then
         assert expected_files == actual_files

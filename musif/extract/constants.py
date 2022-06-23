@@ -1,4 +1,4 @@
-# TODO: document these variables
+"""Constants used as keys in dictionaris score_features and score data throughout the extraction process."""
 DATA_PART = "part"
 DATA_PART_NUMBER = "part_number"
 DATA_PART_ABBREVIATION = "abbreviation"
@@ -10,7 +10,10 @@ DATA_SCORE = "score"
 DATA_MUSESCORE_SCORE = 'MS3_score'
 DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
-HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
-VOICES_LIST = ['sop','ten','alt','bar','bbar', 'bass']
+
+"""Constant for playthrough (count fo measures) added to ms3 dataframe"""
 PLAYTHROUGH='playthrough'
+
+"""List of prefixes of singers's names that might appear in the scores"""
+VOICES_LIST = ['sop','ten','alt','bar','bbar', 'bass']

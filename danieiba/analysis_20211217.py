@@ -1,7 +1,7 @@
 import pandas as pd
 
 from musif import FeaturesExtractor
-from musif.common.utils import read_dicts_from_csv
+from musif.common._utils import read_dicts_from_csv
 from musif.extract.features.ambitus.constants import HIGHEST_NOTE_INDEX, LOWEST_NOTE_INDEX
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.core.constants import NOTES_MEAN, SOUNDING_MEASURES_MEAN

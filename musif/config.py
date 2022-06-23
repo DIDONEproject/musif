@@ -4,7 +4,7 @@ from os import path
 
 from musif import internal_data
 from musif.common._logs import create_logger
-from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
+from musif.common._utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
 
 """Name of the logger and folder where it will be placed."""

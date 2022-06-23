@@ -2,11 +2,11 @@ from os import path
 
 import pytest
 
-from musif.common.utils import read_object_from_yaml_file
+from musif.common._utils import read_object_from_yaml_file
 from musif.config import Configuration
 
 from musif import FilesValidator
-from musif.extract.extract import extract_files
+from musif.extract.extract import find_xml_files
 from tests.constants import BASE_PATH, MALFORMED_FILE, INCOMPLETE_FILE
 
 

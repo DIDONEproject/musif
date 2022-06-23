@@ -1,5 +1,5 @@
 from musif import FeaturesExtractor, FilesValidator
-from musif.common.utils import extract_digits
+from musif.common._utils import extract_digits
 
 if __name__ == "__main__":
 

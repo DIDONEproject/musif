@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from musif.common.utils import read_dicts_from_csv, write_dicts_to_csv
+from musif.common._utils import read_dicts_from_csv, write_dicts_to_csv
 
 if __name__ == "__main__":
 
