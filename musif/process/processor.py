@@ -375,17 +375,12 @@ class DataProcessor:
         for column in tqdm(df.columns, desc= 'Adjusting proper type for every column'):
                 column_type = Counter(df[df[column].notna()][column].map(type)).most_common(1)[0][0]
                 if column_type == str:
-                    # df[column]= df[column].fillna('NA')
                     df[column]= df[column].replace(0, '0')
-                    df[column]= df[column].replace(np.nan, 'Unknown')
-                    
+                    df[column]= df[column].fillna(str("NA"))
+                    # df[column]= df[column].replace(np.nan, str("NA"))
                 else:
-                    df[column]= df[column].fillna(0)
+                    df[column]= df[column].fillna(float("NaN"))
                     df[column]= df[column].replace('0', 0)
-                    # if column_type == float:
-                    #     df = df.astype({column: float})
-                    # elif column_type == int:
-                    #     df = df.astype({column: int})
         return df
                         
                         

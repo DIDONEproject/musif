@@ -29,7 +29,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 0471,0471,Dem25M-Non_dura-1735-Leo[3.07][0471].xml,Dem,Dem25M,Non_dura,3,7,307,1735,1730s,Leonardo Leo,Naples,Italy,Dircea,Female,Da capo,d,b,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 0478,0478,Dem01M-O_piu-1735-Schiassi[1.01][0478].xml,Dem,Dem01M,O_piu,1,1,101,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Matusio,Male,Dal segno,Bb,bb,b,"vn,va,bs","ten,vnI,vnII,va,bs",ten
 0479,0479,Dem02M-In_te-1735-Schiassi[1.02][0479].xml,Dem,Dem02M,In_te,1,2,102,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Dircea,Female,Dal segno,G,s,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
-0485,0485,Did02M-Diro_che-1752-Galuppi[1.03][0485].xml,Did,Did02M,Diro_che,1,3,103,1752,1750s,Baldassare Galuppi,Unknown,Unknown,Selene,Female,Dal segno,A,sss,s,"vn,va,bs","sop,vnI,vnII,vaI,vaII,bs",sop
+0485,0485,Did02M-Diro_che-1752-Galuppi[1.03][0485].xml,Did,Did02M,Diro_che,1,3,103,1752,1750s,Baldassare Galuppi,NA,NA,Selene,Female,Dal segno,A,sss,s,"vn,va,bs","sop,vnI,vnII,vaI,vaII,bs",sop
 0535,0535,Dem23M-Odo_il-1766-Bernasconi[3.06][0535].xml,Dem,Dem23M,Odo_il,3,6,306,1766,1760s,Andrea Bernasconi,Munich,Empire,Oboi i,Male,Dal segno,G,s,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnI,hnII,hnII,ten,vnI,vnII,va,bs",ten
 0537,0537,Dem25M-Non_dura-1766-Bernasconi[3.08][0537].xml,Dem,Dem25M,Non_dura,3,8,308,1766,1760s,Andrea Bernasconi,Munich,Empire,Creusa,Female,Dal segno,G,s,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 0540,0540,Dem01M-O_piu-1748-Hasse[1.01][0540].xml,Dem,Dem01M,O_piu,1,1,101,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Flauti i,Male,Dal segno,Bb,bb,b,"fl,ob,vn,va,bs","flI,flII,obI,obII,sop,vnI,vnII,va,bs",sop
@@ -264,7 +264,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 1207,1207,Dem02M-In_te-1758-Galuppi[1.02][1207].xml,Dem,Dem02M,In_te,1,2,102,1758,1750s,Baldassare Galuppi,Padua,Italy,Dircea,Female,Dal segno,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 1208,1208,Dem03M-Per_lei-1758-Galuppi[1.03][1208].xml,Dem,Dem03M,Per_lei,1,3,103,1758,1750s,Baldassare Galuppi,Padua,Italy,Oboi i,Male,Dal segno,Eb,bbb,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
 1209,1209,Dem05M-Tintendo_ingrata-1758-Galuppi[1.05][1209].xml,Dem,Dem05M,Tintendo_ingrata,1,5,105,1758,1750s,Baldassare Galuppi,Padua,Italy,Cherinto,Male,Da capo,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
-121,121,Did33M-Cadra_fra-nd-Wagenseil[X.XX][0121].xml,Did,Did33M,Cadra_fra,X,XX,XXX,nd,nd,Georg Christoph Wagenseil,Unknown,Unknown,Iarba,Male,Dal segno,A,sss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
+121,121,Did33M-Cadra_fra-nd-Wagenseil[X.XX][0121].xml,Did,Did33M,Cadra_fra,X,XX,XXX,nd,nd,Georg Christoph Wagenseil,NA,NA,Iarba,Male,Dal segno,A,sss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 1210,1210,Dem06M-Non_curo-1758-Galuppi[1.07][1210].xml,Dem,Dem06M,Non_curo,1,7,107,1758,1750s,Baldassare Galuppi,Padua,Italy,Oboi i,Female,Dal segno,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,alt,vnI,vnII,va,bs",alt
 1211,1211,Dem08M-Padre_perdona-1758-Galuppi[1.12][1211].xml,Dem,Dem08M,Padre_perdona,1,12,112,1758,1750s,Baldassare Galuppi,Padua,Italy,Oboi i,Female,Dal segno,C,n,n,"ob,vn,va,bs","obI,obII,sop,vnI,vnII,vaI,vaII,bs",sop
 1212,1212,Dem09M-Se_ardire-1758-Galuppi[1.13][1212].xml,Dem,Dem09M,Se_ardire,1,13,113,1758,1750s,Baldassare Galuppi,Padua,Italy,Flauti i,Male,Dal segno,F,b,b,"fl,hn,vn,va,bs","flI,flII,hnI,hnII,sop,vnI,vnII,va,bs",sop
@@ -578,7 +578,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 322,322,Did05M-Fra_lo-1744-Scalabrini[1.03][0322].xml,Did,Did05M,Fra_lo,1,3,103,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Iarba,Male,Da capo,F,b,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 325,325,Did34M-Vado_ma-1794-Paisiello[2.16][0325].xml,Did,Did34M,Vado_ma,2,16,216,1794,1790s,Giovanni Paisiello,Naples,Italy,Flauti,Female,AAAB,d,b,b,"fl,ob,cl,bn,hn,tpt,vn,va,bs","fl,ob,cl,bn,hnI,hnII,tptI,tptII,sop,vnI,vnII,va,bs",sop
 326,326,Did33M-Cadra_fra-1744-Scalabrini[3.08][0326].xml,Did,Did33M,Cadra_fra,3,08,308,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Iarba,Male,Da capo,g,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
-327,327,Did18M-Ah_non_lasciarmi-1750-Viotti[X.XX][0327].xml,Did,Did18M,Ah_non_lasciarmi,X,XX,XXX,1750,1750s,Pietro Viotti,Unknown,Unknown,Didone,Female,Da capo,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
+327,327,Did18M-Ah_non_lasciarmi-1750-Viotti[X.XX][0327].xml,Did,Did18M,Ah_non_lasciarmi,X,XX,XXX,1750,1750s,Pietro Viotti,NA,NA,Didone,Female,Da capo,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 33,33,Did03M-Son_regina-1753-Perez[1.05][0033].xml,Did,Did03M,Son_regina,1,5,105,1753,1750s,Davide Perez,Genova,Italy,Oboi i,Female,Dal segno,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 330,330,Did24M-Chiamami_pur-1747-Jommelli[2.11][0330].xml,Did,Did24M,Chiamami_pur,2,11,211,1747,1740s,Niccolò Jommelli,Rome,Italy,Oboi i,Male,Da capo,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
 334,334,Did07M-Quando_saprai-1744-Scalabrini[1.04][0334].xml,Did,Did07M,Quando_saprai,1,4,104,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Enea,Male,Da capo,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
@@ -612,7 +612,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 372,372,Did08M-Ogni_amator-1763-Jommelli[2.09][0372].xml,Did,Did08M,Ogni_amator,2,9,209,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Oboi i,Female,Dal segno,F,b,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 373,373,Did31M-Va_crescendo-1763-Jommelli[3.08][0373].xml,Did,Did31M,Va_crescendo,3,08,308,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Oboi i,Female,AAA,Bb,bb,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 374,374,Did26M-Vivi_superbo-1744-Scalabrini[3.01][0374].xml,Did,Did26M,Vivi_superbo,3,01,301,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Enea,Male,Dal segno,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
-375,375,Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml,Did,Did18M,Ah_non_lasciarmi,X,XX,XXX,1784,1780s,Gaetano Andreozzi,Unknown,Unknown,Flauti i,Female,AB,G,s,s,"fl,hn,vn,va,bs","flI,flII,hnI,hnII,sop,vnI,vnII,va,bs",sop
+375,375,Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml,Did,Did18M,Ah_non_lasciarmi,X,XX,XXX,1784,1780s,Gaetano Andreozzi,NA,NA,Flauti i,Female,AB,G,s,s,"fl,hn,vn,va,bs","flI,flII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 376,376,Did02M-Diro_che-1780-Astarita[1.03][0376].xml,Did,Did02M,Diro_che,1,3,103,1780,1780s,Gennaro Astarita,Bratislava,Empire,Oboi i,Female,ABA,G,s,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 378,378,Did09M-Son_quel-1780-Astarita[1.07][0378].xml,Did,Did09M,Son_quel,1,7,107,1780,1780s,Gennaro Astarita,Bratislava,Empire,Oboi i,Male,ABA,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,bar,vnI,vnII,va,bs",bar
 38,38,Did03M-Son_regina-1768-Boroni[1.05][0038].xml,Did,Did03M,Son_regina,1,5,105,1768,1760s,Antonio Boroni,Prague,Empire,Oboi i,Female,Dal segno,Eb,bbb,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
@@ -697,13 +697,13 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 482,482,Dem04M-Sperai_vicino-1735-Schiassi[1.04][0482].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Timante,Male,Dal segno,D,ss,s,"vn,va,bs","alt,vnI,vnII,va,bs",alt
 486,486,Dem11M-Prudente_mi-1775-Myslivecek[2.02][0486].xml,Dem,Dem11M,Prudente_mi,2,2,202,1775,1770s,Josef Mysliveček,Naples,Italy,Oboi i,Male,ABA,C,n,n,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 487,487,Dem13M-E_soccorso-1775-Myslivecek[2.04][0487].xml,Dem,Dem13M,E_soccorso,2,4,204,1775,1770s,Josef Mysliveček,Naples,Italy,Oboi i,Male,ABA,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,vaI,vaII,bs",sop
-488,488,Did07M-Quando_saprai-1752-Galuppi[1.08][0488].xml,Did,Did07M,Quando_saprai,1,8,108,1752,1750s,Baldassare Galuppi,Unknown,Unknown,Enea,Male,Dal segno,A,sss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
+488,488,Did07M-Quando_saprai-1752-Galuppi[1.08][0488].xml,Did,Did07M,Quando_saprai,1,8,108,1752,1750s,Baldassare Galuppi,NA,NA,Enea,Male,Dal segno,A,sss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 489,489,Dem15M-No_non-1775-Myslivecek[2.07][0489].xml,Dem,Dem15M,No_non,2,7,207,1775,1770s,Josef Mysliveček,Naples,Italy,Cherinto,Male,ABA,E,ssss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 49,49,Did03M-Son_regina-1762-Sarti[1.05][0049].xml,Did,Did03M,Son_regina,1,5,105,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Oboi i,Female,Da capo,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,vaI,vaII,bs",sop
 490,490,Dem23M-Odo_il-1775-Myslivecek[3.06][0490].xml,Dem,Dem23M,Odo_il,3,06,306,1775,1770s,Josef Mysliveček,Naples,Italy,Oboi i,Male,ABA,C,n,n,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
 491,491,Dem17M-Perfidi_gia-1775-Myslivecek[2.09][0491].xml,Dem,Dem17M,Perfidi_gia,2,9,209,1775,1770s,Josef Mysliveček,Naples,Italy,Oboi i,Male,ABA,D,ss,s,"ob,hn,tpt,vn,va,bs","obI,obII,hnI,hnII,tptI,tptII,sop,vnI,vnII,va,bs",sop
 492,492,Dem24M-Che_mai-1775-Myslivecek[3.07][0492].xml,Dem,Dem24M,Che_mai,3,07,307,1775,1770s,Josef Mysliveček,Naples,Italy,Dircea,Female,ABA,G,s,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
-493,493,Did16M-Ardi_per-1752-Galuppi[2.01][0493].xml,Did,Did16M,Ardi_per,2,01,201,1752,1750s,Baldassare Galuppi,Unknown,Unknown,Selene,Female,Dal segno,G,s,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
+493,493,Did16M-Ardi_per-1752-Galuppi[2.01][0493].xml,Did,Did16M,Ardi_per,2,01,201,1752,1750s,Baldassare Galuppi,NA,NA,Selene,Female,Dal segno,G,s,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 494,494,Dem06M-Non_curo-1735-Schiassi[1.07][0494].xml,Dem,Dem06M,Non_curo,1,7,107,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Creusa,Female,Dal segno,C,n,n,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 495,495,Dem07M-Il_suo-1735-Schiassi[1.08][0495].xml,Dem,Dem07M,Il_suo,1,8,108,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Cherinto,Male,Dal segno,F,b,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 496,496,Dem08M-Padre_perdona-1735-Schiassi[1.12][0496].xml,Dem,Dem08M,Padre_perdona,1,12,112,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Dircea,Female,Da capo,A,sss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
@@ -714,7 +714,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 501,501,Dem09M-Se_ardire-1743-Jommelli[1.13][0501].xml,Dem,Dem09M,Se_ardire,1,13,113,1743,1740s,Niccolò Jommelli,Padua,Italy,Timante,Male,Da capo,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 503,503,Dem12M-Se_tronca-1735-Schiassi[2.03][0503].xml,Dem,Dem12M,Se_tronca,2,3,203,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Demofoonte,Male,Dal segno,E,ssss,s,"vn,va,bs","ten,vnI,vnII,va,bs",ten
 504,504,Dem13M-E_soccorso-1735-Schiassi[2.04][0504].xml,Dem,Dem13M,E_soccorso,2,4,204,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Oboi i,Male,Dal segno,F,b,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
-506,506,Did18M-Ah_non_lasciarmi-1752-Galuppi[2.04][0506].xml,Did,Did18M,Ah_non_lasciarmi,2,04,204,1752,1750s,Baldassare Galuppi,Unknown,Unknown,Didone,Female,Dal segno,Eb,bbb,b,"vn,va,bs","sop,vnI,vnII,vaI,vaII,bs",sop
+506,506,Did18M-Ah_non_lasciarmi-1752-Galuppi[2.04][0506].xml,Did,Did18M,Ah_non_lasciarmi,2,04,204,1752,1750s,Baldassare Galuppi,NA,NA,Didone,Female,Dal segno,Eb,bbb,b,"vn,va,bs","sop,vnI,vnII,vaI,vaII,bs",sop
 507,507,Dem11M-Prudente_mi-1743-Jommelli[2.02][0507].xml,Dem,Dem11M,Prudente_mi,2,2,202,1743,1740s,Niccolò Jommelli,Padua,Italy,Timante,Male,Da capo,Eb,bbb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 508,508,Dem12M-Se_tronca-1743-Jommelli[2.03][0508].xml,Dem,Dem12M,Se_tronca,2,3,203,1743,1740s,Niccolò Jommelli,Padua,Italy,Demofoonte,Male,Da capo,A,sss,s,"vn,va,bs","ten,vnI,vnII,va,bs",ten
 509,509,Dem15M-No_non-1743-Jommelli[2.07][0509].xml,Dem,Dem15M,No_non,2,7,207,1743,1740s,Niccolò Jommelli,Padua,Italy,Cherinto,Male,Da capo,A,sss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
@@ -723,7 +723,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 511,511,Dem18M-La_destra-1775-Myslivecek[2.10][0511].xml,Dem,Dem18M,La_destra,2,10,210,1775,1770s,Josef Mysliveček,Naples,Italy,Oboi i,Male,ABC,Eb,bbb,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,sop,vnI,vnII,va,bs",sop
 513,513,Dem15M-No_non-1735-Schiassi[2.07][0513].xml,Dem,Dem15M,No_non,2,7,207,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Cherinto,Male,Dal segno,D,ss,s,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 514,514,Dem16M-Felice_eta-1735-Schiassi[2.08][0514].xml,Dem,Dem16M,Felice_eta,2,8,208,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Creusa,Female,Dal segno,Bb,bb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
-515,515,Did20M-Fosca_nube-1752-Galuppi[2.06][0515].xml,Did,Did20M,Fosca_nube,2,06,206,1752,1750s,Baldassare Galuppi,Unknown,Unknown,Oboi i,Male,Dal segno,C,n,n,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
+515,515,Did20M-Fosca_nube-1752-Galuppi[2.06][0515].xml,Did,Did20M,Fosca_nube,2,06,206,1752,1750s,Baldassare Galuppi,NA,NA,Oboi i,Male,Dal segno,C,n,n,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
 517,517,Dem01M-O_piu-1766-Bernasconi[1.01][0517].xml,Dem,Dem01M,O_piu,1,1,101,1766,1760s,Andrea Bernasconi,Munich,Empire,Oboi i,Male,Dal segno,G,s,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
 518,518,Dem02M-In_te-1766-Bernasconi[1.02][0518].xml,Dem,Dem02M,In_te,1,2,102,1766,1760s,Andrea Bernasconi,Munich,Empire,Dircea,Female,Dal segno,F,b,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 519,519,Dem03M-Per_lei-1766-Bernasconi[1.03][0519].xml,Dem,Dem03M,Per_lei,1,3,103,1766,1760s,Andrea Bernasconi,Munich,Empire,Oboi i,Male,Dal segno,D,ss,s,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,ten,vnI,vnII,va,bs",ten
@@ -1152,7 +1152,7 @@ AriaId,AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,D
 977,977,Ale26M-Serbati_a-1731-Handel[3.06][0977].xml,Ale,Ale26M,Serbati_a,3,6,306,1731,1730s,Georg Friedrich Händel,London,England,Oboi i,Male,Da capo,D,ss,s,"ob,vn,va,bs","obI,obII,ten,vnI,vnII,va,bs",ten
 978,978,Ale28M-Dove_si-1731-Handel[3.07][0978].xml,Ale,Ale28M,Dove_si,3,7,307,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,Da capo,f,bbbb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 979,979,Ale29M-Mio_ben-1731-Handel[3.09][0979].xml,Ale,Ale29M,Mio_ben,3,9,309,1731,1730s,Georg Friedrich Händel,London,England,Oboi i,Male,Dal segno,g,bb,b,"ob,vn,va,bs","obI,obII,alt,vnI,vnII,va,bs",alt
-98,98,Dem22M-Misero_pargoletto-1790-Errichelli[3.XX][0098].xml,Dem,Dem22M,Misero_pargoletto,3,XX,3XX,1790,1790s,Pasquale Errichelli,Unknown,Unknown,Timante,Male,Da capo,f,bbbb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
+98,98,Dem22M-Misero_pargoletto-1790-Errichelli[3.XX][0098].xml,Dem,Dem22M,Misero_pargoletto,3,XX,3XX,1790,1790s,Pasquale Errichelli,NA,NA,Timante,Male,Da capo,f,bbbb,b,"vn,va,bs","sop,vnI,vnII,va,bs",sop
 980,980,Ale30M-Son_confusa-1731-Handel[3.10][0980].xml,Ale,Ale30M,Son_confusa,3,10,310,1731,1730s,Georg Friedrich Händel,London,England,Flauti,Female,Da capo,D,ss,s,"fl,vn,va,bs","fl,alt,vnI,vnII,va,bs",alt
 981,981,Dem18M-La_destra-1743-Jommelli[2.11][0981].xml,Dem,Dem18M,La_destra,2,11,211,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,Da capo,G,s,s,"vn,va,bs","sop,sop,vnI,vnII,va,bs",sop
 982,982,Ale02M-Vedrai_con-1778-Mortellari[1.02][0982].xml,Ale,Ale02M,Vedrai_con,1,2,102,1778,1770s,Michele Mortellari,Siena,Italy,Oboi i,Male,ABA,F,b,b,"ob,hn,vn,va,bs","obI,obII,hnI,hnII,sop,vnI,vnII,va,bs",sop
