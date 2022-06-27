@@ -10,7 +10,10 @@ DATA_SCORE = "score"
 DATA_MUSESCORE_SCORE = 'MS3_score'
 DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
+
+"""Names of modules taht require harmonic analysis in a .mscx file"""
 SCALE_RELATIVE_FEATURES = "scale_relative"
+HARMONY_FEATURES = 'harmony'
 
 """Constant for playthrough (count fo measures) added to ms3 dataframe"""
 PLAYTHROUGH='playthrough'

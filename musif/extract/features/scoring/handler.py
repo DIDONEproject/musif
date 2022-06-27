@@ -25,6 +25,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         FAMILY_ABBREVIATION: part_data[DATA_FAMILY_ABBREVIATION],
         INSTRUMENTAL: instrumental,
     })
+    
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):

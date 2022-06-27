@@ -8,7 +8,7 @@ import pandas as pd
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.prefix import get_part_feature, get_score_feature
-from musif.extract.utils import get_beat_position
+from musif.extract.utils import _get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 
 from ..core.constants import DATA_NOTES
@@ -38,7 +38,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                 number_notes += 1
                 notes_dict[element.duration.quarterLength] += 1
                 total_number_notes += 1
-                pos = get_beat_position(beat_count, beats, element.beat)
+                pos = _get_beat_position(beat_count, beats, element.beat)
                 # if pos in positions and element.duration.dots > 0: #has dot
                 if element.duration.dots > 0 and element.duration.quarterLength < beat_unit: #has dot
                     if i+1 < len(measure.elements): #check next item

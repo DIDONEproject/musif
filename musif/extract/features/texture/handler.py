@@ -28,7 +28,6 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     score_features.update(features)
 
     df_score = DataFrame(score_features, index=[0])
-    # df_score = df_parts.aggregate({NOTES: "sum"})
 
     notes = {}
     for f in range(0, len(parts_features)):

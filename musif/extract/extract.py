@@ -179,7 +179,6 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
     ------
     ValueError
         If the given file is not a musicxml.
-
     """
     if not musicxml_file.endswith("." + MUSICXML_FILE_EXTENSION):
         raise ValueError(f"The file {musicxml_file} is not a .{MUSICXML_FILE_EXTENSION} file")
@@ -190,11 +189,10 @@ def compose_musescore_file_path(musicxml_file: str, musescore_dir: Optional[str]
     return musescore_file_path
 
 
-# TODO: the documentation of this class can be improved (the english is not the best...)
 class PartsExtractor:
     """
-    Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
-    indicated in the configurations.
+    Given xml a file or files, extracts the name of the different parts in it. 
+    Parts will be splitted or not according to what is indicated in the configuration,
     """
     def __init__(self, *args, **kwargs):
         """
@@ -257,11 +255,11 @@ class PartsExtractor:
         return part_abbreviation
 
 
-# TODO: the documentation of this class can be improved (the english is not the best...)
 class FilesValidator:
     """
-    Checks if each file can be parsed. If any file can't be parsed, at the end it will print a list of the file paths
-    and their respective raised error.
+    Checks if each file of a group of files can be parsed with no problems.
+    If any file can't be parsed, at the end of the validation list of the file paths will be printed,
+    as well as their respective raised error.
     """
     def __init__(self, *args, **kwargs):
         """
@@ -333,12 +331,14 @@ class FilesValidator:
         return None
 
 
-# TODO: the documentation of this class can be improved (the english is not the best...)
-# TODO: describe how this class works behind the scenes in the documentation
 class FeaturesExtractor:
     """
-    Extract features given in the configuration data getting a file, directory or several files paths,
-    returning a DataFrame of the score.
+    Extract features for a score or a list of scores, according to the parameters established in the configurtaion files.
+    It extracts musical features from .xml and .mscx files based on the configuration and stores them in a dictionary (score features)
+    that at the end will be returned as a DataFrame.
+    Features corresponds to modules placed in musif/features directory, and will be computed in order according to the configuration.
+    Some features might depend on the previous ones, so order is important.
+    
     """
     def __init__(self, *args, **kwargs):
         """
@@ -346,7 +346,9 @@ class FeaturesExtractor:
         ----------
         *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
         **kwargs: Get keywords to construct Configuration.
-
+        check_file: .csv file containing a DataFrame for files extrction that already have been parsed, so they will be skipped in the
+        extraction process.
+        
         Raises
         ------
         TypeError
@@ -358,18 +360,16 @@ class FeaturesExtractor:
         """
         self._cfg = Configuration(*args, **kwargs)
         self.check_file = kwargs.get('check_file')
-        # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
-        # self.logger.start()
 
         
     def extract(self) -> DataFrame:
         """
-        Extracts features given in the configuration data getting a file, directory or several files paths,
-        returning a DataFrame of the score.
+        Extracts features given in the configuration data getting a file, directory or several file paths,
+        returning a DataFrame containing musical features.
 
         Returns
         ------
-            Score dataframe with the extracted features of given scores.
+            Score dataframe with the extracted features of given scores. For one score only, a DataFrem is returned with one row only.
 
         Raises
         ------
@@ -378,7 +378,6 @@ class FeaturesExtractor:
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
-        # TODO: Explain what this function returns if ony one score is requested
         linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = find_xml_files(self._cfg.data_dir, check_file=self.check_file)
@@ -523,14 +522,9 @@ class FeaturesExtractor:
             module = __import__(module_name, fromlist=[''])
             feature_dependencies = self._extract_feature_dependencies(module)
             for feature_dependency in feature_dependencies:
-                # TODO: this not in may be slow!
-                # TODO: I would change the whole architecture of the dependency management:
-                # first it computes the order of the features based on the declared dependencies
-                # then it computes the features in that order
-                # TODO: the user must be able to declare the dependencies of its own features
                 if feature_dependency not in found_features:
                     raise ValueError(
-                        f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)")
+                        f"Feature {feature} is dependent on feature {feature_dependency}. The feaure ({feature_dependency} should appear before {feature} in the configuration)")
             found_features.add(feature)
             yield module
 
