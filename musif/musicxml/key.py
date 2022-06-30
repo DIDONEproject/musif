@@ -16,12 +16,16 @@ def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:
     example: if key == 'D- major': return 'Db'
     """
     score_key = score.analyze("key")
+    mode, tonality = get_name_from_key(score_key)
+    return score_key, tonality, mode
+
+def get_name_from_key(score_key: Key):
     key_parts = score_key.name.split(" ")
     mode = key_parts[1].strip().lower()
     tonality = key_parts[0]
     tonality = tonality.lower() if mode == 'minor' else tonality.capitalize()
     tonality = tonality.replace('-', 'b')  # if the character '-' is not in the string, nothing will change
-    return score_key, tonality, mode
+    return mode,tonality
 
 
 def get_key_signature(score_key: Key) -> str:

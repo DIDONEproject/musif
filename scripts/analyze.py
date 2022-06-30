@@ -20,11 +20,11 @@ if __name__ == "__main__":
     
     name = "features_14_06"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
-    prefix='martiser/'
+    prefix = 'martiser/'
     dest_path = prefix + name + "_total" + ".csv"
     # merge_dataframes(prefix + name, dest_path)
     
-    p = DataProcessor(dest_path, "scripts/post_process.yml", merge_voices=True)
+    p = DataProcessor(dest_path, "scripts/post_process.yml", merge_voices = True)
     print(p.data.shape)
     p.process()
     print('Final shape is: ', p.data.shape)

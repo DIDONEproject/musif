@@ -4,14 +4,14 @@ from typing import List
 import pandas as pd
 
 from musif.config import Configuration
-from musif.extract.constants import DATA_FILE, DATA_PART, DATA_PART_ABBREVIATION, DATA_SCORE
+from musif.extract.constants import DATA_FILE, DATA_MUSESCORE_SCORE, DATA_PART, DATA_PART_ABBREVIATION, DATA_SCORE
 from musif.extract.features.prefix import get_family_feature, get_part_feature, get_score_feature, \
     get_sound_feature
 from musif.musicxml import _get_intervals, get_notes_and_measures, _get_lyrics_in_notes
 from musif.musicxml.key import get_key_and_mode
 from .constants import *
 from ..scoring.constants import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, SOUND_ABBREVIATION
-
+from music21 import *
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data[DATA_PART]
@@ -36,12 +36,19 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
     score = score_data[DATA_SCORE]
-    score_key, tonality, mode = get_key_and_mode(score)
+    score_key, key_name, mode = get_key_and_mode(score)
+    if score_data[DATA_MUSESCORE_SCORE] is not None:
+        tonality_ms3 = score_data[DATA_MUSESCORE_SCORE].globalkey[0]
+        if key_name != tonality_ms3:
+            # tonality = tonality_ms3
+            score_key = key.Key(tonality_ms3)
+            mode, key_name = get_name_from_key(score_key)
+            
     score_features[FILE_NAME] = path.basename(score_data[DATA_FILE])
     num_measures = len(parts_data[0][DATA_MEASURES])
     score_data.update({
         DATA_KEY: score_key,
-        DATA_TONALITY: tonality,
+        DATA_KEY_NAME: key_name,
         DATA_MODE: mode,
         DATA_MEASURES: num_measures,
     })

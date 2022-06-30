@@ -3,6 +3,7 @@ from typing import List
 from musif.config import Configuration
 from musif.extract.features.metadata.constants import CHARACTER
 from musif.logs import lwarn
+from musif.musicxml.scoring import extract_sound
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
@@ -28,11 +29,12 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     return score_features.update(features)
 
 def extract_character(score_data, score_features, features):
-    num_voices=len(score_features['Voices'].split(',')) 
-    if num_voices==1:
-        features[CHARACTER] = score_data['parts'][0].partName.capitalize()
-    else:
-        features[CHARACTER] = "&".join([score_data['parts'][i].partName.capitalize() for i in range(num_voices)])
+    character=[]
+    for voice in score_features['Voices'].split(','):
+        index = score_features['Scoring'].split(',').index(voice)
+        character.append(score_data['parts'][index].partName.capitalize())
+
+    features[CHARACTER] = "&".join(character)
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
