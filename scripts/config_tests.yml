@@ -43,9 +43,9 @@ parts_filter:
   # - obII
   # - va
   # - bs
-  - sop
-  - ten
-  - alt
-  - bar
-  - bass
-  - bbar
+  # - sop
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar

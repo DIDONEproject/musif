@@ -145,7 +145,7 @@ class DataProcessor:
         
         pinfo('\nPreprocessing data...')
         self.preprocess_data()
-        pinfo('\nScanning info looking for errors...')
+        pinfo('\nScanning info looking for missing dataº...')
         self._scan_dataframe()
         
         if self._post_config.unbundle_instrumentation:
@@ -202,12 +202,13 @@ class DataProcessor:
         for agregated analysis, keeping the previous ones. Also deletes unnecesary columns for analysis.
         """
 
-        self.data.drop([i for i in self.data.columns if 'Degree' in i and not '_relative' in i], axis = 1, inplace=True)
-        self.data.drop([i for i in self.data.columns if i.startswith(CHORDS_GROUPING_prefix+'1')], axis = 1, inplace=True)
+        # self.data.drop([i for i in self.data.columns if 'Degree' in i and not '_relative' in i], axis = 1, inplace=True)
+        # self.data.drop([i for i in self.data.columns if i.startswith(CHORDS_GROUPING_prefix+'1')], axis = 1, inplace=True)
         try:
             self._group_keys_modulatory()
             self._group_keys()
             self._join_degrees()
+            self._join_degrees_relative()
         except KeyError:
             perr('Some columns to group could not be found.')
             
@@ -300,11 +301,19 @@ class DataProcessor:
         join_keys(self.data)
 
     def _join_degrees(self) -> None:
-        total_degrees = [i for i in self.data.columns if '_Degree' in i]
+        total_degrees = [i for i in self.data.columns if '_Degree' in i and not 'relative' in i]
 
         for part in self._post_config.instruments_to_keep:
             join_part_degrees(total_degrees, get_part_prefix(part), self.data)
         join_part_degrees(total_degrees, get_sound_prefix('voice'), self.data)
+        # self.data.drop(total_degrees, axis = 1, inplace=True)
+        
+    def _join_degrees_relative(self) -> None:
+        total_degrees = [i for i in self.data.columns if '_Degree' in i and 'relative' in i]
+
+        for part in self._post_config.instruments_to_keep:
+            join_part_degrees(total_degrees, get_part_prefix(part), self.data, sufix = '_relative')
+        join_part_degrees(total_degrees, get_sound_prefix('voice'), self.data,  sufix = '_relative')
         # self.data.drop(total_degrees, axis = 1, inplace=True)
     
     def _scan_dataframe(self):
@@ -345,7 +354,7 @@ class DataProcessor:
 
     def _final_data_processing(self) -> None:
         self.data.sort_values(ARIA_ID, inplace=True)
-        self.replace_nans()
+        # self.replace_nans()
 
         self.data = self._check_columns_type(self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
@@ -359,20 +368,20 @@ class DataProcessor:
 
     def _split_metadata_and_labels(self) -> None:
         label_columns = list(self.data.filter(like='Label_', axis=1))
-        label_dataframe = self.data[[ARIA_ID]+label_columns]
-        self.data.drop(label_columns, inplace=True, axis=1, errors='ignore')
+        label_dataframe = self.data[[ARIA_ID] + label_columns]
         
-        metadata_dataframe = self.data[[ARIA_ID]+metadata_columns]
-        self.data.drop(metadata_columns, inplace=True, axis=1, errors='ignore')
+        metadata_dataframe = self.data[[ARIA_ID] + metadata_columns]
         
         # self.data = sort_columns(self.data, columns_to_sort)
         self.to_csv(self.destination_route + "_labels", label_dataframe)
         self.to_csv(self.destination_route + "_metadata", metadata_dataframe)
+        self.to_csv(self.destination_route + "_alldata", self.data)
         
-        self.data.drop(metadata_columns+label_columns, inplace=True, axis=1, errors='ignore')
+        
+        self.data.drop(metadata_columns + label_columns, inplace=True, axis=1, errors='ignore')
 
     def _check_columns_type(self, df) -> DataFrame:
-        for column in tqdm(df.columns, desc= 'Adjusting proper type for every column'):
+        for column in tqdm(df.columns, desc= 'Adjusting NaN values.'):
                 column_type = Counter(df[df[column].notna()][column].map(type)).most_common(1)[0][0]
                 if column_type == str:
                     df[column]= df[column].replace(0, '0')

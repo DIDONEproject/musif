@@ -83,24 +83,24 @@ def merge_single_voices(df: DataFrame) -> None:
         df[formatted_col] = df[columns_to_merge].sum(axis=1)
 
                 
-def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame) -> None:
-    part_degrees=[i for i in total_degrees if part in i]
+def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame, sufix: str= '') -> None:
+    part_degrees = [i for i in total_degrees if part in i]
 
-    aug=[i for i in part_degrees if '#' in i]
-    desc=[i for i in part_degrees if 'b' in i and not 'bb' in i]
-    d_desc=[i for i in part_degrees if 'bb' in i]
-    d_asc=[i for i in part_degrees if 'x' in i]
+    aug = [i for i in part_degrees if '#' in i]
+    desc = [i for i in part_degrees if 'b' in i and not 'bb' in i]
+    d_desc = [i for i in part_degrees if 'bb' in i]
+    d_asc = [i for i in part_degrees if 'x' in i]
 
-    pattern='^'+part+'Degree'+'[0-9].*'
+    pattern = '^'+part+'Degree'+'[0-9].*'
     degree_nat = [x for x in part_degrees if re.search(pattern, x)]
     degree_nonat = [i for i in part_degrees if i not in degree_nat]
 
-    df[part+DEGREE_PREFIX+'_Asc']=df[aug].sum(axis=1)
-    df[part+DEGREE_PREFIX+'_Desc']=df[desc].sum(axis=1)
-    df[part+DEGREE_PREFIX+'_Dasc']=df[d_asc].sum(axis=1)
-    df[part+DEGREE_PREFIX+'_Ddesc']=df[d_desc].sum(axis=1)
-    df[part+DEGREE_PREFIX+'_Nat']=df[degree_nat].sum(axis=1)
-    df[part+DEGREE_PREFIX+'_Nonat']=df[degree_nonat].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Asc'+sufix] = df[aug].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Desc'+sufix] = df[desc].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Dasc'+sufix] = df[d_asc].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Ddesc'+sufix] = df[d_desc].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Nat'+sufix] = df[degree_nat].sum(axis=1)
+    df[part+DEGREE_PREFIX+'_Nonat'+sufix] = df[degree_nonat].sum(axis=1)
 
 def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: DataFrame) -> None:
     pinfo(f"\nTotal files skipped by composer: {len(composer_counter)}")
@@ -141,7 +141,7 @@ def delete_exceptions(data) -> None:
     if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
         data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis = 1, inplace=True)
 
-        # remove empty voices
+    # remove empty voices
     empty_voices = [col for col in data.columns if col.startswith(tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
     if empty_voices:
         data.drop(empty_voices, axis = 1, inplace=True)

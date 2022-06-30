@@ -14,8 +14,8 @@ from ...constants import DATA_PART_ABBREVIATION
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]
-    tonality = score_data[DATA_KEY]
-    notes_per_degree = get_notes_per_degree(str(tonality), notes)
+    key = score_data[DATA_KEY]
+    notes_per_degree = get_notes_per_degree(str(key), notes)
 
     all_degrees = sum(value for value in notes_per_degree.values())
     for key, value in notes_per_degree.items():
@@ -27,11 +27,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     if len(parts_data) == 0:
         return
 
-    tonality = score_data[DATA_KEY]
+    key = score_data[DATA_KEY]
     score_notes_per_degree = {}
     for part_data in parts_data:
         notes = part_data[DATA_NOTES]
-        part_notes_per_degree = get_notes_per_degree(str(tonality), notes)
+        part_notes_per_degree = get_notes_per_degree(str(key), notes)
         for degree, notes in part_notes_per_degree.items():
             if degree not in score_notes_per_degree:
                 score_notes_per_degree[degree] = 0

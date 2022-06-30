@@ -1501,19 +1501,19 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1500,Dal segno,Dircea,Female,Female lover 1,Turin,Italy
 1501,ABA,Timante,Male,Male lover 1,Turin,Italy
 1502,ABA,Creusa,Female,Female lover 2,Turin,Italy
-1503,,,Male,,Turin,Italy
-1504,,,Male,,Turin,Italy
-1505,,,Male,,Turin,Italy
-1506,,,Male,,Turin,Italy
-1507,,,Male,,Turin,Italy
-1508,,,Male,,Turin,Italy
-1509,,,Male,,Turin,Italy
-1510,,,Male,,Turin,Italy
-1511,,,Male,,,
-1512,,,Male,,,
-1513,,,Male,,,
-1514,,,Male,,,
-1515,,,Male,,,
+1503,ABA,Creusa,Female,Female lover 2,Turin,Italy
+1504,ABC,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Turin,Italy
+1505,ABA,Timante,Male,Male lover 1,Turin,Italy
+1506,ABA,Cherinto,Male,Male lover 2,Turin,Italy
+1507,AA,Enea,Male,Male lover 1,Rome,Italy
+1508,ABA,Selene,Female,Female lover 2,Rome,Italy
+1509,ABC,Timante,Male,Male lover 1,Turin,Italy
+1510,Dal segno,Cherinto,Male,Male lover 2,Turin,Italy
+1511,Dal segno,Iarba,Male,Male lover 2,Rome,Italy
+1512,ABAB,Enea,Male,Male lover 1,Rome,Italy
+1513,Dal segno,Araspe,Male,Male lover 3,Rome,Italy
+1514,AA,Selene,Female,Female lover 2,Rome,Italy
+1515,A,Didone,Female,Female lover 1,Rome,Italy
 1516,,,Male,,,
 1517,,,Male,,,
 1518,,,Male,,,

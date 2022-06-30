@@ -5,7 +5,7 @@ log:
 internal_data_dir: musif/internal_data
 checking_file: parsed_files.csv
 delete_failed_files: False
-merge_voices: True
+merge_voices: False
 grouped_analysis: True
 split_passionA: True
 separate_intrumentation_column: True
@@ -53,12 +53,14 @@ columns_startswith:
   - FamilyWw
   - FamilyBr
   - FamilyGen
+  - FamilyGen
+  - FamilyPerc
   - EndOfThemeA
   - NumberOfBeats
   - SoundVoice_Dyn
 
 columns_contain:
-  # - _Count
+  - _Count
   - _SoundingMeasuresMean
   - _SmallestSemitones
   - _SmallestAbsolute
