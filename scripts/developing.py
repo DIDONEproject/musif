@@ -12,7 +12,7 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did02M-Diro_che-1776-Schuster[1.03][0337].xml'
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale31M-Ombra_dell-1752-Perez[3.11][1071].xml'
 
     #reference
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
@@ -24,6 +24,6 @@ if __name__ == "__main__":
     df.to_csv('martiser/'+'test.csv', index=False)
     # df=pd.read_csv('arias_test.csv')
     path = '.'
-    ReportsGenerator("scripts/config_tests.yml").generate_reports(df, path, num_factors=0, visualizations=True)
+    # ReportsGenerator("scripts/config_tests.yml").generate_reports(df, path, num_factors=0, visualizations=True)
     
     

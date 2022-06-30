@@ -26,7 +26,7 @@ label_by_col = {
 voices_list = ['sop','ten','alt','bar','bbar', 'bass']
 voices_list_prefixes = [get_part_prefix(i) for i in voices_list]
 
-metadata_columns = [ARIA_ID, FILE_NAME, ARIA_OPERA, ARIA_LABEL, ARIA_NAME,
+metadata_columns = [FILE_NAME, ARIA_OPERA, ARIA_LABEL, ARIA_NAME,
             ARIA_ACT, ARIA_SCENE, ACTANDSCENE, ARIA_YEAR, ARIA_DECADE, COMPOSER, ARIA_CITY, 
             TERRITORY, CHARACTER, GENDER, FORM, KEY, KEY_SIGNATURE, KEY_SIGNATURE_TYPE, INSTRUMENTATION, SCORING, VOICES
             ]
