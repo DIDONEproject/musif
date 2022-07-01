@@ -13,12 +13,15 @@ if __name__ == "__main__":
     data_dir = r'../Corpus/xml/'
     musescore_dir = r'../Corpus/musescore'
     
-    name =  'martiser/' + "features_14_06"
-    check_file=name+"_extraction.csv"
+    prefix = 'martiser/'
+    sufix='.csv'
+    name = prefix + "new"
+    dest_path = name + "_extraction"
+    check_file = dest_path + ".csv"
 
     df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
-    dest_path=name+"_extraction2.csv"
-    df.to_csv(dest_path, index=False)
+    
+    df.to_csv(dest_path+'_2'+sufix, index=False)
     k=1
     
 
