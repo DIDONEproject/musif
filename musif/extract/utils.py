@@ -183,7 +183,7 @@ def get_repetition_elements(score, v = True):
 def _include_beats_column(harmonic_analysis: DataFrame) -> None:
     harmonic_analysis['beats']=0
     for index, measure in enumerate(harmonic_analysis[PLAYTHROUGH].values):
-        if measure<=1:
+        if measure <=1:
             beat = int(measure + float(harmonic_analysis.mc_onset[index])*get_number_of_beats(harmonic_analysis.timesig[index]))
         else:
             time_sig = get_number_of_beats(harmonic_analysis.timesig[index-1])
