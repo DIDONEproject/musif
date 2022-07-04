@@ -248,7 +248,7 @@ class DataProcessor:
                     self.data.drop(index, axis=0, inplace=True)
                     pwarn('Item {0} from errors.csv was deleted.'.format(item))
         else:
-            perr('\nA file called "errors.csv" must be created containing File names to be deleted from the dataframe.')
+            perr('\nA file called "errors.csv" must be created containing Filenames to be deleted.')
             
     def delete_unwanted_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
@@ -372,9 +372,9 @@ class DataProcessor:
         
         metadata_dataframe = self.data[[ARIA_ID] + metadata_columns]
         
-        # self.data = sort_columns(self.data, columns_to_sort)
         self.to_csv(self.destination_route + "_labels", label_dataframe)
         self.to_csv(self.destination_route + "_metadata", metadata_dataframe)
+        self.data = sort_columns(self.data, [ARIA_ID] + metadata_columns)
         self.to_csv(self.destination_route + "_alldata", self.data)
         
         
