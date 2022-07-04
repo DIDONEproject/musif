@@ -18,9 +18,10 @@ if __name__ == "__main__":
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     check_file = None
     
-    name = "new"
+    name = "extraction_04_07"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     prefix = 'martiser/'
+    
     dest_path = prefix + name + "_total" + ".csv"
     # merge_dataframes(prefix + name, dest_path)
     
