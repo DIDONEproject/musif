@@ -1,6 +1,7 @@
 from typing import List
 
 from musif.config import Configuration
+from musif.extract.constants import VOICES_LIST
 from musif.extract.features.metadata.constants import CHARACTER
 from musif.logs import lwarn
 from musif.musicxml.scoring import extract_sound
@@ -29,11 +30,15 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     return score_features.update(features)
 
 def extract_character(score_data, score_features, features):
-    character=[]
+    character = []
     for voice in score_features['Voices'].split(','):
-        index = score_features['Scoring'].split(',').index(voice)
-        character.append(score_data['parts'][index].partName.capitalize())
-
+        parts = score_features['Scoring'].split(',')
+        index = parts.index(voice)
+        if parts[index] in VOICES_LIST:
+            character.append(score_data['parts'][index].partName.capitalize())
+        else:
+            character.append('Unknown')
+            
     features[CHARACTER] = "&".join(character)
 
 

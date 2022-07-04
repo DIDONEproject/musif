@@ -114,9 +114,9 @@ def get_number_of_beats(time_signature: str) -> int:
     time_signature = time_signature.split(",")[0]
     if time_signature in ['1/2', '1/4', '1/8', '1/16','3/8']:
         return 1
-    if time_signature in ['2/2','2/4', '2/8', '2/16', '6/8', '6/2', '6/4', '6/16']:
+    if time_signature in ['2/2', '2/4', '2/8', '2/16', '6/8', '6/2', '6/4', '6/16']:
         return 2
-    if time_signature in ['3/2', '3/4', '3/16', '9/2', '9/4', '9/8', '9/16']:
+    if time_signature in ['3/1', '3/2', '3/4', '3/16', '9/2', '9/4', '9/8', '9/16']:
         return 3
     if time_signature in ['4/4', '4/2', '4/8', '4/16', 'C', '12/2', '12/4', '12/8', '12/16']: 
         return 4

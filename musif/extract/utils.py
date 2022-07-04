@@ -114,7 +114,7 @@ def process_musescore_file(file_path, expand_repeats):
 def include_beats(harmonic_analysis: DataFrame) -> None:
     harmonic_analysis['beats']=0
     for index, measure in enumerate(harmonic_analysis[PLAYTHROUGH].values):
-        if measure<=1:
+        if measure <=1:
             beat = int(measure + float(harmonic_analysis.mc_onset[index])*get_number_of_beats(harmonic_analysis.timesig[index]))
         else:
             time_sig = get_number_of_beats(harmonic_analysis.timesig[index-1])

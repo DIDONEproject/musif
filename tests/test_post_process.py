@@ -10,10 +10,9 @@ from musif.process.processor import DataProcessor
 from tests.constants import CONFIG_PATH, DATA_STATIC_DIR, TEST_FILE
 import os
 
-name = "features_14_06"
-dest_path = 'martiser/' + name + "_total" + '_features'
+name = "new"
+processed_file_path = 'martiser/' + name + "_total" + '_alldata' + '.csv'
 
-processed_file_path = path.join(dest_path+'.csv')
 
 postconfig_path = path.join(CONFIG_PATH, "post_process.yml")
 
@@ -54,22 +53,22 @@ class TestPostProcess:
         
 
 class TestProcessedFile:
-    def test_column_types_match(self, processed_data: pd.DataFrame):
-        found_cols = []
-        for col in processed_data.columns:
-            if col in found_cols:
-                continue
-            weird = (processed_data[[col]].applymap(type) != processed_data[[col]].iloc[0].apply(type)).any(axis=1)
-            if len(processed_data[weird]) > 0:
-                found_cols.append(col)
-                print('\n---\n')
-                print(col)
-                indices = weird[weird]
-                print(indices.index)
-        assert not found_cols
+    # def test_column_types_match(self, processed_data: pd.DataFrame):
+    #     found_cols = []
+    #     for col in processed_data.columns:
+    #         if col in found_cols:
+    #             continue
+    #         weird = (processed_data[[col]].applymap(type) != processed_data[[col]].iloc[0].apply(type)).any(axis=1)
+    #         if len(processed_data[weird]) > 0:
+    #             found_cols.append(col)
+    #             print('\n---\n')
+    #             print(col)
+    #             indices = weird[weird]
+    #             print(indices.index)
+    #     assert not found_cols
         
-    def test_not_nan_values(self, processed_data: pd.DataFrame):
-        assert not processed_data.isnull().values.any()
+    # def test_not_nan_values(self, processed_data: pd.DataFrame):
+    #     assert not processed_data.isnull().values.any()
         
     def test_ensure_violin_solo_not_present(self, processed_data: pd.DataFrame):
         assert len([i for i in processed_data if i.startswith('PartVn_')])==0
