@@ -1,12 +1,14 @@
-from typing import List
+from typing import List, Tuple
 
 from musif.config import Configuration
+from music21.chord import Chord
+
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
-from musif.musicxml.ambitus import get_notes_ambitus
 from .constants import *
 from ..core.constants import DATA_NOTES
 from ..prefix import get_part_feature
+from music21.note import Note
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
@@ -14,7 +16,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     if notes is None or len(notes) == 0:
 
         return
-    lowest_note, highest_note = get_notes_ambitus(notes)
+    lowest_note, highest_note = _get_notes_ambitus(notes)
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
     highest_note_text = highest_note.nameWithOctave.replace("-", "b")
     lowest_note_index = int(lowest_note.pitch.midi)
@@ -40,3 +42,16 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         part = part_data[DATA_PART_ABBREVIATION]
         for feature_name in SCORE_FEATURES:
             score_features[get_part_feature(part, feature_name)] = part_features.get(feature_name)
+            
+            
+def _get_notes_ambitus(notes: List[Note]) -> Tuple[Note, Note]:
+    first_note = notes[0][0] if isinstance(notes[0], Chord) else notes[0]
+    lowest_note = first_note
+    highest_note = first_note
+    for note in notes[1:]:
+        current_note = note[0] if isinstance(note, Chord) else note
+        if current_note.pitch.midi < lowest_note.pitch.midi:
+            lowest_note = current_note
+        if current_note.pitch.midi > highest_note.pitch.midi:
+            highest_note = current_note
+    return lowest_note, highest_note

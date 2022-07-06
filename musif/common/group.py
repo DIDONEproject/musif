@@ -1,10 +1,10 @@
 import re
+from typing import List
 
-import roman
 from music21 import pitch, scale
 
 from musif.common.translate import translate_word
-
+from musif.logs import pwarn
 
 def get_musescore_Instrumentname_And_Family(i, instrument_familiy, p):
     i_name = re.sub('\W+', ' ', i.instrumentName)
@@ -13,29 +13,27 @@ def get_musescore_Instrumentname_And_Family(i, instrument_familiy, p):
     return name, family
 
 
-def sort(list_to_sort, main_list):
+def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     """
     Function that sorts the first list based on the second one
     """
     # TODO: would it be better using numpy?
-    # TODO: if list_to_sort may be a set (a dict with only keys) the `in` operation is much faster
-    # TODO: btw, in pure python: return [i for i in main_list if i in list_to_sort]
-    # TODO: the previous one may not be identical... test it!
-    # TODO: also, if the two lists have the same length: https://www.adamsmith.haus/python/answers/how-to-sort-a-list-based-on-another-list-in-python
     indexes = []
-    huerfanos = []
+    others = []
     for i in list_to_sort:
         # this may be very slow (it contains a full for)
-        if i in main_list:
+        if i in reference_list:
             # again, the following is another full for
-            indexes.append(main_list.index(i))  # an error indicates that the elements are not present in the main_list; please get in touch with us if so.
+            indexes.append(reference_list.index(i))  # an error indicates that the elements are not present in the main_list; please get in touch with us if so.
             # TODO: throw an exception with this message and give some info on how to solve it (at least)
         else:
-            huerfanos.append(i)
+            others.append(i)
 
     indexes = sorted(indexes)
-    list_sorted = [main_list[i] for i in indexes]
-    return list_sorted + huerfanos
+    list_sorted = [reference_list[i] for i in indexes]
+    if others:
+        pwarn('Some elements of the list were not present in the reference list so they will be placed at the end.')
+    return list_sorted + others
 
 
 def get_gender(character: str) -> str:
