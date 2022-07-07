@@ -39,7 +39,8 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         year = int(file_name[year_start_idx: year_end_idx])
     except ValueError:
         year = str(year)
-    decade = str(year // 10) + "0s" if isinstance(year, int) else "nd"
+        
+    decade = str(year // 10) + "0s" if isinstance(year, int) else "NA"
 
     title_end_idx = year_start_idx - 1
     title_start_idx = file_name.rfind("-", 0, title_end_idx - 1) + 1
