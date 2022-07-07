@@ -69,7 +69,7 @@ columns_contain:
 replace_nans:
   - Interval
   - Degree
-  - Chord
+  - Harmony
 
 delete_presence:
   - vn

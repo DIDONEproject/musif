@@ -268,7 +268,6 @@ def get_numerals(lausanne_table):
 
     _, ng2 = get_numerals_lists(numerals, relativeroots, keys) # por que se coge solo la funcion segunda?? anyway cojamos los numerals
     numerals_counter= Counter(numerals)
-    # numerals_counter = Counter(ng2)
     
     total_numerals=sum(list(numerals_counter.values()))
     nc = {}
@@ -276,8 +275,8 @@ def get_numerals(lausanne_table):
         if str(n)=='':
             raise Exception('Some chords here are not parsed well')
             continue
-        nc['Numerals_'+str(n)+'_Per'] = round((numerals_counter[n]/total_numerals), 3)
-        nc['Numerals_'+str(n)+'_Count'] = round((numerals_counter[n]), 3)
+        nc[NUMERALS_prefix + str(n) + '_Per'] = round((numerals_counter[n]/total_numerals), 3)
+        nc[NUMERALS_prefix + str(n) + '_Count'] = round((numerals_counter[n]), 3)
 
     return nc 
 
