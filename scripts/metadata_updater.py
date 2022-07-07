@@ -9,8 +9,8 @@ import pandas as pd
 
 if __name__ == "__main__":
     #Arias.csv
-    base_path=r'../../_Ana/Music Analysis/'
-    des_path=r'../musif/metadata/score/'
+    base_path = r'../../_Ana/Music Analysis/'
+    des_path = r'../musif/metadata/score/'
 
    # passions
     passions_route= '../../_AlDaniMartiAnni/' + 'Passions.xlsx'
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     df_passions.to_csv('musif/internal_data/Passions.csv',  index=False)
 
     # arias.csv
-    arias_route=base_path+'Arias_change.xlsx'
+    arias_route = base_path+'Arias_change.xlsx'
     df_arias = pd.read_excel(arias_route, header=2)
     df_arias.rename(columns={'ID': 'AriaId', 'Country':'Territory', 'Type': 'RoleType'}, inplace=True)
     df_arias['Gender']= ['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in df_arias['RoleType']]

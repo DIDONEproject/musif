@@ -17,15 +17,14 @@ from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import (INSTRUMENTATION, SCORING,
                                                       VOICES)
 from musif.logs import perr, pinfo, pwarn
+from musif.process.constants import (PRESENCE, label_by_col, metadata_columns,
+                                     priority_columns, voices_list_prefixes)
 from musif.process.utils import (delete_columns, join_keys,
                                  join_keys_modulatory, join_part_degrees,
                                  log_errors_and_shape, merge_duetos_trios,
                                  merge_single_voices, split_passion_A)
 from pandas import DataFrame
 from tqdm import tqdm
-
-from musif.process.constants import (PRESENCE, metadata_columns, label_by_col,
-                        voices_list_prefixes)
 
 
 # TODO: documentation should be more precise here and there, reread
@@ -373,11 +372,11 @@ class DataProcessor:
         
         self.to_csv(self.destination_route + "_labels", label_dataframe)
         self.to_csv(self.destination_route + "_metadata", metadata_dataframe)
-        self.data = sort_columns(self.data, [ARIA_ID] + metadata_columns)
+        self.data = sort_columns(self.data, [ARIA_ID] + priority_columns)
         self.to_csv(self.destination_route + "_alldata", self.data)
         
         
-        self.data.drop(metadata_columns + label_columns, inplace=True, axis=1, errors='ignore')
+        self.data.drop(priority_columns + label_columns, inplace=True, axis=1, errors='ignore')
 
     def _check_columns_type(self, df) -> DataFrame:
         for column in tqdm(df.columns, desc= 'Adjusting NaN values.'):

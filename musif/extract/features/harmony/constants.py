@@ -1,10 +1,10 @@
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 HARMONY_PREFIX = 'Harmony_'
-HARMONIC_prefix = HARMONY_PREFIX+'Harmonic_'
-HARMONY_PRESENT = HARMONY_PREFIX+'Present'
+HARMONIC_prefix = HARMONY_PREFIX + 'Harmonic'
+HARMONY_PRESENT = HARMONY_PREFIX + 'Present'
 
-HARMONIC_RHYTHM = HARMONIC_prefix+"rhythm"
-HARMONIC_RHYTHM_BEATS= HARMONIC_prefix+"rhythm_beats"
+HARMONIC_RHYTHM = HARMONIC_prefix + "Rhythm"
+HARMONIC_RHYTHM_BEATS= HARMONIC_prefix + "RhythmBeats"
 
 ADDITIONS_prefix = HARMONY_PREFIX+'Additions_'
 ADDITIONS_4_6_64='4_6_64' 
