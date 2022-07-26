@@ -1,7 +1,7 @@
 ALPHA = "abcdefghijklmnopqrstuvwxyz"
 HARMONY_PREFIX = 'Harmony_'
 HARMONIC_prefix = HARMONY_PREFIX + 'Harmonic'
-HARMONY_PRESENT = HARMONY_PREFIX + 'Present'
+HARMONY_AVAILABLE = HARMONY_PREFIX + 'Analysis_Available'
 
 HARMONIC_RHYTHM = HARMONIC_prefix + "Rhythm"
 HARMONIC_RHYTHM_BEATS= HARMONIC_prefix + "RhythmBeats"

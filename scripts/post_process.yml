@@ -5,6 +5,7 @@ log:
 internal_data_dir: musif/internal_data
 checking_file: parsed_files.csv
 delete_failed_files: True
+delete_files_without_harmony: True
 merge_voices: False
 grouped_analysis: True
 split_passionA: True

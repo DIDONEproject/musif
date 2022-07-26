@@ -188,7 +188,7 @@ def join_keys_modulatory(df: DataFrame):
 def merge_dataframes(name: str, dest_path: str) -> None:
     csv='.csv'
     name1 = name+'_extraction'+csv
-    name2 = name+'_extraction2'+csv
+    name2 = name+'_extraction_2'+csv
     
     df2 = pd.read_csv(name2)
     df1 = pd.read_csv(name1)

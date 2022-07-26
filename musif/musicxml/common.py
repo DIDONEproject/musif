@@ -6,14 +6,12 @@ from music21.note import Note
 from music21.scale import MajorScale, MinorScale
 from music21.stream import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
-from roman import toRoman
-
 from musif.common import group
+from roman import toRoman
 
 MUSICXML_FILE_EXTENSION = "xml"
 
 # TODO: Documennt all this module
-
 
 def is_voice(part: Part) -> bool:
     instrument = part.getInstrument(returnDefault=False)
