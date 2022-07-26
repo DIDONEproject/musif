@@ -116,6 +116,7 @@ _CONFIG_POST_FALLBACK = {
     DELETE_FILES: False,
     GROUPED: False,
     DELETE_FILES: False,
+    DELETE_HARMONY: False,
     SPLIT_PASSSIONS: False,
     UNBUNDLE_INSTRUMENTATION: False,
     MERGE_VOICES: True,
@@ -283,6 +284,8 @@ class PostProcess_Configuration:
         self.columns_startswith = config_data.get(STARTSWITH, _CONFIG_POST_FALLBACK[STARTSWITH])
         self.columns_contain = config_data.get(CONTAIN, _CONFIG_POST_FALLBACK[CONTAIN])
         self.replace_nans = config_data.get(REPLACE_NANS, _CONFIG_POST_FALLBACK[REPLACE_NANS])
+        self.delete_files_without_harmony = config_data.get(DELETE_HARMONY, _CONFIG_POST_FALLBACK[DELETE_HARMONY])
+        
         
 
     def to_dict_post(self) -> dict:

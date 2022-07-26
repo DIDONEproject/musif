@@ -18,7 +18,7 @@ if __name__ == "__main__":
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     check_file = None
     
-    name = "extraction_04_07"
+    name = "extraction_07_07_22"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     prefix = 'martiser/'
     
@@ -33,7 +33,6 @@ if __name__ == "__main__":
     filter_list=['Misero_pargoletto', 'Se_tutti', 'Son_regina', 'Non_ha', 'Se_resto', 'Ah_non_lasciarmi', 'Cadra_fra']
     f = DataFilter('total_processed.csv').filter_data(by='AriaName', equal_to=filter_list, instrument='SoundVoice')
     
-    # TODO: Methods to test
     # p.delete_previous_items()
     # print(p.data.columns[p.data.columns.str.contains('Key')])
     # print(p.data.columns[p.data.columns.str.contains('Key')].shape)

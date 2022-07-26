@@ -36,11 +36,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             notes[parts_features[f][PART_ABBREVIATION][0].upper()+parts_features[f][PART_ABBREVIATION][1:]] = len(parts_data[f][DATA_NOTES])
         elif parts_features[f]['Family'] == VOICE_FAMILY:
             notes[parts_features[f][FAMILY_ABBREVIATION].capitalize()] = int(
-                    df_score['Family'+parts_features[f][FAMILY_ABBREVIATION].capitalize()+'_NotesMean'])
+                    score_features['Family' + parts_features[f][FAMILY_ABBREVIATION].capitalize()+'_NotesMean'])
         else:
                 abbreviation=parts_features[f][SOUND_ABBREVIATION][0].upper()+parts_features[f][SOUND_ABBREVIATION][1:] #cheap capitalization
                 notes[parts_features[f][SOUND_ABBREVIATION].capitalize()] = int(
-                    df_score['Sound'+abbreviation+'_NotesMean'])
+                    score_features['Sound' + abbreviation+'_NotesMean'])
 
     for i, (key, value) in enumerate(notes.items()):
         texture = value / np.asarray(list(notes.values())[i+1:])
@@ -49,7 +49,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
             part2 = list(notes.keys())[j+i+1]
             part1_prefix = get_part_prefix(part1)
             part2_prefix = get_part_prefix(part2)
-            score_features[f"{part1_prefix}_{part2_prefix}_{TEXTURE}"] = t
+            score_features[f"{part1_prefix}|{part2_prefix}_{TEXTURE}"] = t
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):

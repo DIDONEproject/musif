@@ -12,7 +12,7 @@ from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PREFIX,
-                                                      CHORDS_GROUPING_prefix)
+                                                      CHORDS_GROUPING_prefix, HARMONY_AVAILABLE)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scoring.constants import (INSTRUMENTATION, SCORING,
                                                       VOICES)
@@ -138,12 +138,11 @@ class DataProcessor:
             self.data[FILE_NAME].to_csv(self._post_config.check_file, index=False)
 
         if self._post_config.delete_files:
-            
             self.delete_previous_items()
         
         pinfo('\nPreprocessing data...')
         self.preprocess_data()
-        pinfo('\nScanning info looking for missing dataº...')
+        pinfo('\nScanning info looking for missing data...')
         self._scan_dataframe()
         
         if self._post_config.unbundle_instrumentation:
@@ -190,7 +189,6 @@ class DataProcessor:
             
         print('Deleted arias without passion: ', self.data[self.data["Label_BasicPassion"].isnull()].shape[0])
         self.data = self.data[~self.data["Label_BasicPassion"].isnull()]
-        # self.data.replace(0.0, 'NA', inplace=True)
         
         self.data.dropna(axis=1, how='all', inplace=True)
         self.data.reset_index(inplace=True,drop=True)
@@ -239,9 +237,9 @@ class DataProcessor:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
         pinfo('\nDeleting items with errors...')
         if os.path.exists('errors.csv'):
-            errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)['FileName'].tolist()
+            errors=pd.read_csv('errors.csv', low_memory=False, sep='\n', encoding_errors='replace',header=0)[FILE_NAME].tolist()
             for item in errors:
-                index = self.data.index[self.data['FileName']==item+'.xml']
+                index = self.data.index[self.data[FILE_NAME]==item+'.xml']
                 if not index.empty:
                     self.data.drop(index, axis=0, inplace=True)
                     pwarn('Item {0} from errors.csv was deleted.'.format(item))
@@ -319,7 +317,13 @@ class DataProcessor:
         self.novoices_counter = []
         self._scan_composers()
         self._scan_voices()
-
+        if self._post_config.delete_files_without_harmony:
+            if HARMONY_AVAILABLE in self.data:
+                number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
+                pinfo(f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted.")   
+                pinfo(f'{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}')
+                self.data = self.data[self.data[HARMONY_AVAILABLE] != 0]
+            
     def _scan_voices(self):
         for i, voice in enumerate(self.data[VOICES].values):
             if pd.isnull(voice):
@@ -352,7 +356,7 @@ class DataProcessor:
 
     def _final_data_processing(self) -> None:
         self.data.sort_values(ARIA_ID, inplace=True)
-        # self.replace_nans()
+        self.replace_nans()
 
         self.data = self._check_columns_type(self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
