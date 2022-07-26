@@ -7,6 +7,12 @@ import pandas as pd
 #     with open(file_path, "r", encoding='utf8') as file:
 #         return [obj for obj in csv.DictReader(file)]
 
+def add_duetos_gender(df_arias):
+    for index, value in enumerate(df_arias['RoleType'].dropna()):
+        if ',' in value:
+            characters = value.split(',')
+            df_arias['Gender'].iat[index] = '&'.join(['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in characters])
+
 if __name__ == "__main__":
     #Arias.csv
     base_path = r'../../_Ana/Music Analysis/'
@@ -21,7 +27,10 @@ if __name__ == "__main__":
     arias_route = base_path+'Arias_change.xlsx'
     df_arias = pd.read_excel(arias_route, header=2)
     df_arias.rename(columns={'ID': 'AriaId', 'Country':'Territory', 'Type': 'RoleType'}, inplace=True)
-    df_arias['Gender']= ['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in df_arias['RoleType']]
+    
+    df_arias['Gender'] = ['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in df_arias['RoleType']]
+    add_duetos_gender(df_arias)
+            
     columns=['AriaId','Form','Character','Gender','RoleType','City','Territory']
     df_arias=df_arias[columns]
     df_arias.to_csv(des_path + 'aria.csv', index=False)

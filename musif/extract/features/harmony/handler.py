@@ -25,10 +25,10 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         harmonic_analysis = score_data.get(DATA_MUSESCORE_SCORE)
 
         if harmonic_analysis is None:
-            features[HARMONY_PRESENT] = 0
+            features[HARMONY_AVAILABLE] = 0
             return features
         else:
-            features[HARMONY_PRESENT] = 1
+            features[HARMONY_AVAILABLE] = 1
             
         all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
         keyareas = get_keyareas(harmonic_analysis, major = score_data[DATA_MODE] == 'major')

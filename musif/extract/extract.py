@@ -547,7 +547,7 @@ class FeaturesExtractor:
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict]):
         for part_data, part_features in zip(parts_data, parts_features):
-            module_name=str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
+            module_name = str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
             ldebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.")
             try:
                 module.update_part_objects(score_data, part_data, self._cfg, part_features)
@@ -562,5 +562,5 @@ class FeaturesExtractor:
         try:
             module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
         except Exception as e:
-            score_name=score_data['file']
+            score_name = score_data['file']
             perr(f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
