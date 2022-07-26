@@ -6,12 +6,11 @@ from music21 import pitch, scale
 from musif.common.translate import translate_word
 from musif.logs import pwarn
 
-def get_musescore_Instrumentname_And_Family(i, instrument_familiy, p):
-    i_name = re.sub('\W+', ' ', i.instrumentName)
+def get_musescore_Instrumentname_And_Family(part, instrument_familiy, p):
+    i_name = re.sub('\W+', ' ', part.instrumentName)
     name = translate_word(i_name)
     family = instrument_familiy[name]
     return name, family
-
 
 def sort(list_to_sort: List[str], reference_list: List[str]) -> List[str]:
     """

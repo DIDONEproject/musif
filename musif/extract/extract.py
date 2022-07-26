@@ -8,16 +8,15 @@ from typing import Dict, List, Optional, Tuple, Union
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
+from musif.common._constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.cache import Cache
-from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
-from musif.extract.common import _filter_parts_data
 from musif.extract import constants as C
+from musif.extract.common import _filter_parts_data
 from musif.extract.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
-
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION,
                             split_layers)
 from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,

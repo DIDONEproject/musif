@@ -1,6 +1,6 @@
 from typing import List
 
-from musif.common.constants import GENERAL_FAMILY, VOICE_FAMILY
+from musif.common._constants import GENERAL_FAMILY, VOICE_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import _part_matches_filter

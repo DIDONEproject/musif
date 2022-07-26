@@ -3,6 +3,8 @@ from typing import Dict, List
 
 from pandas import DataFrame
 from musif.logs import pwarn
+
+
 def sort_list(list_to_sort: list, reference_list: list) -> list:
     """
     Sorts first list based on the second one. Those elements that are not present 
@@ -49,6 +51,7 @@ def sort_dict(dict_to_sort: dict, reference_list: list) -> dict:
     
     return dict_sorted
 
+
 def sort_columns(data: DataFrame, sorting_list: list) -> DataFrame:
     """
     Reorders columns of a Dataframe according to a reference list. Uses sort_list.
@@ -64,6 +67,7 @@ def sort_columns(data: DataFrame, sorting_list: list) -> DataFrame:
     cols = sort_list(data.columns.tolist(), [i for i in sorting_list])
     data = data[cols]
     return data
+   
     
 def sort_dataframe(data: DataFrame, column: str, sorting_lists: Dict[list, str], key_to_sort: str) -> DataFrame:
     """

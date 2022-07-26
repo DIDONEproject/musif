@@ -34,7 +34,6 @@ setup(
         "pandas",
         "numpy",
         "music21>=6.7.1",
-        "nltk==3.5",
         "tqdm==4.56.0",
         "xlrd==2.0.1",
         "scipy",

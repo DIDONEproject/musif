@@ -2,8 +2,6 @@ from ms3.score import MSCX
 
 from musif.logs import ldebug, lerr
 
-
-# TODO: document this function
 def extract_harmonic_analysis(mscx_file: str):
     """
     Given a mscx file name, parses the file using ms3 library and returns a dataframe containing all harmonic information.
