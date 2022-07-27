@@ -14,8 +14,16 @@ MUSICXML_FILE_EXTENSION = "xml"
 
 # TODO: Documennt all this module
 
-
 def is_voice(part: Part) -> bool:
+    """
+    Returns True if the part is a singer part, otherwise returns False
+    
+    Parameters
+    ----------
+    part : Part
+      Music21 part to check if it's a singer part
+    """
+    
     instrument = part.getInstrument(returnDefault=False)
     if instrument is None or instrument.instrumentSound is None:
         return False
@@ -23,107 +31,124 @@ def is_voice(part: Part) -> bool:
 
 
 def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Note], List[Measure], List[Measure]]:
+    """
+    Obtains lists of notes, tied notes, measures, measures that containg notes, and notes and rests.
+    Information that is useful in the subsequent process of extraction.
+    
+    Parameters
+    ----------
+    part : Part
+      Music21 part to extract the info from.
+      
+    """
+    
     measures = list(part.getElementsByClass(Measure))
     sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
     original_notes = [note for measure in measures for note in measure.notes]
     notes_and_rests = [note for measure in measures for note in measure.notesAndRests]
-    tied_notes = tie_notes(original_notes)
+    tied_notes = _tie_notes(original_notes)
     return original_notes, tied_notes, measures, sounding_measures, notes_and_rests
 
 
-def tie_notes(original_notes: List[Note]) -> List[Note]:
-    tied_notes = []
-    for note in original_notes:
-        if not isinstance(note, Note):
-            pass
-        last_note = tied_notes[-1] if len(tied_notes) > 0 else None
-        if must_be_tied(note, last_note):
-            tied_notes[-1].duration.quarterLength += note.duration.quarterLength
-        else:
-            tied_notes.append(note)
-    return tied_notes
-
-
-def must_be_tied(elem, last_elem) -> bool:
-    if last_elem is None:
-        return False
-    if not isinstance(elem, Note):
-        return False
-    if elem.tie is None:
-        return False
-    if elem.tie.type != "stop" and elem.tie.type != "continue":
-        return False
-    if not isinstance(last_elem, Note):
-        return False
-    return True
-
-
-# TODO: this function is a little long...
 def split_layers(score: Score, split_keywords: List[str]):
     """
-    Function used to split the possible layers present on wind instruments
+    Function used to split possible layers. Those instruments that include to parts in the same staff
+    will be separated in two diferent parts so they can be treated separately. 
 
     """
 
     final_parts = []
     for part_index, part in enumerate(score.parts):
         instrument = part.getInstrument(returnDefault=False)
-
-        possible_layers = False
-        for keyword in split_keywords:
-            if keyword in instrument.instrumentSound:
-                possible_layers = True
-                break
-
-        if possible_layers:  # ONLY WIND INSTRUMENTS
-            has_voices = False
-            for measure in part.elements:
-                if isinstance(measure, Measure) and any(isinstance(e, Voice) for e in measure.elements):
-                    has_voices = True
-                    break
-
-            if has_voices:  # recorrer los compases buscando las voices y separamos en dos parts
-                parts_splitted = part.voicesToParts().elements
-                # num_measure = -1
-                for measure in part.elements:
-                    # add missing information to both parts (dynamics, text annotations, etc are missing)
-                    if isinstance(measure, Measure) and any(
-                        not isinstance(e, Voice) for e in measure.elements
-                    ):
-                        not_voices_elements = [
-                            e for e in measure.elements if not isinstance(e, Voice)
-                        ]  # elements such as clefs, dynamics, text annotations...
-                        # introducimos esta información en cada voz:
-                        for p in parts_splitted:
-                            if measure.measureNumber-1 > 0:
-                                if not isinstance(p.elements[measure.measureNumber-1], Measure):
-                                    continue
-                                p.elements[measure.measureNumber-1].elements += tuple(
-                                    e for e in not_voices_elements if e not in p.elements[measure.measureNumber-1].elements
-                                )
-                for num, p in enumerate(parts_splitted, 1):
-                    p_copy = copy.deepcopy(part)
-                    p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
-                    p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
-                    p_copy.elements = p.elements
-                    final_parts.append(p_copy)
+        if any(keyword in instrument.instrumentSound for keyword in split_keywords):
+            has_voices = _search_voices(part)
+            if has_voices:
+                parts_splitted = _separate_parts(part)
+                _copy_new_part(final_parts, part, parts_splitted)
                 score.remove(part)
             else:
-                final_parts.append(part)  # without any change
+                final_parts.append(part)
                 score.remove(part)
         else:
-            final_parts.append(part)  # without any change
+            final_parts.append(part)
             score.remove(part)
 
     for part in final_parts:
         try:
             score.insert(0, part)
         except:
-            pass  # already inserted
+            pass 
+
+def _copy_new_part(final_parts, part, parts_splitted):
+    for num, p in enumerate(parts_splitted, 1):
+        p_copy = copy.deepcopy(part)
+        p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
+        p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
+        p_copy.elements = p.elements
+        final_parts.append(p_copy)
+
+def _separate_parts(part):
+    parts_splitted = part.voicesToParts().elements
+    for measure in part.elements:
+                    # add missing information to both parts (dynamics, text annotations, etc are missing)
+        if isinstance(measure, Measure) and any(
+                        not isinstance(e, Voice) for e in measure.elements
+                    ):
+            not_voices_elements = [
+                            e for e in measure.elements if not isinstance(e, Voice)
+                        ]  # elements such as clefs, dynamics, text annotations...
+            _indroduce_info_into_voices(parts_splitted, measure, not_voices_elements)
+    return parts_splitted
 
 
-def get_part_clef(part):
-    # the clef is in measure 1
+def _indroduce_info_into_voices(parts_splitted, measure, not_voices_elements):
+    for p in parts_splitted:
+        if measure.measureNumber-1 > 0:
+            if not isinstance(p.elements[measure.measureNumber-1], Measure):
+                continue
+            p.elements[measure.measureNumber-1].elements += tuple(
+                                    e for e in not_voices_elements if e not in p.elements[measure.measureNumber-1].elements
+                                )
+
+
+def _search_voices(part):
+    has_voices = False
+    for measure in part.elements:
+        if isinstance(measure, Measure) and any(isinstance(e, Voice) for e in measure.elements):
+            has_voices = True
+            break
+    return has_voices
+
+
+def _tie_notes(original_notes: List[Note]) -> List[Note]:
+    
+    tied_notes = []
+    for note in original_notes:
+        if not isinstance(note, Note):
+            pass
+        last_note = tied_notes[-1] if len(tied_notes) > 0 else None
+        if _must_be_tied(note, last_note):
+            tied_notes[-1].duration.quarterLength += note.duration.quarterLength
+        else:
+            tied_notes.append(note)
+    return tied_notes
+
+
+def _must_be_tied(element, last_element) -> bool:
+    if last_element is None:
+        return False
+    if not isinstance(element, Note):
+        return False
+    if element.tie is None:
+        return False
+    if element.tie.type != "stop" and element.tie.type != "continue":
+        return False
+    if not isinstance(last_element, Note):
+        return False
+    return True
+
+
+def _get_part_clef(part):
     for elem in part.elements:
         if isinstance(elem, Measure):
             if hasattr(elem, "clef"):
@@ -131,34 +156,27 @@ def get_part_clef(part):
     return ""
 
 
-def get_xml_scoring_variables(score):
-    #################################################################################
-    # Function to get the aria's scoring information
-    #################################################################################
-    # PRUEBAS CON SORTINGGROUPINGS
+def _get_xml_scoring_variables(score):
     return group.get_scoring(score)
 
-
-def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:
+def _get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:
     if "major" in key.split():
         scl = MajorScale(key.split(" ")[0])
     else:
         scl = MinorScale(key.split(" ")[0])
-
     degrees = [scl.getScaleDegreeAndAccidentalFromPitch(note.pitches[0]) for note in notes]
-
     return [(degree[0], degree[1].fullName if degree[1] else "") for degree in degrees]
 
 
-def get_intervals(notes: List[Note]) -> List[Interval]:
+def _get_intervals(notes: List[Note]) -> List[Interval]:
     return [Interval(notes[i].pitches[0], notes[i + 1].pitches[0]) for i in range(len(notes) - 1)]
 
 
-def contains_text(part: Part) -> bool:
+def _contains_text(part: Part) -> bool:
     return assembleLyrics(part)
 
 
-def get_notes_lyrics(notes: List[Note]) -> List[str]:
+def _get_lyrics_in_notes(notes: List[Note]) -> List[str]:
     lyrics = []
     for note in notes:
         if note.lyrics is None or len(note.lyrics) == 0:

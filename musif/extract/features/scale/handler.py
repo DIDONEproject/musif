@@ -7,7 +7,7 @@ from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
 from musif.extract.features.core.handler import DATA_KEY, DATA_NOTES
 from musif.extract.features.prefix import get_part_feature, get_score_feature
-from musif.musicxml import get_degrees_and_accidentals
+from musif.musicxml import _get_degrees_and_accidentals
 from .constants import *
 from ...constants import DATA_PART_ABBREVIATION
 
@@ -57,7 +57,7 @@ def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
     all_degrees = 0
-    for degree, accidental in get_degrees_and_accidentals(key, notes):
+    for degree, accidental in _get_degrees_and_accidentals(key, notes):
         if to_full_degree(degree, accidental) not in notes_per_degree:
             continue
         notes_per_degree[to_full_degree(degree, accidental)] += 1

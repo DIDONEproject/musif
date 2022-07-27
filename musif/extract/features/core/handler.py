@@ -7,7 +7,7 @@ from musif.config import Configuration
 from musif.extract.constants import DATA_FILE, DATA_PART, DATA_PART_ABBREVIATION, DATA_SCORE
 from musif.extract.features.prefix import get_family_feature, get_part_feature, get_score_feature, \
     get_sound_feature
-from musif.musicxml import get_intervals, get_notes_and_measures, get_notes_lyrics
+from musif.musicxml import _get_intervals, get_notes_and_measures, _get_lyrics_in_notes
 from musif.musicxml.key import get_key_and_mode
 from .constants import *
 from ..scoring.constants import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, SOUND_ABBREVIATION
@@ -16,8 +16,8 @@ from ..scoring.constants import FAMILY_ABBREVIATION, NUMBER_OF_FILTERED_PARTS, S
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     part = part_data[DATA_PART]
     notes, tied_notes, measures, sounding_measures, notes_and_rests = get_notes_and_measures(part)
-    lyrics = get_notes_lyrics(notes)
-    intervals = get_intervals(notes)
+    lyrics = _get_lyrics_in_notes(notes)
+    intervals = _get_intervals(notes)
     part_data.update({
         DATA_NOTES: notes,
         DATA_LYRICS: lyrics,
