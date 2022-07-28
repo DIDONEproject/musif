@@ -6,13 +6,11 @@ from music21.note import Note
 from music21.scale import MajorScale, MinorScale
 from music21.stream import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
-from roman import toRoman
-
 from musif.common import group
+from roman import toRoman
 
 MUSICXML_FILE_EXTENSION = "xml"
 
-# TODO: Documennt all this module
 
 def is_voice(part: Part) -> bool:
     """
@@ -54,7 +52,15 @@ def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split possible layers. Those instruments that include to parts in the same staff
     will be separated in two diferent parts so they can be treated separately. 
-
+    
+    Parameters
+    ----------
+    score : Score
+        Music21 score to scan and separate parts in it according to split_keywords list
+    
+    split_keywords: List[str]
+        List containing key words of instruments susceptible to be splitted. i.e. [oboe, viola]
+      
     """
 
     final_parts = []
@@ -79,6 +85,25 @@ def split_layers(score: Score, split_keywords: List[str]):
         except:
             pass 
 
+
+def get_part_clef(part):
+    """
+    Extracts the clef in the score by checking the first measure of the part 
+    
+    Parameters
+    ----------
+        part : Part
+      Music21 part to extract the info from
+    
+    """
+    
+    for elem in part.elements:
+        if isinstance(elem, Measure):
+            if hasattr(elem, "clef"):
+                return elem.clef.sign + "-" + str(elem.clef.line)
+    return ""
+
+
 def _copy_new_part(final_parts, part, parts_splitted):
     for num, p in enumerate(parts_splitted, 1):
         p_copy = copy.deepcopy(part)
@@ -86,6 +111,7 @@ def _copy_new_part(final_parts, part, parts_splitted):
         p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
         p_copy.elements = p.elements
         final_parts.append(p_copy)
+
 
 def _separate_parts(part):
     parts_splitted = part.voicesToParts().elements
@@ -148,16 +174,9 @@ def _must_be_tied(element, last_element) -> bool:
     return True
 
 
-def _get_part_clef(part):
-    for elem in part.elements:
-        if isinstance(elem, Measure):
-            if hasattr(elem, "clef"):
-                return elem.clef.sign + "-" + str(elem.clef.line)
-    return ""
-
-
 def _get_xml_scoring_variables(score):
     return group.get_scoring(score)
+
 
 def _get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:
     if "major" in key.split():
@@ -186,3 +205,4 @@ def _get_lyrics_in_notes(notes: List[Note]) -> List[str]:
     return lyrics
 
 
+__all__ = list(globals().keys())

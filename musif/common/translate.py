@@ -2,12 +2,6 @@ from typing import Dict
 
 from googletrans import Translator
 
-# import nltk
-# nltk.download('wordnet', quiet=True)
-# from nltk.corpus import wordnet as wn
-
-# TODO: do we also need googletrans?
-
 def translate_word(word: str, language: str = None, translations_cache: Dict[str, str] = None):
     t = Translator()
     translator_x_eng = ''
