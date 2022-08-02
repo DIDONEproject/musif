@@ -15,13 +15,13 @@ if __name__ == "__main__":
     
     prefix = 'martiser/'
     sufix='.csv'
-    name = prefix + "extraction_07_07_22"
-    dest_path = name + "_extraction"
-    check_file = dest_path + ".csv"
+    name = prefix + "extraction_01_08_22"
+    check_file = name + '_1' + sufix
+    dest_path = name + "_2"+ sufix
 
     df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     
-    df.to_csv(dest_path+'_2'+sufix, index=False)
+    df.to_csv(dest_path,index=False)
     k=1
     
 
