@@ -1,0 +1,1266 @@
+AriaId,FileName,AriaOpera,AriaLabel,AriaName,Act,Scene,ActAndScene,Year,Decade,Composer,City,Territory,Character,Gender,Harmony_Analysis_Available
+0005,Did02M-Diro_che-1730-Sarro[1.03][0005].xml,Did,Did02M,Diro_che,1,3,103,1730,1730s,Domenico Natale Sarro,Naples,Italy,Selene,Female,1
+0023,Did02M-Diro_che-1724-Sarro[1.03][0023].xml,Did,Did02M,Diro_che,1,3,103,1724,1720s,Domenico Natale Sarro,Naples,Italy,Selene,Female,1
+0257,Did01M-Dovrei_ma-1762-Sarti[1.02][0257].xml,Did,Did01M,Dovrei_ma,1,2,102,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Enea,Male,1
+0280,Did01M-Dovrei_ma-1768-Boroni[1.02][0280].xml,Did,Did01M,Dovrei_ma,1,2,102,1768,1760s,Antonio Boroni,Prague,Empire,Enea,Male,1
+0285,Did01M-Dovrei_ma-1769-Majo[1.03][0285].xml,Did,Did01M,Dovrei_ma,1,3,103,1769,1760s,Gian Francesco De Majo,Venice,Italy,Enea,Male,1
+0311,Did01M-Dovrei_ma-1794-Paisiello[1.02][0311].xml,Did,Did01M,Dovrei_ma,1,2,102,1794,1790s,Giovanni Paisiello,Naples,Italy,Enea,Male,1
+0377,Did01M-Dovrei_ma-1780-Astarita[1.02][0377].xml,Did,Did01M,Dovrei_ma,1,2,102,1780,1780s,Gennaro Astarita,Bratislava,Empire,Enea,Male,1
+0384,Did02M-Diro_che-1726-Vinci[1.03][0384].xml,Did,Did02M,Diro_che,1,3,103,1726,1720s,Leonardo Vinci,Rome,Italy,Selene,Male,1
+0389,Dem25M-Non_dura-1733-Caldara[3.08][0389].xml,Dem,Dem25M,Non_dura,3,8,308,1733,1730s,Antonio Caldara,Vienna,Empire,Creusa,Female,1
+0417,Dem02M-In_te-1733-Caldara[1.02][0417].xml,Dem,Dem02M,In_te,1,2,102,1733,1730s,Antonio Caldara,Vienna,Empire,Dircea,Female,1
+0420,Dem01M-O_piu-1733-Caldara[1.01][0420].xml,Dem,Dem01M,O_piu,1,1,101,1733,1730s,Antonio Caldara,Vienna,Empire,Matusio,Male,1
+0430,Dem01M-O_piu-1735-Leo[1.01][0430].xml,Dem,Dem01M,O_piu,1,1,101,1735,1730s,Leonardo Leo,Naples,Italy,Matusio,Male,1
+0463,Dem01M-O_piu-1743-Jommelli[1.01][0463].xml,Dem,Dem01M,O_piu,1,1,101,1743,1740s,Niccolò Jommelli,Padua,Italy,Matusio,Male,1
+0471,Dem25M-Non_dura-1735-Leo[3.07][0471].xml,Dem,Dem25M,Non_dura,3,7,307,1735,1730s,Leonardo Leo,Naples,Italy,Dircea,Female,1
+0478,Dem01M-O_piu-1735-Schiassi[1.01][0478].xml,Dem,Dem01M,O_piu,1,1,101,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Matusio,Male,1
+0492,Dem24M-Che_mai-1775-Myslivecek[3.07][0492].xml,Dem,Dem24M,Che_mai,3,7,307,1775,1770s,Josef Mysliveček,Naples,Italy,Dircea,Female,1
+0535,Dem23M-Odo_il-1766-Bernasconi[3.06][0535].xml,Dem,Dem23M,Odo_il,3,6,306,1766,1760s,Andrea Bernasconi,Munich,Empire,Demofoonte,Male,1
+0536,Dem24M-Che_mai-1766-Bernasconi[3.07][0536].xml,Dem,Dem24M,Che_mai,3,7,307,1766,1760s,Andrea Bernasconi,Munich,Empire,Dircea,Female,1
+0537,Dem25M-Non_dura-1766-Bernasconi[3.08][0537].xml,Dem,Dem25M,Non_dura,3,8,308,1766,1760s,Andrea Bernasconi,Munich,Empire,Creusa,Female,1
+0540,Dem01M-O_piu-1748-Hasse[1.01][0540].xml,Dem,Dem01M,O_piu,1,1,101,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Matusio,Male,1
+0548,Dem24M-Che_mai-1754-Manna[3.07][0548].xml,Dem,Dem24M,Che_mai,3,7,307,1754,1750s,Gennaro Manna,Turin,Italy,Dircea,Female,1
+0555,Dem25M-Non_dura-1735-Schiassi[3.08][0555].xml,Dem,Dem25M,Non_dura,3,8,308,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Creusa,Female,1
+0556,Dem25M-Non_dura-1748-Hasse[3.08][0556].xml,Dem,Dem25M,Non_dura,3,8,308,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Creusa,Female,1
+0561,Dem01M-O_piu-1758-Hasse[1.01][0561].xml,Dem,Dem01M,O_piu,1,1,101,1758,1750s,Johann Adolph Hasse,Naples,Italy,Matusio,Male,1
+0579,Dem24M-Che_mai-1758-Hasse[3.07][0579].xml,Dem,Dem24M,Che_mai,3,7,307,1758,1750s,Johann Adolph Hasse,Naples,Italy,Dircea,Female,1
+0583,Dem01M-O_piu-1743-Gluck[1.01][0583].xml,Dem,Dem01M,O_piu,1,1,101,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Matusio,Male,1
+0600,Dem24M-Che_mai-1743-Gluck[3.07][0600].xml,Dem,Dem24M,Che_mai,3,7,307,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Dircea,Female,1
+0602,Dem25M-Non_dura-1743-Gluck[3.08][0602].xml,Dem,Dem25M,Non_dura,3,8,308,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Creusa,Female,1
+0609,Dem24M-Che_mai-1748-Hasse[3.07][0609].xml,Dem,Dem24M,Che_mai,3,7,307,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Dircea,Female,1
+0633,Dem25M-Non_dura-1761-Piccinni[3.07][0633].xml,Dem,Dem25M,Non_dura,3,7,307,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Creusa,Female,1
+0707,Ale30M-Son_confusa-1755-Galuppi[3.11][0707].xml,Ale,Ale30M,Son_confusa,3,11,311,1755,1750s,Baldassare Galuppi,Venice,Italy,Erissena,Female,1
+0718,Ale30M-Son_confusa-1755-Perez[3.09][0718].xml,Ale,Ale30M,Son_confusa,3,9,309,1755,1750s,Davide Perez,Lisbon,Portugal,Erissena,Female,1
+0766,Ale31M-Ombra_dell-1769-Kozeluch[3.12][0766].xml,Ale,Ale31M,Ombra_dell,3,12,312,1769,1760s,Leopold Kozeluch,Prague,Empire,Cleofide,Female,1
+0775,Dem01M-O_piu-1752-Perez[1.01][0775].xml,Dem,Dem01M,O_piu,1,1,101,1752,1750s,Davide Perez,Lisbon,Portugal,Matusio,Male,1
+0796,Dem24M-Che_mai-1752-Perez[3.07][0796].xml,Dem,Dem24M,Che_mai,3,7,307,1752,1750s,Davide Perez,Lisbon,Portugal,Dircea,Female,1
+0797,Dem25M-Non_dura-1752-Perez[3.08][0797].xml,Dem,Dem25M,Non_dura,3,8,308,1752,1750s,Davide Perez,Lisbon,Portugal,Creusa,Female,1
+0816,Ale73M-Dem04M-Sperai_vicino-1772-Anfossi[1.11][0816].xml,Ale,Ale73M-Dem04M,Sperai_vicino,1,11,111,1772,1770s,Pasquale Anfossi,Rome,Italy,Gandarte,Female&Male&Male,1
+0823,Ale75X-Adr25M-Ah_che_mancar-1772-Anfossi[2.13][0823].xml,Ale,Ale75X-Adr25M,Ah_che_mancar,2,13,213,1772,1770s,Pasquale Anfossi,Rome,Italy,Gandarte,Male,1
+0850,Ale67M-Oli21M-Non_so_donde-1762-Bach[3.07][0850].xml,Ale,Ale67M-Oli21M,Non_so_donde,3,7,307,1762,1760s,Johann Christian Bach,Naples,Italy,Alessandro,Female&Male,1
+0854,Ale31M-Ombra_dell-1762-Bach[3.12][0854].xml,Ale,Ale31M,Ombra_dell,3,12,312,1762,1760s,Johann Christian Bach,Naples,Italy,Cleofide,Female,1
+0894,Dem24M-Che_mai-1743-Jommelli[3.07][0894].xml,Dem,Dem24M,Che_mai,3,7,307,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,1
+0895,Dem25M-Non_dura-1743-Jommelli[3.08][0895].xml,Dem,Dem25M,Non_dura,3,8,308,1743,1740s,Niccolò Jommelli,Padua,Italy,Creusa,Female,1
+0934,Dem23M-Odo_il-1764-Jommelli[3.06][0934].xml,Dem,Dem23M,Odo_il,3,6,306,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Demofoonte,Male,1
+0936,Dem24M-Che_mai-1764-Jommelli[3.07][0936].xml,Dem,Dem24M,Che_mai,3,7,307,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Dircea,Female&Male,1
+0937,Dem25M-Non_dura-1764-Jommelli[3.08][0937].xml,Dem,Dem25M,Non_dura,3,8,308,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Creusa,Female,1
+0938,Dem01M-O_piu-1770-Jommelli[1.01][0938].xml,Dem,Dem01M,O_piu,1,1,101,1770,1770s,Niccolò Jommelli,Naples,Italy,Matusio,Male,1
+0954,Dem24M-Che_mai-1770-Jommelli[3.07][0954].xml,Dem,Dem24M,Che_mai,3,7,307,1770,1770s,Niccolò Jommelli,Naples,Italy,Dircea,Female,1
+1,Did03M-Son_regina-1724-Sarro[1.05][0001].xml,Did,Did03M,Son_regina,1,5,105,1724,1720s,Domenico Natale Sarro,Naples,Italy,Didone,Female,1
+10,Did03M-Son_regina-1760-Bernasconi[1.05][0010].xml,Did,Did03M,Son_regina,1,5,105,1760,1760s,Andrea Bernasconi,Venice,Italy,Didone,Female,1
+100,Dem22M-Misero_pargoletto-1746-Graun[3.05][0100].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1746,1740s,Carl Heinrich Graun,Berlin,Empire,Timante,Male,1
+1000,Ale02M-Vedrai_con-1754-Agricola[1.02][1000].xml,Ale,Ale02M,Vedrai_con,1,2,102,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Poro,Male,1
+1001,Ale03M-Vil_trofeo-1754-Agricola[1.03][1001].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Alessandro,Male,1
+1002,Ale06M-Se_mai-1754-Agricola[1.04][1002].xml,Ale,Ale06M,Se_mai,1,4,104,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Poro,Male,1
+1003,Ale07M-Se_mai-1754-Agricola[1.05][1003].xml,Ale,Ale07M,Se_mai,1,5,105,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Cleofide,Female,1
+1005,Ale11M-Se_amore-1754-Agricola[1.09][1005].xml,Ale,Ale11M,Se_amore,1,09,109,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Alessandro,Male,1
+1006,Ale06M-Ale07M-Se_mai-1754-Agricola[1.10][1006].xml,Ale,Ale06M-Ale07M,Se_mai,1,10,110,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Cleofide,Female,1
+1008,Ale12M-Non_sarei-1754-Agricola[2.03][1008].xml,Ale,Ale12M,Non_sarei,2,03,203,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Erissena,Female,1
+101,Did13M-Se_resto-1742-Hasse[1.19][0101].xml,Did,Did13M,Se_resto,1,19,119,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Enea,Male,1
+1011,Ale16M-Digli_che-1754-Agricola[2.09][1011].xml,Ale,Ale16M,Digli_che,2,9,209,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Cleofide,Female&Male,1
+1012,Ale17M-Destrier_che-1754-Agricola[2.10][1012].xml,Ale,Ale17M,Destrier_che,2,10,210,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Poro,Male,1
+1013,Ale18M-E_ver-1754-Agricola[2.11][1013].xml,Ale,Ale18M,E_ver,2,11,211,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Timagene,Female&Male&Male,1
+1015,Ale24M-Se_troppo-1754-Agricola[3.03][1015].xml,Ale,Ale24M,Se_troppo,3,3,303,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Cleofide,Female,1
+1016,Ale26M-Serbati_a-1754-Agricola[3.05][1016].xml,Ale,Ale26M,Serbati_a,3,5,305,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Alessandro,Male,1
+1017,Ale28M-Dove_si-1754-Agricola[3.08][1017].xml,Ale,Ale28M,Dove_si,3,8,308,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Poro,Male,1
+1018,Ale02M-Vedrai_con-1791-Tarchi[1.02][1018].xml,Ale,Ale02M,Vedrai_con,1,2,102,1791,1790s,Angelo Tarchi,Livorno,Italy,Poro,Female&Male&Male,1
+1019,Ale03M-Vil_trofeo-1791-Tarchi[1.03][1019].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1791,1790s,Angelo Tarchi,Livorno,Italy,Alessandro,Male,1
+102,Dem22M-Misero_pargoletto-1776-Monza[3.05][0102].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1776,1770s,Carlo Monza,Alessandria,Italy,Timante,Male,1
+1020,Ale04M-Chi_vive-1791-Tarchi[1.04][1020].xml,Ale,Ale04M,Chi_vive,1,4,104,1791,1790s,Angelo Tarchi,Livorno,Italy,Erissena,Female,1
+1021,Ale06M-Se_mai-1791-Tarchi[1.05][1021].xml,Ale,Ale06M,Se_mai,1,5,105,1791,1790s,Angelo Tarchi,Livorno,Italy,Poro,Male,1
+1022,Ale07M-Se_mai-1791-Tarchi[1.06][1022].xml,Ale,Ale07M,Se_mai,1,6,106,1791,1790s,Angelo Tarchi,Livorno,Italy,Cleofide,Female,1
+1025,Ale11M-Se_amore-1791-Tarchi[1.12][1025].xml,Ale,Ale11M,Se_amore,1,12,112,1791,1790s,Angelo Tarchi,Livorno,Italy,Alessandro,Male,1
+1026,Ale06M-Ale07M-Se_mai-1791-Tarchi[1.13][1026].xml,Ale,Ale06M-Ale07M,Se_mai,1,13,113,1791,1790s,Angelo Tarchi,Livorno,Italy,Cleofide,Female,1
+1029,Ale27M-Finche_rimango-1791-Tarchi[2.06][1029].xml,Ale,Ale27M,Finche_rimango,2,6,206,1791,1790s,Angelo Tarchi,Livorno,Italy,Timagene,Male,1
+103,Did13M-Se_resto-1747-Jommelli[1.18][0103].xml,Did,Did13M,Se_resto,1,18,118,1747,1740s,Niccolò Jommelli,Rome,Italy,Enea,Male,1
+1031,Ale20M-Se_il-1791-Tarchi[2.10][1031].xml,Ale,Ale20M,Se_il,2,10,210,1791,1790s,Angelo Tarchi,Livorno,Italy,Cleofide,Female,1
+1034,Ale01M-E_prezzo-1740-Caballone[1.01][1034].xml,Ale,Ale01M,E_prezzo,1,1,101,1740,1740s,Michele Caballone,Naples,Italy,Gandarte,Male,1
+1035,Ale02M-Vedrai_con-1740-Caballone[1.02][1035].xml,Ale,Ale02M,Vedrai_con,1,2,102,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+1036,Ale03M-Vil_trofeo-1746-Caballone[1.03][1036].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1746,1740s,Michele Caballone,Naples,Italy,Alessandro,Male,1
+1037,Ale04M-Chi_vive-1746-Caballone[1.04][1037].xml,Ale,Ale04M,Chi_vive,1,4,104,1746,1740s,Michele Caballone,Naples,Italy,Erissena,Female,1
+1038,Ale20M-Se_il-1740-Caballone[2.14][1038].xml,Ale,Ale20M,Se_il,2,14,214,1740,1740s,Michele Caballone,Naples,Italy,Cleofide,Female,1
+1039,Ale06M-Se_mai-1740-Caballone[1.06][1039].xml,Ale,Ale06M,Se_mai,1,6,106,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+104,Did13M-Se_resto-1776-Schuster[2.15][0104].xml,Did,Did13M,Se_resto,2,15,215,1776,1770s,Joseph Schuster,Naples,Italy,Enea,Male,1
+1040,Ale07M-Se_mai-1740-Caballone[1.07][1040].xml,Ale,Ale07M,Se_mai,1,7,107,1740,1740s,Michele Caballone,Naples,Italy,Cleofide,Female,1
+1041,Ale08M-Se_possono-1740-Caballone[1.09][1041].xml,Ale,Ale08M,Se_possono,1,9,109,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+1042,Ale21M-Se_viver-1740-Caballone[2.15][1042].xml,Ale,Ale21M,Se_viver,2,15,215,1740,1740s,Michele Caballone,Naples,Italy,Gandarte,Male,1
+1043,Ale10M-Voi_che-1740-Caballone[1.11][1043].xml,Ale,Ale10M,Voi_che,1,11,111,1740,1740s,Michele Caballone,Naples,Italy,Gandarte,Male,1
+1044,Ale11M-Se_amore-1740-Caballone[1.15][1044].xml,Ale,Ale11M,Se_amore,1,15,115,1740,1740s,Michele Caballone,Naples,Italy,Alessandro,Male,1
+1045,Dem01M-O_piu-1753-Jommelli[01.01][1045].xml,Dem,Dem01M,O_piu,1,1,101,1753,1750s,Niccolò Jommelli,Milan,Italy,Matusio,Male,1
+1046,Ale12M-Non_sarei-1740-Caballone[2.03][1046].xml,Ale,Ale12M,Non_sarei,2,03,203,1740,1740s,Michele Caballone,Naples,Italy,Erissena,Female,1
+1047,Dem02M-In_te-1753-Jommelli[1.02][1047].xml,Dem,Dem02M,In_te,1,2,102,1753,1750s,Niccolò Jommelli,Milan,Italy,Dircea,Female,1
+1048,Ale15M-Dun_barbaro-1740-Caballone[2.08][1048].xml,Ale,Ale15M,Dun_barbaro,2,08,208,1740,1740s,Michele Caballone,Naples,Italy,Alessandro,Male,1
+1049,Ale16M-Digli_che-1740-Caballone[2.09][1049].xml,Ale,Ale16M,Digli_che,2,9,209,1740,1740s,Michele Caballone,Naples,Italy,Cleofide,Female,1
+105,Did13M-Se_resto-1753-Perez[1.18][0105].xml,Did,Did13M,Se_resto,1,18,118,1753,1750s,Davide Perez,Genova,Italy,Enea,Male,1
+1050,Ale17M-Destrier_che-1740-Caballone[2.10][1050].xml,Ale,Ale17M,Destrier_che,2,10,210,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+1051,Ale18M-E_ver-1740-Caballone[2.11][1051].xml,Ale,Ale18M,E_ver,2,11,211,1740,1740s,Michele Caballone,Naples,Italy,Timagene,Male,1
+1052,Ale19M-Se_e-1740-Caballone[2.13][1052].xml,Ale,Ale19M,Se_e,2,13,213,1740,1740s,Michele Caballone,Naples,Italy,Alessandro,Male,1
+1053,Ale01M-E_prezzo-1752-Perez[1.01][1053].xml,Ale,Ale01M,E_prezzo,1,1,101,1752,1750s,Davide Perez,Milan,Italy,Gandarte,Male,1
+1054,Ale02M-Vedrai_con-1752-Perez[1.02][1054].xml,Ale,Ale02M,Vedrai_con,1,2,102,1752,1750s,Davide Perez,Milan,Italy,Poro,Male,1
+1055,Ale03M-Vil_trofeo-1752-Perez[1.03][1055].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1752,1750s,Davide Perez,Milan,Italy,Alessandro,Male,1
+1056,Ale04M-Chi_vive-1752-Perez[1.04][1056].xml,Ale,Ale04M,Chi_vive,1,4,104,1752,1750s,Davide Perez,Milan,Italy,Erissena,Female,1
+1057,Ale05M-O_sugli-1752-Perez[1.05][1057].xml,Ale,Ale05M,O_sugli,1,5,105,1752,1750s,Davide Perez,Milan,Italy,Timagene,Male,1
+1058,Ale06M-Se_mai-1752-Perez[1.06][1058].xml,Ale,Ale06M,Se_mai,1,6,106,1752,1750s,Davide Perez,Milan,Italy,Poro,Male,1
+1059,Ale07M-Se_mai-1752-Perez[1.07][1059].xml,Ale,Ale07M,Se_mai,1,7,107,1752,1750s,Davide Perez,Milan,Italy,Cleofide,Female,1
+106,Did13M-Se_resto-1788-Anfossi[2.07][0106].xml,Did,Did13M,Se_resto,2,7,207,1788,1780s,Pasquale Anfossi,Venice,Italy,Enea,Male,1
+1060,Ale08M-Se_possono-1752-Perez[1.09][1060].xml,Ale,Ale08M,Se_possono,1,9,109,1752,1750s,Davide Perez,Milan,Italy,Poro,Male,1
+1061,Ale08M-Se_possono-1752-Perez[1.09][1061].xml,Ale,Ale08M,Se_possono,1,9,109,1752,1750s,Davide Perez,Milan,Italy,Poro,Male,1
+1062,Ale09M-Compagni_nell-1752-Perez[1.10][1062].xml,Ale,Ale09M,Compagni_nell,1,10,110,1752,1750s,Davide Perez,Milan,Italy,Erissena,Female,1
+1063,Ale10M-Voi_che-1752-Perez[1.11][1063].xml,Ale,Ale10M,Voi_che,1,11,111,1752,1750s,Davide Perez,Milan,Italy,Gandarte,Female&Male,1
+1064,Ale11M-Se_amore-1752-Perez[1.15][1064].xml,Ale,Ale11M,Se_amore,1,15,115,1752,1750s,Davide Perez,Milan,Italy,Alessandro,Male,1
+1068,Ale28M-Dove_si-1752-Perez[3.08][1068].xml,Ale,Ale28M,Dove_si,3,8,308,1752,1750s,Davide Perez,Milan,Italy,Poro,Male,1
+1069,Ale29M-Mio_ben-1752-Perez[3.09][1069].xml,Ale,Ale29M,Mio_ben,3,9,309,1752,1750s,Davide Perez,Milan,Italy,Gandarte,Male,1
+107,Did13M-Se_resto-1763-Traetta[1.18][0107].xml,Did,Did13M,Se_resto,1,18,118,1763,1760s,Tommaso Traetta,Venice,Italy,Enea,Male,1
+1070,Ale30M-Son_confusa-1752-Perez[3.10][1070].xml,Ale,Ale30M,Son_confusa,3,10,310,1752,1750s,Davide Perez,Milan,Italy,Erissena,Female,1
+1071,Ale31M-Ombra_dell-1752-Perez[3.11][1071].xml,Ale,Ale31M,Ombra_dell,3,11,311,1752,1750s,Davide Perez,Milan,Italy,Cleofide,Female,1
+1072,Ale02M-Vedrai_con-1785-Bianchi[1.02][1072].xml,Ale,Ale02M,Vedrai_con,1,2,102,1785,1780s,Francesco Bianchi,Venice,Italy,Poro,Male,1
+1073,Ale03M-Vil_trofeo-1785-Bianchi[1.03][1073].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1785,1780s,Francesco Bianchi,Venice,Italy,Alessandro,Male,1
+1074,Ale04M-Chi_vive-1785-Bianchi[1.05][1074].xml,Ale,Ale04M,Chi_vive,1,5,105,1785,1780s,Francesco Bianchi,Venice,Italy,Erissena,Female,1
+1075,Ale06M-Se_mai-1785-Bianchi[1.06][1075].xml,Ale,Ale06M,Se_mai,1,6,106,1785,1780s,Francesco Bianchi,Venice,Italy,Poro,Male,1
+1076,Ale07M-Se_mai-1785-Bianchi[1.07][1076].xml,Ale,Ale07M,Se_mai,1,7,107,1785,1780s,Francesco Bianchi,Venice,Italy,Cleofide,Female,1
+1078,Ale06M-Ale07M-Se_mai-1785-Bianchi[1.14][1078].xml,Ale,Ale06M-Ale07M,Se_mai,1,14,114,1785,1780s,Francesco Bianchi,Venice,Italy,Cleofide,Female,1
+1079,Ale12M-Non_sarei-1785-Bianchi[2.01][1079].xml,Ale,Ale12M,Non_sarei,2,01,201,1785,1780s,Francesco Bianchi,Venice,Italy,Erissena,Female,1
+108,Did13M-Se_resto-1749-Jommelli[1.18][0108].xml,Did,Did13M,Se_resto,1,18,118,1749,1740s,Niccolò Jommelli,Rome,Italy,Enea,Male,1
+1081,Ale16M-Digli_che-1785-Bianchi[2.08][1081].xml,Ale,Ale16M,Digli_che,2,8,208,1785,1780s,Francesco Bianchi,Venice,Italy,Poro,Male,1
+1082,Ale18M-E_ver-1785-Bianchi[2.10][1082].xml,Ale,Ale18M,E_ver,2,10,210,1785,1780s,Francesco Bianchi,Venice,Italy,Timagene,Male,1
+1083,Ale20M-Se_il-1785-Bianchi[3.01][1083].xml,Ale,Ale20M,Se_il,3,1,301,1785,1780s,Francesco Bianchi,Venice,Italy,Cleofide,Female,1
+1084,Ale01M-E_prezzo-1744-Graun[1.01][1084].xml,Ale,Ale01M,E_prezzo,1,1,101,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Gandarte,Male,1
+1085,Ale03M-Vil_trofeo-1744-Graun[1.03][1085].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Alessandro,Male,1
+1086,Ale04M-Chi_vive-1744-Graun[1.04][1086].xml,Ale,Ale04M,Chi_vive,1,4,104,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Erissena,Female,1
+1087,Ale11M-Se_amore-1744-Graun[1.12][1087].xml,Ale,Ale11M,Se_amore,1,12,112,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Alessandro,Female&Male,1
+1089,Ale12M-Non_sarei-1744-Graun[2.03][1089].xml,Ale,Ale12M,Non_sarei,2,03,203,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Erissena,Female,1
+109,Did13M-Se_resto-1764-Galuppi[1.18][0109].xml,Did,Did13M,Se_resto,1,18,118,1764,1760s,Baldassare Galuppi,Venice,Italy,Enea,Male,1
+1090,Ale15M-Dun_barbaro-1744-Graun[2.08][1090].xml,Ale,Ale15M,Dun_barbaro,2,8,208,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Alessandro,Male,1
+1091,Ale19M-Se_e-1744-Graun[2.13][1091].xml,Ale,Ale19M,Se_e,2,13,213,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Alessandro,Male,1
+1092,Ale26M-Serbati_a-1744-Graun[3.06][1092].xml,Ale,Ale26M,Serbati_a,3,6,306,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Alessandro,Male,1
+1093,Ale28M-Dove_si-1744-Graun[3.09][1093].xml,Ale,Ale28M,Dove_si,3,9,309,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Poro,Male,1
+1094,Ale29M-Mio_ben-1744-Graun[3.10][1094].xml,Ale,Ale29M,Mio_ben,3,10,310,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Gandarte,Male,1
+1095,Ale30M-Son_confusa-1744-Graun[3.11][1095].xml,Ale,Ale30M,Son_confusa,3,11,311,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Erissena,Female,1
+1096,Ale22M-Di_rendermi-1740-Caballone[2.16][1096].xml,Ale,Ale22M,Di_rendermi,2,16,216,1740,1740s,Michele Caballone,Naples,Italy,Erissena,Female,1
+1097,Ale25M-Come_il-1740-Caballone[3.05][1097].xml,Ale,Ale25M,Come_il,3,5,305,1740,1740s,Michele Caballone,Naples,Italy,Erissena,Female,1
+1098,Ale02M-Vedrai_con-1781-Cimarosa[1.02][1098].xml,Ale,Ale02M,Vedrai_con,1,2,102,1781,1780s,Domenico Cimarosa,Rome,Italy,Poro,Male,1
+1099,Ale12M-Non_sarei-1781-Cimarosa[1.03][1099].xml,Ale,Ale12M,Non_sarei,1,03,103,1781,1780s,Domenico Cimarosa,Rome,Italy,Erissena,Female,1
+11,Did18M-Ah_non_lasciarmi-1760-Bernasconi[2.07][0011].xml,Did,Did18M,Ah_non_lasciarmi,2,07,207,1760,1760s,Andrea Bernasconi,Venice,Italy,Didone,Female,1
+110,Dem14M-Se_tutti-1758-Galuppi[2.06][0110].xml,Dem,Dem14M,Se_tutti,2,6,206,1758,1750s,Baldassare Galuppi,Padua,Italy,Dircea,Female,1
+1100,Ale06M-Se_mai-1781-Cimarosa[1.06][1100].xml,Ale,Ale06M,Se_mai,1,6,106,1781,1780s,Domenico Cimarosa,Rome,Italy,Poro,Female&Male&Male,1
+1101,Ale07M-Se_mai-1781-Cimarosa[1.07][1101].xml,Ale,Ale07M,Se_mai,1,7,107,1781,1780s,Domenico Cimarosa,Rome,Italy,Cleofide,Female,1
+1102,Ale06M-Ale07M-Se_mai-1781-Cimarosa[1.12][1102].xml,Ale,Ale06M-Ale07M,Se_mai,1,12,112,1781,1780s,Domenico Cimarosa,Rome,Italy,Cleofide,Female,1
+1103,Ale18M-E_ver-1781-Cimarosa[2.01][1103].xml,Ale,Ale18M,E_ver,2,1,201,1781,1780s,Domenico Cimarosa,Rome,Italy,Timagene,Male,1
+1104,Dem01M-O_piu-1771-Sarti[1.01][1104].xml,Dem,Dem01M,O_piu,1,1,101,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Matusio,Male,1
+1106,Dem03M-Per_lei-1771-Sarti[1.03][1106].xml,Dem,Dem03M,Per_lei,1,3,103,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Demofoonte,Male,1
+1107,Dem06M-Non_curo-1771-Sarti[1.07][1107].xml,Dem,Dem06M,Non_curo,1,07,107,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Creusa,Female,1
+1108,Ale31M-Ombra_dell-1740-Caballone[3.12][1108].xml,Ale,Ale31M,Ombra_dell,3,12,312,1740,1740s,Michele Caballone,Naples,Italy,Cleofide,Female,1
+1109,Ale01M-E_prezzo-1789-Guglielmi[1.01][1109].xml,Ale,Ale01M,E_prezzo,1,1,101,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Gandarte,Male,1
+111,Dem14M-Se_tutti-1759-Ferrandini[2.06][0111].xml,Dem,Dem14M,Se_tutti,2,6,206,1759,1750s,Antonio Ferradini,Milan,Italy,Dircea,Female,1
+1110,Ale02M-Vedrai_con-1789-Guglielmi[1.02][1110].xml,Ale,Ale02M,Vedrai_con,1,2,102,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Poro,Male,1
+1111,Ale03M-Vil_trofeo-1789-Guglielmi[1.03][1111].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Alessandro,Male,1
+1112,Ale04M-Chi_vive-1789-Giglielmi[1.04][1112].xml,Ale,Ale04M,Chi_vive,1,4,104,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Erissena,Female,1
+1113,Ale06M-Se_mai-1789-Guglielmi[1.05][1113].xml,Ale,Ale06M,Se_mai,1,5,105,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Poro,Male,1
+1114,Ale07M-Se_mai-1789-Guglielmi[1.06][1114].xml,Ale,Ale07M,Se_mai,1,6,106,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Cleofide,Female,1
+1115,Ale06M-Ale07M-Se_mai-1789-Guglielmi[1.11][1115].xml,Ale,Ale06M-Ale07M,Se_mai,1,11,111,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Cleofide&Alessandro,Female,1
+1116,Ale06M-Se_mai-1744-Graun[1.05][1116].xml,Ale,Ale06M,Se_mai,1,5,105,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Poro,Male,1
+1117,Ale16M-Digli_che-1744-Graun[2.09][1117].xml,Ale,Ale16M,Digli_che,2,9,209,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Cleofide,Female,1
+1118,Ale22M-Di_rendermi-1781-Cimarosa[2.09][1118].xml,Ale,Ale22M,Di_rendermi,2,9,209,1781,1780s,Domenico Cimarosa,Rome,Italy,Gandarte,Female&Male,1
+1119,Ale16M-Digli_che-1781-Cimarosa[2.07][1119].xml,Ale,Ale16M,Digli_che,2,7,207,1781,1780s,Domenico Cimarosa,Rome,Italy,Cleofide,Female,1
+112,Did13M-Se_resto-1770-Piccinni[1.19][0112].xml,Did,Did13M,Se_resto,1,19,119,1770,1770s,Niccolò Piccinni,Rome,Italy,Enea,Male,1
+1120,Ale29M-Mio_ben-1781-Cimarosa[3.09][1120].xml,Ale,Ale29M,Mio_ben,3,9,309,1781,1780s,Domenico Cimarosa,Rome,Italy,Timagene,Male,1
+1121,Ale12M-Non_sarei-1789-Guglielmi[2.02][1121].xml,Ale,Ale12M,Non_sarei,2,02,202,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Erissena,Female,1
+1122,Ale16M-Digli_che-1789-Guglielmi[2.05][1122].xml,Ale,Ale16M,Digli_che,2,5,205,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Cleofide,Female,1
+1123,Ale23M-Risveglia_lo-1740-Caballone[3.01][1123].xml,Ale,Ale23M,Risveglia_lo,3,1,301,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+1124,Ale24M-Se_troppo-1740-Caballone[3.04][1124].xml,Ale,Ale24M,Se_troppo,3,4,304,1740,1740s,Michele Caballone,Naples,Italy,Cleofide,Female,1
+1125,Ale02M-Vedrai_con-1744-Graun[1.02][1125].xml,Ale,Ale02M,Vedrai_con,1,2,102,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Poro,Male,1
+1126,Ale26M-Serbati_a-1740-Caballone[3.06][1126].xml,Ale,Ale26M,Serbati_a,3,6,306,1740,1740s,Michele Caballone,Naples,Italy,Alessandro,Male,1
+1127,Ale27M-Finche_rimango-1744-Graun[3.07][1127].xml,Ale,Ale27M,Finche_rimango,3,7,307,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Timagene,Male,1
+1128,Ale08M-Se_possono-1789-Guglielmi[2.11][1128].xml,Ale,Ale08M,Se_possono,2,11,211,1789,1780s,Pietro Alessandro Guglielmi,Naples,Italy,Poro,Female&Male,1
+1129,Ale13M-Senza_procelle-1740-Caballone[2.04][1129].xml,Ale,Ale13M,Senza_procelle,2,04,204,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+113,Dem14M-Se_tutti-1748-Hasse[2.06][0113].xml,Dem,Dem14M,Se_tutti,2,6,206,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Dircea,Female,1
+1130,Ale02M-Vedrai_con-1768-Gatti[1.02][1130].xml,Ale,Ale02M,Vedrai_con,1,2,102,1768,1760s,Luigi Gatti,Mantua,Italy,Poro,Male,1
+1131,Ale30M-Son_confusa-1740-Caballone[3.11][1131].xml,Ale,Ale30M,Son_confusa,3,11,311,1740,1740s,Michele Caballone,Naples,Italy,Erissena,Female,1
+1132,Ale03M-Vil_trofeo-1768-Gatti[1.03][1132].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1768,1760s,Luigi Gatti,Mantua,Italy,Alessandro,Male,1
+1133,Ale06M-Ale07M-Se_mai-1740-Caballone[1.16][1133].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1740,1740s,Michele Caballone,Naples,Italy,Cleofide,Female,1
+1134,Ale04M-Chi_vive-1762-Traetta[1.04][1134].xml,Ale,Ale04M,Chi_vive,1,4,104,1762,1760s,Luigi Gatti,Reggio Emilia,Italy,Erissena,Female,1
+1135,Ale06M-Se_mai-1768-Gatti[1.06][1135].xml,Ale,Ale06M,Se_mai,1,6,106,1768,1760s,Luigi Gatti,Mantua,Italy,Poro,Male,1
+1136,Ale29M-Mio_ben-1740-Caballone[3.10][1136].xml,Ale,Ale29M,Mio_ben,3,10,310,1740,1740s,Michele Caballone,Naples,Italy,Gandarte,Male,1
+1137,Ale27M-Finche_rimango-1740-Caballone[3.07][1137].xml,Ale,Ale27M,Finche_rimango,3,7,307,1740,1740s,Michele Caballone,Naples,Italy,Timagene,Male,1
+1138,Ale07M-Se_mai-1768-Gatti[1.07][1138].xml,Ale,Ale07M,Se_mai,1,7,107,1768,1760s,Luigi Gatti,Mantua,Italy,Cleofide,Female,1
+1139,Ale05M-O_sugli-1740-Caballone[1.05][1139].xml,Ale,Ale05M,O_sugli,1,5,105,1740,1740s,Michele Caballone,Naples,Italy,Timagene,Male,1
+114,Dem14M-Se_tutti-1754-Manna[2.07][0114].xml,Dem,Dem14M,Se_tutti,2,7,207,1754,1750s,Gennaro Manna,Turin,Italy,Dircea,Female,1
+1140,Ale28M-Dove_si-1740-Caballone[3.09][1140].xml,Ale,Ale28M,Dove_si,3,9,309,1740,1740s,Michele Caballone,Naples,Italy,Poro,Male,1
+1141,Ale10M-Voi_che-1762-Traetta[1.11][1141].xml,Ale,Ale10M,Voi_che,1,11,111,1762,1760s,Luigi Gatti,Reggio Emilia,Italy,Gandarte,Male,1
+1142,Ale11M-Se_amore-1768-Gatti[1.14][1142].xml,Ale,Ale11M,Se_amore,1,14,114,1768,1760s,Luigi Gatti,Mantua,Italy,Alessandro,Male,1
+1143,Ale06M-Ale07M-Se_mai-1768-Gatti[1.15][1143].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1768,1760s,Luigi Gatti,Mantua,Italy,Cleofide,Female,1
+1144,Did03M-Son_regina-1752-Galuppi[1.05][1144].xml,Did,Did03M,Son_regina,1,5,105,1752,1750s,Baldassare Galuppi,Madrid,Spain,Didone,Female,1
+1145,Did12M-Non_ha-1752-Galuppi[1.17][1145].xml,Did,Did12M,Non_ha,1,17,117,1752,1750s,Baldassare Galuppi,Madrid,Spain,Didone,Female,1
+1146,Did13M-Se_resto-1752-Galuppi[1.18][1146].xml,Did,Did13M,Se_resto,1,18,118,1752,1750s,Baldassare Galuppi,Madrid,Spain,Enea,Male,1
+1147,Did04M-Tu_mi_scorgi-1752-Galuppi[1.06][1147].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1752,1750s,Baldassare Galuppi,Madrid,Spain,Osmida,Male,1
+1148,Did21M-Tacero_se-1752-Galuppi[2.08][1148].xml,Did,Did21M,Tacero_se,2,08,208,1752,1750s,Baldassare Galuppi,Madrid,Spain,Araspe,Male,1
+1149,Ale12M-Non_sarei-1768-Gatti[2.01][1149].xml,Ale,Ale12M,Non_sarei,2,01,201,1768,1760s,Luigi Gatti,Mantua,Italy,Erissena,Female,1
+115,Dem14M-Se_tutti-1752-Perez[2.06][0115].xml,Dem,Dem14M,Se_tutti,2,6,206,1752,1750s,Davide Perez,Lisbon,Portugal,Dircea,Female,1
+1150,Ale08M-Se_possono-1768-Gatti[2.03][1150].xml,Ale,Ale08M,Se_possono,2,3,203,1768,1760s,Luigi Gatti,Mantua,Italy,Poro,Male,1
+1151,Ale16M-Digli_che-1768-Gatti[2.08][1151].xml,Ale,Ale16M,Digli_che,2,8,208,1768,1760s,Luigi Gatti,Mantua,Italy,Cleofide,Female,1
+1152,Ale19M-Se_e-1768-Gatti[2.12][1152].xml,Ale,Ale19M,Se_e,2,12,212,1768,1760s,Luigi Gatti,Mantua,Italy,Alessandro,Male,1
+1153,Ale18M-E_ver-1744-Graun[2.11][1153].xml,Ale,Ale18M,E_ver,2,11,211,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Timagene,Male,1
+1154,Ale24M-Se_troppo-1744-Graun[3.04][1154].xml,Ale,Ale24M,Se_troppo,3,4,304,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Cleofide,Female,1
+1155,Ale17M-Destrier_che-1744-Graun[2.10][1155].xml,Ale,Ale17M,Destrier_che,2,10,210,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Poro,Female&Male,1
+1156,Ale20M-Se_il-1768-Gatti[2.13][1156].xml,Ale,Ale20M,Se_il,2,13,213,1768,1760s,Luigi Gatti,Mantua,Italy,Cleofide,Female,1
+1157,Ale21M-Se_viver-1768-Gatti[2.14][1157].xml,Ale,Ale21M,Se_viver,2,14,214,1768,1760s,Luigi Gatti,Mantua,Italy,Gandarte,Male,1
+1158,Ale26M-Serbati_a-1768-Gatti[3.01][1158].xml,Ale,Ale26M,Serbati_a,3,1,301,1768,1760s,Luigi Gatti,Mantua,Italy,Alessandro,Male,1
+1159,Did31M-Va_crescendo-1752-Galuppi[3.08][1159].xml,Did,Did31M,Va_crescendo,3,08,308,1752,1750s,Baldassare Galuppi,Madrid,Spain,Didone,Female,1
+116,Dem14M-Se_tutti-1753-Jommelli[2.06][0116].xml,Dem,Dem14M,Se_tutti,2,6,206,1753,1750s,Niccolò Jommelli,Milan,Italy,Dircea,Female,1
+1160,Ale07M-Se_mai-1744-Graun[1.06][1160].xml,Ale,Ale07M,Se_mai,1,6,106,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Cleofide,Female,1
+1161,Did24M-Chiamami_pur-1752-Galuppi[2.13][1161].xml,Did,Did24M,Chiamami_pur,2,13,213,1752,1750s,Baldassare Galuppi,Madrid,Spain,Iarba,Male,1
+1162,Did28M-Quando_londa-1752-Galuppi[3.05][1162].xml,Did,Did28M,Quando_londa,3,05,305,1752,1750s,Baldassare Galuppi,Madrid,Spain,Enea,Male,1
+1163,Ale28M-Dove_si-1768-Gatti[3.05][1163].xml,Ale,Ale28M,Dove_si,3,5,305,1768,1760s,Luigi Gatti,Mantua,Italy,Poro,Male,1
+1164,Ale29M-Mio_ben-1762-Traetta[3.10][1164].xml,Ale,Ale29M,Mio_ben,3,10,310,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Gandarte,Male,1
+1165,Did08M-Ogni_amator-1752-Galuppi[2.10][1165].xml,Did,Did08M,Ogni_amator,2,10,210,1752,1750s,Baldassare Galuppi,Madrid,Spain,Selene,Female,1
+1166,Did25M-Va_lusingando-1752-Galuppi[2.14][1166].xml,Did,Did25M,Va_lusingando,2,14,214,1752,1750s,Baldassare Galuppi,Madrid,Spain,Didone,Female,1
+1167,Did33M-Cadra_fra-1752-Galuppi[3.17][1167].xml,Did,Did33M,Cadra_fra,3,17,317,1752,1750s,Baldassare Galuppi,Madrid,Spain,Iarba,Male,1
+1168,Dem01M-O_piu-1758-Galuppi[1.01][1168].xml,Dem,Dem01M,O_piu,1,1,101,1758,1750s,Baldassare Galuppi,Padua,Italy,Matusio,Male,1
+1169,Ale09M-Compagni_nell-1744-Graun[1.09][1169].xml,Ale,Ale09M,Compagni_nell,1,9,109,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Erissena,Female,1
+117,Dem14M-Se_tutti-1749-Galuppi[2.06][0117].xml,Dem,Dem14M,Se_tutti,2,6,206,1749,1740s,Baldassare Galuppi,Madrid,Spain,Dircea,Female,1
+1170,Ale06M-Ale07M-Se_mai-1744-Graun[1.13][1170].xml,Ale,Ale06M-Ale07M,Se_mai,1,13,113,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Cleofide,Female,1
+1171,Ale13M-Senza_procelle-1744-Graun[2.04][1171].xml,Ale,Ale13M,Senza_procelle,2,04,204,1744,1740s,Carl Heinrich Graun,Berlin,Empire,Poro,Male,1
+1172,Dem08M-Padre_perdona-1771-Sarti[1.12][1172].xml,Dem,Dem08M,Padre_perdona,1,12,112,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Dircea,Female&Male,1
+1173,Dem10M-Tu_sai-1771-Sarti[2.01][1173].xml,Dem,Dem10M,Tu_sai,2,1,201,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Creusa,Female,1
+1174,Dem19M-Non_odi-1771-Sarti[3.01][1174].xml,Dem,Dem19M,Non_odi,3,01,301,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Adrasto,Male,1
+1175,Dem03M-Per_lei-1753-Jommelli[1.03][1175].xml,Dem,Dem03M,Per_lei,1,3,103,1753,1750s,Niccolò Jommelli,Milan,Italy,Demofoonte,Male,1
+1176,Dem04M-Sperai_vicino-1753-Jommelli[1.04][1176].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1753,1750s,Niccolò Jommelli,Milan,Italy,Timante,Male,1
+1177,Dem06M-Non_curo-1753-Jommelli[1.07][1177].xml,Dem,Dem06M,Non_curo,1,07,107,1753,1750s,Niccolò Jommelli,Milan,Italy,Creusa,Female,1
+1178,Dem08M-Padre_perdona-1753-Jommelli[1.12][1178].xml,Dem,Dem08M,Padre_perdona,1,12,112,1753,1750s,Niccolò Jommelli,Milan,Italy,Dircea,Female,1
+1179,Dem11M-Prudente_mi-1753-Jommelli[2.02][1179].xml,Dem,Dem11M,Prudente_mi,2,2,202,1753,1750s,Niccolò Jommelli,Milan,Italy,Timante,Male,1
+118,Dem14M-Se_tutti-1758-Hasse[2.06][0118] (1).xml,Dem,Dem14M,Se_tutti,2,6,206,1758,1750s,Johann Adolph Hasse,Naples,Italy,Dircea,Female,0
+1180,Dem13M-E_soccorso-1753-Jommelli[2.04][1180].xml,Dem,Dem13M,E_soccorso,2,4,204,1753,1750s,Niccolò Jommelli,Milan,Italy,Matusio,Male,1
+1181,Dem15M-No_non-1753-Jommelli[2.07][1181].xml,Dem,Dem15M,No_non,2,7,207,1753,1750s,Niccolò Jommelli,Milan,Italy,Cherinto,Male,1
+1182,Dem17M-Perfidi_gia-1753-Jommelli[2.10][1182].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1753,1750s,Niccolò Jommelli,Milan,Italy,Demofoonte,Male,1
+1183,Dem19M-Non_odi-1753-Jommelli[3.01][1183].xml,Dem,Dem19M,Non_odi,3,01,301,1753,1750s,Niccolò Jommelli,Milan,Italy,Adrasto,Male,1
+1184,Dem20M-Nel_tuo-1753-Jommelli[3.02][1184].xml,Dem,Dem20M,Nel_tuo,3,02,302,1753,1750s,Niccolò Piccinni,Milan,Italy,Cherinto,Male,1
+1185,Dem23M-Odo_il-1753-Jommelli[3.06][1185].xml,Dem,Dem23M,Odo_il,3,06,306,1753,1750s,Niccolò Jommelli,Milan,Italy,Demofoonte,Male,1
+1186,Dem24M-Che_mai-1753-Jommelli[3.07][1186].xml,Dem,Dem24M,Che_mai,3,7,307,1753,1750s,Niccolò Jommelli,Milan,Italy,Dircea,Female,1
+1187,Dem18M-La_destra-1753-Jommelli[2.11][1187].xml,Dem,Dem18M,La_destra,2,11,211,1753,1750s,Niccolò Jommelli,Milan,Italy,Dircea,Female,1
+1188,Ale01M-E_prezzo-1768-Sacchini[1.01][1188].xml,Ale,Ale01M,E_prezzo,1,1,101,1768,1760s,Antonio Sacchini,Naples,Italy,Gandarte,Male,1
+1189,Ale02M-Vedrai_con-1768-Sacchini[1.02][1189].xml,Ale,Ale02M,Vedrai_con,1,2,102,1768,1760s,Antonio Sacchini,Naples,Italy,Poro,Male,1
+119,Dem14M-Se_tutti-1764-Jommelli[2.06][0119].xml,Dem,Dem14M,Se_tutti,2,6,206,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Dircea,Female,1
+1190,Ale03M-Vil_trofeo-1768-Sacchini[1.03][1190].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1768,1760s,Antonio Sacchini,Naples,Italy,Alessandro,Male,1
+1191,Ale03M-Vil_trofeo-1763-Sacchini[1.03][1191].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1763,1760s,Antonio Sacchini,Venice,Italy,Alessandro,Male,1
+1192,Ale04M-Chi_vive-1768-Sacchini[1.04][1192].xml,Ale,Ale04M,Chi_vive,1,4,104,1768,1760s,Antonio Sacchini,Naples,Italy,Erissena,Female,1
+1193,Ale07M-Se_mai-1768-Sacchini[1.06][1193].xml,Ale,Ale07M,Se_mai,1,6,106,1768,1760s,Antonio Sacchini,Naples,Italy,Cleofide,Female,1
+1194,Ale16M-Digli_che-1768-Sacchini[2.08][1194].xml,Ale,Ale16M,Digli_che,2,8,208,1768,1760s,Antonio Sacchini,Naples,Italy,Cleofide,Female,1
+1195,Ale12M-Non_sarei-1768-Sacchini[2.03][1195].xml,Ale,Ale12M,Non_sarei,2,03,203,1768,1760s,Antonio Sacchini,Naples,Italy,Erissena,Female,1
+1196,Ale07M-Se_mai-1763-Sacchini[1.07][1196].xml,Ale,Ale07M,Se_mai,1,7,107,1763,1760s,Antonio Sacchini,Venice,Italy,Cleofide,Female,1
+1197,Ale17M-Destrier_che-1763-Sacchini[2.10][1197].xml,Ale,Ale17M,Destrier_che,2,10,210,1763,1760s,Antonio Sacchini,Venice,Italy,Poro,Male,1
+1198,Ale17M-Destrier_che-1768-Sacchini[2.09][1198].xml,Ale,Ale17M,Destrier_che,2,9,209,1768,1760s,Antonio Sacchini,Naples,Italy,Poro,Male,1
+1199,Ale19M-Se_e-1768-Sacchini[2.11][1199].xml,Ale,Ale19M,Se_e,2,11,211,1768,1760s,Antonio Sacchini,Naples,Italy,Alessandro,Male,1
+12,Did03M-Son_regina-1742-Hasse[1.05][0012].xml,Did,Did03M,Son_regina,1,5,105,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Didone,Female,1
+120,Dem14M-Se_tutti-1770-Jommelli[2.07][0120].xml,Dem,Dem14M,Se_tutti,2,7,207,1770,1770s,Niccolò Jommelli,Naples,Italy,Dircea,Female,1
+1200,Ale21M-Se_viver-1768-Sacchini[2.12][1200].xml,Ale,Ale21M,Se_viver,2,12,212,1768,1760s,Antonio Sacchini,Naples,Italy,Gandarte,Male,1
+1201,Ale06M-Se_mai-1763-Sacchini[1.06][1201].xml,Ale,Ale06M,Se_mai,1,6,106,1763,1760s,Antonio Sacchini,Venice,Italy,Poro,Female&Male,1
+1202,Ale24M-Se_troppo-1768-Sacchini[3.01][1202].xml,Ale,Ale24M,Se_troppo,3,1,301,1768,1760s,Antonio Sacchini,Naples,Italy,Cleofide,Female,1
+1203,Ale17M-Destrier_che-1773-Paisiello[1.02][1203].xml,Ale,Ale17M,Destrier_che,1,2,102,1773,1770s,Giovanni Paisiello,Modena,Italy,Poro,Male,1
+1204,Ale03M-Vil_trofeo-1773-Paisiello[1.03][1204].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1773,1770s,Giovanni Paisiello,Modena,Italy,Alessandro,Male,1
+1205,Ale04M-Chi_vive-1773-Paisiello[1.04][1205].xml,Ale,Ale04M,Chi_vive,1,4,104,1773,1770s,Giovanni Paisiello,Modena,Italy,Erissena,Female,1
+1206,Ale05M-O_sugli-1773-Paisiello[1.05][1206].xml,Ale,Ale05M,O_sugli,1,5,105,1773,1770s,Giovanni Paisiello,Modena,Italy,Timagene,Female&Male,1
+1207,Dem02M-In_te-1758-Galuppi[1.02][1207].xml,Dem,Dem02M,In_te,1,2,102,1758,1750s,Baldassare Galuppi,Padua,Italy,Dircea,Female,1
+1208,Dem03M-Per_lei-1758-Galuppi[1.03][1208].xml,Dem,Dem03M,Per_lei,1,3,103,1758,1750s,Baldassare Galuppi,Padua,Italy,Demofoonte,Male,1
+1209,Dem05M-Tintendo_ingrata-1758-Galuppi[1.05][1209].xml,Dem,Dem05M,Tintendo_ingrata,1,05,105,1758,1750s,Baldassare Galuppi,Padua,Italy,Cherinto,Male,1
+121,Did33M-Cadra_fra-nd-Wagenseil[X.XX][0121].xml,Did,Did33M,Cadra_fra,X,XX,XXX,nd,NA,Georg Christoph Wagenseil,NA,NA,Iarba,Male,1
+1210,Dem06M-Non_curo-1758-Galuppi[1.07][1210].xml,Dem,Dem06M,Non_curo,1,07,107,1758,1750s,Baldassare Galuppi,Padua,Italy,Creusa,Female,1
+1211,Dem08M-Padre_perdona-1758-Galuppi[1.12][1211].xml,Dem,Dem08M,Padre_perdona,1,12,112,1758,1750s,Baldassare Galuppi,Padua,Italy,Dircea,Female,1
+1212,Dem09M-Se_ardire-1758-Galuppi[1.13][1212].xml,Dem,Dem09M,Se_ardire,1,13,113,1758,1750s,Baldassare Galuppi,Padua,Italy,Timante,Female&Male,1
+1213,Dem11M-Prudente_mi-1758-Galuppi[2.02][1213].xml,Dem,Dem11M,Prudente_mi,2,2,202,1758,1750s,Baldassare Galuppi,Padua,Italy,Timante,Male,1
+1214,Dem13M-E_soccorso-1758-Galuppi[2.04][1214].xml,Dem,Dem13M,E_soccorso,2,4,204,1758,1750s,Baldassare Galuppi,Padua,Italy,Matusio,Male,1
+1215,Dem15M-No_non-1758-Galuppi[2.07][1215].xml,Dem,Dem15M,No_non,2,7,207,1758,1750s,Baldassare Galuppi,Padua,Italy,Cherinto,Male,1
+1216,Ale06M-Ale07M-Se_mai-1768-Sacchini[1.13][1216].xml,Ale,Ale06M-Ale07M,Se_mai,1,13,113,1768,1760s,Antonio Sacchini,Naples,Italy,Cleofide,Female,1
+1217,Ale06M-Se_mai-1768-Sacchini[1.05][1217].xml,Ale,Ale06M,Se_mai,1,5,105,1768,1760s,Antonio Sacchini,Naples,Italy,Poro,Male,1
+1218,Ale20M-Se_il-1768-Sacchini[2.13][1218].xml,Ale,Ale20M,Se_il,2,13,213,1768,1760s,Antonio Sacchini,Naples,Italy,Cleofide,Female,1
+1219,Ale27M-Finche_rimango-1768-Sacchini[3.05][1219].xml,Ale,Ale27M,Finche_rimango,3,5,305,1768,1760s,Antonio Sacchini,Naples,Italy,Timagene,Male,1
+122,Dem14M-Se_tutti-1775-Myslivecek[2.06][0122].xml,Dem,Dem14M,Se_tutti,2,6,206,1775,1770s,Josef Mysliveček,Naples,Italy,Dircea,Female,1
+1220,Ale28M-Dove_si-1768-Sacchini[3.06][1220].xml,Ale,Ale28M,Dove_si,3,6,306,1768,1760s,Antonio Sacchini,Naples,Italy,Poro,Male,1
+1221,Ale06M-Ale07M-Se_mai-1763-Sacchini[1.15][1221].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1763,1760s,Antonio Sacchini,Venice,Italy,Cleofide,Female,1
+1222,Ale07M-Se_mai-1773-Paisiello[1.07][1222].xml,Ale,Ale07M,Se_mai,1,7,107,1773,1770s,Giovanni Paisiello,Modena,Italy,Cleofide,Female,1
+1223,Ale10M-Voi_che-1773-Paisiello[1.11][1223].xml,Ale,Ale10M,Voi_che,1,11,111,1773,1770s,Giovanni Paisiello,Modena,Italy,Gandarte,Male,1
+1224,Ale12M-Non_sarei-1773-Paisiello[2.04][1224].xml,Ale,Ale12M,Non_sarei,2,04,204,1773,1770s,Giovanni Paisiello,Modena,Italy,Erissena,Female,1
+1225,Ale19M-Se_e-1773-Paisiello[2.12][1225].xml,Ale,Ale19M,Se_e,2,12,212,1773,1770s,Giovanni Paisiello,Modena,Italy,Alessandro,Male,1
+1226,Dem17M-Perfidi_gia-1758-Galuppi[2.10][1226].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1758,1750s,Baldassare Galuppi,Padua,Italy,Demofoonte,Male,1
+1227,Dem18M-La_destra-1758-Galuppi[2.11][1227].xml,Dem,Dem18M,La_destra,2,11,211,1758,1750s,Baldassare Galuppi,Padua,Italy,Dircea,Female,1
+1228,Dem19M-Non_odi-1758-Galuppi[3.01][1228].xml,Dem,Dem19M,Non_odi,3,01,301,1758,1750s,Baldassare Galuppi,Padua,Italy,Adrasto,Male,1
+1229,Dem20M-Nel_tuo-1758-Galuppi[3.02][1229].xml,Dem,Dem20M,Nel_tuo,3,02,302,1758,1750s,Baldassare Galuppi,Padua,Italy,Cherinto,Male,1
+123,Did33M-Cadra_fra-1742-Hasse[3.19][0123].xml,Did,Did33M,Cadra_fra,3,19,319,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Iarba,Male,1
+1230,Dem23M-Odo_il-1758-Galuppi[3.06][1230].xml,Dem,Dem23M,Odo_il,3,06,306,1758,1750s,Baldassare Galuppi,Padua,Italy,Demofoonte,Male,1
+1231,Dem24M-Che_mai-1758-Galuppi[3.07][1231].xml,Dem,Dem24M,Che_mai,3,7,307,1758,1750s,Baldassare Galuppi,Padua,Italy,Dircea,Female,1
+1232,Dem25M-Non_dura-1753-Jommelli[3.07][1232].xml,Dem,Dem25M,Non_dura,3,7,307,1753,1750s,Niccolò Jommelli,Milan,Italy,Creusa,Female,1
+1233,Ale28M-Dove_si-1773-Paisiello[3.09][1233].xml,Ale,Ale28M,Dove_si,3,9,309,1773,1770s,Giovanni Paisiello,Modena,Italy,Poro,Male,1
+1234,Ale29M-Mio_ben-1773-Paisiello[3.10][1234].xml,Ale,Ale29M,Mio_ben,3,10,310,1773,1770s,Giovanni Paisiello,Modena,Italy,Gandarte,Male,1
+1235,Ale31M-Ombra_dell-1773-Paisiello[3.12][1235].xml,Ale,Ale31M,Ombra_dell,3,12,312,1773,1770s,Giovanni Paisiello,Modena,Italy,Cleofide,Female,1
+1236,Dem01M-O_piu-1776-Schuster[1.01][1236].xml,Dem,Dem01M,O_piu,1,1,101,1776,1770s,Joseph Schuster,Forli,Italy,Matusio,Male,1
+1237,Dem02M-In_te-1776-Schuster[1.02][1237].xml,Dem,Dem02M,In_te,1,2,102,1776,1770s,Joseph Schuster,Forli,Italy,Dircea,Female,1
+1238,Dem25M-Non_dura-1758-Galuppi[3.08][1238].xml,Dem,Dem25M,Non_dura,3,8,308,1758,1750s,Baldassare Galuppi,Padua,Italy,Creusa,Female,1
+1239,Ale12M-Non_sarei-nd-Anonymous[2.04][1239].xml,Ale,Ale12M,Non_sarei,2,04,204,nd,NA,Unknown Composer,?,Italy,Erissena,Female,1
+124,Did33M-Cadra_fra-1747-Jommelli[3.19][0124].xml,Did,Did33M,Cadra_fra,3,19,319,1747,1740s,Niccolò Jommelli,Rome,Italy,Iarba,Male,1
+1240,Dem07M-Il_suo-1749-Galuppi[1.08][1240].xml,Dem,Dem07M,Il_suo,1,08,108,1749,1740s,Baldassare Galuppi,Madrid,Spain,Cherinto,Male,1
+1241,Dem04M-Sperai_vicino-1749-Galuppi[1.04][1241].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1749,1740s,Baldassare Galuppi,Madrid,Spain,Timante,Male,1
+1242,Dem10M-Tu_sai-1749-Galuppi[2.01][1242].xml,Dem,Dem10M,Tu_sai,2,01,201,1749,1740s,Baldassare Galuppi,Madrid,Spain,Creusa,Female,1
+1243,Dem24M-Che_mai-1749-Galuppi[3.07][1243].xml,Dem,Dem24M,Che_mai,3,7,307,1749,1740s,Baldassare Galuppi,Madrid,Spain,Dircea,Female,1
+1244,Ale13M-Senza_procelle-1744-Gluck[2.04][1244].xml,Ale,Ale13M,Senza_procelle,2,04,204,1744,1740s,Christoph Willibald Gluck,Turin,Italy,Poro,Male,1
+1245,Ale21M-Se_viver-1744-Gluck[2.14][1245].xml,Ale,Ale21M,Se_viver,2,14,214,1744,1740s,Christoph Willibald Gluck,Turin,Italy,Poro,Male,1
+1246,Dem03M-Per_lei-1776-Schuster[1.03][1246].xml,Dem,Dem03M,Per_lei,1,3,103,1776,1770s,Joseph Schuster,Forli,Italy,Demofoonte,Male,1
+1247,Ale17M-Destrier_che-1731-Porpora[2.11][1247].xml,Ale,Ale17M,Destrier_che,2,11,211,1731,1730s,Nicola Porpora,Turin,Italy,Poro,Male,1
+1248,Ale16M-Digli_che-1731-Porpora[2.XX][1248].xml,Ale,Ale16M,Digli_che,2,XX,2XX,1731,1730s,Nicola Porpora,Turin,Italy,Cleofide,Female,1
+1249,Ale19M-Se_e-1731-Porpora[2.13][1249].xml,Ale,Ale19M,Se_e,2,13,213,1731,1730s,Nicola Porpora,Turin,Italy,Alessandro,Male,1
+125,Did33M-Cadra_fra-1768-Boroni[3.14][0125].xml,Did,Did33M,Cadra_fra,3,14,314,1768,1760s,Antonio Boroni,Prague,Empire,Iarba,Male,1
+1250,Ale27M-Finche_rimango-1731-Porpora[3.07][1250].xml,Ale,Ale27M,Finche_rimango,3,7,307,1731,1730s,Nicola Porpora,Turin,Italy,Timagene,Male,1
+1251,Ale09M-Compagni_nell-1732-Mancini[2.09][1251].xml,Ale,Ale09M,Compagni_nell,2,9,209,1732,1730s,Francesco Mancini,Naples,Italy,Erissena,Female,1
+1252,Ale30M-Son_confusa-1732-Mancini[3.11][1252].xml,Ale,Ale30M,Son_confusa,3,11,311,1732,1730s,Francesco Mancini,Naples,Italy,Erissena,Female,1
+1254,Ale04M-Chi_vive-1732-Pescetti[1.04][1254].xml,Ale,Ale04M,Chi_vive,1,4,104,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Erissena,Female,1
+1255,Ale09M-Compagni_nell-1732-Pescetti[1.10][1255].xml,Ale,Ale09M,Compagni_nell,1,10,110,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Erissena,Female,1
+1256,Ale22M-Di_rendermi-1732-Pescetti[2.16][1256].xml,Ale,Ale22M,Di_rendermi,2,16,216,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Erissena,Female,1
+1257,Ale29M-Mio_ben-1732-Pescetti[3.10][1257].xml,Ale,Ale29M,Mio_ben,3,10,310,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Gandarte,Male,1
+1258,Ale29M-Mio_ben-1734-Schiassi[3.10][1258].xml,Ale,Ale29M,Mio_ben,3,10,310,1734,1730s,Gaetano Maria Schiassi,Bologna,Italy,Gandarte,Male,1
+1259,Dem04M-Sperai_vicino-1776-Schuster[1.05][1259].xml,Dem,Dem04M,Sperai_vicino,1,5,105,1776,1770s,Joseph Schuster,Forli,Italy,Timante,Male,1
+126,Did33M-Cadra_fra-1770-Piccinni[3.19][0126].xml,Did,Did33M,Cadra_fra,3,19,319,1770,1770s,Niccolò Piccinni,Roma,Italy,Iarba,Male,1
+1260,Dem08M-Padre_perdona-1776-Schuster[1.13][1260].xml,Dem,Dem08M,Padre_perdona,1,13,113,1776,1770s,Joseph Schuster,Forli,Italy,Dircea,Female,1
+1261,Dem04M-Sperai_vicino-1758-Galuppi[1.04][1261].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1758,1750s,Baldassare Galuppi,Padua,Italy,Timante,Male,1
+1262,Ale01M-E_prezzo-1738-Galuppi[1.01][1262].xml,Ale,Ale01M,E_prezzo,1,1,101,1738,1730s,Baldassare Galuppi,Mantua,Italy,Gandarte,Male,1
+1263,Ale02M-Vedrai_con-1738-Galuppi[1.02][1263].xml,Ale,Ale02M,Vedrai_con,1,2,102,1738,1730s,Baldassare Galuppi,Mantua,Italy,Poro,Female&Male,1
+1264,Ale02M-Vedrai_con-1766-Majo[1.02][1264].xml,Ale,Ale02M,Vedrai_con,1,2,102,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Poro,Male,1
+1265,Dem24M-Che_mai-1776-Schuster[3.06][1265].xml,Dem,Dem24M,Che_mai,3,6,306,1776,1770s,Joseph Schuster,Forli,Italy,Dircea,Female,1
+1266,Ale03M-Vil_trofeo-1738-Galuppi[1.03][1266].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1738,1730s,Baldassare Galuppi,Mantua,Italy,Alessandro,Male,1
+1267,Ale04M-Chi_vive-1738-Galuppi[1.04][1267].xml,Ale,Ale04M,Chi_vive,1,4,104,1738,1730s,Baldassare Galuppi,Mantua,Italy,Erissena,Female,1
+1269,Ale03M-Vil_trofeo-1766-Majo[1.03][1269].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Alessandro,Male,1
+127,Did33M-Cadra_fra-1769-Majo[3.12][0127].xml,Did,Did33M,Cadra_fra,3,12,312,1769,1760s,Gian Francesco De Majo,Venice,Italy,Iarba,Male,1
+1270,Ale19M-Se_e-1732-Pescetti[2.13][1270].xml,Ale,Ale19M,Se_e,2,13,213,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Alessandro,Male,1
+1271,Ale21M-Se_viver-1732-Pescetti[2.15][1271].xml,Ale,Ale21M,Se_viver,2,15,215,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Gandarte,Male,1
+1272,Ale24M-Se_troppo-1732-Pescetti[3.04][1272].xml,Ale,Ale24M,Se_troppo,3,4,304,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Cleofide,Female,1
+1273,Ale26M-Serbati_a-1732-Pescetti[3.06][1273].xml,Ale,Ale26M,Serbati_a,3,6,306,1732,1730s,Giovanni Battista Pescetti,Venice,Italy,Alessandro,Male,1
+1274,Ale06M-Se_mai-1738-Galuppi[1.06][1274].xml,Ale,Ale06M,Se_mai,1,6,106,1738,1730s,Baldassare Galuppi,Mantua,Italy,Poro,Male,1
+1275,Ale07M-Se_mai-1738-Galuppi[1.07][1275].xml,Ale,Ale07M,Se_mai,1,7,107,1738,1730s,Baldassare Galuppi,Mantua,Italy,Cleofide,Female,1
+1276,Ale08M-Se_possono-1738-Galuppi[1.09][1276].xml,Ale,Ale08M,Se_possono,1,9,109,1738,1730s,Baldassare Galuppi,Mantua,Italy,Poro,Male,1
+1277,Ale10M-Voi_che-1738-Galuppi[1.11][1277].xml,Ale,Ale10M,Voi_che,1,11,111,1738,1730s,Baldassare Galuppi,Mantua,Italy,Gandarte,Male,1
+1278,Ale06M-Ale07M-Se_mai-1738-Galuppi[1.16][1278].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1738,1730s,Baldassare Galuppi,Mantua,Italy,Cleofide,Female,1
+1279,Ale16M-Digli_che-1738-Galuppi[2.09][1279].xml,Ale,Ale16M,Digli_che,2,9,209,1738,1730s,Baldassare Galuppi,Mantua,Italy,Cleofide,Female,1
+128,Did33M-Cadra_fra-1762-Sarti[3.15][0128].xml,Did,Did33M,Cadra_fra,3,15,315,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Iarba,Male,1
+1280,Ale17M-Destrier_che-1738-Galuppi[2.10][1280].xml,Ale,Ale17M,Destrier_che,2,10,210,1738,1730s,Baldassare Galuppi,Mantua,Italy,Poro,Male,1
+1281,Ale21M-Se_viver-1738-Galuppi[2.11][1281].xml,Ale,Ale21M,Se_viver,2,11,211,1738,1730s,Baldassare Galuppi,Mantua,Italy,Timagene,Male,1
+1282,Ale22M-Di_rendermi-1738-Galuppi[2.16][1282].xml,Ale,Ale22M,Di_rendermi,2,16,216,1738,1730s,Baldassare Galuppi,Mantua,Italy,Erissena,Female,1
+1283,Ale27M-Finche_rimango-1738-Galuppi[3.07][1283].xml,Ale,Ale27M,Finche_rimango,3,7,307,1738,1730s,Baldassare Galuppi,Mantua,Italy,Timagene,Male,1
+1284,Ale28M-Dove_si-1738-Galuppi[3.09][1284].xml,Ale,Ale28M,Dove_si,3,9,309,1738,1730s,Baldassare Galuppi,Mantua,Italy,Poro,Male,1
+1285,Ale30M-Son_confusa-1738-Galuppi[3.11][1285].xml,Ale,Ale30M,Son_confusa,3,11,311,1738,1730s,Baldassare Galuppi,Mantua,Italy,Erissena,Female,1
+1286,Dem10M-Tu_sai-1776-Schuster[2.01][1286].xml,Dem,Dem10M,Tu_sai,2,1,201,1776,1770s,Joseph Schuster,Forli,Italy,Creusa,Female,1
+1287,Dem13M-E_soccorso-1776-Schuster[2.04][1287].xml,Dem,Dem13M,E_soccorso,2,4,204,1776,1770s,Joseph Schuster,Forli,Italy,Matusio,Male,1
+1288,Dem14M-Se_tutti-1776-Schuster[2.06][1288].xml,Dem,Dem14M,Se_tutti,2,6,206,1776,1770s,Joseph Schuster,Forli,Italy,Dircea,Female&Male,1
+1289,Dem22M-Misero_pargoletto-1776-Schuster[3.04][1289].xml,Dem,Dem22M,Misero_pargoletto,3,04,304,1776,1770s,Joseph Schuster,Forli,Italy,Timante,Male,1
+129,Did33M-Cadra_fra-1753-Perez[3.18][0129].xml,Did,Did33M,Cadra_fra,3,18,318,1753,1750s,Davide Perez,Genova,Italy,Iarba,Male,1
+1290,Dem04M-Sperai_vicino-1771-Sarti[2.03][1290].xml,Dem,Dem04M,Sperai_vicino,2,3,203,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Timante,Male,1
+1291,Ale04M-Chi_vive-1752-Fiorillo[1.04][1291].xml,Ale,Ale04M,Chi_vive,1,4,104,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Erissena,Female,1
+1292,Ale06M-Se_mai-1752-Fiorillo[1.06][1292].xml,Ale,Ale06M,Se_mai,1,6,106,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Poro,Male,1
+1293,Ale07M-Se_mai-1752-Fiorillo[1.07][1293].xml,Ale,Ale07M,Se_mai,1,7,107,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Cleofide,Female,1
+1294,Ale09M-Compagni_nell-1752-Fiorillo[1.10][1294].xml,Ale,Ale09M,Compagni_nell,1,10,110,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Erissena,Female&Male,1
+1295,Ale16M-Digli_che-1752-Fiorillo[2.09][1295].xml,Ale,Ale16M,Digli_che,2,9,209,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Cleofide,Female,1
+1296,Ale22M-Di_rendermi-1752-Fiorillo[2.16][1296].xml,Ale,Ale22M,Di_rendermi,2,16,216,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Erissena,Female,1
+1297,Ale24M-Se_troppo-1752-Fiorillo[3.04][1297].xml,Ale,Ale24M,Se_troppo,3,4,304,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Cleofide,Female,1
+1298,Ale31M-Ombra_dell-1752-Fiorillo[3.12][1298].xml,Ale,Ale31M,Ombra_dell,3,12,312,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Cleofide,Female,1
+1299,Ale04M-Chi_vive-1766-Majo[1.04][1299].xml,Ale,Ale04M,Chi_vive,1,4,104,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Erissena,Female,1
+13,Did12M-Non_ha-1742-Hasse[1.18][0013].xml,Did,Did12M,Non_ha,1,18,118,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Didone,Female,1
+130,Did33M-Cadra_fra-1764-Galuppi[3.16][0130].xml,Did,Did33M,Cadra_fra,3,16,316,1764,1760s,Baldassare Galuppi,Venice,Italy,Iarba,Male,1
+1300,Ale05M-O_sugli-1766-Majo[1.05][1300].xml,Ale,Ale05M,O_sugli,1,5,105,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Timagene,Male,1
+1301,Ale02M-Vedrai_con-1771-Bertoni[1.02][1301].xml,Ale,Ale02M,Vedrai_con,1,2,102,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Poro,Male,1
+1302,Ale07M-Se_mai-1766-Majo[1.07][1302].xml,Ale,Ale07M,Se_mai,1,7,107,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Cleofide,Female,1
+1303,Ale06M-Ale07M-Se_mai-1766-Majo[1.15][1303].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Cleofide,Female,1
+1304,Ale13M-Senza_procelle-1766-Majo[2.04][1304].xml,Ale,Ale13M,Senza_procelle,2,04,204,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Poro,Male,1
+1305,Ale03M-Vil_trofeo-1771-Bertoni[1.03][1305].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Alessandro,Male,1
+1306,Ale04M-Chi_vive-1771-Bertoni[1.05][1306].xml,Ale,Ale04M,Chi_vive,1,5,105,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Erissena,Female,1
+1307,Ale06M-Se_mai-1771-Bertoni[1.06][1307].xml,Ale,Ale06M,Se_mai,1,6,106,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Poro,Male,1
+1308,Ale07M-Se_mai-1771-Bertoni[1.07][1308].xml,Ale,Ale07M,Se_mai,1,7,107,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Cleofide,Female,1
+1309,Ale06M-Ale07M-Se_mai-1771-Bertoni[1.15][1309].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Cleofide,Female,1
+131,Did33M-Cadra_fra-1730-Sarro[3.16][0131].xml,Did,Did33M,Cadra_fra,3,16,316,1730,1730s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+1310,Ale12M-Non_sarei-1771-Bertoni[2.01][1310].xml,Ale,Ale12M,Non_sarei,2,01,201,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Erissena,Female,1
+1311,Ale01M-E_prezzo-1752-Fiorillo[1.01][1311].xml,Ale,Ale01M,E_prezzo,1,1,101,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Gandarte,Male,1
+1312,Ale02M-Vedrai_con-1752-Fiorillo[1.02][1312].xml,Ale,Ale02M,Vedrai_con,1,2,102,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Poro,Male,1
+1313,Ale05M-O_sugli-1752-Fiorillo[1.05][1313].xml,Ale,Ale05M,O_sugli,1,5,105,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Timagene,Male,1
+1314,Ale21M-Se_viver-1752-Fiorillo[2.15][1314].xml,Ale,Ale21M,Se_viver,2,15,215,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Gandarte,Male,1
+1315,Ale17M-Destrier_che-1766-Majo[2.10][1315].xml,Ale,Ale17M,Destrier_che,2,10,210,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Poro,Male,1
+1316,Ale02M-Vedrai_con-1762-Traetta[1.02][1316].xml,Ale,Ale02M,Vedrai_con,1,2,102,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Poro,Male,1
+1317,Ale06M-Se_mai-1762-Traetta[1.06][1317].xml,Ale,Ale06M,Se_mai,1,6,106,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Poro,Male,1
+1318,Ale16M-Digli_che-1766-Majo[2.09][1318].xml,Ale,Ale16M,Digli_che,2,9,209,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Cleofide,Female,1
+1319,Ale20M-Se_il-1766-Majo[2.13][1319].xml,Ale,Ale20M,Se_il,2,13,213,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Cleofide,Female,1
+132,Did33M-Cadra_fra-1776-Schuster[3.16][0132].xml,Did,Did33M,Cadra_fra,3,16,316,1776,1770s,Joseph Schuster,Naples,Italy,Iarba,Male,1
+1320,Ale21M-Se_viver-1766-Majo[2.14][1320].xml,Ale,Ale21M,Se_viver,2,14,214,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Gandarrte,Male,1
+1321,Ale08M-Se_possono-1771-Bertoni[2.02][1321].xml,Ale,Ale08M,Se_possono,2,2,202,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Poro,Male,1
+1322,Ale16M-Digli_che-1771-Bertoni[2.08][1322].xml,Ale,Ale16M,Digli_che,2,8,208,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Cleofide,Female,1
+1323,Ale17M-Destrier_che-1771-Bertoni[2.10][1323].xml,Ale,Ale17M,Destrier_che,2,10,210,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Poro,Male,1
+1324,Ale19M-Se_e-1771-Bertoni[2.12][1324].xml,Ale,Ale19M,Se_e,2,12,212,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Alessandro,Male,1
+1325,Ale26M-Serbati_a-1771-Bertoni[3.02][1325].xml,Ale,Ale26M,Serbati_a,3,2,302,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Alessandro,Male,1
+1326,Ale28M-Dove_si-1771-Bertoni[3.04][1326].xml,Ale,Ale28M,Dove_si,3,4,304,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Poro,Male,1
+1327,Ale03M-Vil_trofeo-1762-Traetta[1.03][1327].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Alessandro,Male,1
+1328,Ale05M-O_sugli-1762-Traetta[1.05][1328].xml,Ale,Ale05M,O_sugli,1,5,105,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Timagene,Male,1
+1329,Ale08M-Se_possono-1762-Traetta[1.09][1329].xml,Ale,Ale08M,Se_possono,1,9,109,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Poro,Male,1
+1330,Dem07M-Il_suo-1760-Conforto[X.XX][1330].xml,Dem,Dem07M,Il_suo,X,XX,XXX,1760,1760s,Antonio Cerro,-,-,Cherinto,Male,1
+1331,Ale03M-Vil_trofeo-1752-Fiorillo[1.03][1331].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Alessandro,Male,1
+1332,Ale13M-Senza_procelle-1752-Fiorillo[2.04][1332].xml,Ale,Ale13M,Senza_procelle,2,04,204,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Poro,Male,1
+1333,Ale15M-Dun_barbaro-1752-Fiorillo[2.08][1333].xml,Ale,Ale15M,Dun_barbaro,2,8,208,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Alessandro,Male,1
+1334,Ale26M-Serbati_a-1752-Fiorillo[3.06][1334].xml,Ale,Ale26M,Serbati_a,3,6,306,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Alessandro,Male,1
+1335,Ale28M-Dove_si-1752-Fiorillo[3.09][1335].xml,Ale,Ale28M,Dove_si,3,9,309,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Poro,Male,1
+1336,Ale29M-Mio_ben-1752-Fiorillo[3.10][1336].xml,Ale,Ale29M,Mio_ben,3,10,310,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Gandarte,Male,1
+1337,Ale30M-Son_confusa-1752-Fiorillo[3.11][1337].xml,Ale,Ale30M,Son_confusa,3,11,311,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Erissena,Female,1
+1338,Ale31M-Ombra_dell-1771-Bertoni[3.07][1338].xml,Ale,Ale31M,Ombra_dell,3,7,307,1771,1770s,Ferdinando Gasparo Bertoni,Venice,Italy,Cleofide&Alessandro,Female&Male,1
+1339,Ale17M-Destrier_che-1762-Traetta[2.10][1339].xml,Ale,Ale17M,Destrier_che,2,10,210,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Poro,Male,1
+134,Did03M-Son_regina-1766-Anon[1.05][0134].xml,Did,Did03M,Son_regina,1,5,105,1766,1760s,Unknown Composer,Venice,Italy,Didone,Female,1
+1340,Ale30M-Son_confusa-1762-Traetta[3.11][1340].xml,Ale,Ale30M,Son_confusa,3,11,311,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Erissena,Female,1
+1341,Ale01M-E_prezzo-1749-Perez[1.01][1341].xml,Ale,Ale01M,E_prezzo,1,1,101,1749,1740s,Davide Perez,Naples,Italy,Gandarte,Female&Male,1
+1342,Ale02M-Vedrai_con-1749-Perez[1.02][1342].xml,Ale,Ale02M,Vedrai_con,1,2,102,1749,1740s,Davide Perez,Naples,Italy,Poro,Male,1
+1343,Ale03M-Vil_trofeo-1749-Perez[1.03][1343].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1749,1740s,Davide Perez,Naples,Italy,Alessandro,Male,1
+1344,Ale04M-Chi_vive-1749-Perez[1.04][1344].xml,Ale,Ale04M,Chi_vive,1,4,104,1749,1740s,Davide Perez,Naples,Italy,Erissena,Female,1
+1345,Ale28M-Dove_si-1762-Traetta[3.09][1345].xml,Ale,Ale28M,Dove_si,3,9,309,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Poro,Male,1
+1346,Ale12M-Non_sarei-1762-Traetta[2.04][1346].xml,Ale,Ale12M,Non_sarei,2,04,204,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Erissena,Female,1
+1347,Ale18M-E_ver-1752-Fiorillo[2.11][1347].xml,Ale,Ale18M,E_ver,2,11,211,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Timagene,Male,1
+1348,Ale22M-Di_rendermi-1766-Majo[2.15][1348].xml,Ale,Ale22M,Di_rendermi,2,15,215,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Erissena,Female,1
+1349,Ale05M-O_sugli-1749-Perez[1.05][1349].xml,Ale,Ale05M,O_sugli,1,5,105,1749,1740s,Davide Perez,Naples,Italy,Timagene,Male,1
+135,Did33M-Cadra_fra-1763-Jommelli[3.17][0135].xml,Did,Did33M,Cadra_fra,3,17,317,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Iarba,Male,1
+1350,Ale06M-Se_mai-1749-Perez[1.06][1350].xml,Ale,Ale06M,Se_mai,1,6,106,1749,1740s,Davide Perez,Naples,Italy,Poro,Male,1
+1351,Ale08M-Se_possono-1749-Perez[1.09][1351].xml,Ale,Ale08M,Se_possono,1,9,109,1749,1740s,Davide Perez,Naples,Italy,Poro,Male,1
+1352,Ale07M-Se_mai-1762-Traetta[1.07][1352].xml,Ale,Ale07M,Se_mai,1,7,107,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Cleofide,Female,1
+1353,Ale06M-Ale07M-Se_mai-1762-Traetta[1.16][1353].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Cleofide,Female,1
+1354,Ale19M-Se_e-1762-Traetta[2.12][1354].xml,Ale,Ale19M,Se_e,2,12,212,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Alessandro,Female&Male,1
+1355,Ale27M-Finche_rimango-1762-Traetta[3.07][1355].xml,Ale,Ale27M,Finche_rimango,3,7,307,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Timagene,Male,1
+1356,Ale06M-Ale07M-Se_mai-1752-Fiorillo[1.15][1356].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1752,1750s,Ignazio Fiorillo,Brunswich,Empire,Cleofide,Female,1
+1357,Ale13M-Senza_procelle-1746-Lampugnani[2.04][1357].xml,Ale,Ale13M,Senza_procelle,2,04,204,1746,1740s,Giovanni Battista Lampugnani,London,England,Poro,Male,1
+1358,Ale15M-Dun_barbaro-1762-Traetta[2.08][1358].xml,Ale,Ale15M,Dun_barbaro,2,08,208,1762,1760s,Tommaso Traetta,Reggio Emilia,Italy,Alessandro,Male,1
+1359,Ale30M-Son_confusa-1746-Lampugnani[3.08][1359].xml,Ale,Ale30M,Son_confusa,3,8,308,1746,1740s,Giovanni Battista Lampugnani,London,England,Erissena,Female,1
+136,Did18M-Ah_non_lasciarmi-1794-Paisiello[2.06][0136].xml,Did,Did18M,Ah_non_lasciarmi,2,06,206,1794,1790s,Giovanni Paisiello,Naples,Italy,Didone,Female,1
+1360,Did11M-Tu_mi_disarmi-1763-Traetta[1.16][1360].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1763,1760s,Tommaso Traetta,Venice,Italy,Iarba,Male,1
+1361,Did17M-L_augelletto-1763-Traetta[2.02][1361].xml,Did,Did17M,L_augelletto,2,02,202,1763,1760s,Tommaso Traetta,Venice,Italy,Araspe,Male,1
+1362,Did20M-Fosca_nube-1763-Traetta[2.06][1362].xml,Did,Did20M,Fosca_nube,2,06,206,1763,1760s,Tommaso Traetta,Venice,Italy,Iarba,Male,1
+1363,Did23M-Veggio_la-1763-Traetta[2.10][1363].xml,Did,Did23M,Veggio_la,2,10,210,1763,1760s,Tommaso Traetta,Venice,Italy,Selene,Female,1
+1364,Did24M-Chiamami_pur-1763-Traetta[2.13][1364].xml,Did,Did24M,Chiamami_pur,2,13,213,1763,1760s,Tommaso Traetta,Venice,Italy,Iarba,Male,1
+1365,Did30M-Nel_duol-1763-Traetta[3.08][1365].xml,Did,Did30M,Nel_duol,3,08,308,1763,1760s,Tommaso Traetta,Venice,Italy,Selene,Female,1
+1366,Did32M-Gia_si-1763-Traetta[3.15][1366].xml,Did,Did32M,Gia_si,3,15,315,1763,1760s,Tommaso Traetta,Venice,Italy,Araspe,Male,1
+1367,Did31M-Va_crescendo-1763-Traetta[3.09][1367].xml,Did,Did31M,Va_crescendo,3,09,309,1763,1760s,Tommaso Traetta,Venice,Italy,Didone,Female,1
+1368,Ale07M-Se_mai-1749-Perez[1.07][1368].xml,Ale,Ale07M,Se_mai,1,7,107,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1369,Ale06M-Ale07M-Se_mai-1749-Perez[1.16][1369].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1370,Ale10M-Voi_che-1749-Perez[1.11][1370].xml,Ale,Ale10M,Voi_che,1,11,111,1749,1740s,Davide Perez,Naples,Italy,Gandarte,Male,1
+1371,Ale11M-Se_amore-1749-Perez[1.15][1371].xml,Ale,Ale11M,Se_amore,1,15,115,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1372,Ale15M-Dun_barbaro-1749-Perez[2.04][1372].xml,Ale,Ale15M,Dun_barbaro,2,04,204,1749,1740s,Davide Perez,Naples,Italy,Alessandro,Male,1
+1373,Ale16M-Digli_che-1749-Perez[2.05][1373].xml,Ale,Ale16M,Digli_che,2,5,205,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1374,Ale17M-Destrier_che-1749-Perez[2.06][1374].xml,Ale,Ale17M,Destrier_che,2,6,206,1749,1740s,Davide Perez,Naples,Italy,Poro,Male,1
+1375,Ale18M-E_ver-1749-Perez[2.07][1375].xml,Ale,Ale18M,E_ver,2,7,207,1749,1740s,Davide Perez,Naples,Italy,Timagene,Male,1
+1376,Ale19M-Se_e-1749-Perez[2.09][1376].xml,Ale,Ale19M,Se_e,2,9,209,1749,1740s,Davide Perez,Naples,Italy,Alessandro,Male,1
+1377,Ale20M-Se_il-1749-Perez[2.10][1377].xml,Ale,Ale20M,Se_il,2,10,210,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1378,Ale21M-Se_viver-1749-Perez[2.11][1378].xml,Ale,Ale21M,Se_viver,2,11,211,1749,1740s,Davide Perez,Naples,Italy,Gandarte,Male,1
+1379,Ale22M-Di_rendermi-1749-Perez[2.12][1379].xml,Ale,Ale22M,Di_rendermi,2,12,212,1749,1740s,Davide Perez,Naples,Italy,Erissena,Female,1
+1380,Ale24M-Se_troppo-1749-Perez[3.04][1380].xml,Ale,Ale24M,Se_troppo,3,4,304,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1381,Ale26M-Serbati_a-1749-Perez[3.06][1381].xml,Ale,Ale26M,Serbati_a,3,6,306,1749,1740s,Davide Perez,Naples,Italy,Alessandro,Male,1
+1382,Ale28M-Dove_si-1749-Perez[3.09][1382].xml,Ale,Ale28M,Dove_si,3,9,309,1749,1740s,Davide Perez,Naples,Italy,Poro,Female&Male,1
+1383,Ale29M-Mio_ben-1749-Perez[3.10][1383].xml,Ale,Ale29M,Mio_ben,3,10,310,1749,1740s,Davide Perez,Naples,Italy,Gandarte,Male,1
+1384,Ale30M-Son_confusa-1749-Perez[3.11][1384].xml,Ale,Ale30M,Son_confusa,3,11,311,1749,1740s,Davide Perez,Naples,Italy,Erissena,Female,1
+1385,Ale31M-Ombra_dell-1749-Perez[3.12][1385].xml,Ale,Ale31M,Ombra_dell,3,12,312,1749,1740s,Davide Perez,Naples,Italy,Cleofide,Female,1
+1386,Ale01M-E_prezzo-1759-Holzbauer[1.01][1386].xml,Ale,Ale01M,E_prezzo,1,1,101,1759,1750s,Ignaz Holzbauer,Milan,Italy,Gandarte,Male,1
+1387,Ale03M-Vil_trofeo-1759-Holzbauer[1.03][1387].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1759,1750s,Ignaz Holzbauer,Milan,Italy,Alessandro,Male,1
+1388,Ale04M-Chi_vive-1759-Holzbauer[1.04][1388].xml,Ale,Ale04M,Chi_vive,1,4,104,1759,1750s,Ignaz Holzbauer,Milan,Italy,Erissena,Female,1
+1389,Ale05M-O_sugli-1759-Holzbauer[1.05][1389].xml,Ale,Ale05M,O_sugli,1,5,105,1759,1750s,Ignaz Holzbauer,Milan,Italy,Timagene,Male,1
+1390,Ale06M-Se_mai-1759-Holzbauer[1.06][1390].xml,Ale,Ale06M,Se_mai,1,6,106,1759,1750s,Ignaz Holzbauer,Milan,Italy,Poro,Female&Male,1
+1392,Ale27M-Finche_rimango-1735-Ferrandini[3.07][1392].xml,Ale,Ale27M,Finche_rimango,3,7,307,1735,1730s,Giovanni Battista Ferrandini,Munich,Empire,Timagene,Male,1
+1393,Ale04M-Chi_vive-1758-Sciroli[1.04][1393].xml,Ale,Ale04M,Chi_vive,1,4,104,1758,1750s,Gregorio Sciroli,Genoa,Italy,Erissena,Female,1
+1394,Ale05M-O_sugli-1758-Sciroli[1.05][1394].xml,Ale,Ale05M,O_sugli,1,5,105,1758,1750s,Gregorio Sciroli,Genoa,Italy,Timagene,Female&Male,1
+1395,Ale06M-Se_mai-1758-Sciroli[1.06][1395].xml,Ale,Ale06M,Se_mai,1,6,106,1758,1750s,Gregorio Sciroli,Genoa,Italy,Poro,Male,1
+14,Did12M-Non_ha-1747-Jommelli[1.17][0014].xml,Did,Did12M,Non_ha,1,17,117,1747,1740s,Niccolò Jommelli,Rome,Italy,Didone,Female,1
+140,Did10M-Infelice_sventurato-1739-Lampugnani[1.13][0140].xml,Did,Did10M,Infelice_sventurato,1,13,113,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Araspe,Male,1
+1402,Did28M-Quando_londa-1763-Traetta[3.06][1402].xml,Did,Did28M,Quando_londa,3,06,306,1763,1760s,Tommaso Traetta,Venice,Italy,Osmida,Male,1
+1403,Did29M-A_trionfar-1763-Traetta[3.07][1403].xml,Did,Did29M,A_trionfar,3,07,307,1763,1760s,Tommaso Traetta,Venice,Italy,Enea,Male,1
+1407,Ale08M-Se_possono-1759-Holzbauer[1.08][1407].xml,Ale,Ale08M,Se_possono,1,8,108,1759,1750s,Ignaz Holzbauer,Milan,Italy,Poro,Male,1
+1408,Ale07M-Se_mai-1759-Holzbauer[1.07][1408].xml,Ale,Ale07M,Se_mai,1,7,107,1759,1750s,Ignaz Holzbauer,Milan,Italy,Cleofide,Female,1
+1409,Ale06M-Ale07M-Se_mai-1759-Holzbauer[1.15][1409].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1759,1750s,Ignaz Holzbauer,Milan,Italy,Cleofide,Female,1
+141,Did19M-Vedi_nel-1724-Sarro[2.08][0141].xml,Did,Did19M,Vedi_nel,2,08,208,1724,1720s,Domenico Natale Sarro,Naples,Italy,Enea,Male,1
+1410,Ale12M-Non_sarei-1759-Holzbauer[2.03][1410].xml,Ale,Ale12M,Non_sarei,2,03,203,1759,1750s,Ignaz Holzbauer,Milan,Italy,Erissena,Female,1
+1411,Ale17M-Destrier_che-1759-Holzbauer[2.04][1411].xml,Ale,Ale17M,Destrier_che,2,4,204,1759,1750s,Ignaz Holzbauer,Milan,Italy,Poro,Male,1
+1412,Ale10M-Voi_che-1759-Holzbauer[1.10][1412].xml,Ale,Ale10M,Voi_che,1,10,110,1759,1750s,Ignaz Holzbauer,Milan,Italy,Gandarte,Male,1
+1413,Ale16M-Digli_che-1759-Holzbauer[2.09][1413].xml,Ale,Ale16M,Digli_che,2,9,209,1759,1750s,Ignaz Holzbauer,Milan,Italy,Cleofide,Female,1
+1414,Ale18M-E_ver-1759-Holzbauer[2.11][1414].xml,Ale,Ale18M,E_ver,2,11,211,1759,1750s,Ignaz Holzbauer,Milan,Italy,Timagene,Male,1
+1415,Ale24M-Se_troppo-1766-Majo[3.01][1415].xml,Ale,Ale24M,Se_troppo,3,1,301,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Cleofide,Female,1
+1416,Ale26M-Serbati_a-1766-Majo[3.04][1416].xml,Ale,Ale26M,Serbati_a,3,4,304,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Alessandro,Male,1
+1417,Ale27M-Finche_rimango-1766-Majo[3.05][1417].xml,Ale,Ale27M,Finche_rimango,3,5,305,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Timagene,Male,1
+1418,Ale30M-Son_confusa-1766-Majo[3.08][1418].xml,Ale,Ale30M,Son_confusa,3,8,308,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Erissena,Female,1
+1419,Ale02M-Vedrai_con-1747-Abos[1.02][1419].xml,Ale,Ale02M,Vedrai_con,1,2,102,1747,1740s,Girolamo Matteo Abos,Ancona,Italy,Poro,Male,1
+142,Did15M-Leon_che-1730-Sarro[2.03][0142].xml,Did,Did15M,Leon_che,2,3,203,1730,1730s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+1420,Ale03M-Vil_trofeo-1747-Abos[1.03][1420].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1747,1740s,Girolamo Matteo Abos,Ancona,Italy,Alessandro,Male,1
+1421,Ale11M-Se_amore-1747-Abos[1.15][1421].xml,Ale,Ale11M,Se_amore,1,15,115,1747,1740s,Girolamo Matteo Abos,Ancona,Italy,Alessandro,Female&Male,1
+1422,Ale16M-Digli_che-1771-Abos[2.09][1422].xml,Ale,Ale16M,Digli_che,2,9,209,1771,1770s,Girolamo Matteo Abos,Ancona,Italy,Cleofide,Female,1
+1423,Ale17M-Destrier_che-1747-Abos[2.10][1423].xml,Ale,Ale17M,Destrier_che,2,10,210,1747,1740s,Girolamo Matteo Abos,Ancona,Italy,Poro,Male,1
+1424,Ale24M-Se_troppo-1747-Abos[3.04][1424].xml,Ale,Ale24M,Se_troppo,3,4,304,1747,1740s,Girolamo Matteo Abos,Ancona,Italy,Cleofide,Female,1
+1425,Ale19M-Se_e-1759-Holzbauer[2.13][1425].xml,Ale,Ale19M,Se_e,2,13,213,1759,1750s,Ignaz Holzbauer,Milan,Italy,Alessandro,Male,1
+1426,Ale21M-Se_viver-1759-Holzbauer[2.15][1426].xml,Ale,Ale21M,Se_viver,2,15,215,1759,1750s,Ignaz Holzbauer,Milan,Italy,Gandarte,Male,1
+1427,Ale02M-Vedrai_con-1735-Ferrandini[1.02][1427].xml,Ale,Ale02M,Vedrai_con,1,2,102,1735,1730s,Giovanni Battista Ferrandini,Munich,Empire,Poro,Male,1
+1428,Ale03M-Vil_trofeo-1735-Ferrandini[1.03][1428].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1735,1730s,Giovanni Battista Ferrandini,Munich,Empire,Alessandro,Male,1
+1429,Ale28M-Dove_si-1735-Ferrandini[3.09][1429].xml,Ale,Ale28M,Dove_si,3,9,309,1735,1730s,Giovanni Battista Ferrandini,Munich,Empire,Poro,Male,1
+143,Did17M-L_augelletto-1730-Sarro[2.05][0143].xml,Did,Did17M,L_augelletto,2,05,205,1730,1730s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+1431,Ale02M-Vedrai_con-1766-Sarti[1.02][1431].xml,Ale,Ale02M,Vedrai_con,1,2,102,1766,1760s,Giuseppe Sarti,Padua,Italy,Poro,Male,1
+1432,Ale03M-Vil_trofeo-1766-Sarti[1.03][1432].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1766,1760s,Giuseppe Sarti,Padua,Italy,Alessandro,Male,1
+1433,Ale04M-Chi_vive-1766-Sarti[1.05][1433].xml,Ale,Ale04M,Chi_vive,1,5,105,1766,1760s,Giuseppe Sarti,Padua,Italy,Erissena,Female,1
+1434,Ale06M-Se_mai-1766-Sarti[1.06][1434].xml,Ale,Ale06M,Se_mai,1,6,106,1766,1760s,Giuseppe Sarti,Padua,Italy,Poro,Male,1
+1435,Ale07M-Se_mai-1766-Sarti[1.07][1435].xml,Ale,Ale07M,Se_mai,1,7,107,1766,1760s,Giuseppe Sarti,Padua,Italy,Cleofide,Female,1
+1437,Ale10M-Voi_che-1766-Sarti[1.10][1437].xml,Ale,Ale10M,Voi_che,1,10,110,1766,1760s,Giuseppe Sarti,Padua,Italy,Gandarte,Female&Male&Male,1
+1438,Ale12M-Non_sarei-1766-Sarti[2.01][1438].xml,Ale,Ale12M,Non_sarei,2,01,201,1766,1760s,Giuseppe Sarti,Padua,Italy,Erissena,Female,1
+1439,Ale08M-Se_possono-1766-Sarti[2.02][1439].xml,Ale,Ale08M,Se_possono,2,2,202,1766,1760s,Giuseppe Sarti,Padua,Italy,Poro,Male,1
+1440,Ale16M-Digli_che-1766-Sarti[2.08][1440].xml,Ale,Ale16M,Digli_che,2,8,208,1766,1760s,Giuseppe Sarti,Padua,Italy,Cleofide,Female,1
+1441,Ale17M-Destrier_che-1766-Sarti[2.09][1441].xml,Ale,Ale17M,Destrier_che,2,9,209,1766,1760s,Giuseppe Sarti,Padua,Italy,Poro,Male,1
+1442,Ale19M-Se_e-1766-Sarti[2.11][1442].xml,Ale,Ale19M,Se_e,2,11,211,1766,1760s,Giuseppe Sarti,Padua,Italy,Alessandro,Male,1
+1443,Did01M-Dovrei_ma-1751-Fiorillo[1.02][1443].xml,Did,Did01M,Dovrei_ma,1,2,102,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Enea,Male,1
+1444,Did02M-Diro_che-1751-Fiorillo[1.03][1444].xml,Did,Did02M,Diro_che,1,3,103,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Selene,Female,1
+1445,Did07M-Quando_saprai-1751-Fiorillo[1.10][1445].xml,Did,Did07M,Quando_saprai,1,10,110,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Enea,Male,1
+1446,Did13M-Se_resto-1751-Fiorillo[1.17][1446].xml,Did,Did13M,Se_resto,1,17,117,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Enea,Male,1
+1447,Did19M-Vedi_nel-1751-Fiorillo[2.07][1447].xml,Did,Did19M,Vedi_nel,2,07,207,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Enea,Male,1
+145,Did16M-Ardi_per-1730-Sarro[2.04][0145].xml,Did,Did16M,Ardi_per,2,4,204,1730,1730s,Domenico Natale Sarro,Naples,Italy,Selene,Female,1
+1450,Ale20M-Se_il-1766-Sarti[2.13][1450].xml,Ale,Ale20M,Se_il,2,13,213,1766,1760s,Giuseppe Sarti,Padua,Italy,Cleofide,Female,1
+1453,Ale24M-Se_troppo-1766-Sarti[3.01][1453].xml,Ale,Ale24M,Se_troppo,3,1,301,1766,1760s,Giuseppe Sarti,Padua,Italy,Poro,Male,1
+1454,Ale23M-Serbati_a-1766-Sarti[3.03][1454].xml,Ale,Ale23M,Serbati_a,3,3,303,1766,1760s,Giuseppe Sarti,Padua,Italy,Alessandro,Male,1
+1455,Ale27M-Finche_rimango-1766-Sarti[3.04][1455].xml,Ale,Ale27M,Finche_rimango,3,4,304,1766,1760s,Giuseppe Sarti,Padua,Italy,Timagene,Male,1
+1456,Ale28M-Dove_si-1766-Anon[3.05][1456].xml,Ale,Ale28M,Dove_si,3,5,305,1766,1760s,Unknown Composer,Padua,Italy,Poro,Male,1
+1458,Ale24M-Se_troppo-1759-Holzbauer[3.01][1458].xml,Ale,Ale24M,Se_troppo,3,1,301,1759,1750s,Ignaz Holzbauer,Milan,Italy,Cleofide,Female,1
+1459,Ale26M-Serbati_a-1759-Holzbauer[3.04][1459].xml,Ale,Ale26M,Serbati_a,3,4,304,1759,1750s,Ignaz Holzbauer,Milan,Italy,Alessandro,Male,1
+146,Did18M-Ah_non_lasciarmi-1810-Paer[2.02][0146].xml,Did,Did18M,Ah_non_lasciarmi,2,02,202,1810,1810s,Ferdinando Paër,Paris,France,Didone,Female,1
+1460,Ale28M-Dove_si-1759-Holzbauer[3.06][1460].xml,Ale,Ale28M,Dove_si,3,6,306,1759,1750s,Ignaz Holzbauer,Milan,Italy,Poro,Male,1
+1461,Did08M-Ogni_amator-1751-Fiorillo[1.12][1461].xml,Did,Did08M,Ogni_amator,1,12,112,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Selene,Female,1
+1463,Did23M-Veggio_la-1751-Fiorillo[2.12][1463].xml,Did,Did23M,Veggio_la,2,12,212,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Selene,Female,1
+1464,Ale19M-Se_e-1766-Majo[2.11][1464].xml,Ale,Ale19M,Se_e,2,11,211,1766,1760s,Gian Francesco De Majo,Mannheim,Empire,Alessandro,Male,1
+1465,Ale29M-Mio_ben-1759-Holzbauer[3.07][1465].xml,Ale,Ale29M,Mio_ben,3,7,307,1759,1750s,Ignaz Holzbauer,Milan,Italy,Gandarte,Male,1
+1469,Did04M-Tu_mi_scorgi-1751-Fiorillo[1.06][1469].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Osmida,Male,1
+147,Did11M-Tu_mi_disarmi-1742-Hasse[1.17][0147].xml,Did,Did11M,Tu_mi_disarmi,1,17,117,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Iarba,Male,1
+1470,Did06M-Se_dalle-1751-Fiorillo[1.08][1470].xml,Did,Did06M,Se_dalle,1,8,108,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Araspe,Male,1
+1472,Did05M-Fra_lo-1751-Fiorillo[1.07][1472].xml,Did,Did05M,Fra_lo,1,7,107,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Iarba,Male,1
+1473,Did21M-Tacero_se-1751-Fiorillo[2.10][1473].xml,Did,Did21M,Tacero_se,2,10,210,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Araspe,Male,1
+1474,Did03M-Son_regina-1751-Fiorillo[1.05][1474].xml,Did,Did03M,Son_regina,1,5,105,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Didone,Female,1
+1478,Did18M-Ah_non_lasciarmi-1751-Fiorillo[2.06][1478].xml,Did,Did18M,Ah_non_lasciarmi,2,06,206,1751,1750s,Ignazio Fiorillo,Brunswich,Empire,Didone,Female,1
+1479,Ale02M-Vedrai_con-1758-Piccinni[1.02][1479].xml,Ale,Ale02M,Vedrai_con,1,2,102,1758,1750s,Niccolò Piccinni,Rome,Italy,Poro,Male,1
+148,Did08M-Ogni_amator-1742-Hasse[1.11][0148].xml,Did,Did08M,Ogni_amator,1,11,111,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Selene,Female,1
+1481,Ale03M-Vil_trofeo-1758-Piccinni[1.03][1481].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1758,1750s,Niccolò Piccinni,Rome,Italy,Alessandro,Male,1
+1482,Ale05M-O_sugli-1758-Piccinni[1.05][1482].xml,Ale,Ale05M,O_sugli,1,5,105,1758,1750s,Niccolò Piccinni,Rome,Italy,Timagene,Female&Male,1
+1484,Ale13M-Senza_procelle-1758-Piccinni[2.02][1484].xml,Ale,Ale13M,Senza_procelle,2,02,202,1758,1750s,Niccolò Piccinni,Rome,Italy,Gandarte,Male,1
+1485,Ale19M-Se_e-1758-Piccinni[2.12][1485].xml,Ale,Ale19M,Se_e,2,12,212,1758,1750s,Niccolò Piccinni,Rome,Italy,Alessandro,Male,1
+1489,Ale24M-Se_troppo-1758-Piccinni[3.04][1489].xml,Ale,Ale24M,Se_troppo,3,4,304,1758,1750s,Niccolò Piccinni,Rome,Italy,Cleofide,Female&Male,1
+149,Did07M-Quando_saprai-1749-Jommelli[1.10][0149].xml,Did,Did07M,Quando_saprai,1,10,110,1749,1740s,Niccolò Jommelli,Vienna,Empire,Enea,Male,1
+1490,Ale04M-Chi_vive-1758-Piccinni[1.04][1490].xml,Ale,Ale04M,Chi_vive,1,4,104,1758,1750s,Niccolò Piccinni,Rome,Italy,Erissena,Female,1
+1491,Ale10M-Voi_che-1758-Piccinni[1.12][1491].xml,Ale,Ale10M,Voi_che,1,12,112,1758,1750s,Niccolò Piccinni,Rome,Italy,Gandarte,Male,1
+1492,Ale12M-Non_sarei-1758-Piccinni[2.04][1492].xml,Ale,Ale12M,Non_sarei,2,04,204,1758,1750s,Niccolò Piccinni,Rome,Italy,Erissena,Female,1
+1494,Ale25M-Come_il-1758-Piccinni[3.05][1494].xml,Ale,Ale25M,Come_il,3,5,305,1758,1750s,Niccolò Piccinni,Rome,Italy,Erissena,Female,1
+1495,Ale26M-Serbati_a-1758-Piccinni[3.06][1495].xml,Ale,Ale26M,Serbati_a,3,6,306,1758,1750s,Niccolò Piccinni,Rome,Italy,Alessandro,Male,0
+15,Did03M-Son_regina-1747-Jommelli[1.05][0015].xml,Did,Did03M,Son_regina,1,5,105,1747,1740s,Niccolò Jommelli,Rome,Italy,Didone,Female,1
+150,Did04M-Tu_mi_scorgi-1749-Jommelli[1.06][0150].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1749,1740s,Niccolò Jommelli,Vienna,Empire,Osmida,Male,1
+151,Did07M-Quando_saprai-1742-Hasse[1.10][0151].xml,Did,Did07M,Quando_saprai,1,10,110,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Enea,Male,1
+152,Did08M-Ogni_amator-1749-Jommelli[2.10][0152].xml,Did,Did08M,Ogni_amator,2,10,210,1749,1740s,Niccolò Jommelli,Vienna,Empire,Selene,Female,1
+153,Did19M-Vedi_nel-1749-Jommelli[2.05][0153].xml,Did,Did19M,Vedi_nel,2,05,205,1749,1740s,Niccolò Jommelli,Vienna,Empire,Enea,Male,1
+154,Did20M-Fosca_nube-1730-Sarro[2.09][0154].xml,Did,Did20M,Fosca_nube,2,09,209,1730,1730s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+155,Did21M-Tacero_se-1724-Sarro[2.11][0155].xml,Did,Did21M,Tacero_se,2,11,211,1724,1720s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+156,Did22M-Non_cede-1724-Sarro[2.12][0156].xml,Did,Did22M,Non_cede,2,12,212,1724,1720s,Domenico Natale Sarro,Naples,Italy,Didone,Male,1
+157,Did23M-Veggio_la-1730-Sarro[2.13][0157].xml,Did,Did23M,Veggio_la,2,13,213,1730,1730s,Domenico Natale Sarro,Naples,Italy,Selene,Female,1
+158,Did24M-Chiamami_pur-1730-Sarro[2.16][0158].xml,Did,Did24M,Chiamami_pur,2,16,216,1730,1730s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+159,Did25M-Va_lusingando-1724-Sarro[2.17][0159].xml,Did,Did25M,Va_lusingando,2,17,217,1724,1720s,Domenico Natale Sarro,Naples,Italy,Didone,Female,0
+159,Did25M-Va_lusingando-1730-Sarro[2.17][0159].xml,Did,Did25M,Va_lusingando,2,17,217,1730,1730s,Domenico Natale Sarro,Naples,Italy,Didone,Female,1
+16,Did03M-Son_regina-1749-Jommelli[1.05][0016].xml,Did,Did03M,Son_regina,1,5,105,1749,1740s,Niccolò Jommelli,Vienna,Empire,Didone,Female,1
+160,Did26M-Vivi_superbo-1724-Sarro[3.02][0160].xml,Did,Did26M,Vivi_superbo,3,02,302,1724,1720s,Domenico Natale Sarro,Naples,Italy,Enea,Male,1
+165,Did32M-Gia_si-1724-Sarro[3.13][0165].xml,Did,Did32M,Gia_si,3,13,313,1724,1720s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+167,Did23M-Veggio_la-1739-Lampugnani[2.14][0167].xml,Did,Did23M,Veggio_la,2,14,214,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Selene,Male,1
+168,Did24M-Chiamami_pur-1739-Lampugnani[2.17][0168].xml,Did,Did24M,Chiamami_pur,2,17,217,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Iarba,Male,1
+17,Did12M-Non_ha-1753-Perez[1.17][0017].xml,Did,Did12M,Non_ha,1,17,117,1753,1750s,Davide Perez,Genova,Italy,Didone,Female,1
+170,Did14M-Pensa_che-1760-Bernasconi[2.01][0170].xml,Did,Did14M,Pensa_che,2,1,201,1760,1760s,Andrea Bernasconi,Venice,Italy,Osmida,Male,1
+171,Did15M-Leon_che-1760-Bernasconi[2.03][0171].xml,Did,Did15M,Leon_che,2,03,203,1760,1760s,Andrea Bernasconi,Venice,Italy,Iarba,Male,1
+172,Did16M-Ardi_per-1760-Bernasconi[2.04][0172].xml,Did,Did16M,Ardi_per,2,04,204,1760,1760s,Andrea Bernasconi,Venice,Italy,Selene,Female,1
+173,Did19M-Vedi_nel-1760-Bernasconi[2.08][0173].xml,Did,Did19M,Vedi_nel,2,08,208,1760,1760s,Andrea Bernasconi,Venice,Italy,Enea,Male,1
+174,Did21M-Tacero_se-1760-Bernasconi[2.11][0174].xml,Did,Did21M,Tacero_se,2,11,211,1760,1760s,Andrea Bernasconi,Venice,Italy,Araspe,Male,1
+177,Did24M-Chiamami_pur-1760-Bernasconi[2.16][0177].xml,Did,Did24M,Chiamami_pur,2,16,216,1760,1760s,Andrea Bernasconi,Venice,Italy,Iarba,Male,1
+179,Did28M-Quando_londa-1760-Bernasconi[3.07][0179].xml,Did,Did28M,Quando_londa,3,07,307,1760,1760s,Andrea Bernasconi,Venice,Italy,Osmida,Male,1
+181,Did30M-Nel_duol-1760-Bernasconi[3.09][0181].xml,Did,Did30M,Nel_duol,3,09,309,1760,1760s,Andrea Bernasconi,Venice,Italy,Selene,Female,1
+182,Did31M-Va_crescendo-1760-Bernasconi[3.10][0182].xml,Did,Did31M,Va_crescendo,3,10,310,1760,1760s,Andrea Bernasconi,Venice,Italy,Didone,Female,1
+183,Did33M-Cadra_fra-1760-Bernasconi[3.19][0183].xml,Did,Did33M,Cadra_fra,3,19,319,1760,1760s,Andrea Bernasconi,Venice,Italy,Iarba,Male,1
+186,Did02M-Diro_che-1742-Hasse[1.03][0186].xml,Did,Did02M,Diro_che,1,3,103,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Selene,Female,1
+187,Did04M-Tu_mi_scorgi-1742-Hasse[1.06][0187].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Osmida,Male,1
+188,Did05M-Fra_lo-1742-Hasse[1.07][0188].xml,Did,Did05M,Fra_lo,1,7,107,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Iarba,Male,1
+189,Did06M-Se_dalle-1742-Hasse[1.08][0189].xml,Did,Did06M,Se_dalle,1,8,108,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Araspe,Male,1
+19,Did12M-Non_ha-1763-Jommelli[1.17][0019].xml,Did,Did12M,Non_ha,1,17,117,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Didone,Female,1
+190,Did15M-Leon_che-1742-Hasse[2.02][0190].xml,Did,Did15M,Leon_che,2,02,202,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Iarba,Male,1
+191,Did17M-L_augelletto-1742-Hasse[2.04][0191].xml,Did,Did17M,L_augelletto,2,04,204,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Araspe,Male,1
+192,Did19M-Vedi_nel-1742-Hasse[2.07][0192].xml,Did,Did19M,Vedi_nel,2,07,207,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Enea,Male,1
+193,Did21M-Tacero_se-1742-Hasse[2.10][0193].xml,Did,Did21M,Tacero_se,2,10,210,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Araspe,Male,1
+194,Did23M-Veggio_la-1742-Hasse[2.12][0194].xml,Did,Did23M,Veggio_la,2,12,212,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Selene,Female,1
+195,Did24M-Chiamami_pur-1742-Hasse[2.15][0195].xml,Did,Did24M,Chiamami_pur,2,15,215,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Iarba,Male,1
+196,Did25M-Va_lusingando-1742-Hasse[2.16][0196].xml,Did,Did25M,Va_lusingando,2,16,216,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Didone,Female,1
+197,Did26M-Vivi_superbo-1742-Hasse[3.02][0197].xml,Did,Did26M,Vivi_superbo,3,02,302,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Enea,Male,1
+199,Did02M-Diro_che-1747-Jommelli[1.03][0199].xml,Did,Did02M,Diro_che,1,3,103,1747,1740s,Niccolò Jommelli,Rome,Italy,Selene,Female,1
+2,Did12M-Non_ha-1770-Piccinni[1.18][0002].xml,Did,Did12M,Non_ha,1,18,118,1770,1770s,Niccolò Piccinni,Rome,Italy,Didone,Female,1
+20,Did12M-Non_ha-1766-Anon[1.18][0020].xml,Did,Did12M,Non_ha,1,18,118,1766,1760s,Unknown Composer,Venice,Italy,Didone,Female,1
+200,Did04M-Tu_mi_scorgi-1747-Jommelli[1.06][0200].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1747,1740s,Niccolò Jommelli,Rome,Italy,Osmida,Male,1
+201,Did05M-Fra_lo-1747-Jommelli[1.07][0201].xml,Did,Did05M,Fra_lo,1,7,107,1747,1740s,Niccolò Jommelli,Rome,Italy,Iarba,Male,1
+202,Did02M-Diro_che-1749-Jommelli[1.03][0202].xml,Did,Did02M,Diro_che,1,3,103,1749,1740s,Niccolò Jommelli,Vienna,Empire,Selene,Female,1
+203,Did06M-Se_dalle-1749-Jommelli[1.08][0203].xml,Did,Did06M,Se_dalle,1,8,108,1749,1740s,Niccolò Jommelli,Vienna,Empire,Araspe,Male,1
+204,Did21M-Tacero_se-1749-Jommelli[2.08][0204].xml,Did,Did21M,Tacero_se,2,08,208,1749,1740s,Niccolò Jommelli,Vienna,Empire,Araspe,Male,1
+205,Did25M-Va_lusingando-1749-Jommelli[2.14][0205].xml,Did,Did25M,Va_lusingando,2,14,214,1749,1740s,Niccolò Jommelli,Vienna,Empire,Didone,Female,1
+206,Did16M-Ardi_per-1749-Jommelli[2.01][0206].xml,Did,Did16M,Ardi_per,2,01,201,1749,1740s,Niccolò Jommelli,Vienna,Empire,Selene,Female,1
+207,Did09M-Son_quel-1749-Jommelli[1.13][0207].xml,Did,Did09M,Son_quel,1,13,113,1749,1740s,Niccolò Jommelli,Vienna,Empire,Iarba,Male,1
+209,Did28M-Quando_londa-1749-Jommelli[3.06][0209].xml,Did,Did28M,Quando_londa,3,06,306,1749,1740s,Niccolò Jommelli,Vienna,Empire,Osmida,Male,1
+210,Did29M-A_trionfar-1749-Jommelli[3.07][0210].xml,Did,Did29M,A_trionfar,3,07,307,1749,1740s,Niccolò Jommelli,Vienna,Empire,Enea,Male,1
+211,Did32M-Gia_si-1760-Bernasconi[3.16][0211].xml,Did,Did32M,Gia_si,3,16,316,1760,1760s,Andrea Bernasconi,Venice,Italy,Araspe,Male,1
+212,Did28M-Quando_londa-1742-Hasse[3.07][0212].xml,Did,Did28M,Quando_londa,3,07,307,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Osmida,Male,1
+213,Did29M-A_trionfar-1742-Hasse[3.08][0213].xml,Did,Did29M,A_trionfar,3,08,308,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Enea,Male,1
+214,Did07M-Quando_saprai-1747-Jommelli[1.09][0214].xml,Did,Did07M,Quando_saprai,1,9,109,1747,1740s,Niccolò Jommelli,Rome,Italy,Enea,Male,1
+215,Did10M-Infelice_sventurato-1747-Jommelli[1.13][0215].xml,Did,Did10M,Infelice_sventurato,1,13,113,1747,1740s,Niccolò Jommelli,Rome,Italy,Araspe,Male,1
+216,Did11M-Tu_mi_disarmi-1747-Jommelli[1.16][0216].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1747,1740s,Niccolò Jommelli,Rome,Italy,Iarba,Male,1
+217,Did30M-Nel_duol-1749-Jommelli[3.08][0217].xml,Did,Did30M,Nel_duol,3,08,308,1749,1740s,Niccolò Jommelli,Vienna,Empire,Selene,Female,1
+218,Did32M-Gia_si-1749-Jommelli[3.15][0218].xml,Did,Did32M,Gia_si,3,15,315,1749,1740s,Niccolò Jommelli,Vienna,Empire,Araspe,Male,1
+22,Did18M-Ah_non_lasciarmi-1742-Hasse[2.06][0022].xml,Did,Did18M,Ah_non_lasciarmi,2,06,206,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Didone,Female,1
+221,Did19M-Vedi_nel-1747-Jommelli[2.03][0221].xml,Did,Did19M,Vedi_nel,2,03,203,1747,1740s,Niccolò Jommelli,Rome,Italy,Enea,Male,1
+222,Did26M-Vivi_superbo-1747-Jommelli[3.02][0222].xml,Did,Did26M,Vivi_superbo,3,02,302,1747,1740s,Niccolò Jommelli,Rome,Italy,Enea,Male,1
+223,Did28M-Quando_londa-1747-Jommelli[3.07][0223].xml,Did,Did28M,Quando_londa,3,07,307,1747,1740s,Niccolò Jommelli,Rome,Italy,Osmida,Male,1
+224,Did29M-A_trionfar-1747-Jommelli[3.08][0224].xml,Did,Did29M,A_trionfar,3,08,308,1747,1740s,Niccolò Jommelli,Rome,Italy,Enea,Male,1
+225,Did30M-Nel_duol-1747-Jommelli[3.09][0225].xml,Did,Did30M,Nel_duol,3,09,309,1747,1740s,Niccolò Jommelli,Rome,Italy,Selene,Female,1
+226,Did31M-Va_crescendo-1747-Jommelli[3.10][0226].xml,Did,Did31M,Va_crescendo,3,10,310,1747,1740s,Niccolò Jommelli,Rome,Italy,Didone,Female,1
+227,Did32M-Gia_si-1747-Jommelli[3.16][0227].xml,Did,Did32M,Gia_si,3,16,316,1747,1740s,Niccolò Jommelli,Rome,Italy,Araspe,Male,1
+229,Did30M-Nel_duol-1742-Hasse[3.09][0229].xml,Did,Did30M,Nel_duol,3,09,309,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Selene,Female,1
+231,Did32M-Gia_si-1742-Hasse[3.16][0231].xml,Did,Did32M,Gia_si,3,16,316,1742,1740s,Johann Adolph Hasse,Wermsdorf,Empire,Araspe,Male,1
+233,Did02M-Diro_che-1753-Perez[1.03][0233].xml,Did,Did02M,Diro_che,1,3,103,1753,1750s,Davide Perez,Genova,Italy,Selene,Female,1
+235,Did04M-Tu_mi_scorgi-1753-Perez[1.06][0235].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1753,1750s,Davide Perez,Genova,Italy,Osmida,Male,1
+236,Did05M-Fra_lo-1753-Perez[1.07][0236].xml,Did,Did05M,Fra_lo,1,7,107,1753,1750s,Davide Perez,Genova,Italy,Iarba,Male,1
+237,Did21M-Tacero_se-1747-Jommelli[2.06][0237].xml,Did,Did21M,Tacero_se,2,06,206,1747,1740s,Niccolò Jommelli,Rome,Italy,Araspe,Male,1
+239,Did07M-Quando_saprai-1753-Perez[1.09][0239].xml,Did,Did07M,Quando_saprai,1,9,109,1753,1750s,Davide Perez,Genova,Italy,Enea,Male,1
+24,Did06M-Se_dalle-1724-Sarro[1.08][0024].xml,Did,Did06M,Se_dalle,1,8,108,1724,1720s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+240,Did23M-Veggio_la-1747-Jommelli[2.08][0240].xml,Did,Did23M,Veggio_la,2,08,208,1747,1740s,Niccolò Jommelli,Rome,Italy,Selene,Female,1
+241,Did09M-Son_quel-1753-Perez[1.12][0241].xml,Did,Did09M,Son_quel,1,12,112,1753,1750s,Davide Perez,Genova,Italy,Iarba,Male,1
+243,Did02M-Diro_che-1763-Traetta[1.03][0243].xml,Did,Did02M,Diro_che,1,3,103,1763,1760s,Tommaso Traetta,Venice,Italy,Selene,Female,1
+244,Did06M-Se_dalle-1753-Perez[1.13][0244].xml,Did,Did06M,Se_dalle,1,13,113,1753,1750s,Davide Perez,Genova,Italy,Araspe,Male,1
+245,Did11M-Tu_mi_disarmi-1753-Perez[1.16][0245].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1753,1750s,Davide Perez,Genova,Italy,Iarba,Male,1
+246,Did05M-Fra_lo-1763-Traetta[1.07][0246].xml,Did,Did05M,Fra_lo,1,7,107,1763,1760s,Tommaso Traetta,Venice,Italy,Iarba,Male,1
+250,Did19M-Vedi_nel-1753-Perez[2.07][0250].xml,Did,Did19M,Vedi_nel,2,07,207,1753,1750s,Davide Perez,Genova,Italy,Enea,Male,1
+251,Did07M-Quando_saprai-1763-Traetta[1.10][0251].xml,Did,Did07M,Quando_saprai,1,10,110,1763,1760s,Tommaso Traetta,Venice,Italy,Enea,Male,1
+252,Did20M-Fosca_nube-1753-Perez[2.08][0252].xml,Did,Did20M,Fosca_nube,2,08,208,1753,1750s,Davide Perez,Genova,Italy,Iarba,Male,1
+256,Did24M-Chiamami_pur-1753-Perez[2.15][0256].xml,Did,Did24M,Chiamami_pur,2,15,215,1753,1750s,Davide Perez,Genova,Italy,Iarba,Male,1
+26,Did04M-Tu_mi_scorgi-1739-Lampugnani[1.06][0026].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Osmida,Male,1
+260,Did09M-Son_quel-1762-Sarti[1.12][0260].xml,Did,Did09M,Son_quel,1,12,112,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Iarba,Male,1
+262,Did06M-Se_dalle-1762-Sarti[1.07][0262].xml,Did,Did06M,Se_dalle,1,7,107,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Araspe,Male,1
+264,Did16M-Ardi_per-1762-Sarti[2.01][0264].xml,Did,Did16M,Ardi_per,2,1,201,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Selene,Female,1
+265,Did22M-Non_cede-1762-Sarti[1.16][0265].xml,Did,Did22M,Non_cede,1,16,116,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Enea,Male,1
+267,Did31M-Va_crescendo-1753-Perez[3.09][0267].xml,Did,Did31M,Va_crescendo,3,09,309,1753,1750s,Davide Perez,Genova,Italy,Didone,Female,1
+268,Did30M-Nel_duol-1753-Perez[3.08][0268].xml,Did,Did30M,Nel_duol,3,08,308,1753,1750s,Davide Perez,Genova,Italy,Selene,Female,1
+27,Did05M-Fra_lo-1739-Lampugnani[1.07][0027].xml,Did,Did05M,Fra_lo,1,7,107,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Iarba,Male,1
+270,Did20M-Fosca_nube-1762-Sarti[2.05][0270].xml,Did,Did20M,Fosca_nube,2,05,205,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Iarba,Male,1
+271,Did07M-Quando_saprai-1762-Sarti[1.09][0271].xml,Did,Did07M,Quando_saprai,1,9,109,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Enea,Male,1
+278,Did24M-Chiamami_pur-1762-Sarti[2.14][0278].xml,Did,Did24M,Chiamami_pur,2,14,214,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Iarba,Male,1
+28,Did07M-Quando_saprai-1739-Lampugnani[1.09][0028].xml,Did,Did07M,Quando_saprai,1,9,109,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Enea,Male,1
+281,Did04M-Tu_mi_scorgi-1768-Boroni[1.06][0281].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1768,1760s,Antonio Boroni,Prague,Empire,Osmida,Male,1
+282,Did05M-Fra_lo-1768-Boroni[1.07][0282].xml,Did,Did05M,Fra_lo,1,7,107,1768,1760s,Antonio Boroni,Prague,Empire,Iarba,Male,1
+283,Did07M-Quando_saprai-1768-Boroni[1.10][0283].xml,Did,Did07M,Quando_saprai,1,10,110,1768,1760s,Antonio Boroni,Prague,Empire,Enea,Male,1
+284,Did10M-Infelice_sventurato-1768-Boroni[1.13][0284].xml,Did,Did10M,Infelice_sventurato,1,13,113,1768,1760s,Antonio Boroni,Prague,Empire,Araspe,Male,1
+286,Did21M-Tacero_se-1762-Sarti[2.07][0286].xml,Did,Did21M,Tacero_se,2,07,207,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Araspe,Male,1
+287,Did11M-Tu_mi_disarmi-1768-Boroni[1.16][0287].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1768,1760s,Antonio Boroni,Prague,Empire,Iarba,Male,1
+288,Did14M-Pensa_che-1768-Boroni[2.01][0288].xml,Did,Did14M,Pensa_che,2,1,201,1768,1760s,Antonio Boroni,Prague,Empire,Osmida,Male,1
+289,Did08M-Ogni_amator-1762-Sarti[2.09][0289].xml,Did,Did08M,Ogni_amator,2,9,209,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Selene,Female,1
+290,Did21M-Tacero_se-1768-Boroni[2.09][0290].xml,Did,Did21M,Tacero_se,2,09,209,1768,1760s,Antonio Boroni,Prague,Empire,Araspe,Male,1
+291,Did02M-Diro_che-1769-Majo[1.04][0291].xml,Did,Did02M,Diro_che,1,4,104,1769,1760s,Gian Francesco De Majo,Venice,Italy,Selene,Female,1
+292,Did01M-Dovrei_ma-1810-Paer[1.02][0292].xml,Did,Did01M,Dovrei_ma,1,2,102,1810,1810s,Ferdinando Paër,Paris,France,Enea,Male,1
+293,Did05M-Fra_lo-1769-Majo[1.08][0293].xml,Did,Did05M,Fra_lo,1,8,108,1769,1760s,Gian Francesco De Majo,Venice,Italy,Iarba,Male,1
+296,Did23M-Veggio_la-1768-Boroni[2.11][0296].xml,Did,Did23M,Veggio_la,2,11,211,1768,1760s,Antonio Boroni,Prague,Empire,Selene,Female,1
+297,Did07M-Quando_saprai-1769-Majo[1.10][0297].xml,Did,Did07M,Quando_saprai,1,10,110,1769,1760s,Gian Francesco De Majo,Venice,Italy,Enea,Male,1
+298,Did29M-A_trionfar-1768-Boroni[3.06][0298].xml,Did,Did29M,A_trionfar,3,06,306,1768,1760s,Antonio Boroni,Prague,Empire,Enea,Male,1
+3,Did12M-Non_ha-1724-Sarro[1.17][0003].xml,Did,Did12M,Non_ha,1,17,117,1724,1720s,Domenico Natale Sarro,Naples,Italy,Didone,Female,1
+30,Did02M-Diro_che-1760-Bernasconi[1.03][0030].xml,Did,Did02M,Diro_che,1,3,103,1760,1760s,Andrea Bernasconi,Venice,Italy,Selene,Female,1
+300,Did30M-Nel_duol-1768-Boroni[3.07][0300].xml,Did,Did30M,Nel_duol,3,07,307,1768,1760s,Antonio Boroni,Prague,Empire,Selene,Female,1
+301,Did31M-Va_crescendo-1768-Boroni[3.07][0301].xml,Did,Did31M,Va_crescendo,3,07,307,1768,1760s,Antonio Boroni,Prague,Empire,Didone,Female,1
+302,Did32M-Gia_si-1768-Boroni[3.11][0302].xml,Did,Did32M,Gia_si,3,11,311,1768,1760s,Antonio Boroni,Prague,Empire,Araspe,Male,1
+303,Did11M-Tu_mi_disarmi-1810-Paer[1.09][0303].xml,Did,Did11M,Tu_mi_disarmi,1,9,109,1810,1810s,Ferdinando Paër,Paris,France,Iarba,Male,1
+304,Did11M-Tu_mi_disarmi-1769-Majo[1.14][0304].xml,Did,Did11M,Tu_mi_disarmi,1,14,114,1769,1760s,Gian Francesco De Majo,Venice,Italy,Iarba,Male,1
+306,Did20M-Fosca_nube-1768-Boroni[2.07][0306].xml,Did,Did20M,Fosca_nube,2,07,207,1768,1760s,Antonio Boroni,Prague,Empire,Iarba,Male,1
+307,Did02M-Diro_che-1768-Boroni[1.03][0307].xml,Did,Did02M,Diro_che,1,3,103,1768,1760s,Antonio Boroni,Prague,Empire,Selene,Female,1
+31,Did18M-Ah_non_lasciarmi-1747-Jommelli[2.02][0031].xml,Did,Did18M,Ah_non_lasciarmi,2,02,202,1747,1740s,Niccolò Jommelli,Rome,Italy,Didone,Female,1
+313,Did13M-Se_resto-1794-Paisiello[2.13][0313].xml,Did,Did13M,Se_resto,2,13,213,1794,1790s,Giovanni Paisiello,Naples,Italy,Enea,Male,1
+314,Did02M-Diro_che-1794-Paisiello[1.03][0314].xml,Did,Did02M,Diro_che,1,3,103,1794,1790s,Giovanni Paisiello,Naples,Italy,Selene,Female,1
+315,Did06M-Se_dalle-1794-Paisiello[1.07][0315].xml,Did,Did06M,Se_dalle,1,7,107,1794,1790s,Giovanni Paisiello,Naples,Italy,Araspe,Male,1
+316,Did33M-Cadra_fra-1794-Paisiello[2.15][0316].xml,Did,Did33M,Cadra_fra,2,15,215,1794,1790s,Giovanni Paisiello,Naples,Italy,Iarba,Male,1
+317,Did11M-Tu_mi_disarmi-1794-Paisiello[1.15][0317].xml,Did,Did11M,Tu_mi_disarmi,1,15,115,1794,1790s,Giovanni Paisiello,Naples,Italy,Iarba,Male,1
+318,Did14M-Pensa_che-1794-Paisiello[2.01][0318].xml,Did,Did14M,Pensa_che,2,1,201,1794,1790s,Giovanni Paisiello,Naples,Italy,Osmida,Male,1
+319,Did03M-Son_regina-1744-Scalabrini[1.01][0319].xml,Did,Did03M,Son_regina,1,1,101,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Didone,Female,1
+32,Did12M-Non_ha-1749-Jommelli[1.17][0032].xml,Did,Did12M,Non_ha,1,17,117,1749,1740s,Niccolò Jommelli,Vienna,Italy,Didone,Female,1
+320,Did07M-Quando_saprai-1794-Paisiello[1.09][0320].xml,Did,Did07M,Quando_saprai,1,9,109,1794,1790s,Giovanni Paisiello,Naples,Italy,Enea,Male,1
+322,Did05M-Fra_lo-1744-Scalabrini[1.03][0322].xml,Did,Did05M,Fra_lo,1,3,103,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Iarba,Male,1
+325,Did34M-Vado_ma-1794-Paisiello[2.16][0325].xml,Did,Did34M,Vado_ma,2,16,216,1794,1790s,Giovanni Paisiello,Naples,Italy,Didone,Female,1
+326,Did33M-Cadra_fra-1744-Scalabrini[3.08][0326].xml,Did,Did33M,Cadra_fra,3,08,308,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Iarba,Male,1
+327,Did18M-Ah_non_lasciarmi-1750-Viotti[X.XX][0327].xml,Did,Did18M,Ah_non_lasciarmi,X,XX,XXX,1750,1750s,Pietro Viotti,NA,NA,Didone,Female,1
+328,Did02M-Diro_che-1763-Jommelli[1.03][0328].xml,Did,Did02M,Diro_che,1,3,103,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Selene,Female,1
+33,Did03M-Son_regina-1753-Perez[1.05][0033].xml,Did,Did03M,Son_regina,1,5,105,1753,1750s,Davide Perez,Genova,Italy,Didone,Female,1
+330,Did24M-Chiamami_pur-1747-Jommelli[2.11][0330].xml,Did,Did24M,Chiamami_pur,2,11,211,1747,1740s,Niccolò Jommelli,Rome,Italy,Iarba,Male,1
+334,Did07M-Quando_saprai-1744-Scalabrini[1.04][0334].xml,Did,Did07M,Quando_saprai,1,4,104,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Enea,Male,1
+335,Did31M-Va_crescendo-1744-Scalabrini[3.03][0335].xml,Did,Did31M,Va_crescendo,3,03,303,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Selene,Female,1
+336,Did17M-L_augelletto-1744-Scalabrini[3.04][0336].xml,Did,Did17M,L_augelletto,3,04,304,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Araspe,Male,1
+337,Did02M-Diro_che-1776-Schuster[1.03][0337].xml,Did,Did02M,Diro_che,1,3,103,1776,1770s,Joseph Schuster,Naples,Italy,Selene,Female,1
+338,Did09M-Son_quel-1776-Schuster[1.07][0338].xml,Did,Did09M,Son_quel,1,7,107,1776,1770s,Joseph Schuster,Naples,Italy,Iarba,Male,1
+34,Did18M-Ah_non_lasciarmi-1753-Perez[2.06][0034].xml,Did,Did18M,Ah_non_lasciarmi,2,06,206,1753,1750s,Davide Perez,Genova,Italy,Didone,Female,1
+340,Did23M-Veggio_la-1769-Majo[2.09][0340].xml,Did,Did23M,Veggio_la,2,09,209,1769,1760s,Gian Francesco De Majo,Venice,Italy,Selene,Female,1
+341,Did20M-Fosca_nube-1769-Majo[2.05][0341].xml,Did,Did20M,Fosca_nube,2,05,205,1769,1760s,Gian Francesco De Majo,Venice,Italy,Iarba,Male,1
+342,Did06M-Se_dalle-1776-Schuster[1.08][0342].xml,Did,Did06M,Se_dalle,1,8,108,1776,1770s,Joseph Schuster,Naples,Italy,Araspe,Male,1
+343,Did07M-Quando_saprai-1776-Schuster[1.10][0343].xml,Did,Did07M,Quando_saprai,1,10,110,1776,1770s,Joseph Schuster,Naples,Italy,Enea,Male,1
+344,Did04M-Tu_mi_scorgi-1763-Jommelli[1.06][0344].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Osmida,Male,1
+346,Did31M-Va_crescendo-1769-Majo[3.04][0346].xml,Did,Did31M,Va_crescendo,3,04,304,1769,1760s,Gian Francesco De Majo,Venice,Italy,Didone,Female,1
+347,Did11M-Tu_mi_disarmi-1776-Schuster[1.16][0347].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1776,1770s,Joseph Schuster,Naples,Italy,Iarba,Male,1
+348,Did06M-Se_dalle-1763-Jommelli[1.08][0348].xml,Did,Did06M,Se_dalle,1,8,108,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Araspe,Male,1
+349,Did07M-Quando_saprai-1763-Jommelli[1.10][0349].xml,Did,Did07M,Quando_saprai,1,10,110,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Enea,Male,1
+35,Did18M-Ah_non_lasciarmi-1763-Traetta[2.04][0035].xml,Did,Did18M,Ah_non_lasciarmi,2,04,204,1763,1760s,Tommaso Traetta,Venice,Italy,Didone,Female,1
+351,Did03M-Son_regina-1726-Vinci[1.05][0351].xml,Did,Did03M,Son_regina,1,5,105,1726,1720s,Leonardo Vinci,Rome,Italy,Didone,Female,1
+352,Did14M-Pensa_che-1776-Schuster[2.01][0352].xml,Did,Did14M,Pensa_che,2,1,201,1776,1770s,Joseph Schuster,Naples,Italy,Osmida,Male,1
+353,Did24M-Chiamami_pur-1776-Schuster[2.13][0353].xml,Did,Did24M,Chiamami_pur,2,13,213,1776,1770s,Joseph Schuster,Naples,Italy,Iarba,Male,1
+356,Did09M-Son_quel-1747-Jommelli[2.04][0356].xml,Did,Did09M,Son_quel,2,4,204,1747,1740s,Niccolò Jommelli,Rome,Italy,Iarba,Male,1
+357,Did09M-Son_quel-1763-Jommelli[1.13][0357].xml,Did,Did09M,Son_quel,1,13,113,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Iarba,Male,1
+36,Did18M-Ah_non_lasciarmi-1762-Sarti[2.04][0036].xml,Did,Did18M,Ah_non_lasciarmi,2,04,204,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Didone,Female,1
+361,Did12M-Non_ha-1726-Vinci[1.18][0361].xml,Did,Did12M,Non_ha,1,18,118,1726,1720s,Leonardo Vinci,Rome,Italy,Didone,Female,1
+362,Did13M-Se_resto-1726-Vinci[1.19][0362].xml,Did,Did13M,Se_resto,1,19,119,1726,1720s,Leonardo Vinci,Rome,Italy,Enea,Male,1
+363,Did03M-Son_regina-1780-Astarita[1.05][0363].xml,Did,Did03M,Son_regina,1,5,105,1780,1780s,Gennaro Astarita,Bratislava,Empire,Didone,Female,1
+364,Did18M-Ah_non_lasciarmi-1780-Astarita[2.06][0364].xml,Did,Did18M,Ah_non_lasciarmi,2,06,206,1780,1780s,Gennaro Astarita,Bratislava,Empire,Didone,Female,1
+365,Did13M-Se_resto-1780-Astarita[2.15][0365].xml,Did,Did13M,Se_resto,2,15,215,1780,1780s,Gennaro Astarita,Bratislava,Empire,Enea,Male,1
+366,Did20M-Fosca_nube-1763-Jommelli[2.05][0366].xml,Did,Did20M,Fosca_nube,2,05,205,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Iarba,Male,1
+37,Did18M-Ah_non_lasciarmi-1766-Anon[2.07][0037].xml,Did,Did18M,Ah_non_lasciarmi,2,07,207,1766,1760s,Unknown Composer,Venice,Italy,Didone,Female,1
+371,Did33M-Cadra_fra-1780-Astarita[3.09][0371].xml,Did,Did33M,Cadra_fra,3,09,309,1780,1780s,Gennaro Astarita,Bratislava,Empire,Iarba,Male,1
+372,Did08M-Ogni_amator-1763-Jommelli[2.09][0372].xml,Did,Did08M,Ogni_amator,2,9,209,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Selene,Female,1
+373,Did31M-Va_crescendo-1763-Jommelli[3.08][0373].xml,Did,Did31M,Va_crescendo,3,08,308,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Didone,Female,1
+374,Did26M-Vivi_superbo-1744-Scalabrini[3.01][0374].xml,Did,Did26M,Vivi_superbo,3,01,301,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Enea,Male,1
+375,Did18M-Ah_non_lasciarmi-1784-Andreozzi[X.XX][0375].xml,Did,Did18M,Ah_non_lasciarmi,X,XX,XXX,1784,1780s,Gaetano Andreozzi,NA,NA,Didone,Female,1
+376,Did02M-Diro_che-1780-Astarita[1.03][0376].xml,Did,Did02M,Diro_che,1,3,103,1780,1780s,Gennaro Astarita,Bratislava,Empire,Selene,Female,1
+378,Did09M-Son_quel-1780-Astarita[1.07][0378].xml,Did,Did09M,Son_quel,1,7,107,1780,1780s,Gennaro Astarita,Bratislava,Empire,Iarba,Male,1
+38,Did03M-Son_regina-1768-Boroni[1.05][0038].xml,Did,Did03M,Son_regina,1,5,105,1768,1760s,Antonio Boroni,Prague,Empire,Didone,Female,1
+380,Did13M-Se_resto-1744-Scalabrini[1.10][0380].xml,Did,Did13M,Se_resto,1,10,110,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Enea,Male,1
+383,Dem14M-Se_tutti-1733-Caldara[2.06][0383].xml,Dem,Dem14M,Se_tutti,2,6,206,1733,1730s,Antonio Caldara,Vienna,Empire,Dircea,Female,1
+385,Did06M-Se_dalle-1780-Astarita[1.08][0385].xml,Did,Did06M,Se_dalle,1,8,108,1780,1780s,Gennaro Astarita,Bratislava,Empire,Araspe,Male,1
+386,Dem22M-Misero_pargoletto-1733-Caldara[3.05][0386].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1733,1730s,Antonio Caldara,Vienna,Empire,Timante,Male,1
+388,Did04M-Grato_rende-1726-Vinci[1.06][0388].xml,Did,Did04M,Grato_rende,1,6,106,1726,1720s,Leonardo Vinci,Rome,Italy,Osmida,Male,1
+39,Did18M-Ah_non_lasciarmi-1768-Boroni[2.05][0039].xml,Did,Did18M,Ah_non_lasciarmi,2,05,205,1768,1760s,Antonio Boroni,Prague,Empire,Didone,Female,1
+390,Dem24M-Che_mai-1733-Caldara[3.07][0390].xml,Dem,Dem24M,Che_mai,3,07,307,1733,1730s,Antonio Caldara,Vienna,Empire,Dircea,Female,1
+391,Dem23M-Odo_il-1733-Caldara[3.06][0391].xml,Dem,Dem23M,Odo_il,3,06,306,1733,1730s,Antonio Caldara,Vienna,Empire,Demofoonte,Male,1
+393,Did05M-Fra_lo-1726-Vinci[1.07][0393].xml,Did,Did05M,Fra_lo,1,7,107,1726,1720s,Leonardo Vinci,Rome,Italy,Iarba,Male,1
+394,Did06M-Se_dalle-1726-Vinci[1.08][0394].xml,Did,Did06M,Se_dalle,1,8,108,1726,1720s,Leonardo Vinci,Rome,Italy,Araspe,Male,1
+395,Did07M-Quando_saprai-1726-Vinci[1.10][0395].xml,Did,Did07M,Quando_saprai,1,10,110,1726,1720s,Leonardo Vinci,Rome,Italy,Enea,Male,1
+397,Did24M-Chiamami_pur-1744-Scalabrini[2.12][0397].xml,Did,Did24M,Chiamami_pur,2,12,212,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Iarba,Male,1
+398,Did07M-Quando_saprai-1780-Astarita[1.10][0398].xml,Did,Did07M,Quando_saprai,1,10,110,1780,1780s,Gennaro Astarita,Bratislava,Empire,Enea,Male,1
+399,Dem18M-La_destra-1733-Caldara[2.11][0399].xml,Dem,Dem18M,La_destra,2,11,211,1733,1730s,Antonio Caldara,Vienna,Empire,Dircea,Male,1
+40,Did03M-Son_regina-1769-Majo[1.06][0040].xml,Did,Did03M,Son_regina,1,6,106,1769,1760s,Gian Francesco De Majo,Venice,Italy,Didone,Female,1
+400,Dem19M-Non_odi-1733-Caldara[3.01][0400].xml,Dem,Dem19M,Non_odi,3,1,301,1733,1730s,Antonio Caldara,Vienna,Empire,Adrasto,Male,1
+401,Dem20M-Nel_tuo-1733-Caldara[3.02][0401].xml,Dem,Dem20M,Nel_tuo,3,02,302,1733,1730s,Antonio Caldara,Vienna,Empire,Cherinto,Male,1
+402,Dem21M-Ah_che-1733-Caldara[3.03][0402].xml,Dem,Dem21M,Ah_che,3,03,303,1733,1730s,Antonio Caldara,Vienna,Empire,Matusio,Male,1
+403,Dem16M-Felice_eta-1733-Caldara[2.08][0403].xml,Dem,Dem16M,Felice_eta,2,8,208,1733,1730s,Antonio Caldara,Vienna,Empire,Creusa,Female,1
+404,Dem17M-Perfidi_gia-1733-Caldara[2.10][0404].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1733,1730s,Antonio Caldara,Vienna,Empire,Demofoonte,Male,1
+406,Did08M-Ogni_amator-1726-Vinci[1.11][0406].xml,Did,Did08M,Ogni_amator,1,11,111,1726,1720s,Leonardo Vinci,Rome,Italy,Selene,Female,1
+407,Dem15M-No_non-1733-Caldara[2.07][0407].xml,Dem,Dem15M,No_non,2,7,207,1733,1730s,Antonio Caldara,Vienna,Empire,Cherinto,Male,1
+408,Dem09M-Se_ardire-1733-Caldara[1.13][0408].xml,Dem,Dem09M,Se_ardire,1,13,113,1733,1730s,Antonio Caldara,Vienna,Empire,Timante,Male,1
+409,Dem10M-Tu_sai-1733-Caldara[2.01][0409].xml,Dem,Dem10M,Tu_sai,2,01,201,1733,1730s,Antonio Caldara,Vienna,Empire,Creusa,Female,1
+41,Did03M-Son_regina-1770-Piccinni[1.05][0041].xml,Did,Did03M,Son_regina,1,5,105,1770,1770s,Niccolò Jommelli,Rome,Italy,Didone,Female,1
+410,Dem07M-Il_suo-1733-Caldara[1.08][0410].xml,Dem,Dem07M,Il_suo,1,08,108,1733,1730s,Antonio Caldara,Vienna,Empire,Cherinto,Male,1
+411,Dem08M-Padre_perdona-1733-Caldara[1.12][0411].xml,Dem,Dem08M,Padre_perdona,1,12,112,1733,1730s,Antonio Caldara,Vienna,Empire,Dircea,Female,1
+412,Dem11M-Prudente_mi-1733-Caldara[2.02][0412].xml,Dem,Dem11M,Prudente_mi,2,2,202,1733,1730s,Antonio Caldara,Vienna,Empire,Timante,Male,1
+413,Dem12M-Se_tronca-1733-Caldara[2.03][0413].xml,Dem,Dem12M,Se_tronca,2,3,203,1733,1730s,Antonio Caldara,Vienna,Empire,Demofoonte,Male,1
+415,Did09M-Son_quel-1726-Vinci[1.13][0415].xml,Did,Did09M,Son_quel,1,13,113,1726,1720s,Leonardo Vinci,Rome,Italy,Iarba,Male,1
+416,Did11M-Tu_mi_disarmi-1780-Astarita[1.16][0416].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1780,1780s,Gennaro Astarita,Bratislava,Empire,Iarba,Male,1
+418,Dem03M-Per_lei-1733-Caldara[1.03][0418].xml,Dem,Dem03M,Per_lei,1,3,103,1733,1730s,Antonio Caldara,Vienna,Empire,Demofoonte,Male,1
+419,Dem04M-Sperai_vicino-1733-Caldara[1.04][0419].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1733,1730s,Antonio Caldara,Vienna,Empire,Timante,Male,1
+421,Dem05M-Tintendo_ingrata-1733-Caldara[1.05][0421].xml,Dem,Dem05M,Tintendo_ingrata,1,5,105,1733,1730s,Antonio Caldara,Vienna,Empire,Cherinto,Male,1
+422,Dem06M-Non_curo-1733-Caldara[1.07][0422].xml,Dem,Dem06M,Non_curo,1,07,107,1733,1730s,Antonio Caldara,Vienna,Empire,Creusa,Female,1
+424,Did15M-Leon_che-1726-Vinci[2.02][0424].xml,Did,Did15M,Leon_che,2,2,202,1726,1720s,Leonardo Vinci,Rome,Italy,Iarba,Male,1
+425,Did16M-Ardi_per-1726-Vinci[2.03][0425].xml,Did,Did16M,Ardi_per,2,3,203,1726,1720s,Leonardo Vinci,Rome,Italy,Selene,Female,1
+427,Did19M-Vedi_nel-1726-Vinci[2.08][0427].xml,Did,Did19M,Vedi_nel,2,08,208,1726,1720s,Leonardo Vinci,Rome,Italy,Enea,Male,1
+428,Did14M-Pensa_che-1780-Astarita[2.01][0428].xml,Did,Did14M,Pensa_che,2,1,201,1780,1780s,Gennaro Astarita,Bratislava,Empire,Osmida,Male,1
+43,Did03M-Son_regina-1788-Anfossi[1.04][0043].xml,Did,Did03M,Son_regina,1,4,104,1788,1780s,Pasquale Anfossi,Venice,Italy,Didone,Female,1
+431,Dem02M-In_te-1735-Sarro[1.02][0431].xml,Dem,Dem02M,In_te,1,2,102,1735,1730s,Domenico Natale Sarro,Naples,Italy,Dircea,Female,1
+432,Dem03M-Per_lei-1735-Mancini[1.03][0432].xml,Dem,Dem03M,Per_lei,1,3,103,1735,1730s,Francesco Mancini,Naples,Italy,Demofoonte,Male,1
+433,Dem04M-Sperai_vicino-1735-Leo[1.04][0433].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1735,1730s,Leonardo Leo,Naples,Italy,Timante,Male,1
+434,Dem06M-Non_curo-1735-Sarro[1.07][0434].xml,Dem,Dem06M,Non_curo,1,07,107,1735,1730s,Domenico Natale Sarro,Naples,Italy,Creusa,Female,1
+436,Did31M-Va_crescendo-1780-Astarita[2.13][0436].xml,Did,Did31M,Va_crescendo,2,13,213,1780,1780s,Gennaro Astarita,Bratislava,Empire,Didone,Female,1
+438,Did24M-Chiamami_pur-1780-Astarita[2.14][0438].xml,Did,Did24M,Chiamami_pur,2,14,214,1780,1780s,Gennaro Astarita,Bratislava,Empire,Iarba,Male,1
+440,Did17M-L_augelletto-1726-Vinci[2.14][0440].xml,Did,Did17M,L_augelletto,2,14,214,1726,1720s,Leonardo Vinci,Rome,Italy,Selene,Male,1
+441,Did24M-Chiamami_pur-1726-Vinci[2.17][0441].xml,Did,Did24M,Chiamami_pur,2,17,217,1726,1720s,Leonardo Vinci,Rome,Italy,Iarba,Male,1
+443,Dem01M-O_piu-1775-Myslivecek[1.01][0443].xml,Dem,Dem01M,O_piu,1,1,101,1775,1770s,Josef Mysliveček,Naples,Italy,Matusio,Male,1
+444,Dem02M-In_te-1775-Myslivecek[1.02][0444].xml,Dem,Dem02M,In_te,1,2,102,1775,1770s,Josef Mysliveček,Naples,Italy,Dircea,Female,1
+445,Dem03M-Per_lei-1775-Myslivecek[1.03][0445].xml,Dem,Dem03M,Per_lei,1,3,103,1775,1770s,Josef Mysliveček,Naples,Italy,Demofoonte,Male,1
+446,Dem04M-Sperai_vicino-1775-Myslivecek[1.04][0446].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1775,1770s,Josef Mysliveček,Naples,Italy,Timante,Male,1
+447,Dem05M-Tintendo_ingrata-1775-Myslivecek[1.05][0447].xml,Dem,Dem05M,Tintendo_ingrata,1,05,105,1775,1770s,Josef Mysliveček,Naples,Italy,Cherinto,Male,1
+448,Dem06M-Non_curo-1775-Myslivecek[1.08][0448].xml,Dem,Dem06M,Non_curo,1,08,108,1775,1770s,Josef Mysliveček,Naples,Italy,Creusa,Female,1
+45,Did18M-Ah_non_lasciarmi-1769-Majo[2.03][0045].xml,Did,Did18M,Ah_non_lasciarmi,2,03,203,1769,1760s,Gian Francesco De Majo,Venice,Italy,Didone,Female,1
+451,Dem07M-Il_suo-1735-Leo[1.08][0451].xml,Dem,Dem07M,Il_suo,1,08,108,1735,1730s,Leonardo Leo,Naples,Italy,Cherinto,Male,1
+452,Dem09M-Se_ardire-1735-Sarro[1.09][0452].xml,Dem,Dem09M,Se_ardire,1,09,109,1735,1730s,Domenico Natale Sarro,Naples,Italy,Timante,Male,1
+454,Dem11M-Prudente_mi-1735-Mancini[2.02][0454].xml,Dem,Dem11M,Prudente_mi,2,2,202,1735,1730s,Francesco Mancini,Naples,Italy,Timante,Male,1
+456,Dem12M-Se_tronca-1735-Leo[2.03][0456].xml,Dem,Dem12M,Se_tronca,2,3,203,1735,1730s,Leonardo Leo,Naples,Italy,Demofoonte,Male,1
+457,Dem13M-E_soccorso-1735-Mancini[2.04][0457].xml,Dem,Dem13M,E_soccorso,2,4,204,1735,1730s,Francesco Mancini,Naples,Italy,Matusio,Male,1
+458,Dem15M-No_non-1735-Sarro[2.07][0458].xml,Dem,Dem15M,No_non,2,7,207,1735,1730s,Domenico Natale Sarro,Naples,Italy,Cherinto,Male,1
+459,Dem16M-Felice_eta-1735-Mancini[2.08][0459].xml,Dem,Dem16M,Felice_eta,2,8,208,1735,1730s,Francesco Mancini,Naples,Italy,Creusa,Female,1
+46,Did10M-Infelice_sventurato-1724-Sarro[1.13][0046].xml,Did,Did10M,Infelice_sventurato,1,13,113,1724,1720s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+460,Dem18M-La_destra-1735-Leo[2.11][0460].xml,Dem,Dem18M,La_destra,2,11,211,1735,1730s,Leonardo Leo,Naples,Italy,Dircea,Male,1
+461,Dem20M-Nel_tuo-1735-Mancini[3.01][0461].xml,Dem,Dem20M,Nel_tuo,3,01,301,1735,1730s,Francesco Mancini,Naples,Italy,Cherinto,Male,1
+464,Dem02M-In_te-1743-Jommelli[1.02][0464].xml,Dem,Dem02M,In_te,1,2,102,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,1
+465,Dem03M-Per_lei-1743-Jommelli[1.03][0465].xml,Dem,Dem03M,Per_lei,1,3,103,1743,1740s,Niccolò Jommelli,Padua,Italy,Demofoonte,Male,1
+466,Dem08M-Padre_perdona-1775-Myslivecek[1.13][0466].xml,Dem,Dem08M,Padre_perdona,1,13,113,1775,1770s,Josef Mysliveček,Naples,Italy,Dircea,Female,1
+467,Dem10M-Tu_sai-1775-Myslivecek[2.01][0467].xml,Dem,Dem10M,Tu_sai,2,1,201,1775,1770s,Josef Mysliveček,Naples,Italy,Creusa,Female,1
+469,Dem23M-Odo_il-1735-Mancini[3.05][0469].xml,Dem,Dem23M,Odo_il,3,05,305,1735,1730s,Francesco Mancini,Naples,Italy,Demofoonte,Male,1
+47,Did03M-Son_regina-1776-Schuster[1.05][0047].xml,Did,Did03M,Son_regina,1,5,105,1776,1770s,Joseph Schuster,Naples,Italy,Didone,Female,1
+470,Dem24M-Che_mai-1735-Sarro[3.06][0470].xml,Dem,Dem24M,Che_mai,3,06,306,1735,1730s,Domenico Natale Sarro,Naples,Italy,Dircea,Female,1
+472,Did31M-Va_crescendo-1776-Schuster[3.06][0472].xml,Did,Did31M,Va_crescendo,3,06,306,1776,1770s,Joseph Schuster,Naples,Italy,Didone,Female,1
+473,Did19M-Vedi_nel-1744-Scalabrini[2.04][0473].xml,Did,Did19M,Vedi_nel,2,04,204,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Enea,Male,1
+474,Did12M-Non_ha-1744-Scalabrini[1.09][0474].xml,Did,Did12M,Non_ha,1,9,109,1744,1740s,Paolo Scalabrini,Hamburg,Empire,Didone,Female,1
+475,Dem04M-Sperai_vicino-1743-Jommelli[1.04][0475].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1743,1740s,Niccolò Jommelli,Padua,Italy,Timante,Male,1
+476,Dem06M-Non_curo-1743-Jommelli[1.07][0476].xml,Dem,Dem06M,Non_curo,1,07,107,1743,1740s,Niccolò Jommelli,Padua,Italy,Creusa,Female,1
+477,Dem07M-Il_suo-1743-Jommelli[1.08][0477].xml,Dem,Dem07M,Il_suo,1,08,108,1743,1740s,Niccolò Jommelli,Padua,Italy,Cherinto,Male,1
+479,Dem02M-In_te-1735-Schiassi[1.02][0479].xml,Dem,Dem02M,In_te,1,2,102,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Dircea,Female,1
+48,Did18M-Ah_non_lasciarmi-1749-Jommelli[2.04][0048].xml,Did,Did18M,Ah_non_lasciarmi,2,04,204,1749,1740s,Niccolò Jommelli,Vienna,Empire,Didone,Female,1
+481,Dem03M-Per_lei-1735-Schiassi[1.03][0481].xml,Dem,Dem03M,Per_lei,1,3,103,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Demofoonte,Male,1
+482,Dem04M-Sperai_vicino-1735-Schiassi[1.04][0482].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Timante,Male,1
+485,Did02M-Diro_che-1752-Galuppi[1.03][0485].xml,Did,Did02M,Diro_che,1,3,103,1752,1750s,Baldassare Galuppi,NA,NA,Selene,Female,1
+486,Dem11M-Prudente_mi-1775-Myslivecek[2.02][0486].xml,Dem,Dem11M,Prudente_mi,2,2,202,1775,1770s,Josef Mysliveček,Naples,Italy,Timante,Male,1
+487,Dem13M-E_soccorso-1775-Myslivecek[2.04][0487].xml,Dem,Dem13M,E_soccorso,2,4,204,1775,1770s,Josef Mysliveček,Naples,Italy,Matusio,Male,1
+488,Did07M-Quando_saprai-1752-Galuppi[1.08][0488].xml,Did,Did07M,Quando_saprai,1,8,108,1752,1750s,Baldassare Galuppi,NA,NA,Enea,Male,1
+489,Dem15M-No_non-1775-Myslivecek[2.07][0489].xml,Dem,Dem15M,No_non,2,7,207,1775,1770s,Josef Mysliveček,Naples,Italy,Cherinto,Male,1
+49,Did03M-Son_regina-1762-Sarti[1.05][0049].xml,Did,Did03M,Son_regina,1,5,105,1762,1760s,Giuseppe Sarti,Copenhagen,Empire,Didone,Female,1
+490,Dem23M-Odo_il-1775-Myslivecek[3.06][0490].xml,Dem,Dem23M,Odo_il,3,06,306,1775,1770s,Josef Mysliveček,Naples,Italy,Demofoonte,Male,1
+491,Dem17M-Perfidi_gia-1775-Myslivecek[2.09][0491].xml,Dem,Dem17M,Perfidi_gia,2,9,209,1775,1770s,Josef Mysliveček,Naples,Italy,Demofoonte,Male,1
+493,Did16M-Ardi_per-1752-Galuppi[2.01][0493].xml,Did,Did16M,Ardi_per,2,01,201,1752,1750s,Baldassare Galuppi,NA,NA,Selene,Female,1
+494,Dem06M-Non_curo-1735-Schiassi[1.07][0494].xml,Dem,Dem06M,Non_curo,1,07,107,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Creusa,Female,1
+495,Dem07M-Il_suo-1735-Schiassi[1.08][0495].xml,Dem,Dem07M,Il_suo,1,08,108,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Cherinto,Male,1
+496,Dem08M-Padre_perdona-1735-Schiassi[1.12][0496].xml,Dem,Dem08M,Padre_perdona,1,12,112,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Dircea,Female,1
+498,Dem10M-Tu_sai-1735-Schiassi[2.01][0498].xml,Dem,Dem10M,Tu_sai,2,01,201,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Creusa,Female,1
+499,Dem11M-Prudente_mi-1735-Schiassi[2.02][0499].xml,Dem,Dem11M,Prudente_mi,2,2,202,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Timante,Male,1
+50,Did18M-Ah_non_lasciarmi-1763-Jommelli[2.03][0050].xml,Did,Did18M,Ah_non_lasciarmi,2,03,203,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Didone,Female,1
+500,Dem08M-Padre_perdona-1743-Jommelli[1.12][0500].xml,Dem,Dem08M,Padre_perdona,1,12,112,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,1
+501,Dem09M-Se_ardire-1743-Jommelli[1.13][0501].xml,Dem,Dem09M,Se_ardire,1,13,113,1743,1740s,Niccolò Jommelli,Padua,Italy,Timante,Male,1
+503,Dem12M-Se_tronca-1735-Schiassi[2.03][0503].xml,Dem,Dem12M,Se_tronca,2,3,203,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Demofoonte,Male,1
+504,Dem13M-E_soccorso-1735-Schiassi[2.04][0504].xml,Dem,Dem13M,E_soccorso,2,4,204,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Matusio,Male,1
+506,Did18M-Ah_non_lasciarmi-1752-Galuppi[2.04][0506].xml,Did,Did18M,Ah_non_lasciarmi,2,04,204,1752,1750s,Baldassare Galuppi,NA,NA,Didone,Female,1
+507,Dem11M-Prudente_mi-1743-Jommelli[2.02][0507].xml,Dem,Dem11M,Prudente_mi,2,2,202,1743,1740s,Niccolò Jommelli,Padua,Italy,Timante,Male,1
+508,Dem12M-Se_tronca-1743-Jommelli[2.03][0508].xml,Dem,Dem12M,Se_tronca,2,3,203,1743,1740s,Niccolò Jommelli,Padua,Italy,Demofoonte,Male,1
+509,Dem15M-No_non-1743-Jommelli[2.07][0509].xml,Dem,Dem15M,No_non,2,7,207,1743,1740s,Niccolò Jommelli,Padua,Italy,Cherinto,Male,1
+51,Did03M-Son_regina-1763-Jommelli[1.05][0051].xml,Did,Did03M,Son_regina,1,5,105,1763,1760s,Niccolò Jommelli,Stuttgart,Empire,Didone,Female,1
+510,Dem09M-Se_ardire-1775-Myslivecek[1.14][0510].xml,Dem,Dem09M,Se_ardire,1,14,114,1775,1770s,Josef Mysliveček,Naples,Italy,Timante,Male,1
+511,Dem18M-La_destra-1775-Myslivecek[2.10][0511].xml,Dem,Dem18M,La_destra,2,10,210,1775,1770s,Josef Mysliveček,Naples,Italy,Dircea,Male,1
+513,Dem15M-No_non-1735-Schiassi[2.07][0513].xml,Dem,Dem15M,No_non,2,7,207,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Cherinto,Male,1
+514,Dem16M-Felice_eta-1735-Schiassi[2.08][0514].xml,Dem,Dem16M,Felice_eta,2,8,208,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Creusa,Female,1
+515,Did20M-Fosca_nube-1752-Galuppi[2.06][0515].xml,Did,Did20M,Fosca_nube,2,06,206,1752,1750s,Baldassare Galuppi,NA,NA,Iarba,Male,1
+517,Dem01M-O_piu-1766-Bernasconi[1.01][0517].xml,Dem,Dem01M,O_piu,1,1,101,1766,1760s,Andrea Bernasconi,Munich,Empire,Matusio,Male,1
+518,Dem02M-In_te-1766-Bernasconi[1.02][0518].xml,Dem,Dem02M,In_te,1,2,102,1766,1760s,Andrea Bernasconi,Munich,Empire,Dircea,Female,1
+519,Dem03M-Per_lei-1766-Bernasconi[1.03][0519].xml,Dem,Dem03M,Per_lei,1,3,103,1766,1760s,Andrea Bernasconi,Munich,Empire,Demofoonte,Male,1
+52,Did18M-Ah_non_lasciarmi-1776-Schuster[2.07][0052].xml,Did,Did18M,Ah_non_lasciarmi,2,07,207,1776,1770s,Joseph Schuster,Naples,Italy,Didone,Female,1
+520,Dem04M-Sperai_vicino-1766-Bernasconi[1.04][0520].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1766,1760s,Andrea Bernasconi,Munich,Empire,Timante,Male,1
+521,Dem05M-Tintendo_ingrata-1766-Bernasconi[1.05][0521].xml,Dem,Dem05M,Tintendo_ingrata,1,05,105,1766,1760s,Andrea Bernasconi,Munich,Empire,Cherinto,Male,1
+522,Dem06M-Non_curo-1766-Bernasconi[1.07][0522].xml,Dem,Dem06M,Non_curo,1,07,107,1766,1760s,Andrea Bernasconi,Munich,Empire,Creusa,Female,1
+523,Dem07M-Il_suo-1766-Bernasconi[1.08][0523].xml,Dem,Dem07M,Il_suo,1,08,108,1766,1760s,Andrea Bernasconi,Munich,Empire,Cherinto,Male,1
+524,Dem08M-Padre_perdona-1766-Bernasconi[1.12][0524].xml,Dem,Dem08M,Padre_perdona,1,12,112,1766,1760s,Andrea Bernasconi,Munich,Empire,Dircea,Female,1
+525,Dem09M-Se_ardire-1766-Bernasconi[1.13][0525].xml,Dem,Dem09M,Se_ardire,1,13,113,1766,1760s,Andrea Bernasconi,Munich,Empire,Timante,Male,1
+526,Dem10M-Tu_sai-1766-Bernasconi[2.01][0526].xml,Dem,Dem10M,Tu_sai,2,1,201,1766,1760s,Andrea Bernasconi,Munich,Empire,Creusa,Female,1
+527,Dem11M-Prudente_mi-1766-Bernasconi[2.02][0527].xml,Dem,Dem11M,Prudente_mi,2,2,202,1766,1760s,Andrea Bernasconi,Munich,Empire,Timante,Male,1
+528,Dem13M-E_soccorso-1766-Bernasconi[2.04][0528].xml,Dem,Dem13M,E_soccorso,2,4,204,1766,1760s,Andrea Bernasconi,Munich,Empire,Matusio,Male,1
+529,Dem15M-No_non-1766-Bernasconi[1.07][0529].xml,Dem,Dem15M,No_non,1,7,107,1766,1760s,Andrea Bernasconi,Munich,Empire,Cherinto,Male,1
+53,Did03M-Son_regina-1763-Traetta[1.05][0053].xml,Did,Did03M,Son_regina,1,5,105,1763,1760s,Tommaso Traetta,Venice,Italy,Didone,Female,1
+530,Dem17M-Perfidi_gia-1766-Bernasconi[2.10][0530].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1766,1760s,Andrea Bernasconi,Munich,Empire,Demofoonte,Male,1
+531,Dem18M-La_destra-1766-Bernasconi[2.11][0531].xml,Dem,Dem18M,La_destra,2,11,211,1766,1760s,Andrea Bernasconi,Munich,Empire,Timante,Male,1
+532,Dem19M-Non_odi-1766-Bernasconi[3.01][0532].xml,Dem,Dem19M,Non_odi,3,01,301,1766,1760s,Andrea Bernasconi,Munich,Empire,Adrasto,Male,1
+533,Dem20M-Nel_tuo-1766-Bernasconi[3.02][0533].xml,Dem,Dem20M,Nel_tuo,3,02,302,1766,1760s,Andrea Bernasconi,Munich,Empire,Cherinto,Male,1
+534,Dem21M-Ah_che-1766-Bernasconi[3.03][0534].xml,Dem,Dem21M,Ah_che,3,03,303,1766,1760s,Andrea Bernasconi,Munich,Empire,Matusio,Male,1
+538,Dem16M-Felice_eta-1743-Jommelli[2.08][0538] (1).xml,Dem,Dem16M,Felice_eta,2,8,208,1743,1740s,Niccolò Jommelli,Padua,Italy,Creusa,Female,0
+539,Dem17M-Perfidi_gia-1743-Jommelli[2.10][0539].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1743,1740s,Niccolò Jommelli,Padua,Italy,Demofoonte,Male,1
+541,Dem02M-In_te-1748-Hasse[1.02][0541].xml,Dem,Dem02M,In_te,1,2,102,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Dircea,Female,1
+542,Dem11M-Prudente_mi-1748-Hasse[2.02][0542].xml,Dem,Dem11M,Prudente_mi,2,2,202,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Timante,Male,1
+543,Dem18M-La_destra-1754-Manna[2.12][0543].xml,Dem,Dem18M,La_destra,2,12,212,1754,1750s,Gennaro Manna,Turin,Italy,Dircea,Male,1
+544,Dem11M-Prudente_mi-1754-Manna[2.02][0544].xml,Dem,Dem11M,Prudente_mi,2,2,202,1754,1750s,Gennaro Manna,Turin,Italy,Timante,Male,1
+545,Dem20M-Nel_tuo-1754-Manna[3.02][0545].xml,Dem,Dem20M,Nel_tuo,3,02,302,1754,1750s,Gennaro Manna,Turin,Italy,Cherinto,Male,1
+547,Dem23M-Odo_il-1754-Manna[3.06][0547].xml,Dem,Dem23M,Odo_il,3,06,306,1754,1750s,Gennaro Manna,Turin,Italy,Demofoonte,Male,1
+549,Dem17M-Perfidi_gia-1735-Schiassi[2.10][0549].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Dircea&Timante&Demofoonte,Male,1
+55,Did04M-Tu_mi_scorgi-1724-Sarro[1.06][0055].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1724,1720s,Domenico Natale Sarro,Naples,Italy,Osmida,Male,1
+550,Dem19M-Non_odi-1735-Schiassi[3.01][0550].xml,Dem,Dem19M,Non_odi,3,1,301,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Adrasto,Male,1
+551,Dem20M-Nel_tuo-1735-Schiassi[3.02][0551].xml,Dem,Dem20M,Nel_tuo,3,02,302,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Cherinto,Male,1
+552,Dem22M-Misero_pargoletto-1735-Schiassi[3.05][0552].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Timante,Male,1
+553,Dem23M-Odo_il-1735-Schiassi[3.06][0553].xml,Dem,Dem23M,Odo_il,3,06,306,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Demofoonte,Male,1
+554,Dem24M-Che_mai-1735-Schiassi[3.07][0554].xml,Dem,Dem24M,Che_mai,3,07,307,1735,1730s,Gaetano Maria Schiassi,Venice,Italy,Dircea,Female,1
+557,Dem03M-Per_lei-1754-Manna[1.04][0557].xml,Dem,Dem03M,Per_lei,1,4,104,1754,1750s,Gennaro Manna,Turin,Italy,Demofoonte,Male,1
+558,Dem10M-Tu_sai-1754-Manna[2.01][0558].xml,Dem,Dem10M,Tu_sai,2,1,201,1754,1750s,Gennaro Manna,Turin,Italy,Creusa,Female,1
+559,Dem17M-Perfidi_gia-1754-Manna[2.10][0559].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1754,1750s,Gennaro Manna,Turin,Italy,Demofoonte,Male,1
+56,Did05M-Fra_lo-1724-Sarro[1.07][0056].xml,Did,Did05M,Fra_lo,1,7,107,1724,1720s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+560,Dem19M-Non_odi-1754-Manna[3.01][0560].xml,Dem,Dem19M,Non_odi,3,01,301,1754,1750s,Gennaro Manna,Turin,Italy,Adrasto,Male,1
+562,Dem02M-In_te-1758-Hasse[1.02][0562].xml,Dem,Dem02M,In_te,1,2,102,1758,1750s,Johann Adolph Hasse,Naples,Italy,Dircea,Female,1
+563,Dem03M-Per_lei-1758-Hasse[1.03][0563].xml,Dem,Dem03M,Per_lei,1,3,103,1758,1750s,Johann Adolph Hasse,Naples,Italy,Demofoonte,Male,1
+564,Dem04M-Sperai_vicino-1758-Hasse[1.04][0564].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1758,1750s,Johann Adolph Hasse,Naples,Italy,Timante,Male,1
+565,Dem06M-Non_curo-1758-Hasse[1.07][0565].xml,Dem,Dem06M,Non_curo,1,07,107,1758,1750s,Johann Adolph Hasse,Naples,Italy,Creusa,Female,1
+566,Dem07M-Il_suo-1758-Hasse[1.08][0566].xml,Dem,Dem07M,Il_suo,1,08,108,1758,1750s,Johann Adolph Hasse,Naples,Italy,Cherinto,Male,1
+567,Dem08M-Padre_perdona-1758-Hasse[1.10][0567].xml,Dem,Dem08M,Padre_perdona,1,10,110,1758,1750s,Johann Adolph Hasse,Naples,Italy,Dircea,Female,1
+569,Dem10M-Tu_sai-1758-Hasse[2.01][0569].xml,Dem,Dem10M,Tu_sai,2,1,201,1758,1750s,Johann Adolph Hasse,Naples,Italy,Creusa,Female,1
+57,Did07M-Quando_saprai-1724-Sarro[1.10][0057].xml,Did,Did07M,Quando_saprai,1,10,110,1724,1720s,Domenico Natale Sarro,Naples,Italy,Enea,Male,1
+570,Dem11M-Prudente_mi-1758-Hasse[2.02][0570].xml,Dem,Dem11M,Prudente_mi,2,2,202,1758,1750s,Johann Adolph Hasse,Naples,Italy,Timante,Male,1
+571,Dem12M-Se_tronca-1758-Hasse[2.03][0571].xml,Dem,Dem12M,Se_tronca,2,3,203,1758,1750s,Johann Adolph Hasse,Naples,Italy,Demofoonte,Male,1
+572,Dem15M-No_non-1758-Hasse[2.07][0572].xml,Dem,Dem15M,No_non,2,7,207,1758,1750s,Johann Adolph Hasse,Naples,Italy,Cherinto,Male,1
+573,Dem16M-Felice_eta-1758-Hasse[2.08][0573].xml,Dem,Dem16M,Felice_eta,2,8,208,1758,1750s,Johann Adolph Hasse,Naples,Italy,Creusa,Female,1
+574,Dem17M-Perfidi_gia-1758-Hasse[2.10][0574] (1).xml,Dem,Dem17M,Perfidi_gia,2,10,210,1758,1750s,Johann Adolph Hasse,Naples,Italy,Demofoonte,Male,0
+575,Dem18M-La_destra-1758-Hasse[2.11][0575].xml,Dem,Dem18M,La_destra,2,11,211,1758,1750s,Johann Adolph Hasse,Naples,Italy,Dircea,Male,1
+576,Dem19M-Non_odi-1758-Hasse[3.01][0576].xml,Dem,Dem19M,Non_odi,3,01,301,1758,1750s,Johann Adolph Hasse,Naples,Italy,Adrasto,Male,1
+577,Dem20M-Nel_tuo-1758-Hasse[3.02][0577].xml,Dem,Dem20M,Nel_tuo,3,02,302,1758,1750s,Johann Adolph Hasse,Naples,Italy,Cherinto,Male,1
+578,Dem23M-Odo_il-1758-Hasse[3.06][0578].xml,Dem,Dem23M,Odo_il,3,06,306,1758,1750s,Johann Adolph Hasse,Naples,Italy,Demofoonte,Male,1
+58,Did08M-Ogni_amator-1724-Sarro[1.11][0058].xml,Did,Did08M,Ogni_amator,1,11,111,1724,1720s,Domenico Natale Sarro,Naples,Italy,Selene,Female,1
+580,Dem07M-Il_suo-1771-Sarti[1.08][0580].xml,Dem,Dem07M,Il_suo,1,08,108,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Cherinto,Male,1
+581,Dem13M-E_soccorso-1771-Sarti[2.04][0581].xml,Dem,Dem13M,E_soccorso,2,4,204,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Matusio,Male,1
+582,Dem15M-No_non-1771-Sarti[2.07][0582].xml,Dem,Dem15M,No_non,2,7,207,1771,1770s,Giuseppe Sarti,Copenhagen,Empire,Cherinto,Male,1
+584,Dem02M-In_te-1743-Gluck[1.02][0584].xml,Dem,Dem02M,In_te,1,2,102,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Dircea,Female,1
+585,Dem03M-Per_lei-1743-Gluck[1.03][0585].xml,Dem,Dem03M,Per_lei,1,3,103,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Demofoonte,Male,1
+586,Dem04M-Sperai_vicino-1743-Gluck[1.04][0586].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Timante,Male,1
+587,Dem05M-Tintendo_ingrata-1743-Gluck[1.05][0587].xml,Dem,Dem05M,Tintendo_ingrata,1,05,105,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Cherinto,Male,1
+588,Dem06M-Non_curo-1743-Gluck[1.07][0588].xml,Dem,Dem06M,Non_curo,1,07,107,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Creusa,Female,1
+589,Dem07M-Il_suo-1743-Gluck[1.08][0589].xml,Dem,Dem07M,Il_suo,1,08,108,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Cherinto,Male,1
+59,Did09M-Son_quel-1724-Sarro[1.12][0059].xml,Did,Did09M,Son_quel,1,12,112,1724,1720s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+590,Dem08M-Padre_perdona-1743-Gluck[1.12][0590].xml,Dem,Dem08M,Padre_perdona,1,12,112,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Dircea,Female,1
+591,Dem10M-Tu_sai-1743-Gluck[2.01][0591].xml,Dem,Dem10M,Tu_sai,2,1,201,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Creusa,Female&Male,1
+592,Dem11M-Prudente_mi-1743-Gluck[2.03][0592].xml,Dem,Dem11M,Prudente_mi,2,3,203,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Timante,Male,1
+593,Dem12M-Se_tronca-1743-Gluck[2.04][0593].xml,Dem,Dem12M,Se_tronca,2,4,204,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Demofoonte,Male,1
+594,Dem13M-E_soccorso-1743-Gluck[2.05][0594].xml,Dem,Dem13M,E_soccorso,2,5,205,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Matusio,Male,1
+595,Dem14M-Se_tutti-1743-Gluck[2.07][0595].xml,Dem,Dem14M,Se_tutti,2,7,207,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Dircea,Female,1
+596,Dem15M-No_non-1743-Gluck[2.08][0596].xml,Dem,Dem15M,No_non,2,8,208,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Cherinto,Male,1
+597,Dem16M-Felice_eta-1743-Gluck[2.09][0597].xml,Dem,Dem16M,Felice_eta,2,9,209,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Creusa,Female,1
+598,Dem21M-Ah_che-1743-Gluck[3.03][0598].xml,Dem,Dem21M,Ah_che,3,03,303,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Matusio,Male,1
+599,Dem22M-Misero_pargoletto-1743-Gluck[3.05][0599].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Timante,Male,1
+6,Did03M-Son_regina-1730-Sarro[1.05][0006].xml,Did,Did03M,Son_regina,1,5,105,1730,1730s,Domenico Natale Sarro,Naples,Italy,Didone,Female,1
+60,Did11M-Tu_mi_disarmi-1724-Sarro[1.16][0060].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1724,1720s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+601,Dem20M-Nel_tuo-1743-Gluck[3.02][0601].xml,Dem,Dem20M,Nel_tuo,3,02,302,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Cherinto,Male,1
+603,Dem19M-Non_odi-1743-Gluck[3.01][0603].xml,Dem,Dem19M,Non_odi,3,1,301,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Adrasto,Male,1
+604,Dem23M-Odo_il-1743-Gluck[3.06][0604].xml,Dem,Dem23M,Odo_il,3,06,306,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Demofoonte,Male,1
+606,Dem18M-La_destra-1743-Gluck[2.12][0606].xml,Dem,Dem18M,La_destra,2,12,212,1743,1740s,Christoph Willibald Gluck,Milan,Italy,Dircea,Female,1
+608,Dem03M-Per_lei-1748-Hasse[1.03][0608].xml,Dem,Dem03M,Per_lei,1,3,103,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Demofoonte,Male,1
+61,Did13M-Se_resto-1724-Sarro[1.18][0061].xml,Did,Did13M,Se_resto,1,18,118,1724,1720s,Domenico Natale Sarro,Naples,Italy,Enea,Male,1
+610,Dem06M-Non_curo-1748-Hasse[1.07][0610].xml,Dem,Dem06M,Non_curo,1,07,107,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Creusa,Female&Male,1
+611,Dem15M-No_non-1754-Manna[2.08][0611].xml,Dem,Dem15M,No_non,2,8,208,1754,1750s,Gennaro Manna,Turin,Italy,Cherinto,Male,1
+612,Dem12M-Se_tronca-1754-Manna[2.03][0612].xml,Dem,Dem12M,Se_tronca,2,3,203,1754,1750s,Gennaro Manna,Turin,Italy,Demofoonte,Male,1
+613,Dem01M-O_piu-1761-Piccinni[1.01][0613].xml,Dem,Dem01M,O_piu,1,1,101,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Matusio,Male,1
+614,Dem02M-In_te-1761-Piccinni[1.02][0614].xml,Dem,Dem02M,In_te,1,2,102,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Dircea,Female,1
+615,Dem03M-Per_lei-1761-Piccinni[1.03][0615].xml,Dem,Dem03M,Per_lei,1,3,103,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Demofoonte,Male,1
+616,Dem04M-Sperai_vicino-1761-Piccinni[1.04][0616].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Timante,Male,1
+62,Did04M-Tu_mi_scorgi-1730-Sarro[1.06][0062].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1730,1730s,Domenico Natale Sarro,Naples,Italy,Osmida,Male,1
+620,Dem09M-Se_ardire-1761-Piccinni[1.13][0620].xml,Dem,Dem09M,Se_ardire,1,13,113,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Timante,Male,1
+621,Dem08M-Padre_perdona-1761-Piccinni[1.12][0621].xml,Dem,Dem08M,Padre_perdona,1,12,112,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Dircea,Female,1
+622,Dem11M-Prudente_mi-1761-Piccinni[2.02][0622].xml,Dem,Dem11M,Prudente_mi,2,2,202,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Timante,Male,1
+624,Dem13M-E_soccorso-1761-Piccinni[2.05][0624].xml,Dem,Dem13M,E_soccorso,2,5,205,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Matusio,Male,1
+625,Dem18M-La_destra-1761-Piccinni[2.12][0625].xml,Dem,Dem18M,La_destra,2,12,212,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Dircea,Female,1
+627,Dem15M-No_non-1761-Piccinni[2.08][0627].xml,Dem,Dem15M,No_non,2,8,208,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Cherinto,Male,1
+629,Dem17M-Perfidi_gia-1761-Piccinni[2.11][0629].xml,Dem,Dem17M,Perfidi_gia,2,11,211,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Demofoonte,Male,1
+630,Dem19M-Non_odi-1761-Piccinni[3.01][0630].xml,Dem,Dem19M,Non_odi,3,01,301,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Adrasto,Male,1
+635,Ale01M-E_prezzo-1730-Vinci[1.01][0635].xml,Ale,Ale01M,E_prezzo,1,1,101,1730,1730s,Leonardo Vinci,Rome,Italy,Gandarte,Male,1
+636,Ale02M-Vedrai_con-1730-Vinci[1.02][0636].xml,Ale,Ale02M,Vedrai_con,1,2,102,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Male,1
+637,Ale03M-Vil_trofeo-1730-Vinci[1.03][0637].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1730,1730s,Leonardo Vinci,Rome,Italy,Alessandro,Male,1
+638,Ale04M-Chi_vive-1730-Vinci[1.04][0638].xml,Ale,Ale04M,Chi_vive,1,4,104,1730,1730s,Leonardo Vinci,Rome,Italy,Erissena,Female,1
+639,Ale05M-O_sugli-1730-Vinci[1.05][0639].xml,Ale,Ale05M,O_sugli,1,5,105,1730,1730s,Leonardo Vinci,Rome,Italy,Timagene,Female&Male,1
+64,Did06M-Se_dalle-1730-Sarro[1.08][0064].xml,Did,Did06M,Se_dalle,1,8,108,1730,1730s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+640,Ale06M-Se_mai-1730-Vinci[1.06][0640].xml,Ale,Ale06M,Se_mai,1,6,106,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Male,1
+641,Ale07M-Se_mai-1730-Vinci[1.07][0641].xml,Ale,Ale07M,Se_mai,1,7,107,1730,1730s,Leonardo Vinci,Rome,Italy,Cleofide,Female,1
+642,Ale08M-Se_possono-1730-Vinci[1.09][0642].xml,Ale,Ale08M,Se_possono,1,9,109,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Female,1
+643,Ale09M-Compagni_nell-1730-Vinci[1.10][0643].xml,Ale,Ale09M,Compagni_nell,1,10,110,1730,1730s,Leonardo Vinci,Rome,Italy,Erissena,Female&Male,1
+644,Ale10M-Voi_che-1730-Vinci[1.11][0644].xml,Ale,Ale10M,Voi_che,1,11,111,1730,1730s,Leonardo Vinci,Rome,Italy,Gandarte,Male,1
+645,Ale11M-Se_amore-1730-Vinci[1.15][0645].xml,Ale,Ale11M,Se_amore,1,15,115,1730,1730s,Leonardo Vinci,Rome,Italy,Alessandro,Male,1
+646,Ale06M-Ale07M-Se_mai-1730-Vinci[1.16][0646].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1730,1730s,Leonardo Vinci,Rome,Italy,Cleofide,Female,1
+647,Ale12M-Non_sarei-1730-Vinci[2.03][0647].xml,Ale,Ale12M,Non_sarei,2,03,203,1730,1730s,Leonardo Vinci,Rome,Italy,Erissena,Female,1
+648,Ale13M-Senza_procelle-1730-Vinci[2.04][0648].xml,Ale,Ale13M,Senza_procelle,2,04,204,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Male,1
+649,Ale15M-Dun_barbaro-1730-Vinci[2.08][0649].xml,Ale,Ale15M,Dun_barbaro,2,08,208,1730,1730s,Leonardo Vinci,Rome,Italy,Alessandro,Male,1
+65,Did07M-Quando_saprai-1730-Sarro[1.10][0065].xml,Did,Did07M,Quando_saprai,1,10,110,1730,1730s,Domenico Natale Sarro,Naples,Italy,Enea,Male,1
+650,Ale16M-Digli_che-1730-Vinci[2.09][0650].xml,Ale,Ale16M,Digli_che,2,09,209,1730,1730s,Leonardo Vinci,Rome,Italy,Cleofide,Female,1
+651,Ale17M-Destrier_che-1730-Vinci[2.10][0651].xml,Ale,Ale17M,Destrier_che,2,10,210,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Male,1
+652,Ale18M-E_ver-1730-Vinci[2.11][0652].xml,Ale,Ale18M,E_ver,2,11,211,1730,1730s,Leonardo Vinci,Rome,Italy,Timagene,Male,1
+653,Ale19M-Se_e-1730-Vinci[2.13][0653].xml,Ale,Ale19M,Se_e,2,13,213,1730,1730s,Leonardo Vinci,Rome,Italy,Alessandro,Male,1
+654,Ale20M-Se_il-1730-Vinci[2.14][0654].xml,Ale,Ale20M,Se_il,2,14,214,1730,1730s,Leonardo Vinci,Rome,Italy,Cleofide,Female,1
+655,Ale21M-Se_viver-1730-Vinci[2.15][0655].xml,Ale,Ale21M,Se_viver,2,15,215,1730,1730s,Leonardo Vinci,Rome,Italy,Gandarte,Male,1
+656,Ale22M-Di_rendermi-1730-Vinci[2.16][0656].xml,Ale,Ale22M,Di_rendermi,2,16,216,1730,1730s,Leonardo Vinci,Rome,Italy,Erissena,Female,1
+657,Ale23M-Risveglia_lo-1730-Vinci[3.01][0657].xml,Ale,Ale23M,Risveglia_lo,3,1,301,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Male,1
+658,Ale24M-Se_troppo-1730-Vinci[3.04][0658].xml,Ale,Ale24M,Se_troppo,3,4,304,1730,1730s,Leonardo Vinci,Rome,Italy,Cleofide,Female,1
+659,Ale25M-Come_il-1730-Vinci[3.05][0659].xml,Ale,Ale25M,Come_il,3,5,305,1730,1730s,Leonardo Vinci,Rome,Italy,Erissena,Female,1
+66,Did08M-Ogni_amator-1730-Sarro[1.11][0066].xml,Did,Did08M,Ogni_amator,1,11,111,1730,1730s,Domenico Natale Sarro,Naples,Italy,Selene,Female,1
+660,Ale26M-Serbati_a-1730-Vinci[3.06][0660].xml,Ale,Ale26M,Serbati_a,3,6,306,1730,1730s,Leonardo Vinci,Rome,Italy,Alessandro,Male,1
+661,Ale28M-Dove_si-1730-Vinci[3.09][0661].xml,Ale,Ale28M,Dove_si,3,9,309,1730,1730s,Leonardo Vinci,Rome,Italy,Poro,Male,1
+662,Ale29M-Mio_ben-1730-Vinci[3.10][0662].xml,Ale,Ale29M,Mio_ben,3,10,310,1730,1730s,Leonardo Vinci,Rome,Italy,Gandarte,Male,1
+663,Ale30M-Son_confusa-1730-Vinci[3.11][0663].xml,Ale,Ale30M,Son_confusa,3,11,311,1730,1730s,Leonardo Vinci,Rome,Italy,Erissena,Female&Male,1
+664,Ale31M-Ombra_dell-1730-Vinci[3.12][0664].xml,Ale,Ale31M,Ombra_dell,3,12,312,1730,1730s,Leonardo Vinci,Rome,Italy,Cleofide,Female,1
+665,Did23M-Veggio_la-1752-Galuppi[X.XX][0665].xml,Did,Did23M,Veggio_la,X,XX,XXX,1752,1750s,Baldassare Galuppi,Madrid,Spain,Selene,Female,1
+666,Did29M-A_trionfar-1752-Galuppi[3.06][0666].xml,Did,Did29M,A_trionfar,3,06,306,1752,1750s,Baldassare Galuppi,Madrid,Spain,Enea,Male,1
+667,Did02M-Diro_che-1764-Galuppi[1.03][0667].xml,Did,Did02M,Diro_che,1,3,103,1764,1760s,Baldassare Galuppi,Venice,Italy,Selene,Female,1
+668,Ale01M-E_prezzo-1755-Galuppi[1.01][0668].xml,Ale,Ale01M,E_prezzo,1,1,101,1755,1750s,Baldassare Galuppi,Venice,Italy,Gandarte,Male,1
+669,Ale02M-Vedrai_con-1755-Galuppi[1.02][0669].xml,Ale,Ale02M,Vedrai_con,1,2,102,1755,1750s,Baldassare Galuppi,Venice,Italy,Poro,Male,1
+67,Did09M-Son_quel-1730-Sarro[1.12][0067].xml,Did,Did09M,Son_quel,1,12,112,1730,1730s,Domenico Natale Sarro,Naples,Italy,Iarba,Male,1
+670,Ale03M-Vil_trofeo-1755-Galuppi[1.03][0670].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1755,1750s,Baldassare Galuppi,Venice,Italy,Alessandro,Male,1
+671,Ale04M-Chi_vive-1755-Galuppi[1.04][0671].xml,Ale,Ale04M,Chi_vive,1,4,104,1755,1750s,Baldassare Galuppi,Venice,Italy,Erissena,Female,1
+672,Ale05M-O_sugli-1755-Galuppi[1.05][0672].xml,Ale,Ale05M,O_sugli,1,5,105,1755,1750s,Baldassare Galuppi,Venice,Italy,Timagene,Male,1
+673,Ale06M-Se_mai-1755-Galuppi[1.06][0673].xml,Ale,Ale06M,Se_mai,1,6,106,1755,1750s,Baldassare Galuppi,Venice,Italy,Poro,Male,1
+674,Ale07M-Se_mai-1755-Galuppi[1.07][0674].xml,Ale,Ale07M,Se_mai,1,7,107,1755,1750s,Baldassare Galuppi,Venice,Italy,Cleofide,Female,1
+675,Ale08M-Se_possono-1755-Galuppi[1.09][0675].xml,Ale,Ale08M,Se_possono,1,9,109,1755,1750s,Baldassare Galuppi,Venice,Italy,Poro,Male,1
+677,Ale11M-Se_amore-1755-Galuppi[1.15][0677].xml,Ale,Ale11M,Se_amore,1,15,115,1755,1750s,Baldassare Galuppi,Venice,Italy,Alessandro,Male,1
+678,Ale06M-Ale07M-Se_mai-1755-Galuppi[1.16][0678].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1755,1750s,Baldassare Galuppi,Venice,Italy,Cleofide,Female,1
+68,Did10M-Infelice_sventurato-1730-Sarro[1.13][0068].xml,Did,Did10M,Infelice_sventurato,1,13,113,1730,1730s,Domenico Natale Sarro,Naples,Italy,Araspe,Male,1
+680,Ale12M-Non_sarei-1755-Galuppi[2.04][0680].xml,Ale,Ale12M,Non_sarei,2,04,204,1755,1750s,Baldassare Galuppi,Venice,Italy,Erissena,Female,1
+682,Ale16M-Digli_che-1755-Galuppi[2.09][0682].xml,Ale,Ale16M,Digli_che,2,9,209,1755,1750s,Baldassare Galuppi,Venice,Italy,Cleofide,Female&Male,1
+683,Ale17M-Destrier_che-1755-Galuppi[2.10][0683].xml,Ale,Ale17M,Destrier_che,2,10,210,1755,1750s,Baldassare Galuppi,Venice,Italy,Poro,Male,1
+684,Did04M-Tu_mi_scorgi-1764-Galuppi[1.06][0684].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1764,1760s,Baldassare Galuppi,Venice,Italy,Osmida,Male,1
+685,Did05M-Fra_lo-1764-Galuppi[1.07][0685].xml,Did,Did05M,Fra_lo,1,7,107,1764,1760s,Baldassare Galuppi,Venice,Italy,Iarba,Male,1
+686,Did06M-Se_dalle-1764-Galuppi[1.08][0686].xml,Did,Did06M,Se_dalle,1,8,108,1764,1760s,Baldassare Galuppi,Venice,Italy,Araspe,Male,1
+687,Did11M-Tu_mi_disarmi-1764-Galuppi[1.16][0687].xml,Did,Did11M,Tu_mi_disarmi,1,16,116,1764,1760s,Baldassare Galuppi,Venice,Italy,Iarba,Male,1
+688,Did14M-Pensa_che-1764-Galuppi[2.01][0688].xml,Did,Did14M,Pensa_che,2,1,201,1764,1760s,Baldassare Galuppi,Venice,Italy,Osmida,Male,1
+689,Did30M-Nel_duol-1764-Galuppi[3.06][0689].xml,Did,Did30M,Nel_duol,3,06,306,1764,1760s,Baldassare Galuppi,Venice,Italy,Selene,Female,1
+69,Did14M-Pensa_che-1730-Sarro[2.01][0069].xml,Did,Did14M,Pensa_che,2,1,201,1730,1730s,Domenico Natale Sarro,Naples,Italy,Osmida,Male,1
+690,Ale02M-Vedrai_con-1755-Perez[1.02][0690].xml,Ale,Ale02M,Vedrai_con,1,2,102,1755,1750s,Davide Perez,Lisbon,Portugal,Poro,Male,1
+691,Ale03M-Vil_trofeo-1755-Perez[1.03][0691].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1755,1750s,Davide Perez,Lisbon,Portugal,Alessandro,Male,1
+692,Ale04M-Chi_vive-1755-Perez[1.04][0692].xml,Ale,Ale04M,Chi_vive,1,4,104,1755,1750s,Davide Perez,Lisbon,Portugal,Erissena,Female,1
+693,Ale05M-O_sugli-1755-Perez[1.05][0693].xml,Ale,Ale05M,O_sugli,1,5,105,1755,1750s,Davide Perez,Lisbon,Portugal,Timagene,Male,1
+694,Ale06M-Se_mai-1755-Perez[1.06][0694].xml,Ale,Ale06M,Se_mai,1,6,106,1755,1750s,Davide Perez,Lisbon,Portugal,Poro,Male,1
+695,Ale07M-Se_mai-1755-Perez[1.07][0695].xml,Ale,Ale07M,Se_mai,1,7,107,1755,1750s,Davide Perez,Lisbon,Portugal,Cleofide,Female,1
+696,Ale10M-Voi_che-1755-Perez[1.10][0696].xml,Ale,Ale10M,Voi_che,1,10,110,1755,1750s,Davide Perez,Lisbon,Portugal,Gandarte,Male,1
+697,Ale06M-Ale07M-Se_mai-1755-Perez[1.15][0697] (1).xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1755,1750s,Davide Perez,Lisbon,Portugal,Poro,Female,0
+698,Ale13M-Senza_procelle-1755-Perez[2.04][0698].xml,Ale,Ale13M,Senza_procelle,2,4,204,1755,1750s,Davide Perez,Lisbon,Portugal,Poro,Male,1
+699,Ale29M-Mio_ben-1755-Perez[3.08][0699].xml,Ale,Ale29M,Mio_ben,3,8,308,1755,1750s,Davide Perez,Lisbon,Portugal,Gandarte,Male,1
+7,Did12M-Non_ha-1730-Sarro[1.17][0007].xml,Did,Did12M,Non_ha,1,17,117,1730,1730s,Domenico Natale Sarro,Naples,Italy,Didone,Female,1
+70,Did15M-Leon_che-1739-Lampugnani[2.02][0070].xml,Did,Did15M,Leon_che,2,2,202,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Iarba,Male,1
+700,Ale19M-Se_e-1738-Galuppi[2.13][0700].xml,Ale,Ale19M,Se_e,2,13,213,1738,1730s,Baldassare Galuppi,Venice,Italy,Alessandro,Male,1
+702,Ale24M-Se_troppo-1755-Galuppi[3.04][0702].xml,Ale,Ale24M,Se_troppo,3,4,304,1755,1750s,Baldassare Galuppi,Venice,Italy,Cleofide,Female,1
+703,Ale26M-Serbati_a-1755-Galuppi[3.06][0703].xml,Ale,Ale26M,Serbati_a,3,6,306,1755,1750s,Baldassare Galuppi,Venice,Italy,Alessandro,Male,1
+704,Ale27M-Finche_rimango-1755-Galuppi[3.07][0704].xml,Ale,Ale27M,Finche_rimango,3,7,307,1755,1750s,Baldassare Galuppi,Venice,Italy,Timagene,Male,1
+705,Ale28M-Dove_si-1755-Galuppi[3.09][0705].xml,Ale,Ale28M,Dove_si,3,9,309,1755,1750s,Baldassare Galuppi,Venice,Italy,Poro,Male,1
+706,Ale29M-Mio_ben-1738-Galuppi[3.10][0706].xml,Ale,Ale29M,Mio_ben,3,10,310,1738,1730s,Baldassare Galuppi,Venice,Italy,Gandarte,Male,1
+708,Ale31M-Ombra_dell-1755-Galuppi[3.12][0708].xml,Ale,Ale31M,Ombra_dell,3,12,312,1755,1750s,Baldassare Galuppi,Venice,Italy,Cleofide,Female,1
+709,Ale16M-Digli_che-1755-Perez[2.09][0709].xml,Ale,Ale16M,Digli_che,2,9,209,1755,1750s,Davide Perez,Lisbon,Portugal,Ceofide,Female,1
+71,Did17M-L_augelletto-1739-Lampugnani[2.04][0071].xml,Did,Did17M,L_augelletto,2,04,204,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Araspe,Male,1
+710,Ale17M-Destrier_che-1755-Perez[2.10][0710].xml,Ale,Ale17M,Destrier_che,2,10,210,1755,1750s,Davide Perez,Lisbon,Portugal,Poro,Male,1
+711,Ale19M-Se_e-1755-Perez[2.12][0711].xml,Ale,Ale19M,Se_e,2,12,212,1755,1750s,Davide Perez,Lisbon,Portugal,Alessandro,Male,1
+712,Ale20M-Se_il-1755-Perez[2.13][0712].xml,Ale,Ale20M,Se_il,2,13,213,1755,1750s,Davide Perez,Lisbon,Portugal,Cleofide,Female,1
+713,Ale21M-Se_viver-1755-Perez[2.14][0713].xml,Ale,Ale21M,Se_viver,2,14,214,1755,1750s,Davide Perez,Lisbon,Portugal,Gandarte,Male,1
+714,Ale22M-Di_rendermi-1755-Perez[2.15][0714].xml,Ale,Ale22M,Di_rendermi,2,15,215,1755,1750s,Davide Perez,Lisbon,Portugal,Erissena,Female,1
+715,Ale24M-Se_troppo-1755-Perez[3.01][0715].xml,Ale,Ale24M,Se_troppo,3,1,301,1755,1750s,Davide Perez,Lisbon,Portugal,Cleofide,Female,1
+716,Ale27M-Finche_rimango-1755-Perez[3.05][0716].xml,Ale,Ale27M,Finche_rimango,3,5,305,1755,1750s,Davide Perez,Lisbon,Portugal,Timagene,Female&Male,1
+719,Ale26M-Serbati_a-1755-Perez[3.04][0719].xml,Ale,Ale26M,Serbati_a,3,4,304,1755,1750s,Davide Perez,Lisbon,Portugal,Alessandro,Male,1
+72,Did19M-Vedi_nel-1739-Lampugnani[2.08][0072].xml,Did,Did19M,Vedi_nel,2,08,208,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Enea,Male,1
+721,Ale02M-Vedrai_con-1731-Hasse[1.03][0721].xml,Ale,Ale02M,Vedrai_con,1,3,103,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Poro,Male,1
+722,Ale03M-Vil_trofeo-1731-Hasse[1.04][0722].xml,Ale,Ale03M,Vil_trofeo,1,4,104,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Alessandro,Female,1
+723,Ale04M-Chi_vive-1731-Hasse[1.05][0723].xml,Ale,Ale04M,Chi_vive,1,5,105,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Erissena,Female,1
+725,Ale06M-Se_mai-1731-Hasse[1.07][0725].xml,Ale,Ale06M,Se_mai,1,7,107,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Poro,Male,1
+726,Ale07M-Se_mai-1731-Hasse[1.08][0726].xml,Ale,Ale07M,Se_mai,1,8,108,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Cleofide,Female,1
+727,Ale08M-Se_possono-1731-Hasse[1.10][0727].xml,Ale,Ale08M,Se_possono,1,10,110,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Poro,Male,1
+729,Ale10M-Voi_che-1731-Hasse[1.12][0729].xml,Ale,Ale10M,Voi_che,1,12,112,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Gandarte,Male,1
+730,Ale11M-Se_amore-1731-Hasse[1.16][0730].xml,Ale,Ale11M,Se_amore,1,16,116,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Alessandro,Male,1
+731,Ale06M-Ale07M-Se_mai-1731-Hasse[1.17][0731].xml,Ale,Ale06M-Ale07M,Se_mai,1,17,117,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Cleofide&Poro,Female,1
+735,Ale16M-Digli_che-1731-Hasse[2.09][0735].xml,Ale,Ale16M,Digli_che,2,9,209,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Cleofide,Female,1
+736,Ale18M-E_ver-1731-Hasse[2.11][0736].xml,Ale,Ale18M,E_ver,2,11,211,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Timagene,Male,1
+737,Ale19M-Se_e-1731-Hasse[2.12][0737].xml,Ale,Ale19M,Se_e,2,12,212,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Alessandro,Male,1
+742,Ale24M-Se_troppo-1731-Hasse[3.04][0742].xml,Ale,Ale24M,Se_troppo,3,4,304,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Cleofide,Female,1
+746,Ale28M-Dove_si-1731-Hasse[3.09][0746].xml,Ale,Ale28M,Dove_si,3,9,309,1731,1730s,Johann Adolph Hasse,Dresden,Empire,Poro,Male,1
+748,Ale02M-Vedrai_con-1769-Kozeluch[1.02][0748].xml,Ale,Ale02M,Vedrai_con,1,2,102,1769,1760s,Leopold Kozeluch,Prague,Empire,Poro,Male,1
+749,Ale03M-Vil_trofeo-1769-Kozeluch[1.03][0749].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1769,1760s,Leopold Kozeluch,Prague,Empire,Alessandro,Male,1
+75,Did04M-Tu_mi_scorgi-1760-Bernasconi[1.06][0075].xml,Did,Did04M,Tu_mi_scorgi,1,6,106,1760,1760s,Andrea Bernasconi,Venice,Italy,Osmida,Male,1
+750,Ale04M-Chi_vive-1769-Kozeluch[1.04][0750].xml,Ale,Ale04M,Chi_vive,1,4,104,1769,1760s,Leopold Kozeluch,Prague,Empire,Erissena,Female,1
+751,Ale05M-O_sugli-1769-Kozeluch[1.05][0751].xml,Ale,Ale05M,O_sugli,1,5,105,1769,1760s,Leopold Kozeluch,Prague,Empire,Timagene,Male,1
+752,Ale06M-Se_mai-1769-Kozeluch[1.06][0752].xml,Ale,Ale06M,Se_mai,1,6,106,1769,1760s,Leopold Kozeluch,Prague,Empire,Poro,Male,1
+753,Ale07M-Se_mai-1769-Kozeluch[1.06][0753].xml,Ale,Ale07M,Se_mai,1,6,106,1769,1760s,Leopold Kozeluch,Prague,Empire,Cleofide,Female,1
+754,Ale10M-Voi_che-1769-Kozeluch[1.11][0754].xml,Ale,Ale10M,Voi_che,1,11,111,1769,1760s,Leopold Kozeluch,Prague,Empire,Gandarte,Male,1
+755,Ale06M-Ale07M-Se_mai-1769-Kozeluch[1.16][0755].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1769,1760s,Leopold Kozeluch,Prague,Empire,Cleofide,Female,1
+757,Ale12M-Non_sarei-1769-Kozeluch[2.04][0757].xml,Ale,Ale12M,Non_sarei,2,04,204,1769,1760s,Leopold Kozeluch,Prague,Empire,Erissena,Female,1
+758,Ale16M-Digli_che-1769-Kozeluch[2.09][0758].xml,Ale,Ale16M,Digli_che,2,9,209,1769,1760s,Leopold Kozeluch,Prague,Empire,Cleofide,Female,1
+759,Ale17M-Destrier_che-1769-Kozeluch[2.10][0759].xml,Ale,Ale17M,Destrier_che,2,10,210,1769,1760s,Leopold Kozeluch,Prague,Empire,Poro,Male,1
+76,Did06M-Se_dalle-1760-Bernasconi[1.08][0076].xml,Did,Did06M,Se_dalle,1,8,108,1760,1760s,Andrea Bernasconi,Venice,Italy,Araspe,Male,1
+760,Ale19M-Se_e-1769-Kozeluch[2.12][0760].xml,Ale,Ale19M,Se_e,2,12,212,1769,1760s,Leopold Kozeluch,Prague,Empire,Alessandro,Male,1
+761,Ale20M-Se_il-1769-Kozeluch[2.15][0761].xml,Ale,Ale20M,Se_il,2,15,215,1769,1760s,Leopold Kozeluch,Prague,Empire,Cleofide,Female,1
+762,Ale26M-Serbati_a-1769-Kozeluch[3.06][0762].xml,Ale,Ale26M,Serbati_a,3,6,306,1769,1760s,Leopold Kozeluch,Prague,Empire,Alessandro,Male,1
+763,Ale28M-Dove_si-1769-Kozeluch[3.09][0763].xml,Ale,Ale28M,Dove_si,3,9,309,1769,1760s,Leopold Kozeluch,Prague,Empire,Poro,Male,1
+764,Ale29M-Mio_ben-1769-Kozeluch[3.10][0764].xml,Ale,Ale29M,Mio_ben,3,10,310,1769,1760s,Leopold Kozeluch,Prague,Empire,Gandarte,Male,1
+765,Ale30M-Son_confusa-1769-Kozeluch[3.11][0765].xml,Ale,Ale30M,Son_confusa,3,11,311,1769,1760s,Leopold Kozeluch,Prague,Empire,Erissena,Female,1
+767,Did07M-Quando_saprai-1764-Galuppi[1.10][0767].xml,Did,Did07M,Quando_saprai,1,10,110,1764,1760s,Baldassare Galuppi,Venice,Italy,Enea,Male,1
+769,Did20M-Fosca_nube-1764-Galuppi[2.09][0769].xml,Did,Did20M,Fosca_nube,2,09,209,1764,1760s,Baldassare Galuppi,Venice,Italy,Iarba,Male,1
+77,Did07M-Quando_saprai-1760-Bernasconi[1.10][0077].xml,Did,Did07M,Quando_saprai,1,10,110,1760,1760s,Andrea Bernasconi,Venice,Italy,Enea,Male,1
+772,Did31M-Va_crescendo-1764-Galuppi[3.06][0772].xml,Did,Did31M,Va_crescendo,3,06,306,1764,1760s,Baldassare Galuppi,Venice,Italy,Didone,Female,1
+773,Did12M-Non_ha-1764-Galuppi[1.17][0773].xml,Did,Did12M,Non_ha,1,17,117,1764,1760s,Baldassare Galuppi,Venice,Italy,Didone,Female,1
+774,Did34M-Vado_ma-1764-Galuppi[3.17][0774].xml,Did,Did34M,Vado_ma,3,17,317,1764,1760s,Baldassare Galuppi,Venice,Italy,Didone,Female,1
+776,Dem02M-In_te-1752-Perez[1.02][0776].xml,Dem,Dem02M,In_te,1,2,102,1752,1750s,Davide Perez,Lisbon,Portugal,Dircea,Female&Male,1
+777,Dem03M-Per_lei-1752-Perez[1.03][0777].xml,Dem,Dem03M,Per_lei,1,3,103,1752,1750s,Davide Perez,Lisbon,Portugal,Demofoonte,Male,1
+779,Dem04M-Sperai_vicino-1752-Perez[1.05][0779].xml,Dem,Dem04M,Sperai_vicino,1,5,105,1752,1750s,Davide Perez,Lisbon,Portugal,Timante,Male,1
+78,Did09M-Son_quel-1760-Bernasconi[1.13][0078].xml,Did,Did09M,Son_quel,1,13,113,1760,1760s,Andrea Bernasconi,Venice,Italy,Iarba,Male,1
+780,Dem05M-Tintendo_ingrata-1752-Perez[1.06][0780].xml,Dem,Dem05M,Tintendo_ingrata,1,06,106,1752,1750s,Davide Perez,Lisbon,Portugal,Cherinto,Male,1
+781,Dem06M-Non_curo-1752-Perez[1.08][0781].xml,Dem,Dem06M,Non_curo,1,08,108,1752,1750s,Davide Perez,Lisbon,Portugal,Creusa,Female,1
+782,Dem07M-Il_suo-1752-Perez[1.09][0782].xml,Dem,Dem07M,Il_suo,1,09,109,1752,1750s,Davide Perez,Lisbon,Portugal,Cherinto,Male,1
+783,Dem08M-Padre_perdona-1752-Perez[1.13][0783].xml,Dem,Dem08M,Padre_perdona,1,13,113,1752,1750s,Davide Perez,Lisbon,Portugal,Dircea,Female,1
+784,Dem09M-Se_ardire-1752-Perez[1.14][0784].xml,Dem,Dem09M,Se_ardire,1,14,114,1752,1750s,Davide Perez,Lisbon,Portugal,Timante,Male,1
+785,Dem11M-Prudente_mi-1752-Perez[2.02][0785].xml,Dem,Dem11M,Prudente_mi,2,2,202,1752,1750s,Davide Perez,Lisbon,Portugal,Timante,Male,1
+786,Dem12M-Se_tronca-1752-Perez[2.03][0786].xml,Dem,Dem12M,Se_tronca,2,3,203,1752,1750s,Davide Perez,Lisbon,Portugal,Demofoonte,Male,1
+787,Dem13M-E_soccorso-1752-Perez[2.04][0787].xml,Dem,Dem13M,E_soccorso,2,4,204,1752,1750s,Davide Perez,Lisbon,Portugal,Matusio,Male,1
+788,Dem15M-No_non-1752-Perez[2.07][0788].xml,Dem,Dem15M,No_non,2,7,207,1752,1750s,Davide Perez,Lisbon,Portugal,Cherinto,Male,1
+789,Dem16M-Felice_eta-1752-Perez[2.08][0789].xml,Dem,Dem16M,Felice_eta,2,8,208,1752,1750s,Davide Perez,Lisbon,Portugal,Creusa,Female,1
+79,Did03M-Son_regina-1794-Paisiello[1.05][0079].xml,Did,Did03M,Son_regina,1,5,105,1794,1790s,Giovanni Paisiello,Naples,Italy,Didone,Female,1
+790,Dem17M-Perfidi_gia-1752-Perez[2.10][0790].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1752,1750s,Davide Perez,Lisbon,Portugal,Demofoonte,Male,1
+791,Dem18M-La_destra-1752-Perez[2.11][0791].xml,Dem,Dem18M,La_destra,2,11,211,1752,1750s,Davide Perez,Lisbon,Portugal,Timante,Female,1
+792,Dem19M-Non_odi-1752-Perez[3.01][0792].xml,Dem,Dem19M,Non_odi,3,01,301,1752,1750s,Davide Perez,Lisbon,Portugal,Adrasto,Male,1
+793,Dem20M-Nel_tuo-1752-Perez[3.02][0793].xml,Dem,Dem20M,Nel_tuo,3,02,302,1752,1750s,Davide Perez,Lisbon,Portugal,Cherinto,Male,1
+794,Dem21M-Ah_che-1752-Perez[3.03][0794].xml,Dem,Dem21M,Ah_che,3,03,303,1752,1750s,Davide Perez,Lisbon,Portugal,Matusio,Male,1
+795,Dem23M-Odo_il-1752-Perez[3.06][0795].xml,Dem,Dem23M,Odo_il,3,06,306,1752,1750s,Davide Perez,Lisbon,Portugal,Demofoonte,Male,1
+798,Did18M-Ah_non_lasciarmi-1764-Galuppi[2.07][0798].xml,Did,Did18M,Ah_non_lasciarmi,2,07,207,1764,1760s,Baldassare Galuppi,Venice,Italy,Didone,Female,1
+799,Ale01M-E_prezzo-1774-Piccinni[1.01][0799].xml,Ale,Ale01M,E_prezzo,1,1,101,1774,1770s,Niccolò Piccinni,Naples,Italy,Gandarte,Male,1
+8,Did03M-Son_regina-1739-Lampugnani[1.05][0008].xml,Did,Did03M,Son_regina,1,5,105,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Didone,Female,1
+80,Dem22M-Misero_pargoletto-1735-Leo[3.04][0080].xml,Dem,Dem22M,Misero_pargoletto,3,04,304,1735,1730s,Leonardo Leo,Naples,Italy,Timante,Male,1
+800,Ale07M-Se_mai-1774-Piccinni[1.06][0800].xml,Ale,Ale07M,Se_mai,1,6,106,1774,1770s,Niccolò Piccinni,Naples,Italy,Cleofide,Female,1
+802,Ale16M-Digli_che-1774-Piccinni[2.09][0802].xml,Ale,Ale16M,Digli_che,2,9,209,1774,1770s,Niccolò Piccinni,Naples,Italy,Cleofide,Female&Male,1
+804,Ale24M-Se_troppo-1774-Piccinni[3.01][0804].xml,Ale,Ale24M,Se_troppo,3,1,301,1774,1770s,Niccolò Piccinni,Naples,Italy,Cleofide,Female,1
+805,Ale26M-Serbati_a-1774-Piccinni[3.03][0805].xml,Ale,Ale26M,Serbati_a,3,3,303,1774,1770s,Niccolò Piccinni,Naples,Italy,Alessandro,Male,1
+806,Ale29M-Mio_ben-1774-Piccinni[3.06][0806].xml,Ale,Ale29M,Mio_ben,3,6,306,1774,1770s,Niccolò Piccinni,Naples,Italy,Gandarte,Male,1
+807,Ale17M-Destrier_che-1774-Piccinni[2.16][0807].xml,Ale,Ale17M,Destrier_che,2,16,216,1774,1770s,Niccolò Piccinni,Naples,Italy,Poro,Male,1
+808,Dem05M-Tintendo_ingrata-1748-Hasse[1.05][0808].xml,Dem,Dem05M,Tintendo_ingrata,1,05,105,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Cherinto,Male,1
+809,Did03M-Son_regina-1764-Galuppi[1.05][0809].xml,Did,Did03M,Son_regina,1,5,105,1764,1760s,Baldassare Galuppi,Venice,Italy,Didone,Female,1
+81,Dem22M-Misero_pargoletto-1743-Jommelli[3.05][0081].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1743,1740s,Niccolò Jommelli,Padua,Italy,Timante,Male,1
+811,Ale02M-Vedrai_con-1772-Anfossi[1.02][0811].xml,Ale,Ale02M,Vedrai_con,1,2,102,1772,1770s,Pasquale Anfossi,Rome,Italy,Poro,Male,1
+812,Ale03MX-Non_ trionfa-1772-Anfossi[1.03][0812].xml,Ale,Ale03MX,Non_ trionfa,1,3,103,1772,1770s,Pasquale Anfossi,Rome,Italy,Alessandro,Male,1
+813,Ale04M-Chi_vive-1772-Anfossi[1.04][0813].xml,Ale,Ale04M,Chi_vive,1,4,104,1772,1770s,Pasquale Anfossi,Rome,Italy,Erissena,Female,1
+814,Ale06M-Se_mai-1772-Anfossi[1.06][0814].xml,Ale,Ale06M,Se_mai,1,6,106,1772,1770s,Pasquale Anfossi,Rome,Italy,Poro,Male,1
+815,Ale07M-Se_mai-1772-Anfossi[1.07][0815].xml,Ale,Ale07M,Se_mai,1,7,107,1772,1770s,Pasquale Anfossi,Rome,Italy,Cleofide,Female,1
+817,Ale06M-Ale07M-Se_mai-1772-Anfossi[1.16][0817].xml,Ale,Ale06M-Ale07M,Se_mai,1,16,116,1772,1770s,Pasquale Anfossi,Rome,Italy,Poro,Female,1
+818,Ale12M-Non_sarei-1772-Anfossi[2.03][0818].xml,Ale,Ale12M,Non_sarei,2,03,203,1772,1770s,Pasquale Anfossi,Rome,Italy,Erissena,Female,1
+82,Dem22M-Misero_pargoletto-1766-Bernasconi[3.05][0082].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1766,1760s,Andrea Bernasconi,Munich,Italy,Timante,Male,1
+820,Ale16M-Digli_che-1772-Anfossi[2.09][0820].xml,Ale,Ale16M,Digli_che,2,9,209,1772,1770s,Pasquale Anfossi,Rome,Italy,Cleofide,Female,1
+821,Ale17M-Destrier_che-1772-Anfossi[2.10][0821].xml,Ale,Ale17M,Destrier_che,2,10,210,1772,1770s,Pasquale Anfossi,Rome,Italy,Poro,Male,1
+822,Ale18M-E_ver-1772-Anfossi[2.11][0822].xml,Ale,Ale18M,E_ver,2,11,211,1772,1770s,Pasquale Anfossi,Rome,Italy,Timagene,Male,1
+824,Ale19M-Se_e-1772-Anfossi[2.14][0824].xml,Ale,Ale19M,Se_e,2,14,214,1772,1770s,Pasquale Anfossi,Rome,Italy,Alessandro,Male,1
+825,Ale20M-Se_il-1772-Anfossi[2.16][0825].xml,Ale,Ale20M,Se_il,2,16,216,1772,1770s,Pasquale Anfossi,Rome,Italy,Cleofide,Female,1
+826,Ale24M-Se_troppo-1772-Anfossi[3.04][0826].xml,Ale,Ale24M,Se_troppo,3,4,304,1772,1770s,Pasquale Anfossi,Rome,Italy,Cleofide,Female&Male,1
+827,Ale25M-Come_il-1772-Anfossi[3.05][0827].xml,Ale,Ale25M,Come_il,3,5,305,1772,1770s,Pasquale Anfossi,Rome,Italy,Erissena,Female,1
+828,Ale26M-Serbati_a-1772-Anfossi[3.06][0828].xml,Ale,Ale26M,Serbati_a,3,6,306,1772,1770s,Pasquale Anfossi,Rome,Italy,Alessandro,Male,1
+829,Ale28M-Dove_si-1772-Anfossi[3.09][0829].xml,Ale,Ale28M,Dove_si,3,9,309,1772,1770s,Pasquale Anfossi,Rome,Italy,Poro,Male,1
+83,Dem22M-Misero_pargoletto-1748-Hasse[3.05][0083].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Timante,Male,1
+830,Ale29M-Mio_ben-1772-Anfossi[3.10][0830].xml,Ale,Ale29M,Mio_ben,3,10,310,1772,1770s,Pasquale Anfossi,Rome,Italy,Gandarte,Male,1
+833,Ale01M-E_prezzo-1762-Bach[1.01][0833].xml,Ale,Ale01M,E_prezzo,1,1,101,1762,1760s,Johann Christian Bach,Naples,Italy,Gandarte,Male,1
+834,Ale03M-Vil_trofeo-1762-Bach[1.03][0834].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1762,1760s,Johann Christian Bach,Naples,Italy,Alessandro,Male,1
+835,Ale05M-O_sugli-1762-Bach[1.05][0835].xml,Ale,Ale05M,O_sugli,1,5,105,1762,1760s,Johann Christian Bach,Naples,Italy,Timagene,Male,1
+836,Ale06M-Se_mai-1762-Bach[1.06][0836].xml,Ale,Ale06M,Se_mai,1,6,106,1762,1760s,Johann Christian Bach,Naples,Italy,Poro,Male,1
+837,Ale07M-Se_mai-1762-Bach[1.07][0837].xml,Ale,Ale07M,Se_mai,1,7,107,1762,1760s,Johann Christian Bach,Naples,Italy,Cleofide,Female,1
+838,Ale08M-Se_possono-1762-Bach[1.09][0838].xml,Ale,Ale08M,Se_possono,1,9,109,1762,1760s,Johann Christian Bach,Naples,Italy,Poro,Male,1
+839,Ale09M-Compagni_nell-1762-Bach[1.10][0839].xml,Ale,Ale09M,Compagni_nell,1,10,110,1762,1760s,Johann Christian Bach,Naples,Italy,Erissena,Female,1
+840,Ale11M-Se_amore-1762-Bach[1.14][0840].xml,Ale,Ale11M,Se_amore,1,14,114,1762,1760s,Johann Christian Bach,Naples,Italy,Alessandro,Male,1
+841,Ale06M-Ale07M-Se_mai-1762-Bach[1.15][0841].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1762,1760s,Johann Christian Bach,Naples,Italy,Cleofide,Female,1
+842,Ale12M-Non_sarei-1762-Bach[2.02][0842].xml,Ale,Ale12M,Non_sarei,2,02,202,1762,1760s,Johann Christian Bach,Naples,Italy,Erissena,Female,1
+844,Ale16M-Digli_che-1762-Bach[2.08][0844].xml,Ale,Ale16M,Digli_che,2,8,208,1762,1760s,Johann Christian Bach,Naples,Italy,Cleofide,Female,1
+845,Ale17M-Destrier_che-1762-Bach[2.09][0845].xml,Ale,Ale17M,Destrier_che,2,9,209,1762,1760s,Johann Christian Bach,Naples,Italy,Poro,Male,1
+846,Ale19M-Se_e-1762-Bach[2.11][0846].xml,Ale,Ale19M,Se_e,2,11,211,1762,1760s,Johann Christian Bach,Naples,Italy,Alessandro,Male,1
+847,Ale20M-Se_il-1762-Bach[2.12][0847].xml,Ale,Ale20M,Se_il,2,12,212,1762,1760s,Johann Christian Bach,Naples,Italy,Cleofide,Female,1
+848,Ale22M-Di_rendermi-1762-Bach[2.13][0848].xml,Ale,Ale22M,Di_rendermi,2,13,213,1762,1760s,Johann Christian Bach,Naples,Italy,Gandarte,Male,1
+849,Ale24M-Se_troppo-1762-Bach[3.04][0849].xml,Ale,Ale24M,Se_troppo,3,4,304,1762,1760s,Johann Christian Bach,Naples,Italy,Cleofide,Female,1
+852,Ale29M-Mio_ben-1762-Bach[3.10][0852].xml,Ale,Ale29M,Mio_ben,3,10,310,1762,1760s,Johann Christian Bach,Naples,Italy,Gandarte,Male,1
+853,Ale30M-Son_confusa-1762-Bach[3.11][0853].xml,Ale,Ale30M,Son_confusa,3,11,311,1762,1760s,Johann Christian Bach,Naples,Italy,Erissena,Female,1
+855,Dem04M-Sperai_vicino-1748-Hasse[1.04][0855].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Timante,Male,1
+856,Dem07M-Il_suo-1748-Hasse[1.08][0856].xml,Dem,Dem07M,Il_suo,1,08,108,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Cherinto,Male,1
+857,Dem08M-Padre_perdona-1748-Hasse[1.12][0857].xml,Dem,Dem08M,Padre_perdona,1,12,112,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Dircea,Female,1
+858,Dem09M-Se_ardire-1748-Hasse[1.13][0858].xml,Dem,Dem09M,Se_ardire,1,13,113,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Timante,Male,1
+859,Dem10M-Tu_sai-1748-Hasse[2.01][0859].xml,Dem,Dem10M,Tu_sai,2,1,201,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Creusa,Female,1
+86,Dem14M-Se_tutti-1735-Leo[2.06][0086].xml,Dem,Dem14M,Se_tutti,2,6,206,1735,1730s,Leonardo Leo,Naples,Italy,Dircea,Female,1
+860,Dem12M-Se_tronca-1748-Hasse[2.03][0860].xml,Dem,Dem12M,Se_tronca,2,3,203,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Demofoonte,Male,1
+861,Dem13M-E_soccorso-1748-Hasse[2.04][0861].xml,Dem,Dem13M,E_soccorso,2,4,204,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Matusio,Female&Male,1
+862,Dem15M-No_non-1748-Hasse[2.07][0862].xml,Dem,Dem15M,No_non,2,7,207,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Cherinto,Male,1
+863,Dem16M-Felice_eta-1748-Hasse[2.08][0863].xml,Dem,Dem16M,Felice_eta,2,8,208,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Creusa,Female,1
+864,Dem17M-Perfidi_gia-1748-Hasse[2.10][0864].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Demofoonte,Male,1
+865,Dem18M-La_destra-1748-Hasse[2.11][0865].xml,Dem,Dem18M,La_destra,2,11,211,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Dircea,Female,1
+866,Dem19M-Non_odi-1748-Hasse[3.01[0866].xml,Dem,Dem19M,Non_odi,3,0,30,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Adrasto,Male,1
+867,Dem20M-Nel_tuo-1748-Hasse[3.02][0867].xml,Dem,Dem20M,Nel_tuo,3,02,302,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Cherinto,Male,1
+868,Dem21M-Ah_che-1748-Hasse[3.03][0868].xml,Dem,Dem21M,Ah_che,3,03,303,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Matusio,Male,1
+869,Dem23M-Odo_il-1748-Hasse[3.06][0869].xml,Dem,Dem23M,Odo_il,3,06,306,1748,1740s,Johann Adolph Hasse,Dresden,Empire,Demofoonte,Male,1
+87,Dem22M-Misero_pargoletto-1759-Bach[3.04][0087].xml,Dem,Dem22M,Misero_pargoletto,3,04,304,1759,1750s,Johann Christian Bach,Milan,Italy,Timante,Male,1
+870,Ale01M-E_prezzo-1792-Piccinni[1.01][0870].xml,Ale,Ale01M,E_prezzo,1,1,101,1792,1790s,Niccolò Piccinni,Rome,Italy,Gandarte,Male,1
+871,Ale02M-Vedrai_con-1792-Piccinni[1.02][0871].xml,Ale,Ale02M,Vedrai_con,1,2,102,1792,1790s,Niccolò Piccinni,Rome,Italy,Poro,Male,1
+872,Ale03M-Vil_trofeo-1792-Piccinni[1.03][0872].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1792,1790s,Niccolò Piccinni,Rome,Italy,Alessandro,Male,1
+873,Ale04M-Chi_vive-1792-Piccinni[1.04][0873].xml,Ale,Ale04M,Chi_vive,1,4,104,1792,1790s,Niccolò Piccinni,Rome,Italy,Erissena,Female,1
+874,Ale06M-Se_mai-1792-Piccinni[1.05][0874].xml,Ale,Ale06M,Se_mai,1,5,105,1792,1790s,Niccolò Piccinni,Rome,Italy,Poro,Male,1
+875,Ale07M-Se_mai-1792-Piccinni[1.06][0875].xml,Ale,Ale07M,Se_mai,1,6,106,1792,1790s,Niccolò Piccinni,Rome,Italy,Cleofide,Female,1
+876,Ale06M-Ale07M-Se_mai-1792-Piccinni[1.13][0876].xml,Ale,Ale06M-Ale07M,Se_mai,1,13,113,1792,1790s,Niccolò Piccinni,Rome,Italy,Cleofide,Female,1
+878,Ale12M-Non_sarei-1792-Piccinni[2.03][0878].xml,Ale,Ale12M,Non_sarei,2,03,203,1792,1790s,Niccolò Piccinni,Rome,Italy,Erissena,Female,1
+879,Ale08M-Se_possono-1792-Piccinni[2.04][0879].xml,Ale,Ale08M,Se_possono,2,4,204,1792,1790s,Niccolò Piccinni,Rome,Italy,Poro,Male,1
+88,Dem22M-Misero_pargoletto-1754-Manna[3.05][0088].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1754,1750s,Gennaro Manna,Turin,Italy,Timante,Male,1
+883,Ale20M-Se_il-1792-Piccinni[2.14][0883].xml,Ale,Ale20M,Se_il,2,14,214,1792,1790s,Niccolò Piccinni,Rome,Italy,Cleofide,Female,1
+884,Ale28M-Dove_si-1792-Piccinni[2.17][0884].xml,Ale,Ale28M,Dove_si,2,17,217,1792,1790s,Niccolò Piccinni,Rome,Italy,Poro,Male,1
+885,Ale31M-Ombra_dell-1792-Piccinni[2.18][0885].xml,Ale,Ale31M,Ombra_dell,2,18,218,1792,1790s,Niccolò Piccinni,Rome,Italy,Cleofide,Female,1
+888,Dem17M-Giacche_vivendo-1749-Hasse[2.10][0888].xml,Dem,Dem17M,Giacche_vivendo,2,10,210,1749,1740s,Johann Adolph Hasse,Venice,Italy,Demofoonte,Male,1
+89,Dem22M-Misero_pargoletto-1758-Galuppi[3.05][0089].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1758,1750s,Baldassare Galuppi,Padua,Italy,Timante,Male,1
+891,Dem19M-Non_odi-1743-Jommelli[3.01][0891].xml,Dem,Dem19M,Non_odi,3,1,301,1743,1740s,Niccolò Jommelli,Padua,Italy,Adrasto,Male,1
+892,Dem20M-Nel_tuo-1743-Jommelli[3.02][0892].xml,Dem,Dem20M,Nel_tuo,3,02,302,1743,1740s,Niccolò Jommelli,Padua,Italy,Cherinto,Male,1
+893,Dem23M-Odo_il-1743-Jommelli[3.06][0893].xml,Dem,Dem23M,Odo_il,3,06,306,1743,1740s,Niccolò Jommelli,Padua,Italy,Demofoonte,Male,1
+896,Dem14M-Se_tutti-1743-Jommelli[2.06][0896].xml,Dem,Dem14M,Se_tutti,2,6,206,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,1
+898,Ale02M-Vedrai_con-1748-Wagenseil[1.02][0898].xml,Ale,Ale02M,Vedrai_con,1,2,102,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro,Male,1
+899,Ale03M-Vil_trofeo-1748-Wagenseil[1.03][0899].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Alessandro,Male,1
+9,Did18M-Ah_non_lasciarmi-1739-Lampugnani[2.07][0009].xml,Did,Did18M,Ah_non_lasciarmi,2,07,207,1739,1730s,Giovanni Battista Lampugnani,Padua,Italy,Didone,Female,1
+90,Dem22M-Misero_pargoletto-1764-Jommelli[3.05][0090].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Timante,Male,1
+900,Ale04M-Chi_vive-1748-Wagenseil[1.04][0900].xml,Ale,Ale04M,Chi_vive,1,4,104,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Erissena,Female,1
+901,Ale06M-Se_mai-1748-Wagenseil[1.06][0901].xml,Ale,Ale06M,Se_mai,1,6,106,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro,Male,1
+902,Ale08M-Se_possono-1748-Wagenseil[1.08][0902].xml,Ale,Ale08M,Se_possono,1,8,108,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro,Male,1
+903,Ale10M-Voi_che-1748-Wagenseil[1.10][0903].xml,Ale,Ale10M,Voi_che,1,10,110,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Gandarte,Male,1
+904,Ale11M-Se_amore-1748-Wagenseil[1.14][0904].xml,Ale,Ale11M,Se_amore,1,14,114,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Alessandro,Male,1
+905,Ale13M-Senza_procelle-1748-Wagenseil[2.04][0905].xml,Ale,Ale13M,Senza_procelle,2,04,204,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro,Male,1
+906,Ale17M-Destrier_che-1748-Wagenseil[2.10][0906].xml,Ale,Ale17M,Destrier_che,2,10,210,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro,Male,1
+907,Ale19M-Se_e-1748-Wagenseil[2.12][0907].xml,Ale,Ale19M,Se_e,2,12,212,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Alessandro,Male,1
+908,Ale21M-Se_viver-1748-Wagenseil[2.14][0908].xml,Ale,Ale21M,Se_viver,2,14,214,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Gandarte,Male,1
+91,Dem14M-Se_tutti-1743-Jommelli[2.06][0091].xml,Dem,Dem14M,Se_tutti,2,6,206,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,1
+910,Ale28M-Dove_si-1748-Wagenseil[3.06][0910].xml,Ale,Ale28M,Dove_si,3,6,306,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro,Female&Male&Male,1
+911,Ale29M-Mio_ben-1748-Wagenseil[3.07][0911].xml,Ale,Ale29M,Mio_ben,3,7,307,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Gandarte,Male,1
+912,Ale30M-Son_confusa-1748-Wagenseil[3.08][0912].xml,Ale,Ale30M,Son_confusa,3,8,308,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Erissena,Female,1
+913,Ale12M-Non_sarei-1748-Wagenseil[2.03][0913].xml,Ale,Ale12M,Non_sarei,2,03,203,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Erissena,Female,1
+914,Ale07M-Se_mai-1748-Wagenseil[1.07][0914].xml,Ale,Ale07M,Se_mai,1,7,107,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Cleofide,Female,1
+915,Ale16M-Digli_che-1748-Wagenseil[2.09][0915].xml,Ale,Ale16M,Digli_che,2,9,209,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Cleofide,Female,1
+916,Ale22M-Di_rendermi-1748-Wagenseil[2.15][0916].xml,Ale,Ale22M,Di_rendermi,2,15,215,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Erissena,Female,1
+919,Dem03M-Per_lei-1764-Jommelli[1.01][0919].xml,Dem,Dem03M,Per_lei,1,1,101,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Demofoonte,Male,1
+92,Did13M-Se_resto-1730-Sarro[1.18][0092].xml,Did,Did13M,Se_resto,1,18,118,1730,1730s,Domenico Natale Sarro,Naples,Italy,Enea,Male,1
+920,Dem01M-O_piu-1764-Jommelli[1.02][0920].xml,Dem,Dem01M,O_piu,1,2,102,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Matusio,Female&Male,1
+921,Dem02M-In_te-1764-Jommelli[1.03][0921].xml,Dem,Dem02M,In_te,1,3,103,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Dircea,Female,1
+922,Dem04M-Sperai_vicino-1764-Jommelli[1.05][0922].xml,Dem,Dem04M,Sperai_vicino,1,5,105,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Timante,Male,1
+923,Dem06M-Non_curo-1764-Jommelli[1.08][0923].xml,Dem,Dem06M,Non_curo,1,08,108,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Creusa,Female,1
+924,Dem07M-Il_suo-1764-Jommelli[1.09][0924].xml,Dem,Dem07M,Il_suo,1,09,109,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Cherinto,Male,1
+925,Dem08M-Padre_perdona-1764-Jommelli[1.13][0925].xml,Dem,Dem08M,Padre_perdona,1,13,113,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Dircea,Female,1
+926,Dem10M-Tu_sai-1764-Jommelli[2.01][0926].xml,Dem,Dem10M,Tu_sai,2,01,201,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Creusa,Female,1
+927,Dem11M-Prudente_mi-1764-Jommelli[2.02][0927].xml,Dem,Dem11M,Prudente_mi,2,2,202,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Timante,Male,1
+928,Dem12M-Se_tronca-1764-Jommelli[2.03][0928].xml,Dem,Dem12M,Se_tronca,2,3,203,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Demofoonte,Male,1
+929,Dem13M-E_soccorso-1764-Jommelli[2.04][0929].xml,Dem,Dem13M,E_soccorso,2,4,204,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Matusio,Female&Male&Male,1
+93,Dem22M-Misero_pargoletto-1752-Perez[3.05][0093].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1752,1750s,Davide Perez,Lisbon,Portugal,Timante,Male,1
+931,Dem15M-No_non-1764-Jommelli[2.07][0931].xml,Dem,Dem15M,No_non,2,7,207,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Cherinto,Male,1
+932,Dem17M-Perfidi_gia-1764-Jommelli[2.09][0932].xml,Dem,Dem17M,Perfidi_gia,2,9,209,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Demofoonte,Male,1
+933,Dem19M-Non_odi-1764-Jommelli[3.01][0933].xml,Dem,Dem19M,Non_odi,3,01,301,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Adrasto,Male,1
+935,Dem18M-La_destra-1764-Jommelli[2.10][0935].xml,Dem,Dem18M,La_destra,2,10,210,1764,1760s,Niccolò Jommelli,Stuttgart,Empire,Dircea,Female,1
+939,Dem02M-In_te-1770-Jommelli[1.02][0939].xml,Dem,Dem02M,In_te,1,2,102,1770,1770s,Niccolò Jommelli,Naples,Italy,Dircea,Female,1
+94,Dem22M-Misero_pargoletto-1753-Jommelli[3.05][0094].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1753,1750s,Niccolò Jommelli,Milan,Italy,Timante,Male,1
+940,Dem03M-Per_lei-1770-Jommelli[1.03][0940].xml,Dem,Dem03M,Per_lei,1,3,103,1770,1770s,Niccolò Jommelli,Naples,Italy,Demofoonte,Male,1
+941,Dem04M-Sperai_vicino-1770-Jommelli[1.04][0941].xml,Dem,Dem04M,Sperai_vicino,1,4,104,1770,1770s,Niccolò Jommelli,Naples,Italy,Timante,Male&Female,1
+942,Dem06M-Non_curo-1770-Jommelli[1.07][0942].xml,Dem,Dem06M,Non_curo,1,07,107,1770,1770s,Niccolò Jommelli,Naples,Italy,Creusa,Female,1
+943,Dem07M-Il_suo-1770-Jommelli[1.08][0943].xml,Dem,Dem07M,Il_suo,1,08,108,1770,1770s,Niccolò Jommelli,Naples,Italy,Cherinto,Male,1
+944,Dem08M-Padre_perdona-1770-Jommelli[1.12][0944].xml,Dem,Dem08M,Padre_perdona,1,12,112,1770,1770s,Niccolò Jommelli,Naples,Italy,Dircea&Matusio,Female,1
+945,Dem13M-E_soccorso-1770-Jommelli[2.01][0945].xml,Dem,Dem13M,E_soccorso,2,1,201,1770,1770s,Niccolò Jommelli,Naples,Italy,Matusio,Male,1
+946,Dem10M-Tu_sai-1770-Jommelli[2.02][0946].xml,Dem,Dem10M,Tu_sai,2,2,202,1770,1770s,Niccolò Jommelli,Naples,Italy,Creusa,Female,1
+947,Dem11M-Prudente_mi-1770-Jommelli[2.03][0947].xml,Dem,Dem11M,Prudente_mi,2,3,203,1770,1770s,Niccolò Jommelli,Naples,Italy,Timante,Male,1
+948,Dem12M-Se_tronca-1770-Jommelli[2.04][0948].xml,Dem,Dem12M,Se_tronca,2,4,204,1770,1770s,Niccolò Jommelli,Naples,Italy,Demofoonte,Male,1
+949,Dem15M-No_non-1770-Jommelli[2.08][0949].xml,Dem,Dem15M,No_non,2,8,208,1770,1770s,Niccolò Jommelli,Naples,Italy,Cherinto,Male,1
+95,Dem22M-Misero_pargoletto-1775-Myslivecek[3.05][0095].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1775,1770s,Josef Mysliveček,Naples,Italy,Timante,Male,1
+950,Dem17M-Perfidi_gia-1770-Jommelli[2.10][0950].xml,Dem,Dem17M,Perfidi_gia,2,10,210,1770,1770s,Niccolò Jommelli,Naples,Italy,Demofoonte,Male,1
+951,Dem18M-La_destra-1770-Jommelli[2.11][0951].xml,Dem,Dem18M,La_destra,2,11,211,1770,1770s,Niccolò Jommelli,Naples,Italy,Dircea,Female,1
+952,Dem19M-Non_odi-1770-Jommelli[3.01][0952].xml,Dem,Dem19M,Non_odi,3,01,301,1770,1770s,Niccolò Jommelli,Naples,Italy,Adrasto,Female&Male,1
+953,Dem22M-Misero_pargoletto-1770-Jommelli[3.05][0953].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1770,1770s,Niccolò Jommelli,Naples,Italy,Timante,Male,1
+955,Ale05M-O_sugli-1748-Wagenseil[1.05][0955].xml,Ale,Ale05M,O_sugli,1,5,105,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Timagene,Male,1
+956,Ale06M-Ale07M-Se_mai-1748-Wagenseil[1.15][0956].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Poro&Cleofide,Male,1
+957,Ale27M-Finche_rimango-1748-Wagenseil[3.03][0957].xml,Ale,Ale27M,Finche_rimango,3,3,303,1748,1740s,Georg Christoph Wagenseil,Vienna,Empire,Timagene,Male,1
+958,Ale01M-E_prezzo-1731-Handel[1.01][0958].xml,Ale,Ale01M,E_prezzo,1,1,101,1731,1730s,Georg Friedrich Händel,London,England,Gandarte,Male,1
+959,Ale02M-Vedrai_con-1731-Handel[1.02][0959].xml,Ale,Ale02M,Vedrai_con,1,2,102,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,1
+96,Dem22M-Misero_pargoletto-1758-Hasse[3.05][0096].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1758,1750s,Johann Adolph Hasse,Naples,Italy,Timante,Male,1
+960,Ale03M-Vil_trofeo-1731-Handel[1.03][0960].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1731,1730s,Georg Friedrich Händel,London,England,Alessandro,Male,1
+961,Ale04M-Chi_vive-1731-Handel[1.04][0961].xml,Ale,Ale04M,Chi_vive,1,4,104,1731,1730s,Georg Friedrich Händel,London,England,Erissena,Female,1
+962,Ale06M-Se_mai-1731-Handel[1.05][0962].xml,Ale,Ale06M,Se_mai,1,5,105,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,1
+963,Ale07M-Se_mai-1731-Handel[1.07][0963].xml,Ale,Ale07M,Se_mai,1,7,107,1731,1730s,Georg Friedrich Händel,London,England,Cleofide,Female,1
+964,Ale08M-Se_possono-1731-Handel[1.07][0964].xml,Ale,Ale08M,Se_possono,1,7,107,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,1
+965,Ale09M-Compagni_nell-1731-Handel[1.08][0965].xml,Ale,Ale09M,Compagni_nell,1,8,108,1731,1730s,Georg Friedrich Händel,London,England,Erissena,Female,1
+966,Ale11M-Se_amore-1731-Handel[1.11][0966].xml,Ale,Ale11M,Se_amore,1,11,111,1731,1730s,Georg Friedrich Händel,London,England,Alessandro,Female&Male,1
+967,Ale06M-Ale07M-Se_mai-1731-Handel[1.12][0967].xml,Ale,Ale06M-Ale07M,Se_mai,1,12,112,1731,1730s,Georg Friedrich Händel,London,England,Cleofide,Female,1
+968,Ale15M-Dun_barbaro-1731-Handel[2.04][0968].xml,Ale,Ale15M,Dun_barbaro,2,04,204,1731,1730s,Georg Friedrich Händel,London,England,Alessandro,Male,1
+969,Ale16M-Digli_che-1731-Handel[2.05][0969].xml,Ale,Ale16M,Digli_che,2,5,205,1731,1730s,Georg Friedrich Händel,London,England,Cleofide,Female,1
+97,Dem22M-Misero_pargoletto-1761-Piccinni[3.05][0097].xml,Dem,Dem22M,Misero_pargoletto,3,05,305,1761,1760s,Niccolò Piccinni,Reggio Emilia,Italy,Timante,Male,1
+970,Ale13M-Senza_procelle-1731-Handel[2.06][0970].xml,Ale,Ale13M,Senza_procelle,2,06,206,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,1
+971,Ale20M-Se_il-1731-Handel[2.09][0971].xml,Ale,Ale20M,Se_il,2,9,209,1731,1730s,Georg Friedrich Händel,London,England,Cleofide,Female,1
+972,Ale21M-Se_viver-1731-Handel[2.10][0972].xml,Ale,Ale21M,Se_viver,2,10,210,1731,1730s,Georg Friedrich Händel,London,England,Gandarte,Male,1
+973,Ale22M-Di_rendermi-1731-Handel[2.11][0973].xml,Ale,Ale22M,Di_rendermi,2,11,211,1731,1730s,Georg Friedrich Händel,London,England,Erissena,Female&Male,1
+974,Ale23M-Risveglia_lo-1731-Handel[3.01][0974].xml,Ale,Ale23M,Risveglia_lo,3,1,301,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,1
+975,Ale24M-Se_troppo-1731-Handel[3.04][0975].xml,Ale,Ale24M,Se_troppo,3,4,304,1731,1730s,Georg Friedrich Händel,London,England,Cleofide,Female,1
+976,Ale25M-Come_il-1731-Handel[3.05][0976].xml,Ale,Ale25M,Come_il,3,5,305,1731,1730s,Georg Friedrich Händel,London,England,Erissena,Female,1
+977,Ale26M-Serbati_a-1731-Handel[3.06][0977].xml,Ale,Ale26M,Serbati_a,3,6,306,1731,1730s,Georg Friedrich Händel,London,England,Alessandro,Male,1
+978,Ale28M-Dove_si-1731-Handel[3.07][0978].xml,Ale,Ale28M,Dove_si,3,7,307,1731,1730s,Georg Friedrich Händel,London,England,Poro,Male,1
+979,Ale29M-Mio_ben-1731-Handel[3.09][0979].xml,Ale,Ale29M,Mio_ben,3,9,309,1731,1730s,Georg Friedrich Händel,London,England,Gandarte,Male,1
+98,Dem22M-Misero_pargoletto-1790-Errichelli[3.XX][0098].xml,Dem,Dem22M,Misero_pargoletto,3,XX,3XX,1790,1790s,Pasquale Errichelli,NA,NA,Timante,Male,1
+980,Ale30M-Son_confusa-1731-Handel[3.10][0980].xml,Ale,Ale30M,Son_confusa,3,10,310,1731,1730s,Georg Friedrich Händel,London,England,Erissena,Female,1
+981,Dem18M-La_destra-1743-Jommelli[2.11][0981].xml,Dem,Dem18M,La_destra,2,11,211,1743,1740s,Niccolò Jommelli,Padua,Italy,Dircea,Female,1
+982,Ale02M-Vedrai_con-1778-Mortellari[1.02][0982].xml,Ale,Ale02M,Vedrai_con,1,2,102,1778,1770s,Michele Mortellari,Siena,Italy,Poro,Male,1
+983,Ale03M-Vil_trofeo-1778-Mortellari[1.03][0983].xml,Ale,Ale03M,Vil_trofeo,1,3,103,1778,1770s,Michele Mortellari,Siena,Italy,Alessandro,Male,1
+984,Ale04M-Chi_vive-1778-Mortellari[1.05][0984].xml,Ale,Ale04M,Chi_vive,1,5,105,1778,1770s,Michele Mortellari,Siena,Italy,Erissena,Female,1
+985,Ale06M-Se_mai-1778-Mortellari[1.06][0985].xml,Ale,Ale06M,Se_mai,1,6,106,1778,1770s,Michele Mortellari,Siena,Italy,Poro,Male,1
+986,Ale07M-Se_mai-1778-Mortellari[1.08][0986].xml,Ale,Ale07M,Se_mai,1,8,108,1778,1770s,Michele Mortellari,Siena,Italy,Cleofide,Female,1
+988,Ale06M-Ale07M-Se_mai-1778-Mortellari[1.15][0988].xml,Ale,Ale06M-Ale07M,Se_mai,1,15,115,1778,1770s,Michele Mortellari,Siena,Italy,Cleofide,Female,1
+989,Ale12M-Non_sarei-1778-Mortellari[2.01][0989].xml,Ale,Ale12M,Non_sarei,2,01,201,1778,1770s,Michele Mortellari,Siena,Italy,Erissena,Female,1
+990,Ale08M-Se_possono-1778-Mortellari[2.02][0990].xml,Ale,Ale08M,Se_possono,2,2,202,1778,1770s,Michele Mortellari,Siena,Italy,Poro,Male,1
+992,Ale16M-Digli_che-1778-Mortellari[2.08][0992].xml,Ale,Ale16M,Digli_che,2,8,208,1778,1770s,Michele Mortellari,Siena,Italy,Cleofide,Female,1
+994,Ale17M-Destrier_che-1778-Mortellari[2.10][0994].xml,Ale,Ale17M,Destrier_che,2,10,210,1778,1770s,Michele Mortellari,Siena,Italy,Poro,Male,1
+995,Ale19M-Se_e-1778-Mortellari[2.12][0995].xml,Ale,Ale19M,Se_e,2,12,212,1778,1770s,Michele Mortellari,Siena,Italy,Alessandro,Male,1
+998,Ale28M-Dove_si-1778-Mortellari[3.04][0998].xml,Ale,Ale28M,Dove_si,3,4,304,1778,1770s,Michele Mortellari,Siena,Italy,Poro,Male,1
+999,Ale01M-E_prezzo-1754-Agricola[1.01][0999].xml,Ale,Ale01M,E_prezzo,1,1,101,1754,1750s,Johann Friedrich Agricola,Berlin,Empire,Gandarte,Male,1
