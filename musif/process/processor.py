@@ -213,14 +213,14 @@ class DataProcessor:
         """Finds multiple singers arias (duetos/trietos) and calculates mean, max or min between them.
         Unifies all voices columns into SoundVoice_ columns.  
         """
-        pinfo('\nScaning voice columns...')
-        df_voices=self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
+        pinfo('\nScaning voice columns')
+        df_voices = self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
         self.data[df_voices.columns] = self.data[df_voices.columns].replace('NA', np.nan)
         
         merge_single_voices(self.data)
         self.data = merge_duetos_trios(self.data)
         
-        columns_to_delete=[i for i in self.data.columns.values if any(voice in i for voice in voices_list_prefixes)]
+        columns_to_delete = [i for i in self.data.columns.values if any(voice in i for voice in voices_list_prefixes)]
         self.data.drop(columns_to_delete, axis=1, inplace=True)
 
     def unbundle_instrumentation(self) -> None:
@@ -273,7 +273,7 @@ class DataProcessor:
             perr('Some columns are already not present in the Dataframe')
     
     def replace_nans(self) -> None:
-        for col in tqdm(self.data.columns, desc='Replacing NaN values in selected columns...'):
+        for col in tqdm(self.data.columns, desc='Replacing NaN values in selected columns'):
             if any(substring in col for substring in tuple(self._post_config.replace_nans)):
                 self.data[col]= self.data[col].fillna(0)
             
@@ -323,7 +323,7 @@ class DataProcessor:
                 number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
                 pinfo(f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted.")   
                 pinfo(f'{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}')
-                self.data = self.data[self.data[HARMONY_AVAILABLE] != 0]
+                # self.data = self.data[self.data[HARMONY_AVAILABLE] != 0]
             
     def _scan_voices(self):
         for i, voice in enumerate(self.data[VOICES].values):
@@ -384,7 +384,7 @@ class DataProcessor:
         self.data.drop(priority_columns + label_columns, inplace=True, axis=1, errors='ignore')
 
     def _check_columns_type(self, df) -> DataFrame:
-        for column in tqdm(df.columns, desc= 'Adjusting NaN values.'):
+        for column in tqdm(df.columns, desc= 'Adjusting NaN values'):
                 column_type = Counter(df[df[column].notna()][column].map(type)).most_common(1)[0][0]
                 if column_type == str:
                     df[column]= df[column].replace(0, '0')

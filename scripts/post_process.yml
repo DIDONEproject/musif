@@ -15,7 +15,7 @@ instruments_to_keep:
   - vnI
   - bs
 
-instruments_to_delete: #'Part'+inst in column
+instruments_to_delete: #'Part' + inst in column
   - Ob
   - Cor
   - Bn
@@ -23,8 +23,13 @@ instruments_to_delete: #'Part'+inst in column
   - Eh
   - Tbn
   - Timp
+  - BsI
+  - BsII
+  - VeI
+  - VeII
   
 substring_to_delete: #inst in column
+  - VeII
   - VnII
   - VnIV
   - Vc

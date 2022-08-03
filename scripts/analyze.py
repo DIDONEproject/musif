@@ -9,8 +9,6 @@ from musif.extract.extract import FeaturesExtractor
 from musif.process.processor import DataProcessor
 from musif.process.filter import DataFilter
 
-
-    
 if __name__ == "__main__":
     print('\nUpdating metadata files...')
     os.system("python scripts/metadata_updater.py")
@@ -18,7 +16,7 @@ if __name__ == "__main__":
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     check_file = None
     
-    name = "extraction_07_07_22"
+    name = "extraction_01_08_22"
     # df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
     prefix = 'martiser/'
     
