@@ -4,7 +4,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from musif.config import INSTRUMENTS_TO_DELETE, SUBSTRING_TO_DELETE
+from musif.config import ENDSWITH, INSTRUMENTS_TO_DELETE, STARTSWITH, SUBSTRING_TO_DELETE
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.texture.constants import TEXTURE
@@ -119,8 +119,8 @@ def delete_columns(data: DataFrame, config: dictConfig) -> None:
         for substring in config[SUBSTRING_TO_DELETE]:
             data.drop([i for i in data.columns if substring in i], axis = 1, inplace=True)
             
-        data.drop([i for i in data.columns if i.endswith(tuple(config['columns_endswith']))], axis = 1, inplace=True)
-        data.drop([i for i in data.columns if i.startswith(tuple(config['columns_startswith']))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))], axis = 1, inplace=True)
+        data.drop([i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))], axis = 1, inplace=True)
         data.drop([col for col in data.columns if any(substring in col for substring in tuple(config['columns_contain']))], axis = 1, inplace=True)
        
         presence = ['Presence_of_'+str(i) for i in config['delete_presence']]
@@ -187,8 +187,8 @@ def join_keys_modulatory(df: DataFrame):
         
 def merge_dataframes(name: str, dest_path: str) -> None:
     csv='.csv'
-    name1 = name+'_extraction'+csv
-    name2 = name+'_extraction_2'+csv
+    name1 = name+'_1'+csv
+    name2 = name+'_2'+csv
     
     df2 = pd.read_csv(name2)
     df1 = pd.read_csv(name1)
