@@ -1,4 +1,3 @@
-
 from musif.extract.features.composer.constants import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.metadata.constants import *
@@ -32,5 +31,5 @@ priority_columns = [FILE_NAME, ARIA_OPERA, ARIA_LABEL, ARIA_NAME,
 
 metadata_columns = [FILE_NAME, ARIA_OPERA, ARIA_LABEL, ARIA_NAME,
             ARIA_ACT, ARIA_SCENE, ACTANDSCENE, ARIA_YEAR, ARIA_DECADE, COMPOSER, ARIA_CITY, 
-            TERRITORY, CHARACTER, GENDER, HARMONY_AVAILABLE
+            TERRITORY, CHARACTER, GENDER, HARMONY_AVAILABLE, ROLE_TYPE
             ]
