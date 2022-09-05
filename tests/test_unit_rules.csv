@@ -1,0 +1,13 @@
+Checks,Composer,Harmony_*
+any_na,err,err
+all_na,err,err
+any_0,err,info
+all_0,err,warn
+any_str,info,err
+any_int,err,warn
+any_float,err,na
+all_str,info,err
+all_int,err,err
+all_float,err,na
+minval,na,0
+maxval,na,1
