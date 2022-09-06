@@ -47,9 +47,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         for j, t in enumerate(texture):
             part1 = key
             part2 = list(notes.keys())[j+i+1]
-            part1_prefix = get_part_prefix(part1)
-            part2_prefix = get_part_prefix(part2)
-            score_features[f"{part1_prefix}|{part2_prefix}_{TEXTURE}"] = t
+            # part1_prefix = get_part_prefix(part1)
+            # part2_prefix = get_part_prefix(part2)
+            # score_features[f"{part1_prefix}|{part2_prefix}_{TEXTURE}"] = t
+            score_features[f"{part1}|{part2}_{TEXTURE}"] = t
+            
 
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):

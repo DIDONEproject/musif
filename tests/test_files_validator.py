@@ -14,7 +14,6 @@ config_file = path.join(BASE_PATH, "config_test", "config.yml")
 config_file_parallel = path.join(BASE_PATH, "config_test", "config_parallel.yml")
 test_file = path.join(BASE_PATH, "static", "Did03M-Son_regina-1730-Sarro[1.05][0006].xml")
 
-
 class TestFilesValidator:
     # configurations tests
     # Given

@@ -415,7 +415,7 @@ def get_chord_type(chord_type):
         return 'aug'
     else:
         pwarn(f"Chord type {chord_type} not observed")
-        return ''
+        return 'other'
 
 def get_chord_types_groupings(chordtype_list):
     return [get_chord_type(chord_type) for chord_type in chordtype_list]
