@@ -15,7 +15,7 @@ from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PREFIX,
                                                       CHORDS_GROUPING_prefix, HARMONY_AVAILABLE)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import (INSTRUMENTATION, SCORING,
+from musif.extract.features.scoring.constants import (INSTRUMENTATION, ROLE_TYPE, SCORING,
                                                       VOICES)
 from musif.logs import perr, pinfo, pwarn
 from musif.process.constants import (PRESENCE, label_by_col, metadata_columns,
@@ -370,6 +370,7 @@ class DataProcessor:
         self.to_csv(dest_path, self.data)
 
     def _split_metadata_and_labels(self) -> None:
+        self.data.rename(columns={ROLE_TYPE:'Label_'+ROLE_TYPE}, inplace=True)
         label_columns = list(self.data.filter(like='Label_', axis=1))
         label_dataframe = self.data[[ARIA_ID] + label_columns]
         
