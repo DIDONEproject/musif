@@ -304,9 +304,9 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0305,AA,Didone,Female,Female lover 1,Venice,Italy
 0306,Dal segno,Iarba,Male,Male lover 2,Prague,Empire
 0307,Dal segno,Selene,Female,Female lover 2,Prague,Empire
-0308,ABA,Didone&Enea&Iarba,Male,,Prague,Empire
-0309,AB,Didone&Iarba,Male,,Paris,France
-0310,ABAB,Didone&Enea,Male,,Prague,Empire
+0308,ABA,Didone&Enea&Iarba,Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Prague,Empire
+0309,AB,Didone&Iarba,Female&Male,"Female lover 1,Male lover 2",Paris,France
+0310,ABAB,Didone&Enea,Female&Male,"Female lover 1,Male lover 1",Prague,Empire
 0311,recit,Enea,Male,Male lover 1,Naples,Italy
 0312,Dal segno,Enea,Male,Male lover 1,Venice,Italy
 0313,ABA,Enea,Male,Male lover 1,Naples,Italy
@@ -327,7 +327,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0328,Dal segno,Selene,Female,Female lover 2,Stuttgart,Empire
 0329,A,Iarba,Male,Male lover 2,Stuttgart,Empire
 0330,Da capo,Iarba,Male,Male lover 2,Rome,Italy
-0331,AB,Didone&Enea,Male,,Naples,Italy
+0331,AB,Didone&Enea,Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 0332,Dal segno,Araspe,Male,Male lover 3,Venice,Italy
 0333,Dal segno,Osmida,Male,Antagonist,Venice,Italy
 0334,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
@@ -346,7 +346,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0347,AA,Iarba,Male,Male lover 2,Naples,Italy
 0348,Dal segno,Araspe,Male,Male lover 3,Stuttgart,Empire
 0349,Dal segno,Enea,Male,Male lover 1,Stuttgart,Empire
-0350,AB,"Didone,Enea&Iarba",Male,,Venice,Italy
+0350,AB,"Didone,Enea&Iarba",Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Venice,Italy
 0351,Da capo,Didone,Female,Female lover 1,Rome,Italy
 0352,AA,Osmida,Male,Antagonist,Naples,Italy
 0353,AA,Iarba,Male,Male lover 2,Naples,Italy
@@ -366,7 +366,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0367,AA,Didone,Female,Female lover 1,Naples,Italy
 0368,Da capo,Didone,Female,Female lover 1,Rome,Italy
 0369,Dal segno,Enea,Male,Male lover 1,Stuttgart,Empire
-0370,ABCA,Didone&Enea,Male,,Naples,Italy
+0370,ABCA,Didone&Enea,Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 0371,ABA,Iarba,Male,Male lover 2,Bratislava,Empire
 0372,Dal segno,Selene,Female,Female lover 2,Stuttgart,Empire
 0373,AAA,Didone,Female,Female lover 1,Stuttgart,Empire
@@ -378,7 +378,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0379,Da capo,Osmida,Male,Antagonist,Hamburg,Empire
 0380,Da capo,Enea,Male,Male lover 1,Hamburg,Empire
 0381,Dal segno,Osmida,Male,Antagonist,Hamburg,Empire
-0382,ABC,"Didone,Enea&Iarba",Male,,Stuttgart,Empire
+0382,ABC,"Didone,Enea&Iarba",Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Stuttgart,Empire
 0383,Da capo,Dircea,Female,Female lover 1,Vienna,Empire
 0384,Da capo,Enea,Male,Male lover 1,Rome,Italy
 0385,ABA,Araspe,Male,Male lover 3,Bratislava,Empire
@@ -395,7 +395,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0396,Da capo,Araspe,Male,Male lover 3,Hamburg,Empire
 0397,Da capo,Iarba,Male,Male lover 2,Hamburg,Empire
 0398,ABA,Enea,Male,Male lover 1,Bratislava,Empire
-0399,Da capo,Dircea&Timante,Male,,Vienna,Empire
+0399,Da capo,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Vienna,Empire
 0400,Da capo,Adrasto,Male,Confidant,Vienna,Empire
 0401,Da capo,Cherinto,Male,Male lover 2,Vienna,Empire
 0402,Da capo,Matusio,Male,Antagonist,Vienna,Empire
@@ -456,7 +456,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0457,Da capo,Matusio,Male,Antagonist,Naples,Italy
 0458,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
 0459,Da capo,Creusa,Female,Female lover 2,Naples,Italy
-0460,Da capo,Dircea&Timante,Male,,Naples,Italy
+0460,Da capo,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 0461,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
 0462,Da capo,Matusio,Male,Antagonist,Naples,Italy
 0463,Da capo,Matusio,Male,Antagonist,Padua,Italy
@@ -480,7 +480,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0481,Dal segno,Demofoonte,Male,Senior ruler,Venice,Italy
 0482,Dal segno,Timante,Male,Male lover 1,Venice,Italy
 0483,Dal segno,Cherinto,Male,Male lover 2,Venice,Italy
-0484,AB,Didone&Enea,Male,,Bratislava,Empire
+0484,AB,Didone&Enea,Female&Male,"Female lover 1,Male lover 1",Bratislava,Empire
 0485,Dal segno,Selene,Female,Female lover 2,,
 0486,ABA,Timante,Male,Male lover 1,Naples,Italy
 0487,ABA,Matusio,Male,Antagonist,Naples,Italy
@@ -507,7 +507,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0508,Da capo,Demofoonte,Male,Senior ruler,Padua,Italy
 0509,Da capo,Cherinto,Male,Male lover 2,Padua,Italy
 0510,ABAB,Timante,Male,Male lover 1,Naples,Italy
-0511,ABC,Dircea&Timante,Male,,Naples,Italy
+0511,ABC,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 0512,Dal segno,Dircea,Female,Female lover 1,Venice,Italy
 0513,Dal segno,Cherinto,Male,Male lover 2,Venice,Italy
 0514,Dal segno,Creusa,Female,Female lover 2,Venice,Italy
@@ -527,7 +527,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0528,Dal segno,Matusio,Male,Antagonist,Munich,Empire
 0529,Dal segno,Cherinto,Male,Male lover 2,Munich,Empire
 0530,Dal segno,Demofoonte,Male,Senior ruler,Munich,Empire
-0531,Da capo,Dircea&Timante,Male,,Munich,Empire
+0531,Da capo,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Munich,Empire
 0532,Dal segno,Adrasto,Male,Confidant,Munich,Empire
 0533,Dal segno,Cherinto,Male,Male lover 2,Munich,Empire
 0534,Dal segno,Matusio,Male,Antagonist,Munich,Empire
@@ -539,13 +539,13 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0540,Dal segno,Matusio,Male,Antagonist,Dresden,Empire
 0541,Dal segno,Dircea,Female,Female lover 1,Dresden,Empire
 0542,Dal segno,Timante,Male,Male lover 1,Dresden,Empire
-0543,Da capo,Dircea&Timante,Male,,Turin,Italy
+0543,Da capo,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Turin,Italy
 0544,Da capo,Timante,Male,Male lover 1,Turin,Italy
 0545,Da capo,Cherinto,Male,Male lover 2,Turin,Italy
 0546,ABA,Matusio,Male,Antagonist,Turin,Italy
 0547,Dal segno,Demofoonte,Male,Senior ruler,Turin,Italy
 0548,Da capo,Dircea,Female,Female lover 1,Turin,Italy
-0549,Dal segno,"Dircea,Timante&Demofoonte",Male,,Venice,Italy
+0549,Dal segno,"Dircea,Timante&Demofoonte",Female&Male&Male,"Female lover 1,Male lover 1,Senior ruler",Venice,Italy
 0550,Dal segno,Adrasto,Male,Confidant,Venice,Italy
 0551,Dal segno,Cherinto,Male,Male lover 2,Venice,Italy
 0552,Dal segno,Timante,Male,Male lover 1,Venice,Italy
@@ -571,7 +571,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0572,Da capo,Cherinto,Male,Male lover 2,Naples,Italy
 0573,Dal segno,Creusa,Female,Female lover 2,Naples,Italy
 0574,Dal segno,Demofoonte,Male,Senior ruler,Naples,Italy
-0575,Da capo,Dircea&Timante,Male,,Naples,Italy
+0575,Da capo,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 0576,Da capo,Adrasto,Male,Confidant,Naples,Italy
 0577,Dal segno,Cherinto,Male,Male lover 2,Naples,Italy
 0578,Dal segno,Demofoonte,Male,Senior ruler,Naples,Italy
@@ -587,7 +587,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0588,Dal segno,Creusa,Female,Female lover 2,Milan,Italy
 0589,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
 0590,Dal segno,Dircea,Female,Female lover 1,Milan,Italy
-0591,Da capo,Creusa,Female&Male,Female lover 2,Milan,Italy
+0591,Da capo,Creusa,Female,Female lover 2,Milan,Italy
 0592,Da capo,Timante,Male,Male lover 1,Milan,Italy
 0593,Dal segno,Demofoonte,Male,Senior ruler,Milan,Italy
 0594,Da capo,Matusio,Male,Antagonist,Milan,Italy
@@ -602,11 +602,11 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0603,Da capo,Adrasto,Male,Confidant,Milan,Italy
 0604,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
 0605,Dal segno,Timante,Male,Male lover 1,Milan,Italy
-0606,Da capo,Dircea&Timante,Female,"Female lover 1,Male lover 1",Milan,Italy
+0606,Da capo,Dircea&Timante,Female&Male,"Female lover 1,Male lover 1",Milan,Italy
 0607,Da capo,Adrasto,Male,Confidant,Milan,Italy
 0608,Dal segno,Demofoonte,Male,Senior ruler,Dresden,Empire
 0609,Da capo,Dircea,Female,Female lover 1,Dresden,Empire
-0610,Dal segno,Creusa,Female&Male,Female lover 2,Dresden,Empire
+0610,Dal segno,Creusa,Female,Female lover 2,Dresden,Empire
 0611,Da capo,Cherinto,Male,Male lover 2,Turin,Italy
 0612,Da capo,Demofoonte,Male,Senior ruler,Turin,Italy
 0613,Dal segno,Matusio,Male,Antagonist,Reggio Emilia,Italy
@@ -621,14 +621,14 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0622,Da capo,Timante,Male,Male lover 1,Reggio Emilia,Italy
 0623,Dal segno,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
 0624,Dal segno,Matusio,Male,Antagonist,Reggio Emilia,Italy
-0625,Dal segno,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Reggio Emilia,Italy
+0625,Dal segno,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Reggio Emilia,Italy
 0626,ABA,Dircea,Female,Female lover 1,Reggio Emilia,Italy
 0627,Dal segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
 0628a,Dal segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
 0628b,Dal segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
 0629,Da capo,Demofoonte,Male,Senior ruler,Reggio Emilia,Italy
 0630,Da capo,Adrasto,Male,Confidant,Reggio Emilia,Italy
-0631,Dal segno,Cherinto,Female&Male,Male lover 2,Reggio Emilia,Italy
+0631,Dal segno,Cherinto,Male,Male lover 2,Reggio Emilia,Italy
 0632,AA',Matusio,Male,Antagonist,Reggio Emilia,Italy
 0633,Dal segno,Creusa,Female,Female lover 2,Reggio Emilia,Italy
 0634,Da capo,Dircea,Female,Female lover 1,Reggio Emilia,Italy
@@ -636,14 +636,14 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0636,Dal segno,Poro,Male,Male lover 1,Rome,Italy
 0637,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
 0638,Da capo,Erissena,Female,Female lover 2,Rome,Italy
-0639,Da capo,Timagene,Female&Male,Antagonist,Rome,Italy
+0639,Da capo,Timagene,Male,Antagonist,Rome,Italy
 0640,A,Poro,Male,Male lover 1,Rome,Italy
 0641,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
 0642,Da capo,Poro,Female,Female lover 2,Rome,Italy
-0643,Da capo,Erissena,Female&Male,Female lover 2,Rome,Italy
+0643,Da capo,Erissena,Female,Female lover 2,Rome,Italy
 0644,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
 0645,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0646,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+0646,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 0647,Da capo,Erissena,Female,Female lover 2,Rome,Italy
 0648,Dal segno,Poro,Male,Male lover 1,Rome,Italy
 0649,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
@@ -651,16 +651,16 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0651,Da capo,Timagene,Male,Antagonist,Rome,Italy
 0652,Da capo,Timagene,Male,Antagonist,Rome,Italy
 0653,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
-0654,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+0654,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 0655,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
 0656,Da capo,Erissena,Female,Female lover 2,Rome,Italy
 0657,Da capo,Poro,Male,Male lover 1,Rome,Italy
-0658,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+0658,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 0659,Da capo,Erissena,Female,Female lover 2,Rome,Italy
 0660,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
 0661,Da capo,Poro,Male,Male lover 1,Rome,Italy
 0662,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
-0663,Da capo,Erissena,Female&Male,Female lover 2,Rome,Italy
+0663,Da capo,Erissena,Female,Female lover 2,Rome,Italy
 0664,AA',Cleofide,Female,Female lover 1,Rome,Italy
 0665,Dal segno,Selene,Female,Female lover 2,Madrid,Spain
 0666,Dal segno,Enea,Male,Male lover 1,Madrid,Spain
@@ -675,11 +675,11 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0675,Dal segno,Poro,Male,Male lover 1,Venice,Italy
 0676,Dal segno,Gandarte,Male,Male lover 3,Venice,Italy
 0677,Dal segno,Alessandro,Male,Male lover 2,Venice,Italy
-0678,ABA,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Venice,Italy
+0678,ABA,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Venice,Italy
 0679,Dal segno,Gandarte,Male,Male lover 3,Venice,Italy
 0680,Dal segno,Erissena,Female,Female lover 2,Venice,Italy
 0681,Dal segno,Alessandro,Male,Male lover 2,Venice,Italy
-0682,AA',Cleofide,Female&Male,Female lover 1,Venice,Italy
+0682,AA',Cleofide,Female,Female lover 1,Venice,Italy
 0683,Dal segno,Poro,Male,Male lover 1,Venice,Italy
 0684,ABA,Osmida,Male,Antagonist,Venice,Italy
 0685,Dal segno,Iarba,Male,Male lover 2,Venice,Italy
@@ -694,7 +694,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0694,A,Poro,Male,Male lover 1,Lisbon,Portugal
 0695,Dal segno,Cleofide,Female,Female lover 1,Lisbon,Portugal
 0696,Dal segno,Gandarte,Male,Male lover 3,Lisbon,Portugal
-0697,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Lisbon,Portugal
+0697,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Lisbon,Portugal
 0698,Dal segno,Poro,Male,Male lover 1,Lisbon,Portugal
 0699,Dal segno,Gandarte,Male,Male lover 3,Lisbon,Portugal
 0700,Dal segno,Alessandro,Male,Male lover 2,Venice,Italy
@@ -713,11 +713,11 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0713,Dal segno,Gandarte,Male,Male lover 3,Lisbon,Portugal
 0714,Dal segno,Erissena,Female,Female lover 2,Lisbon,Portugal
 0715,Dal segno,Cleofide,Female,Female lover 1,Lisbon,Portugal
-0716,Dal segno,Timagene,Female&Male,Antagonist,Lisbon,Portugal
+0716,Dal segno,Timagene,Male,Antagonist,Lisbon,Portugal
 0717,Da capo,Poro,Male,Male lover 1,Lisbon,Portugal
 0718,Dal segno,Erissena,Female,Female lover 2,Lisbon,Portugal
 0719,Dal segno,Alessandro,Male,Male lover 2,Lisbon,Portugal
-0720,Dal segno,Cleofide,Female&Male,Female lover 1,Dresden,Empire
+0720,Dal segno,Cleofide,Female,Female lover 1,Dresden,Empire
 0721,Dal segno,Poro,Male,Male lover 1,Dresden,Empire
 0722,Dal segno,Erissena,Female,Female lover 2,Dresden,Empire
 0723,Dal segno,Erissena,Female,Female lover 2,Dresden,Empire
@@ -728,16 +728,16 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0728,Da capo,Cleofide,Female,Female lover 1,Dresden,Empire
 0729,Dal segno,Gandarte,Male,Male lover 3,Dresden,Empire
 0730,Dal segno,Alessandro,Male,Male lover 2,Dresden,Empire
-0731,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Dresden,Empire
+0731,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Dresden,Empire
 0732,Dal segno,Gandarte,Male,Male lover 3,Dresden,Empire
 0733,Da capo,Poro,Male,Male lover 1,Dresden,Empire
 0734,Dal segno,Alessandro,Male,Male lover 2,Dresden,Empire
-0735,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Dresden,Empire
+0735,Dal segno,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Dresden,Empire
 0736,Dal segno,Timagene,Male,Antagonist,Dresden,Empire
 0737,Dal segno,Alessandro,Male,Male lover 2,Dresden,Empire
 0738,Dal segno,Gandarte,Male,Male lover 3,Dresden,Empire
 0739,Dal segno,Erissena,Female,Female lover 2,Dresden,Empire
-0740,Da capo,Cleofide,Female&Male,Female lover 1,Dresden,Empire
+0740,Da capo,Cleofide,Female,Female lover 1,Dresden,Empire
 0741,Dal segno,Gandarte,Male,Male lover 3,Dresden,Empire
 0742,Dal segno,Cleofide,Female,Female lover 1,Dresden,Empire
 0743,Dal segno,Erissena,Female,Female lover 2,Dresden,Empire
@@ -752,7 +752,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0752,AA',Poro,Male,Male lover 1,Prague,Empire
 0753,Dal segno,Cleofide,Female,Female lover 1,Prague,Empire
 0754,Dal segno,Gandarte,Male,Male lover 3,Prague,Empire
-0755,ABAB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Prague,Empire
+0755,ABAB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Prague,Empire
 0756,Dal segno,Gandarte,Male,Male lover 3,Prague,Empire
 0757,Dal segno,Erissena,Female,Female lover 2,Prague,Empire
 0758,Dal segno,Cleofide,Female,Female lover 1,Prague,Empire
@@ -773,7 +773,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0773,Dal segno,Didone,Female,Female lover 1,Venice,Italy
 0774,AA',Didone,Female,Female lover 1,Venice,Italy
 0775,Dal segno,Matusio,Male,Antagonist,Lisbon,Portugal
-0776,Dal segno,Dircea,Female&Male,Female lover 1,Lisbon,Portugal
+0776,Dal segno,Dircea,Female,Female lover 1,Lisbon,Portugal
 0777,Dal segno,Demofoonte,Male,Senior ruler,Lisbon,Portugal
 0778,Dal segno,Adrasto,Male,Confidant,Lisbon,Portugal
 0779,Dal segno,Timante,Male,Male lover 1,Lisbon,Portugal
@@ -788,7 +788,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0788,Dal segno,Cherinto,Male,Male lover 2,Lisbon,Portugal
 0789,Dal segno,Creusa,Female,Female lover 2,Lisbon,Portugal
 0790,Dal segno,Demofoonte,Male,Senior ruler,Lisbon,Portugal
-0791,Da capo,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Lisbon,Portugal
+0791,Da capo,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Lisbon,Portugal
 0792,Dal segno,Adrasto,Male,Confidant,Lisbon,Portugal
 0793,Dal segno,Cherinto,Male,Male lover 2,Lisbon,Portugal
 0794,Dal segno,Matusio,Male,Antagonist,Lisbon,Portugal
@@ -799,7 +799,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0799,ABAB,Gandarte,Male,Male lover 3,Naples,Italy
 0800,ABA,Cleofide,Female,Female lover 1,Naples,Italy
 0801,ABAB,Alessandro,Male,Male lover 2,Naples,Italy
-0802,ABA,Cleofide,Female&Male,Female lover 1,Naples,Italy
+0802,ABA,Cleofide,Female,Female lover 1,Naples,Italy
 0803,AA',Timagene,Male,Antagonist,Naples,Italy
 0804,ABA,Cleofide,Female,Female lover 1,Naples,Italy
 0805,ABAB,Alessandro,Male,Male lover 2,Naples,Italy
@@ -813,8 +813,8 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0813,ABA,Erissena,Female,Female lover 2,Rome,Italy
 0814,A,Poro,Male,Male lover 1,Rome,Italy
 0815,Dal segno,Cleofide,Female,Female lover 1,Rome,Italy
-0816,Dal segno,Gandarte,Female&Male&Male,Male lover 3,Rome,Italy
-0817,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+0816,Dal segno,Gandarte,Male,Male lover 3,Rome,Italy
+0817,ABC,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 0818,Dal segno,Erissena,Female,Female lover 2,Rome,Italy
 0819,ABA,Alessandro,Male,Male lover 2,Rome,Italy
 0820,ABA,Cleofide,Female,Female lover 1,Rome,Italy
@@ -823,12 +823,12 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0823,Dal segno,Gandarte,Male,Male lover 3,Rome,Italy
 0824,ABA,Alessandro,Male,Male lover 2,Rome,Italy
 0825,ABA,Cleofide,Female,Female lover 1,Rome,Italy
-0826,Dal segno,Cleofide,Female&Male,Female lover 1,Rome,Italy
+0826,Dal segno,Cleofide,Female,Female lover 1,Rome,Italy
 0827,ABA,Erissena,Female,Female lover 2,Rome,Italy
 0828,Dal segno,Alessandro,Male,Male lover 2,Rome,Italy
 0829,ABA,Poro,Male,Male lover 1,Rome,Italy
 0830,Dal segno,Gandarte,Male,Male lover 3,Rome,Italy
-0831,AA',"Didone,Enea&Iarba",Female,"Female lover 1,Male lover 1,Male lover 2",Venice,Italy
+0831,AA',"Didone,Enea&Iarba",Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Venice,Italy
 0832,Dal segno,Araspe,Male,Male lover 3,Venice,Italy
 0833,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
 0834,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
@@ -838,7 +838,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0838,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 0839,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
 0840,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
-0841,ABAB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Naples,Italy
+0841,ABAB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 0842,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
 0843,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 0844,Dal segno,Cleofide,Female,Female lover 1,Naples,Italy
@@ -847,7 +847,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0847,Dal segno,Cleofide,Female,Female lover 1,Naples,Italy
 0848,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
 0849,Dal segno,Cleofide,Female,Female lover 1,Naples,Italy
-0850,Dal segno,Alessandro,Female&Male,Male lover 2,Naples,Italy
+0850,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
 0851,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 0852,ABA,Gandarte,Male,Male lover 3,Naples,Italy
 0853,ABA,Erissena,Female,Female lover 2,Naples,Italy
@@ -858,11 +858,11 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0858,Dal segno,Timante,Male,Male lover 1,Dresden,Empire
 0859,Dal segno,Creusa,Female,Female lover 3,Dresden,Empire
 0860,Da capo,Demofoonte,Male,Senior ruler,Dresden,Empire
-0861,Dal segno,Matusio,Female&Male,Antagonist,Dresden,Empire
+0861,Dal segno,Matusio,Male,Antagonist,Dresden,Empire
 0862,Da capo,Cherinto,Male,Male lover 2,Dresden,Empire
 0863,Dal segno,Creusa,Female,Female lover 3,Dresden,Empire
 0864,Dal segno,Demofoonte,Male,Senior ruler,Dresden,Empire
-0865,Da capo,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Dresden,Empire
+0865,Da capo,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Dresden,Empire
 0866,Dal segno,Adrasto,Male,Confidant,Dresden,Empire
 0867,Dal segno,Cherinto,Male,Male lover 2,Dresden,Empire
 0868,Dal segno,Matusio,Male,Antagonist,Dresden,Empire
@@ -873,7 +873,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0873,ABAB,Erissena,Female,Female lover 2,Rome,Italy
 0874,A,Poro,Male,Male lover 1,Rome,Italy
 0875,ABABA,Cleofide,Female,Female lover 1,Rome,Italy
-0876,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+0876,ABC,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 0877a,AA,Gandarte,Male,Male lover 3,Rome,Italy
 0877b,AA,Gandarte,Male,Male lover 3,Naples,Italy
 0878,ABAB,Erissena,Female,Female lover 2,Rome,Italy
@@ -908,7 +908,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0907,Dal segno,Alessandro,Male,Male lover 2,Vienna,Empire
 0908,Da capo,Gandarte,Male,Male lover 3,Vienna,Empire
 0909,Da capo,Alessandro,Male,Male lover 2,Vienna,Empire
-0910,Da capo,Poro,Female&Male&Male,Male lover 1,Vienna,Empire
+0910,Da capo,Poro,Male,Male lover 1,Vienna,Empire
 0911,Da capo,Gandarte,Male,Male lover 3,Vienna,Empire
 0912,Da capo,Erissena,Female,Female lover 2,Vienna,Empire
 0913,AA,Erissena,Female,Female lover 2,Vienna,Empire
@@ -918,43 +918,43 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0917,Da capo,Cleofide,Female,Female lover 1,Vienna,Empire
 0918,ABABA,Cleofide,Female,Female lover 1,Vienna,Empire
 0919,Da capo,Demofoonte,Male,Senior ruler,Stuttgart,Empire
-0920,Dal segno,Matusio,Female&Male,Antagonist,Stuttgart,Empire
+0920,Dal segno,Matusio,Male,Antagonist,Stuttgart,Empire
 0921,Dal segno,Dircea,Female,Female lover 1,Stuttgart,Empire
 0922,Dal segno,Timante,Male,Male lover 1,Stuttgart,Empire
 0923,Dal segno,Creusa,Female,Female lover 3,Stuttgart,Empire
 0924,Dal segno,Cherinto,Male,Male lover 2,Stuttgart,Empire
-0925,ABC,"Dircea,Timante,Matusio",Female,"Female lover 1,Male lover 2,Antagonist",Stuttgart,Empire
+0925,ABC,"Dircea,Timante,Matusio",Female&Male&Male,"Female lover 1,Male lover 2,Antagonist",Stuttgart,Empire
 0926,Dal segno,Creusa,Female,Female lover 3,Stuttgart,Empire
 0927,ABA,Timante,Male,Male lover 1,Stuttgart,Empire
 0928,Dal segno,Demofoonte,Male,Senior ruler,Stuttgart,Empire
-0929,Dal segno,Matusio,Female&Male&Male,Antagonist,Stuttgart,Empire
+0929,Dal segno,Matusio,Male,Antagonist,Stuttgart,Empire
 0930,Dal segno,Creusa,Female,Female lover 3,Stuttgart,Empire
 0931,Dal segno,Cherinto,Male,Male lover 2,Stuttgart,Empire
 0932,Dal segno,Demofoonte,Male,Senior ruler,Stuttgart,Empire
 0933,Dal segno,Adrasto,Male,Confidant,Stuttgart,Empire
 0934,Da capo,Demofoonte,Male,Senior ruler,Stuttgart,Empire
-0935,Dal segno,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Stuttgart,Empire
-0936,Da capo,Dircea,Female&Male,Female lover 1,Stuttgart,Empire
+0935,Dal segno,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Stuttgart,Empire
+0936,Da capo,Dircea,Female,Female lover 1,Stuttgart,Empire
 0937,Da capo,Creusa,Female,Female lover 3,Stuttgart,Empire
 0938,ABA,Matusio,Male,Antagonist,Naples,Italy
 0939,Dal segno,Dircea,Female,Female lover 1,Naples,Italy
 0940,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
-0941,Dal segno,Timante,Male&Female,Male lover 1,Naples,Italy
+0941,Dal segno,Timante,Male,Male lover 1,Naples,Italy
 0942,ABA,Creusa,Female,Female lover 3,Naples,Italy
 0943,ABA,Cherinto,Male,Male lover 2,Naples,Italy
-0944,ABA,"Dircea,Timante,Matusio",Female,"Female lover 1,Male lover 1,Antagonist",Naples,Italy
+0944,ABA,"Dircea,Timante,Matusio",Female&Male&Male,"Female lover 1,Male lover 1,Antagonist",Naples,Italy
 0945,ABA,Matusio,Male,Antagonist,Naples,Italy
 0946,ABA,Creusa,Female,Female lover 3,Naples,Italy
 0947,ABA,Timante,Male,Male lover 1,Naples,Italy
 0948,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
 0949,ABA,Cherinto,Male,Male lover 2,Naples,Italy
 0950,ABA,Demofoonte,Male,Senior ruler,Naples,Italy
-0951,ABAB,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Naples,Italy
-0952,Dal segno,Adrasto,Female&Male,Confidant,Naples,Italy
+0951,ABAB,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Naples,Italy
+0952,Dal segno,Adrasto,Male,Confidant,Naples,Italy
 0953,Dal segno,Timante,Male,Male lover 1,Naples,Italy
 0954,Dal segno,Dircea,Female,Female lover 1,Naples,Italy
 0955,Da capo,Timagene,Male,Antagonist,Vienna,Empire
-0956,Da capo,"Poro,Cleofide",Male,"MAle lover 1,Female lover 1",Vienna,Empire
+0956,Da capo,"Poro,Cleofide",Male&Female,"MAle lover 1,Female lover 1",Vienna,Empire
 0957,Dal segno,Timagene,Male,Antagonist,Vienna,Empire
 0958,Dal segno,Gandarte,Male,Male lover 3,London,England
 0959,Da capo,Poro,Male,Male lover 1,London,England
@@ -964,14 +964,14 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0963,Da capo,Cleofide,Female,Female lover 1,London,England
 0964,Dal segno,Poro,Male,Male lover 1,London,England
 0965,Dal segno,Erissena,Female,Female lover 2,London,England
-0966,Dal segno,Alessandro,Female&Male,Male lover 2,London,England
-0967,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",London,England
+0966,Dal segno,Alessandro,Male,Male lover 2,London,England
+0967,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",London,England
 0968,Da capo,Alessandro,Male,Male lover 2,London,England
 0969,Dal segno,Cleofide,Female,Female lover 1,London,England
 0970,Da capo,Poro,Male,Male lover 1,London,England
 0971,Dal segno,Cleofide,Female,Female lover 1,London,England
 0972,Dal segno,Gandarte,Male,Male lover 3,London,England
-0973,Dal segno,Erissena,Female&Male,Female lover 2,London,England
+0973,Dal segno,Erissena,Female,Female lover 2,London,England
 0974,Dal segno,Poro,Male,Male lover 1,London,England
 0975,Dal segno,Cleofide,Female,Female lover 1,London,England
 0976,Dal segno,Erissena,Female,Female lover 2,London,England
@@ -979,17 +979,17 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 0978,Da capo,Poro,Male,Male lover 1,London,England
 0979,Dal segno,Gandarte,Male,Male lover 3,London,England
 0980,Da capo,Erissena,Female,Female lover 2,London,England
-0981,Da capo,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Padua,Italy
+0981,Da capo,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Padua,Italy
 0982,ABA,Poro,Male,Male lover 1,Siena,Italy
 0983,ABA,Alessandro,Male,Male lover 2,Siena,Italy
 0984,ABA,Erissena,Female,Female lover 2,Siena,Italy
 0985,A,Poro,Male,Male lover 1,Siena,Italy
 0986,ABA,Cleofide,Female,Female lover 1,Siena,Italy
 0987,Dal segno,Gandarte,Male,Male lover 3,Siena,Italy
-0988,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Siena,Italy
+0988,ABC,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Siena,Italy
 0989,ABA,Erissena,Female,Female lover 2,Siena,Italy
 0990,Dal segno,Poro,Male,Male lover 1,Siena,Italy
-0991,AA,Gandarte,Female&Male,Male lover 3,Siena,Italy
+0991,AA,Gandarte,Male,Male lover 3,Siena,Italy
 0992,ABA,Cleofide,Female,Female lover 1,Siena,Italy
 0993,A,Timagene,Male,Antagonist,Siena,Italy
 0994,ABA,Poro,Male,Male lover 1,Siena,Italy
@@ -1004,34 +1004,34 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1003,Da capo,Cleofide,Female,Female lover 1,Berlin,Empire
 1004,Dal segno,Erissena,Female,Female lover 2,Berlin,Empire
 1005,Dal segno,Alessandro,Male,Male lover 2,Berlin,Empire
-1006,AB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Berlin,Empire
+1006,AB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Berlin,Empire
 1007,Da capo,Gandarte,Male,Male lover 3,Berlin,Empire
 1008,Dal segno,Erissena,Female,Female lover 2,Berlin,Empire
-1009,Dal segno,Poro,Female&Male,Male lover 1,Berlin,Empire
+1009,Dal segno,Poro,Male,Male lover 1,Berlin,Empire
 1010,Dal segno,Alessandro,Male,Male lover 2,Berlin,Empire
-1011,Dal segno,Cleofide,Female&Male,Female lover 1,Berlin,Empire
+1011,Dal segno,Cleofide,Female,Female lover 1,Berlin,Empire
 1012,Dal segno,Poro,Male,Male lover 1,Berlin,Empire
-1013,Dal segno,Timagene,Female&Male&Male,Antagonist,Berlin,Empire
+1013,Dal segno,Timagene,Male,Antagonist,Berlin,Empire
 1014,Dal segno,Cleofide,Female,Female lover 1,Berlin,Empire
 1015,Dal segno,Cleofide,Female,Female lover 1,Berlin,Empire
 1016,Dal segno,Alessandro,Male,Male lover 2,Berlin,Empire
 1017,Dal segno,Poro,Male,Male lover 1,Berlin,Empire
-1018,AB,Poro,Female&Male&Male,Male lover 1,Livorno,Italy
+1018,AB,Poro,Male,Male lover 1,Livorno,Italy
 1019,ABA,Alessandro,Male,Male lover 2,Livorno,Italy
 1020,AA,Erissena,Female,Female lover 2,Livorno,Italy
 1021,A,Poro,Male,Male lover 1,Livorno,Italy
 1022,ABA,Cleofide,Female,Female lover 1,Livorno,Italy
 1023,AAA,Gandarte,Male,Male lover 3,Livorno,Italy
-1024,ABAB,"Cleofide,Alessandro",Female,"Female lover 1,Male lover 2",Livorno,Italy
+1024,ABAB,"Cleofide,Alessandro",Female&Male,"Female lover 1,Male lover 2",Livorno,Italy
 1025,ABA,Alessandro,Male,Male lover 2,Livorno,Italy
-1026,AB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Livorno,Italy
+1026,AB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Livorno,Italy
 1027,ABA,Erissena,Female,Female lover 2,Livorno,Italy
-1028,ABC,"Cleofide,Poro,Alessandro",Female,"Female lover 1,Male lover 1,Male lover 2",Livorno,Italy
+1028,ABC,"Cleofide,Poro,Alessandro",Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Livorno,Italy
 1029,AB,Timagene,Male,Antagonist,Livorno,Italy
 1030,AB,Alessandro,Male,Male lover 2,Livorno,Italy
 1031,ABA,Cleofide,Female,Female lover 1,Livorno,Italy
 1032,AA,Gandarte,Male,Male lover 3,Livorno,Italy
-1033,AB,"Cleofide,Poro,Alessandro",Female,"Female lover 1,Male lover 1,Male lover 2",Livorno,Italy
+1033,AB,"Cleofide,Poro,Alessandro",Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Livorno,Italy
 1034,Da capo,Gandarte,Male,Male lover 3,Naples,Italy
 1035,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 1036,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
@@ -1061,7 +1061,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1060,Dal segno,Poro,Male,Male lover 1,Milan,Italy
 1061,Dal segno,Poro,Male,Male lover 1,Milan,Italy
 1062,Dal segno,Erissena,Female,Female lover 2,Milan,Italy
-1063,Dal segno,Gandarte,Female&Male,Male lover 3,Milan,Italy
+1063,Dal segno,Gandarte,Male,Male lover 3,Milan,Italy
 1064,Dal segno,Alessandro,Male,Male lover 2,Milan,Italy
 1065,Dal segno,Cleofide,Female,Female lover 1,Milan,Italy
 1066,Dal segno,Alessandro,Male,Male lover 2,Milan,Italy
@@ -1076,7 +1076,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1075,A,Poro,Male,Male lover 1,Venice,Italy
 1076,ABA,Cleofide,Female,Female lover 1,Venice,Italy
 1077,ABA,Gandarte,Male,Male lover 3,Venice,Italy
-1078,ABCD,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Venice,Italy
+1078,ABCD,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Venice,Italy
 1079,ABA,Erissena,Female,Female lover 2,Venice,Italy
 1080,ABA,Poro,Male,Male lover 1,Venice,Italy
 1081,ABA,Poro,Male,Male lover 1,Venice,Italy
@@ -1085,7 +1085,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1084,Dal segno,Gandarte,Male,Male lover 3,Berlin,Empire
 1085,Dal segno,Alessandro,Male,Male lover 2,Berlin,Empire
 1086,Dal segno,Erissena,Female,Female lover 2,Berlin,Empire
-1087,Dal segno,Alessandro,Female&Male,Male lover 2,Berlin,Empire
+1087,Dal segno,Alessandro,Male,Male lover 2,Berlin,Empire
 1088,Dal segno,Gandarte,Male,Male lover 3,Berlin,Empire
 1089,Dal segno,Erissena,Female,Female lover 2,Berlin,Empire
 1090,Dal segno,Alessandro,Male,Male lover 2,Berlin,Empire
@@ -1098,9 +1098,9 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1097,Da capo,Erissena,Female,Female lover 2,Naples,Italy
 1098,ABA,Poro,Male,Male lover 1,Rome,Italy
 1099,ABA,Erissena,Female,Female lover 2,Rome,Italy
-1100,A,Poro,Female&Male&Male,Male lover 1,Rome,Italy
+1100,A,Poro,Male,Male lover 1,Rome,Italy
 1101,ABA,Cleofide,Female,Female lover 1,Rome,Italy
-1102,ABCD,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+1102,ABCD,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 1103,ABA,Timagene,Male,Antagonist,Rome,Italy
 1104,Dal segno,Matusio,Male,Antagonist,Copenhagen,Empire
 1105,Dal segno,Dircea,Female,Female lover 1,Copenhagen,Empire
@@ -1113,10 +1113,10 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1112,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
 1113,A,Poro,Male,Male lover 1,Naples,Italy
 1114,AB,Cleofide,Female,Female lover 1,Naples,Italy
-1115,ABC,"Cleofide,Poro,Alessandro",Female,"Female lover 1,Male lover 1,Male lover 2",Naples,Italy
+1115,ABC,"Cleofide,Poro,Alessandro",Female&Male&Male,"Female lover 1,Male lover 1,Male lover 2",Naples,Italy
 1116,A,Poro,Male,Male lover 1,Berlin,Empire
 1117,Dal segno,Cleofide,Female,Female lover 1,Berlin,Empire
-1118,ABA,Gandarte,Female&Male,Male lover 3,Rome,Italy
+1118,ABA,Gandarte,Male,Male lover 3,Rome,Italy
 1119,ABA,Cleofide,Female,Female lover 1,Rome,Italy
 1120,ABA,Timagene,Male,Antagonist,Rome,Italy
 1121,ABA,Erissena,Female,Female lover 2,Naples,Italy
@@ -1126,12 +1126,12 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1125,Dal segno,Poro,Male,Male lover 1,Berlin,Empire
 1126,Da capo,Alessandro,Male,Male lover 2,Naples,Italy
 1127,Dal segno,Timagene,Male,Antagonist,Berlin,Empire
-1128,ABA,Poro,Female&Male,Male lover 1,Naples,Italy
+1128,ABA,Poro,Male,Male lover 1,Naples,Italy
 1129,Da capo,Poro,Male,Male lover 1,Naples,Italy
 1130,Dal segno,Poro,Male,Male lover 1,Mantua,Italy
 1131,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
 1132,Dal segno,Alessandro,Male,Male lover 2,Mantua,Italy
-1133,ABA,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Naples,Italy
+1133,ABA,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 1134,Dal segno,Erissena,Female,Female lover 2,Reggio Emilia,Italy
 1135,A,Poro,Male,Male lover 1,Mantua,Italy
 1136,Da capo,Gandarte,Male,Male lover 3,Naples,Italy
@@ -1141,7 +1141,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1140,Da capo,Poro,Male,Male lover 1,Naples,Italy
 1141,Dal segno,Gandarte,Male,Male lover 3,Reggio Emilia,Italy
 1142,AA,Alessandro,Male,Male lover 2,Mantua,Italy
-1143,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Mantua,Italy
+1143,ABC,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Mantua,Italy
 1144,Dal segno,Didone,Female,Female lover 1,Madrid,Spain
 1145,Dal segno,Didone,Female,Female lover 1,Madrid,Spain
 1146,Dal segno,Enea,Male,Male lover 1,Madrid,Spain
@@ -1153,7 +1153,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1152,Dal segno,Alessandro,Male,Male lover 2,Mantua,Italy
 1153,Dal segno,Timagene,Male,Antagonist,Berlin,Empire
 1154,Dal segno,Cleofide,Female,Female lover 1,Berlin,Empire
-1155,Dal segno,Poro,Female&Male,Male lover 1,Berlin,Empire
+1155,Dal segno,Poro,Male,Male lover 1,Berlin,Empire
 1156,ABA,Cleofide,Female,Female lover 1,Mantua,Italy
 1157,ABA,Gandarte,Male,Male lover 3,Mantua,Italy
 1158,ABA,Alessandro,Male,Male lover 2,Mantua,Italy
@@ -1168,9 +1168,9 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1167,Da capo,Iarba,Male,Male lover 2,Madrid,Spain
 1168,Dal segno,Matusio,Male,Antagonist,Padua,Italy
 1169,Dal segno,Erissena,Female,Female lover 2,Berlin,Empire
-1170,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Berlin,Empire
+1170,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Berlin,Empire
 1171,Dal segno,Poro,Male,Male lover 1,Berlin,Empire
-1172,Dal segno,Dircea,Female&Male,Female lover 1,Copenhagen,Empire
+1172,Dal segno,Dircea,Female,Female lover 1,Copenhagen,Empire
 1173,AA,Creusa,Female,Female lover 2,Copenhagen,Empire
 1174,Dal segno,Adrasto,Male,Confidant,Copenhagen,Empire
 1175,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
@@ -1185,7 +1185,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1184,Da capo,Cherinto,Male,Male lover 2,Milan,Italy
 1185,Da capo,Demofoonte,Male,Senior ruler,Milan,Italy
 1186,Da capo,Dircea,Female,Female lover 1,Milan,Italy
-1187,Da capo,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Milan,Italy
+1187,Da capo,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Milan,Italy
 1188,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
 1189,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 1190,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
@@ -1199,33 +1199,33 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1198,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 1199,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
 1200,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
-1201,AA,Poro,Female&Male,Male lover 1,Venice,Italy
+1201,AA,Poro,Male,Male lover 1,Venice,Italy
 1202,Dal segno,Cleofide,Female,Female lover 1,Naples,Italy
 1203,ABA,Poro,Male,Male lover 1,Modena,Italy
 1204,ABA,Alessandro,Male,Male lover 2,Modena,Italy
 1205,ABA,Erissena,Female,Female lover 2,Modena,Italy
-1206,ABA,Timagene,Female&Male,Antagonist,Modena,Italy
+1206,ABA,Timagene,Male,Antagonist,Modena,Italy
 1207,Dal segno,Dircea,Female,Female lover 1,Padua,Italy
 1208,Dal segno,Demofoonte,Male,Senior ruler,Padua,Italy
 1209,Da capo,Cherinto,Male,Male lover 2,Padua,Italy
 1210,Dal segno,Creusa,Female,Female lover 2,Padua,Italy
 1211,Dal segno,Dircea,Female,Female lover 1,Padua,Italy
-1212,Dal segno,Timante,Female&Male,Male lover 1,Padua,Italy
+1212,Dal segno,Timante,Male,Male lover 1,Padua,Italy
 1213,Dal segno,Timante,Male,Male lover 1,Padua,Italy
 1214,ABA,Matusio,Male,Antagonist,Padua,Italy
 1215,Dal segno,Cherinto,Male,Male lover 2,Padua,Italy
-1216,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Naples,Italy
+1216,ABC,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 1217,ABA,Poro,Male,Male lover 1,Naples,Italy
 1218,Dal segno,Cleofide,Female,Female lover 1,Naples,Italy
 1219,ABA,Timagene,Male,Antagonist,Naples,Italy
 1220,ABA,Poro,Male,Male lover 1,Naples,Italy
-1221,AB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Venice,Italy
+1221,AB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Venice,Italy
 1222,ABAB,Cleofide,Female,Female lover 1,Modena,Italy
 1223,ABA,Gandarte,Male,Male lover 3,Modena,Italy
 1224,ABA,Erissena,Female,Female lover 2,Modena,Italy
 1225,ABA,Alessandro,Male,Male lover 2,Modena,Italy
 1226,Dal segno,Demofoonte,Male,Senior ruler,Padua,Italy
-1227,Da capo,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Padua,Italy
+1227,Da capo,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Padua,Italy
 1228,Da capo,Adrasto,Male,Confidant,Padua,Italy
 1229,Dal segno,Cherinto,Male,Male lover 2,Padua,Italy
 1230,Da capo,Demofoonte,Male,Senior ruler,Padua,Italy
@@ -1237,7 +1237,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1236,ABA,Matusio,Male,Antagonist,Forli,Italy
 1237,ABA,Dircea,Female,Female lover 1,Forli,Italy
 1238,ABA,Creusa,Female,Female lover 2,Padua,Italy
-1239,Dal segno,Erissena,Female,Female lover 2,?,Italy
+1239,Dal segno,Erissena,Female,Female lover 2,,Italy
 1240,Dal segno,Cherinto,Male,Male lover 2,Madrid,Spain
 1241,Da capo,Timante,Male,Male lover 1,Madrid,Spain
 1242,Da capo,Creusa,Female,Female lover 2,Madrid,Spain
@@ -1261,7 +1261,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1260,ABA,Dircea,Female,Female lover 1,Forli,Italy
 1261,Dal segno,Timante,Male,Male lover 1,Padua,Italy
 1262,Da capo,Gandarte,Male,Male lover 3,Mantua,Italy
-1263,Dal segno,Poro,Female&Male,Male lover 1,Mantua,Italy
+1263,Dal segno,Poro,Male,Male lover 1,Mantua,Italy
 1264,Dal segno,Poro,Male,Male lover 1,Mannheim,Empire
 1265,ABA,Dircea,Female,Female lover 1,Forli,Italy
 1266,Dal segno,Alessandro,Male,Male lover 2,Mantua,Italy
@@ -1276,7 +1276,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1275,Dal segno,Cleofide,Female,Female lover 1,Mantua,Italy
 1276,Dal segno,Poro,Male,Male lover 1,Mantua,Italy
 1277,Da capo,Gandarte,Male,Male lover 3,Mantua,Italy
-1278,ABA,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Mantua,Italy
+1278,ABA,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Mantua,Italy
 1279,Dal segno,Cleofide,Female,Female lover 1,Mantua,Italy
 1280,Dal segno,Poro,Male,Male lover 1,Mantua,Italy
 1281,Dal segno,Timagene,Male,Antagonist,Mantua,Italy
@@ -1286,13 +1286,13 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1285,Dal segno,Erissena,Female,Female lover 2,Mantua,Italy
 1286,ABA,Creusa,Female,Female lover 2,Forli,Italy
 1287,ABA,Matusio,Male,Antagonist,Forli,Italy
-1288,ABA,Dircea,Female&Male,Female lover 1,Forli,Italy
+1288,ABA,Dircea,Female,Female lover 1,Forli,Italy
 1289,ABAB,Timante,Male,Male lover 1,Forli,Italy
 1290,Dal segno,Timante,Male,Male lover 1,Copenhagen,Empire
 1291,Da capo,Erissena,Female,Female lover 2,Brunswich,Empire
 1292,A,Poro,Male,Male lover 1,Brunswich,Empire
 1293,Da capo,Cleofide,Female,Female lover 1,Brunswich,Empire
-1294,Da capo,Erissena,Female&Male,Female lover 2,Brunswich,Empire
+1294,Da capo,Erissena,Female,Female lover 2,Brunswich,Empire
 1295,Da capo,Cleofide,Female,Female lover 1,Brunswich,Empire
 1296,Da capo,Erissena,Female,Female lover 2,Brunswich,Empire
 1297,Da capo,Cleofide,Female,Female lover 1,Brunswich,Empire
@@ -1301,13 +1301,13 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1300,Dal segno,Timagene,Male,Antagonist,Mannheim,Empire
 1301,ABAB,Poro,Male,Male lover 1,Venice,Italy
 1302,ABA,Cleofide,Female,Female lover 1,Mannheim,Empire
-1303,ABC,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Mannheim,Empire
+1303,ABC,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Mannheim,Empire
 1304,Dal segno,Poro,Male,Male lover 1,Mannheim,Empire
 1305,ABA,Alessandro,Male,Male lover 2,Venice,Italy
 1306,Dal segno,Erissena,Female,Female lover 2,Venice,Italy
 1307,A,Poro,Male,Male lover 1,Venice,Italy
 1308,ABA,Cleofide,Female,Female lover 1,Venice,Italy
-1309,AB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Venice,Italy
+1309,AB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Venice,Italy
 1310,AA,Erissena,Female,Female lover 2,Venice,Italy
 1311,Da capo,Gandarte,Male,Male lover 3,Brunswich,Empire
 1312,Dal segno,Poro,Male,Male lover 1,Brunswich,Empire
@@ -1328,7 +1328,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1327,Dal segno,Alessandro,Male,Male lover 2,Reggio Emilia,Italy
 1328,Dal segno,Timagene,Male,Antagonist,Reggio Emilia,Italy
 1329,Dal segno,Poro,Male,Male lover 1,Reggio Emilia,Italy
-1330,Dal segno,Cherinto,Male,Male lover 2,-,-
+1330,Dal segno,Cherinto,Male,Male lover 2,,
 1331,Dal segno,Alessandro,Male,Male lover 2,Brunswich,Empire
 1332,Da capo,Poro,Male,Male lover 1,Brunswich,Empire
 1333,Da capo,Alessandro,Male,Male lover 2,Brunswich,Empire
@@ -1336,10 +1336,10 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1335,Da capo,Poro,Male,Male lover 1,Brunswich,Empire
 1336,Da capo,Gandarte,Male,Male lover 3,Brunswich,Empire
 1337,Da capo,Erissena,Female,Female lover 2,Brunswich,Empire
-1338,A-B,Cleofide,Female&Male,Female lover 1,Venice,Italy
+1338,A-B,Cleofide,Female,Female lover 1,Venice,Italy
 1339,AA,Poro,Male,Male lover 1,Reggio Emilia,Italy
 1340,ABA,Erissena,Female,Female lover 2,Reggio Emilia,Italy
-1341,Dal segno,Gandarte,Female&Male,Male lover 3,Naples,Italy
+1341,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
 1342,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 1343,Dal segno,Alessandro,Male,Male lover 2,Naples,Italy
 1344,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
@@ -1351,10 +1351,10 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1350,A,Poro,Male,Male lover 1,Naples,Italy
 1351,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 1352,Da capo,Cleofide,Female,Female lover 1,Reggio Emilia,Italy
-1353,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Reggio Emilia,Italy
-1354,Dal segno,Alessandro,Female&Male,Male lover 2,Reggio Emilia,Italy
+1353,Dal segno,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Reggio Emilia,Italy
+1354,Dal segno,Alessandro,Male,Male lover 2,Reggio Emilia,Italy
 1355,Dal segno,Timagene,Male,Antagonist,Reggio Emilia,Italy
-1356,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Brunswich,Empire
+1356,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Brunswich,Empire
 1357,Dal segno,Poro,Male,Male lover 1,London,England
 1358,ABA,Alessandro,Male,Male lover 2,Reggio Emilia,Italy
 1359,Dal segno,Erissena,Female,Female lover 2,London,England
@@ -1367,7 +1367,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1366,Da capo,Araspe,Male,Male lover 3,Venice,Italy
 1367,AA,Didone,Female,Female lover 1,Venice,Italy
 1368,Da capo,Cleofide,Female,Female lover 1,Naples,Italy
-1369,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Naples,Italy
+1369,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Naples,Italy
 1370,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
 1371,Dal segno,Cleofide,Female,Female lover 1,Naples,Italy
 1372,Da capo,Alessandro,Male,Male lover 2,Naples,Italy
@@ -1380,7 +1380,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1379,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
 1380,Da capo,Cleofide,Female,Female lover 1,Naples,Italy
 1381,Da capo,Alessandro,Male,Male lover 2,Naples,Italy
-1382,Dal segno,Poro,Female&Male,Male lover 1,Naples,Italy
+1382,Dal segno,Poro,Male,Male lover 1,Naples,Italy
 1383,Dal segno,Gandarte,Male,Male lover 3,Naples,Italy
 1384,Dal segno,Erissena,Female,Female lover 2,Naples,Italy
 1385,AA,Cleofide,Female,Female lover 1,Naples,Italy
@@ -1388,14 +1388,14 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1387,Da capo,Alessandro,Male,Male lover 2,Milan,Italy
 1388,Da capo,Erissena,Female,Female lover 2,Milan,Italy
 1389,Da capo,Timagene,Male,Antagonist,Milan,Italy
-1390,AA,Poro,Female&Male,Male lover 1,Milan,Italy
+1390,AA,Poro,Male,Male lover 1,Milan,Italy
 1391,Da capo,Erissena,Female,Female lover 2,Milan,Italy
 1392,Da capo,Timagene,Male,Antagonist,Munich,Empire
 1393,Dal segno,Erissena,Female,Female lover 2,Genoa,Italy
-1394,AA,Timagene,Female&Male,Antagonist,Genoa,Italy
+1394,AA,Timagene,Male,Antagonist,Genoa,Italy
 1395,AA,Poro,Male,Male lover 1,Genoa,Italy
 1396,Dal segno,Erissena,Female,Female lover 2,London,England
-1397,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Genoa,Italy
+1397,Dal segno,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Genoa,Italy
 1398,Dal segno,Gandarte,Male,Male lover 3,Genoa,Italy
 1399,AA,Alessandro,Male,Male lover 2,Genoa,Italy
 1400,Dal segno,Cleofide,Female,Female lover 1,Genoa,Italy
@@ -1403,11 +1403,11 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1402,Da capo,Osmida,Male,Antagonist,Venice,Italy
 1403,Da capo,Enea,Male,Male lover 1,Venice,Italy
 1404,Dal segno,Timante,Male,Male lover 1,Copenhagen,Empire
-1405,ABB',"Dircea,Timante",Female,"Female lover 1,Male lover 1",Forli,Italy
+1405,ABB',"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Forli,Italy
 1406,Dal segno,Cleofide,Female,Female lover 1,Genoa,Italy
 1407,Da capo,Poro,Male,Male lover 1,Milan,Italy
 1408,Da capo,Cleofide,Female,Female lover 1,Milan,Italy
-1409,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Milan,Italy
+1409,Dal segno,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Milan,Italy
 1410,Da capo,Erissena,Female,Female lover 2,Milan,Italy
 1411,Da capo,Poro,Male,Male lover 1,Milan,Italy
 1412,Da capo,Gandarte,Male,Male lover 3,Milan,Italy
@@ -1419,7 +1419,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1418,Dal segno,Erissena,Female,Female lover 2,Mannheim,Empire
 1419,Dal segno,Poro,Male,Male lover 1,Ancona,Italy
 1420,Da capo,Alessandro,Male,Male lover 2,Ancona,Italy
-1421,Dal segno,Alessandro,Female&Male,Male lover 2,Ancona,Italy
+1421,Dal segno,Alessandro,Male,Male lover 2,Ancona,Italy
 1422,Dal segno,Cleofide,Female,Female lover 1,Ancona,Italy
 1423,Dal segno,Poro,Male,Male lover 1,Ancona,Italy
 1424,Dal segno,Cleofide,Female,Female lover 1,Ancona,Italy
@@ -1434,8 +1434,8 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1433,ABA,Erissena,Female,Female lover 2,Padua,Italy
 1434,A,Poro,Male,Male lover 1,Padua,Italy
 1435,Dal segno,Cleofide,Female,Female lover 1,Padua,Italy
-1436,ABAB,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Padua,Italy
-1437,Dal segno,Gandarte,Female&Male&Male,Male lover 3,Padua,Italy
+1436,ABAB,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Padua,Italy
+1437,Dal segno,Gandarte,Male,Male lover 3,Padua,Italy
 1438,Dal segno,Erissena,Female,Female lover 2,Padua,Italy
 1439,Dal segno,Poro,Male,Male lover 1,Padua,Italy
 1440,Dal segno,Cleofide,Female,Female lover 1,Padua,Italy
@@ -1450,7 +1450,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1449,Da capo,Enea,Male,Male lover 1,Brunswich,Empire
 1450,ABA,Cleofide,Female,Female lover 1,Padua,Italy
 1451,Dal segno,Erissena,Female,Female lover 2,Milan,Italy
-1452,ABAB,"Dircea,Timante,Demofoonte",Female,"Female lover 1,Male lover 1,Senior ruler",Copenhagen,Empire
+1452,ABAB,"Dircea,Timante,Demofoonte",Female&Male&Male,"Female lover 1,Male lover 1,Senior ruler",Copenhagen,Empire
 1453,ABA,Poro,Male,Male lover 1,Padua,Italy
 1454,AB,Alessandro,Male,Male lover 2,Padua,Italy
 1455,ABA,Timagene,Male,Antagonist,Padua,Italy
@@ -1466,7 +1466,7 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1465,Da capo,Gandarte,Male,Male lover 3,Milan,Italy
 1466,Da capo,Iarba,Male,Male lover 2,Brunswich,Empire
 1467,Da capo,Selene,Female,Female lover 2,Brunswich,Empire
-1468,Da capo,Iarba,Female&Male,Male lover 2,Brunswich,Empire
+1468,Da capo,Iarba,Male,Male lover 2,Brunswich,Empire
 1469,Da capo,Osmida,Male,Antagonist,Brunswich,Empire
 1470,Da capo,Araspe,Male,Male lover 3,Brunswich,Empire
 1471,Da capo,Osmida,Male,Antagonist,Brunswich,Empire
@@ -1480,14 +1480,14 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1479,Dal segno,Poro,Male,Male lover 1,Rome,Italy
 1480,Dal segno,Poro,Male,Male lover 1,Rome,Italy
 1481,Dal segno,Alessandro,Male,Male lover 2,Rome,Italy
-1482,Da capo,Timagene,Female&Male,Antagonist,Rome,Italy
-1483,Dal segno,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Rome,Italy
+1482,Da capo,Timagene,Male,Antagonist,Rome,Italy
+1483,Dal segno,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
 1484,Da capo,Gandarte,Male,Male lover 3,Rome,Italy
 1485,Dal segno,Alessandro,Male,Male lover 2,Rome,Italy
 1486,A,Poro,Male,Male lover 1,Rome,Italy
 1487,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
 1488,Dal segno,Cleofide,Female,Female lover 1,Rome,Italy
-1489,Da capo,Cleofide,Female&Male,Female lover 1,Rome,Italy
+1489,Da capo,Cleofide,Female,Female lover 1,Rome,Italy
 1490,Dal segno,Erissena,Female,Female lover 2,Rome,Italy
 1491,Dal segno,Gandarte,Male,Male lover 3,Rome,Italy
 1492,Da capo,Erissena,Female,Female lover 2,Rome,Italy
@@ -1495,14 +1495,14 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1494,Dal segno,Erissena,Female,Female lover 2,Rome,Italy
 1495,Da capo,Alessandro,Male,Male lover 2,Rome,Italy
 1496,Da capo,Dircea,Female,Female lover 1,-,-
-1497,Da capo,"Cleofide,Poro",Female,"Female lover 1,Male lover 1",Bologna,Italy
+1497,Da capo,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Bologna,Italy
 1498,ABA,Matusio,Male,Antagonist,Turin,Italy
 1499,ABA,Demofoonte,Male,Senior ruler,Turin,Italy
 1500,Dal segno,Dircea,Female,Female lover 1,Turin,Italy
 1501,ABA,Timante,Male,Male lover 1,Turin,Italy
 1502,ABA,Creusa,Female,Female lover 2,Turin,Italy
 1503,ABA,Creusa,Female,Female lover 2,Turin,Italy
-1504,ABC,"Dircea,Timante",Female,"Female lover 1,Male lover 1",Turin,Italy
+1504,ABC,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Turin,Italy
 1505,ABA,Timante,Male,Male lover 1,Turin,Italy
 1506,ABA,Cherinto,Male,Male lover 2,Turin,Italy
 1507,AA,Enea,Male,Male lover 1,Rome,Italy
@@ -1557,54 +1557,54 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1556,Dal segno,Dircea,Female,Female lover 1,Rome,Italy
 1557,Dal segno,Matusio,Male,Antagonist,Rome,Italy
 1558,Dal segno,Dircea,Female,Female lover 1,Rome,Italy
-1559,,,Male,,Rome,Italy
-1560,,,Male,,Rome,Italy
-1561,,,Male,,Rome,Italy
-1562,,,Male,,Rome,Italy
-1563,,,Male,,Rome,Italy
-1564,,,Male,,Rome,Italy
-1565,,,Male,,Rome,Italy
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
+1559,Dal segno,Demofoonte,Male,Senior ruler,Rome,Italy
+1560,Dal segno,Creusa,Female,Female lover 2,Rome,Italy
+1561,ABA,Dircea,Female,Female lover 1,Rome,Italy
+1562,ABA,Timante,Male,Male lover 1,Rome,Italy
+1563,Dal segno,Dircea,Female,Female lover 1,Rome,Italy
+1564,Dal segno,Adrasto,Male,Confidant,Rome,Italy
+1565,ABA,Cherinto,Male,Male lover 2,Rome,Italy
+1566,ABA,Demofoonte,Male,Senior ruler,Rome,Italy
+1567,ABAB,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
+1568,ABAB,Timante,Male,Male lover 1,Rome,Italy
+1569,ABA,Demofoonte,Male,Senior ruler,Rome,Italy
+1570,Da capo,Iarba,Male,Male lover 2,Venice,Italy
+1571,Dal segno,Poro,Male,Male lover 1,Stuttgart,Empire
+1572,Dal segno,Erissena,Female,Female lover 2,Stuttgart,Empire
+1573,Da capo,Didone,Female,Female lover 1,Venice,Italy
+1574,Da capo,Osmida,Male,Antagonist,Venice,Italy
+1575,A,Poro,Male,Male lover 1,Stuttgart,Empire
+1576,Dal segno,Alessandro,Male,Male lover 2,Stuttgart,Empire
+1577,Da capo,Selene,Female,Female lover 2,Venice,Italy
+1578,Dal segno,Timagene,Male,Antagonist,Stuttgart,Empire
+1579,Dal segno,Cleofide,Female,Female lover 1,Stuttgart,Empire
+1580,Dal segno,Gandarte,Male,Male lover 3,Stuttgart,Empire
+1581,Dal segno,Poro,Male,Male lover 1,Stuttgart,Empire
+1582,Da capo,Enea,Male,Male lover 1,Venice,Italy
+1583,Dal segno,Iarba,Male,Male lover 2,Venice,Italy
+1584,Dal segno,Matusio,Male,Antagonist,Treviso,Italy
+1585,Dal segno,Dircea,Female,Female lover 1,Treviso,Italy
+1586,Dal segno,Enea,Male,Male lover 1,Venice,Italy
+1587,Dal segno,Timante,Male,Male lover 1,Treviso,Italy
+1588,Dal segno,Araspe,Male,Male lover 3,Venice,Italy
+1589,AA,Cherinto,Male,Male lover 2,Treviso,Italy
+1590,Dal segno,Creusa,Female,Female lover 2,Treviso,Italy
+1591,,,Male,,Venice,Italy
+1592,,,Male,,,
+1593,,,Male,,,
+1594,,,Male,,,
+1595,,,Male,,,
+1596,,,Male,,,
+1597,,,Male,,,
+1598,,,Male,,,
+1599,,,Male,,,
+1600,,,Male,,,
+1601,,,Male,,,
+1602,,,Male,,,
+1603,,,Male,,,
+1604,,,Male,,,
+1605,,,Male,,,
+1606,,,Male,,,
 ,,,Male,,,
 ,,,Male,,,
 ,,,Male,,,

@@ -26,21 +26,17 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
                     continue
                 features[key] = item_features[key]
     
-    extract_character(score_data, score_features, features)
+    extract_character(score_data, parts_data, features)
     return score_features.update(features)
 
-def extract_character(score_data, score_features, features):
+def extract_character(score_data, parts_data, features):
     character = []
-    for voice in score_features['Voices'].split(','):
-        parts = score_features['Scoring'].split(',')
-        index = parts.index(voice)
-        if parts[index] in VOICES_LIST:
-            character.append(score_data['parts'][index].partName.capitalize())
-        else:
-            character.append('Unknown')
-            
+    for part in parts_data:
+        if part['family']=='voice':
+            name=part['part'].partName.capitalize()
+            character.append(name)
+        
     features[CHARACTER] = "&".join(character)
-
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     pass

@@ -1,14 +1,14 @@
 from ast import List
 import csv
+from pickle import DEFAULT_PROTOCOL
 import pandas as pd
 
 
-# def read_dicts_from_csv(file_path: str) -> List[dict]:
-#     with open(file_path, "r", encoding='utf8') as file:
-#         return [obj for obj in csv.DictReader(file)]
-
 def add_duetos_gender(df_arias):
-    for index, value in enumerate(df_arias['RoleType'].dropna()):
+    for index, _ in enumerate(df_arias['RoleType']):
+        value = df_arias['RoleType'].iat[index]
+        if str(value) == 'nan':
+            continue
         if ',' in value:
             characters = value.split(',')
             df_arias['Gender'].iat[index] = '&'.join(['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in characters])

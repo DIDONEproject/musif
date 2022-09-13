@@ -310,7 +310,7 @@ def remove_folder_contents(path: str):
             remove_folder_contents(file_path)
 
 # TODO: rename without the capital G
-def Get_TimeSignature_periods(time_signatures):
+def get_timesignature_periods(time_signatures):
     # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
     periods = [0]
     if len(time_signatures) == 0:
