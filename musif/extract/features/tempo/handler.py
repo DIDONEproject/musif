@@ -57,7 +57,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     score_features.update({
         TEMPO: tempo_mark,
         NUMERIC_TEMPO: numeric_tempo,
-        TIME_SIGNATURE: time_signature,
+        TIME_SIGNATURE: time_signature.split(',')[0],
         TIME_SIGNATURE_GROUPED: time_signature_grouped,
         TEMPO_GROUPED_1: tg1,
         TEMPO_GROUPED_2: tg2,

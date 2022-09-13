@@ -241,6 +241,8 @@ class Configuration:
         self.scoring_order = read_object_from_json_file(path.join(self.internal_data_dir, "scoring_order.json"))
         self.scoring_family_order = read_object_from_json_file(path.join(self.internal_data_dir, "scoring_family_order.json"))
         self.sorting_lists = read_object_from_json_file(path.join(self.internal_data_dir, "sorting_lists.json"))
+        self.all_translations = read_object_from_json_file(path.join(self.internal_data_dir, "all_translations.json"))
+        
         self.cpu_workers = (
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )

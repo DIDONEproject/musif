@@ -36,6 +36,7 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - wind
   - viola
   - strings.cello
+  - bass
   
 parts_filter:
   # - vnI
