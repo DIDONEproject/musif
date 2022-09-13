@@ -33,6 +33,8 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - brass
   - wind
   - flute
+  - strings.cello
+
 parts_filter:
   # - vnI
   # - vnII

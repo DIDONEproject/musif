@@ -32,7 +32,6 @@ def get_tempo_grouped_1(tempo):
     """
     tempo = re.sub('\\W+', ' ', tempo)  # removes eventual special characters
     replacements = [(w, '') for w in ['molto', 'poco', 'un poco', 'tanto', 'un tanto', 'assai', 'meno', 'più', 'piuttosto']]
-    # tempo = tempo.strip()
     if not tempo:
         return 'NA'
 
@@ -135,5 +134,5 @@ def extract_numeric_tempo(file_path: str) -> Optional[int]:
     try:
         tempo = int(root.find("part").find("measure").find("direction").find("sound").get("tempo"))
     except:
-        tempo = None
+        tempo = 'NA'
     return tempo

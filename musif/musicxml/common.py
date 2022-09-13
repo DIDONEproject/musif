@@ -73,7 +73,7 @@ def split_layers(score: Score, split_keywords: List[str]):
                 possible_layers = True
                 break
 
-        if possible_layers:  # ONLY WIND INSTRUMENTS
+        if possible_layers:
             has_voices = False
             for measure in part.elements:
                 if isinstance(measure, Measure) and any(isinstance(e, Voice) for e in measure.elements):

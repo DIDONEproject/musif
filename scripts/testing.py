@@ -12,12 +12,8 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale37X-Se_trova-1731-Hasse[2.08][0734].xml'
-    # PartVel
-    # Ale13M-Senza_procelle-1758-Piccinni[2.02][1484].xml
-
-    #reference
-    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1724-Sarro[1.05][0001].xml'
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Dem18M-La_destra-1735-Leo[2.11][0460].xml'
+    
     #test
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
