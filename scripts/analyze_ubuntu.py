@@ -15,8 +15,11 @@ if __name__ == "__main__":
     
     prefix = 'martiser/'
     sufix='.csv'
-    name = prefix + "extraction_01_08_22"
+    name = prefix + "extraction_13_09_22"
+    
+    
     check_file = name + '_1' + sufix
+    
     dest_path = name + "_2"+ sufix
 
     df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
