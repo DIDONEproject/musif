@@ -8,6 +8,7 @@ POSSIBLE VALUES
 Only for `minval` and `maxval`: numbers (anything if not appliable)
 
 """
+from tkinter.tix import Tree
 import pandas as pd
 from pandas.api.types import is_integer_dtype, is_float_dtype, is_string_dtype, is_bool_dtype
 import numpy as np
@@ -15,53 +16,69 @@ import musif.logs
 from joblib import Parallel, delayed
 
 musif.logs.logger().setLevel(musif.logs.LEVEL_INFO)
-rules = pd.read_csv('tests/test_unit_rules.csv', header=0, index_col=0)
+# rules = pd.read_csv('tests/test_unit_rules.csv', header=0, index_col=0)
+features_definition = pd.read_excel('tests/FeaturesDefinition.xlsx')
+rules = features_definition.iloc[:, 5:]
+rules.set_index(features_definition['Name'], inplace=True)
+
 data = pd.read_csv('martiser/extraction_01_08_22_total_alldata.csv', header=0, index_col=False)
-
-def checktype(df, t):
+def checktype(x, check_type):
     """
-    check that all columns in `df` are of type `t`
+    check that any columns in `df` is not of type `t`
 
-    returns True or False
+    returns True if any is not of type 't' or False otherwise
     """
-    if t == 'str':
-        return all(is_string_dtype(x[col]) for col in x.columns)
-    elif t == 'float':
-        return all(is_float_dtype(x[col]) for col in x.columns)
-    elif t == 'int':
-        return all(is_integer_dtype(x[col]) for col in x.columns)
-    elif t == 'bool':
-        return all(is_bool_dtype(x[col]) for col in x.columns)
+    if check_type == 'str':
+        return not all(is_string_dtype(x[col]) for col in x.columns)
+    elif check_type == 'float':
+        return not all(is_float_dtype(x[col]) for col in x.columns)
+    elif check_type == 'int':
+        return not all(is_integer_dtype(x[col]) for col in x.columns)
+    elif check_type == 'bool':
+        return not all(is_bool_dtype(x[col]) for col in x.columns)
 
 
 check_functions = {
-        'any_na': lambda x, y: x.isna().any()[0],
+        'any_na': lambda x, y: np.asarray(list(x.index))[x.isna().to_numpy()[:, 0]],
         'all_na': lambda x, y: x.isna().all()[0],
-        'any_0': lambda x, y: (x == 0).any()[0],
+        'any_0': lambda x, y:  np.asarray(list(x.index))[(x==0).to_numpy()[:, 0]],
         'all_0': lambda x, y: (x == 0).all()[0],
-        'minval': lambda x, y: (x.select_dtypes([int, float]) < float(y)).any()[0],
-        'maxval': lambda x, y: (x.select_dtypes([int, float]) > float(y)).any()[0],
+        'minval': lambda x, y:  np.asarray(list(x.index))[(x.select_dtypes([int, float]) < float(y)).to_numpy()[:, 0]],
+        'maxval': lambda x, y:  np.asarray(list(x.index))[(x.select_dtypes([int, float]) > float(y)).to_numpy()[:, 0]],
         'data_type': checktype
         }
 
 def check_rules_column(regex, rules, data, check_functions):
     # getting the portion of data that must be checked
-    matched_data = data.filter(regex=regex)
+    matched_data = data.filter(regex='\\b' + regex + '\\b')
+    if matched_data.empty:
+        if rules.loc[regex, 'removed_postpro'] == 1:
+            return
+        musif.logs.perr(f'{regex} could not be found!')
+        return
 
-    for check in rules.index:
-        action = rules.loc[check, regex]
+    # for check in rules.index:
+    for check in rules.columns[:-1]:
+        action = rules.loc[regex, check]
         try:
-            if check_functions[check](matched_data, action):
+            check_res = check_functions[check](matched_data, action)
+            if (type(check_res) is pd.DataFrame and check_res.size > 0) or (check_res is True):
                 if action == 'na':
                     continue
+                if type(action) is not str:
+                    action='err'
                 action_fn = getattr(musif.logs, 'p' + action, musif.logs.perr)
                 action_fn(f"{check} found to be True for columns matched by the following regex:\n\t{regex}")
+                if type(check_res) is pd.DataFrame and action == 'err':
+                    print(check_res.to_string())
+                    
         except ValueError:
             # 1. possible errors connected with casting to float
             # 2. todo
             continue
 
-for regex in rules.columns:
+# for regex in rules.columns:
+for regex in features_definition['Name']:
     check_rules_column(regex, rules, data, check_functions)
 
 # Parallel(n_jobs=1)(delayed(check_rules_column)(regex, rules, data, check_functions) for regex in rules.columns)
