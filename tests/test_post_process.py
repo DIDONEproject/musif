@@ -53,23 +53,7 @@ class TestPostProcess:
         
 
 class TestProcessedFile:
-    # def test_column_types_match(self, processed_data: pd.DataFrame):
-    #     found_cols = []
-    #     for col in processed_data.columns:
-    #         if col in found_cols:
-    #             continue
-    #         weird = (processed_data[[col]].applymap(type) != processed_data[[col]].iloc[0].apply(type)).any(axis=1)
-    #         if len(processed_data[weird]) > 0:
-    #             found_cols.append(col)
-    #             print('\n---\n')
-    #             print(col)
-    #             indices = weird[weird]
-    #             print(indices.index)
-    #     assert not found_cols
-        
-    # def test_not_nan_values(self, processed_data: pd.DataFrame):
-    #     assert not processed_data.isnull().values.any()
-        
+
     def test_ensure_violin_solo_not_present(self, processed_data: pd.DataFrame):
         assert len([i for i in processed_data if i.startswith('PartVn_')])==0
         
@@ -79,9 +63,6 @@ class TestProcessedFile:
             if i.endswith(tuple(post_process_configuration.columns_endswith)):
                 intruders.append(i)
         assert len(intruders) == 0
-        
-    def test_tonic_chord_not_empty(self, processed_data: pd.DataFrame):
-        assert not all([i<0.1 for i in processed_data[CHORD_prefix+'I_Per']])
         
     def test_no_part_texture(self, process_object: pd.DataFrame, processed_data: pd.DataFrame):
         config = process_object._post_config

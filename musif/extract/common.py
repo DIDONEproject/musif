@@ -1,3 +1,4 @@
+from statistics import mean
 from typing import List, Optional
 
 from musif.extract.constants import DATA_PART_ABBREVIATION, VOICES_LIST
@@ -23,3 +24,13 @@ def _part_matches_filter(part_abbreviation: str, parts_filter: Optional[List[str
         return True
     parts_filter_set = set(parts_filter)
     return part_abbreviation in parts_filter_set
+
+def _mix_data_with_precedent_data(prev_features: dict, new_features: dict) -> None:
+    for key in new_features.keys():
+        if 'max' in key.lower() or 'highest' in key.lower():
+            prev_features[key] = max(prev_features[key], new_features[key])
+        elif 'min' in key.lower() or 'lowest' in key.lower():
+            prev_features[key] = max(prev_features[key], new_features[key])
+        if type(new_features[key])==str:
+            continue
+        prev_features[key] = mean([prev_features[key], new_features[key]])

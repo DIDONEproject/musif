@@ -44,7 +44,8 @@ def merge_duetos_trios(df: DataFrame)-> None:
         name = df.at[index, FILE_NAME]
         pinfo(f'\nMerging dueto/trieto {name}')
         all_voices = df.at[index, VOICES].split(',')
-
+        if all(x == all_voices[0] for x in all_voices):
+            continue
         first_voice = all_voices[0]
         columns_to_merge = [i for i in voice_cols if first_voice in i.lower()]
         for col in columns_to_merge:

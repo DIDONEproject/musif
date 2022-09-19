@@ -26,7 +26,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
-
+            
     key = score_data[DATA_KEY]
     score_notes_per_degree = {}
     for part_data in parts_data:
