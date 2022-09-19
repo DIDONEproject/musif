@@ -13,7 +13,9 @@ from musif.common._utils import extract_digits
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_INTERVALS
-from musif.extract.features.prefix import get_part_prefix, _get_score_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
+
+from musif.extract.common import _mix_data_with_precedent_data
 from .constants import *
 
 
@@ -35,11 +37,28 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
         intervals = part_data[DATA_INTERVALS]
-        features.update(get_interval_features(intervals, part_prefix))
-        features.update(get_interval_count_features(intervals, part_prefix))
-        features.update(get_interval_type_features(intervals, part_prefix))
-        features.update(get_interval_stats_features(intervals, part_prefix))
-
+        interval_features = get_interval_features(intervals, part_prefix)
+        interval_count_features=get_interval_count_features(intervals, part_prefix)
+        interval_type_features=get_interval_type_features(intervals, part_prefix)
+        interval_stats_features=get_interval_stats_features(intervals, part_prefix)
+        
+        if all([i in features for i in interval_features.keys()]):
+            _mix_data_with_precedent_data(features, interval_features)
+        else:
+            features.update(interval_features)
+        if all([i in features for i in interval_count_features.keys()]):
+                _mix_data_with_precedent_data(features, interval_count_features)
+        else:
+            features.update(interval_count_features)
+        if all([i in features for i in interval_type_features.keys()]):
+                    _mix_data_with_precedent_data(features, interval_type_features)
+        else:
+            features.update(interval_type_features)
+        if all([i in features for i in interval_stats_features.keys()]):
+                    _mix_data_with_precedent_data(features, interval_stats_features)
+        else:
+            features.update(interval_stats_features)
+            
     parts_data_per_sound = {part_data[DATA_SOUND_ABBREVIATION]: [] for part_data in parts_data}
     for part_data in parts_data:
         sound = part_data[DATA_SOUND_ABBREVIATION]
@@ -60,6 +79,8 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features.update(get_interval_stats_features(score_intervals, score_prefix))
 
     score_features.update(features)
+
+
 
 
 def get_interval_features(intervals: List[Interval], prefix: str = ""):

@@ -1,3 +1,4 @@
+from statistics import mean
 from typing import List, Tuple
 
 from musif.common.sort import sort_dict
@@ -63,8 +64,17 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features = {}
     for part_features in parts_features:
         part = part_features[PART_ABBREVIATION]
-        features[get_part_feature(part, SOUNDING_DENSITY)] = part_features[SOUNDING_DENSITY]
-        features[get_part_feature(part, DENSITY)] = part_features[DENSITY]
+        feature_name = get_part_feature(part, SOUNDING_DENSITY)
+        if feature_name in features:
+            features[feature_name] = mean([features[feature_name],part_features[SOUNDING_DENSITY]])
+        else:
+            features[feature_name] = part_features[SOUNDING_DENSITY]
+            
+        feature_name = get_part_feature(part, DENSITY)
+        if feature_name in features:
+            features[feature_name] = mean([features[feature_name],part_features[DENSITY]])
+        else:
+            features[feature_name] = part_features[DENSITY]
 
     sound_abbreviations = {part_data[DATA_SOUND_ABBREVIATION] for part_data in parts_data}
     for sound in sound_abbreviations:
