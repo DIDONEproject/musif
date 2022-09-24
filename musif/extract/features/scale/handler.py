@@ -1,4 +1,5 @@
 import re
+from statistics import mean
 from typing import Dict, List, Union
 
 from music21.note import Note
@@ -45,9 +46,13 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         part = part_data[DATA_PART_ABBREVIATION]
         degree_count_pattern = DEGREE_COUNT.format(key=".+")
         degree_per_pattern = DEGREE_PER.format(key=".+")
-        for feature in parts_features:
-            if re.match(degree_count_pattern, feature) or re.match(degree_per_pattern, feature):
-                score_features[get_part_feature(part, feature)] = parts_features[feature]
+        for feature_name in parts_features:
+            if re.match(degree_count_pattern, feature_name) or re.match(degree_per_pattern, feature_name):
+                part_feature=get_part_feature(part, feature_name)
+                if part_feature in score_features:
+                    score_features[part_feature] = mean([score_features[part_feature], parts_features[feature_name]])
+                else:
+                    score_features[part_feature] = parts_features[feature_name]
 
 
 def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:

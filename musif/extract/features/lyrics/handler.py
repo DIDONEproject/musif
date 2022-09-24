@@ -60,7 +60,7 @@ def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:
     return len(notes) / len(lyrics)
 
 
-def get_voice_reg(notes):
+def get_voice_reg(notes: List[Note]) -> float:
     if notes:
         last_note = notes[-1].notes[0].pitch.midi if notes[-1].isChord else notes[-1].pitch.midi
         # If we wave 2 or more notes at once, we just take the lowest one

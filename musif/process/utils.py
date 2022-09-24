@@ -39,7 +39,6 @@ def merge_duetos_trios(df: DataFrame)-> None:
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages.')
     voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
     
-    
     for index in tqdm(multiple_voices.index):
         name = df.at[index, FILE_NAME]
         pinfo(f'\nMerging dueto/trieto {name}')
@@ -55,17 +54,16 @@ def merge_duetos_trios(df: DataFrame)-> None:
                 similar_col = col.replace(get_part_prefix(first_voice), get_part_prefix(all_voices[j]))
                 if similar_col in df:
                     similar_cols.append(similar_col)
-            if all(isinstance(x,str) or np.isnan(x) for x in df.loc[index,similar_cols]):
+            if all(isinstance(x,str) for x in df.loc[index,similar_cols]):
+                df.at[index,formatted_col]  = df.loc[index, similar_cols][0]
+            elif all(np.isnan(x) for x in df.loc[index,similar_cols]):
                 df.drop(similar_cols, inplace = True, axis=1)
             elif HIGHEST_NOTE_INDEX in col or ('Largest' and 'Asc') in col:
                 df.at[index,formatted_col] = df.loc[index, similar_cols].max()
-                
             elif LOWEST_NOTE_INDEX in col or ('Largest' and 'Desc') in col:
                 df.at[index,formatted_col] = df.loc[index, similar_cols].min()
-                
             else:
-                df.at[index,formatted_col] = df.loc[index, similar_cols].mean()
-                
+                df.at[index,formatted_col] = df.loc[index, similar_cols].mean()        
     return df
 
 def merge_single_voices(df: DataFrame) -> None:
@@ -78,10 +76,15 @@ def merge_single_voices(df: DataFrame) -> None:
         formatted_col = col.replace(singer_part+'_', generic_sound_voice_prefix)
         if formatted_col in df:
             continue
-        columns_to_merge = [i for i in singer_columns if "_".join(i.split('_')[1:])==generic_col]
-        for colum in columns_to_merge:
-            df[colum].fillna(0)
-        df[formatted_col] = df[columns_to_merge].sum(axis=1)
+        columns_to_merge = [i for i in singer_columns if "_".join(i.split('_')[1:]) == generic_col]
+        if all(df[columns_to_merge].dtypes==object):
+            df[columns_to_merge] = df[columns_to_merge].astype(str)
+            df[formatted_col] = df[columns_to_merge].sum(axis=1)
+            df[formatted_col] = [i.replace('nan','') for i in df[formatted_col]]
+        else:
+            for colum in columns_to_merge:
+                df[colum].fillna(0, inplace=True)
+            df[formatted_col] = df[columns_to_merge].sum(axis=1)
 
                 
 def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame, sufix: str= '') -> None:
