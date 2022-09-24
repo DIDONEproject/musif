@@ -210,7 +210,8 @@ class DataProcessor:
             
     def merge_voices(self) -> None:
         """Finds multiple singers arias (duetos/trietos) and calculates mean, max or min between them.
-        Unifies all voices columns into SoundVoice_ columns.  
+        Unifies all voices columns into SoundVoice_ columns. 
+        Also collapses PartBsI and PartBsII in one column.
         """
         pinfo('\nScaning voice columns')
         df_voices = self.data[[col for col in self.data.columns if any(substring in col for substring in voices_list_prefixes)]]
@@ -221,7 +222,16 @@ class DataProcessor:
         
         columns_to_delete = [i for i in self.data.columns.values if any(voice in i for voice in voices_list_prefixes)]
         self.data.drop(columns_to_delete, axis=1, inplace=True)
-
+        
+        
+        self.data.drop([i for i in self.data.columns if 'PartBsII' in i], axis=1, inplace=True)
+        double_bass_columns = [i for i in self.data.columns if 'PartBsI' in i]
+        for col in double_bass_columns:
+            formatted_col = col.replace('BsI_','Bs_')
+            self.data[formatted_col].fillna(0)
+            self.data[formatted_col] = self.data[[formatted_col,col]].sum(axis=1)
+        self.data.drop(double_bass_columns, axis=1, inplace=True)
+            
     def unbundle_instrumentation(self) -> None:
         """Separates Instrumentation column into as many columns as instruments present in Instrumentation,
         assigning 1 for every instrument that is present and 0 if it is not for every row (aria).
@@ -229,9 +239,9 @@ class DataProcessor:
         
         for i, row in enumerate(self.data[INSTRUMENTATION]):
             for element in row.split(','):
-                self.data.at[i, PRESENCE+'_'+element] = 1
+                self.data.at[i, PRESENCE+'_' + element] = 1
                 
-        self.data[[i for i in self.data if PRESENCE+'_'in i]]=self.data[[i for i in self.data if PRESENCE+'_'in i]].fillna(0)
+        self.data[[i for i in self.data if PRESENCE+'_'in i]] = self.data[[i for i in self.data if PRESENCE+'_'in i]].fillna(0).astype(int)
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
@@ -264,7 +274,7 @@ class DataProcessor:
             If any of the columns required to delete is not found 
             in the original DataFrame.
         """
-        config_data=self._post_config.to_dict_post()
+        config_data = self._post_config.to_dict_post()
         config_data.update(kwargs)  # Override values
         try:
             delete_columns(self.data, config_data)
@@ -371,8 +381,9 @@ class DataProcessor:
     def _split_metadata_and_labels(self) -> None:
         self.data.rename(columns={ROLE_TYPE:'Label_'+ROLE_TYPE}, inplace=True)
         label_columns = list(self.data.filter(like='Label_', axis=1))
-        label_dataframe = self.data[[ARIA_ID] + label_columns]
         
+        label_dataframe = self.data[[ARIA_ID] + label_columns]
+
         metadata_dataframe = self.data[[ARIA_ID] + metadata_columns]
         
         self.to_csv(self.destination_route + "_labels", label_dataframe)
@@ -390,6 +401,8 @@ class DataProcessor:
                     df[column]= df[column].replace(0, '0')
                     df[column]= df[column].fillna(str("NA"))
                     # df[column]= df[column].replace(np.nan, str("NA"))
+                
+                
                 else:
                     df[column]= df[column].fillna(float("NaN"))
                     df[column]= df[column].replace('0', 0)

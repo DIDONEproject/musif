@@ -1,8 +1,10 @@
 import glob
 import inspect
+from pathlib import Path
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
+import sys
 from typing import Dict, List, Optional, Tuple, Union
 
 import pandas as pd
@@ -382,6 +384,12 @@ class FeaturesExtractor:
         musicxml_files = find_xml_files(self._cfg.data_dir, check_file=self.check_file)
         score_df, parts_df = self._process_corpora(musicxml_files)
         return score_df
+
+    def _find_mscx_files(self):
+        for fname in Path(self._cfg.data_dir).glob('*.xml'):
+            if not compose_musescore_file_path(fname, self._cfg.musescore_dir).exists():
+                perr(f"\nNo mscx was found for file {fname}")
+                sys.exit()
 
     def _process_corpora(self, musicxml_files: List[str]) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)

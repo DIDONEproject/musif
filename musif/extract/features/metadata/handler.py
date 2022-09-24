@@ -29,6 +29,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     extract_character(score_data, parts_data, features)
     return score_features.update(features)
 
+# TODO: Label_passion 'Label_Passions' and 'Label_Sentiment' assigned here?
+
+
 def extract_character(score_data, parts_data, features):
     character = []
     for part in parts_data:

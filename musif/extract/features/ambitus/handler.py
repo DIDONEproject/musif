@@ -1,5 +1,5 @@
-from typing import List, Tuple
-
+from typing import List
+from statistics import mean
 from musif.config import Configuration
 from music21.chord import Chord
 
@@ -33,7 +33,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-
+    
     parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
@@ -41,7 +41,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
         for feature_name in SCORE_FEATURES:
-            score_features[get_part_feature(part, feature_name)] = part_features.get(feature_name)
+            part_feature = get_part_feature(part, feature_name)
+            if feature_name in score_features:
+                score_features[part_feature] = mean([score_features[part_feature], parts_features[feature_name]])
+            else:
+                score_features[part_feature] = part_features.get(feature_name)
             
             
 def _get_notes_ambitus(notes: List[Note]) -> Tuple[Note, Note]:
