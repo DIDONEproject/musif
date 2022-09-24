@@ -1,8 +1,10 @@
 import glob
 import inspect
+from pathlib import Path
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
+import sys
 from typing import Dict, List, Optional, Tuple, Union
 
 import pandas as pd
@@ -243,6 +245,7 @@ class PartsExtractor:
           If the provided string is neither a directory nor a file path
         """
         musicxml_files = extract_files(obj, check_file = check_file)
+        
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
@@ -386,8 +389,16 @@ class FeaturesExtractor:
         linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
+        if self._cfg.is_requested_musescore_file():
+            self._find_mscx_files()
         score_df, parts_df = self._process_corpora(musicxml_files)
         return score_df
+
+    def _find_mscx_files(self):
+        for fname in Path(self._cfg.data_dir).glob('*.xml'):
+            if not compose_musescore_file_path(fname, self._cfg.musescore_dir).exists():
+                perr(f"\nNo mscx was found for file {fname}")
+                sys.exit()
 
     def _process_corpora(self, musicxml_files: List[str]) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)

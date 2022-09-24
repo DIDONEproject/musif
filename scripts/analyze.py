@@ -21,7 +21,7 @@ if __name__ == "__main__":
     prefix = 'martiser/'
     
     dest_path = prefix + name + "_total" + ".csv"
-    merge_dataframes(prefix + name, dest_path)
+    # merge_dataframes(prefix + name, dest_path)
     
     p = DataProcessor(dest_path, "scripts/post_process.yml", merge_voices = True)
     print(p.data.shape)

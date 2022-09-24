@@ -8,12 +8,10 @@ from musif.process.processor import DataProcessor
 import pandas as pd
 
 if __name__ == "__main__":
-
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale06M-Ale07M-Se_mai-1771-Bertoni[1.15][1309].xml'
-    
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did29M-A_trionfar-1752-Galuppi[3.06][0666].xml'
     #test
     # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'

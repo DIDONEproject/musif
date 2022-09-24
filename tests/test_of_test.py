@@ -33,7 +33,9 @@ def checktype(x, check_type):
     elif check_type == 'float':
         return not all(is_float_dtype(x[col]) for col in x.columns)
     elif check_type == 'int':
-        return not all(is_integer_dtype(x[col]) for col in x.columns)
+        x.dropna(inplace=True)
+        x_ = x.astype(int)
+        return not all(x_ == x) # in case there is any float value. Meant for int columns that might contain nans
     elif check_type == 'bool':
         return not all(is_bool_dtype(x[col]) for col in x.columns)
 
@@ -51,6 +53,7 @@ check_functions = {
 def check_rules_column(regex, rules, data, check_functions):
     # getting the portion of data that must be checked
     matched_data = data.filter(regex='\\b' + regex + '\\b')
+    
     if matched_data.empty:
         if rules.loc[regex, 'removed_postpro'] == 1:
             return
@@ -62,15 +65,16 @@ def check_rules_column(regex, rules, data, check_functions):
         action = rules.loc[regex, check]
         try:
             check_res = check_functions[check](matched_data, action)
-            if (type(check_res) is pd.DataFrame and check_res.size > 0) or (check_res is True):
+            if (type(check_res) is np.ndarray and check_res.size > 0) or (check_res is True):
                 if action == 'na':
                     continue
                 if type(action) is not str:
                     action='err'
                 action_fn = getattr(musif.logs, 'p' + action, musif.logs.perr)
                 action_fn(f"{check} found to be True for columns matched by the following regex:\n\t{regex}")
-                if type(check_res) is pd.DataFrame and action == 'err':
-                    print(check_res.to_string())
+                if type(check_res) is np.ndarray and action == 'err':
+                    print(f'Indexes are: {check_res} for columns {list(matched_data.columns)}')
+                    
                     
         except ValueError:
             # 1. possible errors connected with casting to float
