@@ -9,14 +9,13 @@ if __name__ == "__main__":
     # print('\nUpdating metadata files...')
     # os.system("python scripts/metadata_updater.py")
     check_file=None
-    data_dir = r'../Corpus/Half'
+    data_dir = r'../Corpus/Half/'
     data_dir = r'../Corpus/xml/'
     musescore_dir = r'../Corpus/musescore'
     
     prefix = 'martiser/'
     sufix='.csv'
-    name = prefix + "extraction_13_09_22"
-    
+    name = prefix + "extraction_23_09_22"
     
     check_file = name + '_1' + sufix
     
