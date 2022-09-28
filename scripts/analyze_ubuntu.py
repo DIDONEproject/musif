@@ -15,7 +15,7 @@ if __name__ == "__main__":
     
     prefix = 'martiser/'
     sufix='.csv'
-    name = prefix + "extraction_23_09_22"
+    name = prefix + "extraction_27_09_22"
     
     check_file = name + '_1' + sufix
     
