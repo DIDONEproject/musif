@@ -9,9 +9,6 @@ from musif.common.utils import read_object_from_json_file
 
 
 def translate_word(original_word: str, translations: dict) -> str:
-    # with open('internal_data/translations.pkl', 'rb') as f:
-    #     translations = pickle.load(f)
-
     parenthesis = original_word.find('(')
     word = original_word[:parenthesis] if '(' in original_word else original_word 
     word = word.lower().strip()

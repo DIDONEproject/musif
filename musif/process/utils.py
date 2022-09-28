@@ -13,7 +13,7 @@ from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PERCENTAGE,
                                                       KEY_PREFIX)
-from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
+from musif.extract.features.interval.constants import REPEATED_NOTES_COUNT, TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.extract.features.scoring.constants import (FAMILY_INSTRUMENTATION,
@@ -36,15 +36,17 @@ def merge_duetos_trios(df: DataFrame)-> None:
     
     df = df[df[VOICES].notna()]
     multiple_voices = df[df[VOICES].str.contains(',')]
+    multiple_voices = _remove_repeated_voices(multiple_voices)
+    
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages.')
     voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
     
     for index in tqdm(multiple_voices.index):
         name = df.at[index, FILE_NAME]
-        pinfo(f'\nMerging dueto/trieto {name}')
         all_voices = df.at[index, VOICES].split(',')
         if all(x == all_voices[0] for x in all_voices):
             continue
+        pinfo(f'\nMerging dueto/trieto {name}')
         first_voice = all_voices[0]
         columns_to_merge = [i for i in voice_cols if first_voice in i.lower()]
         for col in columns_to_merge:
@@ -65,6 +67,14 @@ def merge_duetos_trios(df: DataFrame)-> None:
             else:
                 df.at[index,formatted_col] = df.loc[index, similar_cols].mean()        
     return df
+
+def _remove_repeated_voices(multiple_voices):
+    repeated_voices_indexes= []
+    for i,row in multiple_voices.iterrows():
+        if all(x == row[VOICES].split(',')[0] for x in row[VOICES].split(',')):
+            repeated_voices_indexes.append(i)
+    multiple_voices=multiple_voices[~multiple_voices.index.isin(repeated_voices_indexes)]
+    return multiple_voices
 
 def merge_single_voices(df: DataFrame) -> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
