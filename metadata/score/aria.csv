@@ -1589,65 +1589,65 @@ AriaId,Form,Character,Gender,RoleType,City,Territory
 1588,Dal segno,Araspe,Male,Male lover 3,Venice,Italy
 1589,AA,Cherinto,Male,Male lover 2,Treviso,Italy
 1590,Dal segno,Creusa,Female,Female lover 2,Treviso,Italy
-1591,,,Male,,Venice,Italy
-1592,,,Male,,,
-1593,,,Male,,,
-1594,,,Male,,,
-1595,,,Male,,,
-1596,,,Male,,,
-1597,,,Male,,,
-1598,,,Male,,,
-1599,,,Male,,,
-1600,,,Male,,,
-1601,,,Male,,,
-1602,,,Male,,,
-1603,,,Male,,,
-1604,,,Male,,,
-1605,,,Male,,,
-1606,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
-,,,Male,,,
+1591,Dal segno,Creusa,Female,Female lover 2,Treviso,Italy
+1592,ABA,Adrasto,Male,Confidant,Treviso,Italy
+1593,ABA,Matusio,Male,Antagonist,Treviso,Italy
+1594,Dal segno,Dircea,Female,Female lover 1,Treviso,Italy
+1595,ABA,Demofoonte,Male,Senior ruler,Treviso,Italy
+1596,Dal segno,Timante,Male,Male lover 1,Treviso,Italy
+1597,ABA,Dircea,Female,Female lover 1,Treviso,Italy
+1598,Dal segno,Demofoonte,Male,Senior ruler,Treviso,Italy
+1599,Dal segno,Dircea,Female,Female lover 1,Treviso,Italy
+1600,Dal segno,Timante,Male,Male lover 1,Treviso,Italy
+1601,ABA,Cherinto,Male,Male lover 2,Treviso,Italy
+1602,ABA,Timante,Male,Male lover 1,Treviso,Italy
+1603,Dal segno,Cherinto,Male,Male lover 2,Treviso,Italy
+1604,Dal segno,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Treviso,Italy
+1605,ABA,Demofoonte,Male,Senior ruler,Treviso,Italy
+1606,Dal segno,Demofoonte,Male,Senior ruler,Rome,Italy
+1607,Dal segno,"Dircea,Timante",Female&Male,"Female lover 1,Male lover 1",Rome,Italy
+1608,Dal segno,"Cleofide,Poro",Female&Male,"Female lover 1,Male lover 1",Stuttgart,Empire
+1609,Dal segno,Alessandro,Male,Male lover 2,Stuttgart,Empire
+1610,Dal segno,Cleofide,Female,Female lover 1,Stuttgart,Empire
+1611,Dal segno,Poro,Male,Male lover 1,Stuttgart,Empire
+1612,Dal segno,Gandarte,Male,Male lover 3,Stuttgart,Empire
+1613,AA,Cleofide,Female,Female lover 1,Stuttgart,Empire
+1614,A,Enea,Male,Male lover 1,Milan,Italy
+1615,ABA,Selene,Female,Female lover 2,Milan,Italy
+1616,ABA,Erissena,Female,Female lover 2,Stuttgart,Empire
+1617,Dal segno,Didone,Female,Female lover 1,Milan,Italy
+1618,Dal segno,Araspe,Male,Male lover 3,Milan,Italy
+1619,AA,Iarba,Male,Male lover 2,Milan,Italy
+1620,ABA,Araspe,Male,Male lover 3,Milan,Italy
+1621,Dal segno,Didone,Female,Female lover 1,Milan,Italy
+1622,Dal segno,Iarba,Male,Male lover 2,Milan,Italy
+1623,Dal segno,Iarba,Male,Male lover 2,Milan,Italy
+1624,Dal segno,Selene,Female,Female lover 2,Milan,Italy
+1625,A,Enea,Male,Male lover 1,Naples,Italy
+1626,ABA,Araspe,Male,Male lover 3,Naples,Italy
+1627,ABA,Enea,Male,Male lover 1,Naples,Italy
+1628,ABA,Selene,Female,Female lover 2,Naples,Italy
+1629,ABA,Araspe,Male,Male lover 3,Naples,Italy
+1630,A,Didone,Female,Female lover 1,Naples,Italy
+1631,A,Didone,Female,Female lover 1,Naples,Italy
+1632,ABA,Iarba,Male,Male lover 2,Naples,Italy
+1633,ABA,Selene,Female,Female lover 2,Naples,Italy
+1634,A,Enea,Male,Male lover 1,Vicenza,Italy
+1635,Dal segno,Selene,Female,Female lover 2,Vicenza,Italy
+1636,A,Osmida,Male,Antagonist,Vicenza,Italy
+1637,ABA,Didone,Female,Female lover 1,Vicenza,Italy
+1638,ABA,Araspe,Male,Male lover 3,Vicenza,Italy
+1639,ABA,Iarba,Male,Male lover 2,Vicenza,Italy
+1640,A,Iarba,Male,Male lover 2,Vicenza,Italy
+1641,ABA,Osmida,Male,Antagonist,Vicenza,Italy
+1642,,,Male,,,
+1643,,,Male,,,
+1644,,,Male,,,
+1645,,,Male,,,
+1646,,,Male,,,
+1647,,,Male,,,
+1648,,,Male,,,
+1649,,,Male,,,
 ,,,Male,,,
 ,,,Male,,,
 ,,,Male,,,

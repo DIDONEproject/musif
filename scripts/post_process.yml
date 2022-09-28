@@ -4,7 +4,7 @@ log:
   console_level: WARN
 internal_data_dir: musif/internal_data
 checking_file: parsed_files.csv
-delete_failed_files: True
+delete_failed_files: False
 delete_files_without_harmony: True
 merge_voices: False
 grouped_analysis: True
@@ -22,13 +22,20 @@ instruments_to_delete: #'Part' + inst in column
   - Va
   - Eh
   - Tbn
+  - TbI
   - Timp
+  - Tr
+  - TrI
   - BsI
   - BsII
   - VeI
   - VeII
+  - CI
+  - CiII
+  - CiI
   
 substring_to_delete: #inst in column
+  - Bn
   - VeII
   - VnII
   - VnIV
