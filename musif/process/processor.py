@@ -20,7 +20,7 @@ from musif.extract.features.scoring.constants import (INSTRUMENTATION, ROLE_TYPE
 from musif.logs import perr, pinfo, pwarn
 from musif.process.constants import (PRESENCE, label_by_col, metadata_columns,
                                      priority_columns, voices_list_prefixes)
-from musif.process.utils import (delete_columns, join_keys,
+from musif.process.utils import (_join_double_bass, delete_columns, join_keys,
                                  join_keys_modulatory, join_part_degrees,
                                  log_errors_and_shape, merge_duetos_trios,
                                  merge_single_voices, split_passion_A)
@@ -225,13 +225,9 @@ class DataProcessor:
         self.data.drop(columns_to_delete, axis=1, inplace=True)
         
         
-        self.data.drop([i for i in self.data.columns if 'PartBsII' in i], axis=1, inplace=True)
-        double_bass_columns = [i for i in self.data.columns if 'PartBsI' in i]
-        for col in double_bass_columns:
-            formatted_col = col.replace('BsI_','Bs_')
-            self.data[formatted_col].fillna(0)
-            self.data[formatted_col] = self.data[[formatted_col,col]].sum(axis=1)
-        self.data.drop(double_bass_columns, axis=1, inplace=True)
+        self.data = _join_double_bass(self.data)
+
+
             
     def unbundle_instrumentation(self) -> None:
         """Separates Instrumentation column into as many columns as instruments present in Instrumentation,

@@ -30,7 +30,6 @@ def replace_nans(df):
             if 'Interval' in col or col.startswith('Key_') or col.startswith((CHORD_prefix,'Chords_','Additions_','Numerals_')) or col.endswith(('_DottedRhythm','_DoubleDottedRhythm'))  or ('_Degree' and TRIMMED_INTERVALLIC_MEAN and '_Dyn') in col:
                 df[col]= df[col].fillna('NA')
             
-
 def merge_duetos_trios(df: DataFrame)-> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
     
@@ -96,7 +95,24 @@ def merge_single_voices(df: DataFrame) -> None:
                 df[colum].fillna(0, inplace=True)
             df[formatted_col] = df[columns_to_merge].sum(axis=1)
 
-                
+def _join_double_bass(df: DataFrame):
+    df.drop([i for i in df.columns if 'PartBsII' in i], axis=1, inplace=True)
+    double_bass_columns = [i for i in df.columns if 'PartBsI' in i]
+    for col in double_bass_columns:
+        formatted_col = col.replace('BsI_','Bs_')
+        df[formatted_col].fillna(0)
+        if df[formatted_col].dtypes==object:
+            df[formatted_col] = df[formatted_col].astype(str)
+            df[double_bass_columns] = df[double_bass_columns].astype(str)
+            df[formatted_col] = df[double_bass_columns].sum(axis=1)
+            df[formatted_col] = [i.replace('nan','') for i in df[formatted_col]]
+        else:
+            df[formatted_col] = df[[formatted_col,col]].sum(axis=1)
+    df.drop(double_bass_columns, axis=1, inplace=True)
+                 
+    return df
+
+
 def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame, sufix: str= '') -> None:
     part_degrees = [i for i in total_degrees if part in i]
 
@@ -167,27 +183,27 @@ def split_passion_A(data: DataFrame) -> None:
     data.drop('Label_PassionA', axis = 1, inplace=True)
   
 def join_keys(df: DataFrame) -> None:
-        key_SD = [i for i in [KEY_PREFIX+'IV'+KEY_PERCENTAGE, KEY_PREFIX+'II'+KEY_PERCENTAGE, KEY_PREFIX+'VI'+KEY_PERCENTAGE] if i in df]
-        key_sd =  [i for i in [KEY_PREFIX+'iv'+KEY_PERCENTAGE, KEY_PREFIX+'ii'+KEY_PERCENTAGE] if i in df]
-        key_tonic =  [i for i in [KEY_PREFIX+'I'+KEY_PERCENTAGE, KEY_PREFIX+'i'+KEY_PERCENTAGE] if i in df]
-        key_rel =  [i for i in [KEY_PREFIX+'III'+KEY_PERCENTAGE, KEY_PREFIX+'vi'+KEY_PERCENTAGE] if i in df]
+        key_SD = [i for i in [KEY_PREFIX + 'IV' + KEY_PERCENTAGE, KEY_PREFIX + 'II' + KEY_PERCENTAGE, KEY_PREFIX + 'VI' + KEY_PERCENTAGE] if i in df]
+        key_sd =  [i for i in [KEY_PREFIX + 'iv' + KEY_PERCENTAGE, KEY_PREFIX + 'ii' + KEY_PERCENTAGE] if i in df]
+        key_tonic =  [i for i in [KEY_PREFIX + 'I' + KEY_PERCENTAGE, KEY_PREFIX + 'i' + KEY_PERCENTAGE] if i in df]
+        key_rel =  [i for i in [KEY_PREFIX + 'III' + KEY_PERCENTAGE, KEY_PREFIX + 'vi' + KEY_PERCENTAGE] if i in df]
 
         total_key=key_rel+key_tonic+key_sd+key_SD
         others_key=[i for i in df.columns if KEY_PREFIX in i and i not in total_key and KEY_MODULATORY not in i]
 
         df[KEY_PREFIX + 'SD' + KEY_PERCENTAGE]=df[key_SD].sum(axis=1)
-        df[KEY_PREFIX+'sd'+KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
-        df[KEY_PREFIX+'SubD'+KEY_PERCENTAGE]=df[KEY_PREFIX+'sd'+KEY_PERCENTAGE] + df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]
-        df[KEY_PREFIX+'T'+KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
-        df[KEY_PREFIX+'rel'+KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
-        df[KEY_PREFIX+'Other'+KEY_PERCENTAGE] = df[others_key].sum(axis=1)
-        # df.drop(total_key+others_key, axis = 1, inplace=True)
+        df[KEY_PREFIX + 'sd'+ KEY_PERCENTAGE]=df[key_sd].sum(axis=1)
+        df[KEY_PREFIX + 'SubD' + KEY_PERCENTAGE]=df[KEY_PREFIX+'sd'+KEY_PERCENTAGE] + df[KEY_PREFIX+'SD'+KEY_PERCENTAGE]
+        df[KEY_PREFIX + 'T' + KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
+        df[KEY_PREFIX + 'rel' + KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
+        df[KEY_PREFIX + 'Other' + KEY_PERCENTAGE] = df[others_key].sum(axis=1)
+        # df.drop(total_key + others_key, axis = 1, inplace=True)
 
 def join_keys_modulatory(df: DataFrame):
-        key_SD = [i for i in [KEY_PREFIX+KEY_MODULATORY+'IV',KEY_PREFIX+KEY_MODULATORY+'II', KEY_PREFIX+KEY_MODULATORY+'VI'] if i in df]
-        key_sd = [i for i in [KEY_PREFIX+KEY_MODULATORY+'iv',KEY_PREFIX+KEY_MODULATORY+'ii'] if i in df]
-        key_tonic = [i for i in [KEY_PREFIX+KEY_MODULATORY+'I',KEY_PREFIX+KEY_MODULATORY+'i'] if i in df]
-        key_rel = [i for i in [KEY_PREFIX+KEY_MODULATORY+'III',KEY_PREFIX+KEY_MODULATORY+'vi'] if i in df]
+        key_SD = [i for i in [KEY_PREFIX+KEY_MODULATORY + 'IV',KEY_PREFIX+KEY_MODULATORY+'II', KEY_PREFIX+KEY_MODULATORY+'VI'] if i in df]
+        key_sd = [i for i in [KEY_PREFIX+KEY_MODULATORY + 'iv',KEY_PREFIX+KEY_MODULATORY+'ii'] if i in df]
+        key_tonic = [i for i in [KEY_PREFIX+KEY_MODULATORY + 'I',KEY_PREFIX+KEY_MODULATORY+'i'] if i in df]
+        key_rel = [i for i in [KEY_PREFIX+KEY_MODULATORY + 'III',KEY_PREFIX+KEY_MODULATORY+'vi'] if i in df]
 
         total_key_mod=key_rel+key_tonic+key_sd+key_SD
         others_key_mod=[i for i in df.columns if KEY_PREFIX+KEY_MODULATORY in i and i not in total_key_mod]

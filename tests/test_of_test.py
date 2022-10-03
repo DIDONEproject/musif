@@ -8,7 +8,6 @@ POSSIBLE VALUES
 Only for `minval` and `maxval`: numbers (anything if not appliable)
 
 """
-from tkinter.tix import Tree
 import pandas as pd
 from pandas.api.types import is_integer_dtype, is_float_dtype, is_string_dtype, is_bool_dtype
 import numpy as np
@@ -20,8 +19,9 @@ musif.logs.logger().setLevel(musif.logs.LEVEL_INFO)
 features_definition = pd.read_excel('tests/FeaturesDefinition.xlsx')
 rules = features_definition.iloc[:, 5:]
 rules.set_index(features_definition['Name'], inplace=True)
+data = pd.read_csv('martiser/extraction_total'+'_alldata.csv', header=0, index_col=False)
 
-data = pd.read_csv('martiser/extraction_01_08_22_total_alldata.csv', header=0, index_col=False)
+
 def checktype(x, check_type):
     """
     check that any columns in `df` is not of type `t`
@@ -49,6 +49,7 @@ check_functions = {
         'maxval': lambda x, y:  np.asarray(list(x.index))[(x.select_dtypes([int, float]) > float(y)).to_numpy()[:, 0]],
         'data_type': checktype
         }
+
 
 def check_rules_column(regex, rules, data, check_functions):
     # getting the portion of data that must be checked
