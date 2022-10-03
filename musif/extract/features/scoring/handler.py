@@ -17,7 +17,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     instrumental = part_data[DATA_FAMILY] != VOICE_FAMILY
     part_features.update({
         PART_NAME: part.partName,
-        # PART_NAME: part.getInstrument().instrumentSound.split('.')[-1].capitalize(),
         PART_NUMBER: part_data[DATA_PART_NUMBER],
         PART_ABBREVIATION: part_data[DATA_PART_ABBREVIATION],
         SOUND: part_data[DATA_SOUND],
@@ -64,6 +63,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         filtered_count_by_family[family_abbreviation] += 1 if is_matching_part else 0
         if sound not in sounds:
             sounds.append(sound)
+        if sound_abbreviation not in sound_abbreviations:
             sound_abbreviations.append(sound_abbreviation)
             if instrumental:
                 instrument_abbreviations.append(sound_abbreviation)
