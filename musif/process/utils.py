@@ -100,8 +100,8 @@ def _join_double_bass(df: DataFrame):
     double_bass_columns = [i for i in df.columns if 'PartBsI' in i]
     for col in double_bass_columns:
         formatted_col = col.replace('BsI_','Bs_')
-        df[formatted_col].fillna(0)
-        if df[formatted_col].dtypes==object:
+        df[formatted_col].fillna(0, inplace = True)
+        if df[formatted_col].dtypes == object:
             df[formatted_col] = df[formatted_col].astype(str)
             df[double_bass_columns] = df[double_bass_columns].astype(str)
             df[formatted_col] = df[double_bass_columns].sum(axis=1)
@@ -111,7 +111,6 @@ def _join_double_bass(df: DataFrame):
     df.drop(double_bass_columns, axis=1, inplace=True)
                  
     return df
-
 
 def join_part_degrees(total_degrees: List[str], part: str, df: DataFrame, sufix: str= '') -> None:
     part_degrees = [i for i in total_degrees if part in i]

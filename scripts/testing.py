@@ -11,9 +11,10 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale13M-Senza_procelle-1744-Gluck[2.04][1244].xml'
+    #PartBsI_Density i s Nan
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale03M-Vil_trofeo-1791-Tarchi[1.03][1019].xml'
     #test
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
+    # data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did03M-Son_regina-1730-Sarro[1.05][0006].xml'
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     
     df = FeaturesExtractor("scripts/config_tests.yml", data_dir=data_dir, musescore_dir=musescore_dir).extract()
