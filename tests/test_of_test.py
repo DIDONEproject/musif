@@ -15,7 +15,6 @@ import musif.logs
 from joblib import Parallel, delayed
 
 musif.logs.logger().setLevel(musif.logs.LEVEL_INFO)
-# rules = pd.read_csv('tests/test_unit_rules.csv', header=0, index_col=0)
 features_definition = pd.read_excel('tests/FeaturesDefinition.xlsx')
 rules = features_definition.iloc[:, 5:]
 rules.set_index(features_definition['Name'], inplace=True)
@@ -72,7 +71,7 @@ def check_rules_column(regex, rules, data, check_functions):
                 if type(action) is not str:
                     action='err'
                 action_fn = getattr(musif.logs, 'p' + action, musif.logs.perr)
-                action_fn(f"{check} found to be True for columns matched by the following regex:\n\t{regex}")
+                action_fn(f"{check} found to be True for columns matched by the following regex:\n\t{regex}. Columns: {matched_data.columns}")
                 if type(check_res) is np.ndarray and action == 'err':
                     print(f'Indexes are: {check_res} for columns {list(matched_data.columns)}')
                     
