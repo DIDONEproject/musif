@@ -81,31 +81,7 @@ def split_layers(score: Score, split_keywords: List[str]):
                     break
 
             if has_voices:  # recorrer los compases buscando las voices y separamos en dos parts
-                parts_splitted = part.voicesToParts().elements
-                # num_measure = -1
-                for measure in part.elements:
-                    # add missing information to both parts (dynamics, text annotations, etc are missing)
-                    if isinstance(measure, Measure) and any(
-                        not isinstance(e, Voice) for e in measure.elements
-                    ):
-                        not_voices_elements = [
-                            e for e in measure.elements if not isinstance(e, Voice)
-                        ]  # elements such as clefs, dynamics, text annotations...
-                        # introducimos esta información en cada voz:
-                        for p in parts_splitted:
-                            if measure.measureNumber-1 > 0:
-                                if not isinstance(p.elements[measure.measureNumber-1], Measure):
-                                    continue
-                                p.elements[measure.measureNumber-1].elements += tuple(
-                                    e for e in not_voices_elements if e not in p.elements[measure.measureNumber-1].elements
-                                )
-                for num, p in enumerate(parts_splitted, 1):
-                    p_copy = copy.deepcopy(part)
-                    p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
-                    p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
-                    p_copy.elements = p.elements
-                    final_parts.append(p_copy)
-                score.remove(part)
+                _separate_info_in_two_parts(score, final_parts, part)
             else:
                 final_parts.append(part)  # without any change
                 score.remove(part)
@@ -117,7 +93,42 @@ def split_layers(score: Score, split_keywords: List[str]):
         try:
             score.insert(0, part)
         except:
-            pass  # already inserted
+            pass 
+
+def _separate_info_in_two_parts(score, final_parts, part):
+    parts_splitted = part.voicesToParts().elements
+    num_measure = 0
+    for measure in part.elements:
+                    # add missing information to both parts (dynamics, text annotations, etc are missing)
+        i=1
+        if isinstance(measure, Measure): 
+            num_measure +=1
+            if any(
+                            not isinstance(e, Voice) for e in measure.elements
+                        ):
+                not_voices_elements = [
+                                e for e in measure.elements if not isinstance(e, Voice)
+                            ]  # elements such as clefs, dynamics, text annotations...
+                for p in parts_splitted:
+                    if measure.measureNumber == 0 and isinstance(measure, Measure):
+                        number = measure.measureNumber+1
+                        
+                        p.elements[num_measure].elements += tuple(
+                                        e for e in not_voices_elements if e not in p.elements[num_measure].elements
+                                    )
+                    if measure.measureNumber > 0:
+                        if not isinstance(p.elements[num_measure], Measure):
+                            continue
+                        p.elements[num_measure].elements += tuple(
+                                        e for e in not_voices_elements if e not in p.elements[num_measure].elements
+                                    )
+    for num, p in enumerate(parts_splitted, 1):
+        p_copy = copy.deepcopy(part)
+        p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
+        p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
+        p_copy.elements = p.elements
+        final_parts.append(p_copy)
+    score.remove(part) # already inserted
 
 
 def get_part_clef(part):
