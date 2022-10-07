@@ -22,10 +22,10 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     last_dyn = 0
     number_of_beats = 1
     name = ""
-    old_beat=0
+    old_beat = 0
     dyn = False
-    first_silence=False
-    beats_timesignature=get_number_of_beats('4/4')
+    first_silence = False
+    beats_timesignature = get_number_of_beats('4/4')
 
     for measure in part_data["measures"]:
         measure_elements = list(measure.elements)

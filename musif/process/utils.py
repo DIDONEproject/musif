@@ -34,9 +34,8 @@ def merge_duetos_trios(df: DataFrame)-> None:
     generic_sound_voice_prefix = get_sound_prefix('Voice')
     
     df = df[df[VOICES].notna()]
-    multiple_voices = df[df[VOICES].str.contains(',')]
+    multiple_voices = df[df[VOICES].str.contains(',')] 
     multiple_voices = _remove_repeated_voices(multiple_voices)
-    
     pinfo(f'{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages.')
     voice_cols = [col for col in df.columns.values if any(voice in col for voice in voices_list_prefixes)]
     
