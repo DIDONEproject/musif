@@ -3,9 +3,9 @@ from typing import List
 from music21.note import Note
 from numpy import mean
 
-from musif.common.constants import VOICE_FAMILY
+from musif.common._constants import VOICE_FAMILY
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_LYRICS, DATA_NOTES
 from musif.extract.features.prefix import get_part_feature, get_score_feature
@@ -29,7 +29,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 
@@ -60,7 +60,7 @@ def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:
     return len(notes) / len(lyrics)
 
 
-def get_voice_reg(notes):
+def get_voice_reg(notes: List[Note]) -> float:
     if notes:
         last_note = notes[-1].notes[0].pitch.midi if notes[-1].isChord else notes[-1].pitch.midi
         # If we wave 2 or more notes at once, we just take the lowest one

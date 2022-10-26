@@ -1,3 +1,4 @@
+from asyncio import constants
 import re
 from collections import Counter
 from statistics import mean, stdev
@@ -13,6 +14,8 @@ from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_INTERVALS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
+
+from musif.extract.common import _mix_data_with_precedent_data
 from .constants import *
 
 
@@ -34,11 +37,28 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     for part_data, part_features in zip(parts_data, parts_features):
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
         intervals = part_data[DATA_INTERVALS]
-        features.update(get_interval_features(intervals, part_prefix))
-        features.update(get_interval_count_features(intervals, part_prefix))
-        features.update(get_interval_type_features(intervals, part_prefix))
-        features.update(get_interval_stats_features(intervals, part_prefix))
-
+        interval_features = get_interval_features(intervals, part_prefix)
+        interval_count_features=get_interval_count_features(intervals, part_prefix)
+        interval_type_features=get_interval_type_features(intervals, part_prefix)
+        interval_stats_features=get_interval_stats_features(intervals, part_prefix)
+        
+        if all([i in features for i in interval_features.keys()]):
+            _mix_data_with_precedent_data(features, interval_features)
+        else:
+            features.update(interval_features)
+        if all([i in features for i in interval_count_features.keys()]):
+                _mix_data_with_precedent_data(features, interval_count_features)
+        else:
+            features.update(interval_count_features)
+        if all([i in features for i in interval_type_features.keys()]):
+                    _mix_data_with_precedent_data(features, interval_type_features)
+        else:
+            features.update(interval_type_features)
+        if all([i in features for i in interval_stats_features.keys()]):
+                    _mix_data_with_precedent_data(features, interval_stats_features)
+        else:
+            features.update(interval_stats_features)
+            
     parts_data_per_sound = {part_data[DATA_SOUND_ABBREVIATION]: [] for part_data in parts_data}
     for part_data in parts_data:
         sound = part_data[DATA_SOUND_ABBREVIATION]
@@ -59,6 +79,8 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     features.update(get_interval_stats_features(score_intervals, score_prefix))
 
     score_features.update(features)
+
+
 
 
 def get_interval_features(intervals: List[Interval], prefix: str = ""):
@@ -94,9 +116,9 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     ascending_intervals_percentage = num_ascending_intervals / len(intervals) if len(intervals) > 0 else 0
     descending_intervals_percentage = num_descending_intervals / len(intervals) if len(intervals) > 0 else 0
 
-    largest_semitones = max(numeric_intervals) if len(intervals) > 0 else None
-    largest = Interval(largest_semitones).directedName if len(intervals) > 0 else None
-    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(intervals) > 0 else None
+    largest_semitones = max(numeric_intervals) if len(numeric_intervals) > 0 else None
+    largest = Interval(largest_semitones).directedName if len(numeric_intervals) > 0 else None
+    smallest_semitones = sorted(numeric_intervals, key=abs)[0] if len(numeric_intervals) > 0 else None
     smallest = Interval(smallest_semitones).directedName if len(intervals) > 0 else None
     largest_ascending_semitones = max(ascending_intervals) if len(ascending_intervals) > 0 else None
     largest_ascending = Interval(largest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
@@ -106,7 +128,7 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     smallest_ascending = Interval(smallest_ascending_semitones).directedName if len(ascending_intervals) > 0 else None
     smallest_descending_semitones = max(descending_intervals) if len(descending_intervals) > 0 else None
     smallest_descending = Interval(smallest_descending_semitones).directedName if len(descending_intervals) > 0 else None
-
+    
     features = {
         f"{prefix}{MEAN_INTERVAL}": mean_interval,
         f"{prefix}{INTERVALLIC_MEAN}": intervallic_mean,
@@ -159,7 +181,7 @@ def get_interval_count_features(intervals: List[Interval], prefix: str = "") -> 
     interval_features = {}
     for interval, count in interval_counts.items():
         interval_features[INTERVAL_COUNT.format(prefix=prefix, interval=interval)] = count
-        interval_features[INTERVAL_PER.format(prefix=prefix, interval=interval)] = count / total_count
+        interval_features[INTERVAL_PER.format(prefix=prefix, interval=interval)] = count / total_count if total_count else 0
     return interval_features
 
 

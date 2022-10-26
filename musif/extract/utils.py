@@ -114,7 +114,7 @@ def process_musescore_file(file_path, expand_repeats):
 def include_beats(harmonic_analysis: DataFrame) -> None:
     harmonic_analysis['beats']=0
     for index, measure in enumerate(harmonic_analysis[PLAYTHROUGH].values):
-        if measure<=1:
+        if measure <=1:
             beat = int(measure + float(harmonic_analysis.mc_onset[index])*get_number_of_beats(harmonic_analysis.timesig[index]))
         else:
             time_sig = get_number_of_beats(harmonic_analysis.timesig[index-1])
@@ -310,7 +310,7 @@ def remove_folder_contents(path: str):
             remove_folder_contents(file_path)
 
 # TODO: rename without the capital G
-def Get_TimeSignature_periods(time_signatures):
+def get_timesignature_periods(time_signatures):
     # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
     periods = [0]
     if len(time_signatures) == 0:

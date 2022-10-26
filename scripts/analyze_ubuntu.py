@@ -9,16 +9,21 @@ if __name__ == "__main__":
     # print('\nUpdating metadata files...')
     # os.system("python scripts/metadata_updater.py")
     check_file=None
-    data_dir = r'../Corpus/xml'
-    # data_dir = r'../Corpus/Half_Corpus'
+    data_dir = r'../Corpus/Half/'
+    data_dir = r'../Corpus/xml/'
     musescore_dir = r'../Corpus/musescore'
     
-    # check_file = 'parsed_files_total.csv'
-    name = "features_09_05"
-    check_file=name+"_extraction.csv"
+    prefix = 'martiser/'
+    sufix='.csv'
+    name = prefix + "extraction_27_09_22"
     
+    check_file = name + '_1' + sufix
+    
+    dest_path = name + "_2"+ sufix
+
     df = FeaturesExtractor("scripts/config_drive.yml", data_dir=data_dir, musescore_dir=musescore_dir, check_file=check_file).extract()
-    dest_path=name+"_extraction_2.csv"
-    df.to_csv(dest_path, index=False)
+    
+    df.to_csv(dest_path,index=False)
+    k=1
     
 

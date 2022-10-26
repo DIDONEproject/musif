@@ -1,27 +1,36 @@
 from ast import List
 import csv
+from pickle import DEFAULT_PROTOCOL
 import pandas as pd
 
 
-# def read_dicts_from_csv(file_path: str) -> List[dict]:
-#     with open(file_path, "r", encoding='utf8') as file:
-#         return [obj for obj in csv.DictReader(file)]
+def add_duetos_gender(df_arias):
+    for index, _ in enumerate(df_arias['RoleType']):
+        value = df_arias['RoleType'].iat[index]
+        if str(value) == 'nan':
+            continue
+        if ',' in value:
+            characters = value.split(',')
+            df_arias['Gender'].iat[index] = '&'.join(['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in characters])
 
 if __name__ == "__main__":
     #Arias.csv
-    base_path=r'../../_Ana/Music Analysis/'
-    des_path=r'../musif/metadata/score/'
+    base_path = r'../../_Ana/Music Analysis/'
+    des_path = r'../musif/metadata/score/'
 
    # passions
     passions_route= '../../_AlDaniMartiAnni/' + 'Passions.xlsx'
     df_passions = pd.read_excel(passions_route, header=0)
-    df_passions.to_csv('scripts/Passions.csv',  index=False)
+    df_passions.to_csv('musif/internal_data/Passions.csv',  index=False)
 
     # arias.csv
-    arias_route=base_path+'Arias_change.xlsx'
+    arias_route = base_path+'Arias_change.xlsx'
     df_arias = pd.read_excel(arias_route, header=2)
     df_arias.rename(columns={'ID': 'AriaId', 'Country':'Territory', 'Type': 'RoleType'}, inplace=True)
-    df_arias['Gender']= ['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in df_arias['RoleType']]
+    
+    df_arias['Gender'] = ['Female' if str(i).split(' ')[0].startswith('Female') else 'Male' for i in df_arias['RoleType']]
+    add_duetos_gender(df_arias)
+            
     columns=['AriaId','Form','Character','Gender','RoleType','City','Territory']
     df_arias=df_arias[columns]
     df_arias.to_csv(des_path + 'aria.csv', index=False)
@@ -33,7 +42,6 @@ if __name__ == "__main__":
     columns=['AriaId','Character','Clef1', 'Clef2', 'Clef3']
     df_clefs=df_clefs[columns]
     df_clefs.to_csv(des_path + 'clefs.csv', index=False)
-    pass    
     
     # themeA
     themeA_route = base_path + 'Arias_proportions.xlsx'

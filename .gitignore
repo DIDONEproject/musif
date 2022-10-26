@@ -4,6 +4,7 @@ martiser/myconfig.yml
 results
 ./reports
 .vscode
+build
 .idea
 *.ini
 **/*.log
@@ -13,3 +14,4 @@ __pycache__
 raw_files
 failed_files.txt
 .Rproj.user
+musif.egg-info

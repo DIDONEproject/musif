@@ -1,20 +1,21 @@
 import glob
 import inspect
+import os
+from pathlib import Path
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
+import sys
 from typing import Dict, List, Optional, Tuple, Union
-from urllib.request import parse_keqv_list # TODO: imported but not used!
 
-import ms3 # TODO: imported but not used!
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Part, Score
 from musif.common.cache import Cache
-from musif.common.constants import FEATURES_MODULE, GENERAL_FAMILY
+from musif.common._constants import FEATURES_MODULE, GENERAL_FAMILY
 from musif.common.sort import sort_list
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import _filter_parts_data
 # TODO: I would suggest:
 # from musif.extract import constants as C
 # because it better allows type checking and autocompletion in editors
@@ -30,8 +31,6 @@ from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,
                                     to_abbreviation)
 from pandas import DataFrame
 from tqdm import tqdm
-
-from musif.mlogger import MPLogger
 
 _cache = Cache(10000)  # To cache scanned scores
 
@@ -81,7 +80,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         Parameters
         ----------
         file_path: str
-            A path to a music xml path.
+            A path to a music mscx path.
         expand_repeats: bool
             Determines whether to expand or not the repetitions. Default value is False.
 
@@ -247,6 +246,7 @@ class PartsExtractor:
           If the provided string is neither a directory nor a file path
         """
         musicxml_files = extract_files(obj, check_file = check_file)
+        
         parts = list({part for musicxml_file in musicxml_files for part in self._process_score(musicxml_file)})
         abbreviated_parts_scoring_order = [instr + num
                                            for instr in self._cfg.scoring_order
@@ -390,8 +390,16 @@ class FeaturesExtractor:
         linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
+        if self._cfg.is_requested_musescore_file():
+            self._find_mscx_files()
         score_df, parts_df = self._process_corpora(musicxml_files)
         return score_df
+
+    def _find_mscx_files(self):
+        for name in glob.glob(self._cfg.data_dir+'*.xml'):
+            if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
+                perr(f"\nNo mscx was found for file {name}")
+                # sys.exit()
 
     def _process_corpora(self, musicxml_files: List[str]) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
@@ -448,11 +456,10 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        # linfo(f"\nProcessing score {musicxml_file}")  
         pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
-        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
+        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for module in self._extract_feature_modules():
@@ -484,6 +491,7 @@ class FeaturesExtractor:
             try:
                 data[DATA_MUSESCORE_SCORE] = parse_musescore_file(musescore_file_path, self._cfg.expand_repeats)
             except ParseFileError as e:
+                data[DATA_MUSESCORE_SCORE] = None
                 lerr(str(e))
         return data
 
@@ -550,7 +558,7 @@ class FeaturesExtractor:
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict]):
         for part_data, part_features in zip(parts_data, parts_features):
-            module_name=str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
+            module_name = str(module.__name__).replace("musif.extract.features.", '').replace('.handler','')
             ldebug(f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.")
             try:
                 module.update_part_objects(score_data, part_data, self._cfg, part_features)
@@ -565,5 +573,5 @@ class FeaturesExtractor:
         try:
             module.update_score_objects(score_data, parts_data, self._cfg, parts_features, score_features)
         except Exception as e:
-            score_name=score_data['file']
+            score_name = score_data['file']
             perr(f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')

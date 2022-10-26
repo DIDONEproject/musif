@@ -20,21 +20,24 @@ features:
   - ambitus
   - interval
   - tempo
-  - density
-  - texture
-  - harmony
-  - lyrics
-  - scale
-  - scale_relative
-  - key
-  - dynamics
-  - rhythm
+  # - density
+  # - texture
+  # - harmony
+  # - lyrics
+  # - scale
+  # - scale_relative
+  # - key
+  # - dynamics    
+  # - rhythm
 
 split_keywords:  # Used to split the possible layers present depending on the instrument name
   - woodwind
   - brass
   - wind
   - viola
+  - strings.cello
+  - bass
+  - oboi
   
 parts_filter:
   # - vnI
@@ -43,9 +46,9 @@ parts_filter:
   # - obII
   # - va
   # - bs
-  - sop
-  - ten
-  - alt
-  - bar
-  - bass
-  - bbar
+  # - sop
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar

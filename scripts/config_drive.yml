@@ -5,7 +5,7 @@ musescore_dir: ../Corpus_Test/musescore
 checking_file: parsed_files.csv
 expand_repeats: false
 parallel: true
-max_processes: 12
+max_processes: 10
 log:
   file_path: logs/musif_extraction.log
   file_level: INFO
@@ -36,6 +36,7 @@ split_keywords:  # Used to split the possible layers present depending on the in
   - brass
   - wind
   - viola
+  - strings.cello
 
 parts_filter:
   # - vnI

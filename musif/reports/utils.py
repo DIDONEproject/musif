@@ -3,7 +3,7 @@ import os
 from typing import Dict, List
 
 import numpy as np
-from musif.common.constants import VOICE_FAMILY
+from musif.common._constants import VOICE_FAMILY
 from musif.common.sort import sort_dataframe
 from musif.config import Configuration
 from musif.reports.calculations import compute_average

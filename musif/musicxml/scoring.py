@@ -19,10 +19,11 @@ def extract_sound(part: Part, config: Configuration) -> str:
     instrument = part.getInstrument(returnDefault=False)
     sound_name = None
     if instrument is None or instrument.instrumentSound is None:
+    # if True:        
         sound_name = part.partName.strip().split(' ')[0]
         if sound_name not in config.sound_to_abbreviation:
             sound_name = translate_word(
-                sound_name, translations_cache=config.translations_cache)
+                sound_name, config.all_translations)
             sound_name = replace_naming_exceptions(sound_name, part)
             sound_name = sound_name if sound_name[-1] != 's' else sound_name[:-1]
     else:

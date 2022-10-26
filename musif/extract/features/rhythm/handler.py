@@ -107,14 +107,14 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
         
         
         
-    dotted_rhythm = [i for i in dotted_rhythm if i != 0.0]
+    dotted_rhythm = [i for i in dotted_rhythm if i not in (0.0,'NA')]
     features.update({
         # get_score_feature(AVERAGE_DURATION): mean(average_durations),
-        get_score_feature(AVERAGE_DURATION): mean([note for instrument in total_notes_duration for note in instrument]),
-        get_score_feature(RHYTHMINT): mean(rhythm_intensities) if rhythm_intensities else 0.0 ,
+        get_score_feature(AVERAGE_DURATION): np.mean([note for instrument in total_notes_duration for note in instrument]),
+        get_score_feature(RHYTHMINT): np.mean(rhythm_intensities) if rhythm_intensities else 0.0 ,
         # get_score_feature(RHYTHMINT): mean([rythm for instrument in rhythm_intensities for rythm in instrument])/score_features['Score_SoundingMeasures']*BEATS,
-        get_score_feature(DOTTEDRHYTHM): mean(dotted_rhythm) if dotted_rhythm else 0.0,
-        get_score_feature(DOUBLE_DOTTEDRHYTHM): mean(double_dotted_rhythm) if double_dotted_rhythm else 0.0
+        get_score_feature(DOTTEDRHYTHM): np.mean(dotted_rhythm) if dotted_rhythm else 0.0,
+        get_score_feature(DOUBLE_DOTTEDRHYTHM): np.mean(double_dotted_rhythm) if double_dotted_rhythm else 0.0
     })
 
     score_features.update(features)

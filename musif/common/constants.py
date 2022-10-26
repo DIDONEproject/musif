@@ -1,29 +1,26 @@
 import logging
 
-# TODO: document the variables that are needed
-# TODO: put the others in a private module (e.g. `_constants.py`)
-ENCODING = 'utf-8'
-VERSION = "1.0.0"
-CSV_DELIMITER = ","
-VOICE_FAMILY = "voice"
-GENERAL_FAMILY = "general"
-FEATURES_MODULE = "musif.extract.features"
+"""
+Common constants to be used transversaly throught modules
+"""
 
-
-BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
-
-#These are the sequences needed to get colored ouput
+"""Sequences needed to get colored ouput and reset back to normal"""
 RESET_SEQ = "\033[0m"
 COLOR_SEQ = "\033[1;%dm"
 BOLD_SEQ = "\033[1m"
 
+
+"""Logging constants to introduce in the logger"""
 LEVEL_DEBUG = logging.getLevelName(logging.DEBUG)
 LEVEL_INFO = logging.getLevelName(logging.INFO)
 LEVEL_WARNING = logging.getLevelName(logging.WARNING)
 LEVEL_ERROR = logging.getLevelName(logging.ERROR)
 LEVEL_CRITICAL = logging.getLevelName(logging.CRITICAL)
 
+"""Indexes for each color"""
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
+"""Dictionary to access different color indexes for logging"""
 COLORS = {
     LEVEL_DEBUG: BLUE,
     LEVEL_INFO: WHITE,

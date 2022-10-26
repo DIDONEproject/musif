@@ -7,7 +7,7 @@ from typing import Optional
 # TODO: document this module
 
 class TempoGroup2(Enum):
-    ND = "nd"
+    NA = "NA"
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
@@ -32,9 +32,8 @@ def get_tempo_grouped_1(tempo):
     """
     tempo = re.sub('\\W+', ' ', tempo)  # removes eventual special characters
     replacements = [(w, '') for w in ['molto', 'poco', 'un poco', 'tanto', 'un tanto', 'assai', 'meno', 'più', 'piuttosto']]
-    # tempo = tempo.strip()
     if not tempo:
-        return 'ND'
+        return 'NA'
 
     for r in replacements:
         tempo = tempo.replace(*r)
@@ -84,13 +83,13 @@ def get_tempo_grouped_1(tempo):
         else:
             return 'Con brio'
 
-    return 'ND'
+    return 'NA'
 
 
 def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
 
-    if tempo_grouped_1 is None or tempo_grouped_1.lower() == 'nd':
-        return TempoGroup2.ND
+    if tempo_grouped_1 is None or tempo_grouped_1.lower() == TempoGroup2.NA.value:
+        return TempoGroup2.NA.value
     possible_terminations = ['ino', 'etto', 'ietto', 'ssimo', 'issimo', 'hetto']
     slow_basis = ['Adagio', 'Affettuoso', 'Grave', 'Sostenuto', 'Largo', 'Lento', 'Sostenuto']
     slow = slow_basis + [w[:-1] + t for w in slow_basis for t in possible_terminations]
@@ -101,22 +100,22 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> TempoGroup2:
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
     if tempo_grouped_1 in ['A tempo', 'Giusto']:
-        return TempoGroup2.ND
+        return TempoGroup2.NA.value
     elif tempo_grouped_1 in slow:
-        return TempoGroup2.SLOW
+        return TempoGroup2.SLOW.value
     elif tempo_grouped_1 in moderate:
-        return TempoGroup2.MODERATE
+        return TempoGroup2.MODERATE.value
     elif tempo_grouped_1 in fast:
-        return TempoGroup2.FAST
+        return TempoGroup2.FAST.value
 
 
 def get_number_of_beats(time_signature: str) -> int:
     time_signature = time_signature.split(",")[0]
     if time_signature in ['1/2', '1/4', '1/8', '1/16','3/8']:
         return 1
-    if time_signature in ['2/2','2/4', '2/8', '2/16', '6/8', '6/2', '6/4', '6/16']:
+    if time_signature in ['2/2', '2/4', '2/8', '2/16', '6/8', '6/2', '6/4', '6/16']:
         return 2
-    if time_signature in ['3/2', '3/4', '3/16', '9/2', '9/4', '9/8', '9/16']:
+    if time_signature in ['3/1', '3/2', '3/4', '3/16', '9/2', '9/4', '9/8', '9/16']:
         return 3
     if time_signature in ['4/4', '4/2', '4/8', '4/16', 'C', '12/2', '12/4', '12/8', '12/16']: 
         return 4
@@ -135,5 +134,5 @@ def extract_numeric_tempo(file_path: str) -> Optional[int]:
     try:
         tempo = int(root.find("part").find("measure").find("direction").find("sound").get("tempo"))
     except:
-        tempo = None
+        tempo = 'NA'
     return tempo

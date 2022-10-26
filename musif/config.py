@@ -24,8 +24,10 @@ SPLIT_KEYWORDS = "split_keywords"
 PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 
+INTERNAL_DATA = "internal_data_dir"
 CHECK_FILE = "checking_file"
 DELETE_FILES = "delete_failed_files"
+DELETE_HARMONY ="delete_files_without_harmony"
 GROUPED = "grouped_analysis"
 SPLIT_PASSSIONS = "split_passionA"
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
@@ -35,6 +37,7 @@ SUBSTRING_TO_DELETE = "substring_to_delete"
 ENDSWITH = "columns_endswith"
 STARTSWITH = "columns_startswith"
 CONTAIN = "columns_contain"
+REPLACE_NANS = "replace_nans"
 MERGE_VOICES = "merge_voices"
 PRESENCE = "delete_presence"
 
@@ -58,9 +61,11 @@ _CONFIG_FALLBACK = {
 }
 
 _CONFIG_POST_FALLBACK = {
+    INTERNAL_DATA: 'musif/internal_data',
     DELETE_FILES: False,
     GROUPED: False,
     DELETE_FILES: False,
+    DELETE_HARMONY: False,
     SPLIT_PASSSIONS: False,
     UNBUNDLE_INSTRUMENTATION: False,
     MERGE_VOICES: True,
@@ -72,11 +77,11 @@ _CONFIG_POST_FALLBACK = {
     ENDSWITH: [],
     STARTSWITH: [],
     CONTAIN: [],
+    REPLACE_NANS: []
 }
 
 class Configuration:
     # TODO: add documentation
-
     def __init__(self, *args, **kwargs):
         config_data = {}
         if len(args) > 1:
@@ -157,7 +162,6 @@ class Configuration:
             SPLIT_KEYWORDS: list(self.split_keywords),
             PARTS_FILTER: list(self.parts_filter),
             EXPAND_REPEATS: self.expand_repeats,
-            CHECK_FILE: self.check_file,
         }
 
     def _load_metadata(self) -> None:
@@ -175,6 +179,8 @@ class Configuration:
         self.scoring_order = read_object_from_json_file(path.join(self.internal_data_dir, "scoring_order.json"))
         self.scoring_family_order = read_object_from_json_file(path.join(self.internal_data_dir, "scoring_family_order.json"))
         self.sorting_lists = read_object_from_json_file(path.join(self.internal_data_dir, "sorting_lists.json"))
+        self.all_translations = read_object_from_json_file(path.join(self.internal_data_dir, "all_translations.json"))
+        
         self.cpu_workers = (
             multiprocessing.cpu_count() - 2 if multiprocessing.cpu_count() > 3 else multiprocessing.cpu_count() // 2
         )
@@ -202,7 +208,9 @@ class PostProcess_Configuration:
         self.file_log_level = log_config.get(FILE_LOG_LEVEL, _CONFIG_FALLBACK.get(FILE_LOG_LEVEL))
         self.console_log_level = log_config.get(CONSOLE_LOG_LEVEL, _CONFIG_FALLBACK.get(CONSOLE_LOG_LEVEL))
         create_logger(LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level)
-        self.check_file = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
+        
+        self.internal_data = config_data.get(INTERNAL_DATA, _CONFIG_POST_FALLBACK[INTERNAL_DATA])
+        self.check_file = config_data.get(CHECK_FILE, _CONFIG_POST_FALLBACK[CHECK_FILE])
         self.delete_files = config_data.get(DELETE_FILES, _CONFIG_POST_FALLBACK[DELETE_FILES])
         self.grouped_analysis = config_data.get(GROUPED, _CONFIG_POST_FALLBACK[GROUPED])
         self.split_passionA = config_data.get(SPLIT_PASSSIONS, _CONFIG_POST_FALLBACK[SPLIT_PASSSIONS])
@@ -215,6 +223,10 @@ class PostProcess_Configuration:
         self.columns_endswith = config_data.get(ENDSWITH, _CONFIG_POST_FALLBACK[ENDSWITH])
         self.columns_startswith = config_data.get(STARTSWITH, _CONFIG_POST_FALLBACK[STARTSWITH])
         self.columns_contain = config_data.get(CONTAIN, _CONFIG_POST_FALLBACK[CONTAIN])
+        self.replace_nans = config_data.get(REPLACE_NANS, _CONFIG_POST_FALLBACK[REPLACE_NANS])
+        self.delete_files_without_harmony = config_data.get(DELETE_HARMONY, _CONFIG_POST_FALLBACK[DELETE_HARMONY])
+        
+        
 
     def to_dict_post(self) -> dict:
         return {
@@ -234,4 +246,6 @@ class PostProcess_Configuration:
             STARTSWITH: self.columns_startswith,
             CONTAIN: self.columns_contain,
             PRESENCE: self.delete_presence,
+            REPLACE_NANS: self.replace_nans,
+
         }

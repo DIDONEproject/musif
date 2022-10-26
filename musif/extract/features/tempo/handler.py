@@ -12,7 +12,7 @@ from .constants import *
 
 
 class TempoGroup2(Enum):
-    ND = "NA"
+    NA = "NA"
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
@@ -42,11 +42,11 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
     score = score_data[DATA_SCORE]
     part = score.parts[0]
-    numeric_tempo, tempo_mark = ExtractTempo(score_data, part)
+    numeric_tempo, tempo_mark = extract_tempo(score_data, part)
     tg1 = get_tempo_grouped_1(tempo_mark)
-    tg2 = get_tempo_grouped_2(tg1).value
+    tg2 = get_tempo_grouped_2(tg1)
 
-    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = Extract_Time_Signatures(list(part.getElementsByClass(Measure)))
+    time_signature, measures, time_signatures, time_signature_grouped, number_of_beats = extract_time_signatures(list(part.getElementsByClass(Measure)))
     
     score_data.update({
         TIME_SIGNATURE: time_signature,
@@ -57,14 +57,14 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     score_features.update({
         TEMPO: tempo_mark,
         NUMERIC_TEMPO: numeric_tempo,
-        TIME_SIGNATURE: time_signature,
+        TIME_SIGNATURE: time_signature.split(',')[0],
         TIME_SIGNATURE_GROUPED: time_signature_grouped,
         TEMPO_GROUPED_1: tg1,
         TEMPO_GROUPED_2: tg2,
         NUMBER_OF_BEATS: number_of_beats,
     })
 
-def Extract_Time_Signatures(measures):
+def extract_time_signatures(measures):
     ts_measures=[]
     time_signatures = []
     for i, element in enumerate(measures):
@@ -84,9 +84,9 @@ def Extract_Time_Signatures(measures):
     return time_signature, ts_measures, time_signatures, time_signature_grouped, number_of_beats
 
 
-def ExtractTempo(score_data, part):
+def extract_tempo(score_data, part):
     numeric_tempo = extract_numeric_tempo(score_data[DATA_FILE])
-    tempo_mark = "NA"
+    tempo_mark = TempoGroup2.NA.value
     for measure in part:
         if isinstance(measure, Measure):
             for element in measure:

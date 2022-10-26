@@ -21,10 +21,10 @@ def get_harmonic_rhythm(ms3_table)-> dict:
     numerals = ms3_table.numeral.dropna().tolist()
     number_of_chords = sum(Counter(numerals).values())
     time_signatures = ms3_table.timesig.tolist()
-    harmonic_rhythm = number_of_chords/len(measures_compressed)
+    harmonic_rhythm = number_of_chords/len(measures_compressed) if len(measures_compressed) != 0 else 0.0
 
     if len(Counter(time_signatures)) == 1:
-        harmonic_rhythm_beats = number_of_chords/(get_number_of_beats(time_signatures[0])*len(measures_compressed))
+        harmonic_rhythm_beats = number_of_chords/(get_number_of_beats(time_signatures[0])*len(measures_compressed)) if len(measures_compressed) != 0 else 0.0
     else:
         playthrough = ms3_table.playthrough.dropna().tolist()
         periods_ts=[]
@@ -56,7 +56,6 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
 
     for i, key in enumerate(keys):
         if key != last_key and i < numberofmeasures:
-            #no_beats = relationship_timesignature_beats[time_signatures[i - 1]]
             n_beats = int(get_number_of_beats(time_signatures[i - 1]))
 
             if last_key in key_measures :
@@ -66,10 +65,9 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
             last_key = key
             starting_measure = new_measures[i] - 1
     
-    #último!
+    # last!
     num_measures, _ = compute_number_of_measures(done, starting_measure, new_measures[numberofmeasures - 1], new_measures[numberofmeasures - 1] + 1, mc_onsets[numberofmeasures - 1], n_beats)
 
-    # num_measures, _ = compute_number_of_measures(done, starting_measure, measures[numberofmeasures - 1], measures[numberofmeasures - 1] + 1, mc_onsets[numberofmeasures - 1], n_beats)
     key_measures[last_key] += num_measures
 
     try:
@@ -99,9 +97,8 @@ def compute_number_of_measures(done, starting_measure, previous_measure, measure
     starting_measure += done
     if measure == previous_measure: #We are in the same measure, inside of it
 
-        #
         measures = previous_measure - 1 - starting_measure
-        beat=current_onset.numerator
+        beat = current_onset.numerator
         # habrá que sumarle current_beat / max_beats. Antes convertir current_beat en numérico
         if type(current_onset) == str:
             numbers = current_onset.split('.')
@@ -110,10 +107,12 @@ def compute_number_of_measures(done, starting_measure, previous_measure, measure
             second = int(second[0]) / int(second[1])
             beat = first + second
 
-        return measures + beat/num_beats, beat/num_beats
+        return measures + beat/current_onset.denominator, beat/current_onset.denominator
+        # before
+        # return measures + beat/num_beats, beat/num_beats
     
     else:
-        if measure - previous_measure > 1: #Change occurs in a change of measures
+        if measure - previous_measure > 1: # Change of key happens in a change of measures
             return previous_measure - starting_measure + (measure - 1 - previous_measure), 0 ###WTF IS DIS
         else:
             return previous_measure - starting_measure, 0
@@ -181,7 +180,6 @@ def get_keyareas(lausanne_table, major = True):
 
     total_measures = float(sum(list(key_measures.values())))
     key_measures_percentage = {kc:float(key_measures[kc]/total_measures) for kc in key_measures} 
-    # 
     
     keyGrouping1_measures = get_measures_per_key(list(set(g1)), measures, g1, beats, time_signatures)
     keyGrouping1_measures = {kc:keyGrouping1_measures[kc]/sum(list(keyGrouping1_measures.values())) for kc in keyGrouping1_measures}
@@ -201,9 +199,9 @@ def get_keyareas(lausanne_table, major = True):
     return keyareas
 
 def get_function_first(element, mode):
-    reference={'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'MED': ['iii']}
+    reference = {'T':['i'], 'D':['v', 'vii'], 'SD': ['ii', 'iv', 'vi'], 'MED': ['iii']}
 
-    # Spetial chords 
+    # Special chords 
     if any([i for i in ('It','Ger', 'Fr') if i in element]):
         return 'D'
 
@@ -268,7 +266,6 @@ def get_numerals(lausanne_table):
 
     _, ng2 = get_numerals_lists(numerals, relativeroots, keys) # por que se coge solo la funcion segunda?? anyway cojamos los numerals
     numerals_counter= Counter(numerals)
-    # numerals_counter = Counter(ng2)
     
     total_numerals=sum(list(numerals_counter.values()))
     nc = {}
@@ -276,8 +273,8 @@ def get_numerals(lausanne_table):
         if str(n)=='':
             raise Exception('Some chords here are not parsed well')
             continue
-        nc['Numerals_'+str(n)+'_Per'] = round((numerals_counter[n]/total_numerals), 3)
-        nc['Numerals_'+str(n)+'_Count'] = round((numerals_counter[n]), 3)
+        nc[NUMERALS_prefix + str(n) + '_Per'] = round((numerals_counter[n]/total_numerals), 3)
+        nc[NUMERALS_prefix + str(n) + '_Count'] = round((numerals_counter[n]), 3)
 
     return nc 
 
@@ -418,7 +415,7 @@ def get_chord_type(chord_type):
         return 'aug'
     else:
         pwarn(f"Chord type {chord_type} not observed")
-        return ''
+        return 'other'
 
 def get_chord_types_groupings(chordtype_list):
     return [get_chord_type(chord_type) for chord_type in chordtype_list]
