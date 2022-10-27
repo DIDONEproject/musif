@@ -3,7 +3,8 @@ from typing import List, Optional
 
 from musif.extract.constants import DATA_PART_ABBREVIATION, VOICES_LIST
 
-def _filter_parts_data(parts_data: List[dict], parts_filter: Optional[List[str]]) -> List[dict]:
+
+def filter_parts_data(parts_data: List[dict], parts_filter: Optional[List[str]]) -> List[dict]:
     if parts_filter is None:
         return parts_data
         

@@ -1,9 +1,10 @@
+from musif.extract.basic_modules.file_name.constants import *
+from musif.extract.basic_modules.metadata.constants import *
 from musif.extract.features.composer.constants import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
-from musif.extract.features.metadata.constants import *
-from musif.extract.features.file_name.constants import *
 from musif.extract.features.harmony.constants import HARMONY_AVAILABLE
-from musif.extract.features.key.constants import KEY, KEY_SIGNATURE, KEY_SIGNATURE_TYPE
+from musif.extract.features.key.constants import (KEY, KEY_SIGNATURE,
+                                                  KEY_SIGNATURE_TYPE)
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scoring.constants import VOICES, INSTRUMENTATION, SCORING
 

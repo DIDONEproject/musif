@@ -11,5 +11,7 @@ CSV_DELIMITER = ","
 VOICE_FAMILY = "voice"
 
 GENERAL_FAMILY = "general"
-FEATURES_MODULE = "musif.extract.features"
+FEATURES_MODULES = "musif.extract.features"
+BASIC_MODULES = "musif.extract.basic_modules"
+
 

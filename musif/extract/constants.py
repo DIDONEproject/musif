@@ -20,3 +20,6 @@ PLAYTHROUGH='playthrough'
 
 """List of prefixes of singers's names that might appear in the scores"""
 VOICES_LIST = ['sop','ten','alt','bar','bbar', 'bass']
+
+GLOBAL_TIME_SIGNATURE = 'global_ts'
+WINDOW_RANGE = 'window_range'

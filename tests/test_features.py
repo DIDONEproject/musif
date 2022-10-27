@@ -8,7 +8,7 @@ import pytest
 from musif import FeaturesExtractor
 from musif.common._utils import read_dicts_from_csv
 from musif.extract.features.prefix import get_family_prefix, get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import NUMBER_OF_FILTERED_PARTS, NUMBER_OF_PARTS
+from musif.basic_modules.scoring.constants import NUMBER_OF_FILTERED_PARTS, NUMBER_OF_PARTS
 from .constants import BASE_PATH, DATA_STATIC_DIR
 
 config_path = path.join(DATA_STATIC_DIR, "config.yml")

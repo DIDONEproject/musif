@@ -43,6 +43,8 @@ MAX_PROCESSES = "max_processes"
 """Constant name for features to be extracted"""
 FEATURES = "features"
 
+BASIC_MODULES = "basic_modules"
+
 """Keywords for parts that need to be splitted when sharing same staff"""
 SPLIT_KEYWORDS = "split_keywords"
 
@@ -51,8 +53,10 @@ PARTS_FILTER = "parts_filter"
 
 """Constant name to expand repetitions or not"""
 EXPAND_REPEATS = "expand_repeats"
+WINDOW_SIZE='window_size'
+OVERLAP='overlap'
 
-"""Post-Processing constants---"""
+"""--- Post-Processing constants--- """
 
 """File that keeps previously extracted files"""
 CHECK_FILE = "checking_file"
@@ -104,10 +108,13 @@ _CONFIG_FALLBACK = {
     MUSESCORE_DIR: None,
     PARALLEL: False,
     MAX_PROCESSES: 1,
+    BASIC_MODULES: ["core"],
     FEATURES: None,
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
     EXPAND_REPEATS: False,
+    WINDOW_SIZE: 8,
+    OVERLAP: 2,    
     CHECK_FILE: "."
 }
 
@@ -158,10 +165,14 @@ class Configuration:
         self.musescore_dir = config_data.get(MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
         self.parallel = config_data.get(PARALLEL, _CONFIG_FALLBACK[PARALLEL])
         self.max_processes = config_data.get(MAX_PROCESSES, _CONFIG_FALLBACK[MAX_PROCESSES])
+        self.basic_modules = config_data.get(BASIC_MODULES, _CONFIG_FALLBACK[BASIC_MODULES])
         self.features = config_data.get(FEATURES, _CONFIG_FALLBACK[FEATURES])
         self.split_keywords = config_data.get(SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS])
         self.parts_filter = config_data.get(PARTS_FILTER, _CONFIG_FALLBACK[PARTS_FILTER])
         self.expand_repeats = config_data.get(EXPAND_REPEATS, _CONFIG_FALLBACK[EXPAND_REPEATS])
+        self.window_size = config_data.get(WINDOW_SIZE, _CONFIG_FALLBACK[WINDOW_SIZE])
+        self.overlap = config_data.get(OVERLAP, _CONFIG_FALLBACK[OVERLAP])
+        
         self.internal_data_dir = path.dirname(internal_data.__file__)
         self.check = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
         self._load_metadata()

@@ -2,7 +2,7 @@ from typing import List
 
 from musif.config import Configuration
 from musif.extract.constants import VOICES_LIST
-from musif.extract.features.metadata.constants import CHARACTER
+from musif.extract.basic_modules.metadata.constants import CHARACTER
 from musif.logs import lwarn
 from musif.musicxml.scoring import extract_sound
 

@@ -1,24 +1,30 @@
+import copy
 import glob
 import inspect
 import os
-from pathlib import Path
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
-import sys
 from typing import Dict, List, Optional, Tuple, Union
 
 import pandas as pd
 from music21.converter import parse
-from music21.stream import Part, Score
-from musif.common._constants import FEATURES_MODULE, GENERAL_FAMILY
+from musif.extract import constants as C
+
+from music21.stream import Measure, Part, Score
+from musif.common._constants import (BASIC_MODULES, FEATURES_MODULES,
+                                     GENERAL_FAMILY)
 from musif.common.cache import Cache
 from musif.common.sort import sort_list
 from musif.config import Configuration
-from musif.extract import constants as C
-from musif.extract.common import _filter_parts_data
+
+
+from musif.extract.basic_modules.themeA.constants import END_OF_THEME_A
+
+from musif.extract.common import filter_parts_data
 from musif.extract.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import process_musescore_file
+
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musicxml import (MUSESCORE_FILE_EXTENSION, MUSICXML_FILE_EXTENSION,
                             split_layers)
@@ -383,29 +389,46 @@ class FeaturesExtractor:
         linfo('--- Analyzing scores ---\n'.center(120, ' '))
 
         musicxml_files = find_xml_files(self._cfg.data_dir, check_file=self.check_file)
+        if self._cfg.is_requested_musescore_file():
+            self._find_mscx_files()
         score_df, parts_df = self._process_corpora(musicxml_files)
+
         return score_df
 
     def _find_mscx_files(self):
         for name in glob.glob(self._cfg.data_dir+'*.xml'):
             if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
                 perr(f"\nNo mscx was found for file {name}")
-                # sys.exit()
 
     def _process_corpora(self, musicxml_files: List[str]) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
-        all_scores_features = []
-        all_parts_features = []
-        for corpus_dir, files in corpus_by_dir.items():
-            scores_features, parts_features = self._process_corpus(files)
-            all_scores_features.extend(scores_features)
-            all_parts_features.extend(parts_features)
-        df_scores = DataFrame(all_scores_features)
-        df_scores = df_scores.reindex(sorted(df_scores.columns), axis=1)
-        df_parts = DataFrame(all_parts_features)
-        df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
-        return df_scores, df_parts
-
+        if self._cfg.window_size:
+            for corpus_dir, files in corpus_by_dir.items():
+                all_scores_features, all_parts_features = self._process_corpus(files)
+                all_dfs=[]
+                all_parts_dictionaries=[]
+                for score in all_scores_features:
+                    df_score = DataFrame(score)                
+                    df_score = df_score.reindex(sorted(df_score.columns), axis=1)
+                    all_dfs.append(df_score)
+                for parts in all_parts_features:
+                    df_parts = DataFrame(all_parts_features)
+                    df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
+                    all_parts_dictionaries.append(df_parts)
+        else:
+            all_scores_features = []
+            all_parts_features = []       
+            for corpus_dir, files in corpus_by_dir.items():
+                scores_features, parts_features = self._process_corpus(files)
+                all_scores_features.extend(scores_features)
+                all_parts_features.extend(parts_features)
+            all_dfs = DataFrame(all_scores_features)
+            all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
+            df_parts = DataFrame(all_parts_features)
+            df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
+            
+        return all_dfs, df_parts
+    
     @staticmethod
     def _group_by_dir(files: List[str]) -> Dict[str, List[str]]:
         corpus_by_dir = {}
@@ -425,7 +448,10 @@ class FeaturesExtractor:
         scores_features = []
         parts_features = []
         for musicxml_file in tqdm(musicxml_files):
-            score_features, score_parts_features = self._process_score(musicxml_file)
+            if self._cfg.window_size is not None:
+                score_features, score_parts_features = self._process_windows(musicxml_file)
+            else:
+                score_features, score_parts_features = self._process_score(musicxml_file)
             scores_features.append(score_features)
             parts_features.extend(score_parts_features)
         return scores_features, parts_features
@@ -435,29 +461,92 @@ class FeaturesExtractor:
         parts_features = []
 
         with tqdm(total=len(musicxml_files)) as pbar:
-            with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
-                futures = [executor.submit(self._process_score,  musicxml_file) for musicxml_file in musicxml_files]
-                # iterator = executor.map(self._process_score, musicxml_files)
-                # futures=list(iterator)  # collect the results in a list
-                for future in as_completed(futures):
-                    score_features, score_parts_features = future.result()
-                    scores_features.append(score_features)
-                    parts_features.extend(score_parts_features)
-                    pbar.update(1)
+                with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
+                    if self._cfg.window_size is not None:
+                        futures = [executor.submit(self._process_windows, musicxml_file) for musicxml_file in musicxml_files]
+                    else:
+                        futures = [executor.submit(self._process_score,  musicxml_file) for musicxml_file in musicxml_files]
+                    for future in as_completed(futures):
+                        score_features, score_parts_features = future.result()
+                        scores_features.append(score_features)
+                        parts_features.extend(score_parts_features)
+                        pbar.update(1)
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
-        parts_data = [self._get_part_data(score_data, part) for part in score_data[C.DATA_SCORE].parts]
-        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
+        parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
+        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
+        basic_features, basic_parts_features = self.extract_modules(BASIC_MODULES, score_data, parts_data)
+        score_features, parts_features = self.extract_modules(FEATURES_MODULES, score_data, parts_data)
+        return score_features, parts_features
+    
+    def _process_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+        score_data = self._get_score_data(musicxml_file)
+        parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
+        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
+        basic_features, basic_parts_features = self.extract_modules(BASIC_MODULES, score_data, parts_data)
+        window_features = {}
+        first_window_measure = 0
+        last_window_measure = 0
+        last_score_measure = score_data['score'].parts[0].getElementsByClass(Measure)[-1].measureNumber
+        window_counter = 0
+        number_windows = (last_score_measure + self._cfg.overlap)//(self._cfg.window_size-self._cfg.overlap) #TODO: take into accou8nt end of  theme A
+        all_windows_features = []
+        all_parts_features = []
+
+        while last_window_measure < last_score_measure:
+            if int(float(basic_features.get(END_OF_THEME_A, "100000"))) < first_window_measure:
+                break
+            window_counter += 1
+            last_window_measure = first_window_measure + self._cfg.window_size
+            pinfo(f"\nProcessing window {window_counter} for {musicxml_file} of a total of: {number_windows} windows.")
+            window_data, window_parts_data = self._select_window_data(score_data, parts_data, first_window_measure, last_window_measure)
+            window_features, parts_window_features = self.extract_modules(FEATURES_MODULES, window_data, window_parts_data)
+            window_features[WINDOW_RANGE] = f'{first_window_measure} - {last_window_measure}'
+            
+            window_features = {**basic_features, **window_features}
+            [i.update(parts_window_features[j]) for j, i in enumerate(basic_parts_features)]
+            
+            all_windows_features.append(window_features)
+            all_parts_features.append(parts_window_features)
+            first_window_measure = last_window_measure - self._cfg.overlap
+        
+        return all_windows_features, all_parts_features
+
+    def _select_window_data(self, score_data: dict, parts_data: dict, first_measure: int, last_measure: int):
+        window_data = {}
+        window_data = copy.deepcopy(score_data)
+        window_parts_data = copy.deepcopy(parts_data)
+        transversal_data={}
+        t_s = score_data['parts'][0].getElementsByClass(Measure)[0].timeSignature 
+        transversal_data[GLOBAL_TIME_SIGNATURE] = t_s if t_s else ''
+        for i, part in enumerate(window_data['score'].parts):
+            read_measures = 0
+            elements_to_remove = []
+            for measure in part.getElementsByClass(Measure):
+                read_measures += 1
+                if read_measures <= first_measure or read_measures > last_measure:
+                    elements_to_remove.append(measure)
+            part.remove(targetOrList = elements_to_remove)
+            window_data['parts'][i]=part
+            window_parts_data[i]['part']=part
+        
+        if self._cfg.is_requested_musescore_file() and score_data[DATA_MUSESCORE_SCORE] is not None:
+            window_data[DATA_MUSESCORE_SCORE] =  score_data[DATA_MUSESCORE_SCORE].loc[(score_data[DATA_MUSESCORE_SCORE]['mn'] <= last_measure) & (score_data[DATA_MUSESCORE_SCORE]['mn'] >= first_measure)]
+            window_data[DATA_MUSESCORE_SCORE].reset_index(inplace=True, drop=True, level=0)
+        window_data={**transversal_data, **window_data}
+        return window_data, window_parts_data
+    
+    def extract_modules(self, modules: list, data: dict, parts_data: dict):
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
-        for module in self._extract_feature_modules():
-            self._update_parts_module_features(module, score_data, parts_data, parts_features)
-            self._update_score_module_features(module, score_data, parts_data, parts_features, score_features)
+        for module in self._find_modules(modules):
+            self._update_parts_module_features(module, data, parts_data, parts_features)
+            self._update_score_module_features(module, data, parts_data, parts_features, score_features)
         return score_features, parts_features
-
+    
     def _get_score_data(self, musicxml_file: str) -> dict:
         score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords, expand_repeats=self._cfg.expand_repeats)
         filtered_parts = self._filter_parts(score)
@@ -522,10 +611,11 @@ class FeaturesExtractor:
         }
         return data
 
-    def _extract_feature_modules(self) -> list:
+    def _find_modules(self, modules: str):
         found_features = set()
-        for feature in self._cfg.features:
-            module_name = f"{FEATURES_MODULE}.{feature}.handler"
+        to_extract = self._cfg.basic_modules if 'basic' in modules else self._cfg.features
+        for feature in to_extract:
+            module_name = f"{modules}.{feature}.handler"
             module = __import__(module_name, fromlist=[''])
             feature_dependencies = self._extract_feature_dependencies(module)
             for feature_dependency in feature_dependencies:
@@ -534,10 +624,11 @@ class FeaturesExtractor:
                         f"Feature {feature} is dependent on feature {feature_dependency}. The feaure ({feature_dependency} should appear before {feature} in the configuration)")
             found_features.add(feature)
             yield module
-
+            
+            
     def _extract_feature_dependencies(self, module) -> List[str]:
         module_code = inspect.getsource(module)
-        dependencies = re.findall(rf"from {FEATURES_MODULE}.([\w\.]+) import", module_code)
+        dependencies = re.findall(rf"from {FEATURES_MODULES}.([\w\.]+) import", module_code)
         dependencies = [dependency for dependency in dependencies if dependency in self._cfg.features]
         return dependencies
 
@@ -561,3 +652,9 @@ class FeaturesExtractor:
         except Exception as e:
             score_name = score_data['file']
             perr(f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
+
+    def _find_mscx_files(self):
+        for name in glob.glob(self._cfg.data_dir + '*.xml'):
+            if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
+                perr(f"\nNo mscx was found for file {name}")
+            

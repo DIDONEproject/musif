@@ -9,12 +9,12 @@ from musif.common.sort import sort_columns
 from musif.common._utils import read_dicts_from_csv
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
-from musif.extract.features.file_name.constants import ARIA_ID, ARIA_LABEL
+from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.features.harmony.constants import (KEY_MODULATORY,
                                                       KEY_PREFIX,
                                                       CHORDS_GROUPING_prefix, HARMONY_AVAILABLE)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.features.scoring.constants import (INSTRUMENTATION, ROLE_TYPE, SCORING,
+from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION, ROLE_TYPE, SCORING,
                                                       VOICES)
 from musif.logs import perr, pinfo, pwarn
 from musif.process.constants import (PRESENCE, label_by_col, metadata_columns,

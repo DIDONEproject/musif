@@ -3,10 +3,10 @@ from statistics import mean
 from musif.config import Configuration
 from music21.chord import Chord
 
-from musif.extract.common import _filter_parts_data
+from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from .constants import *
-from ..core.constants import DATA_NOTES
+from musif.extract.features.core.constants import DATA_NOTES
 from ..prefix import get_part_feature
 from music21.note import Note
 
@@ -34,7 +34,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     
-    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 
