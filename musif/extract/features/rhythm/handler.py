@@ -6,12 +6,12 @@ from typing import List
 import numpy as np
 import pandas as pd
 from musif.config import Configuration
-from musif.extract.constants import DATA_PART_ABBREVIATION
+from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATURE
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 
-from ..core.constants import DATA_NOTES
+from musif.extract.features.core.constants import DATA_NOTES
 from .constants import *
 
 
@@ -28,7 +28,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     rhythm_double_dot = 0
     total_beats = 0
     total_sounding_beats = 0
-    
+    beat_count=score_data[GLOBAL_TIME_SIGNATURE].beatCount if GLOBAL_TIME_SIGNATURE in score_data else 1
     motion_features = get_motion_features(part_data)
     part_features.update(motion_features)
     
@@ -39,8 +39,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                 notes_dict[element.duration.quarterLength] += 1
                 total_number_notes += 1
                 pos = get_beat_position(beat_count, beats, element.beat)
-                # if pos in positions and element.duration.dots > 0: #has dot
-                if element.duration.dots > 0 and element.duration.quarterLength < beat_unit: #has dot
+                if element.duration.dots > 0 and element.duration.quarterLength < beat_unit:
                     if i+1 < len(measure.elements): #check next item
                         if measure.elements[i+1].beatStr.split()[0] == element.beatStr.split()[0]:
                             if measure.elements[i+1].duration.quarterLength < element.duration.quarterLength:
@@ -50,13 +49,11 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                     if element.duration.dots == 2:
                         rhythm_double_dot += 1
             elif element.classes[0] == "TimeSignature":
-                # rhythm_intensity_separated += number_notes / beat
                 rhythm_intensity_period.append(sum([float(i)*j for i, j in Counter(notes_dict).items()]) / total_sounding_beats if total_sounding_beats !=0 else 0)
                 number_notes = 0
                 beat_count = element.beatCount
                 beats = get_number_of_beats(element.ratioString)
                 beat_unit=element.beatStrength
-                # positions = [get_beat_position(beat_count, beats, i + 1) for i in range(beats)]
         total_beats += beats
         
         if measure in part_data['sounding_measures']: 

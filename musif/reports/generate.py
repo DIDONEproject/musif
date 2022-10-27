@@ -22,7 +22,6 @@ from musif.extract.features.harmony.constants import (KEY_GROUPING, KEY_PREFIX,
                                                       NUMERALS_prefix)
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS
 from musif.logs import lerr, perr
-# from musif.process.utils import merge_single_voices
 from musif.reports.calculations import make_intervals_absolute
 from musif.reports.utils import capitalize_instruments, remove_folder_contents
 from pandas import DataFrame

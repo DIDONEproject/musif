@@ -3,9 +3,9 @@ from openpyxl.styles.fonts import Font
 from musif.extract.features import ambitus
 from musif.extract.features import interval
 
-from musif.extract.features.scoring.constants import FAMILY_SCORING, SCORING, VOICES
+from musif.extract.basic_modules.scoring.constants import FAMILY_SCORING, SCORING, VOICES
 from musif.extract.features.tempo.constants import TEMPO_GROUPED_1, TEMPO_GROUPED_2
-from musif.extract.features.metadata.constants import *
+from musif.extract.basic_modules.metadata.constants import *
 
 ACT = 'Act'
 # ACTANDSCENE = 'ActAndScene'

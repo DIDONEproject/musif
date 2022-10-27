@@ -87,10 +87,17 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     for sound in sound_abbreviations:
         features[get_sound_feature(sound, NUMBER_OF_PARTS)] = count_by_sound[sound]
         features[get_sound_feature(sound, NUMBER_OF_FILTERED_PARTS)] = filtered_count_by_sound[sound]
+        score_data[get_sound_feature(sound, NUMBER_OF_FILTERED_PARTS)] = filtered_count_by_sound[sound]
+        
     for family in family_abbreviations:
         features[get_family_feature(family, NUMBER_OF_PARTS)] = count_by_family[family]
         features[get_family_feature(family, NUMBER_OF_FILTERED_PARTS)] = filtered_count_by_family[family]
+        score_data[get_family_feature(family, NUMBER_OF_FILTERED_PARTS)] = filtered_count_by_family[family]
+    
     features[get_score_feature(NUMBER_OF_FILTERED_PARTS)] = len(abbreviated_parts)
     features[get_score_feature(NUMBER_OF_PARTS)] = len(score.parts)
-
+    score_data[get_score_feature(NUMBER_OF_FILTERED_PARTS)] = len(abbreviated_parts)
+    score_data[get_score_feature(NUMBER_OF_PARTS)] = len(score.parts)
+    
+    
     return score_features.update(features)

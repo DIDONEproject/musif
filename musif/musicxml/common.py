@@ -112,10 +112,10 @@ def _separate_info_in_two_parts(score, final_parts, part):
                 for p in parts_splitted:
                     if measure.measureNumber == 0 and isinstance(measure, Measure):
                         number = measure.measureNumber+1
-                        
-                        p.elements[num_measure].elements += tuple(
-                                        e for e in not_voices_elements if e not in p.elements[num_measure].elements
-                                    )
+                        if isinstance(p.elements[num_measure], Measure): #only add elements if we are in am measure 
+                            p.elements[num_measure].elements += tuple(
+                                            e for e in not_voices_elements if e not in p.elements[num_measure].elements
+                                        )
                     if measure.measureNumber > 0:
                         if not isinstance(p.elements[num_measure], Measure):
                             continue
