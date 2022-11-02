@@ -9,6 +9,7 @@ dependencies = [
     "openpyxl>=3.0.10",
     "matplotlib>=3.5.3",
     "joblib>=1.2.0",
+    "scipy>=1.6.1",
 ]
 name = "musif"
 version = "0.1.0"
