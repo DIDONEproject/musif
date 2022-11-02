@@ -449,7 +449,7 @@ class FeaturesExtractor:
         parts_features = []
         for musicxml_file in tqdm(musicxml_files):
             if self._cfg.window_size is not None:
-                score_features, score_parts_features = self._process_windows(musicxml_file)
+                score_features, score_parts_features = self._process_score_windows(musicxml_file)
             else:
                 score_features, score_parts_features = self._process_score(musicxml_file)
             scores_features.append(score_features)
@@ -463,7 +463,7 @@ class FeaturesExtractor:
         with tqdm(total=len(musicxml_files)) as pbar:
                 with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
                     if self._cfg.window_size is not None:
-                        futures = [executor.submit(self._process_windows, musicxml_file) for musicxml_file in musicxml_files]
+                        futures = [executor.submit(self._process_score_windows, musicxml_file) for musicxml_file in musicxml_files]
                     else:
                         futures = [executor.submit(self._process_score,  musicxml_file) for musicxml_file in musicxml_files]
                     for future in as_completed(futures):
@@ -480,9 +480,11 @@ class FeaturesExtractor:
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(BASIC_MODULES, score_data, parts_data)
         score_features, parts_features = self.extract_modules(FEATURES_MODULES, score_data, parts_data)
+        score_features = {**basic_features, **score_features}
+        [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
         return score_features, parts_features
     
-    def _process_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+    def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(score_data, part) for part in score_data[DATA_SCORE].parts]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
@@ -496,7 +498,7 @@ class FeaturesExtractor:
         all_windows_features = []
         all_parts_features = []
 
-        while last_window_measure < last_score_measure:
+        while first_window_measure < last_score_measure:
             if int(float(basic_features.get(END_OF_THEME_A, "100000"))) < first_window_measure:
                 break
             window_counter += 1
@@ -629,7 +631,7 @@ class FeaturesExtractor:
     def _extract_feature_dependencies(self, module) -> List[str]:
         module_code = inspect.getsource(module)
         dependencies = re.findall(rf"from {FEATURES_MODULES}.([\w\.]+) import", module_code)
-        dependencies = [dependency for dependency in dependencies if dependency in self._cfg.features]
+        dependencies = [dependency.split('.')[0] for dependency in dependencies if dependency.split('.')[0] in self._cfg.features]
         return dependencies
 
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],

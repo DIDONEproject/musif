@@ -3,6 +3,7 @@ from typing import List
 
 import pandas as pd
 from musif.config import Configuration
+from music21.stream import Measure
 
 from musif.extract.constants import DATA_FAMILY_ABBREVIATION, DATA_FILE, DATA_MUSESCORE_SCORE, DATA_PART, DATA_PART_ABBREVIATION, DATA_SCORE, DATA_SOUND_ABBREVIATION
 from musif.extract.features.prefix import get_family_feature, get_part_feature, get_score_feature, \
@@ -36,14 +37,14 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     score = score_data[DATA_SCORE]
     score_key, key_name, mode = get_key_and_mode(score)
-    if (score_data[DATA_MUSESCORE_SCORE] is not None) and (not score_data[DATA_MUSESCORE_SCORE].empty):
+    if cfg.is_requested_musescore_file() and (score_data[DATA_MUSESCORE_SCORE] is not None) and (not score_data[DATA_MUSESCORE_SCORE].empty):
         tonality_ms3 = score_data[DATA_MUSESCORE_SCORE].globalkey[0]
         if key_name != tonality_ms3:
             score_key = key.Key(tonality_ms3)
             mode, key_name = get_name_from_key(score_key)
             
     score_features[FILE_NAME] = path.basename(score_data[DATA_FILE])
-    num_measures = len(score.parts[0][DATA_MEASURES])
+    num_measures = len(score.parts[0].getElementsByClass(Measure))
     score_data.update({
         DATA_KEY: score_key,
         DATA_KEY_NAME: key_name,
