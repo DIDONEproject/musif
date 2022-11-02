@@ -23,16 +23,16 @@ if __name__ == "__main__":
     data_dir = r'tests/data/static/features'
     musescore_dir=data_dir
 
-    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Ale13M-Senza_procelle-1744-Gluck[2.04][1244].xml'
+    data_dir = r'../../_Ana/Music Analysis/xml/corpus_github\xml/Did29M-A_trionfar-1763-Traetta[3.07][1403].xml'
     musescore_dir = r'../../_Ana\Music Analysis/xml/corpus_github/musescore'
     
-    extraction = FeaturesExtractor("scripts/config_tests.yml", data_dir = data_dir, musescore_dir=musescore_dir).extract()
-    if type(extraction)==list:
-        save_windows_dfs(dest, extraction)
+    extrac = FeaturesExtractor("scripts/config_tests.yml", data_dir = data_dir, musescore_dir=musescore_dir).extract()
+    if type(extrac)==list:
+        save_windows_dfs(dest, extrac)
     else:
-        extraction.to_csv(dest + 'test.csv', index=False)
+        extrac.to_csv(dest + 'test.csv', index=False)
     
-    # extraction=pd.read_csv('arias_test.csv')
+    # extrac=pd.read_csv('arias_test.csv')
     path = '.'
     # ReportsGenerator("scripts/config_tests.yml").generate_reports(extraction, path, num_factors=0, visualizations=True)
     
