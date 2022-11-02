@@ -26,7 +26,7 @@ pip install .
 Assuming we have our scores persisted in a directories structure like this:
  
 ```
-scores                    or               scores
+scores                                   others
 |                                        |
 |__ xml                                  |__ score3.xml
 |   |__ score1.xml                       |__ score3.mscx
