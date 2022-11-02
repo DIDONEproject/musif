@@ -3,9 +3,9 @@ metadata_id_col: AriaId
 data_dir: ../../Corpus_Test/xml
 musescore_dir: ../../Corpus_Test/musescore
 expand_repeats: false
-window_size: 8
+window_size: null
 overlap: 2
-parallel: false
+parallel: true
 max_processes: 7
 log:
   file_path: logs/musif_test.log
@@ -21,7 +21,7 @@ basic_modules:
 features:
   - core
   - composer
-  # - librettist
+  - librettist
   - ambitus
   - interval
   - tempo

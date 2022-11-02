@@ -94,36 +94,6 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         DYNABRUPTNESS: dyn_grad / total_sounding_beats if total_sounding_beats != 0 else 0,
     })
 
-def calculate_dynamics(dynamics, beats_section, dyn_mean_weighted, dyn_grad, last_dyn, number_of_beats, element, beats_timesignature, new_dyn):
-    old_beat = calculate_position(number_of_beats, element, beats_timesignature)
-    dyn_mean_weighted += (beats_section + old_beat) * last_dyn
-    dynamics.append(new_dyn)
-    beats_section, dyn_grad, last_dyn = calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn)
-    first_silence = False
-    return beats_section, dyn_grad, last_dyn, first_silence, dyn_mean_weighted
-
-def calculate_position(number_of_beats, element, beats_timesignature):
-    sub_beat = element.elements[0].beat if element.isStream else element.beat
-    position = get_beat_position(beats_timesignature, number_of_beats,sub_beat)
-    old_beat = position - get_beat_position(beats_timesignature, number_of_beats, 1)
-    return old_beat# - sum([i.duration.quarterLength for i in bar_section.elements if i.classes[0] == REST]) #all silences in the measure
-
-def calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn):
-    if (beats_section + old_beat) > 0:
-        dyn_grad += abs(new_dyn - last_dyn) / (beats_section + old_beat)
-    last_dyn = new_dyn
-    beats_section = - old_beat  # number of beats that has old dynamic
-    return beats_section, dyn_grad, last_dyn
-
-
-def get_dynamic_numeric(value):
-    if value in DYNAMIC_VALUES:
-        return DYNAMIC_VALUES.get(value)
-    else:
-        pwarn(f'Dynamic value was not identified: {value}')
-        lwarn(f'Dynamic value was not identified: {value}')
-        return 40 #average value in case of error
-
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict],
                          score_features: dict):
@@ -163,3 +133,33 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     })
 
     score_features.update(features)
+
+def calculate_dynamics(dynamics, beats_section, dyn_mean_weighted, dyn_grad, last_dyn, number_of_beats, element, beats_timesignature, new_dyn):
+    old_beat = calculate_position(number_of_beats, element, beats_timesignature)
+    dyn_mean_weighted += (beats_section + old_beat) * last_dyn
+    dynamics.append(new_dyn)
+    beats_section, dyn_grad, last_dyn = calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn)
+    first_silence = False
+    return beats_section, dyn_grad, last_dyn, first_silence, dyn_mean_weighted
+
+def calculate_position(number_of_beats, element, beats_timesignature):
+    sub_beat = element.elements[0].beat if element.isStream else element.beat
+    position = get_beat_position(beats_timesignature, number_of_beats,sub_beat)
+    old_beat = position - get_beat_position(beats_timesignature, number_of_beats, 1)
+    return old_beat# - sum([i.duration.quarterLength for i in bar_section.elements if i.classes[0] == REST]) #all silences in the measure
+
+def calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn):
+    if (beats_section + old_beat) > 0:
+        dyn_grad += abs(new_dyn - last_dyn) / (beats_section + old_beat)
+    last_dyn = new_dyn
+    beats_section = - old_beat  # number of beats that has old dynamic
+    return beats_section, dyn_grad, last_dyn
+
+
+def get_dynamic_numeric(value):
+    if value in DYNAMIC_VALUES:
+        return DYNAMIC_VALUES.get(value)
+    else:
+        pwarn(f'Dynamic value was not identified: {value}')
+        lwarn(f'Dynamic value was not identified: {value}')
+        return 40 #average value in case of error

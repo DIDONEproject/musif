@@ -103,8 +103,8 @@ def _join_double_bass(df: DataFrame):
         df[formatted_col].fillna(0, inplace = True)
         if df[formatted_col].dtypes == object:
             df[formatted_col] = df[formatted_col].astype(str)
-            df[double_bass_columns] = df[double_bass_columns].astype(str)
-            df[formatted_col] = df[double_bass_columns].sum(axis=1)
+            df[col] = df[col].astype(str)
+            df[formatted_col] = df[[col, formatted_col]].sum(axis=1)
             df[formatted_col] = [i.replace('nan','') for i in df[formatted_col]]
         else:
             df[col]=df[col].astype(float)

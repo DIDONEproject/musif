@@ -237,26 +237,26 @@ class PostProcess_Configuration:
         self.replace_nans = config_data.get(REPLACE_NANS, _CONFIG_POST_FALLBACK[REPLACE_NANS])
         self.delete_files_without_harmony = config_data.get(DELETE_HARMONY, _CONFIG_POST_FALLBACK[DELETE_HARMONY])
         
-        
-
     def to_dict_post(self) -> dict:
         return {
-            LOG: {
-                LOG_FILE_PATH: self.log_file,
-                FILE_LOG_LEVEL: self.file_log_level,
-                CONSOLE_LOG_LEVEL: self.console_log_level,
-            },
-            CHECK_FILE: self.check_file,
-            DELETE_FILES: self.delete_files,
-            GROUPED: self.grouped_analysis,
-            SPLIT_PASSSIONS: self.split_passionA,
-            INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
-            INSTRUMENTS_TO_DELETE: self.instruments_to_kill,
-            SUBSTRING_TO_DELETE: self.substring_to_kill,
-            ENDSWITH: self.columns_endswith,
-            STARTSWITH: self.columns_startswith,
-            CONTAIN: self.columns_contain,
-            PRESENCE: self.delete_presence,
-            REPLACE_NANS: self.replace_nans,
+        LOG: {
+            LOG_FILE_PATH: self.log_file,
+            FILE_LOG_LEVEL: self.file_log_level,
+            CONSOLE_LOG_LEVEL: self.console_log_level,
+        },
+        CHECK_FILE: self.check_file,
+        DELETE_FILES: self.delete_files,
+        GROUPED: self.grouped_analysis,
+        SPLIT_PASSSIONS: self.split_passionA,
+        INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
+        INSTRUMENTS_TO_DELETE: self.instruments_to_kill,
+        SUBSTRING_TO_DELETE: self.substring_to_kill,
+        ENDSWITH: self.columns_endswith,
+        STARTSWITH: self.columns_startswith,
+        CONTAIN: self.columns_contain,
+        PRESENCE: self.delete_presence,
+        REPLACE_NANS: self.replace_nans,
 
-        }
+    }
+
+
