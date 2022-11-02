@@ -2,6 +2,7 @@ import csv
 import json
 from os import path
 from typing import Iterator, List, Union
+from pathlib import Path, PurePath
 
 import pandas as pd
 import yaml
@@ -40,7 +41,7 @@ def write_text_to_file(text: str, file_path: str):
         file.write(text)
 
 
-def read_object_from_yaml_file(yaml_file_path: str):
+def read_object_from_yaml_file(yaml_file_path: Union[str, PurePath]):
     with open(yaml_file_path, "r", encoding=ENCODING) as file:
         return yaml.load(file.read(), Loader=yaml.FullLoader)
 
