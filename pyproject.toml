@@ -1,0 +1,23 @@
+[project]
+dependencies = [
+  "pandas",
+  "music21==6.7.1",
+  "tqdm==4.56.0",
+  "ms3==0.5.1",
+  "pyyaml",
+]
+name = "musif"
+version = "0.1.0"
+description = "Music feature extraction library from the DIDONE project"
+authors = [{ name = "Didone Project", email = "didone@iccmu.es" }]
+requires-python = ">=3.7"
+readme = "README.md"
+license = { text = "MIT" }
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+
+[tool]
+[tool.pdm]
