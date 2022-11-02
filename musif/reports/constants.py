@@ -19,8 +19,8 @@ CLEF3 = 'Clef3'
 COMPOSER = 'Composer'
 DATE = 'Date'
 DECADE = 'Decade'
-DRAMA='Drama'
-FINAL='Final'
+DRAMA = 'Drama'
+FINAL = 'Final'
 # FORM = 'Form'
 # GENDER ='Gender'
 # GEOGRAPHY='Geography'
@@ -28,7 +28,7 @@ KEY = 'Key'
 KEY_SIGNATURE_TYPE = 'KeySignatureType'
 KEYSIGNATURE = 'KeySignature'
 LIBRETTIST = 'Librettist'
-METRE='Metre'
+METRE = 'Metre'
 MODE = 'Mode'
 NAME = 'FileName'
 OPERA = 'AriaOpera'
@@ -39,29 +39,39 @@ TEMPO = 'Tempo'
 TIMESIGNATURE = 'TimeSignature'
 TIMESIGNATUREGROUPED = 'TimeSignatureGrouped'
 TITLE = 'AriaName'
-TOTAL_ANALYSED='Total analysed'
+TOTAL_ANALYSED = 'Total analysed'
 YEAR = 'Year'
 
-metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, ARIA_CITY, TERRITORY, CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
+metadata_columns = [OPERA, ARIA_LABEL, ARIA_ID, TITLE, COMPOSER, YEAR, DECADE, ACT, SCENE, ACTANDSCENE, NAME, LIBRETTIST, FORM, CHARACTER, GENDER, ROLE, ARIA_CITY, TERRITORY,
+                    CLEF1, CLEF2, CLEF3, KEY, KEYSIGNATURE, KEY_SIGNATURE_TYPE, MODE, TEMPO, TIMESIGNATURE, TIMESIGNATUREGROUPED, TEMPO_GROUPED_1, TEMPO_GROUPED_2, SCORING, FAMILY_SCORING]
+
 
 def get_melody_list(catch):
     return [catch + interval.constants.INTERVALLIC_MEAN, catch + interval.constants.INTERVALLIC_STD, catch + interval.constants.ABSOLUTE_INTERVALLIC_MEAN, catch + interval.constants.ABSOLUTE_INTERVALLIC_STD, catch + interval.constants.TRIMMED_ABSOLUTE_INTERVALLIC_MEAN, catch + interval.constants.TRIMMED_ABSOLUTE_INTERVALLIC_STD,
-        catch + interval.constants.TRIMMED_INTERVALLIC_STD, catch + interval.constants.TRIMMED_INTERVALLIC_MEAN, catch + interval.constants.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch + interval.constants.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch + interval.constants.LARGEST_ABSOLUTE_SEMITONES_ASC, catch + interval.constants.LARGEST_INTERVAL_ASC,
-        catch + interval.constants.LARGEST_SEMITONES_DESC,catch + interval.constants.LARGEST_SEMITONES_ASC, catch + interval.constants.LARGEST_INTERVAL_DESC, catch + ambitus.constants.LOWEST_NOTE,
-        catch + ambitus.constants.LOWEST_NOTE_INDEX, catch + ambitus.constants.HIGHEST_NOTE, catch + ambitus.constants.HIGHEST_NOTE_INDEX,
-        catch + interval.constants.LARGEST_INTERVAL_ALL, catch + interval.constants.LARGEST_SEMITONES_ALL,
-        catch + interval.constants.SMALLEST_INTERVAL_ALL, catch + interval.constants.SMALLEST_SEMITONES_ALL,
-        catch + interval.constants.MEAN_INTERVAL,
-        catch + interval.constants.DESCENDING_INTERVALLIC_MEAN, 
-        catch + interval.constants.ASCENDING_INTERVALLIC_MEAN]
+            catch + interval.constants.TRIMMED_INTERVALLIC_STD, catch + interval.constants.TRIMMED_INTERVALLIC_MEAN, catch + interval.constants.ABSOLUTE_INTERVALLIC_TRIM_DIFF, catch +
+            interval.constants.ABSOLUTE_INTERVALLIC_TRIM_RATIO, catch +
+            interval.constants.LARGEST_ABSOLUTE_SEMITONES_ASC, catch +
+            interval.constants.LARGEST_INTERVAL_ASC,
+            catch + interval.constants.LARGEST_SEMITONES_DESC, catch + interval.constants.LARGEST_SEMITONES_ASC, catch +
+            interval.constants.LARGEST_INTERVAL_DESC, catch + ambitus.constants.LOWEST_NOTE,
+            catch + ambitus.constants.LOWEST_NOTE_INDEX, catch +
+            ambitus.constants.HIGHEST_NOTE, catch + ambitus.constants.HIGHEST_NOTE_INDEX,
+            catch + interval.constants.LARGEST_INTERVAL_ALL, catch +
+            interval.constants.LARGEST_SEMITONES_ALL,
+            catch + interval.constants.SMALLEST_INTERVAL_ALL, catch +
+            interval.constants.SMALLEST_SEMITONES_ALL,
+            catch + interval.constants.MEAN_INTERVAL,
+            catch + interval.constants.DESCENDING_INTERVALLIC_MEAN,
+            catch + interval.constants.ASCENDING_INTERVALLIC_MEAN]
 
-not_used_cols = [ARIA_ID, SCORING, TOTAL_ANALYSED , CLEF2, CLEF3]
+
+not_used_cols = [ARIA_ID, SCORING, TOTAL_ANALYSED, CLEF2, CLEF3]
 
 EXCEPTIONS = [ROLE, KEYSIGNATURE, TEMPO, YEAR, ARIA_CITY, SCENE, NAME]
 
 alfa = "abcdefghijklmnopqrstuvwxyz"
-COMMON_DF='common_df'
-VISUALIZATIONS='visualizations'
+COMMON_DF = 'common_df'
+VISUALIZATIONS = 'visualizations'
 forbiden_groups = {OPERA: [OPERA],
                    ARIA_LABEL: [OPERA, ARIA_LABEL],
                    TITLE: [TITLE, OPERA],
@@ -137,7 +147,7 @@ rows_groups = {OPERA: ([], "Alphabetic"),
                SCORING: ([
                    SCORING,
                    FAMILY_SCORING
-                   #Antes Scoring Sorting
+                   # Antes Scoring Sorting
                ], ["InstrumentSorting", "ScoringFamilySorting"])
                }
 
@@ -157,7 +167,7 @@ titles1Fill = openpyxl.styles.PatternFill(
 
 titles2Fill = openpyxl.styles.PatternFill(
     start_color='93d3fb', end_color='93d3fb', fill_type='solid')
-    
+
 titles3Fill = openpyxl.styles.PatternFill(
     start_color='FBBA93', end_color='FBBA93', fill_type='solid')
 
@@ -168,8 +178,8 @@ titles5Fill = openpyxl.styles.PatternFill(
     start_color='C0C0C0', end_color='C0C0C0', fill_type='solid')
 
 
-
-fills_list=[titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill]
+fills_list = [titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill,
+              titles1Fill, titles3Fill, titles4Fill, titles5Fill, titles1Fill, titles3Fill, titles4Fill, titles5Fill]
 
 factors_Fill = [openpyxl.styles.PatternFill(start_color='06CAFF', end_color='06CAFF', fill_type='solid'),
                 openpyxl.styles.PatternFill(
@@ -179,12 +189,12 @@ factors_Fill = [openpyxl.styles.PatternFill(start_color='06CAFF', end_color='06C
                 openpyxl.styles.PatternFill(start_color='11718A', end_color='11718A', fill_type='solid')]
 
 center = openpyxl.styles.Alignment(horizontal='center')
-BOLD = Font(size = 12, bold=True)
-FONT= Font(size=12)
-FONT_TITLE= Font(size = 12, bold = True, name='Garamond')
+BOLD = Font(size=12, bold=True)
+FONT = Font(size=12)
+FONT_TITLE = Font(size=12, bold=True, name='Garamond')
 
-WIDE=1.5
-NORMAL_WIDTH=1
-NARROW=0.5
+WIDE = 1.5
+NORMAL_WIDTH = 1
+NARROW = 0.5
 
-IMAGE_EXTENSION='.png'
+IMAGE_EXTENSION = '.png'
