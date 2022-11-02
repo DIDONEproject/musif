@@ -125,6 +125,8 @@ def get_number_of_beats(time_signature: str) -> int:
         return 7
     if time_signature in ['8/2', '8/4', '8/8', '8/16']:
         return 8
+    elif time_signature=='':
+        return 1
     raise ValueError(f"The {time_signature} is not a known time signature")
 
 

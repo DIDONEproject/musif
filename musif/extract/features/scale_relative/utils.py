@@ -45,7 +45,7 @@ def get_tonality_per_beat(harmonic_analysis: DataFrame, tonality: str):
 
 def fill_tonality_map(tonality_map):
     if 0 not in tonality_map:
-        tonality_map[0]=tonality_map[1] if 1 in tonality_map else tonality_map[2]
+        tonality_map[0]=tonality_map[list(tonality_map.keys())[1]]
         
     for beat in range(1, max(list(tonality_map.keys()))):
         if beat not in tonality_map.keys():
@@ -66,19 +66,21 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict, harmonic_
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
     for j, note in enumerate(notes_list):
-        if note.isChord:
-          note = note[0]
-
+        note = note[0] if note.isChord else note
         if note.measureNumber in list(harmonic_analysis['playthrough']):
-            note_offset=round(list(harmonic_analysis[harmonic_analysis['playthrough']==note.measureNumber].beats)[0]-1 + note.beat)
+            if note.beat is None:
+                i=0
+            note_offset = round(list(harmonic_analysis[harmonic_analysis['playthrough']==note.measureNumber].beats)[0]-1 + note.beat)
         else:
-            note_offset=round(note.offset)
+            note_offset = round(note.offset)
 
         if note_offset is None:
             note_offset = notes_list[j-1].offset
 
         if note_offset in tonality_map:
             local_tonality = tonality_map[round(note_offset)]
+        else:
+            local_tonality = tonality_map[list(tonality_map.keys())[-1]]        
 
         degree_value = get_note_degree(local_tonality, note.name)
 

@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 from musif.config import ENDSWITH, INSTRUMENTS_TO_DELETE, STARTSWITH, SUBSTRING_TO_DELETE
 from musif.extract.features.core.constants import FILE_NAME
+from musif.extract.basic_modules.scoring.constants import (FAMILY_INSTRUMENTATION,
+                                                      FAMILY_SCORING, VOICES)
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.texture.constants import TEXTURE
 from musif.extract.features.ambitus.constants import (HIGHEST_NOTE_INDEX,
@@ -16,8 +18,7 @@ from musif.extract.features.harmony.constants import (KEY_MODULATORY,
 from musif.extract.features.interval.constants import REPEATED_NOTES_COUNT, TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
-from musif.extract.features.scoring.constants import (FAMILY_INSTRUMENTATION,
-                                                      FAMILY_SCORING, VOICES)
+
 from musif.logs import pinfo
 from pandas import DataFrame
 from tqdm import tqdm
@@ -102,10 +103,11 @@ def _join_double_bass(df: DataFrame):
         df[formatted_col].fillna(0, inplace = True)
         if df[formatted_col].dtypes == object:
             df[formatted_col] = df[formatted_col].astype(str)
-            df[double_bass_columns] = df[double_bass_columns].astype(str)
-            df[formatted_col] = df[double_bass_columns].sum(axis=1)
+            df[col] = df[col].astype(str)
+            df[formatted_col] = df[[col, formatted_col]].sum(axis=1)
             df[formatted_col] = [i.replace('nan','') for i in df[formatted_col]]
         else:
+            df[col]=df[col].astype(float)
             df[formatted_col] = df[[formatted_col,col]].sum(axis=1)
     df.drop(double_bass_columns, axis=1, inplace=True)
                  

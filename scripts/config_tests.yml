@@ -3,23 +3,28 @@ metadata_id_col: AriaId
 data_dir: ../../Corpus_Test/xml
 musescore_dir: ../../Corpus_Test/musescore
 expand_repeats: false
-parallel: false
+window_size: null
+overlap: 2
+parallel: true
 max_processes: 7
 log:
   file_path: logs/musif_test.log
   file_level: DEBUG
   console_level: DEBUG
-features:
+
+basic_modules:
   - scoring
   - file_name
   - metadata
   - themeA
+
+features:
   - core
   - composer
   - librettist
   - ambitus
   - interval
-  - tempo
+  # - tempo
   # - density
   # - texture
   # - harmony
@@ -27,7 +32,7 @@ features:
   # - scale
   # - scale_relative
   # - key
-  # - dynamics    
+  - dynamics    
   # - rhythm
 
 split_keywords:  # Used to split the possible layers present depending on the instrument name

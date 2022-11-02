@@ -20,9 +20,13 @@ MUSESCORE_DIR = "musescore_dir"
 PARALLEL = "parallel"
 MAX_PROCESSES = "max_processes"
 FEATURES = "features"
+BASIC_MODULES = "basic_modules"
 SPLIT_KEYWORDS = "split_keywords"
 PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
+WINDOW_SIZE='window_size'
+OVERLAP='overlap'
+
 
 INTERNAL_DATA = "internal_data_dir"
 CHECK_FILE = "checking_file"
@@ -53,10 +57,13 @@ _CONFIG_FALLBACK = {
     MUSESCORE_DIR: None,
     PARALLEL: False,
     MAX_PROCESSES: 1,
+    BASIC_MODULES: ["core"],
     FEATURES: None,
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
     EXPAND_REPEATS: False,
+    WINDOW_SIZE: 8,
+    OVERLAP: 2,    
     CHECK_FILE: "."
 }
 
@@ -107,10 +114,14 @@ class Configuration:
         self.musescore_dir = config_data.get(MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
         self.parallel = config_data.get(PARALLEL, _CONFIG_FALLBACK[PARALLEL])
         self.max_processes = config_data.get(MAX_PROCESSES, _CONFIG_FALLBACK[MAX_PROCESSES])
+        self.basic_modules = config_data.get(BASIC_MODULES, _CONFIG_FALLBACK[BASIC_MODULES])
         self.features = config_data.get(FEATURES, _CONFIG_FALLBACK[FEATURES])
         self.split_keywords = config_data.get(SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS])
         self.parts_filter = config_data.get(PARTS_FILTER, _CONFIG_FALLBACK[PARTS_FILTER])
         self.expand_repeats = config_data.get(EXPAND_REPEATS, _CONFIG_FALLBACK[EXPAND_REPEATS])
+        self.window_size = config_data.get(WINDOW_SIZE, _CONFIG_FALLBACK[WINDOW_SIZE])
+        self.overlap = config_data.get(OVERLAP, _CONFIG_FALLBACK[OVERLAP])
+        
         self.internal_data_dir = path.dirname(internal_data.__file__)
         self.check = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])
         self._load_metadata()
@@ -226,26 +237,26 @@ class PostProcess_Configuration:
         self.replace_nans = config_data.get(REPLACE_NANS, _CONFIG_POST_FALLBACK[REPLACE_NANS])
         self.delete_files_without_harmony = config_data.get(DELETE_HARMONY, _CONFIG_POST_FALLBACK[DELETE_HARMONY])
         
-        
-
     def to_dict_post(self) -> dict:
         return {
-            LOG: {
-                LOG_FILE_PATH: self.log_file,
-                FILE_LOG_LEVEL: self.file_log_level,
-                CONSOLE_LOG_LEVEL: self.console_log_level,
-            },
-            CHECK_FILE: self.check_file,
-            DELETE_FILES: self.delete_files,
-            GROUPED: self.grouped_analysis,
-            SPLIT_PASSSIONS: self.split_passionA,
-            INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
-            INSTRUMENTS_TO_DELETE: self.instruments_to_kill,
-            SUBSTRING_TO_DELETE: self.substring_to_kill,
-            ENDSWITH: self.columns_endswith,
-            STARTSWITH: self.columns_startswith,
-            CONTAIN: self.columns_contain,
-            PRESENCE: self.delete_presence,
-            REPLACE_NANS: self.replace_nans,
+        LOG: {
+            LOG_FILE_PATH: self.log_file,
+            FILE_LOG_LEVEL: self.file_log_level,
+            CONSOLE_LOG_LEVEL: self.console_log_level,
+        },
+        CHECK_FILE: self.check_file,
+        DELETE_FILES: self.delete_files,
+        GROUPED: self.grouped_analysis,
+        SPLIT_PASSSIONS: self.split_passionA,
+        INSTRUMENTS_TO_KEEP: self.instruments_to_keep,
+        INSTRUMENTS_TO_DELETE: self.instruments_to_kill,
+        SUBSTRING_TO_DELETE: self.substring_to_kill,
+        ENDSWITH: self.columns_endswith,
+        STARTSWITH: self.columns_startswith,
+        CONTAIN: self.columns_contain,
+        PRESENCE: self.delete_presence,
+        REPLACE_NANS: self.replace_nans,
 
-        }
+    }
+
+
