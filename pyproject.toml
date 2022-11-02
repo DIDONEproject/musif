@@ -1,10 +1,14 @@
 [project]
 dependencies = [
-  "pandas",
-  "music21==6.7.1",
-  "tqdm==4.56.0",
-  "ms3==0.5.1",
-  "pyyaml",
+    "pandas",
+    "music21==6.7.1",
+    "tqdm==4.56.0",
+    "ms3==0.5.1",
+    "pyyaml",
+    "roman>=3.3",
+    "openpyxl>=3.0.10",
+    "matplotlib>=3.5.3",
+    "joblib>=1.2.0",
 ]
 name = "musif"
 version = "0.1.0"
