@@ -121,14 +121,13 @@ def _separate_info_in_two_parts(score, final_parts, part):
                                 e for e in not_voices_elements if e not in p.elements[num_measure].elements
                             )
                     if measure.measureNumber > 0:
-                        # TODO: this line creates an error! 🐛🐛🐛
                         if not isinstance(p.elements[num_measure], Measure):
                             continue
                         p.elements[num_measure].elements += tuple(
                             e for e in not_voices_elements if e not in p.elements[num_measure].elements
                         )
     for num, p in enumerate(parts_splitted, 1):
-        p_copy = copy.deepcopy(part)
+        p_copy = copy.deepcopy(part)  # TODO: this line takes > 10% of the time
         p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
         p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
         p_copy.elements = p.elements
@@ -166,6 +165,7 @@ def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, 
 
 
 def get_intervals(notes: List[Note]) -> List[Interval]:
+    # TODO: this takes > 6% of the time
     return [Interval(notes[i].pitches[0], notes[i + 1].pitches[0]) for i in range(len(notes) - 1)]
 
 
