@@ -75,7 +75,9 @@ def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeat
             score = score.expandRepeats()
         _cache.put(file_path, score)
     except Exception as e:
-        raise ParseFileError(file_path, str(e)) from e
+        # import sys
+        # print(sys.exc_info()[2])
+        raise ParseFileError(file_path, str(e))
     return score
 
 
