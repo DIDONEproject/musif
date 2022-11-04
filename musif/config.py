@@ -234,7 +234,7 @@ class PostProcess_Configuration:
             raise ValueError(
                 f"Unexpected number of args passed to constructor: {len(args)}")
         if len(args) > 0:
-            if isinstance(args[0], str):
+            if isinstance(args[0], str) or isinstance(args[0], PurePath):
                 config_data = read_object_from_yaml_file(args[0])
             elif isinstance(args[0], dict):
                 config_data = args[0]
@@ -242,7 +242,7 @@ class PostProcess_Configuration:
                 config_data = args[0].to_dict_post()
             else:
                 raise TypeError(
-                    f"The argument type is {type(args[0])}, and it was expected a dictionary, a Configuration or a string object")
+                    f"The argument type is {type(args[0])}, and it was expected a dictionary, a Configuration, a string, or a Path object")
         config_data.update(kwargs)  # Override values
         log_config = config_data.get(LOG, _CONFIG_FALLBACK[LOG])
         self.log_file = log_config.get(
