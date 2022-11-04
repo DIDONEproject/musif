@@ -25,8 +25,6 @@ pip install .
 
 Assuming we have our scores persisted in a directories structure like this:
  
-TODO: which one of the two?
-
 ```
 scores                                   others
 |                                        |

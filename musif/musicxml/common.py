@@ -22,9 +22,11 @@ def is_voice(part: Part) -> bool:
 
 def get_notes_and_measures(part: Part) -> Tuple[List[Note], List[Note], List[Measure], List[Measure]]:
     measures = list(part.getElementsByClass(Measure))
-    sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
+    sounding_measures = [
+        measure for measure in measures if len(measure.notes) > 0]
     original_notes = [note for measure in measures for note in measure.notes]
-    notes_and_rests = [note for measure in measures for note in measure.notesAndRests]
+    notes_and_rests = [
+        note for measure in measures for note in measure.notesAndRests]
     tied_notes = tie_notes(original_notes)
     return original_notes, tied_notes, measures, sounding_measures, notes_and_rests
 
@@ -56,7 +58,6 @@ def must_be_tied(elem, last_elem) -> bool:
     return True
 
 
-# TODO: this function is a little long...
 def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split the possible layers present on wind instruments
@@ -93,42 +94,44 @@ def split_layers(score: Score, split_keywords: List[str]):
         try:
             score.insert(0, part)
         except:
-            pass 
+            pass
+
 
 def _separate_info_in_two_parts(score, final_parts, part):
     parts_splitted = part.voicesToParts().elements
     num_measure = 0
     for measure in part.elements:
-                    # add missing information to both parts (dynamics, text annotations, etc are missing)
-        i=1
-        if isinstance(measure, Measure): 
-            num_measure +=1
+        # add missing information to both parts (dynamics, text annotations, etc are missing)
+        i = 1
+        if isinstance(measure, Measure):
+            num_measure += 1
             if any(
-                            not isinstance(e, Voice) for e in measure.elements
-                        ):
+                not isinstance(e, Voice) for e in measure.elements
+            ):
                 not_voices_elements = [
-                                e for e in measure.elements if not isinstance(e, Voice)
-                            ]  # elements such as clefs, dynamics, text annotations...
+                    e for e in measure.elements if not isinstance(e, Voice)
+                ]  # elements such as clefs, dynamics, text annotations...
                 for p in parts_splitted:
                     if measure.measureNumber == 0 and isinstance(measure, Measure):
                         number = measure.measureNumber+1
-                        if isinstance(p.elements[num_measure], Measure): #only add elements if we are in am measure 
+                        # only add elements if we are in am measure
+                        if isinstance(p.elements[num_measure], Measure):
                             p.elements[num_measure].elements += tuple(
-                                            e for e in not_voices_elements if e not in p.elements[num_measure].elements
-                                        )
+                                e for e in not_voices_elements if e not in p.elements[num_measure].elements
+                            )
                     if measure.measureNumber > 0:
                         if not isinstance(p.elements[num_measure], Measure):
                             continue
                         p.elements[num_measure].elements += tuple(
-                                        e for e in not_voices_elements if e not in p.elements[num_measure].elements
-                                    )
+                            e for e in not_voices_elements if e not in p.elements[num_measure].elements
+                        )
     for num, p in enumerate(parts_splitted, 1):
         p_copy = copy.deepcopy(part)
         p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
         p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
         p_copy.elements = p.elements
         final_parts.append(p_copy)
-    score.remove(part) # already inserted
+    score.remove(part)  # already inserted
 
 
 def get_part_clef(part):
@@ -154,7 +157,8 @@ def get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, 
     else:
         scl = MinorScale(key.split(" ")[0])
 
-    degrees = [scl.getScaleDegreeAndAccidentalFromPitch(note.pitches[0]) for note in notes]
+    degrees = [scl.getScaleDegreeAndAccidentalFromPitch(
+        note.pitches[0]) for note in notes]
 
     return [(degree[0], degree[1].fullName if degree[1] else "") for degree in degrees]
 
@@ -172,8 +176,7 @@ def get_notes_lyrics(notes: List[Note]) -> List[str]:
     for note in notes:
         if note.lyrics is None or len(note.lyrics) == 0:
             continue
-        note_lyrics = [syllable.text for syllable in note.lyrics if syllable.text is not None]
+        note_lyrics = [
+            syllable.text for syllable in note.lyrics if syllable.text is not None]
         lyrics.extend(note_lyrics)
     return lyrics
-
-
