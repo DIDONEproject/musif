@@ -13,7 +13,6 @@ MUSICXML_FILE_EXTENSION = "xml"
 
 # TODO: Documennt all this module
 
-
 def is_voice(part: Part) -> bool:
     instrument = part.getInstrument(returnDefault=False)
     if instrument is None or instrument.instrumentSound is None:
