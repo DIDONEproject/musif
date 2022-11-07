@@ -18,6 +18,7 @@ METADATA_DIR = "metadata_dir"
 METADATA_ID_COL = "metadata_id_col"
 DATA_DIR = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
+CACHE_DIR = "cache_dir"
 PARALLEL = "parallel"
 MAX_PROCESSES = "max_processes"
 FEATURES = "features"
@@ -56,6 +57,7 @@ _CONFIG_FALLBACK = {
     METADATA_ID_COL: "FileName",
     DATA_DIR: ".",
     MUSESCORE_DIR: None,
+    CACHE_DIR: None,
     PARALLEL: False,
     MAX_PROCESSES: 1,
     BASIC_MODULES: ["core"],
@@ -120,6 +122,8 @@ class Configuration:
         self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
         self.musescore_dir = config_data.get(
             MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR])
+        self.cache_dir = config_data.get(
+            CACHE_DIR, _CONFIG_FALLBACK[CACHE_DIR])
         self.parallel = config_data.get(PARALLEL, _CONFIG_FALLBACK[PARALLEL])
         self.max_processes = config_data.get(
             MAX_PROCESSES, _CONFIG_FALLBACK[MAX_PROCESSES])
@@ -182,6 +186,7 @@ class Configuration:
             METADATA_ID_COL: self.metadata_id_col,
             DATA_DIR: self.data_dir,
             MUSESCORE_DIR: self.musescore_dir,
+            CACHE_DIR: self.cache_dir,
             PARALLEL: self.parallel,
             MAX_PROCESSES: self.max_processes,
             FEATURES: self.features,

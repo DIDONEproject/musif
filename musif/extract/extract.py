@@ -7,11 +7,14 @@ import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from os import path
 from typing import Dict, List, Optional, Tuple, Union
+import pickle
 
 from joblib import Parallel, delayed
 import pandas as pd
 from music21.converter import parse
 from music21.stream import Measure, Part, Score
+
+# from musif import m21pickle as pickle
 from musif.common._constants import (BASIC_MODULES, FEATURES_MODULES,
                                      GENERAL_FAMILY)
 from musif.common.cache import Cache
@@ -396,6 +399,9 @@ class FeaturesExtractor:
         self._cfg = Configuration(*args, **kwargs)
         self.check_file = kwargs.get('check_file')
         self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
+        # creates the directory for the cache
+        if self._cfg.cache_dir is not None:
+            Path(self._cfg.cache_dir).mkdir(exist_ok=True)
         # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
         # self.logger.start()
 
@@ -505,6 +511,9 @@ class FeaturesExtractor:
         return score_features, parts_features
 
     def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+        # TODO:
+        # the first lines are the same as in _process_score
+        # they should be moved in an ad-hoc function
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(
             score_data, part) for part in score_data[DATA_SCORE].parts]
@@ -592,19 +601,32 @@ class FeaturesExtractor:
         return score_features, parts_features
 
     def _get_score_data(self, musicxml_file: str) -> dict:
-        score = parse_musicxml_file(
-            musicxml_file, self._cfg.split_keywords, expand_repeats=self._cfg.expand_repeats)
-        filtered_parts = self._filter_parts(score)
-        if len(filtered_parts) == 0:
-            lwarn(
-                f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}")
-        data = {
-            DATA_SCORE: score,
-            DATA_FILE: musicxml_file,
-            DATA_FILTERED_PARTS: filtered_parts,
-        }
-        if self._cfg.is_requested_musescore_file():
-            data.update(self._get_harmony_data(musicxml_file))
+        cache_name = Path(self._cfg.cache_dir) / \
+            (Path(musicxml_file).stem + '.pkl')
+
+        data = None
+        if cache_name.exists():
+            try:
+                data = pickle.load(open(cache_name, 'rb'))
+            except Exception as e:
+                perr(
+                    "Error while loading pickled object, continuing with extraction from scratch: ", e)
+
+        if data is None:
+            score = parse_musicxml_file(
+                musicxml_file, self._cfg.split_keywords, expand_repeats=self._cfg.expand_repeats)
+            filtered_parts = self._filter_parts(score)
+            if len(filtered_parts) == 0:
+                lwarn(
+                    f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}")
+            data = {
+                DATA_SCORE: score,
+                DATA_FILE: musicxml_file,
+                DATA_FILTERED_PARTS: filtered_parts,
+            }
+            if self._cfg.is_requested_musescore_file():
+                data.update(self._get_harmony_data(musicxml_file))
+            pickle.dump(data, open(cache_name, 'wb'))
         return data
 
     def _get_harmony_data(self, musicxml_file: str) -> dict:
