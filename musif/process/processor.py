@@ -110,7 +110,7 @@ class DataProcessor:
                 if not os.path.exists(info):
                     raise FileNotFoundError('A .csv file could not be found')
                 if isinstance(info, PurePath):
-                    self.destination_route = info.with_suffix('')
+                    self.destination_route = str(info.with_suffix(''))
                 else:
                     self.destination_route = info.replace('.csv', '')
                 df = pd.read_csv(info, low_memory=False,

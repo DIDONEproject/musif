@@ -1,4 +1,4 @@
-from pathlib import PurePath
+from pathlib import PurePath, Path
 import copy
 import glob
 import inspect
@@ -395,6 +395,7 @@ class FeaturesExtractor:
         """
         self._cfg = Configuration(*args, **kwargs)
         self.check_file = kwargs.get('check_file')
+        self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
         # self.logger.start()
 
@@ -424,11 +425,6 @@ class FeaturesExtractor:
         score_df, parts_df = self._process_corpora(musicxml_files)
 
         return score_df
-
-    def _find_mscx_files(self):
-        for name in glob.glob(self._cfg.data_dir+'*.xml'):
-            if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
-                perr(f"\nNo mscx was found for file {name}")
 
     def _process_corpora(self, musicxml_files: List[str]) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
@@ -679,12 +675,11 @@ class FeaturesExtractor:
             found_features.add(feature)
             yield module
 
-    def _extract_feature_dependencies(self, module) -> List[str]:
+    def _extract_feature_dependencies(self, module: str) -> List[str]:
         module_code = inspect.getsource(module)
-        dependencies = re.findall(
-            rf"from {FEATURES_MODULES}.([\w\.]+) import", module_code)
+        dependencies = self.regex.findall(module_code)
         dependencies = [dependency.split('.')[
-            0] for dependency in dependencies if dependency.split('.')[0] in self._cfg.features]
+            0] for dependency in dependencies if dependency.split('.')[0] in self._cfg.features and dependency != module.split('.')[-2]]
         return dependencies
 
     def _update_parts_module_features(self, module, score_data: dict, parts_data: List[dict],
@@ -716,6 +711,12 @@ class FeaturesExtractor:
                 f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
 
     def _find_mscx_files(self):
-        for name in glob.glob(self._cfg.data_dir + '*.xml'):
-            if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
+        data_dir = self._cfg.data_dir
+        if type(data_dir) is list:
+            xml_names = data_dir
+        else:
+            data_dir = Path(data_dir)
+            xml_names = data_dir.glob("*.xml")
+        for name in xml_names:
+            if not os.path.exists(compose_musescore_file_path(str(name), self._cfg.musescore_dir)):
                 perr(f"\nNo mscx was found for file {name}")
