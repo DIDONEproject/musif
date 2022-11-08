@@ -27,3 +27,5 @@ build-backend = "pdm.pep517.api"
 
 [tool]
 [tool.pdm]
+[tool.pdm.build]
+includes = ["musif/py.typed"]
