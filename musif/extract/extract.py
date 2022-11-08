@@ -395,8 +395,6 @@ class FeaturesExtractor:
         """
         self._cfg = Configuration(*args, **kwargs)
         self.check_file = kwargs.get('check_file')
-        # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
-        # self.logger.start()
 
     def extract(self) -> DataFrame:
         """
@@ -426,7 +424,7 @@ class FeaturesExtractor:
         return score_df
 
     def _find_mscx_files(self):
-        for name in glob.glob(self._cfg.data_dir+'*.xml'):
+        for name in glob.glob(self._cfg.data_dir / '*.xml'):
             if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
                 perr(f"\nNo mscx was found for file {name}")
 
@@ -716,6 +714,10 @@ class FeaturesExtractor:
                 f'An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n')
 
     def _find_mscx_files(self):
-        for name in glob.glob(self._cfg.data_dir + '*.xml'):
-            if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
-                perr(f"\nNo mscx was found for file {name}")
+        if os.path.isdir(self._cfg.data_dir):
+            for name in glob.glob(str(self._cfg.data_dir)+'*.xml'):
+                if not os.path.exists(compose_musescore_file_path(name, self._cfg.musescore_dir)):
+                    perr(f"\nNo mscx was found for file {name}")
+        else:
+            if not os.path.exists(compose_musescore_file_path(str(self._cfg.data_dir), self._cfg.musescore_dir)):
+                    perr(f"\nNo mscx was found for file {name}")

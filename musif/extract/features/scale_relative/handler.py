@@ -4,7 +4,7 @@ from musif.config import Configuration
 from musif.extract.common import filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.prefix import get_part_prefix, get_score_feature
-from musif.extract.features.scale_relative.utils import get_emphasised_scale_degrees_relative
+from .utils import get_emphasised_scale_degrees_relative
 from .constants import *
 from musif.extract.features.core.constants import DATA_KEY, DATA_NOTES
 
