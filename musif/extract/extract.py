@@ -476,22 +476,6 @@ class FeaturesExtractor:
 
     def _process_corpus(self, musicxml_files: List[str]) -> Tuple[List[dict], List[dict]]:
 
-        import pysnooper
-
-        def new_tracer(self, frame):
-            is_frame = frame.f_code.co_filename.startswith('/home/federico/musiF/')
-            return not is_frame
-
-        pysnooper.tracer.Tracer._is_internal_frame = new_tracer
-
-        def check_if_type_m21(obj):
-            if obj.__class__.__module__.startswith('music21'):
-                return True
-
-        def repr_m21_obj(obj):
-            return f"Here is a m21 obj: {obj.__class__.__qualname__}"
-
-        @pysnooper.snoop('tmp.log', custom_repr=((check_if_type_m21, repr_m21_obj), ), depth=10)
         def process_corpus_par(musicxml_file):
             if self._cfg.window_size is not None:
                 score_features, score_parts_features = self._process_score_windows(
@@ -512,7 +496,7 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        # pinfo(f"\nProcessing score {musicxml_file}")
+        pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(
             score_data, part) for part in score_data[DATA_SCORE].parts]
