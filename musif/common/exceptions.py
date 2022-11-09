@@ -10,3 +10,12 @@ class ParseFileError(Exception):
 
     def __init__(self, file_path: str, reason: str):
         super().__init__(f"Parse error with file '{file_path}': {reason}")
+
+
+class CannotResurrectObject(Exception):
+    """Exception raised when a cached object is accessed on a non-cached attribute and the object doesn't know how to resurrect the non-cached object"""
+
+    def __init__(self, obj):
+        super().__init__(
+            f"Cannot resurrect object {obj.cache['_repr']}, please define a `resurrect_reference` field in {obj}"
+        )

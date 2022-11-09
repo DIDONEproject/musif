@@ -28,7 +28,7 @@ from musif.extract.constants import *
 from musif.extract.basic_modules.themeA.constants import END_OF_THEME_A
 
 from musif.extract.common import filter_parts_data
-from musif.extract.exceptions import MissingFileError, ParseFileError
+from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.extract.utils import process_musescore_file
 
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
