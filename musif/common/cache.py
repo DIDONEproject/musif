@@ -99,9 +99,9 @@ class SmartModuleCache:
 
     def __repr__(self):
         _repr = self.cache["_repr"]
-        _module = self.cache["_target_module"]
-        _resurrect = self.cache["_resurrect_reference"]
-        return f"SmartModuleCache({_resurrect}, {_module}, {_repr})"
+        _module = self.cache["_target_addresses"]
+        _reference = self.cache["_reference"]
+        return f"SmartModuleCache({_reference}, {_module}, {_repr})"
 
     @property
     def target_addresses(self):
@@ -113,6 +113,11 @@ class SmartModuleCache:
 
     def __hash__(self):
         return self.cache["_hash"]
+
+    def _wmo(self, obj):
+        return wrap_module_objects(
+            obj, target_addresses=self.cache["_target_addresses"]
+        )
 
     def __getattr__(self, name: str) -> Any:
         """
@@ -130,9 +135,7 @@ class SmartModuleCache:
         del self.cache[name]
 
     def __setattr__(self, name, value):
-        self.cache[name] = wrap_module_objects(
-            value, target_addresses=self.cache["_target_addresses"]
-        )
+        self.cache[name] = self._wmo(value)
         self.cache["_reference"].get_attr("__setattr__")(name, value)
 
     def _cache_new_attr(self, name: str) -> Any:
@@ -146,9 +149,7 @@ class SmartModuleCache:
             )
         else:
             # cache the value and returns it
-            self.cache[name] = wrap_module_objects(
-                attr, target_addresses=self.cache["_target_addresses"]
-            )
+            self.cache[name] = self._wmo(attr)
         return attr
 
     def __setstate__(self, state):
@@ -207,7 +208,7 @@ class ObjectReference:
 
     def get_attr(self, name: str) -> Any:
         if self.reference is None:
-            pinfo(f"Resurrecting reference object due to call to attribute {name}")
+            pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
             self._try_resurrect()
         return getattr(self.reference, name)
 
@@ -260,7 +261,12 @@ class MethodCache:
         self.attr_cache = dict()
         self.target_addresses = target_addresses
 
+    def _wmo(self, obj):
+        return wrap_module_objects(obj, target_addresses=self.target_addresses)
+
     def __call__(self, *args, **kwargs):
+        args = [self._wmo(arg) for arg in args]
+        kwargs = {k: self._wmo(v) for k, v in kwargs.items()}
         call_args = CallableArguments(*args, **kwargs)
         cached_res = self.attr_cache.get(call_args)
         if cached_res is not None:
@@ -268,7 +274,7 @@ class MethodCache:
         else:
             attr = self.reference.get_attr(self.attr_name)
             res = attr(*args, **kwargs)
-            res = wrap_module_objects(res, target_addresses=self.target_addresses)
+            res = self._wmo(res)
             self.attr_cache[call_args] = res
             return res
 
