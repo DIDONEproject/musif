@@ -86,15 +86,16 @@ class SmartModuleCache:
         resurrect_reference: Optional[Tuple] = None,
     ):
 
-        self.cache: Dict[
+        cache: Dict[
             str,
             Union[Tuple, str, int, SmartModuleCache, MethodCache, Any],
         ] = {
-            "_hash": random.randint(10**10),
+            "_hash": random.randint(10**10, 10**15),
             "_target_addresses": target_addresses,
             "_repr": str(reference),
             "_reference": ObjectReference(reference, resurrect_reference),
         }
+        object.__setattr__(self, "cache", cache)
 
     def __repr__(self):
         _repr = self.cache["_repr"]
@@ -113,7 +114,7 @@ class SmartModuleCache:
     def __hash__(self):
         return self.cache["_hash"]
 
-    def __getattribute__(self, name: str) -> Any:
+    def __getattr__(self, name: str) -> Any:
         """
         The real key of this class is this method!
         """
@@ -125,11 +126,24 @@ class SmartModuleCache:
             # attr not in cache
             return self._cache_new_attr(name)
 
+    def __delattr__(self, name):
+        del self.cache[name]
+
+    def __setattr__(self, name, value):
+        self.cache[name] = wrap_module_objects(
+            value, target_addresses=self.cache["_target_addresses"]
+        )
+        self.cache["_reference"].get_attr("__setattr__")(name, value)
+
     def _cache_new_attr(self, name: str) -> Any:
         attr = self.cache["_reference"].get_attr(name)
         if callable(attr):
-            # pass the method cacher
-            self.cache[name] = MethodCache(self.cache["_reference"])
+            # use the method cacher
+            self.cache[name] = MethodCache(
+                self.cache["_reference"],
+                name,
+                target_addresses=self.cache["_target_addresses"],
+            )
         else:
             # cache the value and returns it
             self.cache[name] = wrap_module_objects(
@@ -138,10 +152,38 @@ class SmartModuleCache:
         return attr
 
     def __setstate__(self, state):
-        self.cache = state
+        object.__setattr__(self, "cache", state)
 
     def __getstate__(self):
         return self.cache
+
+    # caching other special methods
+    def __iter__(self):
+        it = self.cache.get("__list__")
+        if it is None:
+            it = self.cache["_reference"].get_attr("__iter__")()
+            it = list(it)
+            self.cache["__list__"] = it
+        return iter(it)
+
+    def __len__(self):
+        L = self.cache.get("__len__")
+        if L is None:
+            L = self.cache["_reference"].get_attr("__len__")()
+            self.cache["__len__"] = L
+        return L
+
+    def __getitem__(self, k):
+        v = self.cache.get(f"__item_{k}")
+        if v is None:
+            v = self.cache["_reference"].get_attr("__getitem__")(k)
+            self.cache[f"__item_{k}"] = v
+        return v
+
+    def __setitem__(self, k, v):
+        v = self.cache["_reference"].get_attr("__getitem__")(k)
+        self.cache[f"__item_{k}"] = v
+        self.cache["_reference"].get_attr("__setattr__")(k, v)
 
 
 class ObjectReference:
@@ -156,11 +198,11 @@ class ObjectReference:
         self.resurrect_reference = resurrect_reference
 
     def _try_resurrect(self) -> None:
-        if self._resurrect_reference is None:
+        if self.resurrect_reference is None:
             raise CannotResurrectObject(self)
         else:
-            func = self._resurrect_reference[0]
-            args = self._resurrect_reference[1:]
+            func = self.resurrect_reference[0]
+            args = self.resurrect_reference[1:]
             self.reference = func(*args)
 
     def get_attr(self, name: str) -> Any:
