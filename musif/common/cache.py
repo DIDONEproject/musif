@@ -1,6 +1,13 @@
 from typing import Any, Optional
 
-class Cache:
+
+class FileCacheIntoRAM:
+    """
+    This class simply stores a dictionary of key-value.
+    In `musiF`, it is used to cache the objects (values) coming from the
+    parsing of files (whose names are the keys).
+    It is never written to disk and only kept into RAM.
+    """
 
     def __init__(self, capacity: int):
         self._capacity = capacity

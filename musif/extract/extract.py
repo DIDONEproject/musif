@@ -17,7 +17,7 @@ from music21.stream import Measure, Part, Score
 # from musif import m21pickle as pickle
 from musif.common._constants import (BASIC_MODULES, FEATURES_MODULES,
                                      GENERAL_FAMILY)
-from musif.common.cache import Cache
+from musif.common.cache import FileCacheIntoRAM
 from musif.common.sort import sort_list
 from musif.config import Configuration
 
@@ -40,7 +40,7 @@ from musif.musicxml.scoring import (ROMAN_NUMERALS_FROM_1_TO_20,
 from pandas import DataFrame
 from tqdm import tqdm
 
-_cache = Cache(10000)  # To cache scanned scores
+_cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 
 def parse_musicxml_file(file_path: str, split_keywords: List[str], expand_repeats: bool = False) -> Score:
