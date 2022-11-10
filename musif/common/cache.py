@@ -70,6 +70,15 @@ class SmartModuleCache:
     objects, they will re-use the cache after pickling/unpickling.
     This will automatically work for objects in the `target_module`.
 
+    Sometimes, the methods of the referenced object expect a non-cached module,
+    for instance when a type checking or a hash comparison is done. For those
+    situations, `SmartModuleCache` provides *special methods* that start with
+    `SmartModuleCache.SPECIAL_METHODS_NAME` (which defaults to
+    `"smartcache__"`). It is possible call any method with
+    `smartcache__methoname`, e.g. `score.smartcache__remove`.
+    When a special method is called, the first call is performed with the
+    non-cached arguments, as it would happen without `SmartModuleCache`.
+
     N.B. However, if one method is called with as argument an object that is
     not a singleton and not in `target_module`, the call will be cached but
     after pickling it cannot be used, thus leading to an always increasing
@@ -78,6 +87,8 @@ class SmartModuleCache:
     NotImplemented: When `smart_pickling` is True, it pickles the dictionary
     alone, without the reference, otherwise, it pickles the reference as well.
     """
+
+    SPECIAL_METHODS_NAME = "smartcache__"
 
     def __init__(
         self,
@@ -92,16 +103,14 @@ class SmartModuleCache:
         ] = {
             "_hash": random.randint(10**10, 10**15),
             "_target_addresses": target_addresses,
-            "_repr": str(reference),
             "_reference": ObjectReference(reference, resurrect_reference),
         }
         object.__setattr__(self, "cache", cache)
 
     def __repr__(self):
-        _repr = self.cache["_repr"]
         _module = self.cache["_target_addresses"]
         _reference = self.cache["_reference"]
-        return f"SmartModuleCache({_reference}, {_module}, {_repr})"
+        return f"SmartModuleCache({_reference}, {_module})"
 
     @property
     def target_addresses(self):
@@ -116,7 +125,9 @@ class SmartModuleCache:
 
     def _wmo(self, obj):
         return wrap_module_objects(
-            obj, target_addresses=self.cache["_target_addresses"]
+            obj,
+            target_addresses=self.cache["_target_addresses"],
+            resurrect_reference=None,
         )
 
     def __getattr__(self, name: str) -> Any:
@@ -139,17 +150,27 @@ class SmartModuleCache:
         self.cache["_reference"].get_attr("__setattr__")(name, value)
 
     def _cache_new_attr(self, name: str) -> Any:
+        if name.startswith(self.SPECIAL_METHODS_NAME):
+            special_name = name
+            name = name[len(self.SPECIAL_METHODS_NAME) :]
+        else:
+            special_name = None
         attr = self.cache["_reference"].get_attr(name)
         if callable(attr):
             # use the method cacher
-            self.cache[name] = MethodCache(
+            attr = MethodCache(
                 self.cache["_reference"],
                 name,
                 target_addresses=self.cache["_target_addresses"],
+                special_method=special_name is not None,
             )
         else:
             # cache the value and returns it
-            self.cache[name] = self._wmo(attr)
+            attr = self._wmo(attr)
+
+        if special_name is not None:
+            name = special_name
+        self.cache[name] = attr
         return attr
 
     def __setstate__(self, state):
@@ -163,7 +184,7 @@ class SmartModuleCache:
         it = self.cache.get("__list__")
         if it is None:
             it = self.cache["_reference"].get_attr("__iter__")()
-            it = list(it)
+            it = list(map(self._wmo, it))
             self.cache["__list__"] = it
         return iter(it)
 
@@ -178,13 +199,18 @@ class SmartModuleCache:
         v = self.cache.get(f"__item_{k}")
         if v is None:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
+            v = self._wmo(v)
             self.cache[f"__item_{k}"] = v
         return v
 
     def __setitem__(self, k, v):
         v = self.cache["_reference"].get_attr("__getitem__")(k)
+        v = self._wmo(v)
         self.cache[f"__item_{k}"] = v
         self.cache["_reference"].get_attr("__setattr__")(k, v)
+
+    def __bool__(self):
+        return self.cache["_reference"].get_attr("__bool__")()
 
 
 class ObjectReference:
@@ -219,6 +245,9 @@ class ObjectReference:
         self.reference = None
         self.resurrect_reference = state
 
+    def __repr__(self):
+        return f"ObjectReference({self.reference})"
+
 
 class CallableArguments:
     """
@@ -243,6 +272,15 @@ class CallableArguments:
     def __hash__(self):
         return self._hash
 
+    def __repr__(self):
+        ret = "CallableArguments("
+        for a in self.args:
+            ret += f"{repr(self.args)}, "
+        for k, v in self.kwargs.items():
+            ret += f"{repr(k)}={repr(v)}, "
+        ret += ")"
+        return ret
+
 
 class MethodCache:
     """
@@ -255,27 +293,34 @@ class MethodCache:
         reference: ObjectReference,
         attr_name: str,
         target_addresses: List[str] = ["music21"],
+        special_method: bool = False,
     ):
         self.reference = reference
-        self.attr_name = attr_name
-        self.attr_cache = dict()
+        self.name = attr_name
+        self.cache = dict()
         self.target_addresses = target_addresses
+        self.special_method = special_method
 
     def _wmo(self, obj):
-        return wrap_module_objects(obj, target_addresses=self.target_addresses)
+        return wrap_module_objects(
+            obj, target_addresses=self.target_addresses, resurrect_reference=None
+        )
 
     def __call__(self, *args, **kwargs):
-        args = [self._wmo(arg) for arg in args]
+        args = list(map(self._wmo, args))
         kwargs = {k: self._wmo(v) for k, v in kwargs.items()}
         call_args = CallableArguments(*args, **kwargs)
-        cached_res = self.attr_cache.get(call_args)
+        cached_res = self.cache.get(call_args)
         if cached_res is not None:
             return cached_res
         else:
-            attr = self.reference.get_attr(self.attr_name)
+            attr = self.reference.get_attr(self.name)
+            if self.special_method:
+                args = [arg.cache["_reference"].reference for arg in args]
+                kwargs = {k: v.cache["_reference"].reference for k, v in kwargs.items()}
             res = attr(*args, **kwargs)
             res = self._wmo(res)
-            self.attr_cache[call_args] = res
+            self.cache[call_args] = res
             return res
 
 
