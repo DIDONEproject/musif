@@ -18,7 +18,7 @@ from tqdm import tqdm
 
 # from musif import m21pickle as pickle
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
-from musif.common.cache import FileCacheIntoRAM, SmartModuleCache
+from musif.common.cache import FileCacheIntoRAM, SmartCache
 from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.common.sort import sort_list
 from musif.config import Configuration
@@ -77,9 +77,8 @@ def parse_musicxml_file(
     if score is not None:
         return score
     try:
-        score = SmartModuleCache(
+        score = SmartCache(
             reference=parse(file_path),
-            target_addresses=["music21"],
             resurrect_reference=(parse, file_path),
         )
         # score = parse(file_path)
