@@ -78,7 +78,7 @@ def parse_musicxml_file(
         return score
     try:
         score = SmartModuleCache(
-            reference=None,
+            reference=parse(file_path),
             target_addresses=["music21"],
             resurrect_reference=(parse, file_path),
         )
