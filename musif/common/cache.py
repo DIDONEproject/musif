@@ -39,7 +39,7 @@ class FileCacheIntoRAM:
         return len(self._items) == self._capacity
 
 
-class SmartCache:
+class SmartModuleCache:
     """
     This class wraps any object so that its function calls can be cached in a
     dict, very similarly to how `functools.lru_cache` works.
@@ -59,7 +59,11 @@ class SmartCache:
     first position and the arguments later; the function returned value must be
     the reference object.
 
-    Any object returned by accessing an attribute is cached with `SmartCache`
+    If the method/property/field returns an object defined in a
+    one of the `target_addresses`, this class will return a wrapped version of
+    that object.
+    In `musiF`, this is used to wrap all the music21 objects and to cache
+    (most of) music21 operations.
 
     When a method is called, it is matched with all the arguments, similarly to
     `functools.lru_cache`, thus using the hash value of the objects.
@@ -67,17 +71,17 @@ class SmartCache:
     When pickled, this objects only pickles the cache dictionary.
     The matching of the arguments in a method works on a custom hash value that
     is guaranteed to be the same when the object is pickled/unpickled. As
-    consequence, as long as the method arguments are `SmartCache`
+    consequence, as long as the method arguments are `SmartModuleCache`
     objects, they will re-use the cache after pickling/unpickling.
 
     Sometimes, the methods of the referenced object expect a non-cached module,
     for instance when a type checking or a hash comparison is done. For those
-    situations, `SmartCache` provides *special methods* that start with
-    `SmartCache.SPECIAL_METHODS_NAME` (which defaults to
+    situations, `SmartModuleCache` provides *special methods* that start with
+    `SmartModuleCache.SPECIAL_METHODS_NAME` (which defaults to
     `"smartcache__"`). It is possible call any method with
     `smartcache__methodname`, e.g. `score.smartcache__remove`.
     When a special method is called, the first call is performed with the
-    non-cached arguments, as it would happen without `SmartCache`.
+    non-cached arguments, as it would happen without `SmartModuleCache`.
 
     NotImplemented: When `smart_pickling` is True, it pickles the dictionary
     alone, without the reference, otherwise, it pickles the reference as well.
@@ -94,11 +98,16 @@ class SmartCache:
     def __init__(
         self,
         reference: Any = None,
+        target_addresses: List[str] = ["music21"],
         resurrect_reference: Optional[Tuple] = None,
     ):
 
-        cache: Dict[str, Union[Tuple, str, int, SmartCache, MethodCache, Any],] = {
+        cache: Dict[
+            str,
+            Union[Tuple, str, int, SmartModuleCache, MethodCache, Any],
+        ] = {
             "_hash": random.randint(10**10, 10**15),
+            "_target_addresses": target_addresses,
             "_reference": ObjectReference(reference, resurrect_reference),
         }
         object.__setattr__(self, "cache", cache)
@@ -111,7 +120,15 @@ class SmartCache:
 
     def __repr__(self):
         _reference = self.cache["_reference"]
-        return f"SmartCache({_reference})"
+        return f"SmartModuleCache({_reference}, {_module})"
+
+    @property
+    def target_addresses(self):
+        return self.cache["_target_addresses"]
+
+    @target_addresses.setter
+    def target_addresses(self, value):
+        self.cache["_target_addresses"] = value
 
     def __hash__(self):
         return self.cache["_hash"]
@@ -119,6 +136,7 @@ class SmartCache:
     def _wmo(self, obj):
         return wrap_module_objects(
             obj,
+            target_addresses=self.cache["_target_addresses"],
             resurrect_reference=None,
         )
 
@@ -153,6 +171,7 @@ class SmartCache:
             attr = MethodCache(
                 self.cache["_reference"],
                 name,
+                target_addresses=self.cache["_target_addresses"],
                 special_method=special_name is not None,
             )
         else:
@@ -208,7 +227,7 @@ class SmartCache:
 class ObjectReference:
     """
     This is handles the calls to the reference object so that both
-    `MethodCache` and `SmartCache` reference the same object and when one
+    `MethodCache` and `SmartModuleCache` reference the same object and when one
     resurrects it, the other sees it.
     """
 
@@ -316,15 +335,19 @@ class MethodCache:
         self,
         reference: ObjectReference,
         attr_name: str,
+        target_addresses: List[str] = ["music21"],
         special_method: bool = False,
     ):
         self.reference = reference
         self.name = attr_name
         self.cache = dict()
+        self.target_addresses = target_addresses
         self.special_method = special_method
 
     def _wmo(self, obj):
-        return wrap_module_objects(obj, resurrect_reference=None)
+        return wrap_module_objects(
+            obj, target_addresses=self.target_addresses, resurrect_reference=None
+        )
 
     def __call__(self, *args, **kwargs):
         args = list(map(self._wmo, args))
@@ -348,15 +371,19 @@ class MethodCache:
 
 def wrap_module_objects(
     obj: Any,
+    target_addresses: List[str] = ["music21"],
     resurrect_reference: Optional[Tuple] = None,
 ):
     """
-    Returns the object wrapped with `SmartCache` class if it is not a Cache
+    Returns the object wrapped with `SmartModuleCache` class if it was defined
+    in one of the `target_addresses`
     """
-    if type(obj) not in [SmartCache, MethodCache]:
-        return SmartCache(
-            reference=obj,
-            resurrect_reference=resurrect_reference,
-        )
-    else:
-        return obj
+    __module = obj.__class__.__module__
+    for module in target_addresses:
+        if __module.startswith(module):
+            return SmartModuleCache(
+                reference=obj,
+                target_addresses=target_addresses,
+                resurrect_reference=resurrect_reference,
+            )
+    return obj
