@@ -7,7 +7,7 @@ from pathlib import PurePath
 import numpy as np
 import pandas as pd
 from musif.common.sort import sort_columns
-from musif.common.utils import read_dicts_from_csv
+from musif.common._utils import read_dicts_from_csv
 from musif.config import PostProcess_Configuration
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME

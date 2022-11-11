@@ -9,7 +9,7 @@ from music21.interval import Interval
 from scipy.stats import kurtosis, skew
 from scipy.stats.mstats import trimmed_mean, trimmed_std
 
-from musif.common.utils import extract_digits
+from musif.common._utils import extract_digits
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_INTERVALS

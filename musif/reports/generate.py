@@ -8,7 +8,7 @@ from musif.process.utils import merge_single_voices
 
 import pandas as pd
 from musif.common.constants import LEVEL_DEBUG, LEVEL_ERROR
-from musif.common.utils import colorize
+from musif.common._utils import colorize
 from musif.config import Configuration
 from musif.extract.constants import VOICES_LIST
 from musif.extract.features import (density, harmony, lyrics, scale,

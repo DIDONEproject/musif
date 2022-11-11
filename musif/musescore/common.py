@@ -2,9 +2,22 @@ from ms3.score import MSCX
 
 from musif.logs import ldebug, lerr
 
-
-# TODO: document this function
 def extract_harmonic_analysis(mscx_file: str):
+    """
+    Given a mscx file name, parses the file using ms3 library and returns a dataframe containing all harmonic information.
+    Adds Playthrough column that contains number of every measure in the cronological order
+    Parameters
+    ----------
+    file_path: str
+        Path to mscx file
+    expand_repeats: bool
+        Directory path to musescore file
+    Returns
+    -------
+    harmonic_analysis: str
+        Dataframe containing harmonic information
+    
+    """
     ldebug(f"Extracting harmonic analysis from musescore file '{mscx_file}'")
     harmonic_analysis = None
     try:

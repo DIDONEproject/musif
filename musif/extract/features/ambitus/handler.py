@@ -2,20 +2,22 @@ from statistics import mean
 from typing import List
 
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import __filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
-from musif.musicxml.ambitus import get_notes_ambitus
 from .constants import *
 from musif.extract.features.core.constants import DATA_NOTES
 from ..prefix import get_part_feature
 
+from typing import List, Optional, Tuple
+
+from music21.chord import Chord
+from music21.note import Note
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     notes = part_data[DATA_NOTES]
     if notes is None or len(notes) == 0:
-
         return
-    lowest_note, highest_note = get_notes_ambitus(notes)
+    lowest_note, highest_note = _get_notes_ambitus(notes)
     lowest_note_text = lowest_note.nameWithOctave.replace("-", "b")
     highest_note_text = highest_note.nameWithOctave.replace("-", "b")
     lowest_note_index = int(lowest_note.pitch.midi)
@@ -30,10 +32,9 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     }
     part_features.update(ambitus_features)
 
-
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
     
-    parts_data = filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = __filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
 
@@ -45,3 +46,15 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
                 score_features[part_feature] = mean([score_features[part_feature], parts_features[feature_name]])
             else:
                 score_features[part_feature] = part_features.get(feature_name)
+
+def _get_notes_ambitus(notes: List[Note]) -> Tuple[Note, Note]:
+    first_note = notes[0][0] if isinstance(notes[0], Chord) else notes[0]
+    lowest_note = first_note
+    highest_note = first_note
+    for note in notes[1:]:
+        current_note = note[0] if isinstance(note, Chord) else note
+        if current_note.pitch.midi < lowest_note.pitch.midi:
+            lowest_note = current_note
+        if current_note.pitch.midi > highest_note.pitch.midi:
+            highest_note = current_note
+    return lowest_note, highest_note
