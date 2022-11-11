@@ -18,7 +18,7 @@ from tqdm import tqdm
 
 # from musif import m21pickle as pickle
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
-from musif.common.cache import FileCacheIntoRAM, SmartCache
+from musif.common.cache import FileCacheIntoRAM, SmartModuleCache
 from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.common.sort import sort_list
 from musif.config import Configuration
@@ -77,11 +77,11 @@ def parse_musicxml_file(
     if score is not None:
         return score
     try:
-        score = SmartCache(
-            reference=parse(file_path),
-            resurrect_reference=(parse, file_path),
-        )
-        # score = parse(file_path)
+        # score = SmartCache(
+        #     reference=parse(file_path),
+        #     resurrect_reference=(parse, file_path),
+        # )
+        score = parse(file_path)
         split_layers(score, split_keywords)
         if expand_repeats:
             score = score.expandRepeats()
@@ -666,11 +666,11 @@ class FeaturesExtractor:
             )
         return score_features, parts_features
 
-    def _get_score_data(self, musicxml_file: str) -> dict:
+    def _get_score_data(self, musicxml_file: str, load_cache: bool = True) -> dict:
         cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
 
         data = None
-        if cache_name.exists():
+        if cache_name.exists() and load_cache:
             try:
                 data = pickle.load(open(cache_name, "rb"))
             except Exception as e:
@@ -697,6 +697,10 @@ class FeaturesExtractor:
             }
             if self._cfg.is_requested_musescore_file():
                 data.update(self._get_harmony_data(musicxml_file))
+            data = SmartModuleCache(
+                reference=data,
+                resurrect_reference=(self._get_score_data, musicxml_file, False),
+            )
             pickle.dump(data, open(cache_name, "wb"))
         return data
 
@@ -808,6 +812,7 @@ class FeaturesExtractor:
                 )
             except Exception as e:
                 score_name = score_data["file"]
+                # __import__('traceback').print_exc(e)
                 perr(
                     f"An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
@@ -830,6 +835,7 @@ class FeaturesExtractor:
             )
         except Exception as e:
             score_name = score_data["file"]
+            # __import__('traceback').print_exc(e)
             perr(
                 f"An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
