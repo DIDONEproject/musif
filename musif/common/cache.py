@@ -1,7 +1,7 @@
 import random
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from deepdiff import DeepHash
+# from deepdiff import DeepHash
 
 from musif.logs import pinfo, pwarn
 
@@ -234,7 +234,7 @@ class ObjectReference:
     def __init__(self, reference: Any, resurrect_reference: Optional[Tuple]):
         self.reference = reference
         self.resurrect_reference = resurrect_reference
-        self.deephash = DeepHash(reference)[reference]
+        # self.deephash = DeepHash(reference)[reference]
 
     def _try_resurrect(self) -> None:
         if self.resurrect_reference is None:
@@ -243,7 +243,7 @@ class ObjectReference:
             func = self.resurrect_reference[0]
             args = self.resurrect_reference[1:]
             self.reference = func(*args)
-            self.deephash = DeepHash(self.reference)
+            # self.deephash = DeepHash(self.reference)
 
     def get_attr(self, name: str) -> Any:
         if self.reference is None:
@@ -261,16 +261,16 @@ class ObjectReference:
     def __repr__(self):
         return f"ObjectReference({self.reference})"
 
-    def ischanged(self):
-        """
-        Returns if the reference object is changed using value comparison of
-        its attributes recursively.
-        """
-        newhash = DeepHash(self.reference)[self.reference]
-        if newhash != self.deephash:
-            return True
-        else:
-            return False
+    # def ischanged(self):
+    #     """
+    #     Returns if the reference object is changed using value comparison of
+    #     its attributes recursively.
+    #     """
+    #     newhash = DeepHash(self.reference)[self.reference]
+    #     if newhash != self.deephash:
+    #         return True
+    #     else:
+    #         return False
 
 
 def __compare_ref(a, b) -> bool:
@@ -364,8 +364,8 @@ class MethodCache:
             res = attr(*args, **kwargs)
             res = self._wmo(res)
             self.cache[call_args] = res
-            if self.reference.ischanged():
-                pwarn(str(SmartCacheModified(self, self.name)))
+            # if self.reference.ischanged():
+            #     pwarn(str(SmartCacheModified(self, self.name)))
             return res
 
 
