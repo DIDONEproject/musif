@@ -666,6 +666,15 @@ class FeaturesExtractor:
             )
         return score_features, parts_features
 
+    def load_m21_objects(self, musicxml_file: str):
+        score = parse_musicxml_file(
+            musicxml_file,
+            self._cfg.split_keywords,
+            expand_repeats=self._cfg.expand_repeats,
+        )
+        filtered_parts = self._filter_parts(score)
+        return score, filtered_parts
+
     def _get_score_data(self, musicxml_file: str, load_cache: bool = True) -> dict:
         cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
 
@@ -680,27 +689,21 @@ class FeaturesExtractor:
                 )
 
         if data is None:
-            score = parse_musicxml_file(
-                musicxml_file,
-                self._cfg.split_keywords,
-                expand_repeats=self._cfg.expand_repeats,
+            m21_objects = self.load_m21_objects(musicxml_file)
+            m21_objects = SmartModuleCache(
+                m21_objects, resurrect_reference=(self.load_m21_objects, musicxml_file)
             )
-            filtered_parts = self._filter_parts(score)
-            if len(filtered_parts) == 0:
+            if len(m21_objects[1]) == 0:
                 lwarn(
                     f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}"
                 )
             data = {
-                DATA_SCORE: score,
+                DATA_SCORE: m21_objects[0],
                 DATA_FILE: musicxml_file,
-                DATA_FILTERED_PARTS: filtered_parts,
+                DATA_FILTERED_PARTS: m21_objects[1],
             }
             if self._cfg.is_requested_musescore_file():
                 data.update(self._get_harmony_data(musicxml_file))
-            data = SmartModuleCache(
-                reference=data,
-                resurrect_reference=(self._get_score_data, musicxml_file, False),
-            )
             pickle.dump(data, open(cache_name, "wb"))
         return data
 
@@ -814,7 +817,7 @@ class FeaturesExtractor:
                 score_name = score_data["file"]
                 # __import__('traceback').print_exc(e)
                 perr(
-                    f"An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
+                    f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
                 break
 
@@ -837,7 +840,7 @@ class FeaturesExtractor:
             score_name = score_data["file"]
             # __import__('traceback').print_exc(e)
             perr(
-                f"An error ocurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
+                f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
 
     def _find_mscx_files(self):

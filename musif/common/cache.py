@@ -1,11 +1,11 @@
 import random
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-# from deepdiff import DeepHash
-
 from musif.logs import pinfo, pwarn
 
 from .exceptions import CannotResurrectObject, SmartCacheModified
+
+# from deepdiff import DeepHash
 
 
 class FileCacheIntoRAM:
@@ -37,6 +37,54 @@ class FileCacheIntoRAM:
     @property
     def full(self) -> bool:
         return len(self._items) == self._capacity
+
+
+class ObjectReference:
+    """
+    This is handles the calls to the reference object so that both
+    `MethodCache` and `SmartModuleCache` reference the same object and when one
+    resurrects it, the other sees it.
+    """
+
+    def __init__(
+        self,
+        reference: Any,
+        resurrect_reference: Optional[Tuple],
+        parent=None,
+        name: str = "",
+    ):
+        self.reference = reference
+        self.resurrect_reference = resurrect_reference
+        self.parent = parent
+        # self.deephash = DeepHash(reference)[reference]
+
+    def _try_resurrect(self) -> None:
+        if self.resurrect_reference is None:
+            if self.parent is None or self.name == "":
+                raise CannotResurrectObject(self)
+            else:
+                self.reference = self.parent.get_attr(self.name)
+        else:
+            func = self.resurrect_reference[0]
+            args = self.resurrect_reference[1:]
+            self.reference = func(*args)
+            # self.deephash = DeepHash(self.reference)
+
+    def get_attr(self, name: str) -> Any:
+        if self.reference is None:
+            pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
+            self._try_resurrect()
+        return getattr(self.reference, name)
+
+    def __getstate__(self):
+        return self.resurrect_reference
+
+    def __setstate__(self, state):
+        self.reference = None
+        self.resurrect_reference = state
+
+    def __repr__(self):
+        return f"ObjectReference({self.reference})"
 
 
 class SmartModuleCache:
@@ -100,6 +148,8 @@ class SmartModuleCache:
         reference: Any = None,
         target_addresses: List[str] = ["music21"],
         resurrect_reference: Optional[Tuple] = None,
+        parent: Optional[ObjectReference] = None,
+        name: str = "",
     ):
 
         cache: Dict[
@@ -108,7 +158,7 @@ class SmartModuleCache:
         ] = {
             "_hash": random.randint(10**10, 10**15),
             "_target_addresses": target_addresses,
-            "_reference": ObjectReference(reference, resurrect_reference),
+            "_reference": ObjectReference(reference, resurrect_reference, parent, name),
         }
         object.__setattr__(self, "cache", cache)
 
@@ -120,7 +170,8 @@ class SmartModuleCache:
 
     def __repr__(self):
         _reference = self.cache["_reference"]
-        return f"SmartModuleCache({_reference}, {_module})"
+        _addresses = self.cache["_target_addresses"]
+        return f"SmartModuleCache({_reference}, {_addresses})"
 
     @property
     def target_addresses(self):
@@ -133,11 +184,13 @@ class SmartModuleCache:
     def __hash__(self):
         return self.cache["_hash"]
 
-    def _wmo(self, obj):
+    def _wmo(self, obj, name=""):
         return wrap_module_objects(
             obj,
             target_addresses=self.cache["_target_addresses"],
             resurrect_reference=None,
+            parent=self.cache["_reference"],
+            name=name,
         )
 
     def __getattr__(self, name: str) -> Any:
@@ -156,7 +209,7 @@ class SmartModuleCache:
         del self.cache[name]
 
     def __setattr__(self, name, value):
-        self.cache[name] = self._wmo(value)
+        self.cache[name] = self._wmo(value, name)
         self.cache["_reference"].get_attr("__setattr__")(name, value)
 
     def _cache_new_attr(self, name: str) -> Any:
@@ -176,7 +229,7 @@ class SmartModuleCache:
             )
         else:
             # cache the value and returns it
-            attr = self._wmo(attr)
+            attr = self._wmo(attr, name)
 
         if special_name is not None:
             name = special_name
@@ -209,57 +262,22 @@ class SmartModuleCache:
         v = self.cache.get(f"__item_{k}")
         if v is None:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
-            v = self._wmo(v)
+            v = self._wmo(v, k)
             self.cache[f"__item_{k}"] = v
         return v
 
     def __setitem__(self, k, v):
         pwarn(str(SmartCacheModified(self, k)))
-        v = self.cache["_reference"].get_attr("__getitem__")(k)
-        v = self._wmo(v)
+        try:
+            v = self.cache["_reference"].get_attr("__getitem__")(k)
+        except KeyError:
+            pass
+        v = self._wmo(v, k)
         self.cache[f"__item_{k}"] = v
         self.cache["_reference"].get_attr("__setattr__")(k, v)
 
     def __bool__(self):
         return self.cache["_reference"].get_attr("__bool__")()
-
-
-class ObjectReference:
-    """
-    This is handles the calls to the reference object so that both
-    `MethodCache` and `SmartModuleCache` reference the same object and when one
-    resurrects it, the other sees it.
-    """
-
-    def __init__(self, reference: Any, resurrect_reference: Optional[Tuple]):
-        self.reference = reference
-        self.resurrect_reference = resurrect_reference
-        # self.deephash = DeepHash(reference)[reference]
-
-    def _try_resurrect(self) -> None:
-        if self.resurrect_reference is None:
-            raise CannotResurrectObject(self)
-        else:
-            func = self.resurrect_reference[0]
-            args = self.resurrect_reference[1:]
-            self.reference = func(*args)
-            # self.deephash = DeepHash(self.reference)
-
-    def get_attr(self, name: str) -> Any:
-        if self.reference is None:
-            pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
-            self._try_resurrect()
-        return getattr(self.reference, name)
-
-    def __getstate__(self):
-        return self.resurrect_reference
-
-    def __setstate__(self, state):
-        self.reference = None
-        self.resurrect_reference = state
-
-    def __repr__(self):
-        return f"ObjectReference({self.reference})"
 
     # def ischanged(self):
     #     """
@@ -271,25 +289,6 @@ class ObjectReference:
     #         return True
     #     else:
     #         return False
-
-
-def __compare_ref(a, b) -> bool:
-    """
-    Compares two objects by the values of their attributes ricorsively
-    """
-    a_d = vars(a)
-    b_d = vars(b)
-
-    # check that the attribute names are exactly the same
-    # keys are strings, so can be compared by hash
-    if len(set(a_d.keys()).symmetric_difference(b_d)) > 0:
-        return False
-
-    for k, v in a_d.items():
-        if not compare_ref(v, b_d[k]):
-            return False
-
-    return True
 
 
 class CallableArguments:
@@ -346,7 +345,11 @@ class MethodCache:
 
     def _wmo(self, obj):
         return wrap_module_objects(
-            obj, target_addresses=self.target_addresses, resurrect_reference=None
+            obj,
+            target_addresses=self.target_addresses,
+            resurrect_reference=None,
+            parent=self.reference,
+            name=self.name,
         )
 
     def __call__(self, *args, **kwargs):
@@ -373,6 +376,8 @@ def wrap_module_objects(
     obj: Any,
     target_addresses: List[str] = ["music21"],
     resurrect_reference: Optional[Tuple] = None,
+    parent: Optional[ObjectReference] = None,
+    name: str = "",
 ):
     """
     Returns the object wrapped with `SmartModuleCache` class if it was defined
@@ -385,5 +390,7 @@ def wrap_module_objects(
                 reference=obj,
                 target_addresses=target_addresses,
                 resurrect_reference=resurrect_reference,
+                parent=parent,
+                name=name,
             )
     return obj
