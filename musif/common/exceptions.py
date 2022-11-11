@@ -19,3 +19,11 @@ class CannotResurrectObject(Exception):
         super().__init__(
             f"Cannot resurrect object {obj.cache['_repr']}, please define a `resurrect_reference` field in {obj}"
         )
+
+class SmartCacheModified(Exception):
+    """Exception raised when trying to modify the reference of a `SmartCache` object"""
+
+    def __init__(self, obj, attr):
+        super().__init__(
+            f"Cannot modify SmartCache {obj}, via attribute {attr}"
+        )

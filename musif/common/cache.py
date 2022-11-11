@@ -1,9 +1,11 @@
 import random
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from musif.logs import pinfo
+from deepdiff import DeepHash
 
-from .exceptions import CannotResurrectObject
+from musif.logs import pinfo, pwarn
+
+from .exceptions import CannotResurrectObject, SmartCacheModified
 
 
 class FileCacheIntoRAM:
@@ -48,6 +50,9 @@ class SmartCache:
     When the same call is performed a second time, the result value is taken
     from the dictionary.
 
+    If the object is changed, the change is not cached. As such. only read
+    operations can be executed on a ``SmartCache``.
+
     After unpickling, the referenced object is no longer available.
     If `resurrect_reference` is not None, it will be loaded using its value. In
     such a case, `resurrect_reference` should be a tuple with a function in the
@@ -64,24 +69,24 @@ class SmartCache:
     is guaranteed to be the same when the object is pickled/unpickled. As
     consequence, as long as the method arguments are `SmartCache`
     objects, they will re-use the cache after pickling/unpickling.
-    This will automatically work for objects in the `target_module`.
 
     Sometimes, the methods of the referenced object expect a non-cached module,
     for instance when a type checking or a hash comparison is done. For those
     situations, `SmartCache` provides *special methods* that start with
     `SmartCache.SPECIAL_METHODS_NAME` (which defaults to
     `"smartcache__"`). It is possible call any method with
-    `smartcache__methoname`, e.g. `score.smartcache__remove`.
+    `smartcache__methodname`, e.g. `score.smartcache__remove`.
     When a special method is called, the first call is performed with the
     non-cached arguments, as it would happen without `SmartCache`.
 
-    N.B. However, if one method is called with as argument an object that is
-    not a singleton and not in `target_module`, the call will be cached but
-    after pickling it cannot be used, thus leading to an always increasing
-    cach.
-
     NotImplemented: When `smart_pickling` is True, it pickles the dictionary
     alone, without the reference, otherwise, it pickles the reference as well.
+
+    Note: In future, `deepdiff.Delta` could be used to allow in-place
+    operations, but it needs that:
+        1. the object modified are pickable
+        2. the reference are deep-copiable (for some reason, music21 objects)
+            sometimes exceed the maximum number of recursion while deep-copying
     """
 
     SPECIAL_METHODS_NAME = "smartcache__"
@@ -98,10 +103,15 @@ class SmartCache:
         }
         object.__setattr__(self, "cache", cache)
 
+    def __isinstancecheck__(self, other):
+        return isinstance(self.cache["_reference"].reference, other)
+
+    def __issubclasscheck__(self, other):
+        return issubclass(self.cache["_reference"].reference, other)
+
     def __repr__(self):
-        _module = self.cache["_target_addresses"]
         _reference = self.cache["_reference"]
-        return f"SmartCache({_reference}, {_module})"
+        return f"SmartCache({_reference})"
 
     def __hash__(self):
         return self.cache["_hash"]
@@ -185,6 +195,7 @@ class SmartCache:
         return v
 
     def __setitem__(self, k, v):
+        pwarn(str(SmartCacheModified(self, k)))
         v = self.cache["_reference"].get_attr("__getitem__")(k)
         v = self._wmo(v)
         self.cache[f"__item_{k}"] = v
@@ -204,6 +215,7 @@ class ObjectReference:
     def __init__(self, reference: Any, resurrect_reference: Optional[Tuple]):
         self.reference = reference
         self.resurrect_reference = resurrect_reference
+        self.deephash = DeepHash(reference)[reference]
 
     def _try_resurrect(self) -> None:
         if self.resurrect_reference is None:
@@ -212,6 +224,7 @@ class ObjectReference:
             func = self.resurrect_reference[0]
             args = self.resurrect_reference[1:]
             self.reference = func(*args)
+            self.deephash = DeepHash(self.reference)
 
     def get_attr(self, name: str) -> Any:
         if self.reference is None:
@@ -228,6 +241,36 @@ class ObjectReference:
 
     def __repr__(self):
         return f"ObjectReference({self.reference})"
+
+    def ischanged(self):
+        """
+        Returns if the reference object is changed using value comparison of
+        its attributes recursively.
+        """
+        newhash = DeepHash(self.reference)[self.reference]
+        if newhash != self.deephash:
+            return True
+        else:
+            return False
+
+
+def __compare_ref(a, b) -> bool:
+    """
+    Compares two objects by the values of their attributes ricorsively
+    """
+    a_d = vars(a)
+    b_d = vars(b)
+
+    # check that the attribute names are exactly the same
+    # keys are strings, so can be compared by hash
+    if len(set(a_d.keys()).symmetric_difference(b_d)) > 0:
+        return False
+
+    for k, v in a_d.items():
+        if not compare_ref(v, b_d[k]):
+            return False
+
+    return True
 
 
 class CallableArguments:
@@ -298,6 +341,8 @@ class MethodCache:
             res = attr(*args, **kwargs)
             res = self._wmo(res)
             self.cache[call_args] = res
+            if self.reference.ischanged():
+                pwarn(str(SmartCacheModified(self, self.name)))
             return res
 
 
