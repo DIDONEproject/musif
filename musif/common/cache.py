@@ -1,6 +1,5 @@
 import random
-from queue import Empty, SimpleQueue
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from musif.logs import pinfo
 
@@ -44,11 +43,10 @@ class SmartCache:
     dict, very similarly to how `functools.lru_cache` works.
 
     The object keeps a dictionary and a reference to the wrapped object.
-    Each time a method, a field, or a property is called with `mode="push"`, it
-    pushes the result value in the dictionary, where a queue stores it.
-    When the same call is performed with `mode="pull"`, the oldest result value
-    is taken from the dictionary and removed.
-    Thus, the queue is FIFO.
+    Each time a method, a field, or a property is called, it stores the result
+    value in the dictionary.
+    When the same call is performed a second time, the result value is taken
+    from the dictionary.
 
     After unpickling, the referenced object is no longer available.
     If `resurrect_reference` is not None, it will be loaded using its value. In
@@ -60,7 +58,6 @@ class SmartCache:
 
     When a method is called, it is matched with all the arguments, similarly to
     `functools.lru_cache`, thus using the hash value of the objects.
-    Methods are not stored in queues, but their calls do are stores in queues.
 
     When pickled, this objects only pickles the cache dictionary.
     The matching of the arguments in a method works on a custom hash value that
@@ -93,7 +90,6 @@ class SmartCache:
         self,
         reference: Any = None,
         resurrect_reference: Optional[Tuple] = None,
-        mode: str = "push",
     ):
 
         cache: Dict[str, Union[Tuple, str, int, SmartCache, MethodCache, Any],] = {
@@ -101,7 +97,6 @@ class SmartCache:
             "_reference": ObjectReference(reference, resurrect_reference),
         }
         object.__setattr__(self, "cache", cache)
-        object.__setattr__(self, "mode", mode)
 
     def __repr__(self):
         _module = self.cache["_target_addresses"]
@@ -121,18 +116,10 @@ class SmartCache:
         """
         The real key of this class is this method!
         """
-        cached = self.cache.get(name)
-        if cached is not None:
+        attr = self.cache.get(name)
+        if attr is not None:
             # attr is in cache
-            if type(cached) is SimpleQueue:
-                if self.mode == "pull":
-                    _get_from_queue(cached, self.cache["_reference"], name)
-                else:
-                    return self._cache_new_attr(name)
-            else:
-                # a method
-                cached.mode = self.mode
-                return cached
+            return attr
         else:
             # attr not in cache
             return self._cache_new_attr(name)
@@ -152,37 +139,20 @@ class SmartCache:
             special_name = None
         attr = self.cache["_reference"].get_attr(name)
         if callable(attr):
-            attr = self._cache_method(attr, name, special_name)
-
+            # use the method cacher
+            attr = MethodCache(
+                self.cache["_reference"],
+                name,
+                special_method=special_name is not None,
+            )
         else:
-            attr = self._cache_attribute(attr, name)
+            # cache the value and returns it
+            attr = self._wmo(attr)
 
-        return attr
-
-    def _cache_attribute(self, attr, name: str):
-        # cache the value and returns it
-        attr = self._wmo(attr)
-
-        queue = self.cache.get(name)
-        if queue is not None:
-            queue.put_nowait(attr)
-        else:
-            queue = SimpleQueue()
-            queue.put_nowait(attr)
-            self.cache[name] = queue
-        return attr
-
-    def _cache_method(self, attr, name: str, special_name):
-        # use the method cacher
-        attr = MethodCache(
-            self.cache["_reference"],
-            name,
-            special_method=special_name is not None,
-        )
         if special_name is not None:
             name = special_name
         self.cache[name] = attr
-        return attr, name
+        return attr
 
     def __setstate__(self, state):
         object.__setattr__(self, "cache", state)
@@ -201,13 +171,9 @@ class SmartCache:
 
     def __len__(self):
         L = self.cache.get("__len__")
-        if L is not None and self.mode == "pull":
-            return _get_from_queue(L, self.reference, "__len__")
-        else:
+        if L is None:
             L = self.cache["_reference"].get_attr("__len__")()
-            q = SimpleQueue()
-            self.cache["__len__"] = q
-            q.put_nowait(L)
+            self.cache["__len__"] = L
         return L
 
     def __getitem__(self, k):
@@ -313,7 +279,6 @@ class MethodCache:
         self.name = attr_name
         self.cache = dict()
         self.special_method = special_method
-        self.method = "push"
 
     def _wmo(self, obj):
         return wrap_module_objects(obj, resurrect_reference=None)
@@ -323,8 +288,8 @@ class MethodCache:
         kwargs = {k: self._wmo(v) for k, v in kwargs.items()}
         call_args = CallableArguments(*args, **kwargs)
         cached_res = self.cache.get(call_args)
-        if cached_res is not None and self.mode == "pull":
-            _get_from_queue(cached_res, self.reference, self.name)
+        if cached_res is not None:
+            return cached_res
         else:
             attr = self.reference.get_attr(self.name)
             if self.special_method:
@@ -332,23 +297,8 @@ class MethodCache:
                 kwargs = {k: v.cache["_reference"].reference for k, v in kwargs.items()}
             res = attr(*args, **kwargs)
             res = self._wmo(res)
-            if cached_res is None:
-                queue = SimpleQueue()
-                queue.put_nowait(res)
-                self.cache[call_args] = queue
-            else:
-                cached_res.put_nowait(res)
+            self.cache[call_args] = res
             return res
-
-
-def _get_from_queue(cached, reference, name):
-    try:
-        return cached.get_nowait()
-    except Empty:
-        pinfo(
-            f"Resurrecting reference object due to empty queue for attribute '{name}'"
-        )
-        reference._try_resurrect()
 
 
 def wrap_module_objects(
