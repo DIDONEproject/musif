@@ -144,10 +144,6 @@ def get_part_clef(part):
 
 
 def get_xml_scoring_variables(score):
-    #################################################################################
-    # Function to get the aria's scoring information
-    #################################################################################
-    # PRUEBAS CON SORTINGGROUPINGS
     return group.get_scoring(score)
 
 

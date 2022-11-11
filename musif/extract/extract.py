@@ -476,7 +476,7 @@ class FeaturesExtractor:
                 score_features, score_parts_features = self._process_score(
                     musicxml_file)
             return score_features, score_parts_features
-
+        # max_nbytes=None, backend="multiprocessing"
         result = Parallel(n_jobs=self._cfg.parallel)(
             delayed(process_corpus_par)(fname) for fname in tqdm(musicxml_files))
 
