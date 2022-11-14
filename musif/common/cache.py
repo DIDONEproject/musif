@@ -389,6 +389,12 @@ class CallableArguments:
     def __hash__(self):
         return self._hash
 
+    def __eq__(self, other):
+        if type(other) is CallableArguments:
+            return other._hash == self._hash
+        else:
+            return False
+
     def __repr__(self):
         ret = "CallableArguments("
         for a in self.args:
