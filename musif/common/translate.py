@@ -5,7 +5,7 @@ from typing import Dict
 # from googletrans import Translator
 # nltk.download('wordnet', quiet=True)
 # from nltk.corpus import wordnet as wn
-from musif.common.utils import read_object_from_json_file
+from musif.common._utils import read_object_from_json_file
 
 
 def translate_word(original_word: str, translations: dict) -> str:

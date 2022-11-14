@@ -4,8 +4,8 @@ from os import path
 from pathlib import PurePath
 
 from musif import internal_data
-from musif.common.logs import create_logger
-from musif.common.utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
+from musif.common._logs import create_logger
+from musif.common._utils import read_dicts_from_csv, read_object_from_json_file, read_object_from_yaml_file
 from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
 
 # TODO: add documentation for these variables
