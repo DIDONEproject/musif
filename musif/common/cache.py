@@ -93,7 +93,7 @@ class ObjectReference:
         self.name = state["name"]
 
     def __repr__(self):
-        return f"ObjectReference({self.reference})"
+        return f"ObjectReference({self.reference}, {repr(self.parent)}, {self.name})"
 
 
 class SmartModuleCache:
