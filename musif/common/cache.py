@@ -46,7 +46,7 @@ class ObjectReference:
     resurrects it, the other sees it.
     """
 
-    __slots__ = ("reference", "resurrect_reference", "parent", "name")
+    __slots__ = ("reference", "resurrect_reference", "parent", "name", "args")
 
     def __init__(
         self,
@@ -54,20 +54,32 @@ class ObjectReference:
         resurrect_reference: Optional[Tuple],
         parent=None,
         name: str = "",
+        args: Optional[Tuple] = None,
     ):
         self.reference = reference
         self.resurrect_reference = resurrect_reference
         self.parent = parent
         self.name = name
-        # TODO: we need to handle arguments to methods for resurrecting working correctly
+        self.args = args
         # self.deephash = DeepHash(reference)[reference]
 
     def _try_resurrect(self) -> None:
         if self.resurrect_reference is None:
-            if self.parent is None or self.name == "":
+            if self.parent is None:
                 raise CannotResurrectObject(self)
             else:
-                self.reference = self.parent.get_attr(self.name)
+                origin = self.parent
+                for i in range(len(self.name)):
+                    if self.name[i] == "":
+                        raise CannotResurrectObject(self)
+                    if isinstance(origin, ObjectReference):
+                        origin = origin.get_attr(self.name[i])
+                    else:
+                        origin = getattr(origin, self.name[i])
+                    if self.args[i] is not None:
+                        origin = origin(*self.args[i])
+                self.reference = origin
+
         else:
             func = self.resurrect_reference[0]
             args = self.resurrect_reference[1:]
@@ -85,6 +97,7 @@ class ObjectReference:
             resurrect_reference=self.resurrect_reference,
             parent=self.parent,
             name=self.name,
+            args=self.args,
         )
 
     def __setstate__(self, state):
@@ -92,9 +105,10 @@ class ObjectReference:
         self.resurrect_reference = state["resurrect_reference"]
         self.parent = state["parent"]
         self.name = state["name"]
+        self.args = state["args"]
 
     def __repr__(self):
-        return f"ObjectReference({self.reference}, {repr(self.parent)}, {self.name})"
+        return f"ObjectReference({self.reference}, {self.name})"
 
 
 class SmartModuleCache:
@@ -126,7 +140,7 @@ class SmartModuleCache:
     When a method is called, it is matched with all the arguments, similarly to
     `functools.lru_cache`, thus using the hash value of the objects.
 
-    When pickled, this objects only pickles the cache dictionary.
+    When pickled, this object only pickles the cache dictionary.
     The matching of the arguments in a method works on a custom hash value that
     is guaranteed to be the same when the object is pickled/unpickled. As
     consequence, as long as the method arguments are `SmartModuleCache`
@@ -154,7 +168,7 @@ class SmartModuleCache:
             sometimes exceed the maximum number of recursion while deep-copying
     """
 
-    __slots__ = ("cache")
+    __slots__ = "cache"
     SPECIAL_METHODS_NAME = "smartcache__"
 
     def __init__(
@@ -163,7 +177,8 @@ class SmartModuleCache:
         target_addresses: List[str] = ["music21"],
         resurrect_reference: Optional[Tuple] = None,
         parent: Optional[ObjectReference] = None,
-        name: str = "",
+        name: Tuple[str] = ("",),
+        args: Tuple[Optional[Tuple]] = (None,),
         check_reference_changes: bool = False,
     ):
 
@@ -173,7 +188,9 @@ class SmartModuleCache:
         ] = {
             "_hash": random.randint(10**10, 10**15),
             "_target_addresses": target_addresses,
-            "_reference": ObjectReference(reference, resurrect_reference, parent, name),
+            "_reference": ObjectReference(
+                reference, resurrect_reference, parent, name, args
+            ),
             "_check_reference_changes": check_reference_changes,
         }
         object.__setattr__(self, "cache", cache)
@@ -207,13 +224,14 @@ class SmartModuleCache:
     def __hash__(self):
         return self.cache["_hash"]
 
-    def _wmo(self, obj, name=""):
+    def _wmo(self, obj, name=("",), args=(None,)):
         return wrap_module_objects(
             obj,
             target_addresses=self.cache["_target_addresses"],
             resurrect_reference=None,
             parent=self.cache["_reference"],
             name=name,
+            args=args,
         )
 
     def __getattr__(self, name: str) -> Any:
@@ -221,20 +239,17 @@ class SmartModuleCache:
         The real key of this class is this method!
         """
         attr = self.cache.get(name)
-        if attr is not None:
-            # attr is in cache
-            return attr
-        else:
+        if attr is None:
             # attr not in cache
             attr = self._get_new_attr(name)
             self.cache[name] = attr
-            return attr
+        return attr
 
     def __delattr__(self, name):
         del self.cache[name]
 
     def __setattr__(self, name, value):
-        self.cache[name] = self._wmo(value, name)
+        self.cache[name] = self._wmo(value, (name,))
         self.cache["_reference"].get_attr("__setattr__")(name, value)
 
     def _get_new_attr(self, name: str) -> Any:
@@ -255,7 +270,7 @@ class SmartModuleCache:
             )
         else:
             # cache the value and returns it
-            attr = self._wmo(attr, name)
+            attr = self._wmo(attr, (name,))
 
         return attr
 
@@ -266,13 +281,26 @@ class SmartModuleCache:
         return self.cache
 
     # caching other special methods
-    def __iter__(self):
+    def __list__(self, idx=None):
         it = self.cache.get("__list__")
         if it is None:
             it = self.cache["_reference"].get_attr("__iter__")()
-            it = list(map(lambda x: self._wmo(x, "__iter__"), it))
+            it = [
+                self._wmo(
+                    x,
+                    ("__getitem__",),
+                    ((i,),),
+                )
+                for i, x in enumerate(it)
+            ]
             self.cache["__list__"] = it
-        return iter(it)
+        if idx is not None:
+            return it[idx]
+        else:
+            return it
+
+    def __iter__(self):
+        return iter(self.__list__())
 
     def __len__(self):
         L = self.cache.get("__len__")
@@ -285,7 +313,7 @@ class SmartModuleCache:
         v = self.cache.get(f"__item_{k}")
         if v is None:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
-            v = self._wmo(v, "__getitem__")
+            v = self._wmo(v, ("__getitem__",), ((k,),))
             self.cache[f"__item_{k}"] = v
         return v
 
@@ -295,7 +323,7 @@ class SmartModuleCache:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
         except KeyError:
             pass
-        v = self._wmo(v, "__setitem__")
+        v = self._wmo(v, ("__setitem__",), ((k, v),))
         self.cache[f"__item_{k}"] = v
         self.cache["_reference"].get_attr("__setattr__")(k, v)
 
@@ -307,7 +335,7 @@ class SmartModuleCache:
             except AttributeError:
                 b = self.cache["_reference"].reference is not None
             finally:
-                self.cache['__bool__'] = b
+                self.cache["__bool__"] = b
         return b
 
     def ischanged(self):
@@ -401,14 +429,14 @@ class MethodCache:
         self.special_method = special_method
         self.check_reference_changes = check_reference_changes
 
-    # TODO: if _wmo is called without name, resurrection is not possible
-    def _wmo(self, obj):
+    def _wmo(self, obj, args=None):
         return wrap_module_objects(
             obj,
             target_addresses=self.target_addresses,
             resurrect_reference=None,
             parent=self.reference,
-            name=self.name,
+            name=(self.name,),
+            args=(args,),
         )
 
     def __call__(self, *args, **kwargs):
@@ -424,7 +452,7 @@ class MethodCache:
                 args = [arg.cache["_reference"].reference for arg in args]
                 kwargs = {k: v.cache["_reference"].reference for k, v in kwargs.items()}
             res = attr(*args, **kwargs)
-            res = self._wmo(res)
+            res = self._wmo(res, args=(*args, *kwargs.values()))
             self.cache[call_args] = res
             if self.check_reference_changes and self.reference.ischanged():
                 pwarn(str(SmartCacheModified(self, self.name)))
@@ -436,7 +464,8 @@ def wrap_module_objects(
     target_addresses: List[str] = ["music21"],
     resurrect_reference: Optional[Tuple] = None,
     parent: Optional[ObjectReference] = None,
-    name: str = "",
+    name: Tuple[str] = ("",),
+    args: Tuple[Optional[Tuple]] = (None,),
 ):
     """
     Returns the object wrapped with `SmartModuleCache` class if it was defined
@@ -454,12 +483,20 @@ def wrap_module_objects(
                 resurrect_reference=resurrect_reference,
                 parent=parent,
                 name=name,
+                args=args,
             )
 
     if isinstance(obj, (list, tuple)):
         ret = [
-            wrap_module_objects(v, target_addresses, resurrect_reference, parent, name)
-            for v in obj
+            wrap_module_objects(
+                v,
+                target_addresses,
+                resurrect_reference,
+                parent,
+                (*name, "__getitem__"),
+                (*args, (i,)),
+            )
+            for i, v in enumerate(obj)
         ]
         if isinstance(obj, list):
             return ret
