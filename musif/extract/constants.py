@@ -17,3 +17,4 @@ PLAYTHROUGH = 'playthrough'
 GLOBAL_TIME_SIGNATURE = 'global_ts'
 WINDOW_RANGE = 'window_range'
 THEME_A_METADATA = 'theme_a_per_aria.csv'
+END_OF_THEME_A = "EndOfThemeA"

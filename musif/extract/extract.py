@@ -27,7 +27,6 @@ from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.common.sort import sort_list
 from musif.common._utils import get_ariaid
 from musif.config import Configuration
-from musif.extract.basic_modules.themeA.constants import END_OF_THEME_A
 from musif.extract.common import filter_parts_data
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
@@ -585,7 +584,7 @@ class FeaturesExtractor:
 
         while first_window_measure < last_score_measure:
             if (
-                int(float(basic_features.get(END_OF_THEME_A, "100000")))
+                int(float(basic_features.get(C.END_OF_THEME_A, "100000")))
                 < first_window_measure
             ):
                 break
@@ -723,7 +722,7 @@ class FeaturesExtractor:
         last_measure = 1000000
         for d in self._cfg.scores_metadata[C.THEME_A_METADATA]:
             if d["AriaId"] == aria_id:
-                last_measure = floor(float(d.get(END_OF_THEME_A, last_measure)))
+                last_measure = floor(float(d.get(C.END_OF_THEME_A, last_measure)))
                 break
 
         # removing everything after end of theme A
