@@ -171,6 +171,9 @@ class SmartModuleCache:
     __slots__ = "cache"
     SPECIAL_METHODS_NAME = "smartcache__"
 
+    class _MyNone:
+        pass
+
     def __init__(
         self,
         reference: Any = None,
@@ -242,8 +245,13 @@ class SmartModuleCache:
         if attr is None:
             # attr not in cache
             attr = self._get_new_attr(name)
+            if attr is None:
+                attr = SmartModuleCache._MyNone
             self.cache[name] = attr
-        return attr
+        if attr is SmartModuleCache._MyNone:
+            return None
+        else:
+            return attr
 
     def __delattr__(self, name):
         del self.cache[name]
