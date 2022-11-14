@@ -143,6 +143,9 @@ class SmartModuleCache:
     NotImplemented: When `smart_pickling` is True, it pickles the dictionary
     alone, without the reference, otherwise, it pickles the reference as well.
 
+    Note: this class implements `__repr__` in a custom way, while proxies the
+    `__str__` method to the referenced object.
+
     Note: In future, `deepdiff.Delta` could be used to allow in-place
     operations, but it needs that:
         1. the object modified are pickable
@@ -184,6 +187,13 @@ class SmartModuleCache:
         _reference = self.cache["_reference"]
         _addresses = self.cache["_target_addresses"]
         return f"SmartModuleCache({_reference}, {_addresses})"
+
+    def __str__(self):
+        s = self.cache.get("__str__")
+        if s is None:
+            s = str(self.cache["_reference"].reference)
+            self.cache["__str__"] = s
+        return s
 
     @property
     def target_addresses(self):
