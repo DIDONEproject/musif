@@ -58,9 +58,6 @@ class ObjectReference:
         self.reference = reference
         self.resurrect_reference = resurrect_reference
         self.parent = parent
-        if type(name) is int:
-            __import__("traceback").print_stack()
-            __import__("ipdb").set_trace()
         self.name = name
         # self.deephash = DeepHash(reference)[reference]
 
