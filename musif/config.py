@@ -28,6 +28,7 @@ PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 WINDOW_SIZE = 'window_size'
 OVERLAP = 'overlap'
+ONLY_THEME_A = 'only_theme_a'
 
 
 INTERNAL_DATA = "internal_data_dir"
@@ -60,6 +61,7 @@ _CONFIG_FALLBACK = {
     CACHE_DIR: None,
     PARALLEL: False,
     MAX_PROCESSES: 1,
+    ONLY_THEME_A: False,
     BASIC_MODULES: ["core"],
     FEATURES: None,
     SPLIT_KEYWORDS: [],
@@ -139,6 +141,7 @@ class Configuration:
         self.window_size = config_data.get(
             WINDOW_SIZE, _CONFIG_FALLBACK[WINDOW_SIZE])
         self.overlap = config_data.get(OVERLAP, _CONFIG_FALLBACK[OVERLAP])
+        self.only_theme_a = config_data.get(ONLY_THEME_A, _CONFIG_FALLBACK[ONLY_THEME_A])
 
         self.internal_data_dir = path.dirname(internal_data.__file__)
         self.check = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])

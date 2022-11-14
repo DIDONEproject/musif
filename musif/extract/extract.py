@@ -5,6 +5,7 @@ import os
 import pickle
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from math import floor
 from os import path
 from pathlib import Path, PurePath
 from typing import Dict, List, Optional, Tuple, Union
@@ -16,19 +17,18 @@ from music21.stream import Measure, Part, Score
 from pandas import DataFrame
 from tqdm import tqdm
 
-# from musif import m21pickle as pickle
+# TODO: I would suggest:
+# from musif.extract import constants as C
+# because it better allows type checking and autocompletion in editors
+import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common.cache import FileCacheIntoRAM, SmartModuleCache
 from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.common.sort import sort_list
+from musif.common._utils import get_ariaid
 from musif.config import Configuration
 from musif.extract.basic_modules.themeA.constants import END_OF_THEME_A
 from musif.extract.common import filter_parts_data
-
-# TODO: I would suggest:
-# from musif.extract import constants as C
-# because it better allows type checking and autocompletion in editors
-from musif.extract.constants import *
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musicxml import (
@@ -538,10 +538,11 @@ class FeaturesExtractor:
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         pinfo(f"\nProcessing score {musicxml_file}")
-        score_data = self._get_score_data(musicxml_file)
+        cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
+        score_data = self._get_score_data(musicxml_file, load_cache=cache_name)
         parts_data = [
             self._get_part_data(score_data, part)
-            for part in score_data[DATA_SCORE].parts
+            for part in score_data[C.DATA_SCORE].parts
         ]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(
@@ -552,6 +553,7 @@ class FeaturesExtractor:
         )
         score_features = {**basic_features, **score_features}
         [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
+        pickle.dump(score_data, open(cache_name, "wb"))
         return score_features, parts_features
 
     def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
@@ -561,7 +563,7 @@ class FeaturesExtractor:
         score_data = self._get_score_data(musicxml_file)
         parts_data = [
             self._get_part_data(score_data, part)
-            for part in score_data[DATA_SCORE].parts
+            for part in score_data[C.DATA_SCORE].parts
         ]
         parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(
@@ -599,7 +601,7 @@ class FeaturesExtractor:
                 FEATURES_MODULES, window_data, window_parts_data
             )
             window_features[
-                WINDOW_RANGE
+                C.WINDOW_RANGE
             ] = f"{first_window_measure} - {last_window_measure}"
 
             window_features = {**basic_features, **window_features}
@@ -622,7 +624,7 @@ class FeaturesExtractor:
         window_parts_data = copy.deepcopy(parts_data)
         transversal_data = {}
         t_s = score_data["parts"][0].getElementsByClass(Measure)[0].timeSignature
-        transversal_data[GLOBAL_TIME_SIGNATURE] = t_s if t_s else ""
+        transversal_data[C.GLOBAL_TIME_SIGNATURE] = t_s if t_s else ""
         for i, part in enumerate(window_data["score"].parts):
             read_measures = 0
             elements_to_remove = []
@@ -636,13 +638,15 @@ class FeaturesExtractor:
 
         if (
             self._cfg.is_requested_musescore_file()
-            and score_data[DATA_MUSESCORE_SCORE] is not None
+            and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
-            window_data[DATA_MUSESCORE_SCORE] = score_data[DATA_MUSESCORE_SCORE].loc[
-                (score_data[DATA_MUSESCORE_SCORE]["mn"] <= last_measure)
-                & (score_data[DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
+            window_data[C.DATA_MUSESCORE_SCORE] = score_data[
+                C.DATA_MUSESCORE_SCORE
+            ].loc[
+                (score_data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure)
+                & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
             ]
-            window_data[DATA_MUSESCORE_SCORE].reset_index(
+            window_data[C.DATA_MUSESCORE_SCORE].reset_index(
                 inplace=True, drop=True, level=0
             )
         window_data = {**transversal_data, **window_data}
@@ -666,7 +670,7 @@ class FeaturesExtractor:
             )
         return score_features, parts_features
 
-    def load_m21_objects(self, musicxml_file: str):
+    def _load_m21_objects(self, musicxml_file: str):
         score = parse_musicxml_file(
             musicxml_file,
             self._cfg.split_keywords,
@@ -675,13 +679,12 @@ class FeaturesExtractor:
         filtered_parts = self._filter_parts(score)
         return score, filtered_parts
 
-    def _get_score_data(self, musicxml_file: str, load_cache: bool = True) -> dict:
-        cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
+    def _get_score_data(self, musicxml_file: str, load_cache: Optional[Path] = None) -> dict:
 
         data = None
-        if cache_name.exists() and load_cache:
+        if load_cache is not None and load_cache.exists():
             try:
-                data = pickle.load(open(cache_name, "rb"))
+                data = pickle.load(open(load_cache, "rb"))
             except Exception as e:
                 perr(
                     "Error while loading pickled object, continuing with extraction from scratch: ",
@@ -689,26 +692,60 @@ class FeaturesExtractor:
                 )
 
         if data is None:
-            m21_objects = self.load_m21_objects(musicxml_file)
-            m21_objects = SmartModuleCache(
-                m21_objects, resurrect_reference=(self.load_m21_objects, musicxml_file)
-            )
-            if len(m21_objects[1]) == 0:
+            score, filtered_parts = self._load_m21_objects(musicxml_file)
+            if len(filtered_parts) == 0:
                 lwarn(
                     f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}"
                 )
-            data = {
-                DATA_SCORE: m21_objects[0],
-                DATA_FILE: musicxml_file,
-                DATA_FILTERED_PARTS: m21_objects[1],
-            }
             if self._cfg.is_requested_musescore_file():
-                data.update(self._get_harmony_data(musicxml_file))
-            pickle.dump(data, open(cache_name, "wb"))
+                data_musescore = self._get_harmony_data(musicxml_file)
+            data = {
+                C.DATA_SCORE: score,
+                C.DATA_FILE: musicxml_file,
+                C.DATA_FILTERED_PARTS: filtered_parts,
+                C.DATA_MUSESCORE_SCORE: data_musescore,
+            }
+            if self._cfg.only_theme_a:
+                self._only_theme_a(data)
+            m21_objects = SmartModuleCache(
+                (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
+                resurrect_reference=(self._load_m21_objects, musicxml_file),
+            )
+            data[C.DATA_SCORE] = m21_objects[0]
+            data[C.DATA_FILTERED_PARTS] = m21_objects[1]
         return data
 
-    def _get_harmony_data(self, musicxml_file: str) -> dict:
-        data = {}
+    def _only_theme_a(self, data):
+        score: Score = data[C.DATA_SCORE]
+
+        # extracting theme_a information from metadata
+        aria_id = get_ariaid(path.basename(data[C.DATA_FILE]))
+        last_measure = 1000000
+        for d in self._cfg.scores_metadata[C.THEME_A_METADATA]:
+            if d["AriaId"] == aria_id:
+                last_measure = floor(float(d.get(END_OF_THEME_A, last_measure)))
+                break
+
+        # removing everything after end of theme A
+        for part in score.parts:
+            read_measures = 0
+            elements_to_remove = []
+            for measure in part.getElementsByClass(Measure):  # type: ignore
+                read_measures += 1
+                if read_measures > last_measure:
+                    elements_to_remove.append(measure)
+            part.remove(targetOrList=elements_to_remove)  # type: ignore
+        if (
+            self._cfg.is_requested_musescore_file()
+            and data[C.DATA_MUSESCORE_SCORE] is not None
+        ):
+            data[C.DATA_MUSESCORE_SCORE] = data[C.DATA_MUSESCORE_SCORE].loc[
+                data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure
+            ]
+            data[C.DATA_MUSESCORE_SCORE].reset_index(inplace=True, drop=True)
+        return data
+
+    def _get_harmony_data(self, musicxml_file: str) -> pd.DataFrame:
         musescore_file_path = compose_musescore_file_path(
             musicxml_file, self._cfg.musescore_dir
         )
@@ -717,13 +754,13 @@ class FeaturesExtractor:
             lerr(f"No harmonic analysis will be extracted.{musescore_file_path}")
         else:
             try:
-                data[DATA_MUSESCORE_SCORE] = parse_musescore_file(
+                data_musescore = parse_musescore_file(
                     musescore_file_path, self._cfg.expand_repeats
                 )
             except ParseFileError as e:
-                data[DATA_MUSESCORE_SCORE] = None
+                data_musescore = None
                 lerr(str(e))
-        return data
+        return data_musescore
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
@@ -733,11 +770,11 @@ class FeaturesExtractor:
         if self._cfg.parts_filter is None:
             return parts
         filter_set = set(self._cfg.parts_filter)
-        return [
+        return (
             part
             for part in parts
             if to_abbreviation(part, parts, self._cfg) in filter_set
-        ]
+        )
 
     def _deal_with_dupicated_parts(self, parts):
         for part in parts:
@@ -750,18 +787,18 @@ class FeaturesExtractor:
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
-            sound, part, score_data[DATA_FILTERED_PARTS], self._cfg
+            sound, part, score_data[C.DATA_FILTERED_PARTS], self._cfg
         )
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = self._cfg.family_to_abbreviation[family]
         data = {
-            DATA_PART: part,
-            DATA_PART_NUMBER: part_number,
-            DATA_PART_ABBREVIATION: part_abbreviation,
-            DATA_SOUND: sound,
-            DATA_SOUND_ABBREVIATION: sound_abbreviation,
-            DATA_FAMILY: family,
-            DATA_FAMILY_ABBREVIATION: family_abbreviation,
+            C.DATA_PART: part,
+            C.DATA_PART_NUMBER: part_number,
+            C.DATA_PART_ABBREVIATION: part_abbreviation,
+            C.DATA_SOUND: sound,
+            C.DATA_SOUND_ABBREVIATION: sound_abbreviation,
+            C.DATA_FAMILY: family,
+            C.DATA_FAMILY_ABBREVIATION: family_abbreviation,
         }
         return data
 
@@ -807,7 +844,7 @@ class FeaturesExtractor:
                 .replace(".handler", "")
             )
             ldebug(
-                f'Extracting part "{part_data[DATA_PART_ABBREVIATION]}" {module_name} features.'
+                f'Extracting part "{part_data[C.DATA_PART_ABBREVIATION]}" {module_name} features.'
             )
             try:
                 module.update_part_objects(
@@ -815,7 +852,7 @@ class FeaturesExtractor:
                 )
             except Exception as e:
                 score_name = score_data["file"]
-                # __import__('traceback').print_exc(e)
+                __import__("traceback").print_exc(e)
                 perr(
                     f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
@@ -830,7 +867,7 @@ class FeaturesExtractor:
         score_features: dict,
     ):
         ldebug(
-            f'Extracting score "{score_data[DATA_FILE]}" {module.__name__} features.'
+            f'Extracting score "{score_data[C.DATA_FILE]}" {module.__name__} features.'
         )
         try:
             module.update_score_objects(
@@ -838,7 +875,7 @@ class FeaturesExtractor:
             )
         except Exception as e:
             score_name = score_data["file"]
-            # __import__('traceback').print_exc(e)
+            __import__("traceback").print_exc(e)
             perr(
                 f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
