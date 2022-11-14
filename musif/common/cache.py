@@ -1,11 +1,11 @@
 import random
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from deepdiff import DeepHash
+
 from musif.logs import pinfo, pwarn
 
 from .exceptions import CannotResurrectObject, SmartCacheModified
-
-# from deepdiff import DeepHash
 
 
 class FileCacheIntoRAM:
@@ -46,6 +46,8 @@ class ObjectReference:
     resurrects it, the other sees it.
     """
 
+    __slots__ = ("reference", "resurrect_reference", "parent", "name")
+
     def __init__(
         self,
         reference: Any,
@@ -56,6 +58,10 @@ class ObjectReference:
         self.reference = reference
         self.resurrect_reference = resurrect_reference
         self.parent = parent
+        if type(name) is int:
+            __import__("traceback").print_stack()
+            __import__("ipdb").set_trace()
+        self.name = name
         # self.deephash = DeepHash(reference)[reference]
 
     def _try_resurrect(self) -> None:
@@ -71,17 +77,23 @@ class ObjectReference:
             # self.deephash = DeepHash(self.reference)
 
     def get_attr(self, name: str) -> Any:
-        if self.reference is None:
+        if not hasattr(self, "reference") or self.reference is None:
             pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
             self._try_resurrect()
         return getattr(self.reference, name)
 
     def __getstate__(self):
-        return self.resurrect_reference
+        return dict(
+            resurrect_reference=self.resurrect_reference,
+            parent=self.parent,
+            name=self.name,
+        )
 
     def __setstate__(self, state):
         self.reference = None
-        self.resurrect_reference = state
+        self.resurrect_reference = state["resurrect_reference"]
+        self.parent = state["parent"]
+        self.name = state["name"]
 
     def __repr__(self):
         return f"ObjectReference({self.reference})"
@@ -141,6 +153,7 @@ class SmartModuleCache:
             sometimes exceed the maximum number of recursion while deep-copying
     """
 
+    __slots__ = ("cache")
     SPECIAL_METHODS_NAME = "smartcache__"
 
     def __init__(
@@ -150,6 +163,7 @@ class SmartModuleCache:
         resurrect_reference: Optional[Tuple] = None,
         parent: Optional[ObjectReference] = None,
         name: str = "",
+        check_reference_changes: bool = False,
     ):
 
         cache: Dict[
@@ -159,6 +173,7 @@ class SmartModuleCache:
             "_hash": random.randint(10**10, 10**15),
             "_target_addresses": target_addresses,
             "_reference": ObjectReference(reference, resurrect_reference, parent, name),
+            "_check_reference_changes": check_reference_changes,
         }
         object.__setattr__(self, "cache", cache)
 
@@ -203,7 +218,9 @@ class SmartModuleCache:
             return attr
         else:
             # attr not in cache
-            return self._cache_new_attr(name)
+            attr = self._get_new_attr(name)
+            self.cache[name] = attr
+            return attr
 
     def __delattr__(self, name):
         del self.cache[name]
@@ -212,7 +229,7 @@ class SmartModuleCache:
         self.cache[name] = self._wmo(value, name)
         self.cache["_reference"].get_attr("__setattr__")(name, value)
 
-    def _cache_new_attr(self, name: str) -> Any:
+    def _get_new_attr(self, name: str) -> Any:
         if name.startswith(self.SPECIAL_METHODS_NAME):
             special_name = name
             name = name[len(self.SPECIAL_METHODS_NAME) :]
@@ -226,14 +243,12 @@ class SmartModuleCache:
                 name,
                 target_addresses=self.cache["_target_addresses"],
                 special_method=special_name is not None,
+                check_reference_changes=self.cache["_check_reference_changes"],
             )
         else:
             # cache the value and returns it
             attr = self._wmo(attr, name)
 
-        if special_name is not None:
-            name = special_name
-        self.cache[name] = attr
         return attr
 
     def __setstate__(self, state):
@@ -262,7 +277,7 @@ class SmartModuleCache:
         v = self.cache.get(f"__item_{k}")
         if v is None:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
-            v = self._wmo(v, k)
+            v = self._wmo(v, "__getitem__")
             self.cache[f"__item_{k}"] = v
         return v
 
@@ -272,31 +287,44 @@ class SmartModuleCache:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
         except KeyError:
             pass
-        v = self._wmo(v, k)
+        v = self._wmo(v, "__setitem__")
         self.cache[f"__item_{k}"] = v
         self.cache["_reference"].get_attr("__setattr__")(k, v)
 
     def __bool__(self):
-        return self.cache["_reference"].get_attr("__bool__")()
+        b = self.cache.get("__bool__")
+        if b is None:
+            try:
+                b = self.cache["_reference"].get_attr("__bool__")()
+            except AttributeError:
+                b = self.cache["_reference"].reference is not None
+            finally:
+                self.cache['__bool__'] = b
+        return b
 
-    # def ischanged(self):
-    #     """
-    #     Returns if the reference object is changed using value comparison of
-    #     its attributes recursively.
-    #     """
-    #     newhash = DeepHash(self.reference)[self.reference]
-    #     if newhash != self.deephash:
-    #         return True
-    #     else:
-    #         return False
+    def ischanged(self):
+        """
+        Returns if the reference object is changed using value comparison of
+        its attributes recursively.
+        """
+        newhash = DeepHash(self.reference)[self.reference]
+        if newhash != self.deephash:
+            return True
+        else:
+            return False
 
 
 class CallableArguments:
     """
     This class represents a set of ordered arguments.
     The hash is the concatenation of the argument hashes.
-    If the arguments persists the hash across pickling, this object persists
-    the hash as well.
+    If the arguments persists the hash across pickling, this object uses it,
+    otherwise it uses `deepdiff.DeepHash` to compute a hash based on the
+    content value (which should persists across pickling).
+
+    Note that `DeepHash` may be much slower than the builtin `hash()` function,
+    so for large and complex objects like `music21.Score`, just use a
+    `SmartModuleCache` wrapper.
     """
 
     def __init__(self, *args, **kwargs):
@@ -304,12 +332,23 @@ class CallableArguments:
         self.kwargs = kwargs
 
         h = ""
-        for i in range(len(self.args)):
-            h += str(hash(self.args[i]))
 
-        for i in self.kwargs:
-            h += str(hash(self.kwargs[i]))
-        self._hash = int(h)
+        # hashing  SmartModuleCache
+        for arg in self.args:
+            if type(arg) is SmartModuleCache:
+                h += str(hash(arg))
+
+        kwargs_keys = sorted(self.kwargs.keys())
+        for k in kwargs_keys:
+            v = self.kwargs[k]
+            if type(v) is SmartModuleCache:
+                h += str(hash(v))
+
+        # hashing other object types by value
+        all_args = (args, kwargs)
+        h += DeepHash(all_args, exclude_types=[SmartModuleCache])[all_args]
+
+        self._hash = int(h, 16)
 
     def __hash__(self):
         return self._hash
@@ -330,18 +369,29 @@ class MethodCache:
     cache, otherwise runs the method and caches the arguments
     """
 
+    __slots__ = (
+        "reference",
+        "name",
+        "cache",
+        "target_addresses",
+        "special_method",
+        "check_reference_changes",
+    )
+
     def __init__(
         self,
         reference: ObjectReference,
         attr_name: str,
         target_addresses: List[str] = ["music21"],
         special_method: bool = False,
+        check_reference_changes: bool = False,
     ):
         self.reference = reference
         self.name = attr_name
         self.cache = dict()
         self.target_addresses = target_addresses
         self.special_method = special_method
+        self.check_reference_changes = check_reference_changes
 
     def _wmo(self, obj):
         return wrap_module_objects(
@@ -367,8 +417,8 @@ class MethodCache:
             res = attr(*args, **kwargs)
             res = self._wmo(res)
             self.cache[call_args] = res
-            # if self.reference.ischanged():
-            #     pwarn(str(SmartCacheModified(self, self.name)))
+            if self.check_reference_changes and self.reference.ischanged():
+                pwarn(str(SmartCacheModified(self, self.name)))
             return res
 
 
@@ -382,6 +432,9 @@ def wrap_module_objects(
     """
     Returns the object wrapped with `SmartModuleCache` class if it was defined
     in one of the `target_addresses`
+
+    If `obj` is a list or a tuple, e new list/tuple this function works
+    recursively on their objects.
     """
     __module = obj.__class__.__module__
     for module in target_addresses:
@@ -393,4 +446,15 @@ def wrap_module_objects(
                 parent=parent,
                 name=name,
             )
+
+    if isinstance(obj, (list, tuple)):
+        ret = [
+            wrap_module_objects(v, target_addresses, resurrect_reference, parent, name)
+            for v in obj
+        ]
+        if isinstance(obj, list):
+            return ret
+        else:
+            return tuple(ret)
+
     return obj
