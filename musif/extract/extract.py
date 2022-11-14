@@ -676,7 +676,7 @@ class FeaturesExtractor:
             expand_repeats=self._cfg.expand_repeats,
         )
         filtered_parts = self._filter_parts(score)
-        return score, filtered_parts
+        return score, tuple(filtered_parts)
 
     def _get_score_data(self, musicxml_file: str, load_cache: Optional[Path] = None) -> dict:
 
