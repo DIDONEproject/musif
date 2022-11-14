@@ -552,6 +552,7 @@ class FeaturesExtractor:
         )
         score_features = {**basic_features, **score_features}
         [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
+        # __import__('ipdb').set_trace()
         pickle.dump(score_data, open(cache_name, "wb"))
         return score_features, parts_features
 
@@ -851,7 +852,7 @@ class FeaturesExtractor:
                 )
             except Exception as e:
                 score_name = score_data["file"]
-                __import__("traceback").print_exc(e)
+                # __import__("traceback").print_exc(e)
                 perr(
                     f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
@@ -874,7 +875,7 @@ class FeaturesExtractor:
             )
         except Exception as e:
             score_name = score_data["file"]
-            __import__("traceback").print_exc(e)
+            # __import__("traceback").print_exc(e)
             perr(
                 f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
