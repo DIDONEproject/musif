@@ -59,6 +59,7 @@ class ObjectReference:
         self.resurrect_reference = resurrect_reference
         self.parent = parent
         self.name = name
+        # TODO: we need to handle arguments to methods for resurrecting working correctly
         # self.deephash = DeepHash(reference)[reference]
 
     def _try_resurrect(self) -> None:
@@ -269,7 +270,7 @@ class SmartModuleCache:
         it = self.cache.get("__list__")
         if it is None:
             it = self.cache["_reference"].get_attr("__iter__")()
-            it = list(map(self._wmo, it))
+            it = list(map(lambda x: self._wmo(x, "__iter__"), it))
             self.cache["__list__"] = it
         return iter(it)
 
@@ -400,6 +401,7 @@ class MethodCache:
         self.special_method = special_method
         self.check_reference_changes = check_reference_changes
 
+    # TODO: if _wmo is called without name, resurrection is not possible
     def _wmo(self, obj):
         return wrap_module_objects(
             obj,
