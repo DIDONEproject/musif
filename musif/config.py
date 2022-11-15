@@ -2,6 +2,8 @@ import multiprocessing
 from glob import glob
 from os import path
 from pathlib import PurePath
+from pathlib import Path
+
 
 from musif import internal_data
 from musif.common._logs import create_logger

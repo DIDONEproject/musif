@@ -12,7 +12,7 @@ from musif.config import Configuration
 
 from musif.extract.basic_modules.scoring.constants import FAMILY
 
-from musif.extract.common import __filter_parts_data, _part_matches_filter
+from musif.extract.common import _filter_parts_data, _part_matches_filter
 
 from musif.extract.constants import DATA_FAMILY, DATA_FAMILY_ABBREVIATION, DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 
@@ -29,7 +29,7 @@ from musif.extract.features.core.constants import NUM_NOTES
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
 
-    parts_data = __filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
 
     if len(parts_data) == 0:
         return

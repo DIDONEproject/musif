@@ -76,11 +76,12 @@ def extract_time_signatures(measures: list, score_data: dict):
                 if GLOBAL_TIME_SIGNATURE in score_data:
                     time_signatures.append(score_data[GLOBAL_TIME_SIGNATURE].ratioString)
                 else:
-                    time_signatures.append('')
-        else: #therothetically this works when repetitions are taken into consideration
+                    time_signatures.append(time_signatures[-1])
+        else: 
             time_signatures.append(time_signatures[ts_measures.index(element.measureNumber)])
 
-    time_signature = ",".join(list(sorted(set(time_signatures), key=time_signatures.index)))
+    time_signatures_set=set(time_signatures)
+    time_signature = ",".join(list(sorted(time_signatures_set, key = time_signatures.index)))
     time_signature_grouped = get_time_signature_type(time_signature.split(',')[0])
     number_of_beats = get_number_of_beats(time_signature.split(',')[0])
 

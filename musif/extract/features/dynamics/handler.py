@@ -5,7 +5,7 @@ from xml.dom.minidom import Element
 
 from musif.config import Configuration
 from musif.extract.features.prefix import get_part_feature, get_score_feature
-from musif.extract.utils import get_beat_position
+from musif.extract.utils import _get_beat_position
 from musif.logs import lwarn, pwarn
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
@@ -55,8 +55,8 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
                     first_silence = True
                     new_dyn = 0
                     dynamics.append(new_dyn)
-                    position = get_beat_position(beats_timesignature, number_of_beats, element.beat)
-                    old_beat = position - get_beat_position(beats_timesignature, number_of_beats, 1)
+                    position = _get_beat_position(beats_timesignature, number_of_beats, element.beat)
+                    old_beat = position - _get_beat_position(beats_timesignature, number_of_beats, 1)
                     dyn_mean_weighted += (beats_section + old_beat) * last_dyn
                     beats_section, dyn_grad, last_dyn = calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn)
                     name = ""
@@ -144,8 +144,8 @@ def calculate_dynamics(dynamics, beats_section, dyn_mean_weighted, dyn_grad, las
 
 def calculate_position(number_of_beats, element, beats_timesignature):
     sub_beat = element.elements[0].beat if element.isStream else element.beat
-    position = get_beat_position(beats_timesignature, number_of_beats,sub_beat)
-    old_beat = position - get_beat_position(beats_timesignature, number_of_beats, 1)
+    position = _get_beat_position(beats_timesignature, number_of_beats,sub_beat)
+    old_beat = position - _get_beat_position(beats_timesignature, number_of_beats, 1)
     return old_beat# - sum([i.duration.quarterLength for i in bar_section.elements if i.classes[0] == REST]) #all silences in the measure
 
 def calculate_gradient(beats_section, dyn_grad, last_dyn, old_beat, new_dyn):

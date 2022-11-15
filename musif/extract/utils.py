@@ -369,7 +369,7 @@ def _get_timesignature_periods(time_signatures: list):
     periods = [0]
     if len(time_signatures) == 0:
         return periods
-    for t in range(1, len(time_signatures)):
+    for t in range(0, len(time_signatures)):
         if time_signatures[t] != time_signatures[t-1]:
             periods.append(t - periods[-1])  # Substract indexes in case measures are not cointinuous
     periods.append(t - periods[-1])

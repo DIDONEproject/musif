@@ -10,7 +10,7 @@ from musif.common._constants import VOICE_FAMILY
 
 from musif.config import Configuration
 
-from musif.extract.common import __filter_parts_data
+from musif.extract.common import _filter_parts_data
 
 from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
 
@@ -55,7 +55,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
                          score_features: dict):
 
-    parts_data = __filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
 
     if len(parts_data) == 0:
         return
