@@ -89,9 +89,9 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     part_features.update({
         DYNMEAN: mean(dynamics) if len(dynamics) != 0 else 0,
         DYNMEAN_WEIGHTED: dyn_mean_weighted / total_sounding_beats if total_sounding_beats != 0 else 0,
-        DYNGRAD: dyn_grad / (len(dynamics) - 1) if (len(dynamics) - 1) > 0 else 0,
+        DYNGRAD: float(dyn_grad / (len(dynamics) - 1)) if (len(dynamics) - 1) > 0 else 0,
         # DYNABRUPTNESS: dyn_grad / (total_beats - beats_section) if (total_beats - beats_section) > 0 else 0
-        DYNABRUPTNESS: dyn_grad / total_sounding_beats if total_sounding_beats != 0 else 0,
+        DYNABRUPTNESS: float(dyn_grad / total_sounding_beats) if total_sounding_beats != 0 else 0,
     })
 
 

@@ -258,8 +258,9 @@ class DataProcessor:
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
         pinfo('\nDeleting items with errors...')
-        if os.path.exists('errors.csv'):
-            errors = pd.read_csv('errors.csv', low_memory=False, sep='\n',
+        errors_file=r'./errors.csv'
+        if os.path.exists(errors_file):
+            errors = pd.read_csv(errors_file, low_memory=False,
                                  encoding_errors='replace', header=0)[FILE_NAME].tolist()
             for item in errors:
                 index = self.data.index[self.data[FILE_NAME] == item+'.xml']

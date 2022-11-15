@@ -120,6 +120,7 @@ def _join_double_bass(df: DataFrame):
             df[formatted_col] = df[[col, formatted_col]].sum(axis=1)
             df[formatted_col] = [i.replace('nan', '')
                                  for i in df[formatted_col]]
+            df[formatted_col] = df[formatted_col].astype(float)
         else:
             df[col] = df[col].astype(float)
             df[formatted_col] = df[[formatted_col, col]].sum(axis=1)
