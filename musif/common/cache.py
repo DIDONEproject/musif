@@ -1,8 +1,9 @@
+import builtins
+import logging
 import random
 from typing import Any, Dict, List, Optional, Tuple, Union
-import builtins
 
-from deepdiff import DeepHash
+from deepdiff import DeepHash, deephash
 
 from musif.logs import pinfo, pwarn
 
@@ -40,9 +41,12 @@ class FileCacheIntoRAM:
         return len(self._items) == self._capacity
 
 
+deephash.logger.setLevel(logging.ERROR)
+
+
 class ObjectReference:
     """
-    This is handles the calls to the reference object so that both
+    This handles the calls to the reference object so that both
     `MethodCache` and `SmartModuleCache` reference the same object and when one
     resurrects it, the other sees it.
     """
@@ -110,26 +114,6 @@ class ObjectReference:
 
     def __repr__(self):
         return f"ObjectReference({self.reference}, {self.name})"
-
-
-def isinstance(obj1, cls):
-    """
-    Check if obj1 is instance of `cls`. This function grants that `SmartModuleCache`
-    objects are checked against their reference objects.
-    """
-    if type(obj1) is SmartModuleCache:
-        return obj1.cache["_type"] is cls
-    return builtins.isinstance(obj1, cls)
-
-
-def issubclass(obj1, cls):
-    """
-    Check if obj1 is subclass of `cls`. This function grants that `SmartModuleCache`
-    objects are checked against their reference objects.
-    """
-    if type(obj1) is SmartModuleCache:
-        obj1 = obj1.cache["_type"]
-    return builtins.issubclass(obj1, cls)
 
 
 class SmartModuleCache:
@@ -216,7 +200,7 @@ class SmartModuleCache:
                 reference, resurrect_reference, parent, name, args
             ),
             "_check_reference_changes": check_reference_changes,
-            "_type": type(reference)
+            "_type": type(reference),
         }
         object.__setattr__(self, "cache", cache)
 
@@ -379,8 +363,8 @@ class CallableArguments:
     """
     This class represents a set of ordered arguments.
     The hash is the concatenation of the argument hashes.
-    If the arguments persists the hash across pickling, this object uses it,
-    otherwise it uses `deepdiff.DeepHash` to compute a hash based on the
+    If the arguments are SmartModuleCache objects, this object uses their cache (which
+    persists to disk), otherwise it uses `deepdiff.DeepHash` to compute a hash based on the
     content value (which should persists across pickling).
 
     Note that `DeepHash` may be much slower than the builtin `hash()` function,
@@ -488,6 +472,26 @@ class MethodCache:
             if self.check_reference_changes and self.reference.ischanged():
                 pwarn(str(SmartCacheModified(self, self.name)))
             return res
+
+
+def isinstance(obj1, cls):
+    """
+    Check if obj1 is instance of `cls`. This function grants that `SmartModuleCache`
+    objects are checked against their reference objects.
+    """
+    if type(obj1) is SmartModuleCache:
+        return obj1.cache["_type"] is cls
+    return builtins.isinstance(obj1, cls)
+
+
+def issubclass(obj1, cls):
+    """
+    Check if obj1 is subclass of `cls`. This function grants that `SmartModuleCache`
+    objects are checked against their reference objects.
+    """
+    if type(obj1) is SmartModuleCache:
+        obj1 = obj1.cache["_type"]
+    return builtins.issubclass(obj1, cls)
 
 
 def wrap_module_objects(
