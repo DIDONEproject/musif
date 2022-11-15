@@ -448,6 +448,7 @@ class FeaturesExtractor:
         self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # creates the directory for the cache
         if self._cfg.cache_dir is not None:
+            pinfo("Cache activated!")
             Path(self._cfg.cache_dir).mkdir(exist_ok=True)
         # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
         # self.logger.start()
@@ -540,7 +541,10 @@ class FeaturesExtractor:
 
     def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         pinfo(f"\nProcessing score {musicxml_file}")
-        cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
+        if self._cfg.cache_dir is not None:
+            cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
+        else:
+            cache_name = None
         score_data = self._get_score_data(musicxml_file, load_cache=cache_name)
         parts_data = [
             self._get_part_data(score_data, part)
@@ -556,7 +560,9 @@ class FeaturesExtractor:
         score_features = {**basic_features, **score_features}
         [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
         # __import__('ipdb').set_trace()
-        pickle.dump(score_data, open(cache_name, "wb"))
+
+        if self._cfg.cache_dir is not None:
+            pickle.dump(score_data, open(cache_name, "wb"))
         return score_features, parts_features
 
     def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
@@ -700,12 +706,13 @@ class FeaturesExtractor:
             }
             if self._cfg.only_theme_a:
                 self._only_theme_a(data)
-            m21_objects = SmartModuleCache(
-                (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
-                resurrect_reference=(self._load_m21_objects, musicxml_file),
-            )
-            data[C.DATA_SCORE] = m21_objects[0]
-            data[C.DATA_FILTERED_PARTS] = m21_objects[1]
+            if self._cfg.cache_dir is not None:
+                m21_objects = SmartModuleCache(
+                    (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
+                    resurrect_reference=(self._load_m21_objects, musicxml_file),
+                )
+                data[C.DATA_SCORE] = m21_objects[0]
+                data[C.DATA_FILTERED_PARTS] = m21_objects[1]
         return data
 
     def _only_theme_a(self, data):
