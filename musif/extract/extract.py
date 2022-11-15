@@ -73,10 +73,6 @@ def parse_musicxml_file(
     if score is not None:
         return score
     try:
-        # score = SmartCache(
-        #     reference=parse(file_path),
-        #     resurrect_reference=(parse, file_path),
-        # )
         score = parse(file_path)
         split_layers(score, split_keywords)
         if expand_repeats:
