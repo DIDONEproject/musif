@@ -8,6 +8,8 @@ import ms3
 from pandas import DataFrame
 from musif.extract.constants import PLAYTHROUGH
 
+from musif.common.cache import isinstance
+
 from musif.musicxml.tempo import get_number_of_beats
 file_names = []
 repeat_bracket = False

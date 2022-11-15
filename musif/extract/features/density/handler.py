@@ -20,6 +20,7 @@ from musif.musicxml import Measure, Note, Part
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
 from musif.extract.features.core.constants import NUM_MEASURES, NUM_NOTES, NUM_SOUNDING_MEASURES
+from musif.common.cache import isinstance
 
 def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
     if not _part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):

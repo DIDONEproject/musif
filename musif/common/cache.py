@@ -1,5 +1,6 @@
 import random
 from typing import Any, Dict, List, Optional, Tuple, Union
+import builtins
 
 from deepdiff import DeepHash
 
@@ -111,6 +112,26 @@ class ObjectReference:
         return f"ObjectReference({self.reference}, {self.name})"
 
 
+def isinstance(obj1, cls):
+    """
+    Check if obj1 is instance of `cls`. This function grants that `SmartModuleCache`
+    objects are checked against their reference objects.
+    """
+    if type(obj1) is SmartModuleCache:
+        return obj1.cache["_type"] is cls
+    return builtins.isinstance(obj1, cls)
+
+
+def issubclass(obj1, cls):
+    """
+    Check if obj1 is subclass of `cls`. This function grants that `SmartModuleCache`
+    objects are checked against their reference objects.
+    """
+    if type(obj1) is SmartModuleCache:
+        obj1 = obj1.cache["_type"]
+    return builtins.issubclass(obj1, cls)
+
+
 class SmartModuleCache:
     """
     This class wraps any object so that its function calls can be cached in a
@@ -122,8 +143,8 @@ class SmartModuleCache:
     When the same call is performed a second time, the result value is taken
     from the dictionary.
 
-    If the object is changed, the change is not cached. As such. only read
-    operations can be executed on a ``SmartCache``.
+    If the object is changed, the change is not cached. As such, only read
+    operations can be executed on a ``SmartModuleCache``.
 
     After unpickling, the referenced object is no longer available.
     If `resurrect_reference` is not None, it will be loaded using its value. In
@@ -177,11 +198,11 @@ class SmartModuleCache:
     def __init__(
         self,
         reference: Any = None,
-        target_addresses: List[str] = ["music21"],
         resurrect_reference: Optional[Tuple] = None,
         parent: Optional[ObjectReference] = None,
         name: Tuple[str] = ("",),
         args: Tuple[Optional[Tuple]] = (None,),
+        target_addresses: List[str] = ["music21"],
         check_reference_changes: bool = False,
     ):
 
@@ -195,19 +216,15 @@ class SmartModuleCache:
                 reference, resurrect_reference, parent, name, args
             ),
             "_check_reference_changes": check_reference_changes,
+            "_type": type(reference)
         }
         object.__setattr__(self, "cache", cache)
-
-    def __isinstancecheck__(self, other):
-        return isinstance(self.cache["_reference"].reference, other)
-
-    def __issubclasscheck__(self, other):
-        return issubclass(self.cache["_reference"].reference, other)
 
     def __repr__(self):
         _reference = self.cache["_reference"]
         _addresses = self.cache["_target_addresses"]
-        return f"SmartModuleCache({_reference}, {_addresses})"
+        _class = self.__class__.__qualname__
+        return f"{_class}({_reference}, {_addresses})"
 
     def __str__(self):
         s = self.cache.get("__str__")

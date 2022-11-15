@@ -10,6 +10,7 @@ from musif.musicxml.tempo import extract_numeric_tempo, get_number_of_beats, get
     get_time_signature_type
 from .constants import *
 
+from musif.common.cache import isinstance
 
 class TempoGroup2(Enum):
     NA = "NA"
