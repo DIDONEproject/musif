@@ -852,10 +852,10 @@ class FeaturesExtractor:
                 )
             except Exception as e:
                 score_name = score_data["file"]
-                # __import__("traceback").print_exc(e)
                 perr(
                     f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
+                raise e
                 break
 
     def _update_score_module_features(
@@ -875,10 +875,10 @@ class FeaturesExtractor:
             )
         except Exception as e:
             score_name = score_data["file"]
-            # __import__("traceback").print_exc(e)
             perr(
                 f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
+            raise e
 
     def _find_mscx_files(self):
         data_dir = self._cfg.data_dir
