@@ -482,7 +482,7 @@ class FeaturesExtractor:
         pinfo(f"\nProcessing score {musicxml_file}")
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(
-            score_data, part) for part in score_data[DATA_SCORE].parts]
+            score_data, part) for part in score_data[C.DATA_SCORE].parts]
         parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(
             BASIC_MODULES, score_data, parts_data)
@@ -496,7 +496,7 @@ class FeaturesExtractor:
     def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
         score_data = self._get_score_data(musicxml_file)
         parts_data = [self._get_part_data(
-            score_data, part) for part in score_data[DATA_SCORE].parts]
+            score_data, part) for part in score_data[C.DATA_SCORE].parts]
         parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(
             BASIC_MODULES, score_data, parts_data)
@@ -619,18 +619,18 @@ class FeaturesExtractor:
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
         part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
-            sound, part, score_data[DATA_FILTERED_PARTS], self._cfg
+            sound, part, score_data[C.DATA_FILTERED_PARTS], self._cfg
         )
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = self._cfg.family_to_abbreviation[family]
         data = {
-            DATA_PART: part,
-            DATA_PART_NUMBER: part_number,
-            DATA_PART_ABBREVIATION: part_abbreviation,
-            DATA_SOUND: sound,
-            DATA_SOUND_ABBREVIATION: sound_abbreviation,
-            DATA_FAMILY: family,
-            DATA_FAMILY_ABBREVIATION: family_abbreviation,
+            C.DATA_PART: part,
+            C.DATA_PART_NUMBER: part_number,
+            C.DATA_PART_ABBREVIATION: part_abbreviation,
+            C.DATA_SOUND: sound,
+            C.DATA_SOUND_ABBREVIATION: sound_abbreviation,
+            C.DATA_FAMILY: family,
+            C.DATA_FAMILY_ABBREVIATION: family_abbreviation,
         }
         return data
 
@@ -661,7 +661,7 @@ class FeaturesExtractor:
             module_name = str(module.__name__).replace(
                 "musif.extract.features.", '').replace('.handler', '')
             ldebug(
-                f"Extracting part \"{part_data[DATA_PART_ABBREVIATION]}\" {module_name} features.")
+                f"Extracting part \"{part_data[C.DATA_PART_ABBREVIATION]}\" {module_name} features.")
             try:
                 module.update_part_objects(
                     score_data, part_data, self._cfg, part_features)
@@ -674,7 +674,7 @@ class FeaturesExtractor:
     def _update_score_module_features(self, module, score_data: dict, parts_data: List[dict],
                                       parts_features: List[dict], score_features: dict):
         ldebug(
-            f"Extracting score \"{score_data[DATA_FILE]}\" {module.__name__} features.")
+            f"Extracting score \"{score_data[C.DATA_FILE]}\" {module.__name__} features.")
         try:
             module.update_score_objects(
                 score_data, parts_data, self._cfg, parts_features, score_features)

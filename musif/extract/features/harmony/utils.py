@@ -322,7 +322,7 @@ def get_additions(lausanne_table):
     additions = {}
     for a in additions_dict.keys():
         if additions_dict[a] != 0:
-            additions['Additions_'+str(a)] = additions_dict[a] / sum(list(additions_dict.values()))
+            additions[ADDITIONS_prefix+str(a)] = additions_dict[a] / sum(list(additions_dict.values()))
     return additions
     
 def get_chord_types(lausanne_table):

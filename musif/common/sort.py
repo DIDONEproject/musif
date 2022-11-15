@@ -36,16 +36,16 @@ def sort_dict(dict_to_sort: dict, reference_list: list) -> dict:
     """
     
     indexes = []
-    huerfanos = []
+    oprhans = []
     for i in dict_to_sort:
-        if i in main_list:
-            indexes.append(main_list.index(i))
+        if i in reference_list:
+            indexes.append(reference_list.index(i))
         else:
-            huerfanos.append({i: dict_to_sort[i]})
+            oprhans.append({i: dict_to_sort[i]})
             getLogger(LOGGER_NAME).warning('We do not have the appropiate sorting for {}'.format(i))
     indexes = sorted(indexes)
-    list_sorted = [{main_list[i]: dict_to_sort[main_list[i]]} for i in indexes]
-    list_sorted = list_sorted + huerfanos
+    list_sorted = [{reference_list[i]: dict_to_sort[reference_list[i]]} for i in indexes]
+    list_sorted = list_sorted + oprhans
     dict_sorted = dict((key, d[key]) for d in list_sorted for key in d)
     return dict_sorted
 

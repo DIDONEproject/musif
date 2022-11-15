@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from musif.common.sort import sort_dict
 from musif.config import Configuration
-from musif.extract.common import __filter_parts_data, _part_matches_filter
+from musif.extract.common import _filter_parts_data, _part_matches_filter
 from musif.extract.constants import DATA_FAMILY_ABBREVIATION, DATA_PART_ABBREVIATION, \
     DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.handler import DATA_MEASURES, DATA_NOTES, DATA_SOUNDING_MEASURES
@@ -14,7 +14,7 @@ from musif.extract.features.prefix import get_family_feature, get_family_prefix,
     get_sound_prefix
 from musif.extract.basic_modules.scoring.constants import NUMBER_OF_FILTERED_PARTS 
 from musif.extract.features.tempo.constants import NUMBER_OF_BEATS, TIME_SIGNATURE, TIME_SIGNATURES
-from musif.extract.utils import _get_timesignature_periods, calculate_total_number_of_beats
+from musif.extract.utils import _get_timesignature_periods, _calculate_total_number_of_beats
 from musif.logs import lerr
 from musif.musicxml import Measure, Note, Part
 from musif.musicxml.tempo import get_number_of_beats
@@ -36,19 +36,19 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
         })
     else:
         periods = _get_timesignature_periods(time_signatures)
-        sounding_measures = range(0, len(sounding_measures)) ## cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
+        sounding_measures = range(0, len(sounding_measures)) ## TODO: cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
         sounding_time_signatures=[time_signatures[i] for i in sounding_measures]
 
         sounding_periods = _get_timesignature_periods(sounding_time_signatures)
         
         part_features.update({
-            SOUNDING_DENSITY: len(notes)/calculate_total_number_of_beats(time_signatures, sounding_periods) if len(sounding_measures) > 0 else 0,
-            DENSITY: len(notes)/calculate_total_number_of_beats(time_signatures, periods) if len(measures) > 0 else 0,
+            SOUNDING_DENSITY: len(notes)/_calculate_total_number_of_beats(time_signatures, sounding_periods) if len(sounding_measures) > 0 else 0,
+            DENSITY: len(notes)/_calculate_total_number_of_beats(time_signatures, periods) if len(measures) > 0 else 0,
         })
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
 
-    parts_data = __filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_features) == 0:
         return
 

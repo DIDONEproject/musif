@@ -179,7 +179,6 @@ def _get_part_clef(part):
 
 
 def get_xml_scoring_variables(score):
-    def _get_xml_scoring_variables(score):
     return group.get_scoring(score)
 
 

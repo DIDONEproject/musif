@@ -9,13 +9,13 @@ from music21.note import Note
 
 from musif.config import Configuration
 
-from musif.extract.common import __filter_parts_data
+from musif.extract.common import _filter_parts_data
 
 from musif.extract.features.core.handler import DATA_KEY, DATA_NOTES
 
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 
-from musif.musicxml import _get_degrees_and_accidentals
+from musif.musicxml.common import _get_degrees_and_accidentals
 
 from .constants import *
 
@@ -42,7 +42,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
 
 def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
-    parts_data = __filter_parts_data(parts_data, cfg.parts_filter)
+    parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
 
     if len(parts_data) == 0:
         return
