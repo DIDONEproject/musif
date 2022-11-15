@@ -27,7 +27,7 @@ from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.common.sort import sort_list
 from musif.common._utils import get_ariaid
 from musif.config import Configuration
-from musif.extract.common import filter_parts_data
+from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musicxml import (
@@ -546,7 +546,7 @@ class FeaturesExtractor:
             self._get_part_data(score_data, part)
             for part in score_data[C.DATA_SCORE].parts
         ]
-        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
+        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(
             BASIC_MODULES, score_data, parts_data
         )
@@ -568,7 +568,7 @@ class FeaturesExtractor:
             self._get_part_data(score_data, part)
             for part in score_data[C.DATA_SCORE].parts
         ]
-        parts_data = filter_parts_data(parts_data, self._cfg.parts_filter)
+        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features, basic_parts_features = self.extract_modules(
             BASIC_MODULES, score_data, parts_data
         )
@@ -747,10 +747,10 @@ class FeaturesExtractor:
             lerr(f"No harmonic analysis will be extracted.{musescore_file_path}")
         else:
             try:
-                data[C.DATA_MUSESCORE_SCORE] = parse_musescore_file(
+                data_musescore = parse_musescore_file(
                     musescore_file_path, self._cfg.expand_repeats)
             except ParseFileError as e:
-                data[C.DATA_MUSESCORE_SCORE] = None
+                data_musescore = None
                 lerr(str(e))
         return data_musescore
 
