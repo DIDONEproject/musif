@@ -68,8 +68,8 @@ def get_emphasized_degrees(notes_list: List[Note], tonality_map: dict, harmonic_
     for j, note in enumerate(notes_list):
         note = note[0] if note.isChord else note
         if note.measureNumber in list(harmonic_analysis['playthrough']):
-            if note.beat is None:
-                i=0
+            # if note.beat is None:
+                # i=0
             note_offset = round(list(harmonic_analysis[harmonic_analysis['playthrough']==note.measureNumber].beats)[0]-1 + note.beat)
         else:
             note_offset = round(note.offset)
@@ -117,8 +117,7 @@ def get_modulations(lausanne_table: DataFrame, sections, major = True):
 def extract_harmony(score_data):
     harmonic_analysis=score_data.get('MS3_score', pd.DataFrame())
 
-    tonality=str(score_data[DATA_KEY])
-    # measures = harmonic_analysis.mc.dropna().tolist() if IsAnacrusis(harmonic_analysis) else harmonic_analysis.mn.dropna().tolist()
+    tonality = str(score_data[DATA_KEY])
 
     return harmonic_analysis, tonality
 
