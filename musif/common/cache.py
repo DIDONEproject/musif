@@ -91,6 +91,7 @@ class ObjectReference:
         else:
             func = self.resurrect_reference[0]
             args = self.resurrect_reference[1:]
+            pinfo(f"Resurrecting via function call: {func}{args}")
             self.reference = func(*args)
             # self.deephash = DeepHash(self.reference)
 
@@ -262,7 +263,8 @@ class SmartModuleCache:
 
     def __setattr__(self, name, value):
         self.cache[name] = self._wmo(value, (name,))
-        self.cache["_reference"].get_attr("__setattr__")(name, value)
+        if self.cache["_reference"].reference is not None:
+            self.cache["_reference"].get_attr("__setattr__")(name, value)
 
     def _get_new_attr(self, name: str) -> Any:
         if name.startswith(self.SPECIAL_METHODS_NAME):
