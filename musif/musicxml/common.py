@@ -79,7 +79,7 @@ def split_layers(score: Score, split_keywords: List[str]):
     for part in final_parts:
         try:
             score.insert(0, part)
-        except:
+        except Exception:
             pass
 
 
@@ -163,7 +163,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
                             if e not in p.elements[num_measure].elements
                         )
     for num, p in enumerate(parts_splitted, 1):
-        p_copy = copy.deepcopy(part)  # TODO: this line takes > 10% of the time
+        p_copy = part  # copy.deepcopy(part)  # TODO: this line takes > 10% of the time
         p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
         p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
         p_copy.elements = p.elements
