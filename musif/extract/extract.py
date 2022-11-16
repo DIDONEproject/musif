@@ -22,10 +22,10 @@ from tqdm import tqdm
 # because it better allows type checking and autocompletion in editors
 import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
+from musif.common._utils import get_ariaid
 from musif.common.cache import FileCacheIntoRAM, SmartModuleCache
 from musif.common.exceptions import MissingFileError, ParseFileError
 from musif.common.sort import sort_list
-from musif.common._utils import get_ariaid
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
@@ -49,8 +49,9 @@ def parse_musicxml_file(
     file_path: str, split_keywords: List[str], expand_repeats: bool = False
 ) -> Score:
     """
-    This function parses a musicxml file and returns a music21 Score object. If the file has already been parsed,
-    it will be loaded from cache instead of processing it again. Split a part in different parts if the instrument
+    This function parses a musicxml file and returns a music21 Score object. If
+    the file has already been parsed, it will be loaded from cache instead of
+    processing it again. Split a part in different parts if the instrument
     family is in keywords argument and expands repeats if indicated.
        Parameters
        ----------
@@ -85,8 +86,9 @@ def parse_musicxml_file(
 
 def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.DataFrame:
     """
-    This function parses a musescore file and returns a pandas dataframe. If the file has
-    already been parsed, it will be loaded from cache instead of processing it again.
+    This function parses a musescore file and returns a pandas dataframe. If the file
+    has already been parsed, it will be loaded from cache instead of processing it
+    again.
         Parameters
         ----------
         file_path: str
@@ -228,9 +230,10 @@ def compose_musescore_file_path(
 
 class PartsExtractor:
     """
-    Given xml a file or files, extracts the name of the different parts in it. 
+    Given xml a file or files, extracts the name of the different parts in it.
     Parts will be splitted or not according to what is indicated in the configuration,
     """
+
     def __init__(self, *args, **kwargs):
         """
         Parameters
@@ -320,6 +323,7 @@ class FilesValidator:
     If any file can't be parsed, at the end of the validation list of the file paths will be printed,
     as well as their respective raised error.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Parameters
@@ -410,6 +414,7 @@ class FilesValidator:
             return str(e)
         return None
 
+
 class FeaturesExtractor:
     """
     Extract features for a score or a list of scores, according to the parameters established in the configurtaion files.
@@ -417,7 +422,7 @@ class FeaturesExtractor:
     that at the end will be returned as a DataFrame.
     Features corresponds to modules placed in musif/features directory, and will be computed in order according to the configuration.
     Some features might depend on the previous ones, so order is important.
-    
+
     """
 
     def __init__(self, *args, **kwargs):
@@ -428,7 +433,7 @@ class FeaturesExtractor:
         **kwargs: Get keywords to construct Configuration.
         check_file: .csv file containing a DataFrame for files extrction that already have been parsed, so they will be skipped in the
         extraction process.
-        
+
         Raises
         ------
         TypeError
@@ -525,6 +530,7 @@ class FeaturesExtractor:
                     musicxml_file
                 )
             return score_features, score_parts_features
+
         result = Parallel(n_jobs=self._cfg.parallel)(
             delayed(process_corpus_par)(fname) for fname in tqdm(musicxml_files)
         )
@@ -654,7 +660,7 @@ class FeaturesExtractor:
             )
         window_data = {**transversal_data, **window_data}
         return window_data, window_parts_data
-    
+
     def extract_modules(self, modules: list, data: dict, parts_data: dict):
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
@@ -674,7 +680,9 @@ class FeaturesExtractor:
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts)
 
-    def _get_score_data(self, musicxml_file: str, load_cache: Optional[Path] = None) -> dict:
+    def _get_score_data(
+        self, musicxml_file: str, load_cache: Optional[Path] = None
+    ) -> dict:
 
         data = None
         if load_cache is not None and load_cache.exists():
@@ -751,7 +759,8 @@ class FeaturesExtractor:
         else:
             try:
                 data_musescore = parse_musescore_file(
-                    musescore_file_path, self._cfg.expand_repeats)
+                    musescore_file_path, self._cfg.expand_repeats
+                )
             except ParseFileError as e:
                 data_musescore = None
                 lerr(str(e))
