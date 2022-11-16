@@ -42,6 +42,8 @@ from musif.musicxml.scoring import (
     to_abbreviation,
 )
 
+from .musescore import load_via_musescore
+
 _cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 
@@ -75,6 +77,11 @@ def parse_musicxml_file(
         return score
     try:
         score = parse(file_path)
+    except Exception:
+        pwarn(f"Error while parsing MusicXML {file_path}, trying with musescore")
+        load_via_musescore(file_path)
+
+    try:
         split_layers(score, split_keywords)
         if expand_repeats:
             score = score.expandRepeats()
