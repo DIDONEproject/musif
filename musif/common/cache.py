@@ -1,3 +1,6 @@
+"""
+This module implements utilities to cache and speed-up the extraction of features.
+"""
 import builtins
 import logging
 import random
