@@ -79,7 +79,10 @@ def update_part_objects(
                 if name in ["fp", "pf"]:
                     new_dyn = get_dynamic_numeric(name[0])
                     new_element = deepcopy(element)
+                    # This line is modifying a music21 object!
                     new_element.value = name[1]
+                    # This line is modifying a list that is being looped, this is higly
+                    # unrecommended!
                     measure_elements.insert(
                         measure_elements.index(element) + 1, new_element
                     )
