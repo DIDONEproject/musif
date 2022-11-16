@@ -1,23 +1,28 @@
 import difflib
 import os
 from collections import Counter
+from pathlib import Path, PurePath
 from typing import Union
-from pathlib import PurePath
 
 import numpy as np
 import pandas as pd
+from pandas import DataFrame
+from tqdm import tqdm
+
+from musif.common._utils import read_dicts_from_csv
 from musif.common.sort import sort_columns
-from musif.common.utils import read_dicts_from_csv
 from musif.config import PostProcess_Configuration
+from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL
+from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION,
+                                                           ROLE_TYPE, SCORING,
+                                                           VOICES)
 from musif.extract.features.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
-from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL
-from musif.extract.features.harmony.constants import (KEY_MODULATORY,
+from musif.extract.features.harmony.constants import (HARMONY_AVAILABLE,
+                                                      KEY_MODULATORY,
                                                       KEY_PREFIX,
-                                                      CHORDS_GROUPING_prefix, HARMONY_AVAILABLE)
+                                                      CHORDS_GROUPING_prefix)
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION, ROLE_TYPE, SCORING,
-                                                           VOICES)
 from musif.logs import perr, pinfo, pwarn
 from musif.process.constants import (PRESENCE, label_by_col, metadata_columns,
                                      priority_columns, voices_list_prefixes)
@@ -25,8 +30,6 @@ from musif.process.utils import (_join_double_bass, delete_columns, join_keys,
                                  join_keys_modulatory, join_part_degrees,
                                  log_errors_and_shape, merge_duetos_trios,
                                  merge_single_voices, split_passion_A)
-from pandas import DataFrame
-from tqdm import tqdm
 
 
 # TODO: documentation should be more precise here and there, reread
@@ -255,8 +258,9 @@ class DataProcessor:
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
         pinfo('\nDeleting items with errors...')
-        if os.path.exists('errors.csv'):
-            errors = pd.read_csv('errors.csv', low_memory=False, sep='\n',
+        errors_file=r'./errors.csv'
+        if os.path.exists(errors_file):
+            errors = pd.read_csv(errors_file, low_memory=False,
                                  encoding_errors='replace', header=0)[FILE_NAME].tolist()
             for item in errors:
                 index = self.data.index[self.data[FILE_NAME] == item+'.xml']
@@ -411,6 +415,7 @@ class DataProcessor:
 
         self.to_csv(self.destination_route + "_labels", label_dataframe)
         self.to_csv(self.destination_route + "_metadata", metadata_dataframe)
+        #TODO: donde estan key y key signature
         self.data = sort_columns(self.data, [ARIA_ID] + priority_columns)
         self.to_csv(self.destination_route + "_alldata", self.data)
 

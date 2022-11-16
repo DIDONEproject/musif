@@ -7,8 +7,17 @@ import pandas as pd
 import yaml
 from pandas import DataFrame
 
-from musif.common.constants import COLORS, COLOR_SEQ, RESET_SEQ
 from musif.common._constants import CSV_DELIMITER, ENCODING
+from musif.common.constants import COLOR_SEQ, COLORS, RESET_SEQ
+
+
+def get_ariaid(file_name: str, return_char_start = False) -> str:
+    aria_id_end_idx = file_name.rfind("]")
+    aria_id_start_idx = file_name.rfind("[", 0, aria_id_end_idx - 1) + 1
+    aria_id = file_name[aria_id_start_idx: aria_id_end_idx]
+    if return_char_start:
+        return aria_id, aria_id_start_idx
+    return aria_id
 
 
 def get_file_name(file_path: str) -> str:
@@ -110,5 +119,3 @@ def colorize(text: str, levelname: str):
 
 def extract_digits(text: str) -> str:
     return ''.join([char for char in text if char.isdigit()])
-
-

@@ -120,6 +120,7 @@ def _join_double_bass(df: DataFrame):
             df[formatted_col] = df[[col, formatted_col]].sum(axis=1)
             df[formatted_col] = [i.replace('nan', '')
                                  for i in df[formatted_col]]
+            df[formatted_col] = df[formatted_col].astype(float)
         else:
             df[col] = df[col].astype(float)
             df[formatted_col] = df[[formatted_col, col]].sum(axis=1)
@@ -162,8 +163,9 @@ def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: Dat
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
     pinfo('\nDeleting not useful columns...')
     for inst in config[INSTRUMENTS_TO_DELETE]:
+        #TODO: Check this for Vn columns and all opther instrumetns
         data.drop([i for i in data.columns if 'Part' +
-                  inst in i], axis=1, inplace=True)
+                  inst in i or inst+'_' in i], axis=1, inplace=True)
 
     for substring in config[SUBSTRING_TO_DELETE]:
         data.drop([i for i in data.columns if substring in i],

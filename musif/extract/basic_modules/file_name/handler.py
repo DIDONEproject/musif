@@ -4,6 +4,7 @@ from typing import List
 from musif.config import Configuration
 from musif.extract.constants import DATA_FILE
 from musif.logs import lwarn
+from musif.common._utils import get_ariaid
 from .constants import *
 
 
@@ -14,10 +15,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
     """
 
     file_name = basename(score_data[DATA_FILE])
-
-    aria_id_end_idx = file_name.rfind("]")
-    aria_id_start_idx = file_name.rfind("[", 0, aria_id_end_idx - 1) + 1
-    aria_id = file_name[aria_id_start_idx: aria_id_end_idx]
+    aria_id, aria_id_start_idx = get_ariaid(file_name, return_char_start=True)
 
     act_scene_end_idx = aria_id_start_idx - 2
     act_scene_start_idx = file_name.rfind("[", 0, act_scene_end_idx - 1) + 1

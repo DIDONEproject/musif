@@ -7,10 +7,10 @@ HARMONIC_RHYTHM = HARMONIC_prefix + "Rhythm"
 HARMONIC_RHYTHM_BEATS= HARMONIC_prefix + "RhythmBeats"
 
 ADDITIONS_prefix = HARMONY_PREFIX+'Additions_'
-ADDITIONS_4_6_64='4_6_64' 
-ADDITIONS_9='+9' 
-OTHERS_NO_AUG='Others_no_+'
-OTHERS_AUG='Others_+'
+ADDITIONS_4_6_64 = '4_6_64' 
+ADDITIONS_9 = '+9' 
+OTHERS_NO_AUG = 'Others_no_+'
+OTHERS_AUG = 'Others_+'
 
 KEY_PREFIX = HARMONY_PREFIX + 'Key_'
 KEY_GROUPING = 'KeyGrouping'

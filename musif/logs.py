@@ -3,10 +3,15 @@ from logging import Logger, getLogger
 
 from musif.common.constants import LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEVEL_INFO, \
     LEVEL_WARNING
-from musif.common.utils import colorize
+from musif.common._utils import colorize
 from musif.config import LOGGER_NAME
 
-# TODO: document this module with a simple page (no needed per-fucntion documentation I think)
+"""
+This module contains functions that display information when using musif. 
+Functionts starting with 'l' are using for logging, while function starting by
+'p' are used for terminal display. The messages will be out puted acoording to the level set
+in the configuration file.
+"""
 
 def linfo(text: str, exc_info: bool = False) -> None:
     llog(text, logger(), LEVEL_INFO, exc_info)
