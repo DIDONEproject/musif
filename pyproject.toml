@@ -17,7 +17,7 @@ name = "musif"
 version = "0.1.0"
 description = "Music feature extraction library from the DIDONE project"
 authors = [{ name = "Didone Project", email = "didone@iccmu.es" }]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 readme = "README.md"
 license = { text = "MIT" }
 
