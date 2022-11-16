@@ -690,8 +690,7 @@ class FeaturesExtractor:
                 data = pickle.load(open(load_cache, "rb"))
             except Exception as e:
                 perr(
-                    "Error while loading pickled object, continuing with extraction from scratch: ",
-                    e,
+                    f"Error while loading pickled object, continuing with extraction from scratch: {e}"
                 )
 
         if data is None:
