@@ -4,6 +4,7 @@ This module implements utilities to cache and speed-up the extraction of feature
 import builtins
 import logging
 import random
+import traceback
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from deepdiff import DeepHash, deephash
@@ -262,7 +263,12 @@ class SmartModuleCache:
         del self.cache[name]
 
     def __setattr__(self, name, value):
-        self.cache[name] = self._wmo(value, (name,))
+        pwarn(
+            "You are using a music21 object in writing mode! consider change your code so that SmartModuleCache works correctly. See the stack-trace:"
+        )
+        traceback.print_list(
+            [f for f in traceback.extract_stack() if "musif" in f.filename]
+        )
         if self.cache["_reference"].reference is not None:
             self.cache["_reference"].get_attr("__setattr__")(name, value)
 
@@ -332,7 +338,12 @@ class SmartModuleCache:
         return v
 
     def __setitem__(self, k, v):
-        pwarn(str(SmartCacheModified(self, k)))
+        pwarn(
+            "You are using a music21 object in writing mode! consider change your code so that SmartModuleCache works correctly. See the stack-trace:"
+        )
+        traceback.print_list(
+            [f for f in traceback.extract_stack() if "musif" in f.filename]
+        )
         try:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
         except KeyError:
