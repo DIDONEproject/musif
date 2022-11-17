@@ -294,7 +294,7 @@ class FeaturesExtractor:
         self, musicxml_files: List[str]
     ) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
-        if self._cfg.window_size:
+        if self._cfg.window_size is not None:
             for corpus_dir, files in corpus_by_dir.items():
                 all_scores_features, all_parts_features = self._process_corpus(files)
                 all_dfs = []
@@ -348,6 +348,7 @@ class FeaturesExtractor:
             delayed(process_corpus_par)(fname) for fname in tqdm(musicxml_files)
         )
 
+        __import__("ipdb").set_trace()
         # result is now a list of tuples, we need to transpose it:
         scores_features, scores_parts_features = zip(*result)
         # now, let's concatenate the scores_pars_features
@@ -386,7 +387,6 @@ class FeaturesExtractor:
         )
         score_features = {**basic_features, **score_features}
         [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
-        # __import__('ipdb').set_trace()
 
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
@@ -401,33 +401,29 @@ class FeaturesExtractor:
             score_data,
         ) = self._init_score_processing(musicxml_file)
 
+        score_data[C.GLOBAL_TIME_SIGNATURE] = score_data[
+            C.DATA_FILTERED_PARTS
+        ][0].getElementsByClass(Measure)[0].timeSignature
+
         window_features = {}
-        first_window_measure = 0
-        last_window_measure = 0
-        last_score_measure = (
-            score_data["score"].parts[0].getElementsByClass(Measure)[-1].measureNumber
-        )
-        window_counter = 0
-        # TODO: take into accou8nt end of  theme A
-        number_windows = (last_score_measure + self._cfg.overlap) // (
-            self._cfg.window_size - self._cfg.overlap
-        )
+        nmeasures = len(score_data[C.DATA_SCORE].parts[0].getElementsByClass(Measure))
+
+        ws = self._cfg.window_size
+        hopsize = ws - self._cfg.overlap
+        number_windows = (nmeasures - self._cfg.overlap) // hopsize
+
         all_windows_features = []
         all_parts_features = []
-        while first_window_measure < last_score_measure:
-            if (
-                int(float(basic_features.get(C.END_OF_THEME_A, "100000")))
-                < first_window_measure
-            ):
-                break
-            window_counter += 1
-            last_window_measure = first_window_measure + self._cfg.window_size
+        for idx in range(number_windows):
             pinfo(
-                f"\nProcessing window {window_counter} for {musicxml_file} of a total of: {number_windows} windows."
+                f"\nProcessing window {idx+1} for {musicxml_file} of a total of: {number_windows} windows."
             )
+            first_window_measure = idx * hopsize
+            last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
-                score_data, parts_data, first_window_measure, last_window_measure
+                score_data, first_window_measure, last_window_measure
             )
+
             window_features, parts_window_features = self.extract_modules(
                 FEATURES_MODULES, window_data, window_parts_data
             )
@@ -444,42 +440,41 @@ class FeaturesExtractor:
             all_windows_features.append(window_features)
             all_parts_features.append(parts_window_features)
             first_window_measure = last_window_measure - self._cfg.overlap
+
+        if self._cfg.cache_dir is not None:
+            pickle.dump(score_data, open(cache_name, "wb"))
         return all_windows_features, all_parts_features
 
     def _select_window_data(
-        self, score_data: dict, parts_data: dict, first_measure: int, last_measure: int
+        self, score_data: dict, first_measure: int, last_measure: int
     ):
-        window_data = {}
-        window_data = copy.deepcopy(score_data)
-        window_parts_data = copy.deepcopy(parts_data)
-        transversal_data = {}
-        t_s = score_data["parts"][0].getElementsByClass(Measure)[0].timeSignature
-        transversal_data[C.GLOBAL_TIME_SIGNATURE] = t_s if t_s else ""
-        for i, part in enumerate(window_data["score"].parts):
-            read_measures = 0
-            elements_to_remove = []
-            for measure in part.getElementsByClass(Measure):
-                read_measures += 1
-                if read_measures <= first_measure or read_measures > last_measure:
-                    elements_to_remove.append(measure)
-            part.remove(targetOrList=elements_to_remove)
-            window_data["parts"][i] = part
-            window_parts_data[i]["part"] = part
-
+        window_score = score_data[C.DATA_SCORE].measures(
+            first_measure, last_measure, indicesNotNumbers=True
+        )
+        window_parts = window_score.parts
         if (
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
-            window_data[C.DATA_MUSESCORE_SCORE] = score_data[
-                C.DATA_MUSESCORE_SCORE
-            ].loc[
+            window_mscore = score_data[C.DATA_MUSESCORE_SCORE].loc[
                 (score_data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure)
                 & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
             ]
-            window_data[C.DATA_MUSESCORE_SCORE].reset_index(
-                inplace=True, drop=True, level=0
-            )
-        window_data = {**transversal_data, **window_data}
+            window_mscore.reset_index(inplace=True, drop=True, level=0)
+        window_data = {
+            C.DATA_SCORE: window_score,
+            C.DATA_FILE: score_data[C.DATA_FILE],
+            C.DATA_FILTERED_PARTS: window_parts,
+            C.DATA_MUSESCORE_SCORE: window_mscore,
+            C.GLOBAL_TIME_SIGNATURE: score_data[C.GLOBAL_TIME_SIGNATURE],
+        }
+
+        window_parts_data = [
+            self._get_part_data(window_data, part) for part in window_parts
+        ]
+        window_parts_data = _filter_parts_data(
+            window_parts_data, self._cfg.parts_filter
+        )
         return window_data, window_parts_data
 
     def extract_modules(self, modules: list, data: dict, parts_data: dict):
