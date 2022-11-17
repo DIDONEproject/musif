@@ -1,1 +1,1 @@
-from musif.extract.extract import FeaturesExtractor, FilesValidator
+from musif.extract.extract import FeaturesExtractor
