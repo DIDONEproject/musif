@@ -3,7 +3,7 @@ from musif.extract.basic_modules.metadata.constants import *
 from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION,
                                                            ROLE_TYPE, SCORING,
                                                            VOICES)
-from musif.extract.features.composer.constants import COMPOSER
+from musif.extract.basic_modules.composer.constants import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import HARMONY_AVAILABLE
 from musif.extract.features.key.constants import (KEY, KEY_SIGNATURE,

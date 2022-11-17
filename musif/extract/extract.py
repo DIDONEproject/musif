@@ -348,7 +348,6 @@ class FeaturesExtractor:
             delayed(process_corpus_par)(fname) for fname in tqdm(musicxml_files)
         )
 
-        __import__("ipdb").set_trace()
         # result is now a list of tuples, we need to transpose it:
         scores_features, scores_parts_features = zip(*result)
         # now, let's concatenate the scores_pars_features
@@ -401,9 +400,11 @@ class FeaturesExtractor:
             score_data,
         ) = self._init_score_processing(musicxml_file)
 
-        score_data[C.GLOBAL_TIME_SIGNATURE] = score_data[
-            C.DATA_FILTERED_PARTS
-        ][0].getElementsByClass(Measure)[0].timeSignature
+        score_data[C.GLOBAL_TIME_SIGNATURE] = (
+            score_data[C.DATA_FILTERED_PARTS][0]
+            .getElementsByClass(Measure)[0]
+            .timeSignature
+        )
 
         window_features = {}
         nmeasures = len(score_data[C.DATA_SCORE].parts[0].getElementsByClass(Measure))
@@ -421,7 +422,10 @@ class FeaturesExtractor:
             first_window_measure = idx * hopsize
             last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
-                score_data, first_window_measure, last_window_measure
+                score_data, parts_data, first_window_measure, last_window_measure
+            )
+            window_data.update(
+                {k: v for k, v in score_data.items() if k not in window_data}
             )
 
             window_features, parts_window_features = self.extract_modules(
@@ -446,7 +450,7 @@ class FeaturesExtractor:
         return all_windows_features, all_parts_features
 
     def _select_window_data(
-        self, score_data: dict, first_measure: int, last_measure: int
+        self, score_data: dict, parts_data: list, first_measure: int, last_measure: int
     ):
         window_score = score_data[C.DATA_SCORE].measures(
             first_measure, last_measure, indicesNotNumbers=True
@@ -461,21 +465,15 @@ class FeaturesExtractor:
                 & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
-        window_data = {
+        window_score_data = {
             C.DATA_SCORE: window_score,
-            C.DATA_FILE: score_data[C.DATA_FILE],
             C.DATA_FILTERED_PARTS: window_parts,
             C.DATA_MUSESCORE_SCORE: window_mscore,
-            C.GLOBAL_TIME_SIGNATURE: score_data[C.GLOBAL_TIME_SIGNATURE],
         }
 
-        window_parts_data = [
-            self._get_part_data(window_data, part) for part in window_parts
-        ]
-        window_parts_data = _filter_parts_data(
-            window_parts_data, self._cfg.parts_filter
-        )
-        return window_data, window_parts_data
+        for i, p in enumerate(window_parts):
+            parts_data[i]["part"] = p
+        return window_score_data, parts_data
 
     def extract_modules(self, modules: list, data: dict, parts_data: dict):
         score_features = {}

@@ -16,7 +16,7 @@ from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION,
                                                            ROLE_TYPE, SCORING,
                                                            VOICES)
-from musif.extract.features.composer.handler import COMPOSER
+from musif.extract.basic_modules.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import (HARMONY_AVAILABLE,
                                                       KEY_MODULATORY,
