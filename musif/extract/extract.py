@@ -541,7 +541,7 @@ class FeaturesExtractor:
         parts_features = [*scores_parts_features]
         return scores_features, parts_features
 
-    def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+    def _init_score_processing(self, musicxml_file: str):
         pinfo(f"\nProcessing score {musicxml_file}")
         if self._cfg.cache_dir is not None:
             cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
@@ -556,6 +556,18 @@ class FeaturesExtractor:
         basic_features, basic_parts_features = self.extract_modules(
             BASIC_MODULES, score_data, parts_data
         )
+        return basic_features, basic_parts_features, cache_name, parts_data, score_data
+
+    def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+
+        (
+            basic_features,
+            basic_parts_features,
+            cache_name,
+            parts_data,
+            score_data,
+        ) = self._init_score_processing(musicxml_file)
+
         score_features, parts_features = self.extract_modules(
             FEATURES_MODULES, score_data, parts_data
         )
@@ -568,18 +580,14 @@ class FeaturesExtractor:
         return score_features, parts_features
 
     def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        # TODO:
-        # the first lines are the same as in _process_score
-        # they should be moved in an ad-hoc function
-        score_data = self._get_score_data(musicxml_file)
-        parts_data = [
-            self._get_part_data(score_data, part)
-            for part in score_data[C.DATA_SCORE].parts
-        ]
-        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
-        basic_features, basic_parts_features = self.extract_modules(
-            BASIC_MODULES, score_data, parts_data
-        )
+        (
+            basic_features,
+            basic_parts_features,
+            cache_name,
+            parts_data,
+            score_data,
+        ) = self._init_score_processing(musicxml_file)
+
         window_features = {}
         first_window_measure = 0
         last_window_measure = 0
