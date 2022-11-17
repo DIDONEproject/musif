@@ -416,9 +416,10 @@ class FeaturesExtractor:
         all_windows_features = []
         all_parts_features = []
         for idx in range(number_windows):
-            pinfo(
-                f"\nProcessing window {idx+1} for {musicxml_file} of a total of: {number_windows} windows."
-            )
+            # pinfo(
+            #     f"\nProcessing window {idx+1} for {musicxml_file} of a total of:
+            #     {number_windows} windows."
+            # )
             first_window_measure = idx * hopsize
             last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
