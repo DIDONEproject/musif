@@ -157,7 +157,7 @@ def log_errors_and_shape(composer_counter: list, novoices_counter: list, df: Dat
     # pinfo(f"\nTotal files skipped by duetos/trietos: {len(duetos_counter)}")
     # pinfo(str(duetos_counter))
     pinfo(
-        f"\nFinal shape of the DataFrame: {df.shape[0]} scores, {df.shape[1]} features")
+        f"\nFinal shape of the DataFrame: {df.shape[0]} rows, {df.shape[1]} features")
 
 
 def delete_columns(data: DataFrame, config: dictConfig) -> None:

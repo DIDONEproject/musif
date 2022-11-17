@@ -432,9 +432,12 @@ class FeaturesExtractor:
             window_features, parts_window_features = self.extract_modules(
                 FEATURES_MODULES, window_data, window_parts_data
             )
+
             window_features[
                 C.WINDOW_RANGE
             ] = f"{first_window_measure} - {last_window_measure}"
+
+            window_features[C.WINDOW_ID] = idx
 
             window_features = {**basic_features, **window_features}
             [
