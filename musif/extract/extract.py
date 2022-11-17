@@ -307,6 +307,7 @@ class FeaturesExtractor:
                     df_parts = DataFrame(all_parts_features)
                     df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
                     all_parts_dictionaries.append(df_parts)
+                all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
         else:
             all_scores_features = []
             all_parts_features = []
