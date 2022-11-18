@@ -228,193 +228,6 @@ def compose_musescore_file_path(
     return musescore_file_path
 
 
-class PartsExtractor:
-    """
-    Given xml a file or files, extracts the name of the different parts in it.
-    Parts will be splitted or not according to what is indicated in the configuration,
-    """
-
-    def __init__(self, *args, **kwargs):
-        """
-        Parameters
-        ----------
-        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
-        **kwargs: Get keywords to construct Configuration.
-        Raises
-        ------
-        TypeError
-             If the type is not the expected (str, dict or Configuration).
-        ValueError
-             If there is too many arguments(args)
-        FileNotFoundError
-             If any of the files/directories path inside the expected configuration doesn't exit.
-        """
-
-    def __init__(self, *args, **kwargs):
-        """
-        Parameters
-        ----------
-        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
-        **kwargs: Get keywords to construct Configuration.
-        Raises
-        ------
-        TypeError
-             If the type is not the expected (str, dict or Configuration).
-        ValueError
-             If there is too many arguments(args)
-        FileNotFoundError
-             If any of the files/directories path inside the expected configuration doesn't exit.
-        """
-        self._cfg = Configuration(*args, **kwargs)
-
-    def extract(
-        self, obj: Union[str, List[str]], check_file: Optional[str] = None
-    ) -> List[str]:
-        """
-        Given xml file or files, extracts the name of the different parts within it. With or without spliting the parts,
-        indicated in the configurations.
-        Parameters
-        ---------
-        obj : Union[str, List[str]]
-          A path or a list of paths
-        Returns
-        -------
-        resp : List[str]
-          A list of parts names in the given files
-        Raises
-        ------
-        TypeError
-          If the type is not the expected (str or List[str]).
-        ValueError
-          If the provided string is neither a directory nor a file path
-        """
-        musicxml_files = find_xml_files(obj, check_file=check_file)
-        parts = list(
-            {
-                part
-                for musicxml_file in musicxml_files
-                for part in self._process_score(musicxml_file)
-            }
-        )
-        abbreviated_parts_scoring_order = [
-            instr + num
-            for instr in self._cfg.scoring_order
-            for num in [""] + ROMAN_NUMERALS_FROM_1_TO_20
-        ]
-        return sort_list(parts, abbreviated_parts_scoring_order)
-
-    def _process_score(self, musicxml_file: str) -> List[str]:
-        score = parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
-        parts = list(score.parts)
-        parts_abbreviations = [self._get_part(part, parts) for part in parts]
-        return parts_abbreviations
-
-    def _get_part(self, part: Part, parts: List[Part]) -> str:
-        sound = extract_sound(part, self._cfg)
-        part_abbreviation, _, _ = extract_abbreviated_part(
-            sound, part, parts, self._cfg
-        )
-        return part_abbreviation
-
-
-class FilesValidator:
-    """
-    Checks if each file of a group of files can be parsed with no problems.
-    If any file can't be parsed, at the end of the validation list of the file paths will be printed,
-    as well as their respective raised error.
-    """
-
-    def __init__(self, *args, **kwargs):
-        """
-        Parameters
-        ----------
-        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
-        **kwargs: Get keywords to construct Configuration.
-        Raises
-        ------
-        TypeError
-          If the type is not the expected (str, dict or Configuration).
-        ValueError
-           If there is too many arguments(args)
-        FileNotFoundError
-          If any of the files/directories path inside the expected configuration doesn't exit.
-        """
-
-    def __init__(self, *args, **kwargs):
-        """
-        Parameters
-        ----------
-        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
-        **kwargs: Get keywords to construct Configuration.
-        Raises
-        ------
-        TypeError
-          If the type is not the expected (str, dict or Configuration).
-        ValueError
-           If there is too many arguments(args)
-        FileNotFoundError
-          If any of the files/directories path inside the expected configuration doesn't exit.
-        """
-        self._cfg = Configuration(*args, **kwargs)
-
-    def validate(self) -> None:
-        """
-        Checks, sequentially or in parallel, if the given files are parseable. If any file has a problem, at the end
-        it will print a list of the file paths and their respective raised error.
-        """
-        pinfo("Starting files validation", level=self._cfg.console_log_level)
-        musicxml_files = find_xml_files(self._cfg.data_dir)
-        if self._cfg.parallel:
-            errors = self._validate_in_parallel(musicxml_files)
-        else:
-            errors = self._validate_sequentially(musicxml_files)
-        if len(errors) > 0:
-            perr("\n".join(errors), level=self._cfg.console_log_level)
-        else:
-            pinfo(
-                "Finished files validation with 0 errors",
-                level=self._cfg.console_log_level,
-            )
-
-    def _validate_sequentially(self, musicxml_files: List[str]) -> List[str]:
-        errors = []
-        for musicxml_file in tqdm(musicxml_files):
-            error = self._validate_file(musicxml_file)
-            if error is not None:
-                errors.append(error)
-        return errors
-
-    def _validate_in_parallel(self, musicxml_files: List[str]) -> List[str]:
-        errors = []
-        with tqdm(total=len(musicxml_files)) as pbar:
-            with ProcessPoolExecutor(max_workers=self._cfg.max_processes) as executor:
-                futures = [
-                    executor.submit(self._validate_file, musicxml_file)
-                    for musicxml_file in musicxml_files
-                ]
-                for future in as_completed(futures):
-                    pbar.update(1)
-                    error = future.result()
-                    if error is not None:
-                        errors.append(error)
-        return errors
-
-    def _validate_file(self, musicxml_file: str) -> Optional[str]:
-        pdebug(f"Validating file '{musicxml_file}'", level=self._cfg.console_log_level)
-        try:
-            parse_musicxml_file(musicxml_file, self._cfg.split_keywords)
-            if self._cfg.is_requested_musescore_file():
-                musescore_file = compose_musescore_file_path(
-                    musicxml_file, self._cfg.musescore_dir
-                )
-                if not path.isfile(musescore_file):
-                    raise MissingFileError(musescore_file)
-                parse_musescore_file(musescore_file)
-        except (ParseFileError, MissingFileError) as e:
-            return str(e)
-        return None
-
-
 class FeaturesExtractor:
     """
     Extract features for a score or a list of scores, according to the parameters established in the configurtaion files.
@@ -481,7 +294,7 @@ class FeaturesExtractor:
         self, musicxml_files: List[str]
     ) -> Tuple[DataFrame, DataFrame]:
         corpus_by_dir = self._group_by_dir(musicxml_files)
-        if self._cfg.window_size:
+        if self._cfg.window_size is not None:
             for corpus_dir, files in corpus_by_dir.items():
                 all_scores_features, all_parts_features = self._process_corpus(files)
                 all_dfs = []
@@ -494,6 +307,7 @@ class FeaturesExtractor:
                     df_parts = DataFrame(all_parts_features)
                     df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
                     all_parts_dictionaries.append(df_parts)
+                all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
         else:
             all_scores_features = []
             all_parts_features = []
@@ -541,7 +355,7 @@ class FeaturesExtractor:
         parts_features = [*scores_parts_features]
         return scores_features, parts_features
 
-    def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+    def _init_score_processing(self, musicxml_file: str):
         pinfo(f"\nProcessing score {musicxml_file}")
         if self._cfg.cache_dir is not None:
             cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
@@ -556,63 +370,75 @@ class FeaturesExtractor:
         basic_features, basic_parts_features = self.extract_modules(
             BASIC_MODULES, score_data, parts_data
         )
+        return basic_features, basic_parts_features, cache_name, parts_data, score_data
+
+    def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+
+        (
+            basic_features,
+            basic_parts_features,
+            cache_name,
+            parts_data,
+            score_data,
+        ) = self._init_score_processing(musicxml_file)
+
         score_features, parts_features = self.extract_modules(
             FEATURES_MODULES, score_data, parts_data
         )
         score_features = {**basic_features, **score_features}
         [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
-        # __import__('ipdb').set_trace()
 
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
         return score_features, parts_features
 
     def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
-        # TODO:
-        # the first lines are the same as in _process_score
-        # they should be moved in an ad-hoc function
-        score_data = self._get_score_data(musicxml_file)
-        parts_data = [
-            self._get_part_data(score_data, part)
-            for part in score_data[C.DATA_SCORE].parts
-        ]
-        parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
-        basic_features, basic_parts_features = self.extract_modules(
-            BASIC_MODULES, score_data, parts_data
+        (
+            basic_features,
+            basic_parts_features,
+            cache_name,
+            parts_data,
+            score_data,
+        ) = self._init_score_processing(musicxml_file)
+
+        score_data[C.GLOBAL_TIME_SIGNATURE] = (
+            score_data[C.DATA_FILTERED_PARTS][0]
+            .getElementsByClass(Measure)[0]
+            .timeSignature
         )
+
         window_features = {}
-        first_window_measure = 0
-        last_window_measure = 0
-        last_score_measure = (
-            score_data["score"].parts[0].getElementsByClass(Measure)[-1].measureNumber
-        )
-        window_counter = 0
-        # TODO: take into accou8nt end of  theme A
-        number_windows = (last_score_measure + self._cfg.overlap) // (
-            self._cfg.window_size - self._cfg.overlap
-        )
+        nmeasures = len(score_data[C.DATA_SCORE].parts[0].getElementsByClass(Measure))
+
+        ws = self._cfg.window_size
+        hopsize = ws - self._cfg.overlap
+        number_windows = (nmeasures - self._cfg.overlap) // hopsize
+
         all_windows_features = []
         all_parts_features = []
-        while first_window_measure < last_score_measure:
-            if (
-                int(float(basic_features.get(C.END_OF_THEME_A, "100000")))
-                < first_window_measure
-            ):
-                break
-            window_counter += 1
-            last_window_measure = first_window_measure + self._cfg.window_size
-            pinfo(
-                f"\nProcessing window {window_counter} for {musicxml_file} of a total of: {number_windows} windows."
-            )
+        for idx in range(number_windows):
+            # pinfo(
+            #     f"\nProcessing window {idx+1} for {musicxml_file} of a total of:
+            #     {number_windows} windows."
+            # )
+            first_window_measure = idx * hopsize
+            last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
                 score_data, parts_data, first_window_measure, last_window_measure
             )
+            window_data.update(
+                {k: v for k, v in score_data.items() if k not in window_data}
+            )
+
             window_features, parts_window_features = self.extract_modules(
                 FEATURES_MODULES, window_data, window_parts_data
             )
+
             window_features[
                 C.WINDOW_RANGE
             ] = f"{first_window_measure} - {last_window_measure}"
+
+            window_features[C.WINDOW_ID] = idx
 
             window_features = {**basic_features, **window_features}
             [
@@ -623,43 +449,36 @@ class FeaturesExtractor:
             all_windows_features.append(window_features)
             all_parts_features.append(parts_window_features)
             first_window_measure = last_window_measure - self._cfg.overlap
+
+        if self._cfg.cache_dir is not None:
+            pickle.dump(score_data, open(cache_name, "wb"))
         return all_windows_features, all_parts_features
 
     def _select_window_data(
-        self, score_data: dict, parts_data: dict, first_measure: int, last_measure: int
+        self, score_data: dict, parts_data: list, first_measure: int, last_measure: int
     ):
-        window_data = {}
-        window_data = copy.deepcopy(score_data)
-        window_parts_data = copy.deepcopy(parts_data)
-        transversal_data = {}
-        t_s = score_data["parts"][0].getElementsByClass(Measure)[0].timeSignature
-        transversal_data[C.GLOBAL_TIME_SIGNATURE] = t_s if t_s else ""
-        for i, part in enumerate(window_data["score"].parts):
-            read_measures = 0
-            elements_to_remove = []
-            for measure in part.getElementsByClass(Measure):
-                read_measures += 1
-                if read_measures <= first_measure or read_measures > last_measure:
-                    elements_to_remove.append(measure)
-            part.remove(targetOrList=elements_to_remove)
-            window_data["parts"][i] = part
-            window_parts_data[i]["part"] = part
-
+        window_score = score_data[C.DATA_SCORE].measures(
+            first_measure, last_measure, indicesNotNumbers=True
+        )
+        window_parts = window_score.parts
         if (
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
-            window_data[C.DATA_MUSESCORE_SCORE] = score_data[
-                C.DATA_MUSESCORE_SCORE
-            ].loc[
+            window_mscore = score_data[C.DATA_MUSESCORE_SCORE].loc[
                 (score_data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure)
                 & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
             ]
-            window_data[C.DATA_MUSESCORE_SCORE].reset_index(
-                inplace=True, drop=True, level=0
-            )
-        window_data = {**transversal_data, **window_data}
-        return window_data, window_parts_data
+            window_mscore.reset_index(inplace=True, drop=True, level=0)
+        window_score_data = {
+            C.DATA_SCORE: window_score,
+            C.DATA_FILTERED_PARTS: window_parts,
+            C.DATA_MUSESCORE_SCORE: window_mscore,
+        }
+
+        for i, p in enumerate(window_parts):
+            parts_data[i]["part"] = p
+        return window_score_data, parts_data
 
     def extract_modules(self, modules: list, data: dict, parts_data: dict):
         score_features = {}

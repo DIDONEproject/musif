@@ -341,9 +341,9 @@ class SmartModuleCache:
         pwarn(
             "You are using a music21 object in writing mode! consider change your code so that SmartModuleCache works correctly. See the stack-trace:"
         )
-        traceback.print_list(
-            [f for f in traceback.extract_stack() if "musif" in f.filename]
-        )
+        # traceback.print_list(
+        #     [f for f in traceback.extract_stack() if "musif" in f.filename]
+        # )
         try:
             v = self.cache["_reference"].get_attr("__getitem__")(k)
         except KeyError:

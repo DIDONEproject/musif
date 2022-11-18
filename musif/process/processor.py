@@ -12,11 +12,12 @@ from tqdm import tqdm
 from musif.common._utils import read_dicts_from_csv
 from musif.common.sort import sort_columns
 from musif.config import PostProcess_Configuration
+from musif.extract.constants import WINDOW_ID
 from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL
 from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION,
                                                            ROLE_TYPE, SCORING,
                                                            VOICES)
-from musif.extract.features.composer.handler import COMPOSER
+from musif.extract.basic_modules.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import (HARMONY_AVAILABLE,
                                                       KEY_MODULATORY,
@@ -38,7 +39,7 @@ class DataProcessor:
 
     This operator processes information from a DataFrame or a .csv file. 
     It deletes unseful columns and merges those that are required to clean the data.
-    The main method .process() returns a DataFrame and saves it into a .csv file.
+    The main method .process() returns a DataFrame.
     Requires to have a Passions.csv file in the current working directory containing each passion
     for each aria.
     ...
@@ -55,7 +56,7 @@ class DataProcessor:
     process_info(info=info: Union[str, DataFrame])
         Reads info and returns a DataFrame
     process()
-        Processes all the DataFrame information and saves it to a .csv file
+        Processes all the DataFrame information
     assign_labels()
         Assigns labels from file Passion.csv to DataFrame according to AriaLabel column
     preprocess_data()
@@ -69,7 +70,8 @@ class DataProcessor:
     delete_unwanted_columns(**kwargs)
         Deletes all columns that are not needed according to config.yml file  
     to_csv(dest_path: str)
-        Saves final information to a csv file 
+        Saves final information to various csv files, splitting data, metadata and
+        features
     """
 
     def __init__(self, info: Union[str, DataFrame], *args, **kwargs):
@@ -139,12 +141,12 @@ class DataProcessor:
     def process(self) -> DataFrame:
         """
         Main method tof the class. Removes NaN values, deletes unuseful columns
-        and merges those that are needed according to config.yml file. Saves processed DataFrame 
-        into a csv file.
+        and merges those that are needed according to config.yml file.
+        Saves processed DataFrame into a csv file if the input was a path to a file.
 
         Returns
         ------
-        Dataframe object        
+        Dataframe object
         """
         if FILE_NAME in self.data:
             self.data[FILE_NAME].to_csv(
@@ -206,7 +208,7 @@ class DataProcessor:
         self.data = self.data[~self.data["Label_BasicPassion"].isnull()]
 
         self.data.dropna(axis=1, how='all', inplace=True)
-        self.data.reset_index(inplace=True, drop=True)
+        # self.data.reset_index(inplace=True, drop=True)
 
     def group_columns(self) -> None:
         """Groups Key_*_PercentageMeasures, Key_Modulatory and Degrees columns. Into bigger groups
@@ -301,17 +303,34 @@ class DataProcessor:
             if any(substring in col for substring in tuple(self._post_config.replace_nans)):
                 self.data[col] = self.data[col].fillna(0)
 
-    def to_csv(self, dest_path: str, df: DataFrame) -> None:
-        """Saves current information into a .csv file given the name onf dest_path
+    def save(self, dest_path: Union[str, PurePath], ft="csv") -> None:
+        """Saves current information into a file given the name of dest_path
+
+        To load one of those file, remember to set the index to `AriaId`, and, if
+        windows are used, to `WindowId`:
+
+        ```python
+        df = pd.read_csv('window_alldata.csv').set_index(['AriaId', 'WindowId'])
+        ```
 
         Parameters
         ----------
-        dest_path : str
-            Path to the route where the .csv file needs to be stored.
+        dest_path : str or Path
+            Path to directory where the file will be stored; a suffix like
+            `_metadata.csv` will be added.
+        ft : str
+            Type of file for saving. The filetype must be supported by `pandas`, e.g.
+            `to_csv`, `to_feather`, `to_parquet`, etc.
         """
-        dest_path = dest_path + '.csv'
-        df.to_csv(dest_path, index=False)
-        pinfo(f'\nData succesfully saved as {dest_path} in current directory.')
+
+        pinfo(f"Written data to {dest_path}_*.csv")
+        ft = 'to_' + ft
+        dest_path = str(dest_path)
+        getattr(self.label_dataframe, ft)(dest_path + "_labels.csv", index=False)
+        getattr(self.metadata_dataframe, ft)(
+            dest_path + "_metadata.csv", index=False)
+        getattr(self.features_dataframe, ft)(dest_path + "_features.csv", index=False)
+        getattr(self.data, ft)(dest_path + "_alldata.csv", index=False)
 
     def _group_keys_modulatory(self) -> None:
         self.data.update(
@@ -391,7 +410,7 @@ class DataProcessor:
             perr('Composers file could not be found.')
 
     def _final_data_processing(self) -> None:
-        self.data.sort_values(ARIA_ID, inplace=True)
+        self.data.sort_values([ARIA_ID, WINDOW_ID], inplace=True)
         self.replace_nans()
 
         self.data = self._check_columns_type(self.data)
@@ -400,27 +419,26 @@ class DataProcessor:
 
         log_errors_and_shape(self.composer_counter,
                              self.novoices_counter, self.data)
+
         self._split_metadata_and_labels()
 
-        dest_path = self.destination_route + "_features"
-        self.to_csv(dest_path, self.data)
+        if hasattr(self, 'destination_route'):
+            dest_path = self.destination_route + "_features"
+            self.to_csv(dest_path)
 
     def _split_metadata_and_labels(self) -> None:
         self.data.rename(columns={ROLE_TYPE: 'Label_'+ROLE_TYPE}, inplace=True)
         label_columns = list(self.data.filter(like='Label_', axis=1))
 
-        label_dataframe = self.data[[ARIA_ID] + label_columns]
+        self.label_dataframe = self.data[[ARIA_ID] + label_columns]
 
-        metadata_dataframe = self.data[[ARIA_ID] + metadata_columns]
+        self.metadata_dataframe = self.data[[ARIA_ID] + metadata_columns]
 
-        self.to_csv(self.destination_route + "_labels", label_dataframe)
-        self.to_csv(self.destination_route + "_metadata", metadata_dataframe)
-        #TODO: donde estan key y key signature
+        # TODO: donde estan key y key signature
         self.data = sort_columns(self.data, [ARIA_ID] + priority_columns)
-        self.to_csv(self.destination_route + "_alldata", self.data)
 
-        self.data.drop(priority_columns + label_columns,
-                       inplace=True, axis=1, errors='ignore')
+        self.features_dataframe = self.data.drop(priority_columns + label_columns,
+                                                 axis=1, errors='ignore')
 
     def _check_columns_type(self, df) -> DataFrame:
         for column in tqdm(df.columns, desc='Adjusting NaN values'):
