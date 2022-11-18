@@ -1,4 +1,3 @@
-import copy
 import glob
 import inspect
 import os
@@ -386,6 +385,7 @@ class FeaturesExtractor:
             FEATURES_MODULES, score_data, parts_data
         )
         score_features = {**basic_features, **score_features}
+        score_features[C.WINDOW_ID] = 0
         [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
 
         if self._cfg.cache_dir is not None:
