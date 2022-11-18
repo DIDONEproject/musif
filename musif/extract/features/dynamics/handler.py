@@ -78,15 +78,10 @@ def update_part_objects(
             if dyn:
                 if name in ["fp", "pf"]:
                     new_dyn = get_dynamic_numeric(name[0])
-                    new_element = deepcopy(element)
-                    # This line is modifying a music21 object!
-                    new_element.value = name[1]
-                    # This line is modifying a list that is being looped, this is higly
-                    # unrecommended!
-                    measure_elements.insert(
-                        measure_elements.index(element) + 1, new_element
-                    )
-                    name = name[0]
+                    if new_dyn != last_dyn:
+                        (beats_section, dyn_grad, last_dyn, first_silence, dyn_mean_weighted,
+                        ) = calculate_dynamics(dynamics,beats_section,dyn_mean_weighted,dyn_grad,last_dyn,number_of_beats,element,beats_timesignature,new_dyn)
+                    name = name[1]
                 if name == "other-dynamics":
                     file_name = score_data["file"]
                     lwarn(
@@ -132,7 +127,6 @@ def update_part_objects(
             DYNGRAD: float(dyn_grad / (len(dynamics) - 1))
             if (len(dynamics) - 1) > 0
             else 0,
-            # DYNABRUPTNESS: dyn_grad / (total_beats - beats_section) if (total_beats - beats_section) > 0 else 0
             DYNABRUPTNESS: float(dyn_grad / total_sounding_beats)
             if total_sounding_beats != 0
             else 0,
@@ -234,5 +228,4 @@ def get_dynamic_numeric(value):
         return DYNAMIC_VALUES.get(value)
     else:
         pwarn(f"Dynamic value was not identified: {value}")
-        lwarn(f"Dynamic value was not identified: {value}")
         return 40  # average value in case of error
