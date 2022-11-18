@@ -430,12 +430,12 @@ class DataProcessor:
         self.data.rename(columns={ROLE_TYPE: 'Label_'+ROLE_TYPE}, inplace=True)
         label_columns = list(self.data.filter(like='Label_', axis=1))
 
-        self.label_dataframe = self.data[[ARIA_ID] + label_columns]
+        self.label_dataframe = self.data[[ARIA_ID, WINDOW_ID] + label_columns]
 
-        self.metadata_dataframe = self.data[[ARIA_ID] + metadata_columns]
+        self.metadata_dataframe = self.data[[ARIA_ID, WINDOW_ID] + metadata_columns]
 
         # TODO: donde estan key y key signature
-        self.data = sort_columns(self.data, [ARIA_ID] + priority_columns)
+        self.data = sort_columns(self.data, [ARIA_ID, WINDOW_ID] + priority_columns)
 
         self.features_dataframe = self.data.drop(priority_columns + label_columns,
                                                  axis=1, errors='ignore')
