@@ -12,8 +12,6 @@ from musif.common import group
 
 MUSICXML_FILE_EXTENSION = "xml"
 
-# TODO: Documennt all this module
-
 
 def is_voice(part: Part) -> bool:
     """
@@ -163,12 +161,12 @@ def _separate_info_in_two_parts(score, final_parts, part):
                             if e not in p.elements[num_measure].elements
                         )
     for num, p in enumerate(parts_splitted, 1):
-        p_copy = part  # copy.deepcopy(part)  # TODO: this line takes > 10% of the time
+        p_copy = part  # copy.deepcopy(part)
         p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
         p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
         p_copy.elements = p.elements
         final_parts.append(p_copy)
-    score.remove(part)  # already inserted
+    score.remove(part)
 
 
 def _get_part_clef(part):
