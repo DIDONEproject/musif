@@ -496,8 +496,10 @@ def isinstance(obj1, cls):
     objects are checked against their reference objects.
     """
     if type(obj1) is SmartModuleCache:
-        return obj1.cache["_type"] is cls
+        t = obj1.cache["_type"]
+        return builtins.issubclass(t, cls)
     return builtins.isinstance(obj1, cls)
+
 
 
 def issubclass(obj1, cls):
