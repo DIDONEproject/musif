@@ -675,8 +675,8 @@ class FeaturesExtractor:
                 perr(
                     f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
+                e.add_note(f"In {score_name} while computing {module.__name__}")
                 raise e
-                break
 
     def _update_score_module_features(
         self,
@@ -698,6 +698,7 @@ class FeaturesExtractor:
             perr(
                 f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
+            e.add_note(f"In {score_name} while computing {module.__name__}")
             raise e
 
     def _find_mscx_files(self):
