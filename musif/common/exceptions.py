@@ -27,3 +27,7 @@ class SmartCacheModified(Exception):
         super().__init__(
             f"Cannot modify SmartCache {obj}, via attribute {attr}"
         )
+        
+class FeatureError(RuntimeError):
+    """Exception raised when computing one of the features modules"""
+    pass
