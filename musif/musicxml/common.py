@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple, Union
 from music21.interval import Interval
 from music21.note import Note
 from music21.scale import MajorScale, MinorScale
-from music21.stream import Measure, Part, Score, Voice
+from music21.stream.base import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
 from roman import toRoman
 
