@@ -4,7 +4,13 @@ from logging import Logger
 from logging.handlers import TimedRotatingFileHandler
 from os import mkdir, path
 
-from musif.common.constants import LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEVEL_INFO, LEVEL_WARNING
+from musif.common.constants import (
+    LEVEL_CRITICAL,
+    LEVEL_DEBUG,
+    LEVEL_ERROR,
+    LEVEL_INFO,
+    LEVEL_WARNING,
+)
 from musif.common._utils import colorize
 
 
@@ -35,14 +41,18 @@ class FileFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def set_logger_file_handler(logger: Logger, log_file_path: str = None, file_log_level: str = None):
+def set_logger_file_handler(
+    logger: Logger, log_file_path: str = None, file_log_level: str = None
+):
     if log_file_path is None or file_log_level is None:
         return
     log_filename = path.basename(log_file_path)
-    log_dir = log_file_path[:-len(log_filename)]
+    log_dir = log_file_path[: -len(log_filename)]
     if not path.exists(log_dir):
         mkdir(log_dir)
-    file_handler = TimedRotatingFileHandler(log_file_path, when="midnight", backupCount=5)
+    file_handler = TimedRotatingFileHandler(
+        log_file_path, when="midnight", backupCount=5
+    )
     file_handler.setLevel(file_log_level)
     file_handler.setFormatter(FileFormatter())
     logger.addHandler(file_handler)
@@ -61,7 +71,7 @@ def create_logger(
     logger_name: str,
     log_file_path: str = None,
     file_log_level: str = None,
-    console_log_level: str = None
+    console_log_level: str = None,
 ) -> Logger:
     logger = logging.getLogger()
     logger.setLevel(LEVEL_DEBUG)
