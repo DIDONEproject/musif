@@ -36,6 +36,8 @@ def _part_matches_filter(
     return part_abbreviation in parts_filter_set
 
 
+# shouldn't this function stay in musif.extract.features.interval.common?
+# it's used only there...
 def _mix_data_with_precedent_data(prev_features: dict, new_features: dict) -> None:
 
     for key in new_features.keys():
@@ -43,9 +45,9 @@ def _mix_data_with_precedent_data(prev_features: dict, new_features: dict) -> No
             prev_features[key] = max(prev_features[key], new_features[key])
 
         elif "min" in key.lower() or "lowest" in key.lower():
+            # shouldn't this be min?
             prev_features[key] = max(prev_features[key], new_features[key])
 
-        if type(new_features[key]) == str:
-            continue
-
-        prev_features[key] = mean([prev_features[key], new_features[key]])
+        if type(new_features[key]) != str:
+            # this is run even if we have used max and min...it looks uncorrect
+            prev_features[key] = mean([prev_features[key], new_features[key]])

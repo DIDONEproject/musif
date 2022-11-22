@@ -54,6 +54,8 @@ def update_score_objects(
         interval_type_features = get_interval_type_features(intervals, part_prefix)
         interval_stats_features = get_interval_stats_features(intervals, part_prefix)
 
+        # it looks like these 'all' should be 'any', otherwise, features.update may
+        # overwrite some data
         if all([i in features for i in interval_features.keys()]):
             _mix_data_with_precedent_data(features, interval_features)
         else:
