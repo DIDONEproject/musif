@@ -16,9 +16,6 @@ from music21.stream import Measure, Part, Score
 from pandas import DataFrame
 from tqdm import tqdm
 
-# TODO: I would suggest:
-# from musif.extract import constants as C
-# because it better allows type checking and autocompletion in editors
 import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
@@ -115,10 +112,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     return harmonic_analysis
 
 
-# TODO: change name for this function (it looks like it extracts something from musicxml files)
-
-
-def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
+def find_xml_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
     """Extracts the paths to musicxml files
 
     Given a file path, a directory path, a list of files paths or a list of directories paths, returns a list of
@@ -165,7 +159,7 @@ def extract_files(obj: Union[str, List[str]], check_file: str = None) -> List[st
         else:
             raise ValueError(f"File {obj} doesn't exist")
     return sorted(
-        [mxml_file for obj_path in obj for mxml_file in extract_files(obj_path)]
+        [mxml_file for obj_path in obj for mxml_file in find_xml_files(obj_path)]
     )
 
 
@@ -280,10 +274,9 @@ class FeaturesExtractor:
         KeyError
            If features aren't loaded in corrected order or dependencies
         """
-        # TODO: Explain what this function returns if ony one score is requested
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
-        musicxml_files = extract_files(self._cfg.data_dir, check_file=self.check_file)
+        musicxml_files = find_xml_files(self._cfg.data_dir, check_file=self.check_file)
         if self._cfg.is_requested_musescore_file():
             self._find_mscx_files()
         score_df, parts_df = self._process_corpora(musicxml_files)
