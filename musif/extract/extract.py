@@ -20,7 +20,7 @@ import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
 from musif.common.cache import FileCacheIntoRAM, SmartModuleCache
-from musif.common.exceptions import MissingFileError, ParseFileError, FeatureError
+from musif.common.exceptions import FeatureError, MissingFileError, ParseFileError
 from musif.common.sort import sort_list
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
@@ -668,7 +668,10 @@ class FeaturesExtractor:
                 perr(
                     f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
                 )
-                raise FeatureError(f"In {score_name} while computing {module.__name__}") from e
+                raise FeatureError(
+                    f"In {score_name} while computing {module.__name__}"
+                ) from e
+
     def _update_score_module_features(
         self,
         module,
@@ -689,7 +692,9 @@ class FeaturesExtractor:
             perr(
                 f"An error occurred while extracting module {module.__name__} in {score_name}!!.\nError: {e}\n"
             )
-            raise FeatureError(f"In {score_name} while computing {module.__name__}") from e
+            raise FeatureError(
+                f"In {score_name} while computing {module.__name__}"
+            ) from e
 
     def _find_mscx_files(self):
         data_dir = self._cfg.data_dir
