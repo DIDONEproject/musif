@@ -606,7 +606,7 @@ def _calculate_total_number_of_beats(time_signatures: list, periods: list) -> in
             # here, time_signature is indexed by j, and not by the content of period...
             # is this correct? shouldn't thay be the opposite?
             # when j == 0, period is also == 0, so it can be skipped
-            period * get_number_of_beats(time_signatures[j])
+            j * get_number_of_beats(time_signatures[period])
             for j, period in enumerate(periods)
         ]
     )
