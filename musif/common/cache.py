@@ -98,7 +98,6 @@ class ObjectReference:
 
     def get_attr(self, name: str) -> Any:
         if not hasattr(self, "reference") or self.reference is None:
-            raise Exception(f"Attempt to resurrect {name}")
             # pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
             self._try_resurrect()
         return getattr(self.reference, name)
