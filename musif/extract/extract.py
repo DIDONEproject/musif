@@ -348,7 +348,6 @@ class FeaturesExtractor:
         return scores_features, parts_features
 
     def _init_score_processing(self, musicxml_file: str):
-        pinfo(f"\nProcessing score {musicxml_file}")
         if self._cfg.cache_dir is not None:
             cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
         else:
@@ -495,11 +494,12 @@ class FeaturesExtractor:
     def _get_score_data(
         self, musicxml_file: str, load_cache: Optional[Path] = None
     ) -> dict:
-
+        pinfo(f"\nProcessing score {musicxml_file}")
         data = None
         if load_cache is not None and load_cache.exists():
             try:
                 data = pickle.load(open(load_cache, "rb"))
+                pinfo(f'File was loaded succesfully from cache.')
             except Exception as e:
                 perr(
                     f"Error while loading pickled object, continuing with extraction from scratch: {e}"
