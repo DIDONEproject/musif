@@ -24,7 +24,7 @@ from musif.extract.features.prefix import (
 )
 from musif.musicxml.scoring import (
     ROMAN_NUMERALS_FROM_1_TO_20,
-    extract_abbreviated_part,
+    _extract_abbreviated_part,
     extract_sound,
 )
 from .constants import *
@@ -71,9 +71,8 @@ def update_score_objects(
     score = score_data[DATA_SCORE]
     for part in score.parts:
         sound = extract_sound(part, cfg)
-        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
-            sound, part, score_data[DATA_FILTERED_PARTS], cfg
-        )
+        part_abbreviation, sound_abbreviation, part_number = _extract_abbreviated_part(
+            sound, part, score_data[DATA_FILTERED_PARTS], cfg)
         is_matching_part = _part_matches_filter(part_abbreviation, cfg.parts_filter)
         family = cfg.sound_to_family.get(sound, GENERAL_FAMILY)
         family_abbreviation = cfg.family_to_abbreviation[family]

@@ -33,7 +33,7 @@ from musif.musicxml import (
 )
 from musif.musicxml.scoring import (
     ROMAN_NUMERALS_FROM_1_TO_20,
-    extract_abbreviated_part,
+    _extract_abbreviated_part,
     extract_sound,
     to_abbreviation,
 )
@@ -599,7 +599,7 @@ class FeaturesExtractor:
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
-        part_abbreviation, sound_abbreviation, part_number = extract_abbreviated_part(
+        part_abbreviation, sound_abbreviation, part_number = _extract_abbreviated_part(
             sound, part, score_data[C.DATA_FILTERED_PARTS], self._cfg
         )
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
