@@ -578,23 +578,34 @@ def _expand_part(part, repeat_elements: list):
 
 
 def _get_timesignature_periods(time_signatures: list):
+    # I don't get what this function should do
     # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
     periods = [0]
     if len(time_signatures) == 0:
         return periods
     for t in range(0, len(time_signatures)):
         if time_signatures[t] != time_signatures[t - 1]:
+            # when t is 0, t-1 is -1, is this what we want?
+            # if len(time_signatures) == 1, then it never enters here
             periods.append(
                 t - periods[-1]
             )  # Substract indexes in case measures are not cointinuous
+
+    # if len(time_signatures) == 1, then we add 0 again
+    # if we entered the if, we add the same value twice
     periods.append(t - periods[-1])
 
+    # at the end, periods is a list of indices of time_dignatures... but see next
+    # comment
     return periods
 
 
 def _calculate_total_number_of_beats(time_signatures: list, periods: list) -> int:
     return sum(
         [
+            # here, time_signature is indexed by j, and not by the content of period...
+            # is this correct? shouldn't thay be the opposite?
+            # when j == 0, period is also == 0, so it can be skipped
             period * get_number_of_beats(time_signatures[j])
             for j, period in enumerate(periods)
         ]
