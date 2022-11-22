@@ -10,6 +10,7 @@ from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATUR
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import _get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
+from musif.common.cache import hasattr
 
 from musif.extract.features.core.constants import DATA_NOTES
 from .constants import *
@@ -118,6 +119,7 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
 def get_motion_features(part_data) -> dict:
     notes_duration = [note.duration.quarterLength for note in part_data["notes_and_rests"]]
+            
     notes_midi = np.array([note.pitch.midi if hasattr(note, 'pitch') else np.nan for note in part_data["notes_and_rests"]])
     step = 0.125
     midis_raw = np.repeat(notes_midi, [i/step for i in notes_duration], axis=0)
