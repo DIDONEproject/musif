@@ -4,7 +4,7 @@ import os
 import pickle
 import re
 import subprocess
-from collections.abc import Iterable
+from subprocess import DEVNULL
 from math import floor
 from os import path
 from pathlib import Path, PurePath
@@ -435,16 +435,15 @@ class FeaturesExtractor:
                     "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exec`"
                 )
             if not isinstance(mscore, (list, tuple)):
-                # this is needed to allow stuffs like `xvfb-run mscore`
-                mscore = [mscore]
+                # this is needed to allow stuffs like `xvfb-run -a mscore`
+                mscore = (mscore,)
             tmp_d, tmp_path = mkstemp(suffix=MUSICXML_FILE_EXTENSION)
             process = mscore + ("-fo", tmp_path, filename)
-            try:
-                subprocess.run(process, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            except subprocess.CalledProcessError as e:
+            res = subprocess.run(process) #, stdout=DEVNULL, stderr=DEVNULL)
+            if res.returncode != 0:
                 raise RuntimeError(
                     f"Error while converting musescore file to xml: {filename}"
-                ) from e
+                )
         score = parse_filename(
             tmp_path,
             self._cfg.split_keywords,
