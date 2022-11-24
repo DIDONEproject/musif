@@ -12,7 +12,7 @@ from musif.common._utils import (
     read_object_from_json_file,
     read_object_from_yaml_file,
 )
-from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES
+from musif.extract.constants import HARMONY_FEATURES, SCALE_RELATIVE_FEATURES, REQUIRE_MSCORE
 
 # TODO: add documentation for these variables
 LOGGER_NAME = "musiF"
@@ -169,10 +169,9 @@ class Configuration:
     def is_requested_musescore_file(self) -> bool:
         # TODO: doc
 
-        if self.is_requested_feature_category(HARMONY_FEATURES):
-            return True
-        if self.is_requested_feature_category(SCALE_RELATIVE_FEATURES):
-            return True
+        for feature in REQUIRE_MSCORE:
+            if self.is_requested_feature_category(feature):
+                return True
         return False
 
     def is_requested_feature_category(self, feature) -> bool:

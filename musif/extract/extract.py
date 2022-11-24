@@ -498,7 +498,10 @@ class FeaturesExtractor:
                     f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}"
                 )
             if self._cfg.is_requested_musescore_file():
-                data_musescore = self._get_harmony_data(musicxml_file)
+                data_musescore = self._get_harmony_data(
+                    self._cfg.musescore_dir
+                    / filename.with_suffix(MUSESCORE_FILE_EXTENSION).name
+                )
             data = {
                 C.DATA_SCORE: score,
                 C.DATA_FILE: musicxml_file,

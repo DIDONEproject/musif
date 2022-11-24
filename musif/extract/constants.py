@@ -14,6 +14,7 @@ DATA_FILTERED_PARTS = "parts"
 """Names of modules taht require harmonic analysis in a .mscx file"""
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
+REQUIRE_MSCORE = [HARMONY_FEATURES, SCALE_RELATIVE_FEATURES]
 
 """List of prefixes of singers's names that might appear in the scores"""
 VOICES_LIST = ["sop", "ten", "alt", "bar", "bbar", "bass"]
