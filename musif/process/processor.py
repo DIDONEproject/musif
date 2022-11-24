@@ -33,14 +33,15 @@ from musif.process.utils import (_join_double_bass, delete_columns, join_keys,
                                  merge_single_voices, split_passion_A)
 
 
-# TODO: documentation should be more precise here and there, reread
 class DataProcessor:
     """Processor class that treats columns and information of a DataFrame
 
     This operator processes information from a DataFrame or a .csv file. 
-    It deletes unseful columns and merges those that are required to clean the data.
-    The main method .process() returns a DataFrame.
-    Requires to have a Passions.csv file in the current working directory containing each passion
+    It deletes unseful columns for analysis and saves important ones. For duetos and trios, it
+    merges the merges the singer columns in the same one with the proper calculations.
+    Also saves data in several files in .csv format.
+    The main method .process() returns a DataFrame and saves data.
+    Requires to have a Passions.csv file in ./internal_data directory containing each passion
     for each aria.
     ...
 
@@ -67,9 +68,9 @@ class DataProcessor:
         Joins every voice part into common columns startung with 'SoundVoice'. Also fixes duetos. 
     unbundle_instrumentation()
         Separates 'Instrumentation' column into several Presence_ columns for every instrument present in Instrumentation.
-    delete_unwanted_columns(**kwargs)
+    delete_undesired_columns(**kwargs)
         Deletes all columns that are not needed according to config.yml file  
-    to_csv(dest_path: str)
+    save(dest_path: str)
         Saves final information to various csv files, splitting data, metadata and
         features
     """
@@ -106,7 +107,7 @@ class DataProcessor:
 
         Returns
         ------
-            Dataframe with the information from either the file or the previous DataFrame.
+            Dataframe contaning the information to be processed.
         """
 
         try:
@@ -140,7 +141,7 @@ class DataProcessor:
 
     def process(self) -> DataFrame:
         """
-        Main method tof the class. Removes NaN values, deletes unuseful columns
+        Main method of the class. Removes NaN values, deletes unuseful columns
         and merges those that are needed according to config.yml file.
         Saves processed DataFrame into a csv file if the input was a path to a file.
 
@@ -167,7 +168,7 @@ class DataProcessor:
         if self._post_config.merge_voices:
             self.merge_voices()
 
-        self.delete_unwanted_columns()
+        self.delete_undesired_columns()
 
         if self._post_config.grouped_analysis:
             self.group_columns()
@@ -214,9 +215,6 @@ class DataProcessor:
         """Groups Key_*_PercentageMeasures, Key_Modulatory and Degrees columns. Into bigger groups
         for agregated analysis, keeping the previous ones. Also deletes unnecesary columns for analysis.
         """
-
-        # self.data.drop([i for i in self.data.columns if 'Degree' in i and not '_relative' in i], axis = 1, inplace=True)
-        # self.data.drop([i for i in self.data.columns if i.startswith(CHORDS_GROUPING_prefix+'1')], axis = 1, inplace=True)
         try:
             self._group_keys_modulatory()
             self._group_keys()
@@ -273,7 +271,7 @@ class DataProcessor:
             perr(
                 '\nA file called "errors.csv" must be created containing Filenames to be deleted.')
 
-    def delete_unwanted_columns(self, **kwargs) -> None:
+    def delete_undesired_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
 
         If keyword arguments are passed in, they overwrite those found
