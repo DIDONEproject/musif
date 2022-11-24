@@ -30,6 +30,7 @@ from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musicxml import (
     MUSESCORE_FILE_EXTENSION,
     MUSICXML_FILE_EXTENSION,
+    extract_numeric_tempo,
     split_layers,
 )
 from musif.musicxml.scoring import (
@@ -472,6 +473,7 @@ class FeaturesExtractor:
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
         )
+        score.numeric_tempo = extract_numeric_tempo(tmp_path)
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts)
 

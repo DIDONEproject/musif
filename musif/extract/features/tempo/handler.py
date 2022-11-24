@@ -134,7 +134,7 @@ def extract_time_signatures(measures: list, score_data: dict):
 
 
 def extract_tempo(score_data, part):
-    numeric_tempo = extract_numeric_tempo(score_data[DATA_FILE])
+    numeric_tempo = score_data[DATA_SCORE].numeric_tempo
     tempo_mark = TempoGroup2.NA.value
     for measure in part:
         if isinstance(measure, Measure):
