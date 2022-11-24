@@ -434,13 +434,16 @@ class FeaturesExtractor:
                 raise RuntimeError(
                     "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exec`"
                 )
+            if not isinstance(mscore, (list, tuple)):
+                # this is needed to allow stuffs like `xvfb-run mscore`
+                mscore = [mscore]
             tmp_d, tmp_path = mkstemp(suffix=MUSICXML_FILE_EXTENSION)
-            process = [mscore, "-fo", tmp_path, filename]
+            process = mscore + ("-fo", tmp_path, filename)
             try:
                 subprocess.run(process, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except subprocess.CalledProcessError as e:
                 raise RuntimeError(
-                    f"Error while convertinf musescore file to xml: {filename}"
+                    f"Error while converting musescore file to xml: {filename}"
                 ) from e
         score = parse_filename(
             tmp_path,
