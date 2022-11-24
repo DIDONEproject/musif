@@ -112,17 +112,19 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     return harmonic_analysis
 
 
+# TODO: document check_file or remove it (it looks like unused)
 def find_xml_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
     """Extracts the paths to musicxml files
 
-    Given a file path, a directory path, a list of files paths or a list of directories paths, returns a list of
-    paths to musicxml files found, in alphabetic order. If given neither a string nor list of strings raise a
-    TypeError and if the file doesn't exists returns a ValueError
+    Given a file path, a directory path, a list of files paths or a list of directories
+    paths, returns a list of paths to musicxml files found, in alphabetic order. If
+    given neither a string nor list of strings raise a TypeError and if the file doesn't
+    exists returns a ValueError
 
     Parameters
     ----------
     obj : Union[str, List[str]]
-      A path or a list of paths
+      A path or directory, or a list of paths or directories
 
     Returns
     -------
