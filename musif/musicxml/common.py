@@ -9,6 +9,7 @@ from music21.text import assembleLyrics
 from roman import toRoman
 
 from musif.common import group
+from musif.common.cache import isinstance
 
 MUSICXML_FILE_EXTENSION = "xml"
 
@@ -97,7 +98,8 @@ def get_notes_and_measures(
 
     measures = list(part.getElementsByClass(Measure))
     sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
-    original_notes = [note for measure in measures for note in measure.notes]
+    original_notes = [note for measure in measures for note in measure.notes if
+                      isinstance(note, Note)]
     notes_and_rests = [note for measure in measures for note in measure.notesAndRests]
     tied_notes = _tie_notes(original_notes)
     return original_notes, tied_notes, measures, sounding_measures, notes_and_rests

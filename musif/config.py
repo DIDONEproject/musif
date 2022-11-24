@@ -2,7 +2,6 @@ import multiprocessing
 from glob import glob
 from os import path
 from pathlib import PurePath
-from pathlib import Path
 
 
 from musif import internal_data
@@ -35,6 +34,7 @@ EXPAND_REPEATS = "expand_repeats"
 WINDOW_SIZE = "window_size"
 OVERLAP = "overlap"
 ONLY_THEME_A = "only_theme_a"
+MSCORE_EXEC = "mscore_exec"
 
 
 INTERNAL_DATA = "internal_data_dir"
@@ -76,6 +76,7 @@ _CONFIG_FALLBACK = {
     WINDOW_SIZE: 8,
     OVERLAP: 2,
     CHECK_FILE: ".",
+    MSCORE_EXEC: None,
 }
 
 _CONFIG_POST_FALLBACK = {
@@ -161,6 +162,7 @@ class Configuration:
         self.only_theme_a = config_data.get(
             ONLY_THEME_A, _CONFIG_FALLBACK[ONLY_THEME_A]
         )
+        self.mscore_exec = config_data.get(MSCORE_EXEC, _CONFIG_FALLBACK[MSCORE_EXEC])
 
         self.internal_data_dir = path.dirname(internal_data.__file__)
         self.check = config_data.get(CHECK_FILE, _CONFIG_FALLBACK[CHECK_FILE])

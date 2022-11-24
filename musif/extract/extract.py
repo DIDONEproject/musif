@@ -3,13 +3,15 @@ import inspect
 import os
 import pickle
 import re
-from collections import Iterable
-from concurrent.futures import ProcessPoolExecutor, as_completed
+import subprocess
+from collections.abc import Iterable
 from math import floor
 from os import path
 from pathlib import Path, PurePath
-from typing import Dict, List, Optional, Tuple, Union
+from tempfile import mkstemp
+from typing import List, Optional, Tuple, Union
 
+import ms3
 import pandas as pd
 from joblib import Parallel, delayed
 from music21.converter import parse
@@ -21,12 +23,11 @@ import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
 from musif.common.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache
-from musif.common.exceptions import FeatureError, MissingFileError, ParseFileError
-from musif.common.sort import sort_list
+from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
-from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
+from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pwarn
 from musif.musicxml import (
     MUSESCORE_FILE_EXTENSION,
     MUSICXML_FILE_EXTENSION,
@@ -34,7 +35,6 @@ from musif.musicxml import (
     split_layers,
 )
 from musif.musicxml.scoring import (
-    ROMAN_NUMERALS_FROM_1_TO_20,
     _extract_abbreviated_part,
     extract_sound,
     to_abbreviation,
@@ -43,7 +43,7 @@ from musif.musicxml.scoring import (
 _cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 
-def parse_musicxml_file(
+def parse_filename(
     file_path: str, split_keywords: List[str], expand_repeats: bool = False
 ) -> Score:
     """
@@ -114,16 +114,16 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     return harmonic_analysis
 
 
-# TODO: document check_file or remove it (it looks like unused)
+# TODO: document check_file (or, IMHO, make private) and limit_files
 def find_files(
-    extension: str, obj: Union[str, List[str]], check_file: str = None
+        extension: str, obj: Union[str, List[Union[str, PurePath]]], limit_files:
+        List[str] = None, check_file: str = None
 ) -> List[PurePath]:
     """Extracts the paths to files given an extension
 
-    Given a file path, a directory path, a list of files paths or a list of directories
-    paths, returns a list of paths to musicxml files found, in alphabetic order. If
-    given neither a string nor list of strings raise a TypeError and if the file doesn't
-    exists returns a ValueError
+    Given a path, a directory path, returns a list of paths to musicxml files found, in
+    alphabetic order. If given neither a string nor list of strings raise a TypeError
+    and if the file doesn't exists returns a ValueError
 
     Parameters
     ----------
@@ -146,33 +146,24 @@ def find_files(
     ValueError
       If the provided string is neither a directory nor a file path
     """
-    if not (
-        isinstance(obj, Iterable) or isinstance(obj, str) or isinstance(obj, PurePath)
-    ):
-        raise TypeError(
-            f"Unexpected argument {obj} should be a directory, a file path or a list of files paths"
-        )
-    if not isinstance(obj, Iterable):
-        obj = Path(obj)
-        if not obj.exists():
-            raise ValueError(f"File {obj} doesn't exist")
-        elif obj.is_dir():
-            if check_file:
-                files_to_extract = _skip_files(obj, check_file)
-                return files_to_extract
-            else:
-                return sorted(obj.glob(f"*.{extension}"), key=str.lower)
-        elif obj.is_file() and obj.suffix == f".{extension}":
-            return [obj]
+    obj = Path(obj)
+    if not obj.exists():
+        raise ValueError(f"File {obj} doesn't exist")
+    elif obj.is_dir():
+        if check_file:
+            ret = _skip_files(obj, check_file)
         else:
-            return []
+            ret = sorted(obj.glob(f"*{extension}"))
+        if limit_files is not None:
+            return [f for f in ret if f.name in limit_files]
+        else:
+            return ret
+    elif obj.is_file() and obj.suffix == f"{extension}":
+        return [obj]
     else:
-        return sorted(
-            [file for obj_path in obj for file in find_files(extension, obj_path)]
-        )
+        return []
 
 
-# TODO: check if we need it, otherwise delete it
 def _skip_files(obj, check_file):
     skipped = []
     files_to_extract = []
@@ -198,11 +189,13 @@ def _skip_files(obj, check_file):
 
 class FeaturesExtractor:
     """
-    Extract features for a score or a list of scores, according to the parameters established in the configurtaion files.
-    It extracts musical features from .xml and .mscx files based on the configuration and stores them in a dictionary (score features)
-    that at the end will be returned as a DataFrame.
-    Features corresponds to modules placed in musif/features directory, and will be computed in order according to the configuration.
-    Some features might depend on the previous ones, so order is important.
+    Extract features for a score or a list of scores, according to the parameters
+    established in the configurtaion files. It extracts musical features from .xml and
+    .mscx files based on the configuration and stores them in a dictionary
+    (score features) that at the end will be returned as a DataFrame. Features
+    corresponds to modules placed in musif/features directory, and will be computed in
+    order according to the configuration. Some features might depend on the previous
+    ones, so order is important.
 
     """
 
@@ -212,7 +205,8 @@ class FeaturesExtractor:
         ----------
         *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
         **kwargs: Get keywords to construct Configuration.
-        check_file: .csv file containing a DataFrame for files extrction that already have been parsed, so they will be skipped in the
+        check_file: .csv file containing a DataFrame for files extrction that already
+            have been parsed, so they will be skipped in the
         extraction process.
 
         Raises
@@ -226,14 +220,13 @@ class FeaturesExtractor:
         """
 
         self._cfg = Configuration(*args, **kwargs)
+        self.limit_files = kwargs.get("limit_files")
         self.check_file = kwargs.get("check_file")
         self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # creates the directory for the cache
         if self._cfg.cache_dir is not None:
             pinfo("Cache activated!")
             Path(self._cfg.cache_dir).mkdir(exist_ok=True)
-        # self.logger = MPLogger(self._cfg.log_file, self._cfg.file_log_level)
-        # self.logger.start()
 
     def extract(self) -> DataFrame:
         """
@@ -252,131 +245,104 @@ class FeaturesExtractor:
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
         if self._cfg.xml_dir is not None:
-            filenames: List[PurePath] = find_files(
-                MUSICXML_FILE_EXTENSION, self._cfg.xml_dir, check_file=self.check_file
+            filenames = find_files(
+                MUSESCORE_FILE_EXTENSION,
+                self._cfg.musescore_dir,
+                limit_files=self.limit_files,
+                check_file=self.check_file,
             )
             if len(filenames) == 0:
-                find_files(MUSESCORE_FILE_EXTENSION, self._cfg.musescore_dir)
+                if self._cfg.is_requested_musescore_file():
+                    perr(
+                        f"\nMusescore files are needed for the following features {C.REQUIRE_MSCORE}, but cannot find musescore files. Those features won't be computed!"
+                    )
+                filenames = find_files(
+                    MUSICXML_FILE_EXTENSION,
+                    self._cfg.xml_dir,
+                    limit_files=self.limit_files,
+                    check_file=self.check_file,
+                )
             if len(filenames) == 0:
-                find_files(CACHE_FILE_EXTENSION, self._cfg.cache_dir)
+                filenames = find_files(
+                    CACHE_FILE_EXTENSION,
+                    self._cfg.cache_dir,
+                    limit_files=self.limit_files,
+                    check_file=self.check_file,
+                )
+            if len(filenames) == 0:
+                raise FileNotFoundError("No file found for extracting features!")
 
-        if self._cfg.is_requested_musescore_file():
-            self._find_mscx_files(filenames)
-        score_df, parts_df = self._process_corpora(filenames)
+        score_df = self._process_corpus(filenames)
         return score_df
 
-    def _process_corpora(
-        self, musicxml_files: List[str]
-    ) -> Tuple[DataFrame, DataFrame]:
-        corpus_by_dir = self._group_by_dir(musicxml_files)
-        if self._cfg.window_size is not None:
-            for corpus_dir, files in corpus_by_dir.items():
-                all_scores_features, all_parts_features = self._process_corpus(files)
-                all_dfs = []
-                all_parts_dictionaries = []
-                for score in all_scores_features:
-                    df_score = DataFrame(score)
-                    df_score = df_score.reindex(sorted(df_score.columns), axis=1)
-                    all_dfs.append(df_score)
-                for parts in all_parts_features:
-                    df_parts = DataFrame(all_parts_features)
-                    df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
-                    all_parts_dictionaries.append(df_parts)
-                all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
-        else:
-            all_scores_features = []
-            all_parts_features = []
-            for corpus_dir, files in corpus_by_dir.items():
-                scores_features, parts_features = self._process_corpus(files)
-                all_scores_features.extend(scores_features)
-                all_parts_features.extend(parts_features)
-            all_dfs = DataFrame(all_scores_features)
-            all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
-            df_parts = DataFrame(all_parts_features)
-            df_parts = df_parts.reindex(sorted(df_parts.columns), axis=1)
-        return all_dfs, df_parts
-
-    @staticmethod
-    def _group_by_dir(files: List[str]) -> Dict[str, List[str]]:
-        corpus_by_dir = {}
-        for file in files:
-            corpus_dir = path.dirname(file)
-            if corpus_dir not in corpus_by_dir:
-                corpus_by_dir[corpus_dir] = []
-            corpus_by_dir[corpus_dir].append(file)
-        return corpus_by_dir
-
     def _process_corpus(
-        self, musicxml_files: List[str]
+        self, filenames: List[PurePath]
     ) -> Tuple[List[dict], List[dict]]:
-        def process_corpus_par(musicxml_file):
+        def process_corpus_par(filename):
             if self._cfg.window_size is not None:
-                score_features, score_parts_features = self._process_score_windows(
-                    musicxml_file
-                )
+                score_features = self._process_score_windows(filename)
             else:
-                score_features, score_parts_features = self._process_score(
-                    musicxml_file
-                )
-            return score_features, score_parts_features
+                score_features = self._process_score(filename)
+            return score_features
 
-        result = Parallel(n_jobs=self._cfg.parallel)(
-            delayed(process_corpus_par)(fname) for fname in tqdm(musicxml_files)
+        scores_features = Parallel(n_jobs=self._cfg.parallel)(
+            delayed(process_corpus_par)(fname) for fname in tqdm(filenames)
         )
 
-        # result is now a list of tuples, we need to transpose it:
-        scores_features, scores_parts_features = zip(*result)
-        # now, let's concatenate the scores_pars_features
-        parts_features = [*scores_parts_features]
-        return scores_features, parts_features
+        if self._cfg.window_size is not None:
+            all_dfs = []
+            for score in scores_features:
+                df_score = DataFrame(score)
+                df_score = df_score.reindex(sorted(df_score.columns), axis=1)
+                all_dfs.append(df_score)
+            all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
+        else:
+            all_dfs = DataFrame(scores_features)
+            all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
+        return all_dfs
 
-    def _init_score_processing(self, musicxml_file: str):
+    def _init_score_processing(self, filename: PurePath):
         if self._cfg.cache_dir is not None:
             cache_name = Path(self._cfg.cache_dir) / (
-                Path(musicxml_file).stem + f".{CACHE_FILE_EXTENSION}"
+                filename.with_suffix(CACHE_FILE_EXTENSION).name
             )
         else:
             cache_name = None
-        score_data = self._get_score_data(musicxml_file, load_cache=cache_name)
+        score_data = self._get_score_data(filename, load_cache=cache_name)
         parts_data = [
             self._get_part_data(score_data, part)
             for part in score_data[C.DATA_SCORE].parts
         ]
         parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
-        basic_features, basic_parts_features = self.extract_modules(
-            BASIC_MODULES, score_data, parts_data
-        )
-        return basic_features, basic_parts_features, cache_name, parts_data, score_data
+        basic_features = self.extract_modules(BASIC_MODULES, score_data, parts_data)
+        return basic_features, cache_name, parts_data, score_data
 
-    def _process_score(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+    def _process_score(self, filename: PurePath) -> Tuple[dict, List[dict]]:
 
         (
             basic_features,
-            basic_parts_features,
             cache_name,
             parts_data,
             score_data,
-        ) = self._init_score_processing(musicxml_file)
+        ) = self._init_score_processing(filename)
 
-        score_features, parts_features = self.extract_modules(
+        score_features = self.extract_modules(
             FEATURES_MODULES, score_data, parts_data
         )
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
-        [i.update(parts_features[j]) for j, i in enumerate(basic_parts_features)]
 
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
-        return score_features, parts_features
+        return score_features
 
-    def _process_score_windows(self, musicxml_file: str) -> Tuple[dict, List[dict]]:
+    def _process_score_windows(self, filename: PurePath) -> Tuple[dict, List[dict]]:
         (
             basic_features,
-            basic_parts_features,
             cache_name,
             parts_data,
             score_data,
-        ) = self._init_score_processing(musicxml_file)
+        ) = self._init_score_processing(filename)
 
         score_data[C.GLOBAL_TIME_SIGNATURE] = (
             score_data[C.DATA_FILTERED_PARTS][0]
@@ -392,12 +358,7 @@ class FeaturesExtractor:
         number_windows = (nmeasures - self._cfg.overlap) // hopsize
 
         all_windows_features = []
-        all_parts_features = []
         for idx in range(number_windows):
-            # pinfo(
-            #     f"\nProcessing window {idx+1} for {musicxml_file} of a total of:
-            #     {number_windows} windows."
-            # )
             first_window_measure = idx * hopsize
             last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
@@ -407,7 +368,7 @@ class FeaturesExtractor:
                 {k: v for k, v in score_data.items() if k not in window_data}
             )
 
-            window_features, parts_window_features = self.extract_modules(
+            window_features = self.extract_modules(
                 FEATURES_MODULES, window_data, window_parts_data
             )
 
@@ -418,18 +379,13 @@ class FeaturesExtractor:
             window_features[C.WINDOW_ID] = idx
 
             window_features = {**basic_features, **window_features}
-            [
-                i.update(parts_window_features[j])
-                for j, i in enumerate(basic_parts_features)
-            ]
 
             all_windows_features.append(window_features)
-            all_parts_features.append(parts_window_features)
             first_window_measure = last_window_measure - self._cfg.overlap
 
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
-        return all_windows_features, all_parts_features
+        return all_windows_features
 
     def _select_window_data(
         self, score_data: dict, parts_data: list, first_measure: int, last_measure: int
@@ -465,22 +421,40 @@ class FeaturesExtractor:
             self._update_score_module_features(
                 module, data, parts_data, parts_features, score_features
             )
-        return score_features, parts_features
+        return score_features
 
-    def _load_m21_objects(self, musicxml_file: str):
-        score = parse_musicxml_file(
-            musicxml_file,
+    def _load_m21_objects(self, filename: PurePath):
+        if filename.suffix == MUSESCORE_FILE_EXTENSION:
+            # convert to xml in a temporary file
+            mscore = self._cfg.mscore_exec
+            if mscore is None:
+                mscore = ms3.utils.get_musescore("auto")
+            if mscore is None:
+                raise RuntimeError(
+                    "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exev`"
+                )
+            tmp_d, tmp_path = mkstemp(suffix=MUSICXML_FILE_EXTENSION)
+            process = [mscore, "-fo", tmp_path, filename]
+            try:
+                subprocess.run(process, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except subprocess.CalledProcessError as e:
+                raise RuntimeError(
+                    f"Error while convertinf musescore file to xml: {filename}"
+                ) from e
+        score = parse_filename(
+            tmp_path,
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
         )
         score.numeric_tempo = extract_numeric_tempo(tmp_path)
+        os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts)
 
     def _get_score_data(
-        self, musicxml_file: str, load_cache: Optional[Path] = None
+        self, filename: PurePath, load_cache: Optional[Path] = None
     ) -> dict:
-        pinfo(f"\nProcessing score {musicxml_file}")
+        pinfo(f"\nProcessing score {filename}")
         data = None
         if load_cache is not None and load_cache.exists():
             try:
@@ -492,10 +466,10 @@ class FeaturesExtractor:
                 )
 
         if data is None:
-            score, filtered_parts = self._load_m21_objects(musicxml_file)
+            score, filtered_parts = self._load_m21_objects(filename)
             if len(filtered_parts) == 0:
                 lwarn(
-                    f"No parts were found for file {musicxml_file} and filter: {','.join(self._cfg.parts_filter)}"
+                    f"No parts were found for file {filename} and filter: {','.join(self._cfg.parts_filter)}"
                 )
             if self._cfg.is_requested_musescore_file():
                 data_musescore = self._get_harmony_data(
@@ -504,7 +478,7 @@ class FeaturesExtractor:
                 )
             data = {
                 C.DATA_SCORE: score,
-                C.DATA_FILE: musicxml_file,
+                C.DATA_FILE: str(filename),
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
             }
@@ -513,7 +487,10 @@ class FeaturesExtractor:
             if self._cfg.cache_dir is not None:
                 m21_objects = SmartModuleCache(
                     (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
-                    resurrect_reference=(self._load_m21_objects, musicxml_file),
+                    resurrect_reference=(
+                        self._load_m21_objects,
+                        filename.relative_to("."),
+                    ),
                 )
                 data[C.DATA_SCORE] = m21_objects[0]
                 data[C.DATA_FILTERED_PARTS] = m21_objects[1]
@@ -549,15 +526,14 @@ class FeaturesExtractor:
             data[C.DATA_MUSESCORE_SCORE].reset_index(inplace=True, drop=True)
         return data
 
-    def _get_harmony_data(self, musicxml_file: PurePath) -> pd.DataFrame:
-        musescore_file_path = Path(self._cfg.musescore_dir) / musicxml_file
-        if not musescore_file_path.exists():
-            lerr(f"Musescore file was not found for {musescore_file_path} file!")
-            lerr(f"No harmonic analysis will be extracted.{musescore_file_path}")
+    def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:
+        if not filename.exists():
+            lerr(f"Musescore file was not found for {filename} file!")
+            lerr(f"No harmonic analysis will be extracted for {filename}")
         else:
             try:
                 data_musescore = parse_musescore_file(
-                    str(musescore_file_path), self._cfg.expand_repeats
+                    str(filename), self._cfg.expand_repeats
                 )
             except ParseFileError as e:
                 data_musescore = None
@@ -682,11 +658,3 @@ class FeaturesExtractor:
             raise FeatureError(
                 f"In {score_name} while computing {module.__name__}"
             ) from e
-
-    def _find_mscx_files(self, filenames: List[PurePath]):
-        for name in filenames:
-            p = name.relative_to(self._cfg.musescore_dir).with_suffix(
-                f".{MUSESCORE_FILE_EXTENSION}"
-            )
-            if not p.exists():
-                perr(f"\nNo mscx was found for file {name}")
