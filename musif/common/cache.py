@@ -47,6 +47,8 @@ class FileCacheIntoRAM:
 
 deephash.logger.setLevel(logging.ERROR)
 
+CACHE_FILE_EXTENSION = "pkl"
+
 
 class ObjectReference:
     """

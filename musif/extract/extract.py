@@ -3,6 +3,7 @@ import inspect
 import os
 import pickle
 import re
+from collections import Iterable
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from math import floor
 from os import path
@@ -19,7 +20,7 @@ from tqdm import tqdm
 import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
-from musif.common.cache import FileCacheIntoRAM, SmartModuleCache
+from musif.common.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache
 from musif.common.exceptions import FeatureError, MissingFileError, ParseFileError
 from musif.common.sort import sort_list
 from musif.config import Configuration
@@ -113,8 +114,10 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
 
 
 # TODO: document check_file or remove it (it looks like unused)
-def find_xml_files(obj: Union[str, List[str]], check_file: str = None) -> List[str]:
-    """Extracts the paths to musicxml files
+def find_files(
+    extension: str, obj: Union[str, List[str]], check_file: str = None
+) -> List[PurePath]:
+    """Extracts the paths to files given an extension
 
     Given a file path, a directory path, a list of files paths or a list of directories
     paths, returns a list of paths to musicxml files found, in alphabetic order. If
@@ -123,12 +126,14 @@ def find_xml_files(obj: Union[str, List[str]], check_file: str = None) -> List[s
 
     Parameters
     ----------
-    obj : Union[str, List[str]]
+    extension: str
+      A string representing the extension that will be looked for
+    obj : Union[str, Iterable[str]]
       A path or directory, or a list of paths or directories
 
     Returns
     -------
-    resp : List[str]
+    resp : List[PurePath]
       The list of musicxml files found in the provided arguments
       This list will be returned in alphabetical order
 
@@ -140,31 +145,33 @@ def find_xml_files(obj: Union[str, List[str]], check_file: str = None) -> List[s
     ValueError
       If the provided string is neither a directory nor a file path
     """
-    if not (isinstance(obj, list) or isinstance(obj, str) or isinstance(obj, PurePath)):
+    if not (
+        isinstance(obj, Iterable) or isinstance(obj, str) or isinstance(obj, PurePath)
+    ):
         raise TypeError(
             f"Unexpected argument {obj} should be a directory, a file path or a list of files paths"
         )
-    if isinstance(obj, PurePath):
-        obj = str(obj)
-    if isinstance(obj, str):
-        if path.isdir(obj):
+    if not isinstance(obj, Iterable):
+        obj = Path(obj)
+        if not obj.exists():
+            raise ValueError(f"File {obj} doesn't exist")
+        elif obj.is_dir():
             if check_file:
                 files_to_extract = _skip_files(obj, check_file)
                 return files_to_extract
             else:
-                return sorted(
-                    glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")),
-                    key=str.lower,
-                )
-        elif path.isfile(obj):
-            return [obj] if obj.rstrip().endswith(f".{MUSICXML_FILE_EXTENSION}") else []
+                return sorted(obj.glob(f"*.{extension}"), key=str.lower)
+        elif obj.is_file() and obj.suffix == f".{extension}":
+            return [obj]
         else:
-            raise ValueError(f"File {obj} doesn't exist")
-    return sorted(
-        [mxml_file for obj_path in obj for mxml_file in find_xml_files(obj_path)]
-    )
+            return []
+    else:
+        return sorted(
+            [file for obj_path in obj for file in find_files(extension, obj_path)]
+        )
 
 
+# TODO: check if we need it, otherwise delete it
 def _skip_files(obj, check_file):
     skipped = []
     files_to_extract = []
@@ -186,41 +193,6 @@ def _skip_files(obj, check_file):
         print(*skipped, sep=",\n")
         print("Total: ", len(skipped))
     return files_to_extract
-
-
-def compose_musescore_file_path(
-    musicxml_file: str, musescore_dir: Optional[str]
-) -> str:
-    """
-    Given a musicxml file name, returns the equivalent musescore file name, withint different directory or not.
-    Parameters
-    ----------
-    musicxml_file: str
-        Original musicxml file
-    musescore_dir: Optional[str]
-        Directory path to musescore file.
-    Returns
-    -------
-    resp: str
-        Musescore file path
-    Raises
-    ------
-    ValueError
-        If the given file is not a musicxml.
-    """
-    if not musicxml_file.endswith("." + MUSICXML_FILE_EXTENSION):
-        raise ValueError(
-            f"The file {musicxml_file} is not a .{MUSICXML_FILE_EXTENSION} file"
-        )
-    extension_index = musicxml_file.rfind(".")
-    musescore_file_path = (
-        musicxml_file[:extension_index] + "." + MUSESCORE_FILE_EXTENSION
-    )
-    if musescore_dir:
-        musescore_file_path = path.join(
-            musescore_dir, path.basename(musescore_file_path)
-        )
-    return musescore_file_path
 
 
 class FeaturesExtractor:
@@ -278,10 +250,18 @@ class FeaturesExtractor:
         """
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
-        musicxml_files = find_xml_files(self._cfg.data_dir, check_file=self.check_file)
+        if self._cfg.xml_dir is not None:
+            filenames: List[PurePath] = find_files(
+                MUSICXML_FILE_EXTENSION, self._cfg.xml_dir, check_file=self.check_file
+            )
+            if len(filenames) == 0:
+                find_files(MUSESCORE_FILE_EXTENSION, self._cfg.musescore_dir)
+            if len(filenames) == 0:
+                find_files(CACHE_FILE_EXTENSION, self._cfg.cache_dir)
+
         if self._cfg.is_requested_musescore_file():
-            self._find_mscx_files()
-        score_df, parts_df = self._process_corpora(musicxml_files)
+            self._find_mscx_files(filenames)
+        score_df, parts_df = self._process_corpora(filenames)
         return score_df
 
     def _process_corpora(
@@ -351,7 +331,9 @@ class FeaturesExtractor:
 
     def _init_score_processing(self, musicxml_file: str):
         if self._cfg.cache_dir is not None:
-            cache_name = Path(self._cfg.cache_dir) / (Path(musicxml_file).stem + ".pkl")
+            cache_name = Path(self._cfg.cache_dir) / (
+                Path(musicxml_file).stem + f".{CACHE_FILE_EXTENSION}"
+            )
         else:
             cache_name = None
         score_data = self._get_score_data(musicxml_file, load_cache=cache_name)
@@ -501,7 +483,7 @@ class FeaturesExtractor:
         if load_cache is not None and load_cache.exists():
             try:
                 data = pickle.load(open(load_cache, "rb"))
-                pinfo(f'File was loaded succesfully from cache.')
+                pinfo(f"File was loaded succesfully from cache.")
             except Exception as e:
                 perr(
                     f"Error while loading pickled object, continuing with extraction from scratch: {e}"
@@ -562,17 +544,15 @@ class FeaturesExtractor:
             data[C.DATA_MUSESCORE_SCORE].reset_index(inplace=True, drop=True)
         return data
 
-    def _get_harmony_data(self, musicxml_file: str) -> pd.DataFrame:
-        musescore_file_path = compose_musescore_file_path(
-            musicxml_file, self._cfg.musescore_dir
-        )
-        if musescore_file_path is None:
+    def _get_harmony_data(self, musicxml_file: PurePath) -> pd.DataFrame:
+        musescore_file_path = Path(self._cfg.musescore_dir) / musicxml_file
+        if not musescore_file_path.exists():
             lerr(f"Musescore file was not found for {musescore_file_path} file!")
             lerr(f"No harmonic analysis will be extracted.{musescore_file_path}")
         else:
             try:
                 data_musescore = parse_musescore_file(
-                    musescore_file_path, self._cfg.expand_repeats
+                    str(musescore_file_path), self._cfg.expand_repeats
                 )
             except ParseFileError as e:
                 data_musescore = None
@@ -698,15 +678,10 @@ class FeaturesExtractor:
                 f"In {score_name} while computing {module.__name__}"
             ) from e
 
-    def _find_mscx_files(self):
-        data_dir = self._cfg.data_dir
-        if type(data_dir) is list:
-            xml_names = data_dir
-        else:
-            data_dir = Path(data_dir)
-            xml_names = data_dir.glob("*.xml")
-        for name in xml_names:
-            if not os.path.exists(
-                compose_musescore_file_path(str(name), self._cfg.musescore_dir)
-            ):
+    def _find_mscx_files(self, filenames: List[PurePath]):
+        for name in filenames:
+            p = name.relative_to(self._cfg.musescore_dir).with_suffix(
+                f".{MUSESCORE_FILE_EXTENSION}"
+            )
+            if not p.exists():
                 perr(f"\nNo mscx was found for file {name}")

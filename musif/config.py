@@ -22,7 +22,7 @@ FILE_LOG_LEVEL = "file_level"
 CONSOLE_LOG_LEVEL = "console_level"
 METADATA_DIR = "metadata_dir"
 METADATA_ID_COL = "metadata_id_col"
-DATA_DIR = "data_dir"
+XML_DIR = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
 PARALLEL = "parallel"
@@ -62,7 +62,7 @@ _CONFIG_FALLBACK = {
     },
     METADATA_DIR: "metadata",
     METADATA_ID_COL: "FileName",
-    DATA_DIR: ".",
+    XML_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
     PARALLEL: False,
@@ -134,7 +134,7 @@ class Configuration:
         self.metadata_id_col = config_data.get(
             METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL]
         )
-        self.data_dir = config_data.get(DATA_DIR, _CONFIG_FALLBACK[DATA_DIR])
+        self.xml_dir = config_data.get(XML_DIR, _CONFIG_FALLBACK[XML_DIR])
         self.musescore_dir = config_data.get(
             MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR]
         )
@@ -209,7 +209,7 @@ class Configuration:
             },
             METADATA_DIR: self.metadata_dir,
             METADATA_ID_COL: self.metadata_id_col,
-            DATA_DIR: self.data_dir,
+            XML_DIR: self.xml_dir,
             MUSESCORE_DIR: self.musescore_dir,
             CACHE_DIR: self.cache_dir,
             PARALLEL: self.parallel,
