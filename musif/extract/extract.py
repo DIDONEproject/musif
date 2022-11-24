@@ -244,7 +244,7 @@ class FeaturesExtractor:
         """
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
-        if self._cfg.xml_dir is not None:
+        if self._cfg.musescore_dir is not None:
             filenames = find_files(
                 MUSESCORE_FILE_EXTENSION,
                 self._cfg.musescore_dir,
@@ -256,21 +256,22 @@ class FeaturesExtractor:
                     perr(
                         f"\nMusescore files are needed for the following features {C.REQUIRE_MSCORE}, but cannot find musescore files. Those features won't be computed!"
                     )
-                filenames = find_files(
-                    MUSICXML_FILE_EXTENSION,
-                    self._cfg.xml_dir,
-                    limit_files=self.limit_files,
-                    check_file=self.check_file,
-                )
-            if len(filenames) == 0:
-                filenames = find_files(
-                    CACHE_FILE_EXTENSION,
-                    self._cfg.cache_dir,
-                    limit_files=self.limit_files,
-                    check_file=self.check_file,
-                )
-            if len(filenames) == 0:
-                raise FileNotFoundError("No file found for extracting features!")
+        if self._cfg.xml_dir is not None and len(filenames) == 0:
+            filenames = find_files(
+                MUSICXML_FILE_EXTENSION,
+                self._cfg.xml_dir,
+                limit_files=self.limit_files,
+                check_file=self.check_file,
+            )
+        if self._cfg.cache_dir is not None and len(filenames) == 0:
+            filenames = find_files(
+                CACHE_FILE_EXTENSION,
+                self._cfg.cache_dir,
+                limit_files=self.limit_files,
+                check_file=self.check_file,
+            )
+        if len(filenames) == 0:
+            raise FileNotFoundError("No file found for extracting features!")
 
         score_df = self._process_corpus(filenames)
         return score_df
