@@ -22,8 +22,9 @@ from .constants import *
 from ...constants import DATA_PART_ABBREVIATION
 
 
-
-def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+def update_part_objects(
+    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+):
 
     notes = part_data[DATA_NOTES]
 
@@ -31,22 +32,28 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
 
     notes_per_degree = get_notes_per_degree(str(key), notes)
 
-
     all_degrees = sum(value for value in notes_per_degree.values())
 
     for key, value in notes_per_degree.items():
 
         part_features[DEGREE_COUNT.format(key=key)] = value
 
-        part_features[DEGREE_PER.format(key=key)] = value / all_degrees if all_degrees != 0 else 0
+        part_features[DEGREE_PER.format(key=key)] = (
+            value / all_degrees if all_degrees != 0 else 0
+        )
 
 
-def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
+def update_score_objects(
+    score_data: dict,
+    parts_data: List[dict],
+    cfg: Configuration,
+    parts_features: List[dict],
+    score_features: dict,
+):
     parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
 
     if len(parts_data) == 0:
         return
-            
 
     key = score_data[DATA_KEY]
 
@@ -72,8 +79,9 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
         score_features[get_score_feature(DEGREE_COUNT.format(key=key))] = value
 
-        score_features[get_score_feature(DEGREE_PER.format(key=key))] = value / all_score_degrees if all_score_degrees != 0 else 0
-
+        score_features[get_score_feature(DEGREE_PER.format(key=key))] = (
+            value / all_score_degrees if all_score_degrees != 0 else 0
+        )
 
     for part_data, parts_features in zip(parts_data, parts_features):
 
@@ -85,30 +93,29 @@ def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configur
 
         for feature_name in parts_features:
 
-            if re.match(degree_count_pattern, feature_name) or re.match(degree_per_pattern, feature_name):
+            if re.match(degree_count_pattern, feature_name) or re.match(
+                degree_per_pattern, feature_name
+            ):
 
-                part_feature=get_part_feature(part, feature_name)
+                part_feature = get_part_feature(part, feature_name)
 
                 if part_feature in score_features:
 
-                    score_features[part_feature] = mean([score_features[part_feature], parts_features[feature_name]])
+                    score_features[part_feature] = mean(
+                        [score_features[part_feature], parts_features[feature_name]]
+                    )
 
                 else:
 
                     score_features[part_feature] = parts_features[feature_name]
 
 
-
 def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
 
     notes_per_degree = {
-
         to_full_degree(degree, accidental): 0
-
         for accidental in ["", "sharp", "flat"]
-
         for degree in [1, 2, 3, 4, 5, 6, 7]
-
     }
 
     all_degrees = 0
@@ -124,8 +131,6 @@ def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
     return notes_per_degree
 
 
-
 def to_full_degree(degree: Union[int, str], accidental: str) -> str:
 
     return f"{ACCIDENTAL_ABBREVIATION[accidental]}{degree}"
-

@@ -20,14 +20,15 @@ class CannotResurrectObject(Exception):
             f"Cannot resurrect object {repr(obj)}, please define a `resurrect_reference` field"
         )
 
+
 class SmartCacheModified(Exception):
     """Exception raised when trying to modify the reference of a `SmartCache` object"""
 
     def __init__(self, obj, attr):
-        super().__init__(
-            f"Cannot modify SmartCache {obj}, via attribute {attr}"
-        )
-        
+        super().__init__(f"Cannot modify SmartCache {obj}, via attribute {attr}")
+
+
 class FeatureError(RuntimeError):
     """Exception raised when computing one of the features modules"""
+
     pass

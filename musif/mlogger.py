@@ -5,6 +5,7 @@ from ctypes import c_wchar_p, c_int
 
 # TODO: check which modules are really needed
 
+
 class MPLogger:
     def __init__(self, logger_name, log_level) -> None:
         self._logger_name = logger_name
@@ -18,8 +19,7 @@ class MPLogger:
             logger_name = self._ctx.Value(c_wchar_p, self._logger_name)
             logger_level = self._ctx.Value(c_wchar_p, self._log_level)
             self._proc = self._ctx.Process(
-                target=self._log,
-                args=(self._event_queue, logger_name, logger_level)
+                target=self._log, args=(self._event_queue, logger_name, logger_level)
             )
 
         self._proc.start()

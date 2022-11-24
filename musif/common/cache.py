@@ -498,18 +498,23 @@ def isinstance(obj1, cls):
     if type(obj1) is SmartModuleCache:
         t = obj1.cache["_type"]
         return builtins.issubclass(t, cls)
-    return builtins.isinstance(obj1, cls)
+    else:
+        return builtins.isinstance(obj1, cls)
 
 
-
-def issubclass(obj1, cls):
+def hasattr(obj1, attr):
     """
-    Check if obj1 is subclass of `cls`. This function grants that `SmartModuleCache`
-    objects are checked against their reference objects.
+    Check if `obj1` has `attr`. This function grants that `SmartModuleCache` objects are
+    checked against their cache or reference objects.
     """
     if type(obj1) is SmartModuleCache:
-        obj1 = obj1.cache["_type"]
-    return builtins.issubclass(obj1, cls)
+        ref = obj1.cache["_reference"].reference
+        if ref is not None:
+            return builtins.hasattr(ref, attr)
+        else:
+            return attr in obj1.cache
+    else:
+        return builtins.hasattr(obj1, attr)
 
 
 def wrap_module_objects(

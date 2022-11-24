@@ -1,8 +1,13 @@
 import logging
 from logging import Logger, getLogger
 
-from musif.common.constants import LEVEL_CRITICAL, LEVEL_DEBUG, LEVEL_ERROR, LEVEL_INFO, \
-    LEVEL_WARNING
+from musif.common.constants import (
+    LEVEL_CRITICAL,
+    LEVEL_DEBUG,
+    LEVEL_ERROR,
+    LEVEL_INFO,
+    LEVEL_WARNING,
+)
 from musif.common._utils import colorize
 from musif.config import LOGGER_NAME
 
@@ -13,8 +18,10 @@ Functionts starting with 'l' are using for logging, while function starting by
 in the configuration file.
 """
 
+
 def linfo(text: str, exc_info: bool = False) -> None:
     llog(text, logger(), LEVEL_INFO, exc_info)
+
 
 def ldebug(text: str, exc_info: bool = False) -> None:
     llog(text, logger(), LEVEL_DEBUG, exc_info)
