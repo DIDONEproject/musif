@@ -432,7 +432,7 @@ class FeaturesExtractor:
                 mscore = ms3.utils.get_musescore("auto")
             if mscore is None:
                 raise RuntimeError(
-                    "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exev`"
+                    "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exec`"
                 )
             tmp_d, tmp_path = mkstemp(suffix=MUSICXML_FILE_EXTENSION)
             process = [mscore, "-fo", tmp_path, filename]
