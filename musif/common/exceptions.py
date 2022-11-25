@@ -8,8 +8,8 @@ class MissingFileError(Exception):
 class ParseFileError(Exception):
     """Exception informing that an file couldn't be parsed with the specified attributes."""
 
-    def __init__(self, file_path: str, reason: str):
-        super().__init__(f"Parse error with file '{file_path}': {reason}")
+    def __init__(self, file_path: str):
+        super().__init__(f"Parse error with file '{file_path}'")
 
 
 class CannotResurrectObject(Exception):

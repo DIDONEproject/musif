@@ -4,10 +4,10 @@ import os
 import pickle
 import re
 import subprocess
-from subprocess import DEVNULL
 from math import floor
 from os import path
 from pathlib import Path, PurePath
+from subprocess import DEVNULL
 from tempfile import mkstemp
 from typing import List, Optional, Tuple, Union
 
@@ -78,7 +78,8 @@ def parse_filename(
             score = score.expandRepeats()
         _cache.put(file_path, score)
     except Exception as e:
-        raise ParseFileError(file_path, str(e))
+        print(file_path)
+        raise ParseFileError(file_path) from e
     return score
 
 
@@ -110,14 +111,17 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
         _cache.put(file_path, harmonic_analysis)
     except Exception as e:
         harmonic_analysis = None
-        raise ParseFileError(file_path, str(e)) from e
+        print(file_path)
+        raise ParseFileError(file_path) from e
     return harmonic_analysis
 
 
 # TODO: document check_file (or, IMHO, make private) and limit_files
 def find_files(
-        extension: str, obj: Union[str, List[Union[str, PurePath]]], limit_files:
-        List[str] = None, check_file: str = None
+    extension: str,
+    obj: Union[str, List[Union[str, PurePath]]],
+    limit_files: List[str] = None,
+    check_file: str = None,
 ) -> List[PurePath]:
     """Extracts the paths to files given an extension
 
@@ -146,6 +150,8 @@ def find_files(
     ValueError
       If the provided string is neither a directory nor a file path
     """
+    if obj is None:
+        return []
     obj = Path(obj)
     if not obj.exists():
         raise ValueError(f"File {obj} doesn't exist")
@@ -155,7 +161,8 @@ def find_files(
         else:
             ret = sorted(obj.glob(f"*{extension}"))
         if limit_files is not None:
-            return [f for f in ret if f.name in limit_files]
+            limit_stems = set(map(lambda x: Path(x).stem, limit_files))
+            return [f for f in ret if f.stem in limit_stems]
         else:
             return ret
     elif obj.is_file() and obj.suffix == f"{extension}":
@@ -244,32 +251,36 @@ class FeaturesExtractor:
         """
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
-        if self._cfg.musescore_dir is not None:
-            filenames = find_files(
-                MUSESCORE_FILE_EXTENSION,
-                self._cfg.musescore_dir,
-                limit_files=self.limit_files,
-                check_file=self.check_file,
-            )
-            if len(filenames) == 0:
-                if self._cfg.is_requested_musescore_file():
-                    perr(
-                        f"\nMusescore files are needed for the following features {C.REQUIRE_MSCORE}, but cannot find musescore files. Those features won't be computed!"
-                    )
-        if self._cfg.xml_dir is not None and len(filenames) == 0:
-            filenames = find_files(
-                MUSICXML_FILE_EXTENSION,
-                self._cfg.xml_dir,
-                limit_files=self.limit_files,
-                check_file=self.check_file,
-            )
-        if self._cfg.cache_dir is not None and len(filenames) == 0:
+        xml_filenames = find_files(
+            MUSICXML_FILE_EXTENSION,
+            self._cfg.xml_dir,
+            limit_files=self.limit_files,
+            check_file=self.check_file,
+        )
+        musescore_filenames = find_files(
+            MUSESCORE_FILE_EXTENSION,
+            self._cfg.musescore_dir,
+            limit_files=self.limit_files,
+            check_file=self.check_file,
+        )
+        if len(musescore_filenames) == 0:
+            if self._cfg.is_requested_musescore_file():
+                perr(
+                    f"\nMusescore files are needed for the following features {C.REQUIRE_MSCORE}, but cannot find musescore files. Those features won't be computed!"
+                )
+        if len(xml_filenames) > 0:
+            filenames = xml_filenames
+        elif len(musescore_filenames) > 0:
+            filenames = musescore_filenames
+        elif self._cfg.cache_dir is not None:
             filenames = find_files(
                 CACHE_FILE_EXTENSION,
                 self._cfg.cache_dir,
                 limit_files=self.limit_files,
                 check_file=self.check_file,
             )
+        else:
+            filenames = []
         if len(filenames) == 0:
             raise FileNotFoundError("No file found for extracting features!")
 
@@ -327,9 +338,7 @@ class FeaturesExtractor:
             score_data,
         ) = self._init_score_processing(filename)
 
-        score_features = self.extract_modules(
-            FEATURES_MODULES, score_data, parts_data
-        )
+        score_features = self.extract_modules(FEATURES_MODULES, score_data, parts_data)
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
 
@@ -437,20 +446,25 @@ class FeaturesExtractor:
             if not isinstance(mscore, (list, tuple)):
                 # this is needed to allow stuffs like `xvfb-run -a mscore`
                 mscore = (mscore,)
-            tmp_d, tmp_path = mkstemp(suffix=MUSICXML_FILE_EXTENSION)
+            tmp_d, tmp_path = mkstemp(
+                prefix=filename.stem, suffix=MUSICXML_FILE_EXTENSION
+            )
             process = mscore + ("-fo", tmp_path, filename)
-            res = subprocess.run(process) #, stdout=DEVNULL, stderr=DEVNULL)
+            res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
             if res.returncode != 0:
                 raise RuntimeError(
                     f"Error while converting musescore file to xml: {filename}"
                 )
+        else:
+            tmp_path = filename
         score = parse_filename(
             tmp_path,
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
         )
         score.numeric_tempo = extract_numeric_tempo(tmp_path)
-        os.remove(tmp_path)
+        if filename.suffix == MUSESCORE_FILE_EXTENSION:
+            os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts)
 
@@ -474,7 +488,10 @@ class FeaturesExtractor:
                 lwarn(
                     f"No parts were found for file {filename} and filter: {','.join(self._cfg.parts_filter)}"
                 )
-            if self._cfg.is_requested_musescore_file():
+            if (
+                self._cfg.is_requested_musescore_file()
+                and self._cfg.musescore_dir is not None
+            ):
                 data_musescore = self._get_harmony_data(
                     self._cfg.musescore_dir
                     / filename.with_suffix(MUSESCORE_FILE_EXTENSION).name
@@ -532,7 +549,9 @@ class FeaturesExtractor:
     def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:
         if not filename.exists():
             lerr(f"Musescore file was not found for {filename} file!")
-            lerr(f"No harmonic analysis will be extracted for {filename}")
+            lerr(
+                f"These features won't be extracted for {filename}: {C.REQUIRE_MSCORE}"
+            )
         else:
             try:
                 data_musescore = parse_musescore_file(
