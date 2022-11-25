@@ -9,6 +9,7 @@ from musif.config import Configuration
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 
 
+
 def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
     """
         Returns abbreviation name for a specific part based on the sound name
@@ -49,8 +50,12 @@ def extract_sound(part: Part, config: Configuration) -> str:
             sound_name = _replace_naming_exceptions(sound_name, part)
             sound_name = sound_name if sound_name[-1] != 's' else sound_name[:-1]
     else:
-        for instrument in instrument.instrumentSound.split('.')[::-1]:
-            if 'flat' not in instrument and 'sharp' not in instrument and len(instrument) > 2:
+        for instrument in instrument.instrumentSound.split(".")[::-1]:
+            if (
+                "flat" not in instrument
+                and "sharp" not in instrument
+                and len(instrument) > 2
+            ):
                 sound_name = instrument
                 break
     if sound_name:
@@ -64,20 +69,23 @@ def extract_sound(part: Part, config: Configuration) -> str:
 def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config: Configuration) -> Tuple[str, str, int]:
     if sound not in config.sound_to_abbreviation:
         abbreviation = part.partAbbreviation  # may contain I, II or whatever
-        abbreviation_parts = abbreviation.split(' ')
-        abbreviation = abbreviation_parts[0].lower().replace(
-            '.', '') + (abbreviation_parts[1] if len(abbreviation_parts) > 1 else '')
+        abbreviation_parts = abbreviation.split(" ")
+        abbreviation = abbreviation_parts[0].lower().replace(".", "") + (
+            abbreviation_parts[1] if len(abbreviation_parts) > 1 else ""
+        )
     else:
         abbreviation = config.sound_to_abbreviation[sound]
     part_roman_number = _get_part_roman_number(
         part) or _get_part_roman_number_by_position(part, parts)
     part_number = fromRoman(part_roman_number) if part_roman_number else 0
-    return abbreviation + (part_roman_number or ''), abbreviation, part_number
+    return abbreviation + (part_roman_number or ""), abbreviation, part_number
 
 
 def _get_part_roman_number(part: Part) -> Optional[str]:
     for number in ROMAN_NUMERALS_FROM_1_TO_20:
-        if part.partAbbreviation.endswith(f'. {number}') or part.partName.endswith(f' {number}'):
+        if part.partAbbreviation.endswith(f". {number}") or part.partName.endswith(
+            f" {number}"
+        ):
             return number
     return None
 
@@ -100,9 +108,9 @@ def _replace_naming_exceptions(sound: str, part: Part) -> str:
             sound = 'horn'
     if 'bass' == sound:  # determines if voice or string instrument
         if len(part.lyrics()) == 0:
-            sound = 'basso continuo'
-    if 'french' in sound and 'horn' in sound:
-        sound = 'horn'
-    if 'cello' in sound and 'bass' in part.partName.lower():
-        sound = 'basso continuo'
+            sound = "basso continuo"
+    if "french" in sound and "horn" in sound:
+        sound = "horn"
+    if "cello" in sound and "bass" in part.partName.lower():
+        sound = "basso continuo"
     return sound

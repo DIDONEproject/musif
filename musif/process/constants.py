@@ -1,13 +1,15 @@
 from musif.extract.basic_modules.file_name.constants import *
 from musif.extract.basic_modules.metadata.constants import *
-from musif.extract.basic_modules.scoring.constants import (INSTRUMENTATION,
-                                                           ROLE_TYPE, SCORING,
-                                                           VOICES)
+from musif.extract.basic_modules.scoring.constants import (
+    INSTRUMENTATION,
+    ROLE_TYPE,
+    SCORING,
+    VOICES,
+)
 from musif.extract.basic_modules.composer.constants import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import HARMONY_AVAILABLE
-from musif.extract.features.key.constants import (KEY, KEY_SIGNATURE,
-                                                  KEY_SIGNATURE_TYPE)
+from musif.extract.features.key.constants import KEY, KEY_SIGNATURE, KEY_SIGNATURE_TYPE
 from musif.extract.features.prefix import get_part_prefix
 
 
@@ -16,13 +18,13 @@ PRESENCE='Presence_of'
 
 '''Dictionary to assing label prefix to columns that need to bein the _labels.csv file to run analysis.'''
 label_by_col = {
-        "Basic_passion": "Label_BasicPassion",
-        "PassionA": "Label_PassionA",
-        "PassionB": "Label_PassionB",
-        "Value": "Label_Value",
-        "Value2": "Label_Value2",
-        "Time": "Label_Time",
-    }
+    "Basic_passion": "Label_BasicPassion",
+    "PassionA": "Label_PassionA",
+    "PassionB": "Label_PassionB",
+    "Value": "Label_Value",
+    "Value2": "Label_Value2",
+    "Time": "Label_Time",
+}
 
 '''List of prefixes for singers used to find voices columns'''
 voices_list = ['sop', 'ten', 'alt', 'bar', 'bbar', 'bass']

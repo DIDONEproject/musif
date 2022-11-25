@@ -79,8 +79,23 @@ def update_part_objects(
                 if name in ["fp", "pf"]:
                     new_dyn = get_dynamic_numeric(name[0])
                     if new_dyn != last_dyn:
-                        (beats_section, dyn_grad, last_dyn, first_silence, dyn_mean_weighted,
-                        ) = calculate_dynamics(dynamics,beats_section,dyn_mean_weighted,dyn_grad,last_dyn,number_of_beats,element,beats_timesignature,new_dyn)
+                        (
+                            beats_section,
+                            dyn_grad,
+                            last_dyn,
+                            first_silence,
+                            dyn_mean_weighted,
+                        ) = calculate_dynamics(
+                            dynamics,
+                            beats_section,
+                            dyn_mean_weighted,
+                            dyn_grad,
+                            last_dyn,
+                            number_of_beats,
+                            element,
+                            beats_timesignature,
+                            new_dyn,
+                        )
                     name = name[1]
                 if name == "other-dynamics":
                     file_name = score_data["file"]

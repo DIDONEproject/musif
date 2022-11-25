@@ -6,37 +6,45 @@ from typing import List, Optional
 from musif.extract.constants import DATA_PART_ABBREVIATION, VOICES_LIST
 
 
-def _filter_parts_data(parts_data: List[dict], parts_filter: Optional[List[str]]) -> List[dict]:
+def _filter_parts_data(
+    parts_data: List[dict], parts_filter: Optional[List[str]]
+) -> List[dict]:
 
     if parts_filter is None:
         return parts_data
 
-    if 'voice' in parts_filter:
-        parts_filter.remove('voice')
+    if "voice" in parts_filter:
+        parts_filter.remove("voice")
         parts_filter.extend(VOICES_LIST)
 
     parts_filter_set = set(parts_filter)
 
-    return [part_data for part_data in parts_data if part_data[DATA_PART_ABBREVIATION] in parts_filter_set]
+    return [
+        part_data
+        for part_data in parts_data
+        if part_data[DATA_PART_ABBREVIATION] in parts_filter_set
+    ]
 
 
-def _part_matches_filter(part_abbreviation: str, parts_filter: Optional[List[str]]) -> bool:
+def _part_matches_filter(
+    part_abbreviation: str, parts_filter: Optional[List[str]]
+) -> bool:
 
     if parts_filter is None:
         return True
     parts_filter_set = set(parts_filter)
     return part_abbreviation in parts_filter_set
 
+
 def _mix_data_with_precedent_data(prev_features: dict, new_features: dict) -> None:
-
     for key in new_features.keys():
-        if 'max' in key.lower() or 'highest' in key.lower():
+        if "max" in key.lower() or "highest" in key.lower():
             prev_features[key] = max(prev_features[key], new_features[key])
-
-        elif 'min' in key.lower() or 'lowest' in key.lower():
-            prev_features[key] = max(prev_features[key], new_features[key])
-
-        if type(new_features[key])==str:
             continue
 
-        prev_features[key] = mean([prev_features[key], new_features[key]])
+        elif "min" in key.lower() or "lowest" in key.lower():
+            prev_features[key] = min(prev_features[key], new_features[key])
+            continue
+
+        if type(new_features[key]) != str:
+            prev_features[key] = new_features[key] if prev_features[key] is None else mean([prev_features[key], new_features[key]])
