@@ -42,7 +42,6 @@ def update_part_objects(
     part = part_data[DATA_PART]
     (
         notes,
-        tied_notes,
         measures,
         sounding_measures,
         notes_and_rests,

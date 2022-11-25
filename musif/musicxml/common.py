@@ -101,35 +101,7 @@ def get_notes_and_measures(
     original_notes = [note for measure in measures for note in measure.notes if
                       isinstance(note, Note)]
     notes_and_rests = [note for measure in measures for note in measure.notesAndRests]
-    tied_notes = _tie_notes(original_notes)
-    return original_notes, tied_notes, measures, sounding_measures, notes_and_rests
-
-
-def _tie_notes(original_notes: List[Note]) -> List[Note]:
-    tied_notes = []
-    for note in original_notes:
-        if not isinstance(note, Note):
-            pass
-        last_note = tied_notes[-1] if len(tied_notes) > 0 else None
-        if _must_be_tied(note, last_note):
-            tied_notes[-1].duration.quarterLength += note.duration.quarterLength
-        else:
-            tied_notes.append(note)
-    return tied_notes
-
-
-def _must_be_tied(elem, last_elem) -> bool:
-    if last_elem is None:
-        return False
-    if not isinstance(elem, Note):
-        return False
-    if elem.tie is None:
-        return False
-    if elem.tie.type != "stop" and elem.tie.type != "continue":
-        return False
-    if not isinstance(last_elem, Note):
-        return False
-    return True
+    return original_notes, measures, sounding_measures, notes_and_rests
 
 
 def _separate_info_in_two_parts(score, final_parts, part):
