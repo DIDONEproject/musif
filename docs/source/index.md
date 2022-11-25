@@ -1,0 +1,28 @@
+# Welcome to musiF's documentation!
+
+```{toctree}
+---
+maxdepth: 2
+caption: Contents
+---
+
+Tutorial
+Workflow
+Configuration
+Custom features
+Caching
+Examples
+API
+
+```
+
+## Indices and tables
+
+* [](genindex)
+* [](modindex)
+* [](search)
+
+## Build docs by hand
+* `pipx install sphinx`
+* `pipx inject sphinx myst_parser`
+* `make html`

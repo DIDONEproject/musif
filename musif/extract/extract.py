@@ -51,22 +51,23 @@ def parse_filename(
     the file has already been parsed, it will be loaded from cache instead of
     processing it again. Split a part in different parts if the instrument
     family is in keywords argument and expands repeats if indicated.
-       Parameters
-       ----------
-       file_path: str
-        A path to a music xml path.
-       split_keywords: List[str]
-         A lists of keywords based on music21 instrument sound names to split in different parts.
-       expand_repeats: bool
-         Determines whether to expand or not the repetitions. Default value is False.
-       Returns
-       -------
-       resp : Score
-         The score saved in cache or the new score parsed with the necessary parts split.
-       Raises
-       ------
-         ParseFileError
-           If the xml file can't be parsed for any reason.
+
+    Parameters
+    ----------
+    file_path: str
+    A path to a music xml path.
+    split_keywords: List[str]
+     A lists of keywords based on music21 instrument sound names to split in different parts.
+    expand_repeats: bool
+     Determines whether to expand or not the repetitions. Default value is False.
+    Returns
+    -------
+    resp : Score
+     The score saved in cache or the new score parsed with the necessary parts split.
+    Raises
+    ------
+     ParseFileError
+       If the xml file can't be parsed for any reason.
     """
     score = _cache.get(file_path)
     if score is not None:
@@ -88,20 +89,21 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     This function parses a musescore file and returns a pandas dataframe. If the file
     has already been parsed, it will be loaded from cache instead of processing it
     again.
-        Parameters
-        ----------
-        file_path: str
-            A path to a music mscx path.
-        expand_repeats: bool
-            Determines whether to expand or not the repetitions. Default value is False.
-        Returns
-        -------
-        resp : pd.DataFrame
-            The score saved in cache or the new score parsed in the form of a dataframe.
-        Raises
-        ------
-        ParseFileError
-            If the musescore file can't be parsed for any reason.
+        
+    Parameters
+    ----------
+    file_path: str
+        A path to a music mscx path.
+    expand_repeats: bool
+        Determines whether to expand or not the repetitions. Default value is False.
+    Returns
+    -------
+    resp : pd.DataFrame
+        The score saved in cache or the new score parsed in the form of a dataframe.
+    Raises
+    ------
+    ParseFileError
+        If the musescore file can't be parsed for any reason.
     """
     harmonic_analysis = _cache.get(file_path)
     if harmonic_analysis is not None:
@@ -239,9 +241,11 @@ class FeaturesExtractor:
         """
         Extracts features given in the configuration data getting a file, directory or several file paths,
         returning a DataFrame containing musical features.
+
         Returns
         ------
-            Score dataframe with the extracted features of given scores. For one score only, a DataFrem is returned with one row only.
+        Score dataframe with the extracted features of given scores. For one score only, a DataFrem is returned with one row only.
+
         Raises
         ------
         ParseFileError
