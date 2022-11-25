@@ -180,7 +180,6 @@ def update_score_objects(
         features[get_part_feature(part, DYNABRUPTNESS)] = part_features[DYNABRUPTNESS]
         dyn_abruptness.append(part_features[DYNABRUPTNESS])
 
-    # remove zeros from mean calculation
     dyn_means = [i for i in dyn_means if i != 0.0]
     dyn_means_weighted = [i for i in dyn_means_weighted if i != 0.0]
     dyn_grads = [i for i in dyn_grads if i != 0.0]

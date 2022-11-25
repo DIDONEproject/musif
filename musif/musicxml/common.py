@@ -163,11 +163,16 @@ def _separate_info_in_two_parts(score, final_parts, part):
                             if e not in p.elements[num_measure].elements
                         )
     for num, p in enumerate(parts_splitted, 1):
-        p_copy = part  # copy.deepcopy(part)
-        p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
-        p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
-        p_copy.elements = p.elements
-        final_parts.append(p_copy)
+        p.id = part.id + " " + toRoman(num)  # only I or II
+        p.partName = part.partName + " " + toRoman(num)  # only I or II
+        # p.elements = p.elements
+        final_parts.append(p)
+
+        # p_copy = copy.deepcopy(part)
+        # p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
+        # p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
+        # p_copy.elements = p.elements
+        # final_parts.append(p_copy)
     score.remove(part)
 
 
