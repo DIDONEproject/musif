@@ -27,8 +27,8 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
 ]
-autosummary_generate = True
-autosummary_imported_members = True
+# autosummary_generate = True
+# autosummary_imported_members = True
 
 templates_path = ["_templates"]
 autodoc_mock_imports = [
