@@ -433,7 +433,8 @@ class FeaturesExtractor:
             )
         return score_features
 
-    def _load_m21_objects(self, filename: PurePath):
+    def _load_m21_objects(self, filename: Union[str, PurePath]):
+        filename = Path(filename)
         if filename.suffix == MUSESCORE_FILE_EXTENSION:
             # convert to xml in a temporary file
             mscore = self._cfg.mscore_exec
