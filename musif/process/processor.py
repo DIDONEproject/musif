@@ -291,8 +291,9 @@ class DataProcessor:
 
     def delete_previous_items(self) -> None:
         """Deletes items from 'errors.csv' file in case they were not extracted properly"""
+        # TODO: this is definitely ugly
         pinfo("\nDeleting items with errors...")
-        errors_file = r"./errors.csv"
+        errors_file = r"./internal_data/errors.csv"
         if os.path.exists(errors_file):
             errors = pd.read_csv(
                 errors_file, low_memory=False, encoding_errors="replace", header=0
