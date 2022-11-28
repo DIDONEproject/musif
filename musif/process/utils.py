@@ -195,13 +195,9 @@ def log_errors_and_shape(
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
     pinfo("\nDeleting not useful columns...")
     for inst in config[INSTRUMENTS_TO_DELETE]:
-        # TODO: Check this for Vn columns and all opther instrumetns
-        data.drop(
-            [i for i in data.columns if "Part" + inst in i or inst + "_" in i],
-            axis=1,
-            inplace=True,
-        )
-
+        data.drop([i for i in data.columns if 'Part' +
+                  inst in i or inst+'_' in i], axis=1, inplace=True)
+    
     for substring in config[SUBSTRING_TO_DELETE]:
         data.drop([i for i in data.columns if substring in i], axis=1, inplace=True)
 
@@ -229,12 +225,8 @@ def delete_columns(data: DataFrame, config: dictConfig) -> None:
     if all(item in data.columns for item in presence):
         data.drop(presence, axis=1, inplace=True, errors="ignore")
 
-    # Sound features
-    data.drop(
-        [i for i in data.columns if i.startswith("Sound") and not "Voice" in i],
-        axis=1,
-        inplace=True,
-    )
+    data.drop([i for i in data.columns if i.startswith('Sound')
+              and not 'Voice' in i], axis=1, inplace=True)
 
     delete_exceptions(data)
 
@@ -252,13 +244,9 @@ def delete_exceptions(data) -> None:
     if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
         data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis=1, inplace=True)
 
-    # remove empty voices
-    empty_voices = [
-        col
-        for col in data.columns
-        if col.startswith(tuple(voices_list_prefixes))
-        and all(data[col].isnull().values)
-    ]
+    # Remove empty voices
+    empty_voices = [col for col in data.columns if col.startswith(
+        tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
     if empty_voices:
         data.drop(empty_voices, axis=1, inplace=True)
 
