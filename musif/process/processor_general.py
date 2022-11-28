@@ -13,7 +13,7 @@ from musif.common._utils import read_dicts_from_csv
 from musif.common.sort import sort_columns
 from musif.config import PostProcess_Configuration
 from musif.extract.constants import WINDOW_ID
-from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL
+from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL, ID
 from musif.extract.basic_modules.scoring.constants import (
     INSTRUMENTATION,
     ROLE_TYPE,
@@ -49,6 +49,8 @@ from musif.process.utils import (
     split_passion_A,
 )
 
+LABELS_FILE = "Passions.csv"
+
 
 class DataProcessor:
     """Processor class that treats columns and information of a DataFrame
@@ -80,8 +82,6 @@ class DataProcessor:
         Deletes columns with no information, convertes 0 to nan and depurates data
     group_columns()
         Groups thos columns related to Keys, Key_Modulatory and Degree for agregated analysis
-    merge_voices()
-        Joins every voice part into common columns startung with 'SoundVoice'. Also fixes duetos.
     unbundle_instrumentation()
         Separates 'Instrumentation' column into several Presence_ columns for every instrument present in Instrumentation.
     delete_undesired_columns(**kwargs)
@@ -170,15 +170,12 @@ class DataProcessor:
 
         pinfo("\nPreprocessing data...")
         self.preprocess_data()
-        pinfo("\nScanning info looking for missing data...")
-        self._scan_dataframe()
+        if self._post_config.delete_files_without_harmony:
+            self.delete_files_without_harmony()
 
         if self._post_config.unbundle_instrumentation:
             pinfo('\nSeparating "Instrumentation" column...')
             self.unbundle_instrumentation()
-
-        if self._post_config.merge_voices:
-            self.merge_voices()
 
         self.delete_undesired_columns()
 
@@ -188,12 +185,19 @@ class DataProcessor:
         self._final_data_processing()
         return self.data
 
+    def delete_files_without_harmony(self):
+            if HARMONY_AVAILABLE in self.data:
+                number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
+                pinfo(
+                    f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted."
+                )
+                pinfo(
+                    f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}"
+                )
+
     def assign_labels(self) -> None:
-        """Crosses passions labels from Passions.csv file with the DataFrame so every row (aria)
-        gets assigned to its own Label
-        """
         passions = read_dicts_from_csv(
-            os.path.join(self.internal_data_dir, "Passions.csv")
+            os.path.join(self.internal_data_dir, LABELS_FILE)
         )
 
         data_by_aria_label = {
@@ -385,7 +389,6 @@ class DataProcessor:
         for part in self._post_config.instruments_to_keep:
             join_part_degrees(total_degrees, get_part_prefix(part), self.data)
         join_part_degrees(total_degrees, get_sound_prefix("voice"), self.data)
-        # self.data.drop(total_degrees, axis = 1, inplace=True)
 
     def _join_degrees_relative(self) -> None:
         total_degrees = [
@@ -399,32 +402,10 @@ class DataProcessor:
         join_part_degrees(
             total_degrees, get_sound_prefix("voice"), self.data, sufix="_relative"
         )
-        # self.data.drop(total_degrees, axis = 1, inplace=True)
 
-    def _scan_dataframe(self):
-        self.composer_counter = []
-        self.novoices_counter = []
-        self._scan_composers()
-        self._scan_voices()
-        if self._post_config.delete_files_without_harmony:
-            if HARMONY_AVAILABLE in self.data:
-                number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
-                pinfo(
-                    f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted."
-                )
-                pinfo(
-                    f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}"
-                )
-                # self.data = self.data[self.data[HARMONY_AVAILABLE] != 0]
-
-    # def _scan_voices(self):
-    #     for i, voice in enumerate(self.data[VOICES].values):
-    #         if pd.isnull(voice):
-    #             self.novoices_counter.append(self.data[FILE_NAME][i])
-    #             self.data.drop(i, axis=0, inplace=True)
-
+    
     def _final_data_processing(self) -> None:
-        self.data.sort_values([ARIA_ID, WINDOW_ID], inplace=True)
+        self.data.sort_values([ID, WINDOW_ID], inplace=True)
         self.replace_nans()
 
         self.data = self._check_columns_type(self.data)
