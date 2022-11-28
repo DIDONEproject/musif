@@ -11,10 +11,10 @@ from musif.common._constants import CSV_DELIMITER, ENCODING
 from musif.common.constants import COLOR_SEQ, COLORS, RESET_SEQ
 
 
-def get_ariaid(file_name: str, return_char_start = False) -> str:
+def get_ariaid(file_name: str, return_char_start=False) -> str:
     aria_id_end_idx = file_name.rfind("]")
     aria_id_start_idx = file_name.rfind("[", 0, aria_id_end_idx - 1) + 1
-    aria_id = file_name[aria_id_start_idx: aria_id_end_idx]
+    aria_id = file_name[aria_id_start_idx:aria_id_end_idx]
     if return_char_start:
         return aria_id, aria_id_start_idx
     return aria_id
@@ -22,12 +22,14 @@ def get_ariaid(file_name: str, return_char_start = False) -> str:
 
 def get_file_name(file_path: str) -> str:
     file_basename = path.basename(file_path)
-    file_basename = path.join('tests',file_path)
-    extension_pos = file_basename.rfind('.')
+    file_basename = path.join("tests", file_path)
+    extension_pos = file_basename.rfind(".")
     return file_basename if extension_pos < 0 else file_basename[extension_pos]
 
 
-def write_object_to_json_file(obj: Union[dict, list], json_file_path: str, indent: int = 4):
+def write_object_to_json_file(
+    obj: Union[dict, list], json_file_path: str, indent: int = 4
+):
     with open(json_file_path, "w", encoding=ENCODING) as json_file:
         json.dump(obj, json_file, indent=indent)
 
@@ -80,14 +82,16 @@ def load_excel(excel_path, from_row: int = 1) -> DataFrame:
     return arias_scoring.parse(skiprows=from_row - 1)
 
 
-def combine_lists(first_element: str, second_list: str, third_list: List[str]) -> List[str]:
+def combine_lists(
+    first_element: str, second_list: str, third_list: List[str]
+) -> List[str]:
     final_list = []
 
     for s in third_list:
-        if second_list != '':  # in 1-element combinations
-            final_list.append(first_element + ',' + second_list + ',' + s)
+        if second_list != "":  # in 1-element combinations
+            final_list.append(first_element + "," + second_list + "," + s)
         else:
-            final_list.append(first_element + ',' + s)
+            final_list.append(first_element + "," + s)
 
     return final_list
 
@@ -118,4 +122,4 @@ def colorize(text: str, levelname: str):
 
 
 def extract_digits(text: str) -> str:
-    return ''.join([char for char in text if char.isdigit()])
+    return "".join([char for char in text if char.isdigit()])

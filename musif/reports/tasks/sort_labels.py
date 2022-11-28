@@ -5,8 +5,9 @@ from urllib.request import urlopen
 
 REGEX = {}
 
+
 def features2type(numeral, form=None, figbass=None):
-	""" Turns a combination of the three chord features into a chord type.
+    """Turns a combination of the three chord features into a chord type.
     Returns
     -------
     'M':    Major triad
@@ -22,40 +23,44 @@ def features2type(numeral, form=None, figbass=None):
     '+7':   Augmented (minor) seventh chord
     '+M7':  Augmented major seventh chord
     """
-	if pd.isnull(numeral):
-		return numeral
-	form, figbass = tuple('' if pd.isnull(val) else val for val in (form, figbass))
-	#triads
-	if figbass in ['', '6', '64']:
-		if form in ['o', '+']:
-			return form
-		if form in ['%', 'M']:
-			if figbass == '':
-				return f"{form}7"
-			print(f"{form} is a seventh chord and cannot have figbass '{figbass}'")
-			return None
-		return 'm' if numeral.islower() else 'M'
-	# seventh chords
-	if form in ['o', '%', '+', '+M']:
-		return f"{form}7"
-	triad = 'm' if numeral.islower() else 'M'
-	seventh = 'M' if form == 'M' else 'm'
-	return f"{triad}{seventh}7"
+    if pd.isnull(numeral):
+        return numeral
+    form, figbass = tuple("" if pd.isnull(val) else val for val in (form, figbass))
+    # triads
+    if figbass in ["", "6", "64"]:
+        if form in ["o", "+"]:
+            return form
+        if form in ["%", "M"]:
+            if figbass == "":
+                return f"{form}7"
+            print(f"{form} is a seventh chord and cannot have figbass '{figbass}'")
+            return None
+        return "m" if numeral.islower() else "M"
+    # seventh chords
+    if form in ["o", "%", "+", "+M"]:
+        return f"{form}7"
+    triad = "m" if numeral.islower() else "M"
+    seventh = "M" if form == "M" else "m"
+    return f"{triad}{seventh}7"
 
 
-
-def make_type_col(df, num_col='numeral', form_col='form', fig_col='figbass'):
-	""" Create a new Series with the chord type for every row of `df`.
-        Uses: features2type()
+def make_type_col(df, num_col="numeral", form_col="form", fig_col="figbass"):
+    """Create a new Series with the chord type for every row of `df`.
+    Uses: features2type()
     """
-	param_tuples = list(df[[num_col, form_col, fig_col]].itertuples(index=False, name=None))
-	result_dict = {t: features2type(*t) for t in set(param_tuples)}
-	return pd.Series([result_dict[t] for t in param_tuples], index=df.index, name='chordtype')
+    param_tuples = list(
+        df[[num_col, form_col, fig_col]].itertuples(index=False, name=None)
+    )
+    result_dict = {t: features2type(*t) for t in set(param_tuples)}
+    return pd.Series(
+        [result_dict[t] for t in param_tuples], index=df.index, name="chordtype"
+    )
 
 
-
-def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True, **kwargs):
-	""" Sort a list of DCML labels following custom criteria.
+def sort_labels(
+    labels, git_branch="master", drop_duplicates=True, verbose=True, **kwargs
+):
+    """Sort a list of DCML labels following custom criteria.
         Uses: split_labels()
     Parameters
     ----------
@@ -101,52 +106,60 @@ def sort_labels(labels, git_branch='master', drop_duplicates=True, verbose=True,
         # following the given custom order
         sort_labels(labels, chordtype='roccurrences', figbass=['2', '43', '65', '7'])
     """
-	if len(kwargs) == 0:
-		raise ValueError("Pass at least one keyword argument for sorting...")
-	if not isinstance(labels, pd.core.series.Series):
-		if isinstance(labels, pd.core.frame.DataFrame):
-			raise TypeError("Pass only one column of your DataFrame.")
-		labels = pd.Series(labels)
-	if drop_duplicates:
-		labels = labels.drop_duplicates()
-	features = split_labels(labels, git_branch)
+    if len(kwargs) == 0:
+        raise ValueError("Pass at least one keyword argument for sorting...")
+    if not isinstance(labels, pd.core.series.Series):
+        if isinstance(labels, pd.core.frame.DataFrame):
+            raise TypeError("Pass only one column of your DataFrame.")
+        labels = pd.Series(labels)
+    if drop_duplicates:
+        labels = labels.drop_duplicates()
+    features = split_labels(labels, git_branch)
 
-	def make_keys(col, order):
+    def make_keys(col, order):
+        def make_order_dict(it):
+            missing = [v for v in col.unique() if v not in it]
+            if len(missing) > 0 and verbose:
+                print(
+                    f"The following values were missing in the custom ordering for column {col.name}:\n{missing}"
+                )
+            return {v: i for i, v in enumerate(list(it) + missing)}
 
-		def make_order_dict(it):
-			missing = [v for v in col.unique() if v not in it]
-			if len(missing) > 0 and verbose:
-				print(f"The following values were missing in the custom ordering for column {col.name}:\n{missing}")
-			return {v: i for i, v in enumerate(list(it) + missing)}
+        if order in ["values", "rvalues"]:
+            keys = sorted(set(col)) if order == "values" else reversed(sorted(set(col)))
+            order_dict = make_order_dict(keys)
+        elif order in ["occurrences", "roccurrences"]:
+            keys = (
+                col.value_counts(dropna=False).index
+                if order == "occurrences"
+                else col.value_counts(dropna=False, ascending=True).index
+            )
+            order_dict = make_order_dict(keys)
+        elif order.__class__ is not dict:
+            try:
+                order_dict = make_order_dict(order)
+            except:
+                # order is expected to be a callable:
+                return np.vectorize(order)(col)
+        else:
+            order_dict = order
 
-		if order in ['values', 'rvalues']:
-			keys = sorted(set(col)) if order == 'values' else reversed(sorted(set(col)))
-			order_dict = make_order_dict(keys)
-		elif order in ['occurrences', 'roccurrences']:
-			keys = col.value_counts(dropna=False).index if order == 'occurrences' else col.value_counts(dropna=False, ascending=True).index
-			order_dict = make_order_dict(keys)
-		elif order.__class__ is not dict:
-			try:
-				order_dict = make_order_dict(order)
-			except:
-				# order is expected to be a callable:
-				return np.vectorize(order)(col)
-		else:
-			order_dict = order
+        return np.vectorize(order_dict.get)(col)
 
-		return np.vectorize(order_dict.get)(col)
-
-	if 'chordtype' in kwargs:
-		features['chordtype'] = make_type_col(features)
-	key_cols = {col: make_keys(features[col], order) for col, order in kwargs.items() if col in features.columns}
-	df = pd.DataFrame(key_cols, index=features.index)
-	ordered_ix = df.sort_values(by=df.columns.to_list()).index
-	return labels.loc[ordered_ix]
+    if "chordtype" in kwargs:
+        features["chordtype"] = make_type_col(features)
+    key_cols = {
+        col: make_keys(features[col], order)
+        for col, order in kwargs.items()
+        if col in features.columns
+    }
+    df = pd.DataFrame(key_cols, index=features.index)
+    ordered_ix = df.sort_values(by=df.columns.to_list()).index
+    return labels.loc[ordered_ix]
 
 
-
-def split_labels(labels, git_branch='master', dropna=True):
-	""" Split DCML harmony labels into their respective features using the regEx
+def split_labels(labels, git_branch="master", dropna=True):
+    """Split DCML harmony labels into their respective features using the regEx
         from the indicated branch of the DCMLab/standards repository.
     Parameters
     ----------
@@ -157,18 +170,31 @@ def split_labels(labels, git_branch='master', dropna=True):
     dropna : :obj:`bool`, optional
         Drop rows where the regEx didn't match.
     """
-	global REGEX
-	if git_branch not in REGEX:
-		url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
-		glo, loc = {}, {}
-		exec(urlopen(url).read(), glo, loc)
-		REGEX[git_branch] = re.compile(loc['regex'], re.VERBOSE)
-	regex = REGEX[git_branch]
-	cols = ['globalkey', 'localkey', 'pedal', 'chord', 'numeral', 'form', 'figbass', 'changes', 'relativeroot', 'pedalend', 'phraseend']
-	res = labels.str.extract(regex, expand=True)[cols]
-	if dropna:
-		return res.dropna(how='all').fillna('')
-	return res.fillna('')
+    global REGEX
+    if git_branch not in REGEX:
+        url = f"https://raw.githubusercontent.com/DCMLab/standards/{git_branch}/harmony.py"
+        glo, loc = {}, {}
+        exec(urlopen(url).read(), glo, loc)
+        REGEX[git_branch] = re.compile(loc["regex"], re.VERBOSE)
+    regex = REGEX[git_branch]
+    cols = [
+        "globalkey",
+        "localkey",
+        "pedal",
+        "chord",
+        "numeral",
+        "form",
+        "figbass",
+        "changes",
+        "relativeroot",
+        "pedalend",
+        "phraseend",
+    ]
+    res = labels.str.extract(regex, expand=True)[cols]
+    if dropna:
+        return res.dropna(how="all").fillna("")
+    return res.fillna("")
+
 
 # labels = pd.read_csv('labels.csv').label
 # sort_labels(labels, chordtype='roccurrences')

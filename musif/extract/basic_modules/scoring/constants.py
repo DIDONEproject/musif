@@ -17,4 +17,4 @@ INSTRUMENTATION = "Instrumentation"
 VOICES = "Voices"
 FAMILY_SCORING = "FamilyScoring"
 FAMILY_INSTRUMENTATION = "FamilyInstrumentation"
-ROLE_TYPE = 'RoleType'
+ROLE_TYPE = "RoleType"

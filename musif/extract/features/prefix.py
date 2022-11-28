@@ -3,15 +3,15 @@ from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIAT
 
 def get_part_prefix(part_abbreviation: str) -> str:
     """
-        Returns prefix name for a specific part given instrument's abbreviation
-        
-        Example
-        'vnI' -> 'PartVnI_'    
-        
-        Parameters
-        ----------
-        part_abbreviation:  str
-            String that represents the abbreviated name of an instrument
+    Returns prefix name for a specific part given instrument's abbreviation
+
+    Example
+    'vnI' -> 'PartVnI_'
+
+    Parameters
+    ----------
+    part_abbreviation:  str
+        String that represents the abbreviated name of an instrument
     """
     if part_abbreviation is None or len(part_abbreviation) == 0:
         return "Part"
@@ -20,33 +20,34 @@ def get_part_prefix(part_abbreviation: str) -> str:
 
 def get_sound_prefix(sound_abbreviation: str) -> str:
     """
-        Returns prefix name for a specific part given sound's abbreviation
-        
-        Example
-        'vnI' -> 'SoundVn_'    
-        
-        Parameters
-        ----------
-        part_abbreviation:  str
-            String that represents the abbreviated name of a sound
+    Returns prefix name for a specific part given sound's abbreviation
+
+    Example
+    'vnI' -> 'SoundVn_'
+
+    Parameters
+    ----------
+    part_abbreviation:  str
+        String that represents the abbreviated name of a sound
     """
     if sound_abbreviation is None or len(sound_abbreviation) == 0:
         return "Sound"
     return f"Sound{sound_abbreviation[0].upper() + sound_abbreviation[1:]}_"
 
+
 def get_family_prefix(family_abbreviation: str) -> str:
     """
-        Returns prefix name for a specific part given sound's abbreviation
-        
-        Example
-        'vnI' -> 'SoundVn_'    
-        
-        Parameters
-        ----------
-        part_abbreviation:  str
-            String that represents the abbreviated name of a sound
+    Returns prefix name for a specific part given sound's abbreviation
+
+    Example
+    'vnI' -> 'SoundVn_'
+
+    Parameters
+    ----------
+    part_abbreviation:  str
+        String that represents the abbreviated name of a sound
     """
-    
+
     if family_abbreviation is None or len(family_abbreviation) == 0:
         return "Family"
     return f"Family{family_abbreviation[0].upper() + family_abbreviation[1:]}_"
@@ -71,7 +72,7 @@ def get_part_feature(part: str, feature: str) -> str:
     Returns:
         str: The feature properly prefixed for the part passed as argument.
     """
-    
+
     return get_part_prefix(part) + feature
 
 
@@ -123,5 +124,3 @@ def get_score_feature(feature: str) -> str:
         str: The feature properly prefixed for score scope.
     """
     return get_score_prefix() + feature
-
-

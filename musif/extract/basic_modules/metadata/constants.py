@@ -1,7 +1,7 @@
-ARIA_CITY = 'City'
-CHARACTER = 'Character'
-GENDER ='Gender'
-FORM = 'Form'
-GEOGRAPHY='Geography'
-TERRITORY = 'Territory'
-ACTANDSCENE = 'ActAndScene'
+ARIA_CITY = "City"
+CHARACTER = "Character"
+GENDER = "Gender"
+FORM = "Form"
+GEOGRAPHY = "Geography"
+TERRITORY = "Territory"
+ACTANDSCENE = "ActAndScene"
