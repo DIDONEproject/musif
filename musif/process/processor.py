@@ -424,7 +424,7 @@ class DataProcessor:
 
         if hasattr(self, 'destination_route'):
             dest_path = self.destination_route + "_features"
-            self.to_csv(dest_path)
+            self.save(dest_path)
 
     def _split_metadata_and_labels(self) -> None:
         self.data.rename(columns={ROLE_TYPE: 'Label_'+ROLE_TYPE}, inplace=True)
