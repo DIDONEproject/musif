@@ -413,15 +413,19 @@ class DataProcessor:
         self._scan_composers()
         self._scan_voices()
         if self._post_config.delete_files_without_harmony:
-            if HARMONY_AVAILABLE in self.data:
-                number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
-                pinfo(
+            self.delete_files_without_harmony()
+
+    def delete_files_without_harmony(self):
+        """Deletes files (actually rows in the DataFrame) that didn't have a proper harmonic analysis and, there fore, got a value of 0 in
+        'Harmony_Available' column"""
+        if HARMONY_AVAILABLE in self.data:
+            number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
+            pinfo(
                     f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted."
                 )
-                pinfo(
+            pinfo(
                     f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}"
                 )
-                # self.data = self.data[self.data[HARMONY_AVAILABLE] != 0]
 
     def _scan_voices(self):
         for i, voice in enumerate(self.data[VOICES].values):

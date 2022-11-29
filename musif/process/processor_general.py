@@ -1,10 +1,8 @@
-import difflib
 import os
 from collections import Counter
 from pathlib import Path, PurePath
 from typing import Union
 
-import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from tqdm import tqdm
@@ -12,45 +10,37 @@ from tqdm import tqdm
 from musif.common._utils import read_dicts_from_csv
 from musif.common.sort import sort_columns
 from musif.config import PostProcess_Configuration
-from musif.extract.constants import WINDOW_ID
-from musif.extract.basic_modules.file_name.constants import ARIA_ID, ARIA_LABEL, ID
+from musif.extract.constants import WINDOW_ID, ID
+from musif.extract.basic_modules.file_name.constants import ARIA_LABEL
 from musif.extract.basic_modules.scoring.constants import (
     INSTRUMENTATION,
     ROLE_TYPE,
-    SCORING,
-    VOICES,
 )
-from musif.extract.basic_modules.composer.handler import COMPOSER
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import (
     HARMONY_AVAILABLE,
     KEY_MODULATORY,
     KEY_PREFIX,
-    CHORDS_GROUPING_prefix,
 )
 from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
-from musif.logs import perr, pinfo, pwarn
+from musif.logs import perr, pinfo
 from musif.process.constants import (
     PRESENCE,
     label_by_col,
     metadata_columns,
     priority_columns,
-    voices_list_prefixes,
 )
 from musif.process.utils import (
-    _join_double_bass,
     delete_columns,
     join_keys,
     join_keys_modulatory,
     join_part_degrees,
     log_errors_and_shape,
-    merge_duetos_trios,
-    merge_single_voices,
-    split_passion_A,
 )
 
 LABELS_FILE = "Passions.csv"
-
+MAIN_LABEL = "Label_BasicPassion"
+ScoreLabel = "AriaLabel"
 
 class DataProcessor:
     """Processor class that treats columns and information of a DataFrame
@@ -59,8 +49,8 @@ class DataProcessor:
     It deletes unseful columns for analysis and saves important ones.
     Also saves data in several files in .csv format.
     The main method .process() returns a DataFrame and saves data.
-    Requires to have a Passions.csv file in ./internal_data directory containing each passion
-    for each aria.
+    Requires to have a labels file in ./internal_data directory containing 
+    each label assigned to each score.
     ...
 
     Attributes
@@ -77,7 +67,7 @@ class DataProcessor:
     process()
         Processes all the DataFrame information
     assign_labels()
-        Assigns labels from file Passion.csv to DataFrame according to AriaLabel column
+        Assigns labels from labels file to DataFrame according to ScoreLabel column
     preprocess_data()
         Deletes columns with no information, convertes 0 to nan and depurates data
     group_columns()
@@ -106,6 +96,7 @@ class DataProcessor:
         self.info = info
         self.data = self._process_info(self.info)
         self.internal_data_dir = self._post_config.internal_data
+
 
     def _process_info(self, info: Union[str, DataFrame]) -> DataFrame:
         """
@@ -157,6 +148,7 @@ class DataProcessor:
             )
             return e
 
+
     def process(self) -> DataFrame:
         """
         Main method of the class. Removes NaN values, deletes unuseful columns
@@ -185,23 +177,26 @@ class DataProcessor:
         self._final_data_processing()
         return self.data
 
+
     def delete_files_without_harmony(self):
-            if HARMONY_AVAILABLE in self.data:
-                number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
-                pinfo(
-                    f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted."
-                )
-                pinfo(
-                    f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}"
-                )
+        """Deletes files (actually rows in the DataFrame) that didn't have a proper harmonic analysis and, there fore, got a value of 0 in
+        'Harmony_Available' column"""
+        if HARMONY_AVAILABLE in self.data:
+            number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
+            pinfo(
+                f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted."
+            )
+            pinfo(
+                f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}"
+            )
+
 
     def assign_labels(self) -> None:
-        passions = read_dicts_from_csv(
+        labels = read_dicts_from_csv(
             os.path.join(self.internal_data_dir, LABELS_FILE)
         )
-
         data_by_aria_label = {
-            label_data["Label"]: label_data for label_data in passions
+            label_data["Label"]: label_data for label_data in labels
         }
         for col, label in label_by_col.items():
             values = []
@@ -211,25 +206,16 @@ class DataProcessor:
                 values.append(label_value)
             self.data[label] = values
 
-        if self._post_config.split_passionA:
-            split_passion_A(self.data)
 
     def preprocess_data(self) -> None:
-        """Adds labels to arias. Cleans data and removes columns with no information or rows without assigned Label"""
+        """Adds labels to scores. Cleans data and removes columns with no information or rows without assigned Label"""
         self.assign_labels()
-        if "Label_Passions" in self.data:
-            del self.data["Label_Passions"]
-        if "Label_Sentiment" in self.data:
-            del self.data["Label_Sentiment"]
-
         print(
-            "Deleted arias without passion: ",
-            self.data[self.data["Label_BasicPassion"].isnull()].shape[0],
+            "Deleted scores without a label: ",
+            self.data[self.data[MAIN_LABEL].isnull()].shape[0],
         )
-        self.data = self.data[~self.data["Label_BasicPassion"].isnull()]
-
+        self.data = self.data[~self.data[MAIN_LABEL].isnull()]
         self.data.dropna(axis=1, how="all", inplace=True)
-        # self.data.reset_index(inplace=True, drop=True)
 
     def group_columns(self) -> None:
         """Groups Key_*_PercentageMeasures, Key_Modulatory and Degrees columns. Into bigger groups
@@ -243,40 +229,10 @@ class DataProcessor:
         except KeyError:
             perr("Some columns to group could not be found.")
 
-    def merge_voices(self) -> None:
-        """Finds multiple singers arias (duetos/trietos) and calculates mean, max or min between them.
-        Unifies all voices columns into SoundVoice_ columns.
-        Also collapses PartBsI and PartBsII in one column.
-        """
-        pinfo("\nScaning voice columns")
-        df_voices = self.data[
-            [
-                col
-                for col in self.data.columns
-                if any(substring in col for substring in voices_list_prefixes)
-            ]
-        ]
-        self.data[df_voices.columns] = self.data[df_voices.columns].replace(
-            "NA", np.nan
-        )
-
-        merge_single_voices(self.data)
-        self.data = merge_duetos_trios(self.data)
-
-        columns_to_delete = [
-            i
-            for i in self.data.columns.values
-            if any(voice in i for voice in voices_list_prefixes)
-        ]
-        self.data.drop(columns_to_delete, axis=1, inplace=True)
-
-        self.data = _join_double_bass(self.data)
-
     def unbundle_instrumentation(self) -> None:
         """Separates Instrumentation column into as many columns as instruments present in Instrumentation,
-        assigning 1 for every instrument that is present and 0 if it is not for every row (aria).
+        assigning a value of 1 for every instrument that is present and 0 if it is not for every row (aria).
         """
-
         for i, row in enumerate(self.data[INSTRUMENTATION]):
             for element in row.split(","):
                 self.data.at[i, PRESENCE + "_" + element] = 1
@@ -286,24 +242,6 @@ class DataProcessor:
             .fillna(0)
             .astype(int)
         )
-
-    def delete_previous_items(self) -> None:
-        """Deletes items from 'errors.csv' file in case they were not extracted properly"""
-        pinfo("\nDeleting items with errors...")
-        errors_file = r"./errors.csv"
-        if os.path.exists(errors_file):
-            errors = pd.read_csv(
-                errors_file, low_memory=False, encoding_errors="replace", header=0
-            )[FILE_NAME].tolist()
-            for item in errors:
-                index = self.data.index[self.data[FILE_NAME] == item + ".xml"]
-                if not index.empty:
-                    self.data.drop(index, axis=0, inplace=True)
-                    pwarn("Item {0} from errors.csv was deleted.".format(item))
-        else:
-            perr(
-                '\nA file called "errors.csv" must be created containing Filenames to be deleted.'
-            )
 
     def delete_undesired_columns(self, **kwargs) -> None:
         """Deletes not necessary columns for statistical analysis.
@@ -403,7 +341,6 @@ class DataProcessor:
             total_degrees, get_sound_prefix("voice"), self.data, sufix="_relative"
         )
 
-    
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
         self.replace_nans()
@@ -421,15 +358,11 @@ class DataProcessor:
             self.to_csv(dest_path)
 
     def _split_metadata_and_labels(self) -> None:
-        self.data.rename(columns={ROLE_TYPE: "Label_" + ROLE_TYPE}, inplace=True)
         label_columns = list(self.data.filter(like="Label_", axis=1))
 
-        self.label_dataframe = self.data[[ARIA_ID, WINDOW_ID] + label_columns]
-
-        self.metadata_dataframe = self.data[[ARIA_ID, WINDOW_ID] + metadata_columns]
-
-        # TODO: donde estan key y key signature
-        self.data = sort_columns(self.data, [ARIA_ID, WINDOW_ID] + priority_columns)
+        self.label_dataframe = self.data[[ID, WINDOW_ID] + label_columns]
+        self.metadata_dataframe = self.data[[ID, WINDOW_ID] + metadata_columns]
+        self.data = sort_columns(self.data, [ID, WINDOW_ID] + priority_columns)
 
         self.features_dataframe = self.data.drop(
             priority_columns + label_columns, axis=1, errors="ignore"
@@ -443,7 +376,6 @@ class DataProcessor:
             if column_type == str:
                 df[column] = df[column].replace(0, "0")
                 df[column] = df[column].fillna(str("NA"))
-                # df[column]= df[column].replace(np.nan, str("NA"))
 
             else:
                 df[column] = df[column].fillna(float("NaN"))
