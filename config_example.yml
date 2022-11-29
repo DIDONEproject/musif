@@ -1,0 +1,93 @@
+# Directory containing .csv files that contain metadata information.
+metadata_dir: ./metadata
+
+# Name of the column to be used as a reference when crossing metadata with each score.
+metadata_id_col: Id
+
+# Directory containing .xml files to be analized.
+data_dir: ../../Corpus_Test/xml
+
+# Directory containing .mscx files to be analyzed if harmonic analysis is required.
+musescore_dir: ../../Corpus_Test/musescore
+
+# Directory to keep .pkl files if caching is enabled. null for disabling cache.
+cache_dir: null
+
+# Boolean flag to expand repetitions of score or not.
+expand_repeats: false
+
+# Boolean flag to extract features only for the theme A part. The limit is set as a measure number in a csv file
+# in the metadata directory.
+only_theme_a: true
+
+# Size of windows (in measures) when extracting features of the score in a windows approach.
+# Each row of the resulting DataFrame will correspond to each window.
+window_size: null
+
+# Size of overlap (in measures) beatween each window. 
+overlap: 2
+
+# Number of parallel processes to be used as defined by joblib: 
+# 1 => no parallel. 2 => 2 processes. -1 => all available virtual cores. -2 => all available virtual cores except 1
+parallel: 1
+
+# Directory to save the logs files, level for logging in the console (console_level) and inthe log file (file_level)
+log:
+  file_path: logs/musif_test.log
+  file_level: INFO
+  console_level: INFO
+
+# Modules that are basic, needed for any score. They are processed first and used by the other features so disabling them might result 
+# in errors when extracting features.
+basic_modules:
+  - scoring
+  - file_name
+  - metadata
+  - composer
+  - librettist
+
+# Modules to be extracting from scores. Order is important, so last ones will be processed last. Some of them might depends on others.
+# For example, density model relies on the number of note, which is computed in core.
+# To disable/enable a module, simply comment the line.
+features:
+  - core
+  - ambitus
+  - interval
+  - tempo
+  - density
+  - texture
+  - harmony
+  - lyrics
+  - scale
+  - scale_relative
+  - key
+  - dynamics    
+  - rhythm
+
+# Filter to select only some instruments to be processed for each score. 
+# If the filter is None (disabling all parts), the program will extract all parts.
+parts_filter:
+  # - vnI
+  # - vnII
+  # - obI
+  # - obII
+  # - va
+  # - bs
+  # - sop
+  # - ten
+  # - alt
+  # - bar
+  # - bass
+  # - bbar
+
+# Used to split the possible layers present depending on the instrument name
+split_keywords:  
+  - woodwind
+  - brass
+  - wind
+  - viola
+  - strings.cello
+  - bass
+  - oboi
+  
+
