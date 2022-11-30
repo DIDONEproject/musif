@@ -1,6 +1,7 @@
 # musiF
 
 Python library for **Music Feature Extraction and Analysis**, developed by [Didone Project](https://didone.eu/). 
+Find the documentation at: https://musif.readthedocs.io/en/latest/API/musif.html
 
 Main goals:
 
@@ -11,7 +12,7 @@ Main goals:
 
 musiF requires:
 
-* Python >= 3.7
+* Python >= 3.10
 
 We recommend installing it with `pip`:
 
@@ -88,11 +89,10 @@ if __name__ == "__main__":
 
 ```
 
-### TODO
+### Cofiguration file
 
-[ ] The above examples where put the features?
-[ ] The format of the feature file
-[ ] Document configuration files
-[ ] Links to the documentation
+```
+``` 
+### TODO
 [ ] Links to related modules
 [ ] Links to jupyter notebooks
