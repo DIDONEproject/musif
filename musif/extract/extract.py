@@ -22,7 +22,7 @@ from tqdm import tqdm
 import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
-from musif.common.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache
+from musif.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data

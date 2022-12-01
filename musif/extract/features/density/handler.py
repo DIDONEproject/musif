@@ -43,7 +43,7 @@ from musif.extract.features.core.constants import (
     NUM_NOTES,
     NUM_SOUNDING_MEASURES,
 )
-from musif.common.cache import isinstance
+from musif.cache import isinstance
 
 
 def update_part_objects(

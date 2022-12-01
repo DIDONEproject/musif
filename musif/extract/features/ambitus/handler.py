@@ -10,7 +10,7 @@ from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.constants import DATA_NOTES
-from musif.common.cache import isinstance
+from musif.cache import isinstance
 
 from ..prefix import get_part_feature
 from .constants import *

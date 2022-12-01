@@ -20,7 +20,7 @@ from musif.musicxml.tempo import (
 )
 from .constants import *
 
-from musif.common.cache import isinstance
+from musif.cache import isinstance
 
 
 class TempoGroup2(Enum):

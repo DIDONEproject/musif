@@ -2,14 +2,15 @@ import copy
 from typing import Dict, List, Tuple, Union
 
 from music21.interval import Interval
-from music21.note import Note
+from music21.note import Note, Rest
+from music21.chord import Chord
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
 from roman import toRoman
 
 from musif.common import group
-from musif.common.cache import isinstance
+from musif.cache import isinstance, iscache
 
 MUSICXML_FILE_EXTENSION = "xml"
 
@@ -100,7 +101,21 @@ def get_notes_and_measures(
     sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
     original_notes = [note for measure in measures for note in measure.notes if
                       isinstance(note, Note)]
-    notes_and_rests = [note for measure in measures for note in measure.notesAndRests]
+    # iterating and caching attributes
+    notes_and_rests = []
+    for measure in measures:
+        measure.smartforcecache('offset')
+        for note in measure.notesAndRests:
+            if iscache(note):
+                note.smartforcecache('offset')
+                if isinstance(note, Note):
+                    note.smartforcecache('nameWithOctave')
+                elif isinstance(note, Rest):
+                    note.smartforcecache('name')
+                elif isinstance(note, Chord):
+                    for n in note.notes:
+                        n.smartforcecache('nameWithOctave')
+            notes_and_rests.append(note)
     return original_notes, measures, sounding_measures, notes_and_rests
 
 

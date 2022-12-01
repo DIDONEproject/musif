@@ -1,7 +1,3 @@
-"""
-This module implements utilities to cache and speed-up the extraction of features.
-"""
-import builtins
 import logging
 import random
 import traceback
@@ -9,41 +5,8 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from deepdiff import DeepHash, deephash
 
+from musif.common.exceptions import CannotResurrectObject, SmartCacheModified
 from musif.logs import pinfo, pwarn
-
-from .exceptions import CannotResurrectObject, SmartCacheModified
-
-
-class FileCacheIntoRAM:
-    """
-    This class simply stores a dictionary of key-value.
-    In `musiF`, it is used to cache the objects (values) coming from the
-    parsing of files (whose names are the keys).
-    It is never written to disk and only kept into RAM.
-    """
-
-    def __init__(self, capacity: int):
-        self._capacity = capacity
-        self._items = []
-
-    def put(self, key: str, value: Any):
-        if self.full:
-            del self._items[0]
-        self._items.append({"key": key, "value": value})
-
-    def get(self, key: str) -> Optional[Any]:
-        for item in self._items:
-            if item["key"] == key:
-                return item["value"]
-        return None
-
-    def clear(self) -> None:
-        self._items.clear()
-
-    @property
-    def full(self) -> bool:
-        return len(self._items) == self._capacity
-
 
 deephash.logger.setLevel(logging.ERROR)
 
@@ -123,6 +86,13 @@ class ObjectReference:
         return f"ObjectReference({self.reference}, {self.name})"
 
 
+class _MyNone:
+    """Type used internally for representing attributes that do not exist in the
+    reference object"""
+
+    pass
+
+
 class SmartModuleCache:
     """
     This class wraps any object so that its function calls can be cached in a
@@ -183,9 +153,6 @@ class SmartModuleCache:
     __slots__ = "cache"
     SPECIAL_METHODS_NAME = "smartcache__"
 
-    class _MyNone:
-        pass
-
     def __init__(
         self,
         reference: Any = None,
@@ -210,6 +177,24 @@ class SmartModuleCache:
             "_type": type(reference),
         }
         object.__setattr__(self, "cache", cache)
+
+    def smartforcecache(self, name, *args, **kwargs):
+        """
+        This method can be used to forcedly cache some attribute of the reference
+        object without using it. `name` is the name of the attribute. If it is a method,
+        `*args` and `**kwargs`.
+
+        Return `(True, None)` if object is cached, `(False, Exception)` otherwise
+        """
+        try:
+            attr = self.__getattr__(name)
+            assert self.cache["name"] is not None, "Object retrieved but not cached!"
+
+            if isinstance(attr, MethodCache):
+                attr.__forcecache(*args, **kwargs)
+        except Exception as e:
+            return False, e
+        return True, None
 
     def __repr__(self):
         _reference = self.cache["_reference"]
@@ -236,6 +221,7 @@ class SmartModuleCache:
         return self.cache["_hash"]
 
     def _wmo(self, obj, name=("",), args=(None,)):
+        from .utils import wrap_module_objects
         return wrap_module_objects(
             obj,
             target_addresses=self.cache["_target_addresses"],
@@ -254,9 +240,9 @@ class SmartModuleCache:
             # attr not in cache
             attr = self._get_new_attr(name)
             if attr is None:
-                attr = SmartModuleCache._MyNone
+                attr = _MyNone
             self.cache[name] = attr
-        if attr is SmartModuleCache._MyNone:
+        if attr is _MyNone:
             return None
         else:
             return attr
@@ -382,8 +368,8 @@ class CallableArguments:
     This class represents a set of ordered arguments.
     The hash is the concatenation of the argument hashes.
     If the arguments are SmartModuleCache objects, this object uses their cache (which
-    persists to disk), otherwise it uses `deepdiff.DeepHash` to compute a hash based on the
-    content value (which should persists across pickling).
+    persists to disk), otherwise it uses `deepdiff.DeepHash` to compute a hash based on
+    the content value (which should persists across pickling).
 
     Note that `DeepHash` may be much slower than the builtin `hash()` function,
     so for large and complex objects like `music21.Score`, just use a
@@ -463,6 +449,7 @@ class MethodCache:
         self.check_reference_changes = check_reference_changes
 
     def _wmo(self, obj, args=None):
+        from .utils import wrap_module_objects
         return wrap_module_objects(
             obj,
             target_addresses=self.target_addresses,
@@ -478,6 +465,8 @@ class MethodCache:
         call_args = CallableArguments(*args, **kwargs)
         cached_res = self.cache.get(call_args)
         if cached_res is not None:
+            if cached_res is _MyNone:
+                return None
             return cached_res
         else:
             attr = self.reference.get_attr(self.name)
@@ -485,82 +474,17 @@ class MethodCache:
                 args = [arg.cache["_reference"].reference for arg in args]
                 kwargs = {k: v.cache["_reference"].reference for k, v in kwargs.items()}
             res = attr(*args, **kwargs)
-            res = self._wmo(res, args=(*args, *kwargs.values()))
+            if res is None:
+                res = _MyNone
+            else:
+                res = self._wmo(res, args=(*args, *kwargs.values()))
             self.cache[call_args] = res
             if self.check_reference_changes and self.reference.ischanged():
                 pwarn(str(SmartCacheModified(self, self.name)))
             return res
 
-
-def isinstance(obj1, cls):
-    """
-    Check if obj1 is instance of `cls`. This function grants that `SmartModuleCache`
-    objects are checked against their reference objects.
-    """
-    if type(obj1) is SmartModuleCache:
-        t = obj1.cache["_type"]
-        return builtins.issubclass(t, cls)
-    else:
-        return builtins.isinstance(obj1, cls)
-
-
-def hasattr(obj1, attr):
-    """
-    Check if `obj1` has `attr`. This function grants that `SmartModuleCache` objects are
-    checked against their cache or reference objects.
-    """
-    if type(obj1) is SmartModuleCache:
-        ref = obj1.cache["_reference"].reference
-        if ref is not None:
-            return builtins.hasattr(ref, attr)
-        else:
-            return attr in obj1.cache
-    else:
-        return builtins.hasattr(obj1, attr)
-
-
-def wrap_module_objects(
-    obj: Any,
-    target_addresses: List[str] = ["music21"],
-    resurrect_reference: Optional[Tuple] = None,
-    parent: Optional[ObjectReference] = None,
-    name: Tuple[str] = ("",),
-    args: Tuple[Optional[Tuple]] = (None,),
-):
-    """
-    Returns the object wrapped with `SmartModuleCache` class if it was defined
-    in one of the `target_addresses`
-
-    If `obj` is a list or a tuple, e new list/tuple this function works
-    recursively on their objects.
-    """
-    __module = obj.__class__.__module__
-    for module in target_addresses:
-        if __module.startswith(module):
-            return SmartModuleCache(
-                reference=obj,
-                target_addresses=target_addresses,
-                resurrect_reference=resurrect_reference,
-                parent=parent,
-                name=name,
-                args=args,
-            )
-
-    if isinstance(obj, (list, tuple)):
-        ret = [
-            wrap_module_objects(
-                v,
-                target_addresses,
-                resurrect_reference,
-                parent,
-                (*name, "__getitem__"),
-                (*args, (i,)),
-            )
-            for i, v in enumerate(obj)
-        ]
-        if isinstance(obj, list):
-            return ret
-        else:
-            return tuple(ret)
-
-    return obj
+    def smartforcecache(self, *args, **kwargs):
+        self.__call__(*args, **kwargs)
+        assert (
+            self.cache.get(CallableArguments(*args, **kwargs)) is not None
+        ), "Method retrieved but arguments not cached!"
