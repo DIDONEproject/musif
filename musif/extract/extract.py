@@ -22,7 +22,7 @@ from tqdm import tqdm
 import musif.extract.constants as C
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
-from musif.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache
+from musif.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache, store_score_df
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
@@ -44,7 +44,8 @@ _cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 
 def parse_filename(
-    file_path: str, split_keywords: List[str], expand_repeats: bool = False
+    file_path: str, split_keywords: List[str], expand_repeats: bool = False,
+    export_dfs_to: Union[str, PurePath] = None
 ) -> Score:
     """
     This function parses a musicxml file and returns a music21 Score object. If
@@ -60,6 +61,9 @@ def parse_filename(
      A lists of keywords based on music21 instrument sound names to split in different parts.
     expand_repeats: bool
      Determines whether to expand or not the repetitions. Default value is False.
+    export_dfs_to: Union[str, PurePath]
+     Path to a directory where dataframes containing the score data are exported. If
+     None, no score is exported. Default value is None.
     Returns
     -------
     resp : Score
@@ -74,6 +78,10 @@ def parse_filename(
         return score
     try:
         score = parse(file_path)
+        if export_dfs_to is not None:
+            dest_path = Path(export_dfs_to)
+            dest_path /= Path(file_path).with_suffix('.pkl').name
+            store_score_df(score, dest_path)
         split_layers(score, split_keywords)
         if expand_repeats:
             score = score.expandRepeats()
@@ -466,6 +474,7 @@ class FeaturesExtractor:
             tmp_path,
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
+            export_dfs_to=self._cfg.dfs_dir
         )
         score.numeric_tempo = extract_numeric_tempo(tmp_path)
         if filename.suffix == MUSESCORE_FILE_EXTENSION:

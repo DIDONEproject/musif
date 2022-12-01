@@ -53,6 +53,7 @@ CONTAIN = "columns_contain"
 REPLACE_NANS = "replace_nans"
 MERGE_VOICES = "merge_voices"
 PRESENCE = "delete_presence"
+DFS_DIR = "dfs_dir"
 
 _CONFIG_FALLBACK = {
     LOG: {
@@ -77,6 +78,7 @@ _CONFIG_FALLBACK = {
     OVERLAP: 2,
     CHECK_FILE: ".",
     MSCORE_EXEC: None,
+    DFS_DIR: None
 }
 
 _CONFIG_POST_FALLBACK = {
@@ -139,6 +141,7 @@ class Configuration:
         self.musescore_dir = config_data.get(
             MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR]
         )
+        self.dfs_dir = config_data.get(DFS_DIR, _CONFIG_FALLBACK[DFS_DIR])
         self.cache_dir = config_data.get(CACHE_DIR, _CONFIG_FALLBACK[CACHE_DIR])
         self.parallel = config_data.get(PARALLEL, _CONFIG_FALLBACK[PARALLEL])
         self.max_processes = config_data.get(

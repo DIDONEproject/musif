@@ -1,6 +1,6 @@
 import builtins
 import pickle
-from pathlib import PurePath
+from pathlib import PurePath, Path
 from typing import Any, List, Optional, Tuple
 
 import music21 as m21
@@ -123,10 +123,10 @@ def wrap_module_objects(
     return obj
 
 
-def load_scores(fname):
+def store_score_df(score, fname):
     """
-    Open `fname` (a file-like object, a string or a Path object)
-    and returns a dataframe with most of the information in it
+    Stores `score` into `fname` (a file-like object, a string or a Path object)
+    using dataframes and returns the object saved.
 
     The returned object is a dictionary with keys the name of the parts and values
     dataframes with the following columns:
@@ -137,23 +137,19 @@ def load_scores(fname):
         the time signature string for time signatures; for measures and rests, the value
         ``"-"`` is used.
         * "Value": The midi pitch for notes, -1 for others
-        * "Beat": The beat position of the object in reference to the measure, -1 for
-        measures
-        * "Onset": The onset position of the object in reference to the beginning
+        * "Measure Onset": The beat position of the object in reference to the beginning
+        of the measure, -1 for measures
+        * "Part Onset": The onset position of the object in reference to the beginning
+        of the part
         * "Duration": The duration of the object, -1 for time signatures
         * "Tie": If a tie is applied to the note, its type is there (one of ``"start"``,
         ``"continue"``, ``"stop"``), otherwise ``"-"`` is used
     """
-    # from music21.note import Note
-
-    if isinstance(fname, (PurePath, str)):
-        fname = open(fname, "rb")
-    cached_score = pickle.load(fname)["score"]
 
     def append_note(alist, note, offset, type, pitch=None, name=None):
         onset = offset + note.offset
         dur = note.duration.quarterLength
-        beat = note.beat
+        m_onset = note.offset
         if pitch is None:
             pitch = note.pitch.midi
         if name is None:
@@ -162,14 +158,15 @@ def load_scores(fname):
             tie = note.tie.type
         else:
             tie = "-"
-        alist.append((type, name, pitch, beat, onset, dur, tie))
+        alist.append((type, name, pitch, m_onset, onset, dur, tie))
 
-    score = {}
-    for part in cached_score.parts:
+    score_dict = {}
+    for part in score.parts:
         data_part = []
         for measure in part.getElementsByClass(m21.stream.base.Measure):
             offset = measure.offset
-            data_part.append(("Measure", "-", -1, -1, offset, measure.highestTime, "-"))
+            data_part.append(("Measure", "-", -1, -1, offset,
+                              measure.duration.quarterLength, "-"))
             ts = measure.timeSignature
             if ts is not None:
                 data_part.append(
@@ -177,13 +174,13 @@ def load_scores(fname):
                         "Time Signature",
                         ts.ratioString,
                         -1,
-                        ts.beat,
+                        ts.offset,
                         ts.offset + offset,
                         -1,
                         "-",
                     )
                 )
-            for note in measure.notesAndRests:
+            for note in measure.flat.notesAndRests:
                 if isinstance(note, m21.note.Note):
                     append_note(data_part, note, offset, "Note")
                 elif isinstance(note, m21.note.Rest):
@@ -197,14 +194,31 @@ def load_scores(fname):
                     )
         data_part = pd.DataFrame(
             data_part,
-            columns=("Type", "Name", "Value", "Beat", "Onset", "Duration", "Tie"),
+            columns=(
+                "Type",
+                "Name",
+                "Value",
+                "Measure Onset",
+                "Part Onset",
+                "Duration",
+                "Tie",
+            ),
         )
-        score[part.partName] = data_part
-    __import__("ipdb").set_trace()
-    return score
+        score_dict[part.partName] = data_part
+    if isinstance(fname, (PurePath, str)):
+        fname = Path(fname)
+        fname.parent.mkdir(exist_ok=True)
+        fname = open(fname, "wb")
+    pickle.dump(score_dict, fname)
+    return score_dict
 
 
-if __name__ == "__main__":
-    load_scores(
-        "/home/federico/musiF_tests/data/cache/Did05M-Fra_lo-1769-Majo[1.08][0293].pkl"
-    )
+def load_score_df(fname):
+    """
+    Loads a score object saved with `store_score_df` from a string or Path pointing to
+    the file or from a file-like object. Return a dictionary of dataframes
+    """
+    if isinstance(fname, (PurePath, str)):
+        fname = Path(fname)
+        fname = open(fname, "rb")
+    return pickle.load(fname)
