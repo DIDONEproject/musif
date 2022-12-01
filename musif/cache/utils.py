@@ -143,8 +143,10 @@ def load_scores(fname):
             name = note.nameWithOctave
         alist.append((name, pitch, onset, dur))
 
-    score = {}
+    score = {'timeSignatures': []}
     for part in cached_score.parts:
+        ts = part.getTimeSignatures()
+        score['timeSignatures'] += [t.ratioString for t in ts]
         data_part = []
         for measure in part.getElementsByClass(m21.stream.base.Measure):
             offset = measure.offset
@@ -153,7 +155,7 @@ def load_scores(fname):
                     append_note(data_part, note, offset)
                 elif isinstance(note, m21.note.Rest):
                     append_note(data_part, note, offset, name='rest', pitch=-1)
-                elif isinstance(note, m21.m21.Chord):
+                elif isinstance(note, m21.chord.Chord):
                     for note in note.notes:
                         append_note(data_part, note, offset)
                 else:
@@ -164,9 +166,7 @@ def load_scores(fname):
             data_part, columns=("Name", "Pitch", "Onset", "Duration")
         )
         score[part.partName] = data_part
-        __import__("ipdb").set_trace()
-        pass
-    __import__("ipdb").set_trace()
+    __import__('ipdb').set_trace()
     return score
 
 
