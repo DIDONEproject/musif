@@ -130,7 +130,7 @@ def merge_single_voices(df: DataFrame) -> None:
         ]
         if all(df[columns_to_merge].dtypes == object):
             df[columns_to_merge] = df[columns_to_merge].astype(str)
-            df[formatted_col] = df[columns_to_merge].sum(axis=1)
+            df[formatted_col] = df[columns_to_merge].sum(axis=1) 
             df[formatted_col] = [i.replace("nan", "") for i in df[formatted_col]]
         else:
             for colum in columns_to_merge:
