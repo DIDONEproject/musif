@@ -1,0 +1,34 @@
+musif package
+=============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   musif.common
+   musif.extract
+   musif.internal_data
+   musif.musescore
+   musif.musicxml
+   musif.process
+   musif.reports
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   musif.config
+   musif.logs
+   musif.mlogger
+
+Module contents
+---------------
+
+.. automodule:: musif
+   :members:
+   :undoc-members:
+   :show-inheritance:
