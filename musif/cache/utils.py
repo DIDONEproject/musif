@@ -127,6 +127,22 @@ def load_scores(fname):
     """
     Open `fname` (a file-like object, a string or a Path object)
     and returns a dataframe with most of the information in it
+
+    The returned object is a dictionary with keys the name of the parts and values
+    dataframes with the following columns:
+
+        * "Type": A string identifying the type of object. Possible values: ``"Note"``,
+        ``"Rest"``, ``"Measure"``,  ``"Time Signature"``
+        * "Name": A string with the name of the note in Common Western Notation or with
+        the time signature string for time signatures; for measures and rests, the value
+        ``"-"`` is used.
+        * "Value": The midi pitch for notes, -1 for others
+        * "Beat": The beat position of the object in reference to the measure, -1 for
+        measures
+        * "Onset": The onset position of the object in reference to the beginning
+        * "Duration": The duration of the object, -1 for time signatures
+        * "Tie": If a tie is applied to the note, its type is there (one of ``"start"``,
+        ``"continue"``, ``"stop"``), otherwise ``"-"`` is used
     """
     # from music21.note import Note
 
@@ -134,39 +150,57 @@ def load_scores(fname):
         fname = open(fname, "rb")
     cached_score = pickle.load(fname)["score"]
 
-    def append_note(alist, note, offset, pitch=None, name=None):
+    def append_note(alist, note, offset, type, pitch=None, name=None):
         onset = offset + note.offset
         dur = note.duration.quarterLength
+        beat = note.beat
         if pitch is None:
             pitch = note.pitch.midi
         if name is None:
             name = note.nameWithOctave
-        alist.append((name, pitch, onset, dur))
+        if note.tie is not None:
+            tie = note.tie.type
+        else:
+            tie = "-"
+        alist.append((type, name, pitch, beat, onset, dur, tie))
 
-    score = {'timeSignatures': []}
+    score = {}
     for part in cached_score.parts:
-        ts = part.getTimeSignatures()
-        score['timeSignatures'] += [t.ratioString for t in ts]
         data_part = []
         for measure in part.getElementsByClass(m21.stream.base.Measure):
             offset = measure.offset
+            data_part.append(("Measure", "-", -1, -1, offset, measure.highestTime, "-"))
+            ts = measure.timeSignature
+            if ts is not None:
+                data_part.append(
+                    (
+                        "Time Signature",
+                        ts.ratioString,
+                        -1,
+                        ts.beat,
+                        ts.offset + offset,
+                        -1,
+                        "-",
+                    )
+                )
             for note in measure.notesAndRests:
                 if isinstance(note, m21.note.Note):
-                    append_note(data_part, note, offset)
+                    append_note(data_part, note, offset, "Note")
                 elif isinstance(note, m21.note.Rest):
-                    append_note(data_part, note, offset, name='rest', pitch=-1)
+                    append_note(data_part, note, offset, "Rest", name="-", pitch=-1)
                 elif isinstance(note, m21.chord.Chord):
                     for note in note.notes:
-                        append_note(data_part, note, offset)
+                        append_note(data_part, note, offset, "Note")
                 else:
                     raise Exception(
                         f"Cannot handle this type of note: {note.cache['_type']}"
                     )
         data_part = pd.DataFrame(
-            data_part, columns=("Name", "Pitch", "Onset", "Duration")
+            data_part,
+            columns=("Type", "Name", "Value", "Beat", "Onset", "Duration", "Tie"),
         )
         score[part.partName] = data_part
-    __import__('ipdb').set_trace()
+    __import__("ipdb").set_trace()
     return score
 
 

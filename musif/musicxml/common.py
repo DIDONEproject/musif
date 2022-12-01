@@ -104,17 +104,25 @@ def get_notes_and_measures(
     # iterating and caching attributes
     notes_and_rests = []
     for measure in measures:
-        measure.smartforcecache('offset')
+        if iscache(measure):
+            measure.smartforcecache('offset')
+            if measure.timeSignature is not None:
+                measure.timeSignature.smartforcecache('ratioString')
+            measure.smartforcecache('highestTime')
         for note in measure.notesAndRests:
             if iscache(note):
                 note.smartforcecache('offset')
                 if isinstance(note, Note):
                     note.smartforcecache('nameWithOctave')
+                    if note.tie is not None:
+                        note.tie.smartforcecache('type')
                 elif isinstance(note, Rest):
                     note.smartforcecache('name')
                 elif isinstance(note, Chord):
                     for n in note.notes:
                         n.smartforcecache('nameWithOctave')
+                        if note.tie is not None:
+                            note.tie.smartforcecache('type')
             notes_and_rests.append(note)
     return original_notes, measures, sounding_measures, notes_and_rests
 
