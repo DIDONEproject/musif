@@ -1,6 +1,6 @@
 import os
 from collections import Counter
-from pathlib import Path, PurePath
+from pathlib import PurePath
 from typing import Union
 
 import pandas as pd
