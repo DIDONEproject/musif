@@ -20,9 +20,14 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 import musif.extract.constants as C
+from musif.cache import (
+    CACHE_FILE_EXTENSION,
+    FileCacheIntoRAM,
+    SmartModuleCache,
+    store_score_df,
+)
 from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
 from musif.common._utils import get_ariaid
-from musif.cache import CACHE_FILE_EXTENSION, FileCacheIntoRAM, SmartModuleCache, store_score_df
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
@@ -44,8 +49,10 @@ _cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 
 def parse_filename(
-    file_path: str, split_keywords: List[str], expand_repeats: bool = False,
-    export_dfs_to: Union[str, PurePath] = None
+    file_path: str,
+    split_keywords: List[str],
+    expand_repeats: bool = False,
+    export_dfs_to: Union[str, PurePath] = None,
 ) -> Score:
     """
     This function parses a musicxml file and returns a music21 Score object. If
@@ -80,7 +87,7 @@ def parse_filename(
         score = parse(file_path)
         if export_dfs_to is not None:
             dest_path = Path(export_dfs_to)
-            dest_path /= Path(file_path).with_suffix('.pkl').name
+            dest_path /= Path(file_path).with_suffix(".pkl").name
             store_score_df(score, dest_path)
         split_layers(score, split_keywords)
         if expand_repeats:
@@ -97,7 +104,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     This function parses a musescore file and returns a pandas dataframe. If the file
     has already been parsed, it will be loaded from cache instead of processing it
     again.
-        
+
     Parameters
     ----------
     file_path: str
@@ -338,7 +345,9 @@ class FeaturesExtractor:
             for part in score_data[C.DATA_SCORE].parts
         ]
         parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
-        basic_features = self.extract_modules(BASIC_MODULES, score_data, parts_data)
+        basic_features = self.extract_modules(
+            BASIC_MODULES, score_data, parts_data, basic=True
+        )
         return basic_features, cache_name, parts_data, score_data
 
     def _process_score(self, filename: PurePath) -> Tuple[dict, List[dict]]:
@@ -350,7 +359,9 @@ class FeaturesExtractor:
             score_data,
         ) = self._init_score_processing(filename)
 
-        score_features = self.extract_modules(FEATURES_MODULES, score_data, parts_data)
+        score_features = self.extract_modules(
+            FEATURES_MODULES, score_data, parts_data, basic=False
+        )
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
 
@@ -391,7 +402,7 @@ class FeaturesExtractor:
             )
 
             window_features = self.extract_modules(
-                FEATURES_MODULES, window_data, window_parts_data
+                FEATURES_MODULES, window_data, window_parts_data, basic=False
             )
 
             window_features[
@@ -435,14 +446,19 @@ class FeaturesExtractor:
             parts_data[i]["part"] = p
         return window_score_data, parts_data
 
-    def extract_modules(self, modules: list, data: dict, parts_data: dict):
+    def extract_modules(
+        self, packages: list, data: dict, parts_data: dict, basic: bool
+    ):
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
-        for module in self._find_modules(modules):
-            self._update_parts_module_features(module, data, parts_data, parts_features)
-            self._update_score_module_features(
-                module, data, parts_data, parts_features, score_features
-            )
+        for package in packages:
+            for module in self._find_modules(package, basic):
+                self._update_parts_module_features(
+                    module, data, parts_data, parts_features
+                )
+                self._update_score_module_features(
+                    module, data, parts_data, parts_features, score_features
+                )
         return score_features
 
     def _load_m21_objects(self, filename: Union[str, PurePath]):
@@ -474,7 +490,7 @@ class FeaturesExtractor:
             tmp_path,
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
-            export_dfs_to=self._cfg.dfs_dir
+            export_dfs_to=self._cfg.dfs_dir,
         )
         score.numeric_tempo = extract_numeric_tempo(tmp_path)
         if filename.suffix == MUSESCORE_FILE_EXTENSION:
@@ -614,22 +630,38 @@ class FeaturesExtractor:
         }
         return data
 
-    def _find_modules(self, modules: str):
+    def _get_module_or_attribute(self, f, name):
+        if hasattr(f, name):
+            module = getattr(f, name)
+        else:
+            try:
+                module = __import__(f.__name__ + "." + name, fromlist=[""])
+            except Exception as e:
+                raise ImportError(
+                    f"It seems like module {f} has no `{name}` component."
+                ) from e
+        return module
+
+    def _find_modules(self, package: str, basic: bool):
         found_features = set()
-        to_extract = (
-            self._cfg.basic_modules if "basic" in modules else self._cfg.features
-        )
+        package = __import__(package, fromlist=[""])
+        if basic:
+            to_extract = self._cfg.basic_modules
+        else:
+            to_extract = self._cfg.features
         for feature in to_extract:
-            module_name = f"{modules}.{feature}.handler"
-            module = __import__(module_name, fromlist=[""])
-            feature_dependencies = self._extract_feature_dependencies(module)
-            for feature_dependency in feature_dependencies:
-                if feature_dependency not in found_features:
-                    raise ValueError(
-                        f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)"
-                    )
-            found_features.add(feature)
-            yield module
+            feature_package = self._get_module_or_attribute(package, feature)
+            if feature_package is not None:
+                module = self._get_module_or_attribute(feature_package, "handler")
+                feature_dependencies = self._extract_feature_dependencies(module)
+                # feature_dependencies = getattr('musif_dependencies', feature)
+                for feature_dependency in feature_dependencies:
+                    if feature_dependency not in found_features:
+                        raise ValueError(
+                            f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)"
+                        )
+                found_features.add(feature)
+                yield module
 
     def _extract_feature_dependencies(self, module: str) -> List[str]:
         module_code = inspect.getsource(module)
