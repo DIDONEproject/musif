@@ -653,8 +653,9 @@ class FeaturesExtractor:
             feature_package = self._get_module_or_attribute(package, feature)
             if feature_package is not None:
                 module = self._get_module_or_attribute(feature_package, "handler")
-                feature_dependencies = self._extract_feature_dependencies(module)
-                # feature_dependencies = getattr('musif_dependencies', feature)
+                feature_dependencies = self._extract_feature_dependencies(
+                    [module, feature_package, package]
+                )
                 for feature_dependency in feature_dependencies:
                     if feature_dependency not in found_features:
                         raise ValueError(
@@ -663,16 +664,23 @@ class FeaturesExtractor:
                 found_features.add(feature)
                 yield module
 
-    def _extract_feature_dependencies(self, module: str) -> List[str]:
-        module_code = inspect.getsource(module)
-        dependencies = self.regex.findall(module_code)
-        dependencies = [
-            dependency.split(".")[0]
-            for dependency in dependencies
-            if dependency.split(".")[0] in self._cfg.features
-            and dependency != module.split(".")[-2]
-        ]
-        return dependencies
+    def _extract_feature_dependencies(self, modules: List[str]) -> List[str]:
+        all_dependencies = []
+        for module in modules:
+            try:
+                module_code = inspect.getsource(module)
+            except Exception:
+                continue
+            else:
+                dependencies = self.regex.findall(module_code)
+                dependencies = [
+                    dependency.split(".")[0]
+                    for dependency in dependencies
+                    if dependency.split(".")[0] in self._cfg.features
+                    and dependency != module.split(".")[-2]
+                ]
+                all_dependencies += dependencies
+        return all_dependencies
 
     def _update_parts_module_features(
         self,
