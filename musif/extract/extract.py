@@ -26,7 +26,7 @@ from musif.cache import (
     SmartModuleCache,
     store_score_df,
 )
-from musif.common._constants import BASIC_MODULES, FEATURES_MODULES, GENERAL_FAMILY
+from musif.common._constants import GENERAL_FAMILY
 from musif.common._utils import get_ariaid
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import Configuration
@@ -346,7 +346,7 @@ class FeaturesExtractor:
         ]
         parts_data = _filter_parts_data(parts_data, self._cfg.parts_filter)
         basic_features = self.extract_modules(
-            BASIC_MODULES, score_data, parts_data, basic=True
+            self._cfg.basic_modules_addresses, score_data, parts_data, basic=True
         )
         return basic_features, cache_name, parts_data, score_data
 
@@ -360,7 +360,7 @@ class FeaturesExtractor:
         ) = self._init_score_processing(filename)
 
         score_features = self.extract_modules(
-            FEATURES_MODULES, score_data, parts_data, basic=False
+            self._cfg.feature_modules_addresses, score_data, parts_data, basic=False
         )
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
@@ -402,7 +402,10 @@ class FeaturesExtractor:
             )
 
             window_features = self.extract_modules(
-                FEATURES_MODULES, window_data, window_parts_data, basic=False
+                self._cfg.feature_modules_addresses,
+                window_data,
+                window_parts_data,
+                basic=False,
             )
 
             window_features[

@@ -28,6 +28,8 @@ PARALLEL = "parallel"
 MAX_PROCESSES = "max_processes"
 FEATURES = "features"
 BASIC_MODULES = "basic_modules"
+BASIC_MODULES_ADDRESSES = "basic_modules_addresses"
+FEATURE_MODULES_ADDRESSES = "feature_modules_addresses"
 SPLIT_KEYWORDS = "split_keywords"
 PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
@@ -70,6 +72,8 @@ _CONFIG_FALLBACK = {
     MAX_PROCESSES: 1,
     ONLY_THEME_A: False,
     BASIC_MODULES: ["core"],
+    BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
+    FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
     FEATURES: None,
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
@@ -150,7 +154,13 @@ class Configuration:
         self.basic_modules = config_data.get(
             BASIC_MODULES, _CONFIG_FALLBACK[BASIC_MODULES]
         )
+        self.basic_modules_addresses = config_data.get(
+            BASIC_MODULES_ADDRESSES, _CONFIG_FALLBACK[BASIC_MODULES_ADDRESSES]
+        )
         self.features = config_data.get(FEATURES, _CONFIG_FALLBACK[FEATURES])
+        self.feature_modules_addresses = config_data.get(
+            FEATURE_MODULES_ADDRESSES, _CONFIG_FALLBACK[FEATURE_MODULES_ADDRESSES]
+        )
         self.split_keywords = config_data.get(
             SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS]
         )
