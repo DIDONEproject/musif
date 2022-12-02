@@ -246,7 +246,7 @@ class FeaturesExtractor:
         self._cfg = Configuration(*args, **kwargs)
         self.limit_files = kwargs.get("limit_files")
         self.check_file = kwargs.get("check_file")
-        self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
+        # self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # creates the directory for the cache
         if self._cfg.cache_dir is not None:
             pinfo("Cache activated!")
@@ -650,37 +650,23 @@ class FeaturesExtractor:
         else:
             to_extract = self._cfg.features
         for feature in to_extract:
-            feature_package = self._get_module_or_attribute(package, feature)
+            try:
+                feature_package = self._get_module_or_attribute(package, feature)
+            except ImportError:
+                continue
             if feature_package is not None:
                 module = self._get_module_or_attribute(feature_package, "handler")
-                feature_dependencies = self._extract_feature_dependencies(
-                    [module, feature_package, package]
+                feature_dependencies = getattr(
+                    feature_package, "musif_dependencies", []
                 )
-                for feature_dependency in feature_dependencies:
-                    if feature_dependency not in found_features:
+                for dependency in feature_dependencies:
+                    if dependency not in found_features and dependency != feature:
                         raise ValueError(
-                            f"Feature {feature} is dependent on feature {feature_dependency} ({feature_dependency} should appear before {feature} in the configuration)"
+                            f"Feature {feature} is dependent on feature {dependency} ({dependency} should appear before {feature} in the configuration)"
                         )
                 found_features.add(feature)
                 yield module
 
-    def _extract_feature_dependencies(self, modules: List[str]) -> List[str]:
-        all_dependencies = []
-        for module in modules:
-            try:
-                module_code = inspect.getsource(module)
-            except Exception:
-                continue
-            else:
-                dependencies = self.regex.findall(module_code)
-                dependencies = [
-                    dependency.split(".")[0]
-                    for dependency in dependencies
-                    if dependency.split(".")[0] in self._cfg.features
-                    and dependency != module.split(".")[-2]
-                ]
-                all_dependencies += dependencies
-        return all_dependencies
 
     def _update_parts_module_features(
         self,
