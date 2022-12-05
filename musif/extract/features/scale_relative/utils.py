@@ -10,8 +10,8 @@ from pandas.core.frame import DataFrame
 from musif.common.sort import sort_dict
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import get_function_first, get_function_second
-from musif.logs import pwarn
-from musif.musicxml.tempo import get_number_of_beats
+import musif.extract.constants as C
+
 
 accidental_abbreviation = {
     "": "",
@@ -139,7 +139,7 @@ def get_modulations(lausanne_table: DataFrame, sections, major=True):
 
 
 def extract_harmony(score_data):
-    harmonic_analysis = score_data.get("MS3_score", pd.DataFrame())
+    harmonic_analysis = score_data.get(C.DATA_MUSESCORE_SCORE, pd.DataFrame())
 
     tonality = str(score_data[DATA_KEY])
 

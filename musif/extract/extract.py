@@ -349,7 +349,6 @@ class FeaturesExtractor:
             parts_data,
             score_data,
         ) = self._init_score_processing(filename)
-
         score_features = self.extract_modules(FEATURES_MODULES, score_data, parts_data)
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
@@ -523,7 +522,9 @@ class FeaturesExtractor:
                     (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
                     resurrect_reference=(
                         self._load_m21_objects,
-                        filename.relative_to("."),
+                        # filename.relative_to("."),
+                        filename,
+                        
                     ),
                 )
                 data[C.DATA_SCORE] = m21_objects[0]
@@ -566,15 +567,17 @@ class FeaturesExtractor:
             lerr(
                 f"These features won't be extracted for {filename}: {C.REQUIRE_MSCORE}"
             )
+            return None
         else:
             try:
                 data_musescore = parse_musescore_file(
                     str(filename), self._cfg.expand_repeats
                 )
+                return data_musescore
             except ParseFileError as e:
                 data_musescore = None
                 lerr(str(e))
-        return data_musescore
+                return None
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
