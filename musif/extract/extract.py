@@ -1,10 +1,7 @@
 import glob
-import inspect
 import os
 import pickle
-import re
 import subprocess
-from math import floor
 from os import path
 from pathlib import Path, PurePath
 from subprocess import DEVNULL
@@ -27,7 +24,6 @@ from musif.cache import (
     store_score_df,
 )
 from musif.common._constants import GENERAL_FAMILY
-from musif.common._utils import get_ariaid
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import Configuration
 from musif.extract.common import _filter_parts_data
@@ -535,8 +531,10 @@ class FeaturesExtractor:
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
             }
-            if self._cfg.only_theme_a:
-                self._only_theme_a(data)
+            if len(self._cfg.precache_hooks) > 0:
+                for hook in self._cfg.precache_hooks:
+                    hook = __import__(hook, fromlist=[""])
+                    hook.execute(self._cfg, data)
             if self._cfg.cache_dir is not None:
                 m21_objects = SmartModuleCache(
                     (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
@@ -549,37 +547,6 @@ class FeaturesExtractor:
                 )
                 data[C.DATA_SCORE] = m21_objects[0]
                 data[C.DATA_FILTERED_PARTS] = m21_objects[1]
-        return data
-
-    def _only_theme_a(self, data):
-        # TODO: move this and get_ariaid and filename to custom features
-        score: Score = data[C.DATA_SCORE]
-
-        # extracting theme_a information from metadata
-        aria_id = get_ariaid(path.basename(data[C.DATA_FILE]))
-        last_measure = 1000000
-        for d in self._cfg.scores_metadata[C.THEME_A_METADATA]:
-            if d["Id"] == aria_id:
-                last_measure = floor(float(d.get(C.END_OF_THEME_A, last_measure)))
-                break
-
-        # removing everything after end of theme A
-        for part in score.parts:
-            read_measures = 0
-            elements_to_remove = []
-            for measure in part.getElementsByClass(Measure):  # type: ignore
-                read_measures += 1
-                if read_measures > last_measure:
-                    elements_to_remove.append(measure)
-            part.remove(targetOrList=elements_to_remove)  # type: ignore
-        if (
-            self._cfg.is_requested_musescore_file()
-            and data[C.DATA_MUSESCORE_SCORE] is not None
-        ):
-            data[C.DATA_MUSESCORE_SCORE] = data[C.DATA_MUSESCORE_SCORE].loc[
-                data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure
-            ]
-            data[C.DATA_MUSESCORE_SCORE].reset_index(inplace=True, drop=True)
         return data
 
     def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:

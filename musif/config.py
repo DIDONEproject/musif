@@ -34,7 +34,7 @@ PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 WINDOW_SIZE = "window_size"
 OVERLAP = "overlap"
-ONLY_THEME_A = "only_theme_a"
+PRECACHE_HOOKS = "precache_hooks"
 MSCORE_EXEC = "mscore_exec"
 
 
@@ -68,7 +68,7 @@ _CONFIG_FALLBACK = {
     CACHE_DIR: None,
     PARALLEL: False,
     MAX_PROCESSES: 1,
-    ONLY_THEME_A: False,
+    PRECACHE_HOOKS: [],
     BASIC_MODULES: ["core"],
     BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
     FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
@@ -167,8 +167,8 @@ class Configuration:
         )
         self.window_size = config_data.get(WINDOW_SIZE, _CONFIG_FALLBACK[WINDOW_SIZE])
         self.overlap = config_data.get(OVERLAP, _CONFIG_FALLBACK[OVERLAP])
-        self.only_theme_a = config_data.get(
-            ONLY_THEME_A, _CONFIG_FALLBACK[ONLY_THEME_A]
+        self.precache_hooks = config_data.get(
+            PRECACHE_HOOKS, _CONFIG_FALLBACK[PRECACHE_HOOKS]
         )
         self.mscore_exec = config_data.get(MSCORE_EXEC, _CONFIG_FALLBACK[MSCORE_EXEC])
 
