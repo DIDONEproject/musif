@@ -134,8 +134,7 @@ class DataProcessor:
         """
         Main method of the class. Removes NaN values, deletes unuseful columns
         and merges those that are needed according to config.yml file.
-        Saves processed DataFrame into a csv file if the input was a path to a file.
-
+        
         Returns
         ------
         Dataframe object
@@ -240,11 +239,12 @@ class DataProcessor:
     def save(self, dest_path: Union[str, PurePath], ft="csv") -> None:
         """Saves current information into a file given the name of dest_path
 
-        To load one of those file, remember to set the index to `AriaId`, and, if
-        windows are used, to `WindowId`:
+        To load one of those file, remember to set the index to
+        `musif.extract.constant.ID`, and, if windows are used, to
+        `musif.extract.constant.WINDOW_ID`:
 
         ```python
-        df = pd.read_csv('window_alldata.csv').set_index(['AriaId', 'WindowId'])
+        df = pd.read_csv('window_alldata.csv').set_index(['Id', 'WindowId'])
         ```
 
         Parameters
@@ -257,12 +257,9 @@ class DataProcessor:
             `to_csv`, `to_feather`, `to_parquet`, etc.
         """
 
-        pinfo(f"Written data to {dest_path}_*.csv")
+        pinfo(f"Writing data to {dest_path}_*.csv")
         ft = "to_" + ft
         dest_path = str(dest_path)
-        getattr(self.label_dataframe, ft)(dest_path + "_labels.csv", index=False)
-        getattr(self.metadata_dataframe, ft)(dest_path + "_metadata.csv", index=False)
-        getattr(self.features_dataframe, ft)(dest_path + "_features.csv", index=False)
         getattr(self.data, ft)(dest_path + "_alldata.csv", index=False)
 
     def _group_keys_modulatory(self) -> None:
@@ -308,10 +305,6 @@ class DataProcessor:
         self.data = self._check_columns_type(self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         self.data.drop("index", axis=1, inplace=True, errors="ignore")
-
-        if hasattr(self, "destination_route"):
-            dest_path = self.destination_route + "_features"
-            self.save(dest_path)
 
     def _check_columns_type(self, df) -> DataFrame:
         for column in tqdm(df.columns, desc="Adjusting NaN values"):
