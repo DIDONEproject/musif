@@ -1,9 +1,6 @@
 """Sets the tyoe of encoding to be used"""
 ENCODING = "utf-8"
 
-"""Version of the library"""
-VERSION = "1.0.0"
-
 """Sets the tyoe of encoding to be used"""
 CSV_DELIMITER = ","
 

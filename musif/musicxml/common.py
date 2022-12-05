@@ -1,16 +1,13 @@
-import copy
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple
 
-from music21.chord import Chord
 from music21.interval import Interval
-from music21.note import Note, Rest
+from music21.note import Note
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
 from roman import toRoman
 
-from musif.cache import iscache, isinstance
-from musif.common import group
+from musif.cache import isinstance
 
 MUSICXML_FILE_EXTENSION = "xml"
 
@@ -165,10 +162,6 @@ def _get_part_clef(part):
             if hasattr(elem, "clef"):
                 return elem.clef.sign + "-" + str(elem.clef.line)
     return ""
-
-
-def get_xml_scoring_variables(score):
-    return group.get_scoring(score)
 
 
 def _get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str, str]]:
