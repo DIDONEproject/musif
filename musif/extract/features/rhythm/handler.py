@@ -5,14 +5,15 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+
+from musif.cache import hasattr
 from musif.config import Configuration
 from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATURE
+from musif.extract.features.core.constants import DATA_NOTES
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import _get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
-from musif.cache import hasattr
 
-from musif.extract.features.core.constants import DATA_NOTES
 from .constants import *
 
 
@@ -182,24 +183,24 @@ def update_score_objects(
 
 
 def get_motion_features(part_data) -> dict:
-    notes_duration = [
-        note.duration.quarterLength for note in part_data["notes_and_rests"]
-    ]
+    notes_midi = []
+    notes_duration = []
+    for note in part_data["notes_and_rests"]:
+        if hasattr(note, "pitch"):
+            notes_midi.append(note.pitch.midi)
+            notes_duration.append(note.duration.quarterLength)
+    
+    notes_midi = np.asarray(notes_midi)
+    notes_duration = np.asarray(notes_duration)
 
-    notes_midi = np.array(
-        [
-            note.pitch.midi if hasattr(note, "pitch") else np.nan
-            for note in part_data["notes_and_rests"]
-        ]
-    )
     step = 0.125
     midis_raw = np.repeat(notes_midi, [i / step for i in notes_duration], axis=0)
     spe_raw = np.diff(midis_raw) / step
     acc_raw = np.diff(spe_raw) / step
 
     # Absolute means of speed and acceleration
-    spe_avg_abs = np.nanmean(abs(spe_raw))
-    acc_avg_abs = np.nanmean(abs(acc_raw))
+    spe_avg_abs = np.mean(abs(spe_raw))
+    acc_avg_abs = np.mean(abs(acc_raw))
 
     # Rolling mean to smooth the midis by +-1 compasses -- not required for
     # statistics based on means but important for detecting increasing sequences
@@ -207,14 +208,14 @@ def get_motion_features(part_data) -> dict:
     measure = 4
     midis_smo_series = pd.Series(midis_raw)
     midis_smo = [
-        np.nanmean(i.to_list())
+        np.mean(i.to_list())
         for i in midis_smo_series.rolling(2 * measure + 1, center=True)
     ]
 
     # midis_smo = np.rollmean(midis_raw, k = 2 * compass + 1, align = "center")
 
-    spe_smo = np.diff(midis_smo) / step
-    acc_smo = np.diff(spe_smo) / step
+    # spe_smo = np.diff(midis_smo) / step
+    # acc_smo = np.diff(spe_smo) / step
 
     # Prolonged ascent/descent chunks in smoothed midis of the aria (allows for
     # small violations in the form of decrements/increments that do not
