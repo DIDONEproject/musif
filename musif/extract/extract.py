@@ -552,13 +552,14 @@ class FeaturesExtractor:
         return data
 
     def _only_theme_a(self, data):
+        # TODO: move this and get_ariaid and filename to custom features
         score: Score = data[C.DATA_SCORE]
 
         # extracting theme_a information from metadata
         aria_id = get_ariaid(path.basename(data[C.DATA_FILE]))
         last_measure = 1000000
         for d in self._cfg.scores_metadata[C.THEME_A_METADATA]:
-            if d["AriaId"] == aria_id:
+            if d["Id"] == aria_id:
                 last_measure = floor(float(d.get(C.END_OF_THEME_A, last_measure)))
                 break
 

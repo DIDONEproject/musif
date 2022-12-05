@@ -20,7 +20,6 @@ LOG_FILE_PATH = "file_path"
 FILE_LOG_LEVEL = "file_level"
 CONSOLE_LOG_LEVEL = "console_level"
 METADATA_DIR = "metadata_dir"
-METADATA_ID_COL = "metadata_id_col"
 XML_DIR = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
@@ -64,7 +63,6 @@ _CONFIG_FALLBACK = {
         CONSOLE_LOG_LEVEL: "INFO",
     },
     METADATA_DIR: "metadata",
-    METADATA_ID_COL: "FileName",
     XML_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
@@ -137,9 +135,6 @@ class Configuration:
         )
         self.metadata_dir = config_data.get(
             METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR]
-        )
-        self.metadata_id_col = config_data.get(
-            METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL]
         )
         self.xml_dir = config_data.get(XML_DIR, _CONFIG_FALLBACK[XML_DIR])
         self.musescore_dir = config_data.get(
@@ -222,7 +217,6 @@ class Configuration:
                 CONSOLE_LOG_LEVEL: self.console_log_level,
             },
             METADATA_DIR: self.metadata_dir,
-            METADATA_ID_COL: self.metadata_id_col,
             XML_DIR: self.xml_dir,
             MUSESCORE_DIR: self.musescore_dir,
             CACHE_DIR: self.cache_dir,
