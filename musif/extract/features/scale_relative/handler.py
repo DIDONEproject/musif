@@ -21,7 +21,6 @@ def update_part_objects(
 ):
 
     if score_data:
-
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
