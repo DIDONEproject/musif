@@ -21,6 +21,7 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 clean:
 	rm -r $(BUILDDIR)
+	rm -r $(SOURCEDIR)/$(APIDOC)
 	
 %: Makefile
 	export SPHINX_APIDOC_OPTIONS="members"

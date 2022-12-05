@@ -7,13 +7,13 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   musif.cache
    musif.common
    musif.extract
    musif.internal_data
    musif.musescore
    musif.musicxml
    musif.process
-   musif.reports
 
 Submodules
 ----------
