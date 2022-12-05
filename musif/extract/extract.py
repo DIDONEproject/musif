@@ -523,7 +523,7 @@ class FeaturesExtractor:
                     (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
                     resurrect_reference=(
                         self._load_m21_objects,
-                        filename.relative_to("."),
+                        filename("."),
                     ),
                 )
                 data[C.DATA_SCORE] = m21_objects[0]
