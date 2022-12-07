@@ -2,7 +2,6 @@ from logging.config import dictConfig
 import re
 from typing import List
 
-import numpy as np
 import pandas as pd
 from musif.config import (
     ENDSWITH,
@@ -10,7 +9,6 @@ from musif.config import (
     STARTSWITH,
     SUBSTRING_TO_DELETE,
 )
-from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.basic_modules.scoring.constants import (
     FAMILY_INSTRUMENTATION,
     FAMILY_SCORING,
@@ -18,25 +16,19 @@ from musif.extract.basic_modules.scoring.constants import (
 )
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.texture.constants import TEXTURE
-from musif.extract.features.ambitus.constants import (
-    HIGHEST_NOTE_INDEX,
-    LOWEST_NOTE_INDEX,
-)
 from musif.extract.features.harmony.constants import (
     KEY_MODULATORY,
     KEY_PERCENTAGE,
     KEY_PREFIX,
 )
 from musif.extract.features.interval.constants import (
-    REPEATED_NOTES_COUNT,
     TRIMMED_INTERVALLIC_MEAN,
 )
-from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
+from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 
 from musif.logs import pinfo
 from pandas import DataFrame
-from tqdm import tqdm
 
 from .constants import voices_list_prefixes
 
@@ -51,111 +43,6 @@ def replace_nans(df):
             or ("_Degree" and TRIMMED_INTERVALLIC_MEAN and "_Dyn") in col
         ):
             df[col] = df[col].fillna("NA")
-
-
-def merge_duetos_trios(df: DataFrame) -> None:
-    generic_sound_voice_prefix = get_sound_prefix("Voice")
-
-    df = df[df[VOICES].notna()]
-    multiple_voices = df[df[VOICES].str.contains(",")]
-    multiple_voices = _remove_repeated_voices(multiple_voices)
-    pinfo(
-        f"{multiple_voices.shape[0]} arias were found with duetos/trietos. Calculating averages."
-    )
-    voice_cols = [
-        col
-        for col in df.columns.values
-        if any(voice in col for voice in voices_list_prefixes)
-    ]
-
-    for index in tqdm(multiple_voices.index):
-        name = df.at[index, FILE_NAME]
-        all_voices = df.at[index, VOICES].split(",")
-        if all(x == all_voices[0] for x in all_voices):
-            continue
-        pinfo(f"\nMerging dueto/trieto {name}")
-        first_voice = all_voices[0]
-        columns_to_merge = [i for i in voice_cols if first_voice in i.lower()]
-        for col in columns_to_merge:
-            similar_cols = []
-            formatted_col = col.replace(
-                get_part_prefix(first_voice), generic_sound_voice_prefix
-            )
-            for j in range(0, len(all_voices)):
-                similar_col = col.replace(
-                    get_part_prefix(first_voice), get_part_prefix(all_voices[j])
-                )
-                if similar_col in df:
-                    similar_cols.append(similar_col)
-            if all(isinstance(x, str) for x in df.loc[index, similar_cols]):
-                df.at[index, formatted_col] = df.loc[index, similar_cols][0]
-            elif all(np.isnan(x) for x in df.loc[index, similar_cols]):
-                df.drop(similar_cols, inplace=True, axis=1)
-            elif HIGHEST_NOTE_INDEX in col or ("Largest" and "Asc") in col:
-                df.at[index, formatted_col] = df.loc[index, similar_cols].max()
-            elif LOWEST_NOTE_INDEX in col or ("Largest" and "Desc") in col:
-                df.at[index, formatted_col] = df.loc[index, similar_cols].min()
-            else:
-                df.at[index, formatted_col] = df.loc[index, similar_cols].mean()
-    return df
-
-
-def _remove_repeated_voices(multiple_voices):
-    repeated_voices_indexes = []
-    for i, row in multiple_voices.iterrows():
-        if all(x == row[VOICES].split(",")[0] for x in row[VOICES].split(",")):
-            repeated_voices_indexes.append(i)
-    multiple_voices = multiple_voices[
-        ~multiple_voices.index.isin(repeated_voices_indexes)
-    ]
-    return multiple_voices
-
-
-def merge_single_voices(df: DataFrame) -> None:
-    generic_sound_voice_prefix = get_sound_prefix("Voice")
-    pinfo("\nJoining voice parts...")
-    singer_columns = [
-        i
-        for i in df.columns.values
-        if any(voice in i for voice in voices_list_prefixes)
-    ]
-    for col in singer_columns:
-        singer_part = col.split("_")[0]
-        generic_col = "_".join(col.split("_")[1:])
-        formatted_col = col.replace(singer_part + "_", generic_sound_voice_prefix)
-        if formatted_col in df:
-            continue
-        columns_to_merge = [
-            i for i in singer_columns if "_".join(i.split("_")[1:]) == generic_col
-        ]
-        if all(df[columns_to_merge].dtypes == object):
-            df[columns_to_merge] = df[columns_to_merge].astype(str)
-            df[formatted_col] = df[columns_to_merge].sum(axis=1) 
-            df[formatted_col] = [i.replace("nan", "") for i in df[formatted_col]]
-        else:
-            for colum in columns_to_merge:
-                df[colum].fillna(0, inplace=True)
-            df[formatted_col] = df[columns_to_merge].sum(axis=1)
-
-
-def _join_double_bass(df: DataFrame):
-    df.drop([i for i in df.columns if "PartBsII" in i], axis=1, inplace=True)
-    double_bass_columns = [i for i in df.columns if "PartBsI" in i]
-    for col in double_bass_columns:
-        formatted_col = col.replace("BsI_", "Bs_")
-        df[formatted_col].fillna(0, inplace=True)
-        if df[formatted_col].dtypes == object:
-            df[formatted_col] = df[formatted_col].astype(str)
-            df[col] = df[col].astype(str)
-            df[formatted_col] = df[[col, formatted_col]].sum(axis=1)
-            df[formatted_col] = [i.replace("nan", "") for i in df[formatted_col]]
-            # df[formatted_col] = df[formatted_col].astype(float)
-        else:
-            df[col] = df[col].astype(float)
-            df[formatted_col] = df[[formatted_col, col]].sum(axis=1)
-    df.drop(double_bass_columns, axis=1, inplace=True)
-
-    return df
 
 
 def join_part_degrees(
@@ -249,19 +136,6 @@ def delete_exceptions(data) -> None:
         tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
     if empty_voices:
         data.drop(empty_voices, axis=1, inplace=True)
-
-
-def split_passion_A(data: DataFrame) -> None:
-    data["Label_PassionA_primary"] = data["Label_PassionA"].str.split(";", expand=True)[
-        0
-    ]
-    data["Label_PassionA_secundary"] = data["Label_PassionA"].str.split(
-        ";", expand=True
-    )[1]
-    data["Label_PassionA_secundary"].fillna(
-        data["Label_PassionA_primary"], inplace=True
-    )
-    data.drop("Label_PassionA", axis=1, inplace=True)
 
 
 def join_keys(df: DataFrame) -> None:
