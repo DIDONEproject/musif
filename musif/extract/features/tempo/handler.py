@@ -4,7 +4,7 @@ from typing import List
 from music21.expressions import TextExpression
 from music21.stream import Measure
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.constants import (
     DATA_FILE,
     DATA_PART,
@@ -31,7 +31,7 @@ class TempoGroup2(Enum):
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     part = part_data[DATA_PART]
     time_signature = list(part.getTimeSignatures())[0].ratioString
@@ -49,7 +49,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

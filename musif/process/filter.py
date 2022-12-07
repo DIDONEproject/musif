@@ -39,13 +39,13 @@ class DataFilter:
         Parameters
         ----------
         *args:  str
-            Could be a path to a .yml file, a PostProcess_Configuration object or a dictionary. Length zero or one.
+            Could be a path to a .yml file, a PostProcessExtractConfiguration object or a dictionary. Length zero or one.
         *kwargs : str
             Key words arguments to construct
         kwargs[info]: Union[str, DataFrame]
             Either a path to a .csv file containing the information either a DataFrame object fromm FeaturesExtractor
         """
-        # self._post_config=PostProcess_Configuration(*args, **kwargs)
+        # self._post_config=PostProcessExtractConfiguration(*args, **kwargs)
         self.info = info
         self.data = self._process_info(self.info)
 

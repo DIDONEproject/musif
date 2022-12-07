@@ -8,7 +8,7 @@ from pandas import DataFrame
 
 from musif.common._constants import VOICE_FAMILY
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 
 from musif.extract.basic_modules.scoring.constants import FAMILY
 
@@ -33,7 +33,7 @@ from musif.extract.features.core.constants import NUM_NOTES
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):
@@ -103,7 +103,7 @@ def update_score_objects(
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
 
     if not _part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):

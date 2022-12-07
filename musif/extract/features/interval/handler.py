@@ -10,7 +10,7 @@ from scipy.stats import kurtosis, skew
 from scipy.stats.mstats import trimmed_mean, trimmed_std
 
 from musif.common._utils import extract_digits
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
 from musif.extract.features.core.constants import DATA_INTERVALS
 from musif.extract.features.prefix import get_part_prefix, get_score_prefix, get_sound_prefix
@@ -19,7 +19,7 @@ from musif.extract.common import _mix_data_with_precedent_data
 from .constants import *
 
 
-def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, part_features: dict):
+def update_part_objects(score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict):
     intervals = part_data[DATA_INTERVALS]
 
     part_features.update(get_interval_features(intervals))
@@ -28,7 +28,7 @@ def update_part_objects(score_data: dict, part_data: dict, cfg: Configuration, p
     part_features.update(get_interval_stats_features(intervals))
 
 
-def update_score_objects(score_data: dict, parts_data: List[dict], cfg: Configuration, parts_features: List[dict], score_features: dict):
+def update_score_objects(score_data: dict, parts_data: List[dict], cfg: ExtractConfiguration, parts_features: List[dict], score_features: dict):
 
     if len(parts_data) == 0:
         return

@@ -6,7 +6,7 @@ from music21.harmony import ChordSymbol
 
 from music21.note import Note
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.constants import DATA_NOTES
@@ -17,7 +17,7 @@ from .constants import *
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     notes = part_data[DATA_NOTES]
     if notes is None or len(notes) == 0:
@@ -41,7 +41,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

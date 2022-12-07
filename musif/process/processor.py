@@ -7,7 +7,7 @@ import pandas as pd
 from pandas import DataFrame
 from tqdm import tqdm
 
-from musif.config import PostProcess_Configuration
+from musif.config import PostProcessConfiguration
 from musif.extract.basic_modules.scoring.constants import INSTRUMENTATION
 from musif.extract.constants import ID, WINDOW_ID
 from musif.extract.features.core.constants import FILE_NAME
@@ -67,7 +67,7 @@ class DataProcessor:
         Parameters
         ----------
         *args:  str
-            Could be a path to a .yml file, a PostProcess_Configuration object or a
+            Could be a path to a .yml file, a PostProcessConfiguration object or a
             dictionary. Length zero or one.
         *kwargs : str
             Key words arguments to construct
@@ -75,7 +75,7 @@ class DataProcessor:
             Either a path to a .csv file containing the information either a DataFrame
             object fromm FeaturesExtractor
         """
-        self._post_config = PostProcess_Configuration(*args, **kwargs)
+        self._post_config = PostProcessConfiguration(*args, **kwargs)
         self.info = info
         self.data = self._process_info(self.info)
         self.internal_data_dir = self._post_config.internal_data

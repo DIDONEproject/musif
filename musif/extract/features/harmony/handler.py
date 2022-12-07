@@ -2,7 +2,7 @@ from typing import List
 
 from pandas import DataFrame
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.features.core.handler import DATA_MODE
 from musif.logs import perr
 from .constants import *
@@ -29,7 +29,7 @@ def get_harmony_data(score_features: dict, harmonic_analysis: DataFrame) -> dict
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):
