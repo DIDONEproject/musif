@@ -12,7 +12,6 @@ from musif.config import (
 from musif.extract.basic_modules.scoring.constants import (
     FAMILY_INSTRUMENTATION,
     FAMILY_SCORING,
-    VOICES,
 )
 from musif.extract.features.harmony.constants import CHORD_prefix
 from musif.extract.features.texture.constants import TEXTURE
