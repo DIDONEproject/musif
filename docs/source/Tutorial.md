@@ -19,7 +19,7 @@ The extractor will extract the features you require and add metadata information
 
 If you wish to have this metadata included, it has to be placed in form of .csv files in a directory you define in the configuration file (metadata_dir)
 
-These files must have an Id column that will be used to assosiate each metadata file information to each score. This column has to be named the same in every file, obviously, and is defined in the field 'metadata_id_col' of the config file.  
+These files must have an Id column that will be used to assosiate each metadata file information to each score.
 
 ### Corpus files
 
