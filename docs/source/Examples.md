@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
 
 ## Window-based approach
+
 MusiF offers the possibility of extracting sets of features for scores by taking into account only certain windows of measures and then overlapping some measures with the previous window. This extracts the same amount of features than for a single file, but values will correspond to the extraction data of only that window of measures.
 The amount of measures to be taken into account for each window, as well as the overlapping quantity is set in the Configuration file. 
 It can also be overriden directly when instanciating FeaturesExtractor object.
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 
 '''
 
-## ReportsGenerator
+## Reports Generator
 
 [TODO: UNDER CONSTRUCTION-. DIDONE SPECIFIC] MusiF is able to generate reports using the data that FeatureExtractor generates. 
 It creates excel files for each module and presents them organized according to the metadata information.

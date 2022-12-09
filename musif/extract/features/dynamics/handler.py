@@ -136,7 +136,7 @@ def update_part_objects(
     part_features.update(
         {
             DYNMEAN: mean(dynamics) if len(dynamics) != 0 else 0,
-            DYNMEAN_WEIGHTED: dyn_mean_weighted / total_sounding_beats
+            DYNMEAN_WEIGHTED: float(dyn_mean_weighted / total_sounding_beats)
             if total_sounding_beats != 0
             else 0,
             DYNGRAD: float(dyn_grad / (len(dynamics) - 1))

@@ -1,10 +1,10 @@
 # Workflow
-MusiF 
+MusiF is intended
 
-## Extract features
+## How to extract features
 
 ## Post-process information
 
-## Add new features
+## How to add new features
 
 ## Introduce attributes to Configuration object
