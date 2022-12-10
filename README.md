@@ -91,8 +91,8 @@ if __name__ == "__main__":
 
 ### Cofiguration file
 
-```
-``` 
+Please find the config_example.yml as a documented example file to be used as configuration.
+
 ### TODO
 [ ] Links to related modules
 [ ] Links to jupyter notebooks
