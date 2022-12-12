@@ -78,7 +78,6 @@ class DataProcessor:
         self._post_config = PostProcessConfiguration(*args, **kwargs)
         self.info = info
         self.data = self._process_info(self.info)
-        self.internal_data_dir = self._post_config.internal_data
 
     def _process_info(self, info: Union[str, DataFrame]) -> DataFrame:
         """
@@ -220,7 +219,7 @@ class DataProcessor:
             If any of the columns required to delete is not found
             in the original DataFrame.
         """
-        config_data = self._post_config.to_dict_post()
+        config_data = self._post_config.__dict__
         config_data.update(kwargs)  # Override values
         try:
             delete_columns(self.data, config_data)
