@@ -26,32 +26,39 @@ instance, the following will allow to re-use the stock features; if you omit the
 ```yaml
 basic_modules_addresses: ["musif.extract.basic_modules", "custom_basic_modules"]
 ```
-Each feature should have two functions `update_part_objects` and
-`update_score_objects`. `musiF` will run `update_part_objects` for each part in the score (or
-window), and then `update_score_objects` for the score. This is repeated independently
-for each score and window.
 
-The two functions have almost the same signature and it is identical for basic and
+Each feature should have two functions `update_part_objects`, which each part's feature, and
+`update_score_objects`, which computes global calculations for the score, for each Sound and for each Family.
+
+`musiF` will run `update_part_objects` for each part in the score (or
+window), and then `update_score_objects` for the score. This is repeated independently
+for each window and each score.
+
+The two functions similar signatures and it is identical for basic and
 generic features:
 * `score_data` is a dictionary containing all the data loaded from the score or from the
-  cache; it contains musescore harmonic annotations and music21 objects. This object
+  cache; it contains music21 objects representing score info and musescore harmonic annotations if there is any.
+  This is where info is taken from to compute 
+  This object contains the info necessary to calculate any feature you whish to compute. Music21 objects
   should **never** be changed, especially if you intend to use the [caching
-  system](Caching)
+  system](Caching.md)
 * `part_data` is a dictionary containing data about the part being analysized (for
   `update_part_objects`) or with a list of all the `part_data` (for
   `update_score_objects`). In it, you can find the music21 object of the part, the part
   name, etc. This object should **never** be changed, especially if you intend to use
-  the [caching system](Caching)
+  the [caching system](Caching.md)
 * `cfg` is a [configuration](/Configuration) object that can be used to access
-  configuration options
+  configuration options.
 * `parts_features` is a dictionary with the features already computed for all the
-  parts; you should modify this only in `update_part_objects`
+  parts; you should modify this only in `update_part_objects`.
 * `score_features` is a dictionary with the features already computed for all the
-  parts; you should modify this only in `update_score_objects`
+  parts; you should modify this only in `update_score_objects`. It will result in the
+  final DataFrame containing all features for that score/window. 
+
 
 In the following we will show 3 different examples of custom features. For starting,
-let's create the `custom_features` directory, where we will put all our files: `mkdir
-custom_features`.
+let's create the `custom_features` directory, where we will put all our files: 
+`mkdir custom_features`.
 
 ## 1. Custom feature as a package
 
@@ -72,6 +79,20 @@ touch custom_features/custom_feature_package/handler.py
 
 `handler.py` will look like this:
 ```python
+
+
+def update_part_objects(
+    score_data: dict = None,
+    parts_data: list = None,
+    cfg: object = None,
+    parts_features: list = None,
+):
+    print(
+        "We are updating stuffs from module inside a package  given its parent package (part)!"
+    )
+    parts_features['OurNewFeature'] = 1
+
+
 def update_score_objects(
     score_data: dict = None,
     parts_data: list = None,
@@ -80,23 +101,13 @@ def update_score_objects(
     score_features: dict = None,
 ):
     print(
-        "We are updating stuffs from module inside a package  given its parent package (score)!"
+        "We are updating stuffs from module inside a package given its parent package (score)!"
     )
     score_features['OurNewFeature'] = 0
 
-
-def update_part_objects(
-    score_data: dict = None,
-    parts_data: list = None,
-    cfg: object = None,
-    parts_features: list = None,
-    score_features: dict = None,
-):
-    print(
-        "We are updating stuffs from module inside a package  given its parent package (part)!"
-    )
-    parts_features['OurNewFeature'] = 1
 ```
+We must take into account that first 'update_part_objects' will be computed for each part requesed in th score, 
+and then 'update_score_objects' to include final info in the *score_f
 
 In the configuration:
 ```yaml
@@ -110,9 +121,9 @@ features:
 
 ## 2. Custom feature as a class
 
-If you are writing only a few feature, you may find more confortable with only one file,
+If you are writing just a few features, you may find more confortable with only one file,
 instead of a whole directory. For this, you can simply create your module
-`costum_feature_module.py`:
+`custom_feature_module.py`:
 
 ```python
 class custom_feature_class:
@@ -135,7 +146,6 @@ class custom_feature_class:
             parts_data: list = None,
             cfg: object = None,
             parts_features: list = None,
-            score_features: dict = None,
         ):
             print(
                 "We can even update stuffs from an inner class given a module (part)!"
@@ -216,7 +226,6 @@ class handler:
         parts_data: list = None,
         cfg: object = None,
         parts_features: list = None,
-        score_features: dict = None,
     ):
         print(
             "We are updating stuffs from a class inside a module given a package (part)!"
