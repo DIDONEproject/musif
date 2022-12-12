@@ -5,7 +5,7 @@ import pandas as pd
 from music21 import *
 from music21.stream import Measure
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.basic_modules.scoring.constants import (
     FAMILY_ABBREVIATION,
     NUMBER_OF_FILTERED_PARTS,
@@ -37,7 +37,7 @@ from .constants import *
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     part = part_data[DATA_PART]
     (
@@ -70,7 +70,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

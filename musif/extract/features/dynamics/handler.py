@@ -3,7 +3,7 @@ from statistics import mean
 from typing import List
 from xml.dom.minidom import Element
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import _get_beat_position
 from musif.logs import lwarn, pwarn
@@ -14,7 +14,7 @@ from .constants import *
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     dynamics = []
     beats_section = 0
@@ -152,7 +152,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

@@ -4,13 +4,13 @@ from music21.stream.base import Part
 from roman import fromRoman, toRoman
 
 from musif.common.translate import translate_word
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 
 
 
-def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
+def to_abbreviation(part: Part, parts: List[Part], cfg: ExtractConfiguration) -> str:
     """
         Returns abbreviation name for a specific part based on the sound name
         
@@ -20,15 +20,15 @@ def to_abbreviation(part: Part, parts: List[Part], cfg: Configuration) -> str:
             Part to get abbreviaton from
         parts: List[part]
             List of parts in the score
-        cfg: Configuration
-            Configuration object            
+        cfg: ExtractConfiguration
+            ExtractConfiguration object            
     """
     
     sound = extract_sound(part, cfg)
     return list(_extract_abbreviated_part(sound, part, parts, cfg))[0]
 
 
-def extract_sound(part: Part, config: Configuration) -> str:
+def extract_sound(part: Part, config: ExtractConfiguration) -> str:
     """
     Returns sound name for a specific part based on the sound name
     Part: VnI -> Sound name: Vn
@@ -36,8 +36,8 @@ def extract_sound(part: Part, config: Configuration) -> str:
     ----------
     part:  str
         Part to get abbreviaton from
-    cfg: Configuration
-        Configuration object            
+    cfg: ExtractConfiguration
+        ExtractConfiguration object            
     """
     
     instrument = part.getInstrument(returnDefault=False)
@@ -66,7 +66,7 @@ def extract_sound(part: Part, config: Configuration) -> str:
         return ''
 
 
-def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config: Configuration) -> Tuple[str, str, int]:
+def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config: ExtractConfiguration) -> Tuple[str, str, int]:
     if sound not in config.sound_to_abbreviation:
         abbreviation = part.partAbbreviation  # may contain I, II or whatever
         abbreviation_parts = abbreviation.split(" ")

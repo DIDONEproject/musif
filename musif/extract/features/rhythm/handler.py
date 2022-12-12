@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from musif.cache import hasattr
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATURE
 from musif.extract.features.core.constants import DATA_NOTES
 from musif.extract.features.prefix import get_part_feature, get_score_feature
@@ -18,7 +18,7 @@ from .constants import *
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
 
     notes_duration = [note.duration.quarterLength for note in part_data["notes"]]
@@ -108,7 +108,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

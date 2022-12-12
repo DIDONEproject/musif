@@ -2,7 +2,7 @@ from typing import List
 
 from musif.common._constants import GENERAL_FAMILY, VOICE_FAMILY
 from musif.common.sort import sort_list
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.common import _part_matches_filter
 from musif.extract.constants import (
     DATA_FAMILY,
@@ -31,7 +31,7 @@ from .constants import *
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     part = part_data[DATA_PART]
     instrumental = part_data[DATA_FAMILY] != VOICE_FAMILY
@@ -52,7 +52,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

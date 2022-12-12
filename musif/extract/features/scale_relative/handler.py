@@ -1,7 +1,7 @@
 from typing import List
 
 
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 
 from musif.extract.common import _filter_parts_data
 
@@ -17,7 +17,7 @@ from musif.extract.features.core.constants import DATA_KEY, DATA_NOTES
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
 
     if score_data:
@@ -39,7 +39,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):

@@ -2,7 +2,7 @@ from statistics import mean
 from typing import List, Tuple
 
 from musif.common.sort import sort_dict
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data, _part_matches_filter
 from musif.extract.constants import (
     DATA_FAMILY_ABBREVIATION,
@@ -47,7 +47,7 @@ from musif.cache import isinstance
 
 
 def update_part_objects(
-    score_data: dict, part_data: dict, cfg: Configuration, part_features: dict
+    score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     if not _part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
         return {}
@@ -97,7 +97,7 @@ def update_part_objects(
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
-    cfg: Configuration,
+    cfg: ExtractConfiguration,
     parts_features: List[dict],
     score_features: dict,
 ):
@@ -222,7 +222,7 @@ def set_ties(subject, my_notes_list):
         )  # sum tied notes' length across measures
 
 
-def calculate_densities(notes_list, measures_list, names_list, cfg: Configuration):
+def calculate_densities(notes_list, measures_list, names_list, cfg: ExtractConfiguration):
     density_list = []
     try:
         for i, part in enumerate(names_list):

@@ -25,7 +25,7 @@ from musif.cache import (
 )
 from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
-from musif.config import Configuration
+from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pwarn
@@ -223,8 +223,8 @@ class FeaturesExtractor:
         """
         Parameters
         ----------
-        *args:  Could be a path to a .yml file, a Configuration object or a dictionary. Length zero or one.
-        **kwargs: Get keywords to construct Configuration.
+        *args:  Could be a path to a .yml file, an AbstractExtractConfiguration object or a dictionary. Length zero or one.
+        **kwargs: Get keywords to construct ExtractConfiguration.
         check_file: .csv file containing a DataFrame for files extrction that already
             have been parsed, so they will be skipped in the
         extraction process.
@@ -232,14 +232,14 @@ class FeaturesExtractor:
         Raises
         ------
         TypeError
-         - If the type is not the expected (str, dict or Configuration).
+         - If the type is not the expected (str, dict or ExtractConfiguration).
         ValueError
           - If there is too many arguments(args)
         FileNotFoundError
           - If any of the files/directories path inside the expected configuration doesn't exit.
         """
 
-        self._cfg = Configuration(*args, **kwargs)
+        self._cfg = ExtractConfiguration(*args, **kwargs)
         self.limit_files = kwargs.get("limit_files")
         self.check_file = kwargs.get("check_file")
         # self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
@@ -542,7 +542,6 @@ class FeaturesExtractor:
                         self._load_m21_objects,
                         # filename.relative_to("."),
                         filename,
-                        
                     ),
                 )
                 data[C.DATA_SCORE] = m21_objects[0]
@@ -641,7 +640,6 @@ class FeaturesExtractor:
                         )
                 found_features.add(feature)
                 yield module
-
 
     def _update_parts_module_features(
         self,

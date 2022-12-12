@@ -7,7 +7,6 @@ caption: Contents
 ---
 
 Tutorial
-Workflow
 Configuration
 Custom_features
 Caching
