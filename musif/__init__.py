@@ -1,3 +1,3 @@
-from musif.common._constants import ENCODING, VERSION
+from musif.common._constants import ENCODING
 from musif.extract import FeaturesExtractor
-from musif.reports import ReportsGenerator
+from musif.process.processor import DataProcessor

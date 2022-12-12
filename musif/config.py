@@ -20,7 +20,6 @@ LOG_FILE_PATH = "file_path"
 FILE_LOG_LEVEL = "file_level"
 CONSOLE_LOG_LEVEL = "console_level"
 METADATA_DIR = "metadata_dir"
-METADATA_ID_COL = "metadata_id_col"
 XML_DIR = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
@@ -28,12 +27,14 @@ PARALLEL = "parallel"
 MAX_PROCESSES = "max_processes"
 FEATURES = "features"
 BASIC_MODULES = "basic_modules"
+BASIC_MODULES_ADDRESSES = "basic_modules_addresses"
+FEATURE_MODULES_ADDRESSES = "feature_modules_addresses"
 SPLIT_KEYWORDS = "split_keywords"
 PARTS_FILTER = "parts_filter"
 EXPAND_REPEATS = "expand_repeats"
 WINDOW_SIZE = "window_size"
 OVERLAP = "overlap"
-ONLY_THEME_A = "only_theme_a"
+PRECACHE_HOOKS = "precache_hooks"
 MSCORE_EXEC = "mscore_exec"
 
 
@@ -62,14 +63,15 @@ _CONFIG_FALLBACK = {
         CONSOLE_LOG_LEVEL: "INFO",
     },
     METADATA_DIR: "metadata",
-    METADATA_ID_COL: "FileName",
     XML_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
     PARALLEL: False,
     MAX_PROCESSES: 1,
-    ONLY_THEME_A: False,
+    PRECACHE_HOOKS: [],
     BASIC_MODULES: ["core"],
+    BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
+    FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
     FEATURES: None,
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
@@ -134,9 +136,6 @@ class Configuration:
         self.metadata_dir = config_data.get(
             METADATA_DIR, _CONFIG_FALLBACK[METADATA_DIR]
         )
-        self.metadata_id_col = config_data.get(
-            METADATA_ID_COL, _CONFIG_FALLBACK[METADATA_ID_COL]
-        )
         self.xml_dir = config_data.get(XML_DIR, _CONFIG_FALLBACK[XML_DIR])
         self.musescore_dir = config_data.get(
             MUSESCORE_DIR, _CONFIG_FALLBACK[MUSESCORE_DIR]
@@ -150,7 +149,13 @@ class Configuration:
         self.basic_modules = config_data.get(
             BASIC_MODULES, _CONFIG_FALLBACK[BASIC_MODULES]
         )
+        self.basic_modules_addresses = config_data.get(
+            BASIC_MODULES_ADDRESSES, _CONFIG_FALLBACK[BASIC_MODULES_ADDRESSES]
+        )
         self.features = config_data.get(FEATURES, _CONFIG_FALLBACK[FEATURES])
+        self.feature_modules_addresses = config_data.get(
+            FEATURE_MODULES_ADDRESSES, _CONFIG_FALLBACK[FEATURE_MODULES_ADDRESSES]
+        )
         self.split_keywords = config_data.get(
             SPLIT_KEYWORDS, _CONFIG_FALLBACK[SPLIT_KEYWORDS]
         )
@@ -162,8 +167,8 @@ class Configuration:
         )
         self.window_size = config_data.get(WINDOW_SIZE, _CONFIG_FALLBACK[WINDOW_SIZE])
         self.overlap = config_data.get(OVERLAP, _CONFIG_FALLBACK[OVERLAP])
-        self.only_theme_a = config_data.get(
-            ONLY_THEME_A, _CONFIG_FALLBACK[ONLY_THEME_A]
+        self.precache_hooks = config_data.get(
+            PRECACHE_HOOKS, _CONFIG_FALLBACK[PRECACHE_HOOKS]
         )
         self.mscore_exec = config_data.get(MSCORE_EXEC, _CONFIG_FALLBACK[MSCORE_EXEC])
 
@@ -212,7 +217,6 @@ class Configuration:
                 CONSOLE_LOG_LEVEL: self.console_log_level,
             },
             METADATA_DIR: self.metadata_dir,
-            METADATA_ID_COL: self.metadata_id_col,
             XML_DIR: self.xml_dir,
             MUSESCORE_DIR: self.musescore_dir,
             CACHE_DIR: self.cache_dir,

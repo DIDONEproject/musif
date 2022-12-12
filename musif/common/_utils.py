@@ -1,6 +1,5 @@
 import csv
 import json
-from os import path
 from typing import Iterator, List, Union
 
 import pandas as pd
@@ -9,22 +8,6 @@ from pandas import DataFrame
 
 from musif.common._constants import CSV_DELIMITER, ENCODING
 from musif.common.constants import COLOR_SEQ, COLORS, RESET_SEQ
-
-
-def get_ariaid(file_name: str, return_char_start=False) -> str:
-    aria_id_end_idx = file_name.rfind("]")
-    aria_id_start_idx = file_name.rfind("[", 0, aria_id_end_idx - 1) + 1
-    aria_id = file_name[aria_id_start_idx:aria_id_end_idx]
-    if return_char_start:
-        return aria_id, aria_id_start_idx
-    return aria_id
-
-
-def get_file_name(file_path: str) -> str:
-    file_basename = path.basename(file_path)
-    file_basename = path.join("tests", file_path)
-    extension_pos = file_basename.rfind(".")
-    return file_basename if extension_pos < 0 else file_basename[extension_pos]
 
 
 def write_object_to_json_file(

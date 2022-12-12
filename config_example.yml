@@ -2,7 +2,6 @@
 metadata_dir: ./metadata
 
 # Name of the column to be used as a reference when crossing metadata with each score.
-metadata_id_col: Id
 
 # Directory containing .xml files to be analized.
 data_dir: ../../Corpus_Test/xml

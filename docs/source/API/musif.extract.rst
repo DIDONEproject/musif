@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   musif.extract.basic_modules
    musif.extract.features
 
 Submodules
