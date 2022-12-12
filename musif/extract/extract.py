@@ -167,7 +167,7 @@ def find_files(
         raise ValueError(f"File {obj} doesn't exist")
     elif obj.is_dir():
         if check_file:
-            ret = _skip_files(obj, check_file)
+            ret = _skip_files(obj, check_file, extension)
         else:
             ret = sorted(obj.glob(f"*{extension}"))
         if limit_files is not None:
@@ -181,29 +181,29 @@ def find_files(
         return []
 
 
-def _skip_files(obj, check_file):
+def _skip_files(obj, check_file, extension):
     skipped = []
     files_to_extract = []
     total_files = sorted(
-        glob.glob(path.join(obj, f"*.{MUSICXML_FILE_EXTENSION}")), key=str.lower
+        glob.glob(path.join(obj, f"*{extension}")), key=str.lower
     )
     parsed_files = pd.read_csv(
         check_file, low_memory=False, sep=",", encoding_errors="replace", header=0
     )["FileName"].tolist()
     for i in total_files:
-        if i.replace(obj, "").replace("\\", "").replace("/", "") not in parsed_files:
+        if i.replace(str(obj), "").replace("\\", "").replace("/", "") not in parsed_files:
             files_to_extract.append(i)
         else:
-            skipped.append(i.replace(obj, "").replace("\\", ""))
+            skipped.append(i.replace(str(obj), "").replace("\\", ""))
     if skipped:
         pwarn(
             "Some files were skipped because they have been already processed before: "
         )
         print(*skipped, sep=",\n")
         print("Total: ", len(skipped))
-    return files_to_extract
+    return [i for i in sorted(obj.glob(f"*{extension}")) if str(i) in files_to_extract]
 
-
+#  sorted(obj.glob(f"*{extension}"))
 class FeaturesExtractor:
     """
     Extract features for a score or a list of scores, according to the parameters
@@ -273,7 +273,7 @@ class FeaturesExtractor:
             MUSESCORE_FILE_EXTENSION,
             self._cfg.musescore_dir,
             limit_files=self.limit_files,
-            check_file=self.check_file,
+            check_file=None, # check_file is only needed for xml files 
         )
         if len(musescore_filenames) == 0:
             if self._cfg.is_requested_musescore_file():
