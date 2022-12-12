@@ -34,7 +34,6 @@ SPLIT_KEYWORDS = "split_keywords"
 METADATA_DIR = "metadata_dir"
 
 
-CHECK_FILE = "checking_file"
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
@@ -47,12 +46,8 @@ CONTAIN = "columns_contain"
 REPLACE_NANS = "replace_nans"
 PRESENCE = "delete_presence"
 DFS_DIR = "dfs_dir"
-# Didone specific?
 GROUPED = "grouped_analysis"
-# Didone specific
 MERGE_VOICES = "merge_voices"
-INTERNAL_DATA = "internal_data_dir"
-SPLIT_PASSSIONS = "split_passionA"
 
 _CONFIG_LOG_FALLBACK = {
     LOG_FILE_PATH: "./musiF.log",
@@ -77,21 +72,17 @@ _CONFIG_FALLBACK = {
     EXPAND_REPEATS: False,
     WINDOW_SIZE: 8,
     OVERLAP: 2,
-    CHECK_FILE: ".",
     MSCORE_EXEC: None,
     DFS_DIR: None,
 }
 
 _CONFIG_POST_FALLBACK = {
-    INTERNAL_DATA: "musif/internal_data",
     DELETE_FILES: False,
     GROUPED: False,
     DELETE_FILES: False,
     DELETE_HARMONY: False,
-    SPLIT_PASSSIONS: False,
     UNBUNDLE_INSTRUMENTATION: False,
     MERGE_VOICES: True,
-    CHECK_FILE: ".",
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_DELETE: [],
     SUBSTRING_TO_DELETE: [],
