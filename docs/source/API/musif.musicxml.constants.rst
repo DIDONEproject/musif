@@ -3,5 +3,5 @@ musif.musicxml.constants module
 
 .. automodule:: musif.musicxml.constants
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

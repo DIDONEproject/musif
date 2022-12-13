@@ -3,5 +3,5 @@ musif.common.translate module
 
 .. automodule:: musif.common.translate
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

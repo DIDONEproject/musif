@@ -3,5 +3,5 @@ musif.extract.features.scale.constants module
 
 .. automodule:: musif.extract.features.scale.constants
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

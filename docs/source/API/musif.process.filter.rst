@@ -3,5 +3,5 @@ musif.process.filter module
 
 .. automodule:: musif.process.filter
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

@@ -3,5 +3,5 @@ musif.extract.features.interval.handler module
 
 .. automodule:: musif.extract.features.interval.handler
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

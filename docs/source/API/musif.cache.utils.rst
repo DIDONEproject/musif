@@ -3,5 +3,5 @@ musif.cache.utils module
 
 .. automodule:: musif.cache.utils
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

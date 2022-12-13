@@ -17,5 +17,5 @@ Module contents
 
 .. automodule:: musif.process
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

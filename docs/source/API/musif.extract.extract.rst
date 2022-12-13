@@ -3,5 +3,5 @@ musif.extract.extract module
 
 .. automodule:: musif.extract.extract
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

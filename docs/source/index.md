@@ -10,7 +10,6 @@ Tutorial
 Configuration
 Custom_features
 Caching
-Examples
 API/modules
 
 ```

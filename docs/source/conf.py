@@ -30,7 +30,7 @@ extensions = [
 # autosummary_generate = True
 # autosummary_imported_members = True
 
-templates_path = ["_templates"]
+# templates_path = ["_templates"]
 autodoc_mock_imports = [
     "music21", "pandas", "scipy", "joblib", "matplotlib",
     "numpy", "openpyxl", "deepdiff", "pyyaml", "ms3", "tqdm",
@@ -43,4 +43,5 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "alabaster"
-html_static_path = ["_static"]
+html_static_path = ['_static']
+html_css_files = ['css/custom.css']

@@ -3,5 +3,5 @@ musif.extract.constants module
 
 .. automodule:: musif.extract.constants
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

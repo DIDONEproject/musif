@@ -15,5 +15,5 @@ Module contents
 
 .. automodule:: musif.musescore
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

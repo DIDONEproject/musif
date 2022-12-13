@@ -3,5 +3,5 @@ musif.logs module
 
 .. automodule:: musif.logs
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

@@ -15,5 +15,5 @@ Module contents
 
 .. automodule:: musif.extract.features.scale
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

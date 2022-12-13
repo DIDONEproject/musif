@@ -3,5 +3,5 @@ musif.musicxml.tempo module
 
 .. automodule:: musif.musicxml.tempo
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

@@ -3,5 +3,5 @@ musif.musicxml.repeat module
 
 .. automodule:: musif.musicxml.repeat
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

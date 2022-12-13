@@ -34,5 +34,5 @@ Module contents
 
 .. automodule:: musif.extract.features
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

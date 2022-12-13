@@ -15,5 +15,5 @@ Module contents
 
 .. automodule:: musif.extract.features.rhythm
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

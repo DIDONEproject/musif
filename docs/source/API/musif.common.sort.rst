@@ -3,5 +3,5 @@ musif.common.sort module
 
 .. automodule:: musif.common.sort
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

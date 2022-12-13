@@ -18,5 +18,5 @@ Module contents
 
 .. automodule:: musif.common
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

@@ -30,5 +30,5 @@ Module contents
 
 .. automodule:: musif
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

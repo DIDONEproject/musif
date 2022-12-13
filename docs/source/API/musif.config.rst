@@ -3,5 +3,5 @@ musif.config module
 
 .. automodule:: musif.config
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

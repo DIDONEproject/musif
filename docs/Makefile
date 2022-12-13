@@ -5,7 +5,7 @@
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SPHINXAPIDOC	?= sphinx-apidoc
+SPHINXAPIDOC	?= SPHINX_APIDOC_OPTIONS="members,no-undoc-members,show-inheritance" sphinx-apidoc
 SOURCEDIR     = source
 APIDOC 				= API
 BUILDDIR      = build
@@ -24,6 +24,6 @@ clean:
 	rm -r $(SOURCEDIR)/$(APIDOC)
 	
 %: Makefile
-	export SPHINX_APIDOC_OPTIONS="members"
+	make clean
 	@$(SPHINXAPIDOC) -e -o "$(SOURCEDIR)/$(APIDOC)" "$(APISRC)" 
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -v

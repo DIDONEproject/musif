@@ -16,5 +16,5 @@ Module contents
 
 .. automodule:: musif.extract.features.harmony
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

@@ -3,5 +3,5 @@ musif.mlogger module
 
 .. automodule:: musif.mlogger
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

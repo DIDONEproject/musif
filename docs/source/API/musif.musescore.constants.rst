@@ -3,5 +3,5 @@ musif.musescore.constants module
 
 .. automodule:: musif.musescore.constants
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

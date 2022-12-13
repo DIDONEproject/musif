@@ -15,5 +15,5 @@ Module contents
 
 .. automodule:: musif.cache
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

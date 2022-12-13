@@ -15,5 +15,5 @@ Module contents
 
 .. automodule:: musif.extract.features.texture
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

@@ -3,5 +3,5 @@ musif.extract.features.interval.constants module
 
 .. automodule:: musif.extract.features.interval.constants
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

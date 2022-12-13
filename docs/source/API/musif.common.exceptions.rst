@@ -3,5 +3,5 @@ musif.common.exceptions module
 
 .. automodule:: musif.common.exceptions
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

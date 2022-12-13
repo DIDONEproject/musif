@@ -6,5 +6,5 @@ Module contents
 
 .. automodule:: musif.internal_data
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:

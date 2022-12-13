@@ -1,0 +1,15 @@
+.py {
+  margin: 15px 0px !important;
+}
+
+.py.class::before, .py.exception::before, .py.function::before {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-right: 5px;
+  background: black;
+  color: black;
+  content: "";
+  margin-bottom: 20px;
+  margin-top: 20px;
+}

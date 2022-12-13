@@ -3,5 +3,5 @@ musif.musescore.common module
 
 .. automodule:: musif.musescore.common
    :members:
-   :undoc-members:
+   :no-undoc-members:
    :show-inheritance:
