@@ -64,7 +64,7 @@ To allow you to modify the parsed score, we have introduced the option of using 
 as explained below.
 
 You can implement any object, module, or package with a function `execute` which
-accepts two objects: a [`Configuration`](/Configuration) object and the data parsed from
+accepts two objects: a [`Configuration`](/Configuration.md) object and the data parsed from
 the score. This latter is a dictionary which contains the `music21.stream.Score` object
 resulting from the MusicXML file, its parts data, the harmonic annotations contained in
 a `Musescore` file (if available), etc.

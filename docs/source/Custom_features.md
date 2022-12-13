@@ -27,7 +27,7 @@ instance, the following will allow to re-use the stock features; if you omit the
 basic_modules_addresses: ["musif.extract.basic_modules", "custom_basic_modules"]
 ```
 
-Each feature should have two functions `update_part_objects`, which each part's feature, and
+Each feature should have two functions `update_part_objects`, which each computes part's feature, and
 `update_score_objects`, which computes global calculations for the score, for each Sound and for each Family.
 
 `musiF` will run `update_part_objects` for each part in the score (or
@@ -128,6 +128,18 @@ instead of a whole directory. For this, you can simply create your module
 ```python
 class custom_feature_class:
     class handler:
+        
+        def update_part_objects(
+            self,
+            score_data: dict = None,
+            parts_data: list = None,
+            cfg: object = None,
+            parts_features: list = None,
+        ):
+            print(
+                "We can even update stuffs from an inner class given a module (part)!"
+            )
+
         def update_score_objects(
             self,
             score_data: dict = None,
@@ -140,16 +152,6 @@ class custom_feature_class:
                 "We can even update stuffs from an inner class given a module (score)!"
             )
 
-        def update_part_objects(
-            self,
-            score_data: dict = None,
-            parts_data: list = None,
-            cfg: object = None,
-            parts_features: list = None,
-        ):
-            print(
-                "We can even update stuffs from an inner class given a module (part)!"
-            )
 ```
 
 In the configuration file:
@@ -174,18 +176,6 @@ class MyNewFeature:
   def __init__(*args, **kwargs):
     pass
     
-  def update_score_objects(
-      self,
-      score_data: dict = None,
-      parts_data: list = None,
-      cfg: object = None,
-      parts_features: list = None,
-      score_features: dict = None,
-  ):
-      print(
-          "We can even update stuffs from an inner class given a module (score)!"
-      )
-
   def update_part_objects(
       self,
       score_data: dict = None,
@@ -198,6 +188,19 @@ class MyNewFeature:
           "We can even update stuffs from an inner class given a module (part)!"
       )
 
+  def update_score_objects(
+      self,
+      score_data: dict = None,
+      parts_data: list = None,
+      cfg: object = None,
+      parts_features: list = None,
+      score_features: dict = None,
+  ):
+      print(
+          "We can even update stuffs from an inner class given a module (score)!"
+      )
+
+
 custom_feature_class = FeatureCreator(MyNewFeature, 'other', 'args')
 ```
 
@@ -208,6 +211,18 @@ module inside a package `custom_features/custom_feature_module_in_package.py`:
 
 ```python
 class handler:
+    
+    def update_part_objects(
+        self,
+        score_data: dict = None,
+        parts_data: list = None,
+        cfg: object = None,
+        parts_features: list = None,
+    ):
+        print(
+            "We are updating stuffs from a class inside a module given a package (part)!"
+        )
+        
     def update_score_objects(
         self,
         score_data: dict = None,
@@ -220,16 +235,6 @@ class handler:
             "We are updating stuffs from a class inside a module given a package (score)!"
         )
 
-    def update_part_objects(
-        self,
-        score_data: dict = None,
-        parts_data: list = None,
-        cfg: object = None,
-        parts_features: list = None,
-    ):
-        print(
-            "We are updating stuffs from a class inside a module given a package (part)!"
-        )
 ```
 
 And then in the configuration file:

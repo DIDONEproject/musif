@@ -56,7 +56,6 @@ _CONFIG_LOG_FALLBACK = {
 }
 
 _CONFIG_FALLBACK = {
-    METADATA_DIR: "metadata",
     XML_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
@@ -92,6 +91,7 @@ _CONFIG_POST_FALLBACK = {
     CONTAIN: [],
     REPLACE_NANS: [],
 }
+
 
 
 class AbstractConfiguration:
