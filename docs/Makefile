@@ -24,6 +24,5 @@ clean:
 	rm -r $(SOURCEDIR)/$(APIDOC)
 	
 %: Makefile
-	make clean
 	@$(SPHINXAPIDOC) -e -o "$(SOURCEDIR)/$(APIDOC)" "$(APISRC)" 
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -v

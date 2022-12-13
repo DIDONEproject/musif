@@ -134,7 +134,7 @@ def find_files(
     extension: str,
     obj: Union[str, List[Union[str, PurePath]]],
     limit_files: List[str] = None,
-    check_file: str = None,
+    exclude_files: List[str] = None,
 ) -> List[PurePath]:
     """Extracts the paths to files given an extension
 
@@ -148,6 +148,12 @@ def find_files(
       A string representing the extension that will be looked for
     obj : Union[str, Iterable[str]]
       A path or directory, or a list of paths or directories
+    limit_files: List[str] = None
+        List of file names relative to `obj`. Only these files are taken. Incompatible
+        with `exclude_files`
+    exclude_files: List[str] = None
+        List of file names relative to `obj`. None of these files are taken.
+        Incompatible with `limit_files`
 
     Returns
     -------
@@ -169,13 +175,13 @@ def find_files(
     if not obj.exists():
         raise ValueError(f"File {obj} doesn't exist")
     elif obj.is_dir():
-        if check_file:
-            ret = _skip_files(obj, check_file, extension)
-        else:
-            ret = sorted(obj.glob(f"*{extension}"))
+        ret = sorted(obj.glob(f"*{extension}"))
         if limit_files is not None:
             limit_stems = set(map(lambda x: Path(x).stem, limit_files))
             return [f for f in ret if f.stem in limit_stems]
+        elif exclude_files is not None:
+            exclude_stems = set(map(lambda x: Path(x).stem, exclude_files))
+            return [f for f in ret if f.stem not in exclude_stems]
         else:
             return ret
     elif obj.is_file() and obj.suffix == f"{extension}":
@@ -183,28 +189,6 @@ def find_files(
     else:
         return []
 
-
-def _skip_files(obj, check_file, extension):
-    skipped = []
-    files_to_extract = []
-    total_files = sorted(
-        glob.glob(path.join(obj, f"*{extension}")), key=str.lower
-    )
-    parsed_files = pd.read_csv(
-        check_file, low_memory=False, sep=",", encoding_errors="replace", header=0
-    )["FileName"].tolist()
-    for i in total_files:
-        if i.replace(str(obj), "").replace("\\", "").replace("/", "") not in parsed_files:
-            files_to_extract.append(i)
-        else:
-            skipped.append(i.replace(str(obj), "").replace("\\", ""))
-    if skipped:
-        pwarn(
-            "Some files were skipped because they have been already processed before: "
-        )
-        print(*skipped, sep=",\n")
-        print("Total: ", len(skipped))
-    return [i for i in sorted(obj.glob(f"*{extension}")) if str(i) in files_to_extract]
 
 #  sorted(obj.glob(f"*{extension}"))
 class FeaturesExtractor:
@@ -225,9 +209,12 @@ class FeaturesExtractor:
         ----------
         *args:  Could be a path to a .yml file, an AbstractExtractConfiguration object or a dictionary. Length zero or one.
         **kwargs: Get keywords to construct ExtractConfiguration.
-        check_file: .csv file containing a DataFrame for files extrction that already
-            have been parsed, so they will be skipped in the
-        extraction process.
+        limit_files: List[str] = None
+            List of file names relative to `obj`. Only these files are taken.
+            Incompatible with `exclude_files`
+        exclude_files: List[str] = None
+            List of file names relative to `obj`. None of these files are taken.
+            Incompatible with `limit_files`
 
         Raises
         ------
@@ -241,7 +228,7 @@ class FeaturesExtractor:
 
         self._cfg = ExtractConfiguration(*args, **kwargs)
         self.limit_files = kwargs.get("limit_files")
-        self.check_file = kwargs.get("check_file")
+        self.exclude_files = kwargs.get("limit_files")
         # self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # creates the directory for the cache
         if self._cfg.cache_dir is not None:
@@ -276,7 +263,7 @@ class FeaturesExtractor:
             MUSESCORE_FILE_EXTENSION,
             self._cfg.musescore_dir,
             limit_files=self.limit_files,
-            check_file=None, # check_file is only needed for xml files 
+            check_file=None,  # check_file is only needed for xml files
         )
         if len(musescore_filenames) == 0:
             if self._cfg.is_requested_musescore_file():
