@@ -1,10 +1,5 @@
-# Directory containing .csv files that contain metadata information.
-metadata_dir: ./metadata
-
-# Name of the column to be used as a reference when crossing metadata with each score.
-
 # Directory containing .xml files to be analized.
-data_dir: ../../Corpus_Test/xml
+xml_dir: ../../Corpus_Test/xml
 
 # Directory containing .mscx files to be analyzed if harmonic analysis is required.
 musescore_dir: ../../Corpus_Test/musescore
@@ -14,10 +9,6 @@ cache_dir: null
 
 # Boolean flag to expand repetitions of score or not.
 expand_repeats: false
-
-# Boolean flag to extract features only for the theme A part. The limit is set as a measure number in a csv file
-# in the metadata directory.
-only_theme_a: true
 
 # Size of windows (in measures) when extracting features of the score in a windows approach.
 # Each row of the resulting DataFrame will correspond to each window.
@@ -85,7 +76,7 @@ split_keywords:
   - brass
   - wind
   - viola
-  - strings.cello
+  - cello
   - bass
   - oboi
   
