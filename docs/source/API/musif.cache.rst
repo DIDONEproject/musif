@@ -1,19 +1,26 @@
 musif.cache package
 ===================
 
+.. automodule:: musif.cache
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
-.. toctree::
-   :maxdepth: 4
+musif.cache.cache module
+------------------------
 
-   musif.cache.cache
-   musif.cache.utils
-
-Module contents
----------------
-
-.. automodule:: musif.cache
+.. automodule:: musif.cache.cache
    :members:
-   :no-undoc-members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.cache.utils module
+------------------------
+
+.. automodule:: musif.cache.utils
+   :members:
+   :undoc-members:
    :show-inheritance:

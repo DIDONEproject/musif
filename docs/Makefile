@@ -5,11 +5,12 @@
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SPHINXAPIDOC	?= SPHINX_APIDOC_OPTIONS="members,no-undoc-members,show-inheritance" sphinx-apidoc
+SPHINXAPIDOC	?= sphinx-apidoc
 SOURCEDIR     = source
 APIDOC 				= API
 BUILDDIR      = build
 APISRC 				= ../musif
+APISRC_EXCLUDE = ../musif/extract/features
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -24,5 +25,5 @@ clean:
 	rm -r $(SOURCEDIR)/$(APIDOC)
 	
 %: Makefile
-	@$(SPHINXAPIDOC) -e -o "$(SOURCEDIR)/$(APIDOC)" "$(APISRC)" 
+	@$(SPHINXAPIDOC) -M -f -o "$(SOURCEDIR)/$(APIDOC)" "$(APISRC)" "$(APISRC_EXCLUDE)"
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -v

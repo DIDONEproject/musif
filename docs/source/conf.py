@@ -27,21 +27,49 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
 ]
-# autosummary_generate = True
-# autosummary_imported_members = True
+autosummary_generate = True
+autosummary_imported_members = True
 
 # templates_path = ["_templates"]
 autodoc_mock_imports = [
-    "music21", "pandas", "scipy", "joblib", "matplotlib",
-    "numpy", "openpyxl", "deepdiff", "pyyaml", "ms3", "tqdm",
-    "roman"
+    "music21",
+    "pandas",
+    "scipy",
+    "joblib",
+    "matplotlib",
+    "numpy",
+    "openpyxl",
+    "deepdiff",
+    "pyyaml",
+    "ms3",
+    "tqdm",
+    "roman",
 ]
 exclude_patterns = []
 
+autodoc_default_options = {
+    "members": True,
+    "show_inheritance": True,
+}
 
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+
+def autodoc_skip_member_handler(app, what, name, obj, skip, options):
+    # Basic approach; you might want a regex instead
+    if not hasattr(obj, "__doc__"):
+        return True
+    elif not obj.__doc__:
+        return True
+    elif name == "__init__":
+        return False
+    elif name.startswith("_"):
+        return True
+    return skip
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", autodoc_skip_member_handler)
+
 
 html_theme = "alabaster"
-html_static_path = ['_static']
-html_css_files = ['css/custom.css']
+html_static_path = ["_static"]
+html_css_files = ["css/custom.css"]
