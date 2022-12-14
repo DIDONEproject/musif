@@ -1,21 +1,42 @@
 musif.process package
 =====================
 
+.. automodule:: musif.process
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
-.. toctree::
-   :maxdepth: 4
+musif.process.constants module
+------------------------------
 
-   musif.process.constants
-   musif.process.filter
-   musif.process.processor
-   musif.process.utils
+.. automodule:: musif.process.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-Module contents
----------------
+musif.process.filter module
+---------------------------
 
-.. automodule:: musif.process
+.. automodule:: musif.process.filter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.process.processor module
+------------------------------
+
+.. automodule:: musif.process.processor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.process.utils module
+--------------------------
+
+.. automodule:: musif.process.utils
    :members:
    :undoc-members:
    :show-inheritance:

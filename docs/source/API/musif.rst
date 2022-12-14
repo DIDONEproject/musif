@@ -1,6 +1,11 @@
 musif package
 =============
 
+.. automodule:: musif
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -10,7 +15,6 @@ Subpackages
    musif.cache
    musif.common
    musif.extract
-   musif.internal_data
    musif.musescore
    musif.musicxml
    musif.process
@@ -18,17 +22,26 @@ Subpackages
 Submodules
 ----------
 
-.. toctree::
-   :maxdepth: 4
+musif.config module
+-------------------
 
-   musif.config
-   musif.logs
-   musif.mlogger
+.. automodule:: musif.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-Module contents
----------------
+musif.logs module
+-----------------
 
-.. automodule:: musif
+.. automodule:: musif.logs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.mlogger module
+--------------------
+
+.. automodule:: musif.mlogger
    :members:
    :undoc-members:
    :show-inheritance:

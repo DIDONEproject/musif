@@ -1,19 +1,26 @@
 musif.musescore package
 =======================
 
+.. automodule:: musif.musescore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
-.. toctree::
-   :maxdepth: 4
+musif.musescore.common module
+-----------------------------
 
-   musif.musescore.common
-   musif.musescore.constants
+.. automodule:: musif.musescore.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-Module contents
----------------
+musif.musescore.constants module
+--------------------------------
 
-.. automodule:: musif.musescore
+.. automodule:: musif.musescore.constants
    :members:
    :undoc-members:
    :show-inheritance:

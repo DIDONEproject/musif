@@ -1,23 +1,58 @@
 musif.musicxml package
 ======================
 
+.. automodule:: musif.musicxml
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
-.. toctree::
-   :maxdepth: 4
+musif.musicxml.common module
+----------------------------
 
-   musif.musicxml.common
-   musif.musicxml.constants
-   musif.musicxml.key
-   musif.musicxml.repeat
-   musif.musicxml.scoring
-   musif.musicxml.tempo
+.. automodule:: musif.musicxml.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-Module contents
----------------
+musif.musicxml.constants module
+-------------------------------
 
-.. automodule:: musif.musicxml
+.. automodule:: musif.musicxml.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.musicxml.key module
+-------------------------
+
+.. automodule:: musif.musicxml.key
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.musicxml.repeat module
+----------------------------
+
+.. automodule:: musif.musicxml.repeat
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.musicxml.scoring module
+-----------------------------
+
+.. automodule:: musif.musicxml.scoring
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+musif.musicxml.tempo module
+---------------------------
+
+.. automodule:: musif.musicxml.tempo
    :members:
    :undoc-members:
    :show-inheritance:
