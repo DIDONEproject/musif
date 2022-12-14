@@ -6,7 +6,7 @@ There are 2 different type of features:
 * basic features
 * generic features
 
-The only true difference among them is that "basic features" will be computed once per
+The only true difference between them is that "basic features" will be computed once per
 each music score, while "generic features" will be recomputed for each window in the
 score. If you disable windows in the [configuration](Configuration.html) with the option
 `window_size=None`, then there will be no difference. However, "basic features" will be
@@ -38,11 +38,10 @@ The two functions similar signatures and it is identical for basic and
 generic features:
 * `score_data` is a dictionary containing all the data loaded from the score or from the
   cache; it contains music21 objects representing score info and musescore harmonic annotations if there is any.
-  This is where info is taken from to compute 
-  This object contains the info necessary to calculate any feature you whish to compute. Music21 objects
+  Likely, you want to use this object to design your features. Remember that music21 objects
   should **never** be changed, especially if you intend to use the [caching
   system](Caching.html)
-* `part_data` is a dictionary containing data about the part being analysized (for
+* `part_data` is a dictionary containing data about the part being analyzed (for
   `update_part_objects`) or with a list of all the `part_data` (for
   `update_score_objects`). In it, you can find the music21 object of the part, the part
   name, etc. This object should **never** be changed, especially if you intend to use
@@ -68,7 +67,7 @@ all the `musiF` features are implemented.
 
 First, let's create a directory for the package and a `__init__.py` file in it:
 ```shell
-mkdir custom_features/custom_feature_package 
+mkdir -p custom_features/custom_feature_package 
 touch custom_features/custom_feature_package/__init__.py
 ```
 
@@ -79,8 +78,6 @@ touch custom_features/custom_feature_package/handler.py
 
 `handler.py` will look like this:
 ```python
-
-
 def update_part_objects(
     score_data: dict = None,
     parts_data: list = None,
@@ -104,10 +101,12 @@ def update_score_objects(
         "We are updating stuffs from module inside a package given its parent package (score)!"
     )
     score_features['OurNewFeature'] = 0
-
 ```
-We must take into account that first 'update_part_objects' will be computed for each part requesed in th score, 
-and then 'update_score_objects' to include final info in the *score_f
+We must take into account that first `update_part_objects` will be computed for each
+part requesed in th score. Successively, `update_score_objects` is run once to include
+final info in the `score_features`. In this process, you can use `parts_features` to
+compute final features for the score - for instance if you want to create a feature only
+for violins or a certain family of instruments.
 
 In the configuration:
 ```yaml
@@ -182,7 +181,6 @@ class MyNewFeature:
       parts_data: list = None,
       cfg: object = None,
       parts_features: list = None,
-      score_features: dict = None,
   ):
       print(
           "We can even update stuffs from an inner class given a module (part)!"
