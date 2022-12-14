@@ -144,9 +144,9 @@ class DataProcessor:
         if self._post_config.delete_files_without_harmony:
             self.delete_files_without_harmony()
 
-        if self._post_config.unbundle_instrumentation:
+        if self._post_config.separate_intrumentation_column:
             pinfo('\nSeparating "Instrumentation" column...')
-            self.unbundle_instrumentation()
+            self.separate_instrumentation_column()
 
         self.delete_undesired_columns()
 
@@ -185,7 +185,7 @@ class DataProcessor:
         except KeyError:
             perr("Some columns to group could not be found.")
 
-    def unbundle_instrumentation(self) -> None:
+    def separate_instrumentation_column(self) -> None:
         """
         Separates Instrumentation column into as many columns as instruments present in
         Instrumentation, assigning a value of 1 for every instrument that is present and
