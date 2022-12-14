@@ -31,7 +31,7 @@ repo](https://github.com/DIDONEproject/musiF/).
 
 ## Build docs by hand
 * `pipx install sphinx`
-* `pipx inject sphinx myst_parser`
+* `pipx inject sphinx myst_nb`
 * `make html`
 
 <p style="text-align:center;margin:100px 0;">
