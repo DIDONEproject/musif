@@ -53,7 +53,8 @@ Another feature that you should be aware of is that `SmartModuleCache` transform
 iterator to lists and make it available under the `__list__` field. The successive calls
 to the iterator will then return the list.
 
-## Modifying `music21` objects before of caching
+(hooks)=
+## Hooks: modifying `music21` objects before of caching
 
 The only condition for using the cache system is that you do not change the music21
 objects from inside the features, which is a reasonable condition. If you are doing it,
