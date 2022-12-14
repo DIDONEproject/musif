@@ -29,6 +29,7 @@ extensions = [
 ]
 autosummary_generate = True
 autosummary_imported_members = True
+myst_all_links_external = True
 
 # templates_path = ["_templates"]
 autodoc_mock_imports = [

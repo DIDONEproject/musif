@@ -8,11 +8,11 @@ There are 2 different type of features:
 
 The only true difference among them is that "basic features" will be computed once per
 each music score, while "generic features" will be recomputed for each window in the
-score. If you disable windows in the [configuration](/Configuration) with the option
+score. If you disable windows in the [configuration](Configuration.html) with the option
 `window_size=None`, then there will be no difference. However, "basic features" will be
 always computed before of the "generic features".
 
-There are two options in the [configuration](/Configuration) that allow to extend the
+There are two options in the [configuration](Configuration.html) that allow to extend the
 features computed:
 * `basic_modules_addresses` for extending basic features
 * `feature_modules_addresses` for extending generic features
@@ -41,13 +41,13 @@ generic features:
   This is where info is taken from to compute 
   This object contains the info necessary to calculate any feature you whish to compute. Music21 objects
   should **never** be changed, especially if you intend to use the [caching
-  system](Caching.md)
+  system](Caching.html)
 * `part_data` is a dictionary containing data about the part being analysized (for
   `update_part_objects`) or with a list of all the `part_data` (for
   `update_score_objects`). In it, you can find the music21 object of the part, the part
   name, etc. This object should **never** be changed, especially if you intend to use
-  the [caching system](Caching.md)
-* `cfg` is a [configuration](/Configuration) object that can be used to access
+  the [caching system](Caching.html)
+* `cfg` is a [configuration](Configuration.html) object that can be used to access
   configuration options.
 * `parts_features` is a dictionary with the features already computed for all the
   parts; you should modify this only in `update_part_objects`.
