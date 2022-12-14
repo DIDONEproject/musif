@@ -484,19 +484,24 @@ class FeaturesExtractor:
     def _get_score_data(
         self, filename: PurePath, load_cache: Optional[Path] = None
     ) -> dict:
-        pinfo(f"\nProcessing score {filename}")
         data = None
+        info_load_str = ""
         if load_cache is not None and load_cache.exists():
             try:
                 data = pickle.load(open(load_cache, "rb"))
-                pinfo(f"File was loaded succesfully from cache.")
             except Exception as e:
-                perr(
-                    f"Error while loading pickled object, continuing with extraction from scratch: {e}"
-                )
+                info_load_str += f" Error while loading pickled object, continuing with extraction from scratch: {e}"
+            else:
+                info_load_str += " File was loaded from cache."
 
         if data is None:
-            score, filtered_parts = self._load_m21_objects(filename)
+            try:
+                score, filtered_parts = self._load_m21_objects(filename)
+            except ParseFileError as e:
+                perr(f"Error while parsing file {filename}")
+                raise e
+            else:
+                info_load_str += " XML file parsed succesfully!"
             if len(filtered_parts) == 0:
                 lwarn(
                     f"No parts were found for file {filename} and filter: {','.join(self._cfg.parts_filter)}"
@@ -505,10 +510,17 @@ class FeaturesExtractor:
                 self._cfg.is_requested_musescore_file()
                 and self._cfg.musescore_dir is not None
             ):
-                data_musescore = self._get_harmony_data(
+                filename_ms3 = (
                     self._cfg.musescore_dir
                     / filename.with_suffix(MUSESCORE_FILE_EXTENSION).name
                 )
+                try:
+                    data_musescore = self._get_harmony_data(filename_ms3)
+                except ParseFileError as e:
+                    perr(f"Error while parsing file {filename_ms3}")
+                    raise e
+                else:
+                    info_load_str += " MS3 file parsed succesfully!"
             data = {
                 C.DATA_SCORE: score,
                 C.DATA_FILE: str(filename),
@@ -530,6 +542,8 @@ class FeaturesExtractor:
                 )
                 data[C.DATA_SCORE] = m21_objects[0]
                 data[C.DATA_FILTERED_PARTS] = m21_objects[1]
+
+        pinfo(f"\nProcessing score {filename}." + info_load_str)
         return data
 
     def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:
