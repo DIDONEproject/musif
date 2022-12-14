@@ -33,6 +33,4 @@ build-backend = "pdm.pep517.api"
 # includes = ["musif/py.typed", "musif/**"]
 
 [tool.pdm.dev-dependencies]
-dev = [
-    "notebook>=6.5.2",
-]
+dev = []
