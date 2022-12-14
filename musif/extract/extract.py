@@ -1,8 +1,6 @@
-import glob
 import os
 import pickle
 import subprocess
-from os import path
 from pathlib import Path, PurePath
 from subprocess import DEVNULL
 from tempfile import mkstemp
@@ -28,7 +26,7 @@ from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pwarn
+from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo
 from musif.musicxml import (
     MUSESCORE_FILE_EXTENSION,
     MUSICXML_FILE_EXTENSION,
@@ -129,7 +127,6 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     return harmonic_analysis
 
 
-# TODO: document check_file (or, IMHO, make private) and limit_files
 def find_files(
     extension: str,
     obj: Union[str, List[Union[str, PurePath]]],
@@ -228,7 +225,7 @@ class FeaturesExtractor:
 
         self._cfg = ExtractConfiguration(*args, **kwargs)
         self.limit_files = kwargs.get("limit_files")
-        self.exclude_files = kwargs.get("limit_files")
+        self.exclude_files = kwargs.get("exclude_files")
         # self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # creates the directory for the cache
         if self._cfg.cache_dir is not None:
@@ -257,13 +254,13 @@ class FeaturesExtractor:
             MUSICXML_FILE_EXTENSION,
             self._cfg.xml_dir,
             limit_files=self.limit_files,
-            check_file=self.check_file,
+            exclude_files=self.exclude_files,
         )
         musescore_filenames = find_files(
             MUSESCORE_FILE_EXTENSION,
             self._cfg.musescore_dir,
             limit_files=self.limit_files,
-            check_file=None,  # check_file is only needed for xml files
+            exclude_files=self.exclude_files,
         )
         if len(musescore_filenames) == 0:
             if self._cfg.is_requested_musescore_file():
@@ -279,7 +276,7 @@ class FeaturesExtractor:
                 CACHE_FILE_EXTENSION,
                 self._cfg.cache_dir,
                 limit_files=self.limit_files,
-                check_file=self.check_file,
+                exclude_files=self.exclude_files,
             )
         else:
             filenames = []
