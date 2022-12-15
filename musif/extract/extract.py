@@ -28,11 +28,11 @@ from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo
 from musif.musicxml import (
-    MUSESCORE_FILE_EXTENSION,
     MUSICXML_FILE_EXTENSION,
     extract_numeric_tempo,
     split_layers,
 )
+from musif.musescore import MUSESCORE_FILE_EXTENSION
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,

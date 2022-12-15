@@ -1,2 +1,2 @@
 MUSICXML_FILE_EXTENSION = ".xml"
-MUSESCORE_FILE_EXTENSION = ".mscx"
+"""Extension of the MusicXML file. Defaults to "xml"."""

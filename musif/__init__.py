@@ -3,4 +3,7 @@ from musif.extract import FeaturesExtractor
 from musif.process.processor import DataProcessor
 import importlib.metadata
 
-__version__ = importlib.metadata.version(__package__ or __name__)
+try:
+    __version__ = importlib.metadata.version(__package__ or __name__)
+except:
+    pass

@@ -44,22 +44,6 @@ class DataProcessor:
         DataFrame extracted with FeaturesExtractor containing all info.
     info: str
         Path to .csv file or Dataframe containing the information from FeaturesExtractor
-
-    Methods
-    -------
-    process_info(info=info: Union[str, DataFrame])
-        Reads info and returns a DataFrame
-    process()
-        Processes all the DataFrame information
-    group_columns()
-        Groups thos columns related to Keys, Key_Modulatory and Degree for agregated analysis
-    unbundle_instrumentation()
-        Separates 'Instrumentation' column into several Presence_ columns for every instrument present in Instrumentation.
-    delete_undesired_columns(**kwargs)
-        Deletes all columns that are not needed according to config.yml file
-    save(dest_path: str)
-        Saves final information to various csv files, splitting data, metadata and
-        features
     """
 
     def __init__(self, info: Union[str, DataFrame], *args, **kwargs):

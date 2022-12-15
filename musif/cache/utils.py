@@ -11,10 +11,9 @@ from musif.cache.cache import MethodCache, ObjectReference, SmartModuleCache
 
 class FileCacheIntoRAM:
     """
-    This class simply stores a dictionary of key-value.
-    In `musiF`, it is used to cache the objects (values) coming from the
-    parsing of files (whose names are the keys).
-    It is never written to disk and only kept into RAM.
+    This class simply stores a dictionary of key-value. In `musiF`, it is used to cache
+    the objects (values) coming from the parsing of files (whose names are the keys). It
+    is never written to disk and only kept into RAM.
     """
 
     def __init__(self, capacity: int):
@@ -131,18 +130,18 @@ def store_score_df(score, fname):
     The returned object is a dictionary with keys the name of the parts and values
     dataframes with the following columns:
 
-        * "Type": A string identifying the type of object. Possible values: ``"Note"``,
+    * "Type": A string identifying the type of object. Possible values: ``"Note"``,
         ``"Rest"``, ``"Measure"``,  ``"Time Signature"``
-        * "Name": A string with the name of the note in Common Western Notation or with
+    * "Name": A string with the name of the note in Common Western Notation or with
         the time signature string for time signatures; for measures and rests, the value
         ``"-"`` is used.
-        * "Value": The midi pitch for notes, -1 for others
-        * "Measure Onset": The beat position of the object in reference to the beginning
+    * "Value": The midi pitch for notes, -1 for others
+    * "Measure Onset": The beat position of the object in reference to the beginning
         of the measure, -1 for measures
-        * "Part Onset": The onset position of the object in reference to the beginning
+    * "Part Onset": The onset position of the object in reference to the beginning
         of the part
-        * "Duration": The duration of the object, -1 for time signatures
-        * "Tie": If a tie is applied to the note, its type is there (one of ``"start"``,
+    * "Duration": The duration of the object, -1 for time signatures
+    * "Tie": If a tie is applied to the note, its type is there (one of ``"start"``,
         ``"continue"``, ``"stop"``), otherwise ``"-"`` is used
     """
 

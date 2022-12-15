@@ -29,10 +29,8 @@ extensions = [
     # this fixes a bug with ipython 8.7: https://github.com/spatialaudio/nbsphinx/issues/687
     "IPython.sphinxext.ipython_console_highlighting",
 ]
-autosummary_generate = True
-autosummary_imported_members = True
 myst_all_links_external = True
-jupyter_execute_notebooks = "off"
+nb_execution_mode = "off"
 
 # templates_path = ["_templates"]
 autodoc_mock_imports = [

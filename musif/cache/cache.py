@@ -145,9 +145,10 @@ class SmartModuleCache:
 
     Note: In future, `deepdiff.Delta` could be used to allow in-place
     operations, but it needs that:
-        1. the object modified are pickable
-        2. the reference are deep-copiable (for some reason, music21 objects)
-            sometimes exceed the maximum number of recursion while deep-copying
+        
+    1. the object modified are pickable
+    2. the reference are deep-copiable (for some reason, music21 objects)
+        sometimes exceed the maximum number of recursion while deep-copying
     """
 
     __slots__ = "cache"
