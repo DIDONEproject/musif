@@ -11,7 +11,7 @@ respectively.
 However, there are some options that will be always present as they are used by the
 stock features and classes. Check the examples to see the definition of all the default
 settings:
-* [extraction setting example](//github.com-config_example.yml)
+* [extraction setting example](./Config_extraction_example.html)
 * [data processing example]()
 
 To override these options and/or add your owns, you have two options:
