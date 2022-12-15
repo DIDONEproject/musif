@@ -14,7 +14,6 @@ XML_DIR = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
 PARALLEL = "parallel"
-MAX_PROCESSES = "max_processes"
 FEATURES = "features"
 BASIC_MODULES = "basic_modules"
 BASIC_MODULES_ADDRESSES = "basic_modules_addresses"
@@ -53,17 +52,16 @@ _CONFIG_FALLBACK = {
     XML_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
-    PARALLEL: False,
-    MAX_PROCESSES: 1,
+    PARALLEL: 1,
     PRECACHE_HOOKS: [],
-    BASIC_MODULES: ["core"],
+    BASIC_MODULES: [],
     BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
     FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
-    FEATURES: None,
+    FEATURES: ['core'],
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
     EXPAND_REPEATS: False,
-    WINDOW_SIZE: 8,
+    WINDOW_SIZE: None,
     OVERLAP: 2,
     MSCORE_EXEC: None,
     DFS_DIR: None,

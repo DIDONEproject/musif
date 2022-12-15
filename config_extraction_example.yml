@@ -1,11 +1,35 @@
-# Directory containing .xml files to be analized.
-xml_dir: ../../Corpus_Test/xml
+# Directory containing MusicXML files to be analized. By default, the extension should
+# be .xml, but you can change it via `musif.musicxml.constants.MUSICXML_FILE_EXTENSION`
+# Note that MusicXML files supported are limited to Finale exported ones.
+xml_dir: .
 
-# Directory containing .mscx files to be analyzed if harmonic analysis is required.
-musescore_dir: ../../Corpus_Test/musescore
+# Directory containing MuseScore files to be analyzed. By default, the extension should
+# be .xml, but you can change it via `musif.musescore.constants.MUSESCORE_FILE_EXTENSION`
+# If only musescore_dir is give, musif will try to convert the files to MusicXML using
+# musescore -- see `mscore_exe` setting.
+# If xml_dr is given, musescore files are only used if one of the following features are
+# requested: [ harmonic, scale_relative ]. In this case, only the harmonic annotations
+# are ridden from MuseScore files.
+musescore_dir: null
+  
+# Path to the binary of musescore. Used in case only MuseScore files are provided to
+# convert them to MusicXML. Note that most of the features won't work with those files.
+# Prefer using Finale MusicXML files, instead.
+# This option can be:
+# a) null -> ms3 library will try to find the musescore binary by itself
+# c) string -> the path to the mscore executable
+# b) list or tuple -> each element is a string as in `subprocess.run()` use it for remote
+#    server processing such as `xvfb-run -a mscore`
+mscore_exec: null
 
 # Directory to keep .pkl files if caching is enabled. null for disabling cache.
+# See `Caching` page for more info
 cache_dir: null
+  
+# If not null, musif will export MusicXML files to dataframes pickled in this directory.
+# See `musif.cache.utils.store_score_df` for more info.
+# They are useful for allowing interoperability with data science packages.
+dfs_dir: null
 
 # Boolean flag to expand repetitions of the music score or not.
 expand_repeats: false
@@ -29,8 +53,8 @@ parallel: 1
 # Directory to save the logs files, level for logging in the console (console_level) and
 # inthe log file (file_level)
 log:
-  file_path: logs/musif_test.log
-  file_level: INFO
+  file_path: ./musif.log
+  file_level: DEBUG
   console_level: INFO
 
 # Modules that are run once for every score. This distinction is important only when
@@ -39,8 +63,9 @@ log:
 # in errors when extracting features.
 # Dependencies may be expressed in the `musif_dependencies` property of the feature, see
 # for instance `musif.extract.features.density.__init__.py`
-basic_modules:
-  - scoring
+basic_modules: []
+  # Possible values:
+  # - scoring
 
 # Modules to be extracting from scores. Order is important, so last ones will be
 # processed last. Some of them might depends on others.
@@ -48,24 +73,38 @@ basic_modules:
 # Dependencies may be expressed in the `musif_dependencies` property of the feature, see
 # for instance `musif.extract.features.density.__init__.py`
 # To disable/enable a module, simply comment the line.
-features:
-  - core
-  - ambitus
-  - interval
-  - tempo
-  - density
-  - texture
-  - harmony
-  - lyrics
-  - scale
-  - scale_relative
-  - key
-  - dynamics    
-  - rhythm
+features: ['core']
+  # Possible values:
+  # - core
+  # - ambitus
+  # - interval
+  # - tempo
+  # - density
+  # - texture
+  # - harmony # require MuseScore files with harmonic annotations
+  # - lyrics
+  # - scale
+  # - scale_relative # require MuseScore files with harmonic annotations
+  # - key
+  # - dynamics    
+  # - rhythm
+
+# The list of packages/modules where basic features are. See page `Custom Features` for
+# more info
+basic_modules_addresses: ["musif.extract.basic_modules"]
+
+# The list of packages/modules where features are. See page `Custom Features` for
+# more info
+feature_modules_addresses: ["musif.extract.features"]
+
+# List of hooks executed before of creating the read-only cache objects.
+# See `Caching` page for more info
+precache_hooks: []
 
 # Filter to select only some instruments to be processed for each score. 
 # If the filter is None (disabling all parts), the program will extract all parts.
-parts_filter:
+parts_filter: []
+  # Possible Values
   # - vnI
   # - vnII
   # - obI
@@ -80,13 +119,12 @@ parts_filter:
   # - bbar
 
 # Used to split the possible layers present depending on the instrument name
-split_keywords:  
-  - woodwind
-  - brass
-  - wind
-  - viola
-  - cello
-  - bass
-  - oboi
-  
-
+split_keywords: []
+  # Possible Values
+  # - woodwind
+  # - brass
+  # - wind
+  # - viola
+  # - cello
+  # - bass
+  # - oboi
