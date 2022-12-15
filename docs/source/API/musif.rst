@@ -37,11 +37,3 @@ musif.logs module
    :members:
    :undoc-members:
    :show-inheritance:
-
-musif.mlogger module
---------------------
-
-.. automodule:: musif.mlogger
-   :members:
-   :undoc-members:
-   :show-inheritance:

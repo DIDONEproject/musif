@@ -21,14 +21,18 @@ author = "Didone Project"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "myst_parser",
+    "myst_nb",  # this also loads myst_parser
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
+    # this fixes a bug with ipython 8.7: https://github.com/spatialaudio/nbsphinx/issues/687
+    "IPython.sphinxext.ipython_console_highlighting",
 ]
 autosummary_generate = True
 autosummary_imported_members = True
+myst_all_links_external = True
+jupyter_execute_notebooks = "off"
 
 # templates_path = ["_templates"]
 autodoc_mock_imports = [

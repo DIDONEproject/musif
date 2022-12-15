@@ -1,6 +1,6 @@
 # Caching
 
-`musiF` is entirely written using [`music21`]|(https://web.mit.edu/music21/) objects for
+`musiF` is entirely written using [`music21`](https://web.mit.edu/music21/) objects for
 computing features. This approach allows users to easily add features using a python
 library that is largely supported by the community. However, it doesn't come without
 issues.
@@ -53,7 +53,8 @@ Another feature that you should be aware of is that `SmartModuleCache` transform
 iterator to lists and make it available under the `__list__` field. The successive calls
 to the iterator will then return the list.
 
-## Modifying `music21` objects before of caching
+(hooks)=
+## Hooks: modifying `music21` objects before of caching
 
 The only condition for using the cache system is that you do not change the music21
 objects from inside the features, which is a reasonable condition. If you are doing it,
@@ -64,7 +65,7 @@ To allow you to modify the parsed score, we have introduced the option of using 
 as explained below.
 
 You can implement any object, module, or package with a function `execute` which
-accepts two objects: a [`Configuration`](/Configuration.md) object and the data parsed from
+accepts two objects: a [`Configuration`](./Configuration.html) object and the data parsed from
 the score. This latter is a dictionary which contains the `music21.stream.Score` object
 resulting from the MusicXML file, its parts data, the harmonic annotations contained in
 a `Musescore` file (if available), etc.

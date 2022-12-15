@@ -1,4 +1,3 @@
-"""Constants used as keys in dictionaris score_features and score data throughout the extraction process."""
 DATA_PART = "part"
 DATA_PART_NUMBER = "part_number"
 DATA_PART_ABBREVIATION = "abbreviation"
@@ -11,22 +10,25 @@ DATA_MUSESCORE_SCORE = "MS3_score"
 DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
 
-"""Names of modules taht require harmonic analysis in a .mscx file"""
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
 REQUIRE_MSCORE = [HARMONY_FEATURES, SCALE_RELATIVE_FEATURES]
+"""Names of modules taht require harmonic analysis in a .mscx file"""
 
-"""List of prefixes of singers's names that might appear in the scores"""
 VOICES_LIST = ["sop", "ten", "alt", "bar", "bbar", "bass"]
+"""List of prefixes of singers's names that might appear in the scores"""
 
-"""Constant for playthrough (count fo measures) added to ms3 dataframe"""
 PLAYTHROUGH = "playthrough"
-
+"""Constant for playthrough (count fo measures) added to ms3 dataframe"""
 
 GLOBAL_TIME_SIGNATURE = "global_ts"
+"""The name used for the column indicating the global time signature"""
+
 WINDOW_RANGE = "WindowRange"
-THEME_A_METADATA = "theme_a_per_aria.csv"
-END_OF_THEME_A = "EndOfThemeA"
+"""The name used for the column indicating the start and end of a window"""
 
 WINDOW_ID = "WindowId"
+"""The name used for the column of the window's id"""
+
 ID = "Id"
+"""The name used for the column of the music score's id"""
