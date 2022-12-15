@@ -75,7 +75,7 @@ def update_score_objects(
             sound, part, score_data[DATA_FILTERED_PARTS], cfg)
         is_matching_part = _part_matches_filter(part_abbreviation, cfg.parts_filter)
         family = cfg.sound_to_family.get(sound, GENERAL_FAMILY)
-        family_abbreviation = cfg.family_to_abbreviation[family]
+        family_abbreviation = cfg.family_to_abbreviation.get(family, family)
         abbreviated_parts.append(part_abbreviation)
         instrumental = family != VOICE_FAMILY
         if sound_abbreviation not in count_by_sound:

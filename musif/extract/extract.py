@@ -28,11 +28,11 @@ from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo
 from musif.musicxml import (
-    MUSICXML_FILE_EXTENSION,
     extract_numeric_tempo,
     split_layers,
 )
-from musif.musescore import MUSESCORE_FILE_EXTENSION
+from musif.musicxml import constants as musicxml_c
+from musif.musescore import constants as mscore_c
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,
@@ -251,13 +251,13 @@ class FeaturesExtractor:
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
         xml_filenames = find_files(
-            MUSICXML_FILE_EXTENSION,
+            musicxml_c.MUSICXML_FILE_EXTENSION,
             self._cfg.xml_dir,
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
         )
         musescore_filenames = find_files(
-            MUSESCORE_FILE_EXTENSION,
+            mscore_c.MUSESCORE_FILE_EXTENSION,
             self._cfg.musescore_dir,
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
@@ -446,7 +446,7 @@ class FeaturesExtractor:
 
     def _load_m21_objects(self, filename: Union[str, PurePath]):
         filename = Path(filename)
-        if filename.suffix == MUSESCORE_FILE_EXTENSION:
+        if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
             # convert to xml in a temporary file
             mscore = self._cfg.mscore_exec
             if mscore is None:
@@ -459,7 +459,7 @@ class FeaturesExtractor:
                 # this is needed to allow stuffs like `xvfb-run -a mscore`
                 mscore = (mscore,)
             tmp_d, tmp_path = mkstemp(
-                prefix=filename.stem, suffix=MUSICXML_FILE_EXTENSION
+                prefix=filename.stem, suffix=musicxml_c.MUSICXML_FILE_EXTENSION
             )
             process = mscore + ("-fo", tmp_path, filename)
             res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
@@ -476,7 +476,7 @@ class FeaturesExtractor:
             export_dfs_to=self._cfg.dfs_dir,
         )
         score.numeric_tempo = extract_numeric_tempo(tmp_path)
-        if filename.suffix == MUSESCORE_FILE_EXTENSION:
+        if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
             os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts)
@@ -512,7 +512,7 @@ class FeaturesExtractor:
             ):
                 filename_ms3 = (
                     self._cfg.musescore_dir
-                    / filename.with_suffix(MUSESCORE_FILE_EXTENSION).name
+                    / filename.with_suffix(mscore_c.MUSESCORE_FILE_EXTENSION).name
                 )
                 try:
                     data_musescore = self._get_harmony_data(filename_ms3)
@@ -521,6 +521,8 @@ class FeaturesExtractor:
                     raise e
                 else:
                     info_load_str += " MS3 file parsed succesfully!"
+            else:
+                data_musescore = None
             data = {
                 C.DATA_SCORE: score,
                 C.DATA_FILE: str(filename),
@@ -590,7 +592,7 @@ class FeaturesExtractor:
             sound, part, score_data[C.DATA_FILTERED_PARTS], self._cfg
         )
         family = self._cfg.sound_to_family.get(sound, GENERAL_FAMILY)
-        family_abbreviation = self._cfg.family_to_abbreviation[family]
+        family_abbreviation = self._cfg.family_to_abbreviation.get(family, family)
         data = {
             C.DATA_PART: part,
             C.DATA_PART_NUMBER: part_number,

@@ -3,7 +3,6 @@ from typing import List, Optional, Tuple
 from music21.stream.base import Part
 from roman import fromRoman, toRoman
 
-from musif.common.translate import translate_word
 from musif.config import ExtractConfiguration
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
@@ -45,8 +44,6 @@ def extract_sound(part: Part, config: ExtractConfiguration) -> str:
     if instrument is None or instrument.instrumentSound is None:
         sound_name = part.partName.strip().split(' ')[0]
         if sound_name not in config.sound_to_abbreviation:
-            sound_name = translate_word(
-                sound_name, config.all_translations)
             sound_name = _replace_naming_exceptions(sound_name, part)
             sound_name = sound_name if sound_name[-1] != 's' else sound_name[:-1]
     else:

@@ -9,7 +9,6 @@ from roman import toRoman
 
 from musif.cache import isinstance
 
-MUSICXML_FILE_EXTENSION = "xml"
 
 
 def is_voice(part: Part) -> bool:
@@ -48,10 +47,11 @@ def split_layers(score: Score, split_keywords: List[str]):
         instrument = part.getInstrument(returnDefault=False)
 
         possible_layers = False
-        for keyword in split_keywords:
-            if keyword in instrument.instrumentSound:
-                possible_layers = True
-                break
+        if instrument.instrumentSound is not None:
+            for keyword in split_keywords:
+                if keyword in instrument.instrumentSound:
+                    possible_layers = True
+                    break
 
         if possible_layers:
             has_voices = False

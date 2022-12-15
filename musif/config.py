@@ -57,7 +57,7 @@ _CONFIG_FALLBACK = {
     BASIC_MODULES: [],
     BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
     FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
-    FEATURES: ['core'],
+    FEATURES: ["core"],
     SPLIT_KEYWORDS: [],
     PARTS_FILTER: [],
     EXPAND_REPEATS: False,
@@ -153,7 +153,31 @@ class GenericConfiguration:
 class ExtractConfiguration(GenericConfiguration):
     """
     Configuration object used by :class: `musif.extract.extract.FeatureExtractor`
+
+    It additionaly sets the following properties:
+
+    ..  code-block:: python
+
+        from musif.musicxml import constants as musicxml_c
+        self.scoring_family_order = musicxml_c.SCORING_FAMILY_ORDER
+        self.scoring_order = musicxml_c.SCORING_ORDER
+        self.sound_to_family = musicxml_c.SOUND_TO_FAMILY
+        self.family_to_abbreviation = musicxml_c.FAMILY_TO_ABBREVIATION
+        self.sound_to_abbreviation = musicxml_c.SOUND_TO_ABBREVIATION
+
+    The above settings can be overriden by the user both by changing
+    the variables in `musicxml.constants` and by adding them to the configuration.
     """
+
+    def __init__(self, *args, **kwargs):
+        from musif.musicxml import constants as musicxml_c
+        # ^--- here to avoid circular imports
+        self.scoring_family_order = musicxml_c.SCORING_FAMILY_ORDER
+        self.scoring_order = musicxml_c.SCORING_ORDER
+        self.sound_to_family = musicxml_c.SOUND_TO_FAMILY
+        self.family_to_abbreviation = musicxml_c.FAMILY_TO_ABBREVIATION
+        self.sound_to_abbreviation = musicxml_c.SOUND_TO_ABBREVIATION
+        super().__init__(*args, **kwargs)
 
     def _get_fallback(self):
         return _CONFIG_FALLBACK
