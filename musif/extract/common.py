@@ -10,7 +10,7 @@ def _filter_parts_data(
     parts_data: List[dict], parts_filter: Optional[List[str]]
 ) -> List[dict]:
 
-    if parts_filter is None:
+    if parts_filter is None or len(parts_filter) == 0:
         return parts_data
 
     if "voice" in parts_filter:
