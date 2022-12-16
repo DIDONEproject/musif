@@ -1,7 +1,7 @@
 # Directory containing MusicXML files to be analized. By default, the extension should
 # be .xml, but you can change it via `musif.musicxml.constants.MUSICXML_FILE_EXTENSION`
 # Note that MusicXML files supported are limited to Finale exported ones.
-xml_dir: .
+xml_dir: null
 
 # Directory containing MuseScore files to be analyzed. By default, the extension should
 # be .xml, but you can change it via `musif.musescore.constants.MUSESCORE_FILE_EXTENSION`
