@@ -8,6 +8,7 @@ class TempoGroup2(Enum):
     """
     Contains constants refering to grouped tempo on the second level that will be used by the tempo module.
     """
+
     NA = "NA"
     SLOW = "Slow"
     MODERATE = "Moderate"
@@ -17,24 +18,42 @@ class TempoGroup2(Enum):
 def get_time_signature_type(time_signature: str) -> str:
     """
     Given a time signature, it returns  the correspondent type.
-    
+
     Parameters
     ----------
         time_signature: str
         Time signature in the form of string separated by '/' to obtain the time signature type.
     """
-    if time_signature in ['1/2', '1/4', '1/8', '1/16', '2/2', '2/4', '2/8', '2/16', '4/4', 'C', '4/2', '4/8', '4/16', '8/2', '8/4', '8/8', '8/16']:
-        return 'simple duple'
-    
-    elif time_signature in ['6/8', '3/8', '12/2', '12/4', '12/8', '12/16']:
-        return 'compound duple'
-    
-    elif time_signature in ['3/2', '3/4', '3/16', '6/2', '6/4', '6/16']:
-        return 'simple triple'
-    
-    elif time_signature in ['9/2', '9/4', '9/8', '9/16']:
-        return 'compound triple'
-    
+    if time_signature in [
+        "1/2",
+        "1/4",
+        "1/8",
+        "1/16",
+        "2/2",
+        "2/4",
+        "2/8",
+        "2/16",
+        "4/4",
+        "C",
+        "4/2",
+        "4/8",
+        "4/16",
+        "8/2",
+        "8/4",
+        "8/8",
+        "8/16",
+    ]:
+        return "simple duple"
+
+    elif time_signature in ["6/8", "3/8", "12/2", "12/4", "12/8", "12/16"]:
+        return "compound duple"
+
+    elif time_signature in ["3/2", "3/4", "3/16", "6/2", "6/4", "6/16"]:
+        return "simple triple"
+
+    elif time_signature in ["9/2", "9/4", "9/8", "9/16"]:
+        return "compound triple"
+
     else:
         return "other"
 
@@ -43,12 +62,12 @@ def get_tempo_grouped_1(tempo: str) -> str:
     """
     Returns a 1st level of grouping for the tempo markings, removing secondary labels
     and diminutive endings.
-    
+
     Parameters
     ----------
         tempo: str
         Tempo string in italian to be extract the group from.
-        
+
     """
     tempo = re.sub("\\W+", " ", tempo)  # removes eventual special characters
     replacements = [
@@ -70,8 +89,23 @@ def get_tempo_grouped_1(tempo: str) -> str:
 
     for r in replacements:
         tempo = tempo.replace(*r)
-    tempo = tempo.replace("Con brio", 'brio').replace('con brio', 'brio').replace('Con spirito', 'spiritoso').replace('con spirito', 'spiritoso')
-    base_important_words = ['adagio', "allegro", "andante", "andantino", "largo", "lento", "presto", "vivace", 'minueto']
+    tempo = (
+        tempo.replace("Con brio", "brio")
+        .replace("con brio", "brio")
+        .replace("Con spirito", "spiritoso")
+        .replace("con spirito", "spiritoso")
+    )
+    base_important_words = [
+        "adagio",
+        "allegro",
+        "andante",
+        "andantino",
+        "largo",
+        "lento",
+        "presto",
+        "vivace",
+        "minueto",
+    ]
     # if the tempo marking ends in -ietto and or -issimo, it retuns the marking without that ending
     important_words = (
         base_important_words
@@ -149,11 +183,11 @@ def get_tempo_grouped_1(tempo: str) -> str:
 def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
     """
     Returns a 2nd level of grouping for the tempo markings.
-    
+
     Parameters
     ----------
         tempo_grouped_1: str
-        Tempo string got from get_tempo_grouped_1        
+        Tempo string got from get_tempo_grouped_1
     """
     if tempo_grouped_1 is None or tempo_grouped_1.lower() == TempoGroup2.NA.value:
         return TempoGroup2.NA.value
@@ -211,52 +245,47 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
 def get_number_of_beats(time_signature: str) -> int:
     """
     Returns the number of beats corresponding to a time signature.
+
+    By default, this returns the numerator, with the exceptions when the numerator is
+    6, 9, or 12 and when the time signature is C or 3/8. If it is empty, it returns 1.
+
     Parameters
     ----------
         time_signature: str
-        Time signature in the form of string separated by '/' to obtain the time signature type.        
-    
+            Time signature in the form of string separated by '/' to obtain the time
+            signature type.
+
     """
     time_signature = time_signature.split(",")[0]
-    if time_signature in ["1/2", "1/4", "1/8", "1/16", "3/8"]:
-        return 1
-    if time_signature in ["2/2", "2/4", "2/8", "2/16", "6/8", "6/2", "6/4", "6/16"]:
-        return 2
-    if time_signature in ["3/1", "3/2", "3/4", "3/16", "9/2", "9/4", "9/8", "9/16"]:
-        return 3
-    if time_signature in [
-        "4/4",
-        "4/2",
-        "4/8",
-        "4/16",
-        "C",
-        "12/2",
-        "12/4",
-        "12/8",
-        "12/16",
-    ]:
+    if time_signature == "C":
         return 4
-    if time_signature in ["5/2", "5/4", "5/8", "5/16"]:
-        return 5
-    if time_signature in ["7/2", "7/4", "7/8", "7/16"]:
-        return 7
-    if time_signature in ["8/2", "8/4", "8/8", "8/16"]:
-        return 8
     elif time_signature == "":
         return 1
-    raise ValueError(f"The {time_signature} is not a known time signature")
+
+    num, den = time_signature.split("/")
+    if num == "3" and den == "8":
+        return 1
+    elif num == "6":
+        return 2
+    elif num == "9":
+        return 3
+    elif num == "12":
+        return 4
+    else:
+        return int(num)
+        # raise ValueError(f"The {time_signature} is not a known time signature")
 
 
 def extract_numeric_tempo(file_path: str) -> Optional[int]:
     """
     Finds the numeric tempo in a musixml file by looking at the tempo marking in the xml code.
-    
+
     Parameters
     ----------
-    
+
         file_path: str
         Path to xml file to get the tempo from.
-        
+
     """
     tree = ET.parse(file_path)
     root = tree.getroot()
