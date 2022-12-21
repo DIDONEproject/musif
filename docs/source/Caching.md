@@ -25,7 +25,7 @@ The cache system is implemented in the package `musif.cache`. It allows you to:
 2. cache every call to expensive `music21` function
 3. expand your code basis using cached properties
 
-In our experiments we have obtained a code around 2-3 times when using the cache.
+In our experiments we have obtained a code around 2-3 times faster when using the cache.
 
 Once you have cached your objects, you can use them with the existing properties; you
 change them, for instance running a wrong code, you will have to delte them to get back
