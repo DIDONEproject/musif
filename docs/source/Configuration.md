@@ -12,7 +12,7 @@ However, there are some options that will be always present as they are used by 
 stock features and classes. Check the examples to see the definition of all the default
 settings:
 * [extraction setting example](./Config_extraction_example.html)
-* [data processing example]()
+* [data processing example](./Config_postprocess_example.html)
 
 To override these options and/or add your owns, you have two options:
 1. provide to `FeatureExtractor` and `DataProcessor` the file names to yaml files; in

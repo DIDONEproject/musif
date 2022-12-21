@@ -1,32 +1,35 @@
-
-# Directory to save the logs files, level for logging in the console (console_level) and inthe log file (file_level)
+# Directory to save the logs files, level for logging in the console (console_level) and
+# inthe log file (file_level)
 log:
   file_path: logs/post_process.log
   file_level: DEBUG
   console_level: WARN
 
-# Directory of folder where the internal data to extract the metadata from is stored
-internal_data_dir: internal_data
-
-# Flag to determine whether to delete files containing errors (whose FileNames bust be containedin a 'errors.csv' file) or not
+# Flag to determine whether to delete files containing errors (whose FileNames bust be
+# containedin a 'errors.csv' file) or not
 delete_files: True
 
-# Flag to determine whether delete files that do not have harmonic annotations (and hence, no harmonic analysis) or not
+# Flag to determine whether delete files that do not have harmonic annotations (and
+# hence, no harmonic analysis) or not
 delete_files_without_harmony: True
 
-# Flag to determine if multiple voices's scores (duetos and trios) shall be merge into the same column (SoundVoice_*) calculating averages, min or max of both values 
+# Flag to determine if multiple voices's scores (duetos and trios) shall be merge into
+# the same column (SoundVoice_*) calculating averages, min or max of both values 
 merge_voices: True
 
-# Flag to determine if keys, keys modulatory and degrees columns should be groued per type
+# Flag to determine if keys, keys modulatory and degrees columns should be grouped per type
 grouped: True
 
-# Flag to determine if Intrumentation column should be disgregated in several columns (Peresence_of_*) having a value of 1 if instrument is present, 0 otherwise.
+# Flag to determine if Intrumentation column should be disgregated in several columns
+# (Peresence_of_*) having a value of 1 if instrument is present, 0 otherwise.
+# # see also `delete_presence` option
 separate_intrumentation_column: True
 
 # Specify what instuments's features are desired to be kept after the post processing
 instruments_to_keep: 
   - vnI
   - bs
+ 
 # Specify what instuments's features are desired to be deleted after the post processing
 # i.e. 'Part' + inst in column
 instruments_to_delete: 
@@ -61,7 +64,7 @@ substring_to_delete:
   - Hn
   - Fl
 
-# Columns's endings to be deleted from the dataframe
+# Column suffixes that should be deleted from the dataframe
 columns_endswith:
   - _HighestNote
   - _LowestNote
@@ -79,7 +82,7 @@ columns_endswith:
   - 'Semitones_Sum'    
   - _MeanInterval'
 
-# Columns's starts to be deleted from the dataframe
+# Column prefixes to be deleted from the dataframe
 columns_startswith:
   - FamilyWw
   - FamilyBr
@@ -90,7 +93,7 @@ columns_startswith:
   - NumberOfBeats
   - SoundVoice_Dyn
 
-# Columns's substrings to be deleted from the dataframe
+# Column substrings to be deleted from the dataframe
 columns_contain:
   - _Count
   - _SoundingMeasuresMean
@@ -98,17 +101,15 @@ columns_contain:
   - _SmallestAbsolute
   - _SmallestInterval
 
-# Columns groups that require that nan values are replaced with 0
+# Column groups that require that nan values are replaced with 0
 replace_nans:
   - Interval
   - Degree
   - Harmony
 
-# Columns to delete of type 'Presence_of_*' if separate_intrumentation_column is activated
+# Columns that should delete of type 'Presence_of_*' if separate_intrumentation_column is activated
 delete_presence:
   - vn
   - bs
   - vc
   - va
-
-
