@@ -126,27 +126,29 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
 
 def find_files(
     extension: str,
-    obj: Union[str, List[Union[str, PurePath]]],
+    base_dir: Union[str, List[Union[str, PurePath]]],
     limit_files: List[str] = None,
     exclude_files: List[str] = None,
 ) -> List[PurePath]:
     """Extracts the paths to files given an extension
 
-    Given a path, a directory path, returns a list of paths to musicxml files found, in
-    alphabetic order. If given neither a string nor list of strings raise a TypeError
-    and if the file doesn't exists returns a ValueError
+    Given a directory path, return a list of paths of files found, in alphabetic order.
+    It searches recursively inside `base_dir`. If `base_dir` is a fileor a list of paths
+    or directories with `extension`, it is returned in a list. If given neither a string
+    nor list of strings raise a TypeError and if the file doesn't exists returns a
+    ValueError.
 
     Parameters
     ----------
     extension: str
-      A string representing the extension that will be looked for
-    obj : Union[str, Iterable[str]]
-      A path or directory, or a list of paths or directories
+        A string representing the extension that will be looked for
+    base_dir : Union[str, Iterable[str]]
+        A path or directory
     limit_files: List[str] = None
-        List of file names relative to `obj`. Only these files are taken. Incompatible
-        with `exclude_files`
+        List of file names relative to `base_dir`. Only these files are taken.
+        Incompatible with `exclude_files`
     exclude_files: List[str] = None
-        List of file names relative to `obj`. None of these files are taken.
+        List of file names relative to `base_dir`. None of these files are taken.
         Incompatible with `limit_files`
 
     Returns
@@ -163,13 +165,13 @@ def find_files(
     ValueError
       If the provided string is neither a directory nor a file path
     """
-    if obj is None:
+    if base_dir is None:
         return []
-    obj = Path(obj)
-    if not obj.exists():
-        raise ValueError(f"File {obj} doesn't exist")
-    elif obj.is_dir():
-        ret = sorted(obj.glob(f"*{extension}"))
+    base_dir = Path(base_dir)
+    if not base_dir.exists():
+        raise ValueError(f"File {base_dir} doesn't exist")
+    elif base_dir.is_dir():
+        ret = sorted(base_dir.glob(f"**/*{extension}"))
         if limit_files is not None:
             limit_stems = set(map(lambda x: Path(x).stem, limit_files))
             return [f for f in ret if f.stem in limit_stems]
@@ -178,8 +180,8 @@ def find_files(
             return [f for f in ret if f.stem not in exclude_stems]
         else:
             return ret
-    elif obj.is_file() and obj.suffix == f"{extension}":
-        return [obj]
+    elif base_dir.is_file() and base_dir.suffix == f"{extension}":
+        return [base_dir]
     else:
         return []
 
@@ -221,8 +223,12 @@ class FeaturesExtractor:
         """
 
         self._cfg = ExtractConfiguration(*args, **kwargs)
-        self.limit_files = kwargs.get("limit_files")
-        self.exclude_files = kwargs.get("exclude_files")
+        self.limit_files = kwargs.get("limit_files") or getattr(
+            self._cfg, "limit_files", None
+        )
+        self.exclude_files = kwargs.get("exclude_files") or getattr(
+            self._cfg, "exclude_files", None
+        )
         # self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
         # creates the directory for the cache
         if self._cfg.cache_dir is not None:
