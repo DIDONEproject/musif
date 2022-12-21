@@ -134,7 +134,7 @@ class DataProcessor:
 
         self.delete_undesired_columns()
 
-        if self._post_config.grouped_analysis:
+        if self._post_config.grouped:
             self.group_columns()
 
         self._final_data_processing()

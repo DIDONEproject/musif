@@ -75,26 +75,6 @@ if __name__ == "__main__":
 
 '''
 
-## Reports Generator
-
-[TODO: UNDER CONSTRUCTION-. DIDONE SPECIFIC] MusiF is able to generate reports using the data that FeatureExtractor generates. 
-It creates excel files for each module and presents them organized according to the metadata information.
-The number of factors (num_factors) is the level of digration of the reports. Level 0 will create a single folder containing one file for each module.
-Level 1 will create a group of folders, each containing several excel files, grouping scores's data according to each metadata division (Per City, Per Decade, Per Title, and so on).
-
-To generate these reports anit subsequent visualizations, you must use ReportsGenerator musiF's object, eand input the DataFrame that FeaturesExtractor outputs.
-'''
-from musif.extract.extract import FeaturesExtractor
-from musif.reports.generate import ReportsGenerator
-
-
-if __name__ == "__main__":
-    extraction = FeaturesExtractor(
-            path_to_file / "config_tests.yml").extract()
-            
-    ReportsGenerator("scripts/config_tests.yml").generate_reports(extraction, path_to_save_files, num_factors=0, visualizations=True)
-
-'''
 
 ## Create your own musiF modules
 Visit [custom features](Custom_features.md) tutorial to learn how to implement your own musiF feature calculations :)
