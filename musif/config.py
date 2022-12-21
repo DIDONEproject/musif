@@ -10,7 +10,7 @@ LOG = "log"
 LOG_FILE_PATH = "log_file"
 FILE_LOG_LEVEL = "file_log_level"
 CONSOLE_LOG_LEVEL = "console_log_level"
-XML_DIR = "xml_dir"
+XML_DIR = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
 PARALLEL = "parallel"
@@ -26,6 +26,7 @@ PRECACHE_HOOKS = "precache_hooks"
 MSCORE_EXEC = "mscore_exec"
 # Didone specific?
 SPLIT_KEYWORDS = "split_keywords"
+VERBOSE = "verbose"
 
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
@@ -65,6 +66,7 @@ _CONFIG_FALLBACK = {
     OVERLAP: 2,
     MSCORE_EXEC: None,
     DFS_DIR: None,
+    VERBOSE: 0
 }
 
 _CONFIG_POST_FALLBACK = {

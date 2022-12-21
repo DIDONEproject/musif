@@ -552,7 +552,8 @@ class FeaturesExtractor:
                 data[C.DATA_SCORE] = m21_objects[0]
                 data[C.DATA_FILTERED_PARTS] = m21_objects[1]
 
-        pinfo(f"\nProcessing score {filename}." + info_load_str)
+        if self._cfg.verbose > 0:
+            pinfo(f"\nProcessing score {filename}." + info_load_str)
         return data
 
     def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:

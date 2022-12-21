@@ -47,8 +47,13 @@ window_size: null
 overlap: 2
 
 # Number of parallel processes to be used as defined by joblib: 
-# 1 => no parallel. 2 => 2 processes. -1 => all available virtual cores. -2 => all available virtual cores except 1
+# 1 => no parallel. 2 => 2 processes. -1 => all available virtual cores. -2 => all
+# available virtual cores except 1
 parallel: 1
+
+# The level of verbosity for stdout and logs. Currently, only one level is implemented
+# consisting in the printing of the file currently being processed.
+verbose: 0
 
 # Directory to save the logs files, level for logging in the console (console_level) and
 # inthe log file (file_level)
