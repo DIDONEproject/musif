@@ -138,7 +138,7 @@ class DataProcessor:
             self.group_columns()
 
         self._final_data_processing()
-        return self.data
+        return self
 
     def delete_files_without_harmony(self):
         """

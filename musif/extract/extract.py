@@ -27,12 +27,9 @@ from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
 from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo
-from musif.musicxml import (
-    extract_numeric_tempo,
-    split_layers,
-)
-from musif.musicxml import constants as musicxml_c
 from musif.musescore import constants as mscore_c
+from musif.musicxml import constants as musicxml_c
+from musif.musicxml import extract_numeric_tempo, split_layers
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,
@@ -289,15 +286,16 @@ class FeaturesExtractor:
     def _process_corpus(
         self, filenames: List[PurePath]
     ) -> Tuple[List[dict], List[dict]]:
-        def process_corpus_par(filename):
+        def process_corpus_par(idx, filename):
             if self._cfg.window_size is not None:
-                score_features = self._process_score_windows(filename)
+                score_features = self._process_score_windows(idx, filename)
             else:
-                score_features = self._process_score(filename)
+                score_features = self._process_score(idx, filename)
             return score_features
 
         scores_features = Parallel(n_jobs=self._cfg.parallel)(
-            delayed(process_corpus_par)(fname) for fname in tqdm(filenames)
+            delayed(process_corpus_par)(idx, fname)
+            for idx, fname in enumerate(tqdm(filenames))
         )
 
         if self._cfg.window_size is not None:
@@ -312,7 +310,7 @@ class FeaturesExtractor:
             all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
         return all_dfs
 
-    def _init_score_processing(self, filename: PurePath):
+    def _init_score_processing(self, idx: int, filename: PurePath):
         if self._cfg.cache_dir is not None:
             cache_name = Path(self._cfg.cache_dir) / (
                 filename.with_suffix(CACHE_FILE_EXTENSION).name
@@ -328,16 +326,17 @@ class FeaturesExtractor:
         basic_features = self.extract_modules(
             self._cfg.basic_modules_addresses, score_data, parts_data, basic=True
         )
+        basic_features[C.ID] = idx
         return basic_features, cache_name, parts_data, score_data
 
-    def _process_score(self, filename: PurePath) -> Tuple[dict, List[dict]]:
+    def _process_score(self, idx: int, filename: PurePath) -> Tuple[dict, List[dict]]:
 
         (
             basic_features,
             cache_name,
             parts_data,
             score_data,
-        ) = self._init_score_processing(filename)
+        ) = self._init_score_processing(idx, filename)
 
         score_features = self.extract_modules(
             self._cfg.feature_modules_addresses, score_data, parts_data, basic=False
@@ -349,13 +348,15 @@ class FeaturesExtractor:
             pickle.dump(score_data, open(cache_name, "wb"))
         return score_features
 
-    def _process_score_windows(self, filename: PurePath) -> Tuple[dict, List[dict]]:
+    def _process_score_windows(
+        self, idx: int, filename: PurePath
+    ) -> Tuple[dict, List[dict]]:
         (
             basic_features,
             cache_name,
             parts_data,
             score_data,
-        ) = self._init_score_processing(filename)
+        ) = self._init_score_processing(idx, filename)
 
         score_data[C.GLOBAL_TIME_SIGNATURE] = (
             score_data[C.DATA_FILTERED_PARTS][0]
@@ -569,7 +570,7 @@ class FeaturesExtractor:
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
         self._deal_with_dupicated_parts(parts)
-        if self._cfg.parts_filter is None:
+        if self._cfg.parts_filter is None or len(self._cfg.parts_filter) == 0:
             return parts
         filter_set = set(self._cfg.parts_filter)
         return (

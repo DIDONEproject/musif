@@ -30,7 +30,7 @@ def _part_matches_filter(
     part_abbreviation: str, parts_filter: Optional[List[str]]
 ) -> bool:
 
-    if parts_filter is None:
+    if parts_filter is None or len(parts_filter) == 0:
         return True
     parts_filter_set = set(parts_filter)
     return part_abbreviation in parts_filter_set
