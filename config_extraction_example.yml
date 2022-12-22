@@ -52,7 +52,8 @@ overlap: 2
 parallel: 1
 
 # The level of verbosity for stdout and logs. Currently, only one level is implemented
-# consisting in the printing of the file currently being processed.
+# consisting in the printing of the file currently being processed. Any number greater than 0
+# will output info in the console.
 verbose: 0
 
 # Directory to save the logs files, level for logging in the console (console_level) and
