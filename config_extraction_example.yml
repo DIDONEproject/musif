@@ -51,17 +51,12 @@ overlap: 2
 # available virtual cores except 1
 parallel: 1
 
-# The level of verbosity for stdout and logs. Currently, only one level is implemented
-# consisting in the printing of the file currently being processed. Any number greater than 0
-# will output info in the console.
-verbose: 0
-
 # Directory to save the logs files, level for logging in the console (console_level) and
 # inthe log file (file_level)
 log:
   file_path: ./musif.log
   file_level: DEBUG
-  console_level: INFO
+  console_level: ERROR
 
 # Modules that are run once for every score. This distinction is important only when
 # `window_size` > 1
