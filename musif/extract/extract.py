@@ -519,7 +519,7 @@ class FeaturesExtractor:
                 and self._cfg.musescore_dir is not None
             ):
                 filename_ms3 = (
-                    self._cfg.musescore_dir
+                    Path(self._cfg.musescore_dir)
                     / filename.with_suffix(mscore_c.MUSESCORE_FILE_EXTENSION).name
                 )
                 try:
