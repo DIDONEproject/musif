@@ -26,7 +26,7 @@ from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo
+from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
 from musif.musicxml import extract_numeric_tempo, split_layers
@@ -553,8 +553,7 @@ class FeaturesExtractor:
                 data[C.DATA_SCORE] = m21_objects[0]
                 data[C.DATA_FILTERED_PARTS] = m21_objects[1]
 
-        if self._cfg.verbose > 0:
-            pinfo(f"\nProcessing score {filename}." + info_load_str)
+        pdebug(f"\nProcessing score {filename}." + info_load_str)
         return data
 
     def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:
