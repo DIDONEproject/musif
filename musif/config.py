@@ -26,7 +26,6 @@ PRECACHE_HOOKS = "precache_hooks"
 MSCORE_EXEC = "mscore_exec"
 # Didone specific?
 SPLIT_KEYWORDS = "split_keywords"
-VERBOSE = "verbose"
 
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
@@ -46,7 +45,7 @@ MERGE_VOICES = "merge_voices"
 _CONFIG_LOG_FALLBACK = {
     LOG_FILE_PATH: "./musiF.log",
     FILE_LOG_LEVEL: "DEBUG",
-    CONSOLE_LOG_LEVEL: "INFO",
+    CONSOLE_LOG_LEVEL: "ERROR",
 }
 
 _CONFIG_FALLBACK = {
@@ -66,7 +65,6 @@ _CONFIG_FALLBACK = {
     OVERLAP: 2,
     MSCORE_EXEC: None,
     DFS_DIR: None,
-    VERBOSE: 0
 }
 
 _CONFIG_POST_FALLBACK = {

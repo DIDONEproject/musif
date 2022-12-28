@@ -1,4 +1,4 @@
-from typing import List
+ from typing import List
 
 from musif.common._constants import GENERAL_FAMILY, VOICE_FAMILY
 from musif.common.sort import sort_list
