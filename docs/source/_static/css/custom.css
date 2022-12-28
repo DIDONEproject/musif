@@ -21,3 +21,14 @@
 div.highlight pre {
     white-space: pre-wrap;
 }
+
+div.cell_output table.dataframe {
+  font-size: 0.5em;
+  table-layout: fixed;
+}
+
+div.cell_output table.dataframe th {
+  word-wrap: anywhere;
+  overflow-wrap: anywhere;
+  min-width: 30px;
+}
