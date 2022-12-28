@@ -484,6 +484,7 @@ class FeaturesExtractor:
         )
         score.numeric_tempo = extract_numeric_tempo(tmp_path)
         if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
+            os.close(tmp_d)
             os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts)
