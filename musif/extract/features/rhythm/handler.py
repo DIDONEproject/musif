@@ -192,6 +192,16 @@ def get_motion_features(part_data) -> dict:
     
     notes_midi = np.asarray(notes_midi)
     notes_duration = np.asarray(notes_duration)
+    
+    if len(notes_midi) == 0:
+        return {
+            SPEED_AVG_ABS: 0,
+            ACCELERATION_AVG_ABS: 0,
+            ASCENDENT_AVERAGE: 0,
+            DESCENDENT_AVERAGE: 0,
+            ASCENDENT_PROPORTION: 0,
+            DESCENDENT_PROPORTION: 0,
+        }
 
     step = 0.125
     midis_raw = np.repeat(notes_midi, [i / step for i in notes_duration], axis=0)
