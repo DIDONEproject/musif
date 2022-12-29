@@ -46,5 +46,9 @@ def _mix_data_with_precedent_data(prev_features: dict, new_features: dict) -> No
             prev_features[key] = min(prev_features[key], new_features[key])
             continue
 
-        if type(new_features[key]) != str:
-            prev_features[key] = new_features[key] if prev_features[key] is None else mean([prev_features[key], new_features[key]])
+        if prev_features[key] is None:
+            prev_features[key] = new_features[key]
+        elif new_features[key] is None:
+            continue
+        elif type(new_features[key]) != str:
+             prev_features[key] = mean([prev_features[key], new_features[key]])
