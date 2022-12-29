@@ -47,17 +47,17 @@ def get_tonality_per_beat(harmonic_analysis: DataFrame, tonality: str):
         beat = harmonic_analysis.beats[index]
         tonality_map[beat] = get_localTonalty(tonality, degree.strip())
 
-    fill_tonality_map(tonality_map)
+    _fill_gaps_in_tonality_map(tonality_map)
 
     tonality_map = sort_dict(tonality_map, sorted(tonality_map.keys()))
     return tonality_map
 
 
-def fill_tonality_map(tonality_map):
+def _fill_gaps_in_tonality_map(tonality_map):
     if 0 not in tonality_map:
         tonality_map[0] = tonality_map[list(tonality_map.keys())[0]]
 
-    for beat in range(1, max(list(tonality_map.keys()))):
+    for beat in range(1, max(tonality_map.keys())):
         if beat not in tonality_map:
             tonality_map[beat] = tonality_map[beat - 1]
 
