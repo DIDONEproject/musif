@@ -1,17 +1,18 @@
 from collections import Counter
 from itertools import chain
-from typing import List, Union, Tuple
+from typing import List, Tuple, Union
+from math import ceil, floor
 
 import pandas as pd
 import roman
 from music21 import pitch, scale
 from music21.note import Note
 from pandas.core.frame import DataFrame
+
+import musif.extract.constants as C
 from musif.common.sort import sort_dict
 from musif.extract.features.core.handler import DATA_KEY
 from musif.extract.features.harmony.utils import get_function_first, get_function_second
-import musif.extract.constants as C
-
 
 accidental_abbreviation = {
     "": "",
@@ -41,23 +42,25 @@ def IsAnacrusis(harmonic_analysis):
     return harmonic_analysis.mn.dropna().tolist()[0] == 0
 
 
-def get_tonality_per_beat(harmonic_analysis: DataFrame, tonality: str):
+def get_tonality_per_beat(
+    harmonic_analysis: DataFrame, tonality: str, start_beat: float, end_beat: float
+):
     tonality_map = {}
     for index, degree in enumerate(harmonic_analysis.localkey):
         beat = harmonic_analysis.beats[index]
         tonality_map[beat] = get_localTonalty(tonality, degree.strip())
 
-    fill_tonality_map(tonality_map)
+    fill_tonality_map(tonality_map, start_beat, end_beat)
 
     tonality_map = sort_dict(tonality_map, sorted(tonality_map.keys()))
     return tonality_map
 
 
-def fill_tonality_map(tonality_map):
+def fill_tonality_map(tonality_map, start_beat, end_beat):
     if 0 not in tonality_map:
         tonality_map[0] = tonality_map[list(tonality_map.keys())[0]]
 
-    for beat in range(1, max(list(tonality_map.keys()))):
+    for beat in range(floor(start_beat), ceil(end_beat) + 1):
         if beat not in tonality_map:
             tonality_map[beat] = tonality_map[beat - 1]
 
@@ -66,7 +69,12 @@ def get_emphasised_scale_degrees_relative(
     notes_list: list, score_data: dict
 ) -> List[list]:
     harmonic_analysis, tonality = extract_harmony(score_data)
-    tonality_map = get_tonality_per_beat(harmonic_analysis, tonality)
+    beats = list(
+        map(lambda x: x.beat, score_data[C.DATA_SCORE].flatten().elements)
+    )
+    tonality_map = get_tonality_per_beat(
+        harmonic_analysis, tonality, min(beats), max(beats)
+    )
     emph_degrees = get_emphasized_degrees(notes_list, tonality_map, harmonic_analysis)
     return emph_degrees
 
