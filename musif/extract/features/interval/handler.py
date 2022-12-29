@@ -90,22 +90,22 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     descending_intervals = [numeric_interval for numeric_interval in numeric_intervals if numeric_interval < 0]
 
     absolute_intervallic_mean = mean(absolute_numeric_intervals) if len(intervals) > 0 else 0
-    absolute_intervallic_std = stdev(absolute_numeric_intervals) if len(intervals) > 1 else 0
     intervallic_mean = mean(numeric_intervals) if len(intervals) > 0 else 0
-    intervallic_std = stdev(numeric_intervals) if len(intervals) > 1 else 0
     ascending_intervallic_mean = mean(ascending_intervals) if len(ascending_intervals) > 0 else 0
-    ascending_intervallic_std = stdev(ascending_intervals) if len(ascending_intervals) > 1 else 0
     descending_intervallic_mean = mean(descending_intervals) if len(descending_intervals) > 0 else 0
-    descending_intervallic_std = stdev(descending_intervals) if len(descending_intervals) > 1 else 0
+    with np.errstate(invalid='ignore'):
+        absolute_intervallic_std = stdev(absolute_numeric_intervals) if len(intervals) > 1 else 0
+        intervallic_std = stdev(numeric_intervals) if len(intervals) > 1 else 0
+        ascending_intervallic_std = stdev(ascending_intervals) if len(ascending_intervals) > 1 else 0
+        descending_intervallic_std = stdev(descending_intervals) if len(descending_intervals) > 1 else 0
     mean_interval = Interval(int(round(absolute_intervallic_mean))).directedName
 
     cutoff = 0.1
     limits = (cutoff, cutoff)
     trimmed_intervallic_mean = trimmed_mean(numeric_intervals, limits) if len(intervals) > 0 else 0
-    with np.errstate(invalid='ignore'):
-        trimmed_intervallic_std = trimmed_std(numeric_intervals, limits) if len(intervals) > 1 else 0
     trimmed_absolute_intervallic_mean = trimmed_mean(absolute_numeric_intervals, limits) if len(intervals) > 0 else 0
     with np.errstate(invalid='ignore'):
+        trimmed_intervallic_std = trimmed_std(numeric_intervals, limits) if len(intervals) > 1 else 0
         trimmed_absolute_intervallic_std = trimmed_std(absolute_numeric_intervals, limits) if len(intervals) > 1 else 0
     trim_diff = intervallic_mean - trimmed_intervallic_mean
     trim_ratio = trim_diff / intervallic_mean if intervallic_mean != 0 else 0
@@ -332,10 +332,11 @@ def get_all_asc_desc_count(intervals: List[Interval]) -> Tuple[int, int, int]:
 def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
     numeric_intervals = np.array([interval.semitones for interval in intervals])
     absolute_numeric_intervals = abs(numeric_intervals)
-    intervals_skewness = skew(numeric_intervals, bias=False) if [i for i in numeric_intervals if i != 0] else None
-    intervals_kurtosis = kurtosis(numeric_intervals, bias=False)  if [i for i in numeric_intervals if i != 0] else None
-    absolute_intervals_skewness = skew(absolute_numeric_intervals, bias=False) if [i for i in absolute_numeric_intervals if i != 0] else None
-    absolute_intervals_kurtosis = kurtosis(absolute_numeric_intervals, bias=False) if [i for i in absolute_numeric_intervals if i != 0] else None
+    with np.errstate(invalid='ignore'):
+        intervals_skewness = skew(numeric_intervals, bias=False) if [i for i in numeric_intervals if i != 0] else None
+        intervals_kurtosis = kurtosis(numeric_intervals, bias=False)  if [i for i in numeric_intervals if i != 0] else None
+        absolute_intervals_skewness = skew(absolute_numeric_intervals, bias=False) if [i for i in absolute_numeric_intervals if i != 0] else None
+        absolute_intervals_kurtosis = kurtosis(absolute_numeric_intervals, bias=False) if [i for i in absolute_numeric_intervals if i != 0] else None
     return {
         f"{prefix}{INTERVALLIC_SKEWNESS}": intervals_skewness,
         f"{prefix}{INTERVALLIC_KURTOSIS}": intervals_kurtosis,
