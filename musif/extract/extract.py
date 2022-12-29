@@ -426,6 +426,8 @@ class FeaturesExtractor:
                 & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
+        else:
+            window_mscore = None
         window_score_data = {
             C.DATA_SCORE: window_score,
             C.DATA_FILTERED_PARTS: window_parts,
@@ -621,9 +623,10 @@ class FeaturesExtractor:
             try:
                 module = __import__(f.__name__ + "." + name, fromlist=[""])
             except Exception as e:
-                raise ImportError(
-                    f"It seems like module {f} has no `{name}` component."
-                ) from e
+                return None
+                # raise ImportError(
+                    # f"It seems like module {f} has no `{name}` component."
+                # ) from e
         return module
 
     def _find_modules(self, package: str, basic: bool):
@@ -634,10 +637,10 @@ class FeaturesExtractor:
         else:
             to_extract = self._cfg.features
         for feature in to_extract:
-            try:
-                feature_package = self._get_module_or_attribute(package, feature)
-            except ImportError:
-                continue
+            # try:
+            feature_package = self._get_module_or_attribute(package, feature)
+            # except ImportError:
+                # continue
             if feature_package is not None:
                 module = self._get_module_or_attribute(feature_package, "handler")
                 feature_dependencies = getattr(

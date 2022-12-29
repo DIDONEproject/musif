@@ -50,13 +50,13 @@ def get_tonality_per_beat(
         beat = harmonic_analysis.beats[index]
         tonality_map[beat] = get_localTonalty(tonality, degree.strip())
 
-    fill_tonality_map(tonality_map, start_beat, end_beat)
+    _fill_gaps_in_tonality_map(tonality_map, start_beat, end_beat)
 
     tonality_map = sort_dict(tonality_map, sorted(tonality_map.keys()))
     return tonality_map
 
 
-def fill_tonality_map(tonality_map, start_beat, end_beat):
+def _fill_gaps_in_tonality_map(tonality_map, start_beat, end_beat):
     if 0 not in tonality_map:
         tonality_map[0] = tonality_map[list(tonality_map.keys())[0]]
 

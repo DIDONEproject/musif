@@ -74,9 +74,15 @@ def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config:
         abbreviation = config.sound_to_abbreviation[sound]
     part_roman_number = _get_part_roman_number(
         part) or _get_part_roman_number_by_position(part, parts)
-    part_number = fromRoman(part_roman_number) if part_roman_number else 0
-    return abbreviation + (part_roman_number or ""), abbreviation, part_number
+    other_number = _get_part_normal_number(part)
+    part_number = fromRoman(part_roman_number) if part_roman_number else (other_number if other_number else 0)
+    sound_abbreviation = abbreviation.split('(')[0]
+    return abbreviation + (part_roman_number or ""), sound_abbreviation, part_number
 
+def _get_part_normal_number(part: Part) -> Optional[str]:
+    if '(' and ')' in part.partAbbreviation:
+        return part.partAbbreviation.split('(')[1].split(')')[0]
+    return None
 
 def _get_part_roman_number(part: Part) -> Optional[str]:
     for number in ROMAN_NUMERALS_FROM_1_TO_20:
