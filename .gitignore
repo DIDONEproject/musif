@@ -11,3 +11,5 @@ docs/build
 docs/source/data
 docs/source/musiF.log
 docs/source/dataset.zip
+docs/ltex.dictionary.en-US.txt
+docs/ltex.disabledRules.en-US.txt
