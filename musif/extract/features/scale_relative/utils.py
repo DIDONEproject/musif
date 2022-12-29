@@ -55,10 +55,10 @@ def get_tonality_per_beat(harmonic_analysis: DataFrame, tonality: str):
 
 def fill_tonality_map(tonality_map):
     if 0 not in tonality_map:
-        tonality_map[0] = tonality_map[list(tonality_map.keys())[1]]
+        tonality_map[0] = tonality_map[list(tonality_map.keys())[0]]
 
     for beat in range(1, max(list(tonality_map.keys()))):
-        if beat not in tonality_map.keys():
+        if beat not in tonality_map:
             tonality_map[beat] = tonality_map[beat - 1]
 
 

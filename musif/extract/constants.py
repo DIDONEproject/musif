@@ -9,6 +9,7 @@ DATA_SCORE = "score"
 DATA_MUSESCORE_SCORE = "MS3_score"
 DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
+DATA_NUMERIC_TEMPO = "numeric_tempo"
 
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
