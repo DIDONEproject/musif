@@ -1,33 +1,23 @@
 from typing import List
 
-
 import numpy as np
-
 from pandas import DataFrame
 
-
 from musif.common._constants import VOICE_FAMILY
-
 from musif.config import ExtractConfiguration
-
 from musif.extract.basic_modules.scoring.constants import FAMILY
-
 from musif.extract.common import _filter_parts_data, _part_matches_filter
-
 from musif.extract.constants import (
     DATA_FAMILY,
     DATA_FAMILY_ABBREVIATION,
     DATA_PART_ABBREVIATION,
     DATA_SOUND_ABBREVIATION,
 )
-
+from musif.extract.features.core.constants import NUM_NOTES
 from musif.extract.features.core.handler import DATA_NOTES
-
 from musif.extract.features.prefix import get_part_feature, get_part_prefix
 
 from .constants import *
-
-from musif.extract.features.core.constants import NUM_NOTES
 
 
 def update_score_objects(
@@ -37,7 +27,6 @@ def update_score_objects(
     parts_features: List[dict],
     score_features: dict,
 ):
-
     parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
 
     if len(parts_data) == 0:
@@ -85,21 +74,26 @@ def update_score_objects(
                 score_features["Sound" + abbreviation + "_NotesMean"]
             )
 
-    for i, (key, value) in enumerate(notes.items()):
+    notes = list(notes.items())
+    for i in range(len(notes)):
 
-        texture = value / np.asarray(list(notes.values())[i + 1 :])
+        key_1, value_1 = notes[i]
 
-        for j, t in enumerate(texture):
+        for j in range(i + 1, len(notes)):
+            key_2, value_2 = notes[j]
+            if value_2 == 0:
+                if value_1 > 0:
+                    texture = np.inf
+                else:
+                    texture = np.nan
+            else:
+                texture = value_1 / value_2
 
-            part1 = key
+            part1_prefix = get_part_prefix(key_1).replace("_", "")
 
-            part2 = list(notes.keys())[j + i + 1]
+            part2_prefix = get_part_prefix(key_2).replace("_", "")
 
-            part1_prefix = get_part_prefix(part1).replace("_", "")
-
-            part2_prefix = get_part_prefix(part2).replace("_", "")
-
-            score_features[f"{part1_prefix}|{part2_prefix}_{TEXTURE}"] = t
+            score_features[f"{part1_prefix}|{part2_prefix}_{TEXTURE}"] = texture
 
 
 def update_part_objects(
