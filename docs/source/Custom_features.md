@@ -6,74 +6,79 @@ There are 2 different type of features:
 * basic features
 * generic features
 
-The only true difference between them is that "basic features" will be computed once per
-each music score, while "generic features" will be recomputed for each window in the
-score. If you disable windows in the [configuration](Configuration.html) with the option
-`window_size=None`, then there will be no difference. However, "basic features" will be
-always computed before of the "generic features".
+The only true difference between them is that “basic features” will be computed once per
+each music score, while “generic features” will be recomputed for each window in the
+score. If you disable windows in the [configuration](./Config_extraction_example.html)
+with the option `window_size: null`, then there will be no difference. However, “basic
+features” will always be computed before of the “generic features”.
 
-There are two options in the [configuration](Configuration.html) that allow to extend the
-features computed:
+Each feature should have two functions:
+* `update_part_objects`, which computes the features from each part in the score (or
+  window)
+* `update_score_objects`, which computes global calculations for the score (or window), or 
+  for multiple parts (e.g. features for all the winds or all the strings)
+
+`update_part_objects` will be executed for each part in the score, unless that part is
+not filtered out with `parts_filter` in the [configuration](Configuration.html).
+Successively, `update_score_objects` is run once to include final info in the
+`score_features`. In this process, you can use the features computed at the part-level
+for computing features at the score level — for instance if you want to create a feature
+only for violins or a certain family of instruments. Only the features at the
+score-level are inserted in the final dataframe.
+
+The two functions have similar signatures and contain the following:
+* `score_data`: a dictionary containing all the data loaded from the score or from the
+  cache; it contains `music21` objects representing score information and `pandas` dataframes containing MuseScore harmonic annotations (if any feature containing harmonic data is requested).
+  Likely, you want to use this object to design your features. Remember that music21 objects
+  should **never** be changed, especially if you intend to use the [caching
+  system](Caching.html)
+* `part_data`: a dictionary containing data about the part being analyzed (for
+  `update_part_objects`) or with a list of all the `part_data` (for
+  `update_score_objects`). In it, you can find the music21 object of the part, the part
+  name, etc. This object should **never** be changed, especially if you intend to use
+  the [caching system](Caching.html)
+* `cfg`: a [configuration](Configuration.html) object that can be used to access
+  configuration options.
+* `parts_features`: a dictionary with the features already computed by the previous calls to `update_part_objects` on this score (or window), e.g. for the previously computed features or for the other parts; these features are not inserted into the final dataframe.
+* `score_features`: a dictionary with the features already computed by the previous
+  calls to `update_score_objects` on this score (or window), e.g. for the previously
+  computed features; the keys of this dictionary
+  are the columns or the dataframe produced during the extraction.
+
+
+There are two options in the [configuration](./Config_extraction_example.html) that
+allow to extend the features computed:
 * `basic_modules_addresses` for extending basic features
 * `feature_modules_addresses` for extending generic features
 
 By default, their values will be `["musif.extract.basic_modules"]` and
-`["musif.extract.features"]`. To extend them, you have to override their values. By
-doing so, you can keep the stock `musiF` features, or completely replace them. For
-instance, the following will allow to re-use the stock features; if you omit the
-`"musif.extract.basic_modules"`, then the stock features won't be usable anymore.
+`["musif.extract.features"]`. For instance, the following allow to re-use the stock
+features; if you omit the `"musif.extract.basic_modules"`, then the stock features won't
+be usable anymore:
 
 ```yaml
 basic_modules_addresses: ["musif.extract.basic_modules", "custom_basic_modules"]
 ```
 
-Each feature should have two functions `update_part_objects`, which each computes part's feature, and
-`update_score_objects`, which computes global calculations for the score, for each Sound and for each Family.
-
-`musiF` will run `update_part_objects` for each part in the score (or
-window), and then `update_score_objects` for the score. This is repeated independently
-for each window and each score.
-
-The two functions similar signatures and it is identical for basic and
-generic features:
-* `score_data` is a dictionary containing all the data loaded from the score or from the
-  cache; it contains music21 objects representing score info and musescore harmonic annotations if there is any.
-  Likely, you want to use this object to design your features. Remember that music21 objects
-  should **never** be changed, especially if you intend to use the [caching
-  system](Caching.html)
-* `part_data` is a dictionary containing data about the part being analyzed (for
-  `update_part_objects`) or with a list of all the `part_data` (for
-  `update_score_objects`). In it, you can find the music21 object of the part, the part
-  name, etc. This object should **never** be changed, especially if you intend to use
-  the [caching system](Caching.html)
-* `cfg` is a [configuration](Configuration.html) object that can be used to access
-  configuration options.
-* `parts_features` is a dictionary with the features already computed for all the
-  parts; you should modify this only in `update_part_objects`.
-* `score_features` is a dictionary with the features already computed for all the
-  parts; you should modify this only in `update_score_objects`. It will result in the
-  final DataFrame containing all features for that score/window. 
-
+## Examples
 
 In the following we will show 3 different examples of custom features. For starting,
 let's create the `custom_features` directory, where we will put all our files: 
 `mkdir custom_features`.
 
-## 1. Custom feature as a package
+### 1. Custom feature as a package
 
-If you are going to write a large number of features, you should likely chose this
+If you are going to write numerous features, you should likely choose this
 method. With this method, each feature is implemented as a Python package. This is how
 all the `musiF` features are implemented.
 
 First, let's create a directory for the package and a `__init__.py` file in it:
-```shell
-mkdir -p custom_features/custom_feature_package 
-touch custom_features/custom_feature_package/__init__.py
+We should also create a module named `handler` inside `custom_feature_package`. The
+final directory structure looks like this:
 ```
-
-We should now create a module named `handler` inside `custom_feature_package`:
-```shell
-touch custom_features/custom_feature_package/handler.py
+custom_feature_package
+├── handler.py
+└── __init__.py
 ```
 
 `handler.py` will look like this:
@@ -102,11 +107,6 @@ def update_score_objects(
     )
     score_features['OurNewFeature'] = 0
 ```
-We must take into account that first `update_part_objects` will be computed for each
-part requesed in th score. Successively, `update_score_objects` is run once to include
-final info in the `score_features`. In this process, you can use `parts_features` to
-compute final features for the score - for instance if you want to create a feature only
-for violins or a certain family of instruments.
 
 In the configuration:
 ```yaml
@@ -118,7 +118,7 @@ features:
    - custom_feature_package
 ```
 
-## 2. Custom feature as a class
+### 2. Custom feature as a class
 
 If you are writing just a few features, you may find more confortable with only one file,
 instead of a whole directory. For this, you can simply create your module
