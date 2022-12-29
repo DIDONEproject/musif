@@ -4,23 +4,22 @@ from typing import List
 from music21.expressions import TextExpression
 from music21.stream import Measure
 
+from musif.cache import isinstance
 from musif.config import ExtractConfiguration
 from musif.extract.constants import (
-    DATA_FILE,
+    DATA_NUMERIC_TEMPO,
     DATA_PART,
     DATA_SCORE,
     GLOBAL_TIME_SIGNATURE,
 )
 from musif.musicxml.tempo import (
-    extract_numeric_tempo,
     get_number_of_beats,
     get_tempo_grouped_1,
     get_tempo_grouped_2,
     get_time_signature_type,
 )
-from .constants import *
 
-from musif.cache import isinstance
+from . import constants as C
 
 
 class TempoGroup2(Enum):
@@ -39,9 +38,9 @@ def update_part_objects(
     number_of_beats = get_number_of_beats(time_signature)
     part_features.update(
         {
-            TIME_SIGNATURE: time_signature,
-            TIME_SIGNATURE_GROUPED: time_signature_grouped,
-            NUMBER_OF_BEATS: number_of_beats,
+            C.TIME_SIGNATURE: time_signature,
+            C.TIME_SIGNATURE_GROUPED: time_signature_grouped,
+            C.NUMBER_OF_BEATS: number_of_beats,
         }
     )
 
@@ -54,9 +53,10 @@ def update_score_objects(
     score_features: dict,
 ):
 
-    # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de devolverla para su posterior uso
-    # cambiamos la forma de extraer la voz --- se hace con el atributo de part, 'instrumentSound'. Este atributo
-    # indica el tipo de instrumento y por ultimo el nombre. voice.soprano, strings.violin o strings.viola
+    # cogemos la part de la voz, y de ahí sacamos el time signature, aparte de
+    # devolverla para su posterior uso cambiamos la forma de extraer la voz --- se hace
+    # con el atributo de part, 'instrumentSound'. Este atributo indica el tipo de
+    # instrumento y por ultimo el nombre. voice.soprano, strings.violin o strings.viola
     # for part in score.parts:
     # m = list(part.getTimeSignatures())
     # time_signature = m[0].ratioString
@@ -78,21 +78,21 @@ def update_score_objects(
 
     score_data.update(
         {
-            TIME_SIGNATURE: time_signature,
-            TIME_SIGNATURES: time_signatures,
-            TS_MEASURES: measures,
+            C.TIME_SIGNATURE: time_signature,
+            C.TIME_SIGNATURES: time_signatures,
+            C.TS_MEASURES: measures,
         }
     )
 
     score_features.update(
         {
-            TEMPO: tempo_mark,
-            NUMERIC_TEMPO: numeric_tempo,
-            TIME_SIGNATURE: time_signature.split(",")[0],
-            TIME_SIGNATURE_GROUPED: time_signature_grouped,
-            TEMPO_GROUPED_1: tempo_grouped_1,
-            TEMPO_GROUPED_2: tempo_grouped_2,
-            NUMBER_OF_BEATS: number_of_beats,
+            C.TEMPO: tempo_mark,
+            C.NUMERIC_TEMPO: numeric_tempo,
+            C.TIME_SIGNATURE: time_signature.split(",")[0],
+            C.TIME_SIGNATURE_GROUPED: time_signature_grouped,
+            C.TEMPO_GROUPED_1: tempo_grouped_1,
+            C.TEMPO_GROUPED_2: tempo_grouped_2,
+            C.NUMBER_OF_BEATS: number_of_beats,
         }
     )
 
@@ -134,7 +134,7 @@ def extract_time_signatures(measures: list, score_data: dict):
 
 
 def extract_tempo(score_data, part):
-    numeric_tempo = score_data[DATA_SCORE].numeric_tempo
+    numeric_tempo = score_data[DATA_NUMERIC_TEMPO]
     tempo_mark = TempoGroup2.NA.value
     for measure in part:
         if isinstance(measure, Measure):

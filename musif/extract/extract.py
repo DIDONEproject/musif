@@ -430,6 +430,7 @@ class FeaturesExtractor:
             C.DATA_SCORE: window_score,
             C.DATA_FILTERED_PARTS: window_parts,
             C.DATA_MUSESCORE_SCORE: window_mscore,
+            C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO]
         }
 
         for i, p in enumerate(window_parts):
@@ -451,7 +452,7 @@ class FeaturesExtractor:
                 )
         return score_features
 
-    def _load_m21_objects(self, filename: Union[str, PurePath]):
+    def _load_xml_data(self, filename: Union[str, PurePath]):
         filename = Path(filename)
         if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
             # convert to xml in a temporary file
@@ -482,12 +483,12 @@ class FeaturesExtractor:
             expand_repeats=self._cfg.expand_repeats,
             export_dfs_to=self._cfg.dfs_dir,
         )
-        score.numeric_tempo = extract_numeric_tempo(tmp_path)
+        numeric_tempo = extract_numeric_tempo(tmp_path)
         if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
             os.close(tmp_d)
             os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
-        return score, tuple(filtered_parts)
+        return score, tuple(filtered_parts), numeric_tempo
 
     def _get_score_data(
         self, filename: PurePath, load_cache: Optional[Path] = None
@@ -504,7 +505,7 @@ class FeaturesExtractor:
 
         if data is None:
             try:
-                score, filtered_parts = self._load_m21_objects(filename)
+                score, filtered_parts, numeric_tempo = self._load_xml_data(filename)
             except ParseFileError as e:
                 perr(f"Error while parsing file {filename}")
                 raise e
@@ -536,6 +537,7 @@ class FeaturesExtractor:
                 C.DATA_FILE: str(filename),
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
+                C.DATA_NUMERIC_TEMPO: numeric_tempo
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
@@ -545,7 +547,7 @@ class FeaturesExtractor:
                 m21_objects = SmartModuleCache(
                     (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
                     resurrect_reference=(
-                        self._load_m21_objects,
+                        self._load_xml_data,
                         # filename.relative_to("."),
                         filename,
                     ),
