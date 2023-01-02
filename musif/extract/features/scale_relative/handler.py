@@ -24,6 +24,9 @@ def update_part_objects(
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
+        if notes_per_degree_relative is None:
+            # no harmonic data in the musescore file (or window)
+            return
 
         all_degrees = sum(value for value in notes_per_degree_relative.values())
 
@@ -62,6 +65,9 @@ def update_score_objects(
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
+        if notes_per_degree_relative is None:
+            # no harmonic data in the musescore file (or window)
+            return
 
         for degree, notes in notes_per_degree_relative.items():
 

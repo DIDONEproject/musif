@@ -69,6 +69,9 @@ def get_emphasised_scale_degrees_relative(
     notes_list: list, score_data: dict
 ) -> List[list]:
     harmonic_analysis, tonality = extract_harmony(score_data)
+    if harmonic_analysis.size == 0:
+        return None
+
     beats = list(
         map(lambda x: x.beat, score_data[C.DATA_SCORE].flatten().elements)
     )
