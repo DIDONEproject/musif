@@ -445,7 +445,7 @@ class FeaturesExtractor:
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for package in packages:
-            for module in self._find_modules(package, basic):
+             for module in self._find_modules(package, basic):
                 self._update_parts_module_features(
                     module, data, parts_data, parts_features
                 )
@@ -621,7 +621,10 @@ class FeaturesExtractor:
             module = getattr(f, name)
         else:
             try:
-                module = __import__(f.__name__ + "." + name, fromlist=[""])
+                # if os.path.exists((os.getcwd() + '\\' + str(f.__name__)+ "." + name).replace('.','\\')):
+                module = __import__(f.__name__+ "." + name, fromlist=[""])
+                # else:
+                    # return None
             except Exception as e:
                 return None
                 # raise ImportError(

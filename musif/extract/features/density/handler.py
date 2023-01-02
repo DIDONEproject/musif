@@ -84,11 +84,11 @@ def update_part_objects(
                 / _calculate_total_number_of_beats(time_signatures, sounding_periods)
                 # the above is 0 (cannot divide by 0) if len(sounding_measures) == 1
                 # shouldn't we use sounding_time_signature in place of time_signature?
-                if len(sounding_measures) > 0
+                if len(sounding_measures) > 0 and len(notes) > 0
                 else 0,
                 DENSITY: len(notes)
                 / _calculate_total_number_of_beats(time_signatures, periods)
-                if len(measures) > 0
+                if len(measures) > 0 and len(notes) > 0
                 else 0,
             }
         )
