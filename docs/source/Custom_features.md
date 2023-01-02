@@ -202,7 +202,7 @@ class MyNewFeature:
 custom_feature_class = FeatureCreator(MyNewFeature, 'other', 'args')
 ```
 
-## 3. Custom feature as a module
+### 3. Custom feature as a module
 
 The third option you have actually comes out of the box from the above. You can create a
 module inside a package `custom_features/custom_feature_module_in_package.py`:
