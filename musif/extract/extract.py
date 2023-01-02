@@ -621,15 +621,9 @@ class FeaturesExtractor:
             module = getattr(f, name)
         else:
             try:
-                # if os.path.exists((os.getcwd() + '\\' + str(f.__name__)+ "." + name).replace('.','\\')):
                 module = __import__(f.__name__+ "." + name, fromlist=[""])
-                # else:
-                    # return None
-            except Exception as e:
+            except ModuleNotFoundError:
                 return None
-                # raise ImportError(
-                    # f"It seems like module {f} has no `{name}` component."
-                # ) from e
         return module
 
     def _find_modules(self, package: str, basic: bool):
@@ -640,12 +634,13 @@ class FeaturesExtractor:
         else:
             to_extract = self._cfg.features
         for feature in to_extract:
-            # try:
             feature_package = self._get_module_or_attribute(package, feature)
-            # except ImportError:
-                # continue
             if feature_package is not None:
                 module = self._get_module_or_attribute(feature_package, "handler")
+                if module is None:
+                    raise ImportError(
+                        f"It seems {feature} has no `{handler}` component."
+                    ) from e
                 feature_dependencies = getattr(
                     feature_package, "musif_dependencies", []
                 )
