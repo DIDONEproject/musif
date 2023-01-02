@@ -3,7 +3,7 @@
 In general, you can define any option that you want to use while extracting features or
 post-processing data.
 You will be able to access them in `cfg` argument of your [custom
-features](/Custom_features.html) and [hooks](./Caching.html#hooks) or in the fields
+features](/Custom_features.html) and [hooks](./Hooks.html) or in the fields
 `self._cfg` and `self._post_config` of
 [`FeaturesExtractor`](./API/musif.extract.html#musif.extract.extract.FeaturesExtractor)
 and [`DataProcessor`](./API/musif.process.html#musif.process.processor.DataProcessor)

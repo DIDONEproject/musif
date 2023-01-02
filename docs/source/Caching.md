@@ -53,8 +53,7 @@ Another feature that you should be aware of is that `SmartModuleCache` transform
 iterator to lists and make it available under the `__list__` field. The successive calls
 to the iterator will then return the list.
 
-(hooks)=
-## Hooks: modifying `music21` objects before of caching
+## Modifying `music21` objects before of caching
 
 The only condition for using the cache system is that you do not change the music21
 objects from inside the features, which is a reasonable condition. If you are doing it,
@@ -62,42 +61,4 @@ you should probably stopping doing it, because it necessarily involves a copy of
 `music21` objects, which is slow.
 
 To allow you to modify the parsed score, we have introduced the option of using hooks,
-as explained below.
-
-You can implement any object, module, or package with a function `execute` which
-accepts two objects: a [`Configuration`](./Configuration.html) object and the data parsed from
-the score. This latter is a dictionary which contains the `music21.stream.Score` object
-resulting from the MusicXML file, its parts data, the harmonic annotations contained in
-a `Musescore` file (if available), etc.
-
-An example of hook may be the following:
-```python
-
-import pandas as pd
-import musif.extract.constants as C
-
-class MyHook:
-  def execute(cfg, data):
-      score: Score = data[C.DATA_SCORE]
-      ms3_df: pd.DatFrame = data[C.DATA_MUSESCORE_SCORE]
-      for p in score.parts:
-        score.remove(p)
-
-      ms3_df[:] = 0
-
-      return data
-```
-
-You can put the function `execute` in any object. In this case, we used a class, but you
-could even use a module or a package.
-
-Then you only need to tell to the `FeatureExtractor` object that it should use the hook:
-```python
-from musif.extract.extract import FeaturesExtractor
-
-df = FeaturesExtractor("config.yml", precache_hooks=["MyHook"])
-```
-Of course, you can use the option `precache_hooks` in the `config.yml` file as well.
-
-This hook is run just before of creating the `SmartModuleCache` object, thus it is only
-run when parsing the score, not when loading the cache from file.
+as explained [here](./Hooks.html)

@@ -9,6 +9,7 @@ hidden:
 Getting Started <Tutorial>
 Custom_features
 Caching
+Hooks
 Configuration
 API <API/modules>
 General Index <genindex>
