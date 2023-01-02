@@ -287,7 +287,11 @@ def extract_numeric_tempo(file_path: str) -> Optional[int]:
         Path to xml file to get the tempo from.
 
     """
-    tree = ET.parse(file_path)
+    try:
+        tree = ET.parse(file_path)
+    except ET.ParseError as e:
+        return "NA"
+
     root = tree.getroot()
     try:
         tempo = int(
