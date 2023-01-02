@@ -2,14 +2,13 @@ import itertools
 import os
 from typing import Union
 
+import ms3
 import music21 as m21
 import pandas as pd
-import ms3
 from pandas import DataFrame
-from musif.extract.constants import PLAYTHROUGH
 
 from musif.cache import isinstance
-
+from musif.extract.constants import PLAYTHROUGH
 from musif.musicxml.tempo import get_number_of_beats
 
 file_names = []
@@ -560,37 +559,52 @@ def _expand_part(part, repeat_elements: list):
     return p
 
 
-def _get_timesignature_periods(time_signatures: list):
-    # I don't get what this function should do
-    # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
-    periods = [0]
-    if len(time_signatures) == 0:
-        return periods
-    for t in range(0, len(time_signatures)):
-        if time_signatures[t] != time_signatures[t - 1]:
-            # when t is 0, t-1 is -1, is this what we want?
-            # if len(time_signatures) == 1, then it never enters here
-            periods.append(
-                t - periods[-1]
-            )  # Substract indexes in case measures are not cointinuous
+# def _get_timesignature_periods(time_signatures: list):
+#     """
+#     Get the number of `time_signatures` that must be skipped to get one that is
+#     different from the current one.
 
-    # if len(time_signatures) == 1, then we add 0 again
-    # if we entered the if, we add the same value twice
-    periods.append(t - periods[-1])
+#     For instance, let the following be the input:
 
-    # at the end, periods is a list of indices of time_dignatures... but see next
-    # comment
-    return periods
+#     ```
+#     [TimeSignature('3/4'), TimeSignature('6/8'), TimeSignature('6/8'), TimeSignature('3/4')]
+#     ```
+
+#     With the above input, return:
+
+#     ```
+#     #       ↓---| skip 1 time signature and get a different one (6/8)
+#     [ (3/4, 1), (6/8, 2), (3/4, 1) ]
+#     #                 ↑         ↑---| skip 1 time signatures and get the end
+#     #                 ---| skip 2 time signatures and get a different one (3/4)
+#     ```
+
+#     Not used anymore, this was used only in _calculate_total_number_of_beats
+#     """
+#     # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
+#     if len(time_signatures) == 0:
+#         return (None, 0)
+#     current_ts = time_signatures[0]
+#     idx_current_ts = 0
+#     if len(time_signatures) == 1:
+#         return [(current_ts, 1)]
+#     for t in range(k, len(time_signatures) + 1):
+#         if t == len(time_signatures):
+#             is_a_new_ts = True
+#         else:
+#             next_ts = time_signatures[t]
+#             is_a_new_ts = current_ts != next_ts
+#         if is_a_new_ts:
+#             periods.append((current_ts, t - idx_current_ts))
+#             current_ts = next_ts
+#             idx_current_ts = t
+
+#     return periods
 
 
-def _calculate_total_number_of_beats(time_signatures: list, periods: list) -> int:
-    return sum(
-        [
-            # here, time_signature is indexed by j, and not by the content of period...
-            # is this correct? shouldn't thay be the opposite?
-            # when j == 0, period is also == 0, so it can be skipped
-            period * get_number_of_beats(time_signatures[period])
-            # j * get_number_of_beats(time_signatures[period])
-            for j, period in enumerate(periods)
-        ]
-    )
+def _calculate_total_number_of_beats(time_signatures: list) -> int:
+    """
+    Given a list of time signatures, sums the beats of each time signature
+    """
+    # periods = _get_timesignature_periods(time_signatures)
+    return sum(get_number_of_beats(ts) for ts in time_signatures)

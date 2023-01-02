@@ -31,7 +31,6 @@ from musif.extract.features.tempo.constants import (
     TIME_SIGNATURES,
 )
 from musif.extract.utils import (
-    _get_timesignature_periods,
     _calculate_total_number_of_beats,
 )
 from musif.logs import lerr
@@ -56,42 +55,22 @@ def update_part_objects(
     measures = part_data[DATA_MEASURES]
     time_signature = score_data[TIME_SIGNATURE].split(",")
     time_signatures = score_data[TIME_SIGNATURES]
-    if len(time_signature) == 1:
-        part_features.update(
-            {
-                SOUNDING_DENSITY: len(notes)
-                / (get_number_of_beats(time_signature[0]) * len(sounding_measures))
-                if len(sounding_measures) > 0
-                else 0,
-                DENSITY: len(notes)
-                / (get_number_of_beats(time_signature[0]) * len(measures))
-                if len(measures) > 0
-                else 0,
-            }
-        )
-    else:
-        periods = _get_timesignature_periods(time_signatures)
-        sounding_measures = range(
-            0, len(sounding_measures)
-        )  ## TODO: cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
-        sounding_time_signatures = [time_signatures[i] for i in sounding_measures]
+    sounding_measures = range(
+        0, len(sounding_measures)
+    )  ## TODO: cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
+    sounding_time_signatures = [time_signatures[i] for i in sounding_measures]
 
-        sounding_periods = _get_timesignature_periods(sounding_time_signatures)
-
-        part_features.update(
-            {
-                SOUNDING_DENSITY: len(notes)
-                / _calculate_total_number_of_beats(time_signatures, sounding_periods)
-                # the above is 0 (cannot divide by 0) if len(sounding_measures) == 1
-                # shouldn't we use sounding_time_signature in place of time_signature?
-                if len(sounding_measures) > 0 and len(notes) > 0
-                else 0,
-                DENSITY: len(notes)
-                / _calculate_total_number_of_beats(time_signatures, periods)
-                if len(measures) > 0 and len(notes) > 0
-                else 0,
-            }
-        )
+    part_features.update(
+        {
+            SOUNDING_DENSITY: len(notes)
+            / _calculate_total_number_of_beats(sounding_time_signatures)
+            if len(sounding_time_signatures) > 0
+            else 0,
+            DENSITY: len(notes)
+            / _calculate_total_number_of_beats(time_signatures)
+            if len(time_signatures) > 0 else 0,
+        }
+    )
 
 
 def update_score_objects(
