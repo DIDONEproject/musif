@@ -7,6 +7,7 @@ hidden:
 ---
 
 Getting Started <Tutorial>
+File_loading
 Custom_features
 Caching
 Hooks
