@@ -65,15 +65,25 @@ Once the list of files has been obtained, we proceed with the parsing of each
    default they are `'harmony'` and `'scale_relative'` only.
 
 In general, the recommended file format is MusicXML, as created by Finale Music.
-However, you can tune `musif.musicxml.constants.MUSICXML_FILE_EXTENSION` to
-load any other file supported by music21, or
-`musif.musescore.constants.MUSESCORE_FILE_EXTENSION` to load any file supported by
-MuseScore. In general, the two latter methods will lead to loss of information in the
-feature extraction process and will likely generate errors. Thus you will need to tune
-the extraction process using [hooks](./Hooks.html) and [custom
-features](./Custom_features.html). See the [advanced tutorial]() for an example.
-Keep in mind that when using harmonic features, you will always need MuseScore files
-loadable by `ms3`.
+However, you can tune `musif.musicxml.constants.MUSICXML_FILE_EXTENSION` to load any
+other file supported by music21, or `musif.musescore.constants.MUSESCORE_FILE_EXTENSION`
+to load any file supported by MuseScore. In general, the two latter methods will lead to
+loss of information in the feature extraction process and will likely generate errors.
+Thus you will need to tune the extraction process using [hooks](./Hooks.html) and
+[custom features](./Custom_features.html). For instance, you could load a dataset of
+MIDI files by using MuseScore or Humdrum/ABC/MEI files by using music21. Where possible,
+we suggest the use of MuseScore. See the [advanced tutorial]() for an example.
+
+It is not possible to mix MuseScore and music21 except for the case where [harmonic
+annotations](./API/musif.extract.html#musif.extract.constants.REQUIRE_MSCORE) are
+needed. Indeed, if some file is found in `xml_dir`, then
+`musescore_dir` is expected to contain files with harmonic features, i.e. MuseScore
+files loadable by `ms3`. On the contrary, if `xml_dir` is empty, MusicXML files will
+be created using MuseScore; thus, if you need harmonic annotations, you could
+theretically provide only MuseScore files with harmonic annotations. However, we
+experienced errors due to the parsing of MusicXML by music21 and to the  slight
+differences in the MusicXML files produced by different notation software, such as
+MuseScore, Finale, Sibelius, Dorico, etc.
 
 ## Annotating
 
