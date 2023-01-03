@@ -49,11 +49,20 @@ Once the list of files has been obtained, we proceed with the parsing of each
 1. if a corresponding file is found in `cache_dir`, unpickle it and skip the parsing
 2. if `filename` has the [extension specified for
    MuseScore](./API/musif.musescore.html#musif.musescore.constants.MUSESCORE_FILE_EXTENSION),
-   convert it to the [extension specified for music21](./API/musif.musicxml.html#musif.musicxml.constants.MUSICXML_FILE_EXTENSION) format using MuseScore; by default, `ms3` is used to
-   discover a path to the MuseScore executable, but you can specify it using the
-   `mscore_exec` option (you will need this option to run MuseScore without graphical
-   environment, e.g. using `xvfb-run`); by default, files are converted to MusicXML
-3. if `filename` has the [extension specified for music21](./API/musif.musicxml.html#musif.musicxml.constants.MUSICXML_FILE_EXTENSION), parse it using music21
+   convert it to the [extension specified for
+   music21](./API/musif.musicxml.html#musif.musicxml.constants.MUSICXML_FILE_EXTENSION)
+   format using MuseScore; by default, `ms3` is used to discover a path to the MuseScore
+   executable, but you can specify it using the `mscore_exec` option (you will need this
+   option to run MuseScore without graphical environment, e.g. using `xvfb-run`); by
+   default, files are converted to MusicXML
+3. if `filename` has the [extension specified for
+   music21](./API/musif.musicxml.html#musif.musicxml.constants.MUSICXML_FILE_EXTENSION),
+   parse it using music21
+4. if `filename` also exists in `musescore_dir` (with the extension specified for
+   MuseScore) and harmonic features are requested, load it using `ms3` in search of
+   harmonic annotations. Harmonic features are listed (and editable) in [a constant
+   variable](./API/musif.extract.html#musif.extract.constants.REQUIRE_MSCORE) and by
+   default they are `'harmony'` and `'scale_relative'` only.
 
 In general, the recommended file format is MusicXML, as created by Finale Music.
 However, you can tune `musif.musicxml.constants.MUSICXML_FILE_EXTENSION` to
@@ -63,6 +72,8 @@ MuseScore. In general, the two latter methods will lead to loss of information i
 feature extraction process and will likely generate errors. Thus you will need to tune
 the extraction process using [hooks](./Hooks.html) and [custom
 features](./Custom_features.html). See the [advanced tutorial]() for an example.
+Keep in mind that when using harmonic features, you will always need MuseScore files
+loadable by `ms3`.
 
 ## Annotating
 
