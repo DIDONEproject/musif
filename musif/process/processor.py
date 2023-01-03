@@ -211,13 +211,15 @@ class DataProcessor:
             perr("Some columns are already not present in the Dataframe")
 
     def replace_nans(self) -> None:
-        for col in tqdm(
-            self.data.columns, desc="Replacing NaN values in selected columns"
-        ):
+        pinfo("Replacing NaN values in selected columns")
+        cols = []
+        for col in self.data.columns:
             if any(
                 substring in col for substring in tuple(self._post_config.replace_nans)
             ):
-                self.data[col] = self.data[col].fillna(0)
+                cols.append(col)
+        self.data[cols].fillna(0, inplace=True)
+        # todo: check the above works
 
     def save(self, dest_path: Union[str, PurePath], ft="csv") -> None:
         """Saves current information into a file given the name of dest_path
@@ -294,6 +296,8 @@ class DataProcessor:
             column_type = Counter(df[df[column].notna()][column].map(type)).most_common(
                 1
             )[0][0]
+            # todo: try infer_objects or apply
+            __import__('ipdb').set_trace()
             if column_type == str:
                 df[column] = df[column].replace(0, "0")
                 df[column] = df[column].fillna(str("NA"))
