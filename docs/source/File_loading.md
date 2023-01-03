@@ -5,8 +5,9 @@ parse them and a [caching system](./Caching.html) to cache the parsed objects an
 up successive parsing.
 
 While MusicXML offer a rather complete representation of western music notation, they do
-not offer a standard way of encoding harmonic annotations. For this reason, we adopted
-MuseScore files for this purpose.
+not offer a standard way of encoding complex harmonic annotations. For this reason, we
+adopted MuseScore files for this purpose (another option could be the MEI or the
+IEEE 1599 formats).
 
 Finally, we offer the option to load any file format supported by MuseScore or
 music21.
