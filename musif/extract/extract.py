@@ -25,7 +25,7 @@ from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
-from musif.extract.utils import process_musescore_file
+from musif.extract.utils import process_musescore_file, cast_mixed_dtypes
 from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
@@ -287,6 +287,11 @@ class FeaturesExtractor:
             raise FileNotFoundError("No file found for extracting features!")
 
         score_df = self._process_corpus(filenames)
+
+        # fix dtypes
+        score_df = score_df.convert_dtypes()
+        score_df = score_df.apply(cast_mixed_dtypes, axis=0)
+
         return score_df
 
     def _process_corpus(

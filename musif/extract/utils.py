@@ -559,52 +559,23 @@ def _expand_part(part, repeat_elements: list):
     return p
 
 
-# def _get_timesignature_periods(time_signatures: list):
-#     """
-#     Get the number of `time_signatures` that must be skipped to get one that is
-#     different from the current one.
-
-#     For instance, let the following be the input:
-
-#     ```
-#     [TimeSignature('3/4'), TimeSignature('6/8'), TimeSignature('6/8'), TimeSignature('3/4')]
-#     ```
-
-#     With the above input, return:
-
-#     ```
-#     #       ↓---| skip 1 time signature and get a different one (6/8)
-#     [ (3/4, 1), (6/8, 2), (3/4, 1) ]
-#     #                 ↑         ↑---| skip 1 time signatures and get the end
-#     #                 ---| skip 2 time signatures and get a different one (3/4)
-#     ```
-
-#     Not used anymore, this was used only in _calculate_total_number_of_beats
-#     """
-#     # TODO: Comprobar para cuando haya repeticiones, que al volver usa el beat del compas que toca.
-#     if len(time_signatures) == 0:
-#         return (None, 0)
-#     current_ts = time_signatures[0]
-#     idx_current_ts = 0
-#     if len(time_signatures) == 1:
-#         return [(current_ts, 1)]
-#     for t in range(k, len(time_signatures) + 1):
-#         if t == len(time_signatures):
-#             is_a_new_ts = True
-#         else:
-#             next_ts = time_signatures[t]
-#             is_a_new_ts = current_ts != next_ts
-#         if is_a_new_ts:
-#             periods.append((current_ts, t - idx_current_ts))
-#             current_ts = next_ts
-#             idx_current_ts = t
-
-#     return periods
-
-
 def _calculate_total_number_of_beats(time_signatures: list) -> int:
     """
     Given a list of time signatures, sums the beats of each time signature
     """
     # periods = _get_timesignature_periods(time_signatures)
     return sum(get_number_of_beats(ts) for ts in time_signatures)
+
+
+def cast_mixed_dtypes(col):
+    if "mixed" in pd.api.types.infer_dtype(col):
+        notna = col.notna()
+        newtype = col[notna].map(type).mode()
+        if isinstance(newtype, float):
+            #  convert fractions like '1/3' to float
+            col[notna] = col[notna].apply(pd.eval)
+            col = col.convert_dtypes()
+        elif isinstance(newtype, int):
+            # convert to string
+            col = col.astype('string')
+    return col
