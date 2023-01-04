@@ -9,7 +9,6 @@ from musif.config import (
     ENDSWITH,
     INSTRUMENTS_TO_DELETE,
     STARTSWITH,
-    SUBSTRING_TO_DELETE,
 )
 from musif.extract.basic_modules.scoring.constants import (
     FAMILY_INSTRUMENTATION,
@@ -22,7 +21,6 @@ from musif.extract.features.harmony.constants import (
     CHORD_prefix,
 )
 from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
-from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.logs import pinfo
 
@@ -47,7 +45,7 @@ def join_part_degrees(
     part_degrees = [i for i in total_degrees if part in i]
 
     aug = [i for i in part_degrees if "#" in i]
-    desc = [i for i in part_degrees if "b" in i and not "bb" in i]
+    desc = [i for i in part_degrees if "b" in i and "bb" not in i]
     d_desc = [i for i in part_degrees if "bb" in i]
     d_asc = [i for i in part_degrees if "x" in i]
 
