@@ -218,8 +218,7 @@ class DataProcessor:
                 substring in col for substring in tuple(self._post_config.replace_nans)
             ):
                 cols.append(col)
-        self.data[cols].fillna(0, inplace=True)
-        # todo: check the above works
+        self.data[cols] = self.data[cols].fillna(0)
 
     def save(self, dest_path: Union[str, PurePath], ft="csv") -> None:
         """Saves current information into a file given the name of dest_path
@@ -287,22 +286,6 @@ class DataProcessor:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
         self.replace_nans()
 
-        self.data = self._check_columns_type(self.data)
+        # self.data = self._check_columns_type(self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         self.data.drop("index", axis=1, inplace=True, errors="ignore")
-
-    def _check_columns_type(self, df) -> DataFrame:
-        for column in tqdm(df.columns, desc="Adjusting NaN values"):
-            column_type = Counter(df[df[column].notna()][column].map(type)).most_common(
-                1
-            )[0][0]
-            # todo: try infer_objects or apply
-            __import__('ipdb').set_trace()
-            if column_type == str:
-                df[column] = df[column].replace(0, "0")
-                df[column] = df[column].fillna(str("NA"))
-
-            else:
-                df[column] = df[column].fillna(float("NaN"))
-                df[column] = df[column].replace("0", 0)
-        return df

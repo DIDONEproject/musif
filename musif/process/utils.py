@@ -1,8 +1,10 @@
-from logging.config import dictConfig
 import re
+from logging.config import dictConfig
 from typing import List
 
 import pandas as pd
+from pandas import DataFrame
+
 from musif.config import (
     ENDSWITH,
     INSTRUMENTS_TO_DELETE,
@@ -13,21 +15,17 @@ from musif.extract.basic_modules.scoring.constants import (
     FAMILY_INSTRUMENTATION,
     FAMILY_SCORING,
 )
-from musif.extract.features.harmony.constants import CHORD_prefix
-from musif.extract.features.texture.constants import TEXTURE
 from musif.extract.features.harmony.constants import (
     KEY_MODULATORY,
     KEY_PERCENTAGE,
     KEY_PREFIX,
+    CHORD_prefix,
 )
-from musif.extract.features.interval.constants import (
-    TRIMMED_INTERVALLIC_MEAN,
-)
+from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
-
+from musif.extract.features.texture.constants import TEXTURE
 from musif.logs import pinfo
-from pandas import DataFrame
 
 from .constants import voices_list_prefixes
 
@@ -58,6 +56,7 @@ def join_part_degrees(
     degree_nat = [x for x in part_degrees if re.search(pattern, x)]
     degree_nonat = [i for i in part_degrees if i not in degree_nat]
 
+    # TODO: strange names here, should be like aug, dim, etc.
     df[part + DEGREE_PREFIX + "_Asc" + sufix] = df[aug].sum(axis=1)
     df[part + DEGREE_PREFIX + "_Desc" + sufix] = df[desc].sum(axis=1)
     df[part + DEGREE_PREFIX + "_Dasc" + sufix] = df[d_asc].sum(axis=1)
@@ -80,61 +79,38 @@ def log_errors_and_shape(
 
 def delete_columns(data: DataFrame, config: dictConfig) -> None:
     pinfo("\nDeleting not useful columns...")
+    to_delete = []
     for inst in config[INSTRUMENTS_TO_DELETE]:
-        data.drop([i for i in data.columns if 'Part' +
-                  inst in i or inst+'_' in i], axis=1, inplace=True)
-    
+        to_delete += [i for i in data.columns if "Part" + inst in i or inst + "_" in i]
+
     for substring in config[SUBSTRING_TO_DELETE]:
-        data.drop([i for i in data.columns if substring in i], axis=1, inplace=True)
+        to_delete += [i for i in data.columns if substring in i]
 
-    data.drop(
-        [i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))],
-        axis=1,
-        inplace=True,
-    )
-    data.drop(
-        [i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))],
-        axis=1,
-        inplace=True,
-    )
-    data.drop(
-        [
-            col
-            for col in data.columns
-            if any(substring in col for substring in tuple(config["columns_contain"]))
-        ],
-        axis=1,
-        inplace=True,
-    )
+    to_delete += [i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))]
+    to_delete += [i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))]
+    to_delete += [
+        col
+        for col in data.columns
+        if any(substring in col for substring in tuple(config["columns_contain"]))
+    ]
+    to_delete += [i for i in data.columns if i.startswith("Sound") and "Voice" not in i]
+    to_delete += ["Presence_of_" + str(i) for i in config["delete_presence"]]
 
-    presence = ["Presence_of_" + str(i) for i in config["delete_presence"]]
-    if all(item in data.columns for item in presence):
-        data.drop(presence, axis=1, inplace=True, errors="ignore")
-
-    data.drop([i for i in data.columns if i.startswith('Sound')
-              and not 'Voice' in i], axis=1, inplace=True)
-
-    delete_exceptions(data)
-
-
-def delete_exceptions(data) -> None:
     # Delete Vn when it is alone
-    data.drop(
-        data.columns[data.columns.str.contains(get_part_prefix("Vn"))],
-        axis=1,
-        inplace=True,
-    )
-    if "PartVnI__PartVoice__" + TEXTURE in data:
-        del data["PartVnI__PartVoice__Texture"]
+    to_delete += [i for i in data.columns if get_part_prefix("Vn") in i]
+    to_delete.append(f"PartVnI__PartVoice__{TEXTURE}")
+    # The above two are Didone-specific! TODO
 
-    if (FAMILY_INSTRUMENTATION and FAMILY_SCORING) in data:
-        data.drop([FAMILY_INSTRUMENTATION, FAMILY_SCORING], axis=1, inplace=True)
+    to_delete += [FAMILY_INSTRUMENTATION, FAMILY_SCORING]
 
     # Remove empty voices
-    empty_voices = [col for col in data.columns if col.startswith(
-        tuple(voices_list_prefixes)) and all(data[col].isnull().values)]
-    if empty_voices:
-        data.drop(empty_voices, axis=1, inplace=True)
+    to_delete += [
+        col
+        for col in data.columns
+        if col.startswith(tuple(voices_list_prefixes))
+        and all(data[col].isnull().values)
+    ]
+    data.drop(columns=to_delete, inplace=True, errors="ignore")
 
 
 def join_keys(df: DataFrame) -> None:
