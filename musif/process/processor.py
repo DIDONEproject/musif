@@ -1,11 +1,9 @@
 import os
-from collections import Counter
 from pathlib import PurePath
 from typing import Union
 
 import pandas as pd
 from pandas import DataFrame
-from tqdm import tqdm
 
 from musif.config import PostProcessConfiguration
 from musif.extract.basic_modules.scoring.constants import INSTRUMENTATION
@@ -20,7 +18,7 @@ from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.logs import perr, pinfo
 from musif.process.constants import PRESENCE
 from musif.process.utils import (
-    delete_columns,
+    _delete_columns,
     join_keys,
     join_keys_modulatory,
     join_part_degrees,
@@ -117,7 +115,7 @@ class DataProcessor:
         """
         Main method of the class. Removes NaN values, deletes unuseful columns
         and merges those that are needed according to config.yml file.
-        
+
         Returns
         ------
         Dataframe object
@@ -206,7 +204,7 @@ class DataProcessor:
         config_data = self._post_config.__dict__
         config_data.update(kwargs)  # Override values
         try:
-            delete_columns(self.data, config_data)
+            _delete_columns(self.data, config_data)
         except KeyError:
             perr("Some columns are already not present in the Dataframe")
 
@@ -262,7 +260,7 @@ class DataProcessor:
 
     def _join_degrees(self) -> None:
         total_degrees = [
-            i for i in self.data.columns if "_Degree" in i and not "relative" in i
+            i for i in self.data.columns if "_Degree" in i and "relative" not in i
         ]
 
         for part in self._post_config.instruments_to_keep:

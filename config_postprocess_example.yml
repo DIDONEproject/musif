@@ -34,16 +34,27 @@ grouped: False
 # see also `delete_presence` option
 separate_intrumentation_column: False
 
-# Specify what instuments's features are desired to be kept after the post processing
+# Specify the instruments whose features will be kept even if they are merged with the option
+# `grouped`
+# Matching is case-sensitive
 instruments_to_keep: []
-  # possible values
+  # Possible values are from abbreviations from musif.musicxml.constants.SOUND_TO_ABBREVIATION
+  # Note that if an abbreviation is not available, the full instrument name is used
+  # TODO: why these instrument names are not capitalized?
+  # Example:
   # - vnI
   # - bs
  
-# Specify what instuments's features are desired to be deleted after the post processing
-# i.e. 'Part' + inst in column
+# Specify the instuments whose features will be deleted
+# i.e. 
+# * features containing 'Part' + <inst> will be deleted
+# * features containing <inst> + '_' will be deleted
+# Matching is case-sensitive
 instruments_to_delete: []
-  # possible values
+  # Possible values are from abbreviations from musif.musicxml.constants.SOUND_TO_ABBREVIATION
+  # Note that if an abbreviation is not available, the full instrument name is used
+  # First letter is always capitalized
+  # Example:
   # - Ob
   # - Cor
   # - Bn
@@ -62,20 +73,16 @@ instruments_to_delete: []
   # - CiII
   # - CiI
 
-# In case of instruments with similar names to the ones desired to be kept, substings in features to be deleted
-# i.e. inst in column
-substring_to_delete: []
-  # - Bn
-  # - VnII
-  # - VnIII
-  # - VnIV
-  # - Vc
-  # - Cl
-  # - Tpt
-  # - Hn
-  # - Fl
+# Columns containing these substrings will have nan values replaced with 0
+# Matching is case-sensitive
+replace_nans: []
+  # Example of values (but any substring can be used):
+  # - Interval
+  # - Degree
+  # - Harmony
 
-# Column suffixes that should be deleted from the dataframe
+# Columns ending with any of these strings will be deleted
+# Matching is case-sensitive
 columns_endswith: []
   # example of values (but any other suffix can be used)
   # - _HighestNote
@@ -94,7 +101,8 @@ columns_endswith: []
   # - 'Semitones_Sum'    
   # - _MeanInterval'
 
-# Column prefixes to be deleted from the dataframe
+# Columns starting with any of these strings will be deleted
+# Matching is case-sensitive
 columns_startswith: []
   # example of values (but any other prefix can be used)
   # - FamilyWw
@@ -106,23 +114,30 @@ columns_startswith: []
   # - NumberOfBeats
   # - SoundVoice_Dyn
 
-# Column substrings to be deleted from the dataframe
+# Columns containing any of these strings will be deleted
+# Matching is case-sensitive
 columns_contain: []
+  # example of values (but any other substring can be used)
   # - _Count
   # - _SoundingMeasuresMean
   # - _SmallestSemitones
   # - _SmallestAbsolute
   # - _SmallestInterval
+  # - Bn
+  # - VnII
+  # - VnIII
+  # - VnIV
+  # - Vc
+  # - Cl
+  # - Tpt
+  # - Hn
+  # - Fl
 
-# Column groups that require that nan values are replaced with 0
-replace_nans: []
-  # - Interval
-  # - Degree
-  # - Harmony
-
-# Columns that should delete of type 'Presence_of_*' if separate_intrumentation_column is activated
-delete_presence: []
-  # - vn
-  # - bs
-  # - vc
-  # - va
+# Columns exactly matching any of these strings will be deleted
+# Matching is case-sensitive
+columns_match: []
+  # example of values (but any column can be used)
+  # - Presence_of_vn
+  # - Presence_of_bs
+  # - Presence_of_vc
+  # - Presence_of_va

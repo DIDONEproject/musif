@@ -24,7 +24,6 @@ from musif.extract.features.harmony.constants import (
 from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
-from musif.extract.features.texture.constants import TEXTURE
 from musif.logs import pinfo
 
 from .constants import voices_list_prefixes
@@ -77,29 +76,25 @@ def log_errors_and_shape(
     pinfo(f"\nFinal shape of the DataFrame: {df.shape[0]} rows, {df.shape[1]} features")
 
 
-def delete_columns(data: DataFrame, config: dictConfig) -> None:
+def _delete_columns(data: DataFrame, config: dictConfig) -> None:
     pinfo("\nDeleting not useful columns...")
     to_delete = []
     for inst in config[INSTRUMENTS_TO_DELETE]:
         to_delete += [i for i in data.columns if "Part" + inst in i or inst + "_" in i]
-
-    for substring in config[SUBSTRING_TO_DELETE]:
-        to_delete += [i for i in data.columns if substring in i]
 
     to_delete += [i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))]
     to_delete += [i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))]
     to_delete += [
         col
         for col in data.columns
-        if any(substring in col for substring in tuple(config["columns_contain"]))
+        if any(substring in col for substring in config["columns_contain"])
+    ]
+    to_delete += [
+        col
+        for col in data.columns
+        if any(string == col for string in config["columns_match"])
     ]
     to_delete += [i for i in data.columns if i.startswith("Sound") and "Voice" not in i]
-    to_delete += ["Presence_of_" + str(i) for i in config["delete_presence"]]
-
-    # Delete Vn when it is alone
-    to_delete += [i for i in data.columns if get_part_prefix("Vn") in i]
-    to_delete.append(f"PartVnI__PartVoice__{TEXTURE}")
-    # The above two are Didone-specific! TODO
 
     to_delete += [FAMILY_INSTRUMENTATION, FAMILY_SCORING]
 

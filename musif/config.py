@@ -32,12 +32,11 @@ DELETE_HARMONY = "delete_files_without_harmony"
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
 INSTRUMENTS_TO_DELETE = "instruments_to_delete"
-SUBSTRING_TO_DELETE = "substring_to_delete"
 ENDSWITH = "columns_endswith"
 STARTSWITH = "columns_startswith"
 CONTAIN = "columns_contain"
+MATCH = "columnds_match"
 REPLACE_NANS = "replace_nans"
-PRESENCE = "delete_presence"
 DFS_DIR = "dfs_dir"
 GROUPED = "grouped_analysis"
 MERGE_VOICES = "merge_voices"
@@ -76,12 +75,11 @@ _CONFIG_POST_FALLBACK = {
     MERGE_VOICES: True,
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_DELETE: [],
-    SUBSTRING_TO_DELETE: [],
-    PRESENCE: [],
     ENDSWITH: [],
     STARTSWITH: [],
     CONTAIN: [],
     REPLACE_NANS: [],
+    MATCH: []
 }
 
 
