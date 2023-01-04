@@ -213,12 +213,14 @@ class DataProcessor:
         cols = []
         for col in self.data.columns:
             if any(
-                substring in col for substring in tuple(self._post_config.replace_nans)
+                substring.lower() in col.lower()
+                for substring in tuple(self._post_config.replace_nans)
             ):
                 cols.append(col)
+        cols = self.data[cols].select_dtypes(include='number').columns
         self.data[cols] = self.data[cols].fillna(0)
 
-    def save(self, dest_path: Union[str, PurePath], ft="csv") -> None:
+    def save(self, dest_path: Union[str, PurePath], ext=".csv", ft="csv", **kwargs) -> None:
         """Saves current information into a file given the name of dest_path
 
         To load one of those file, remember to set the index to
@@ -234,15 +236,20 @@ class DataProcessor:
         dest_path : str or Path
             Path to directory where the file will be stored; a suffix like
             `_metadata.csv` will be added.
+        ext : str
+            Extension used to save files. Use `.gz`, `.xz`, `.zip` etc. to compress the
+            files. Default: `.csv`
         ft : str
             Type of file for saving. The filetype must be supported by `pandas`, e.g.
-            `to_csv`, `to_feather`, `to_parquet`, etc.
+            `to_csv`, `to_feather`, `to_parquet`, etc. Default: `csv`
         """
 
-        pinfo(f"Writing data to {dest_path}_*.csv")
+        pinfo(f"Writing data to {dest_path}_*{ext}")
         ft = "to_" + ft
         dest_path = str(dest_path)
-        getattr(self.data, ft)(dest_path + "_alldata.csv", index=False)
+        if ft == 'csv':
+            kwargs['index'] = False
+        getattr(self.data, ft)(dest_path + "_alldata" + ext, **kwargs)
 
     def _group_keys_modulatory(self) -> None:
         self.data.update(
