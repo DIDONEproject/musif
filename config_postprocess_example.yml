@@ -1,115 +1,128 @@
 # Directory to save the logs files, level for logging in the console (console_level) and
-# inthe log file (file_level)
+# in the log file (file_level)
 log:
-  file_path: logs/post_process.log
+  file_path: ./musiF.log
   file_level: DEBUG
-  console_level: WARN
+  console_level: ERROR
 
-# Flag to determine whether to delete files containing errors (whose FileNames bust be
-# containedin a 'errors.csv' file) or not
-delete_files: True
+# Flag to determine whether to delete rows associated to files containing errors (whose
+# FileNames bust be contained in a './errors.csv' file) or not
+delete_files: False
 
-# Flag to determine whether delete files that do not have harmonic annotations (and
+# Flag to determine whether delete rows associated to files that do not have harmonic
+# annotations (and
 # hence, no harmonic analysis) or not
-delete_files_without_harmony: True
+delete_files_without_harmony: False
 
-# Flag to determine if multiple voices's scores (duetos and trios) shall be merge into
-# the same column (SoundVoice_*) calculating averages, min or max of both values 
+# Flag to determine if multiple voices (e.g. duetos and trios) sould be merge into
+# the same column (SoundVoice_*), calculating averages, min or max of both values 
 merge_voices: True
 
 # Flag to determine if keys, keys modulatory and degrees columns should be grouped per type
-grouped: True
+# For instance, about the keys:
+# * IV, II, and VI will be merged into the SD group (subdominant)
+# * iv, ii, will be merged into the sd group (subdominant)
+# * I and i will be merged into the T group (tonic)
+# * III and vi will be merged into the rel group (relative)
+# 
+# The degrees will be merged into [Doubly] Augmented, [Doubly] Diminished, Natural, No
+# Natural. This applies to both raw and percentage degree features.
+grouped: False
 
 # Flag to determine if Intrumentation column should be disgregated in several columns
-# (Peresence_of_*) having a value of 1 if instrument is present, 0 otherwise.
-# # see also `delete_presence` option
-separate_intrumentation_column: True
+# (Presence_of_*) having a value of 1 if instrument is present, 0 otherwise.
+# see also `delete_presence` option
+separate_intrumentation_column: False
 
 # Specify what instuments's features are desired to be kept after the post processing
-instruments_to_keep: 
-  - vnI
-  - bs
+instruments_to_keep: []
+  # possible values
+  # - vnI
+  # - bs
  
 # Specify what instuments's features are desired to be deleted after the post processing
 # i.e. 'Part' + inst in column
-instruments_to_delete: 
-  - Ob
-  - Cor
-  - Bn
-  - Va
-  - Eh
-  - Tbn
-  - TbI
-  - Timp
-  - Tr
-  - TrI
-  - BsI
-  - BsII
-  - VeI
-  - VeII
-  - CI
-  - CiII
-  - CiI
+instruments_to_delete: []
+  # possible values
+  # - Ob
+  # - Cor
+  # - Bn
+  # - Va
+  # - Eh
+  # - Tbn
+  # - TbI
+  # - Timp
+  # - Tr
+  # - TrI
+  # - BsI
+  # - BsII
+  # - VeI
+  # - VeII
+  # - CI
+  # - CiII
+  # - CiI
 
 # In case of instruments with similar names to the ones desired to be kept, substings in features to be deleted
 # i.e. inst in column
-substring_to_delete: 
-  - Bn
-  - VnII
-  - VnIII
-  - VnIV
-  - Vc
-  - Cl
-  - Tpt
-  - Hn
-  - Fl
+substring_to_delete: []
+  # - Bn
+  # - VnII
+  # - VnIII
+  # - VnIV
+  # - Vc
+  # - Cl
+  # - Tpt
+  # - Hn
+  # - Fl
 
 # Column suffixes that should be deleted from the dataframe
-columns_endswith:
-  - _HighestNote
-  - _LowestNote
-  - _Notes
-  - _SoundingMeasures
-  - _Syllables
-  - _NumberOfFilteredParts
-  - NumberOfParts
-  - _NotesMean
-  - Librettist
-  - _LargestIntervalAsc
-  - _LargestIntervalAll
-  - _LargestIntervalDesc
-  - _NotesMean
-  - 'Semitones_Sum'    
-  - _MeanInterval'
+columns_endswith: []
+  # example of values (but any other suffix can be used)
+  # - _HighestNote
+  # - _LowestNote
+  # - _Notes
+  # - _SoundingMeasures
+  # - _Syllables
+  # - _NumberOfFilteredParts
+  # - NumberOfParts
+  # - _NotesMean
+  # - Librettist
+  # - _LargestIntervalAsc
+  # - _LargestIntervalAll
+  # - _LargestIntervalDesc
+  # - _NotesMean
+  # - 'Semitones_Sum'    
+  # - _MeanInterval'
 
 # Column prefixes to be deleted from the dataframe
-columns_startswith:
-  - FamilyWw
-  - FamilyBr
-  - FamilyGen
-  - FamilyGen
-  - FamilyPerc
-  - EndOfThemeA
-  - NumberOfBeats
-  - SoundVoice_Dyn
+columns_startswith: []
+  # example of values (but any other prefix can be used)
+  # - FamilyWw
+  # - FamilyBr
+  # - FamilyGen
+  # - FamilyGen
+  # - FamilyPerc
+  # - EndOfThemeA
+  # - NumberOfBeats
+  # - SoundVoice_Dyn
 
 # Column substrings to be deleted from the dataframe
-columns_contain:
-  - _Count
-  - _SoundingMeasuresMean
-  - _SmallestSemitones
-  - _SmallestAbsolute
-  - _SmallestInterval
+columns_contain: []
+  # - _Count
+  # - _SoundingMeasuresMean
+  # - _SmallestSemitones
+  # - _SmallestAbsolute
+  # - _SmallestInterval
 
 # Column groups that require that nan values are replaced with 0
-replace_nans:
-  - Interval
-  - Degree
-  - Harmony
+replace_nans: []
+  # - Interval
+  # - Degree
+  # - Harmony
 
 # Columns that should delete of type 'Presence_of_*' if separate_intrumentation_column is activated
-delete_presence:
-  - vn
-  - bs
-  - vc
-  - va
+delete_presence: []
+  # - vn
+  # - bs
+  # - vc
+  # - va
