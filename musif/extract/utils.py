@@ -570,12 +570,12 @@ def _calculate_total_number_of_beats(time_signatures: list) -> int:
 def cast_mixed_dtypes(col):
     if "mixed" in pd.api.types.infer_dtype(col):
         notna = col.notna()
-        newtype = col[notna].map(type).mode()
-        if isinstance(newtype, float):
+        newtype = col[notna].map(type).mode()[0]
+        if issubclass(newtype, float):
             #  convert fractions like '1/3' to float
             col[notna] = col[notna].apply(pd.eval)
             col = col.convert_dtypes()
-        elif isinstance(newtype, int):
+        elif issubclass(newtype, int):
             # convert to string
             col = col.astype('string')
     return col
