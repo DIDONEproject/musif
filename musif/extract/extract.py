@@ -644,8 +644,8 @@ class FeaturesExtractor:
                 module = self._get_module_or_attribute(feature_package, "handler")
                 if module is None:
                     raise ImportError(
-                        f"It seems {feature} has no `{handler}` component."
-                    ) from e
+                        f"It seems {feature} has no `handler` component."
+                    )
                 feature_dependencies = getattr(
                     feature_package, "musif_dependencies", []
                 )
