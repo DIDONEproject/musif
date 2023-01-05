@@ -25,8 +25,8 @@ from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
-from musif.extract.utils import process_musescore_file, cast_mixed_dtypes
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug
+from musif.extract.utils import cast_mixed_dtypes, process_musescore_file
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
 from musif.musicxml import extract_numeric_tempo, split_layers
@@ -290,6 +290,7 @@ class FeaturesExtractor:
 
         # fix dtypes
         score_df = score_df.convert_dtypes()
+        score_df.to_pickle("temp1.pkl")
         score_df = score_df.apply(cast_mixed_dtypes, axis=0)
 
         return score_df
@@ -437,7 +438,7 @@ class FeaturesExtractor:
             C.DATA_SCORE: window_score,
             C.DATA_FILTERED_PARTS: window_parts,
             C.DATA_MUSESCORE_SCORE: window_mscore,
-            C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO]
+            C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO],
         }
 
         for i, p in enumerate(window_parts):
@@ -450,7 +451,7 @@ class FeaturesExtractor:
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for package in packages:
-             for module in self._find_modules(package, basic):
+            for module in self._find_modules(package, basic):
                 self._update_parts_module_features(
                     module, data, parts_data, parts_features
                 )
@@ -544,7 +545,7 @@ class FeaturesExtractor:
                 C.DATA_FILE: str(filename),
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
-                C.DATA_NUMERIC_TEMPO: numeric_tempo
+                C.DATA_NUMERIC_TEMPO: numeric_tempo,
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
@@ -626,9 +627,9 @@ class FeaturesExtractor:
             module = getattr(f, name)
         else:
             try:
-                module = __import__(f.__name__+ "." + name, fromlist=[""])
-            except ModuleNotFoundError:
-                return None
+                module = __import__(f.__name__ + "." + name, fromlist=[""])
+            except ModuleNotFoundError as e:
+                return e
         return module
 
     def _find_modules(self, package: str, basic: bool):
@@ -640,22 +641,21 @@ class FeaturesExtractor:
             to_extract = self._cfg.features
         for feature in to_extract:
             feature_package = self._get_module_or_attribute(package, feature)
-            if feature_package is not None:
-                module = self._get_module_or_attribute(feature_package, "handler")
-                if module is None:
-                    raise ImportError(
-                        f"It seems {feature} has no `handler` component."
+            if isinstance(feature_package, Exception):
+                continue
+            module = self._get_module_or_attribute(feature_package, "handler")
+            if isinstance(module, Exception):
+                raise ImportError(
+                    f"It seems {feature}.handler cannot be imported."
+                ) from module
+            feature_dependencies = getattr(feature_package, "musif_dependencies", [])
+            for dependency in feature_dependencies:
+                if dependency not in found_features and dependency != feature:
+                    raise ValueError(
+                        f"Feature {feature} is dependent on feature {dependency} ({dependency} should appear before {feature} in the configuration)"
                     )
-                feature_dependencies = getattr(
-                    feature_package, "musif_dependencies", []
-                )
-                for dependency in feature_dependencies:
-                    if dependency not in found_features and dependency != feature:
-                        raise ValueError(
-                            f"Feature {feature} is dependent on feature {dependency} ({dependency} should appear before {feature} in the configuration)"
-                        )
-                found_features.add(feature)
-                yield module
+            found_features.add(feature)
+            yield module
 
     def _update_parts_module_features(
         self,
