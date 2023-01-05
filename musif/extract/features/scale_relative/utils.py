@@ -1,12 +1,13 @@
 from collections import Counter
 from itertools import chain
-from typing import List, Tuple, Union
 from math import ceil, floor
+from typing import List, Tuple, Union
 
 import pandas as pd
 import roman
 from music21 import pitch, scale
 from music21.note import Note
+from music21.stream import Measure
 from pandas.core.frame import DataFrame
 
 import musif.extract.constants as C
@@ -72,11 +73,14 @@ def get_emphasised_scale_degrees_relative(
     if harmonic_analysis.size == 0:
         return None
 
-    beats = list(
-        map(lambda x: x.beat, score_data[C.DATA_SCORE].flatten().elements)
-    )
+    measures = [
+        m for p in score_data[C.DATA_SCORE].parts for m in
+        p.getElementsByClass(Measure)
+    ]
+    min_beat = min(m.offset for m in measures)
+    max_beat = max(m.offset + m.quarterLength for m in measures)
     tonality_map = get_tonality_per_beat(
-        harmonic_analysis, tonality, min(beats), max(beats)
+        harmonic_analysis, tonality, min_beat, max_beat
     )
     emph_degrees = get_emphasized_degrees(notes_list, tonality_map, harmonic_analysis)
     return emph_degrees
