@@ -3,15 +3,13 @@ import xml.etree.ElementTree as ET
 from enum import Enum
 from typing import Optional
 
-import numpy as np
-
 
 class TempoGroup2(Enum):
     """
     Contains constants refering to grouped tempo on the second level that will be used by the tempo module.
     """
 
-    NA = np.nan
+    NA = "NA"
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
@@ -87,7 +85,7 @@ def get_tempo_grouped_1(tempo: str) -> str:
         ]
     ]
     if not tempo:
-        return np.nan
+        return "NA"
 
     for r in replacements:
         tempo = tempo.replace(*r)
@@ -179,7 +177,7 @@ def get_tempo_grouped_1(tempo: str) -> str:
         else:
             return "Con brio"
 
-    return np.nan
+    return "NA"
 
 
 def get_tempo_grouped_2(tempo_grouped_1: str) -> str:

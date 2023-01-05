@@ -4,7 +4,7 @@ from typing import List
 from music21.note import Note
 
 from numpy import mean
-import numpy as np
+
 
 from musif.common._constants import VOICE_FAMILY
 
@@ -142,4 +142,4 @@ def get_voice_reg(notes: List[Note]) -> float:
 
     else:
 
-        return np.nan
+        return "NA"
