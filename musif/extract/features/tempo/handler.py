@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
 
+import numpy as np
 from music21.expressions import TextExpression
 from music21.stream import Measure
 
@@ -23,7 +24,7 @@ from . import constants as C
 
 
 class TempoGroup2(Enum):
-    NA = "NA"
+    NA = np.nan
     SLOW = "Slow"
     MODERATE = "Moderate"
     FAST = "Fast"
@@ -142,7 +143,7 @@ def extract_tempo(score_data, part):
         if isinstance(measure, Measure):
             for element in measure:
                 if isinstance(element, TextExpression):
-                    if get_tempo_grouped_1(element.content) != "NA":
+                    if get_tempo_grouped_1(element.content) != np.nan:
                         tempo_mark = element.content
             break  # only take into account the first bar!
     return numeric_tempo, tempo_mark

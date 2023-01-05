@@ -2,6 +2,7 @@ import re
 from logging.config import dictConfig
 from typing import List
 
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
@@ -36,7 +37,7 @@ def replace_nans(df):
             or col.endswith(("_DottedRhythm", "_DoubleDottedRhythm"))
             or ("_Degree" and TRIMMED_INTERVALLIC_MEAN and "_Dyn") in col
         ):
-            df[col] = df[col].fillna("NA")
+            df[col] = df[col].fillna(np.nan)
 
 
 def join_part_degrees(

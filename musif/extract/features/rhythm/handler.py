@@ -95,11 +95,11 @@ def update_part_objects(
         {
             AVERAGE_DURATION: mean(notes_duration)
             if len(notes_duration) != 0
-            else "NA",
+            else np.nan,
             RHYTHMINT: sum(rhythm_intensity_period),
             DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats)
             if total_sounding_beats
-            else "NA",
+            else np.nan,
             DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats),
         }
     )
@@ -159,7 +159,7 @@ def update_score_objects(
             DESCENDENT_PROPORTION
         ]
 
-    dotted_rhythm = [i for i in dotted_rhythm if i not in (0.0, "NA")]
+    dotted_rhythm = [i for i in dotted_rhythm if i not in (0.0, np.nan)]
     features.update(
         {
             # get_score_feature(AVERAGE_DURATION): mean(average_durations),
