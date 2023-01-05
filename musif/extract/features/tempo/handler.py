@@ -106,7 +106,7 @@ def extract_time_signatures(measures: list, score_data: dict):
             if element.timeSignature:
                 time_signatures.append(element.timeSignature.ratioString)
             else:
-                if len(time_signatures) > 1:
+                if len(time_signatures) > 0:
                     time_signatures.append(time_signatures[-1])
                 elif GLOBAL_TIME_SIGNATURE in score_data:
                     time_signatures.append(
