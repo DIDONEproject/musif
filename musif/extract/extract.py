@@ -315,11 +315,13 @@ class FeaturesExtractor:
             for score in scores_features:
                 df_score = DataFrame(score)
                 df_score = df_score.reindex(sorted(df_score.columns), axis=1)
+                df_score.replace("NA", pd.NA, inplace=True)
                 all_dfs.append(df_score)
             all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
         else:
             all_dfs = DataFrame(scores_features)
             all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
+            all_dfs.replace("NA", pd.NA, inplace=True)
         return all_dfs
 
     def _init_score_processing(self, idx: int, filename: PurePath):
@@ -341,7 +343,7 @@ class FeaturesExtractor:
         basic_features[C.ID] = idx
         return basic_features, cache_name, parts_data, score_data
 
-    def _process_score(self, idx: int, filename: PurePath) -> Tuple[dict, List[dict]]:
+    def _process_score(self, idx: int, filename: PurePath) -> dict:
 
         (
             basic_features,
@@ -362,7 +364,7 @@ class FeaturesExtractor:
 
     def _process_score_windows(
         self, idx: int, filename: PurePath
-    ) -> Tuple[dict, List[dict]]:
+    ) -> List[dict]:
         (
             basic_features,
             cache_name,
