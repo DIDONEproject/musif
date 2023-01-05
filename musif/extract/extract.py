@@ -290,7 +290,6 @@ class FeaturesExtractor:
 
         # fix dtypes
         score_df = score_df.convert_dtypes()
-        score_df.to_pickle("temp1.pkl")
         score_df = score_df.apply(cast_mixed_dtypes, axis=0)
 
         return score_df
