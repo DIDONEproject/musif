@@ -106,14 +106,15 @@ def extract_time_signatures(measures: list, score_data: dict):
             if element.timeSignature:
                 time_signatures.append(element.timeSignature.ratioString)
             else:
-                if len(time_signatures) > 1:
+                if len(time_signatures) >= 1:
                     time_signatures.append(time_signatures[-1])
                 elif GLOBAL_TIME_SIGNATURE in score_data:
                     time_signatures.append(
                         score_data[GLOBAL_TIME_SIGNATURE].ratioString
                     )
                 else:
-                    time_signatures.append('unknown time signature')
+                    raise Exception("There was an error when omputing time signatures of the score.")
+                    
         else:
             time_signatures.append(
                 time_signatures[ts_measures.index(element.measureNumber)]

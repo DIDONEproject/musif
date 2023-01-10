@@ -261,7 +261,6 @@ def get_number_of_beats(time_signature: str) -> int:
         return 4
     elif time_signature == "":
         return 1
-
     num, den = time_signature.split("/")
     if num == "3" and den == "8":
         return 1

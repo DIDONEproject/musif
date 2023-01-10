@@ -311,14 +311,16 @@ class FeaturesExtractor:
 
         if self._cfg.window_size is not None:
             all_dfs = []
-            for score in scores_features:
-                df_score = DataFrame(score)
-                df_score = df_score.reindex(sorted(df_score.columns), axis=1)
-                all_dfs.append(df_score)
-            all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
+            for score in scores_features: 
+                df_score = DataFrame(score) 
+                df_score = df_score.reindex(sorted(df_score.columns), axis=1) 
+                df_score.replace("NA", pd.NA, inplace=True) 
+                all_dfs.append(df_score) 
+            all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs))) 
         else:
             all_dfs = DataFrame(scores_features)
             all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
+            all_dfs.replace("NA", pd.NA, inplace=True) 
         return all_dfs
 
     def _init_score_processing(self, idx: int, filename: PurePath):
@@ -450,7 +452,8 @@ class FeaturesExtractor:
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for package in packages:
-             for module in self._find_modules(package, basic):
+            i=1
+            for module in self._find_modules(package, basic):
                 self._update_parts_module_features(
                     module, data, parts_data, parts_features
                 )
@@ -548,7 +551,8 @@ class FeaturesExtractor:
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
-                    hook = __import__(hook, fromlist=[""])
+                    if isinstance(hook,str):
+                        hook = __import__(hook, fromlist=[""])
                     hook.execute(self._cfg, data)
             if self._cfg.cache_dir is not None:
                 m21_objects = SmartModuleCache(
