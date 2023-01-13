@@ -637,7 +637,8 @@ class FeaturesExtractor:
 
     def _find_modules(self, package: str, basic: bool):
         found_features = set()
-        package = __import__(package, fromlist=[""])
+        if isinstance(package,str):
+            package = __import__(package, fromlist=[""])
         if basic:
             to_extract = self._cfg.basic_modules
         else:
