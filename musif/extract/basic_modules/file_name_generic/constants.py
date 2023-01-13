@@ -1,0 +1,2 @@
+ARTIST = 'Artist'
+TITLE = 'Title'

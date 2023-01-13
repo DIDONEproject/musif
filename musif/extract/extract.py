@@ -550,7 +550,8 @@ class FeaturesExtractor:
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
-                    hook = __import__(hook, fromlist=[""])
+                    if isinstance(hook,str):
+                        hook = __import__(hook, fromlist=[""])
                     hook.execute(self._cfg, data)
             if self._cfg.cache_dir is not None:
                 m21_objects = SmartModuleCache(
@@ -635,7 +636,8 @@ class FeaturesExtractor:
 
     def _find_modules(self, package: str, basic: bool):
         found_features = set()
-        package = __import__(package, fromlist=[""])
+        if isinstance(package,str):
+            package = __import__(package, fromlist=[""])
         if basic:
             to_extract = self._cfg.basic_modules
         else:

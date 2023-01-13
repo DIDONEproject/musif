@@ -379,6 +379,8 @@ def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
 
 def get_additions(lausanne_table):
     additions = lausanne_table.changes.tolist()
+    total_chords = len(lausanne_table.chord.tolist())
+    
     additions_cleaned = []
     for i, a in enumerate(additions):
         if isinstance(a, int):
@@ -410,9 +412,9 @@ def get_additions(lausanne_table):
     additions = {}
     for a in additions_dict.keys():
         if additions_dict[a] != 0:
-            additions[ADDITIONS_prefix + str(a)] = additions_dict[a] / sum(
-                list(additions_dict.values())
-            )
+            # additions[ADDITIONS_prefix + str(a)] = additions_dict[a] / sum(
+                # list(additions_dict.values())
+            additions[ADDITIONS_prefix + str(a)] = additions_dict[a] / total_chords
     return additions
 
 

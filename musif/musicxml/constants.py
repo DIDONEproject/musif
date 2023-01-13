@@ -526,6 +526,7 @@ SOUND_TO_FAMILY = {
     "orchestra": "general",
     "additions to any wind instrument to indicate a tuning other than standard tuning": "general",
     "examples": "general",
+    "electric": "electric",
     "cl in a \t\t\tcor in e|b": "general",
 }
 """Dictionary containing the family of each instrument (sound)"""
