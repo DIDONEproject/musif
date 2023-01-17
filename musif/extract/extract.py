@@ -311,16 +311,16 @@ class FeaturesExtractor:
 
         if self._cfg.window_size is not None:
             all_dfs = []
-            for score in scores_features: 
-                df_score = DataFrame(score) 
-                df_score = df_score.reindex(sorted(df_score.columns), axis=1) 
-                df_score.replace("NA", pd.NA, inplace=True) 
-                all_dfs.append(df_score) 
-            all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs))) 
+            for score in scores_features:
+                df_score = DataFrame(score)
+                df_score = df_score.reindex(sorted(df_score.columns), axis=1)
+                df_score.replace("NA", pd.NA, inplace=True)
+                all_dfs.append(df_score)
+            all_dfs = pd.concat(all_dfs, axis=0, keys=range(len(all_dfs)))
         else:
             all_dfs = DataFrame(scores_features)
             all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
-            all_dfs.replace("NA", pd.NA, inplace=True) 
+            all_dfs.replace("NA", pd.NA, inplace=True)
         return all_dfs
 
     def _init_score_processing(self, idx: int, filename: PurePath):
@@ -342,7 +342,7 @@ class FeaturesExtractor:
         basic_features[C.ID] = idx
         return basic_features, cache_name, parts_data, score_data
 
-    def _process_score(self, idx: int, filename: PurePath) -> Tuple[dict, List[dict]]:
+    def _process_score(self, idx: int, filename: PurePath) -> dict:
 
         (
             basic_features,
@@ -362,7 +362,7 @@ class FeaturesExtractor:
 
     def _process_score_windows(
         self, idx: int, filename: PurePath
-    ) -> Tuple[dict, List[dict]]:
+    ) -> List[dict]:
         (
             basic_features,
             cache_name,
@@ -434,7 +434,7 @@ class FeaturesExtractor:
             C.DATA_SCORE: window_score,
             C.DATA_FILTERED_PARTS: window_parts,
             C.DATA_MUSESCORE_SCORE: window_mscore,
-            C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO]
+            C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO],
         }
 
         for i, p in enumerate(window_parts):
@@ -447,7 +447,6 @@ class FeaturesExtractor:
         score_features = {}
         parts_features = [{} for _ in range(len(parts_data))]
         for package in packages:
-            i=1
             for module in self._find_modules(package, basic):
                 self._update_parts_module_features(
                     module, data, parts_data, parts_features
@@ -542,7 +541,7 @@ class FeaturesExtractor:
                 C.DATA_FILE: str(filename),
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
-                C.DATA_NUMERIC_TEMPO: numeric_tempo
+                C.DATA_NUMERIC_TEMPO: numeric_tempo,
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
@@ -625,9 +624,9 @@ class FeaturesExtractor:
             module = getattr(f, name)
         else:
             try:
-                module = __import__(f.__name__+ "." + name, fromlist=[""])
-            except ModuleNotFoundError:
-                return None
+                module = __import__(f.__name__ + "." + name, fromlist=[""])
+            except ModuleNotFoundError as e:
+                return e
         return module
 
     def _find_modules(self, package: str, basic: bool):
@@ -640,22 +639,21 @@ class FeaturesExtractor:
             to_extract = self._cfg.features
         for feature in to_extract:
             feature_package = self._get_module_or_attribute(package, feature)
-            if feature_package is not None:
-                module = self._get_module_or_attribute(feature_package, "handler")
-                if module is None:
-                    raise ImportError(
-                        f"It seems {feature} has no `{handler}` component."
-                    ) from e
-                feature_dependencies = getattr(
-                    feature_package, "musif_dependencies", []
-                )
-                for dependency in feature_dependencies:
-                    if dependency not in found_features and dependency != feature:
-                        raise ValueError(
-                            f"Feature {feature} is dependent on feature {dependency} ({dependency} should appear before {feature} in the configuration)"
-                        )
-                found_features.add(feature)
-                yield module
+            if isinstance(feature_package, Exception):
+                continue
+            module = self._get_module_or_attribute(feature_package, "handler")
+            if isinstance(module, Exception):
+                raise ImportError(
+                    f"It seems {feature}.handler cannot be imported."
+                ) from module
+            feature_dependencies = getattr(feature_package, "musif_dependencies", [])
+            for dependency in feature_dependencies:
+                if dependency not in found_features and dependency != feature:
+                    raise ValueError(
+                        f"Feature {feature} is dependent on feature {dependency} ({dependency} should appear before {feature} in the configuration)"
+                    )
+            found_features.add(feature)
+            yield module
 
     def _update_parts_module_features(
         self,
