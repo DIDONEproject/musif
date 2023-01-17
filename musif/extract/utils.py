@@ -4,9 +4,12 @@ from typing import Union
 
 import ms3
 import music21 as m21
+from music21.stream.base import Measure
+from musif.logs import pwarn
 import pandas as pd
 from pandas import DataFrame
 
+import musif.extract.constants as C
 from musif.cache import isinstance
 from musif.extract.constants import PLAYTHROUGH
 from musif.musicxml.tempo import get_number_of_beats
@@ -579,3 +582,16 @@ def cast_mixed_dtypes(col):
             # convert to string
             col = col.astype('string')
     return col
+
+def extract_global_time_signature(score_data):
+    """
+    Extracts a global time signature for the score for cases where is not possibel to get measure-by-measure TS
+    """
+    global_ts = score_data[C.GLOBAL_TIME_SIGNATURE] = (
+        score_data[C.DATA_FILTERED_PARTS][0]
+        .getElementsByClass(Measure)[0]
+        .timeSignature
+    )
+    if global_ts is None:
+        pwarn('Global Time Signature could not possible to be extracted!')
+    return global_ts

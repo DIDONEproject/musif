@@ -1,12 +1,15 @@
 import os
 from pathlib import PurePath
 from typing import Union
+from musif.common.sort import sort_columns
 
 import pandas as pd
 from pandas import DataFrame
 
 from musif.config import PostProcessConfiguration
 from musif.extract.basic_modules.scoring.constants import INSTRUMENTATION
+from musif.extract.basic_modules.file_name_generic.constants import TITLE, ARTIST
+
 from musif.extract.constants import ID, WINDOW_ID
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import (
@@ -290,7 +293,10 @@ class DataProcessor:
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
         self.replace_nans()
-
-        # self.data = self._check_columns_type(self.data)
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
+        if TITLE and ARTIST in self.data.columns:
+            priority_columns =[FILE_NAME, TITLE, ARTIST]
+        else:
+            priority_columns=[] 
+        self.data = sort_columns(self.data, [ID, WINDOW_ID] + priority_columns)
         self.data.drop("index", axis=1, inplace=True, errors="ignore")

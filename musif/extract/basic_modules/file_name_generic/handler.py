@@ -21,16 +21,15 @@ def update_score_objects(
 
     file_name = basename(score_data[DATA_FILE])
     name = file_name.split('.')[:-1]
-    if '.' in name:
-        artist = name[0]
-        title = name[1]
-    elif '_' in name:
+    if '_' in name:
         name = name.split('_')
         title = name[0]
         artist = ""
     else:
         title = "".join(name)
         artist = ""
+    artist = name[0]
+    title = name[1]
         
     score_features.update(
         {

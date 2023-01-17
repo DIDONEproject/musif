@@ -26,7 +26,7 @@ from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import process_musescore_file, cast_mixed_dtypes
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug
+from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug, pwarn
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
 from musif.musicxml import extract_numeric_tempo, split_layers
@@ -350,7 +350,6 @@ class FeaturesExtractor:
             parts_data,
             score_data,
         ) = self._init_score_processing(idx, filename)
-
         score_features = self.extract_modules(
             self._cfg.feature_modules_addresses, score_data, parts_data, basic=False
         )
@@ -371,11 +370,7 @@ class FeaturesExtractor:
             score_data,
         ) = self._init_score_processing(idx, filename)
 
-        score_data[C.GLOBAL_TIME_SIGNATURE] = (
-            score_data[C.DATA_FILTERED_PARTS][0]
-            .getElementsByClass(Measure)[0]
-            .timeSignature
-        )
+        extract_global_time_signature(score_data)
 
         window_features = {}
         nmeasures = len(score_data[C.DATA_SCORE].parts[0].getElementsByClass(Measure))
@@ -416,7 +411,7 @@ class FeaturesExtractor:
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
         return all_windows_features
-
+    
     def _select_window_data(
         self, score_data: dict, parts_data: list, first_measure: int, last_measure: int
     ):
