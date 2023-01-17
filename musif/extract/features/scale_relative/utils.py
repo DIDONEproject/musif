@@ -63,7 +63,12 @@ def _fill_gaps_in_tonality_map(tonality_map, start_beat, end_beat):
 
     for beat in range(floor(start_beat), ceil(end_beat) + 1):
         if beat not in tonality_map:
-            tonality_map[beat] = tonality_map[beat - 1]
+            if beat-1 in tonality_map:
+            # If tonality is not found 
+                tonality_map[beat] = tonality_map[beat - 1]
+            # In case there is no tonality for first beats, we assume the first one we can find.
+            else:
+                tonality_map[beat] = tonality_map[list(tonality_map.keys())[0]]
 
 
 def get_emphasised_scale_degrees_relative(
@@ -97,15 +102,9 @@ def get_emphasized_degrees(
     }
     for j, note in enumerate(notes_list):
         note = note[0] if note.isChord else note
-        if note.measureNumber in list(harmonic_analysis["playthrough"]):
-            # if note.beat is None:
-            # i=0
+        if note.measureNumber in list(harmonic_analysis["playthrough"]) and str(note.beat) != 'nan':
             note_offset = round(
-                list(
-                    harmonic_analysis[
-                        harmonic_analysis["playthrough"] == note.measureNumber
-                    ].beats
-                )[0]
+                list(harmonic_analysis[harmonic_analysis["playthrough"] == note.measureNumber].beats)[0]
                 - 1
                 + note.beat
             )

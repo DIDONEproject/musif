@@ -19,7 +19,6 @@ from musif.extract.features.core.constants import DATA_KEY, DATA_NOTES
 def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
-
     if score_data:
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
@@ -31,9 +30,7 @@ def update_part_objects(
         all_degrees = sum(value for value in notes_per_degree_relative.values())
 
         for key, value in notes_per_degree_relative.items():
-
             part_features[DEGREE_RELATIVE_COUNT.format(key=key)] = value
-
             part_features[DEGREE_RELATIVE_PER.format(key=key)] = (
                 value / all_degrees if all_degrees != 0 else 0
             )
@@ -61,7 +58,6 @@ def update_score_objects(
     for part_data in parts_data:
 
         notes = part_data[DATA_NOTES]
-
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
@@ -92,9 +88,7 @@ def update_score_objects(
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
 
         for feature in parts_features:
-
             if "Degree" and "relative" in feature:
-
                 features[f"{part_prefix}{feature}"] = parts_features[feature]
 
     score_features.update(features)
