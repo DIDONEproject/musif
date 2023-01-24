@@ -10,7 +10,7 @@ Main goals:
 
 ## Installation
 
-musiF requires:
+musiFrequires:
 
 * Python >= 3.10
 

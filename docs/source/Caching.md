@@ -6,14 +6,14 @@ library that is largely supported by the community. However, it doesn't come wit
 issues.
 
 We have mainly found two weaknesses in this approach:
-1. while `music21` is doing a great job at improving performances, it remains slow when
+1. While `music21` is doing a great job at improving performances, it remains slow when
    iterating over complex and deeply nested objects and even more slow while parsing
-   large MusicXML files
+   large MusicXML files.
 2. `music21` still has various issues about serializing data, including pickling and
    deepcopying
 
 For this reason, we have implemented a system for automatic caching music21 objects in a
-serializable format. The only drawback of our system, is that it is not possible to use
+serializable format. The only drawback of our system is that it is not possible to use
 the cached objects for writing data, but only for reading. Put in simple words, if you
 decide to use the cache system, you cannot modify any `music21` object from inside the
 features.
@@ -28,7 +28,7 @@ The cache system is implemented in the package `musif.cache`. It allows you to:
 In our experiments we have obtained a code around 2-3 times faster when using the cache.
 
 Once you have cached your objects, you can use them with the existing properties; you
-change them, for instance running a wrong code, you will have to delte them to get back
+change them, for instance running a wrong code, you will have to delete them to get back
 the original results.
 
 If you try to access a property that is not cached, the caching system will try to parse

@@ -8,7 +8,7 @@ final DataFrame.
 The _Kind of values_ column is mainly referred to the Didone DataFrames and its aim is
 to give an idea of the range of values that are produced by each feature.
 
-Finally, the _Sock module_ column list the module distributed in musiF and that generates each feature.
+Finally, the _Sock module_ column list the module distributed in musiFand that generates each feature.
 
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | **Kind of values**                                                                                                         | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|-------------------|
