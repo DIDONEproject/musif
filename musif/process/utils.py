@@ -78,7 +78,7 @@ def _delete_columns(data: DataFrame, config: dictConfig) -> None:
     pinfo("\nDeleting not useful columns...")
     to_delete = []
     for inst in config[INSTRUMENTS_TO_DELETE]:
-        to_delete += [i for i in data.columns if "Part" + inst in i or inst + "_" in i]
+        to_delete += [i for i in data.columns if "Part" + inst  + "_" in i]
 
     to_delete += [i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))]
     to_delete += [i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))]
