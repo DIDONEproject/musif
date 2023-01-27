@@ -25,7 +25,7 @@ from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
-from musif.extract.utils import process_musescore_file, cast_mixed_dtypes
+from musif.extract.utils import extract_global_time_signature, process_musescore_file, cast_mixed_dtypes
 from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug, pwarn
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
@@ -353,6 +353,7 @@ class FeaturesExtractor:
         score_features = self.extract_modules(
             self._cfg.feature_modules_addresses, score_data, parts_data, basic=False
         )
+        extract_global_time_signature(score_data)
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
 

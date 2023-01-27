@@ -1,6 +1,7 @@
 import re
 from logging.config import dictConfig
 from typing import List
+from musif.extract.features.prefix import get_part_prefix
 
 import pandas as pd
 from pandas import DataFrame
@@ -8,6 +9,7 @@ from pandas import DataFrame
 from musif.config import (
     ENDSWITH,
     INSTRUMENTS_TO_DELETE,
+    INSTRUMENTS_TO_KEEP,
     STARTSWITH,
 )
 from musif.extract.basic_modules.scoring.constants import (
@@ -77,8 +79,18 @@ def log_errors_and_shape(
 def _delete_columns(data: DataFrame, config: dictConfig) -> None:
     pinfo("\nDeleting not useful columns...")
     to_delete = []
+    instruments_to_keep = [get_part_prefix(i) for i in config[INSTRUMENTS_TO_KEEP]] 
     for inst in config[INSTRUMENTS_TO_DELETE]:
-        to_delete += [i for i in data.columns if "Part" + inst  + "_" in i]
+        # for i in data.columns:
+        #     if "Part" + inst + "_" in i
+        part_prefix = "Part" + inst #+ "_"
+        for col in data.columns:
+                if part_prefix in col and all(inst not in col for inst in instruments_to_keep):
+                    pass
+                    to_delete.append(col)
+                else:
+                    pass
+        # to_delete += [i for i in data.columns if part_prefix in i and instrument not in i for instrument in instruments_to_keep]
 
     to_delete += [i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))]
     to_delete += [i for i in data.columns if i.startswith(tuple(config[STARTSWITH]))]

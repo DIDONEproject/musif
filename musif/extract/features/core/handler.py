@@ -1,10 +1,11 @@
 from os import path
 from typing import List
+from musif.musicxml.tempo import get_number_of_beats, get_time_signature_type
 
 import pandas as pd
 from music21 import *
 from music21.stream import Measure
-
+from musif.extract.constants import DATA_FILTERED_PARTS 
 from musif.config import ExtractConfiguration
 from musif.extract.basic_modules.scoring.constants import (
     FAMILY_ABBREVIATION,
@@ -19,6 +20,7 @@ from musif.extract.constants import (
     DATA_PART_ABBREVIATION,
     DATA_SCORE,
     DATA_SOUND_ABBREVIATION,
+    GLOBAL_TIME_SIGNATURE,
 )
 from musif.extract.features.prefix import (
     get_family_feature,
@@ -31,7 +33,7 @@ from musif.musicxml.common import (
     _get_lyrics_in_notes,
     get_notes_and_measures,
 )
-from musif.musicxml.key import get_key_and_mode, get_name_from_key
+from musif.musicxml.key import get_key_and_mode, get_key_signature, get_name_from_key
 
 from .constants import *
 
@@ -88,9 +90,20 @@ def update_score_objects(
 
     score_features[FILE_NAME] = path.basename(score_data[DATA_FILE])
     num_measures = len(score.parts[0].getElementsByClass(Measure))
+    key_signature = get_key_signature(score_key)
+    
+    part = score.parts[0]
+    (time_signature,
+        measures,
+        time_signatures,
+        time_signature_grouped,
+        number_of_beats,
+    ) = extract_time_signatures(list(part.getElementsByClass(Measure)), score_data)
+
     score_data.update(
         {
             DATA_KEY: score_key,
+            KEY_SIGNATURE: key_signature,
             DATA_KEY_NAME: key_name,
             DATA_MODE: mode,
             DATA_MEASURES: num_measures,
@@ -165,3 +178,10 @@ def update_score_objects(
     features[NUM_MEASURES] = num_measures
 
     score_features.update(features)
+
+def _get_time_signature(measures: list, score_data: dict):
+    if GLOBAL_TIME_SIGNATURE in score_data:
+        time_signature = score_data[GLOBAL_TIME_SIGNATURE].ratioString
+    else:
+        time_signature = score_data[DATA_FILTERED_PARTS][0].getElementsByClass(Measure)[0].timeSignature.ratioString
+    return time_signature
