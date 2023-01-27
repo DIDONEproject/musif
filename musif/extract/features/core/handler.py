@@ -1,11 +1,11 @@
 from os import path
 from typing import List
-from musif.musicxml.tempo import get_number_of_beats, get_time_signature_type
-
 import pandas as pd
 from music21 import *
 from music21.stream import Measure
 from musif.extract.constants import DATA_FILTERED_PARTS 
+from musif.extract.features.tempo.constants import TIME_SIGNATURE
+
 from musif.config import ExtractConfiguration
 from musif.extract.basic_modules.scoring.constants import (
     FAMILY_ABBREVIATION,
@@ -93,16 +93,13 @@ def update_score_objects(
     key_signature = get_key_signature(score_key)
     
     part = score.parts[0]
-    (time_signature,
-        measures,
-        time_signatures,
-        time_signature_grouped,
-        number_of_beats,
-    ) = extract_time_signatures(list(part.getElementsByClass(Measure)), score_data)
+    time_signature = _get_time_signature(list(part.getElementsByClass(Measure)), score_data)
 
     score_data.update(
         {
             DATA_KEY: score_key,
+            KEY_SIGNATURE: key_signature,
+            TIME_SIGNATURE: time_signature,      
             KEY_SIGNATURE: key_signature,
             DATA_KEY_NAME: key_name,
             DATA_MODE: mode,
