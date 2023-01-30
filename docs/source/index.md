@@ -1,4 +1,4 @@
-# Welcome to musif's documentation!
+# Welcome to `musif`'s documentation!
 
 ```{toctree}
 ---
