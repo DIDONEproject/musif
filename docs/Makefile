@@ -8,7 +8,7 @@ SPHINXBUILD   ?= sphinx-build
 SPHINXAPIDOC	?= sphinx-apidoc
 SOURCEDIR     = source
 APIDOC 				= API
-BUILDDIR      = build
+BUILDDIR      = ../_site
 APISRC 				= ../musif
 APISRC_EXCLUDE = ../musif/extract/features
 
