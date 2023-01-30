@@ -4,7 +4,7 @@ from music21.key import Key
 from music21.stream.base import Score
 
 
-def get_key_signature(score_key: Key) -> str:
+def _get_key_signature(score_key: Key) -> str:
     """
     Returns the key signature from a specific music21 Key object
 

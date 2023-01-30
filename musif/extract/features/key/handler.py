@@ -3,7 +3,7 @@ from typing import List
 from musif.config import ExtractConfiguration
 from musif.extract.features.core.handler import DATA_KEY, DATA_MODE, DATA_KEY_NAME
 from musif.musicxml.key import (
-    get_key_signature,
+    _get_key_signature,
     get_key_signature_type,
     get_name_from_key,
 )

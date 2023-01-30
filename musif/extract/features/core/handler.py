@@ -33,7 +33,7 @@ from musif.musicxml.common import (
     _get_lyrics_in_notes,
     get_notes_and_measures,
 )
-from musif.musicxml.key import get_key_and_mode, get_key_signature, get_name_from_key
+from musif.musicxml.key import get_key_and_mode, _get_key_signature, get_name_from_key
 
 from .constants import *
 
@@ -90,7 +90,7 @@ def update_score_objects(
 
     score_features[FILE_NAME] = path.basename(score_data[DATA_FILE])
     num_measures = len(score.parts[0].getElementsByClass(Measure))
-    key_signature = get_key_signature(score_key)
+    key_signature = _get_key_signature(score_key)
     
     part = score.parts[0]
     time_signature = _get_time_signature(list(part.getElementsByClass(Measure)), score_data)
