@@ -39,7 +39,6 @@ autodoc_mock_imports = [
     "scipy",
     "joblib",
     "numpy",
-    "openpyxl",
     "deepdiff",
     "pyyaml",
     "ms3",
