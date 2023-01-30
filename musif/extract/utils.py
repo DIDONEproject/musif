@@ -35,7 +35,7 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     """
 
     msc3_score = ms3.score.Score(file_path, logger_cfg={"level": "ERROR"})
-    harmonic_analysis = msc3_score.mscx.expanded
+    harmonic_analysis = msc3_score.mscx.expanded()
     harmonic_analysis.reset_index(inplace=True)
     if expand_repeats:
         mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index("mc").next)

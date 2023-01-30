@@ -2,7 +2,7 @@
 dependencies = [
     'pandas>=1.3.3',
     'tqdm>=4.56.0',
-    'ms3>=0.4.10,<1.0',
+    'ms3>=1.2.0',
     'pyyaml>=5.4.1',
     'roman>=3.3',
     'openpyxl>=3.0.6',
