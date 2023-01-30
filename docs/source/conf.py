@@ -38,7 +38,6 @@ autodoc_mock_imports = [
     "pandas",
     "scipy",
     "joblib",
-    "matplotlib",
     "numpy",
     "openpyxl",
     "deepdiff",

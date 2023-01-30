@@ -6,7 +6,6 @@ dependencies = [
     'pyyaml>=5.4.1',
     'roman>=3.3',
     'openpyxl>=3.0.6',
-    'matplotlib>=3.3.4',
     'joblib>=1.0.0',
     'scipy>=1.6.0',
     'music21>=8,<9',
