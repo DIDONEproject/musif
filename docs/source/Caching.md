@@ -1,6 +1,6 @@
 # Caching
 
-`musiF` is entirely written using [`music21`](https://web.mit.edu/music21/) objects for
+`musif` is entirely written using [`music21`](https://web.mit.edu/music21/) objects for
 computing features. This approach allows users to easily add features using a python
 library that is largely supported by the community. However, it doesn't come without
 issues.

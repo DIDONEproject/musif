@@ -4,8 +4,8 @@ Hooks were originally introduced to mitigate the limits of the [caching
 system](./Caching.html), that forbid the modification of `music21` objects from inside
 the features.
 
-However, they turn to be useful to expand the compatibility of musiFto file formats and
-datasets that present differences and that generates error with the musiFcode. For an
+However, they turn to be useful to expand the compatibility of `musif` to file formats and
+datasets that present differences and that generates error with the `musif` code. For an
 example, see the [advanced tutorial]().
 
 A hook is any object, module, or package with a function `execute` which

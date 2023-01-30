@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath("../../"))
 # The full version, including alpha/beta/rc tags
 release = "0.1"
 
-project = "musiF"
+project = "musif"
 copyright = "2022, Didone Project"
 author = "Didone Project"
 

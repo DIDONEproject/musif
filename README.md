@@ -1,4 +1,4 @@
-# musiF
+# musif
 
 Python library for **Music Feature Extraction and Analysis**, developed by [Didone Project](https://didone.eu/). 
 

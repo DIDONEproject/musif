@@ -1,7 +1,7 @@
 # Directory to save the logs files, level for logging in the console (console_level) and
 # in the log file (file_level)
 log:
-  file_path: ./musiF.log
+  file_path: ./musif.log
   file_level: DEBUG
   console_level: ERROR
 
