@@ -1,0 +1,20 @@
+name: Build documentation
+
+on:
+  push:
+    branches: [ "main" ]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install sphinx
+      run: python3 -m pip install --user sphinx myst_nb
+
+    - name: Build htmls
+      run: cd docs; make html
