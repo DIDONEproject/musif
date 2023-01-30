@@ -30,7 +30,7 @@ jobs:
       - name: Install sphinx
         run: python3 -m pip install --user sphinx myst_nb
       - name: Build htmls
-        run: cd docs; make html
+        run: cd docs; make html; mv build/html ../_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
