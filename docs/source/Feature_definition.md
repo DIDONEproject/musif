@@ -1,6 +1,6 @@
 # Feature definition
 
-This tables presents the definition of all the stock features provided with musiF.
+This tables presents the definition of all the stock features provided with musif.
 
 The first column are Python Regular Expression that match the relevant columns of the
 final DataFrame.
@@ -8,7 +8,7 @@ final DataFrame.
 The _Kind of values_ column is mainly referred to the Didone DataFrames and its aim is
 to give an idea of the range of values that are produced by each feature.
 
-Finally, the _Sock module_ column list the module distributed in musiFand that generates each feature.
+Finally, the _Sock module_ column list the module distributed in musifand that generates each feature.
 
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | **Kind of values**                                                                                                         | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|-------------------|

@@ -1,6 +1,6 @@
 # Custom features
 
-While using `musiF`, you will be able to add your custom features.
+While using `musif`, you will be able to add your custom features.
 
 There are 2 different type of features:
 * basic features
@@ -70,7 +70,7 @@ let's create the `custom_features` directory, where we will put all our files:
 
 If you are going to write numerous features, you should likely choose this
 method. With this method, each feature is implemented as a Python package. This is how
-all the `musiF` features are implemented.
+all the `musif` features are implemented.
 
 First, let's create a directory for the package and a `__init__.py` file in it:
 We should also create a module named `handler` inside `custom_feature_package`. The

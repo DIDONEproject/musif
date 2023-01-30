@@ -116,7 +116,7 @@ class SmartModuleCache:
     If the method/property/field returns an object defined in a
     one of the `target_addresses`, this class will return a wrapped version of
     that object.
-    In `musiF`, this is used to wrap all the music21 objects and to cache
+    In `musif`, this is used to wrap all the music21 objects and to cache
     (most of) music21 operations.
 
     When a method is called, it is matched with all the arguments, similarly to

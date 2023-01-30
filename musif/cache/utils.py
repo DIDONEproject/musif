@@ -11,7 +11,7 @@ from musif.cache.cache import MethodCache, ObjectReference, SmartModuleCache
 
 class FileCacheIntoRAM:
     """
-    This class simply stores a dictionary of key-value. In `musiF`, it is used to cache
+    This class simply stores a dictionary of key-value. In `musif`, it is used to cache
     the objects (values) coming from the parsing of files (whose names are the keys). It
     is never written to disk and only kept into RAM.
     """

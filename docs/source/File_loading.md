@@ -1,6 +1,6 @@
 # File loading
 
-musiFis mainly built on top of MusicXML files. Specifically, it uses music21 to
+musifis mainly built on top of MusicXML files. Specifically, it uses music21 to
 parse them and a [caching system](./Caching.html) to cache the parsed objects and speed
 up successive parsing.
 
@@ -88,7 +88,7 @@ MuseScore, Finale, Sibelius, Dorico, etc.
 
 ## Annotating
 
-musiFwas created in the context of the [`Didone`](https://didone.eu) project and thus
+musifwas created in the context of the [`Didone`](https://didone.eu) project and thus
 it works better when using the same work pipeline and annotations.
 
 In the `Didone` project, we adopted the following approach:
