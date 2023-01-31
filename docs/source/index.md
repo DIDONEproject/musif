@@ -7,6 +7,7 @@ hidden:
 ---
 
 Getting started <Tutorial>
+Getting advanced <Tutorial poprock>
 File_loading
 Feature_definition
 Custom_features

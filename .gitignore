@@ -19,3 +19,6 @@ docs/ltex.disabledRules.en-US.txt
 .gutentags
 build
 docs/source/API
+docs/source/.venv
+docs/source/.python-version
+docs/source/musif.log
