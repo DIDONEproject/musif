@@ -5,7 +5,7 @@ system](./Caching.html), that forbid the modification of `music21` objects from 
 the features.
 
 However, they turn to be useful to expand the compatibility of `musif` to file formats and
-datasets that present differences and that generates error with the `musif` code. For an
+datasets that present differences and that generate error with the `musif` code. For an
 example, see the [advanced tutorial]().
 
 A hook is any object, module, or package with a function `execute` which
@@ -35,7 +35,7 @@ class MyHook:
 You can put the function `execute` in any object. In this case, we used a class, but you
 could even use a module or a package.
 
-Then you only need to tell to the `FeatureExtractor` object that it should use the hook:
+Then you only need to tell the `FeatureExtractor` object that it should use the hook:
 ```python
 from musif.extract.extract import FeaturesExtractor
 
@@ -45,5 +45,5 @@ Of course, you can use the option `precache_hooks` in the `config.yml` file as w
 which case you should pass a string that can be imported with `import ...` or loaded
 with `getattr`.
 
-Hooks is run just before of creating the `SmartModuleCache` object, thus they are only
-run when parsing the score, not when loading the cache from file.
+Hooks are run just before of creating the `SmartModuleCache` object. Thus they are only
+run when parsing the score, not when loading the cache from the file.

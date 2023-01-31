@@ -10,7 +10,7 @@ We have mainly found two weaknesses in this approach:
    iterating over complex and deeply nested objects and even more slow while parsing
    large MusicXML files.
 2. `music21` still has various issues about serializing data, including pickling and
-   deepcopying
+   deepcopying.
 
 For this reason, we have implemented a system for automatic caching music21 objects in a
 serializable format. The only drawback of our system is that it is not possible to use
@@ -61,4 +61,4 @@ you should probably stopping doing it, because it necessarily involves a copy of
 `music21` objects, which is slow.
 
 To allow you to modify the parsed score, we have introduced the option of using hooks,
-as explained [here](./Hooks.html)
+as explained [here](./Hooks.html).

@@ -2,14 +2,14 @@
 
 While using `musif`, you will be able to add your custom features.
 
-There are 2 different type of features:
+There are 2 different types of features:
 * basic features
 * generic features
 
-The only true difference between them is that “basic features” will be computed once per
-each music score, while “generic features” will be recomputed for each window in the
+The only difference between them is that the “basic features” will be computed once per
+each music score, while the “generic features” will be recomputed for each window in the
 score. If you disable windows in the [configuration](./Config_extraction_example.html)
-with the option `window_size: null`, then there will be no difference. However, “basic
+with the option `window_size: null`, then there will be no difference. However, the “basic
 features” will always be computed before of the “generic features”.
 
 Each feature should have two functions:
@@ -18,20 +18,20 @@ Each feature should have two functions:
 * `update_score_objects`, which computes global calculations for the score (or window), or 
   for multiple parts (e.g. features for all the winds or all the strings)
 
-`update_part_objects` will be executed for each part in the score, unless that part is
+`update_part_objects` will be executed for each part on the score, unless that part is
 not filtered out with `parts_filter` in the [configuration](Configuration.html).
 Successively, `update_score_objects` is run once to include final info in the
-`score_features`. In this process, you can use the features computed at the part-level
+`score_features`. In this process, you can use the features computed at the part level
 for computing features at the score level — for instance if you want to create a feature
 only for violins or a certain family of instruments. Only the features at the
-score-level are inserted in the final dataframe.
+score level are inserted into the final dataframe.
 
 The two functions have similar signatures and contain the following:
 * `score_data`: a dictionary containing all the data loaded from the score or from the
   cache; it contains `music21` objects representing score information and `pandas` dataframes containing MuseScore harmonic annotations (if any feature containing harmonic data is requested).
-  Likely, you want to use this object to design your features. Remember that music21 objects
+  You may want to use this object to design your features. Remember that music21 objects
   should **never** be changed, especially if you intend to use the [caching
-  system](Caching.html)
+  system](Caching.html).
 * `part_data`: a dictionary containing data about the part being analyzed (for
   `update_part_objects`) or with a list of all the `part_data` (for
   `update_score_objects`). In it, you can find the music21 object of the part, the part
@@ -43,11 +43,11 @@ The two functions have similar signatures and contain the following:
 * `score_features`: a dictionary with the features already computed by the previous
   calls to `update_score_objects` on this score (or window), e.g. for the previously
   computed features; the keys of this dictionary
-  are the columns or the dataframe produced during the extraction.
+  are the columns of the dataframe produced during the extraction.
 
 
 There are two options in the [configuration](./Config_extraction_example.html) that
-allow to extend the features computed:
+allow extending the features computed:
 * `basic_modules_addresses` for extending basic features
 * `feature_modules_addresses` for extending generic features
 
@@ -62,7 +62,7 @@ basic_modules_addresses: ["musif.extract.basic_modules", "custom_basic_modules"]
 
 ## Examples
 
-In the following we will show 3 different examples of custom features. For starting,
+In the following we will show 3 different examples of custom features. To start,
 let's create the `custom_features` directory, where we will put all our files: 
 `mkdir custom_features`.
 
