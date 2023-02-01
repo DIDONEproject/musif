@@ -22,3 +22,5 @@ docs/source/API
 docs/source/.venv
 docs/source/.python-version
 docs/source/musif.log
+docs/source/__tutorial_cache
+docs/source/musif.log.2023-01-31
