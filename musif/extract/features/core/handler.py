@@ -173,7 +173,6 @@ def update_score_objects(
     features[get_score_feature(NUM_SOUNDING_MEASURES)] = sounding_measures
     features[get_score_feature(SOUNDING_MEASURES_MEAN)] = sounding_measures_mean
     features[NUM_MEASURES] = num_measures
-
     score_features.update(features)
 
 def _get_time_signature(measures: list, score_data: dict):
