@@ -16,15 +16,15 @@ settings:
 * [data processing example](./Config_postprocess_example.html)
 
 To override these options and/or add your own ones, you have two options:
-1. Provide to `FeatureExtractor` and `DataProcessor` the file names to YAML files; in
+1.  To provide `FeatureExtractor` and `DataProcessor` with the file names to YAML files; in
    this case, every YAML variable will become a field in the `Configuration`
    object
-2. Provide them a list of key-word arguments, where the key will become the name of the
+2. To provide them a list of key-word arguments, where the key will become the name of the
    field of the `Configuration` object.
-You can also mix these two methods and in such a case, the key-word arguments will have
+You can also mix these two methods and, in such a case, the key-word arguments will have
 the precedence.
 
-For instance, imagine your YAML file is named `myconf.yml`, and it looks like this:
+For instance, imagine your YAML file is named `myconf.yml` and looks like this:
 ```yaml
 myoption: [1, 2, 3]
 ```
@@ -52,4 +52,4 @@ def update_part_objects(
 
 Also, have a look the [Configuration API page](./API/musif.config.html) to understand how
 the `Configuration` class works. You can subclass it for advanced handling of
-configurations, see for instance the [Didone feature project](//TODO).
+configurations; see, for instance, the [Didone feature project](//TODO).
