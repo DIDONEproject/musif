@@ -14,6 +14,8 @@ Custom_features
 Caching
 Hooks
 Configuration
+Acknowledgments
+
 API <API/modules>
 General index <genindex>
 Module index <modindex>
