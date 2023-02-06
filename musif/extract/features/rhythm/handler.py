@@ -37,8 +37,8 @@ def update_part_objects(
         if GLOBAL_TIME_SIGNATURE in score_data
         else 1
     )
-    motion_features = get_motion_features(part_data)
-    part_features.update(motion_features)
+    # motion_features = get_motion_features(part_data)
+    # part_features.update(motion_features)
 
     for measure in part_data["measures"]:
         for i, element in enumerate(measure.elements):
@@ -142,22 +142,7 @@ def update_score_objects(
         ]
         double_dotted_rhythm.append(part_features[DOUBLE_DOTTEDRHYTHM])
 
-        features[get_part_feature(part, SPEED_AVG_ABS)] = part_features[SPEED_AVG_ABS]
-        features[get_part_feature(part, ACCELERATION_AVG_ABS)] = part_features[
-            ACCELERATION_AVG_ABS
-        ]
-        features[get_part_feature(part, ASCENDENT_AVERAGE)] = part_features[
-            ASCENDENT_AVERAGE
-        ]
-        features[get_part_feature(part, DESCENDENT_AVERAGE)] = part_features[
-            DESCENDENT_AVERAGE
-        ]
-        features[get_part_feature(part, ASCENDENT_PROPORTION)] = part_features[
-            ASCENDENT_PROPORTION
-        ]
-        features[get_part_feature(part, DESCENDENT_PROPORTION)] = part_features[
-            DESCENDENT_PROPORTION
-        ]
+
 
     dotted_rhythm = [i for i in dotted_rhythm if i not in (0.0, "NA")]
     features.update(
@@ -182,76 +167,3 @@ def update_score_objects(
     score_features.update(features)
 
 
-def get_motion_features(part_data) -> dict:
-    notes_midi = []
-    notes_duration = []
-    for note in part_data["notes_and_rests"]:
-        if hasattr(note, "pitch"):
-            notes_midi.append(note.pitch.midi)
-            notes_duration.append(note.duration.quarterLength)
-    
-    notes_midi = np.asarray(notes_midi)
-    notes_duration = np.asarray(notes_duration)
-    
-    if len(notes_midi) == 0:
-        return {
-            SPEED_AVG_ABS: 0,
-            ACCELERATION_AVG_ABS: 0,
-            ASCENDENT_AVERAGE: 0,
-            DESCENDENT_AVERAGE: 0,
-            ASCENDENT_PROPORTION: 0,
-            DESCENDENT_PROPORTION: 0,
-        }
-
-    step = 0.125
-    midis_raw = np.repeat(notes_midi, [i / step for i in notes_duration], axis=0)
-    spe_raw = np.diff(midis_raw) / step
-    acc_raw = np.diff(spe_raw) / step
-
-    # Absolute means of speed and acceleration
-    spe_avg_abs = np.mean(abs(spe_raw))
-    acc_avg_abs = np.mean(abs(acc_raw))
-
-    # Rolling mean to smooth the midis by +-1 compasses -- not required for
-    # statistics based on means but important for detecting increasing sequences
-    # with a tolerance.
-    measure = 4
-    midis_smo_series = pd.Series(midis_raw)
-    midis_smo = [
-        np.mean(i.to_list())
-        for i in midis_smo_series.rolling(2 * measure + 1, center=True)
-    ]
-
-    # midis_smo = np.rollmean(midis_raw, k = 2 * compass + 1, align = "center")
-
-    # spe_smo = np.diff(midis_smo) / step
-    # acc_smo = np.diff(spe_smo) / step
-
-    # Prolonged ascent/descent chunks in smoothed midis of the aria (allows for
-    # small violations in the form of decrements/increments that do not
-    # decrease/increase the rolling mean).
-
-    dife = np.diff(midis_smo)
-
-    asc = [(k, sum(1 for i in g)) for k, g in groupby(dife > 0)]
-    dsc = [(k, sum(1 for i in g)) for k, g in groupby(dife < 0)]
-
-    asc = [i for b, i in asc if b]
-    dsc = [i for b, i in dsc if b]
-
-    # Average length of ascent/descent chunks of the aria
-    asc_avg = mean(asc) if asc else np.nan
-    dsc_avg = mean(dsc) if dsc else np.nan
-
-    # Proportion of ascent/descent chunks over the total of the aria
-    asc_prp = sum(asc) / (len(dife) - 1) if asc else np.nan
-    dsc_prp = sum(dsc) / (len(dife) - 1) if dsc else np.nan
-
-    return {
-        SPEED_AVG_ABS: spe_avg_abs,
-        ACCELERATION_AVG_ABS: acc_avg_abs,
-        ASCENDENT_AVERAGE: asc_avg,
-        DESCENDENT_AVERAGE: dsc_avg,
-        ASCENDENT_PROPORTION: asc_prp,
-        DESCENDENT_PROPORTION: dsc_prp,
-    }
