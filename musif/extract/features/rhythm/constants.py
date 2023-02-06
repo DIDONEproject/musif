@@ -4,9 +4,3 @@ RHYTHMINT = "RhythmInt"  # number of notes / number of beats
 DOTTEDRHYTHM = "DottedRhythm"
 DOUBLE_DOTTEDRHYTHM = "DoubleDottedRhythm"
 
-SPEED_AVG_ABS = "Spe_avg_abs"
-ACCELERATION_AVG_ABS = "Acc_avg_abs"
-ASCENDENT_AVERAGE = "Asc_avg"
-DESCENDENT_AVERAGE = "Dsc_avg"
-ASCENDENT_PROPORTION = "Asc_prp"
-DESCENDENT_PROPORTION = "Dsc_prp"

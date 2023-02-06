@@ -78,7 +78,7 @@ features: ['core']
   # Possible values:
   # - core
   # - ambitus
-  # - interval
+  # - melody
   # - tempo
   # - density
   # - texture

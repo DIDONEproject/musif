@@ -147,3 +147,4 @@ def extract_tempo(score_data, part):
                         tempo_mark = element.content
             break  # only take into account the first bar!
     return numeric_tempo, tempo_mark
+
