@@ -14,16 +14,15 @@ Custom_features
 Caching
 Hooks
 Configuration
+Acknowledgments
+
 API <API/modules>
 General index <genindex>
 Module index <modindex>
 Search <search>
 ```
 
-`musif` is a Python module for computing features from music scores. It is especially
-designed for arias from 18th-Century Italian operas. It has extensively been used and
-designed by the [Didone](https://didone.eu) team for analyzing opera arias from the
-Metastasian literature.
+`musif` is a Python module for computing features from music scores. It has been designed and extensively used by the [Didone](https://didone.eu) team for analyzing arias from 18th-century Italian operas on texts by Pietro Metastasio.
 
 Please, see the [Tutorial](Tutorial.html) for an easy introduction.
 

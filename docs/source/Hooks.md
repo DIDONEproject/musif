@@ -1,7 +1,7 @@
 # Hooks
 
 Hooks were originally introduced to mitigate the limits of the [caching
-system](./Caching.html), that forbid the modification of `music21` objects from inside
+system](./Caching.html), which forbid the modification of `music21` objects from inside
 the features.
 
 However, they turn to be useful to expand the compatibility of `musif` to file formats and
@@ -45,5 +45,5 @@ Of course, you can use the option `precache_hooks` in the `config.yml` file as w
 which case you should pass a string that can be imported with `import ...` or loaded
 with `getattr`.
 
-Hooks are run just before of creating the `SmartModuleCache` object. Thus they are only
+Hooks are run just before of creating the `SmartModuleCache` object. Thus, they are only
 run when parsing the score, not when loading the cache from the file.
