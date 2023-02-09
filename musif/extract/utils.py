@@ -4,14 +4,15 @@ from typing import Union
 
 import ms3
 import music21 as m21
-from music21.stream.base import Measure
-from musif.logs import pwarn
 import pandas as pd
+from ms3.utils import next2sequence
+from music21.stream.base import Measure
 from pandas import DataFrame
 
 import musif.extract.constants as C
 from musif.cache import isinstance
 from musif.extract.constants import PLAYTHROUGH
+from musif.logs import pwarn
 from musif.musicxml.tempo import get_number_of_beats
 
 file_names = []
@@ -38,11 +39,17 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     harmonic_analysis = msc3_score.mscx.expanded()
     harmonic_analysis.reset_index(inplace=True)
     if expand_repeats:
-        mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index("mc").next)
-        mn = pd.Series(mn, name="mc_playthrough")
-        harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
+        harmonic_analysis = msc3_score.mscx.expanded(unfold=True)
+        harmonic_analysis.reset_index(inplace=True) 
+        # unfolded_mc=msc3_score.mscx.measures().set_index("mc").next
+        # mn = next2sequence(unfolded_mc) 
+        # mn = ms3.utils.next2sequence(unfolded_mc) 
+        # mn = pd.Series(mn, name="mc_playthrough")
+        # harmonic_analysis = ms3.utils.unfold_repeats(harmonic_analysis, mn)
         harmonic_analysis.rename(columns={"mc_playthrough": PLAYTHROUGH}, inplace=True)
     else:
+        harmonic_analysis = msc3_score.mscx.expanded()
+        harmonic_analysis.reset_index(inplace=True)
         if harmonic_analysis.mn[0] == 0:
             harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mc"]
         else:
