@@ -1,13 +1,15 @@
 from collections import Counter
+from itertools import groupby
 from statistics import mean, stdev
 from typing import List, Tuple
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from music21.interval import Interval
 from scipy.stats import kurtosis, skew
 from scipy.stats.mstats import trimmed_mean, trimmed_std
 
+from musif.cache import hasattr
 from musif.common._utils import extract_digits
 from musif.config import ExtractConfiguration
 from musif.extract.common import _mix_data_with_precedent_data

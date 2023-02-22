@@ -1,12 +1,9 @@
 from collections import Counter, defaultdict
-from itertools import groupby
 from statistics import mean
 from typing import List
 
 import numpy as np
-import pandas as pd
 
-from musif.cache import hasattr
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATURE
 from musif.extract.features.core.constants import DATA_NOTES
