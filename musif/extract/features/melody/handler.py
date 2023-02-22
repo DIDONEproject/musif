@@ -44,7 +44,6 @@ def update_score_objects(
     parts_features: List[dict],
     score_features: dict,
 ):
-
     if len(parts_data) == 0:
         return
 
@@ -54,6 +53,7 @@ def update_score_objects(
         features[get_part_feature(part, SPEED_AVG_ABS)] = part_features[SPEED_AVG_ABS]
         features[get_part_feature(part, ACCELERATION_AVG_ABS)] = part_features[
             ACCELERATION_AVG_ABS
+        ]
         features[get_part_feature(part, ASCENDENT_AVERAGE)] = part_features[
             ASCENDENT_AVERAGE
         ]
@@ -66,7 +66,7 @@ def update_score_objects(
         features[get_part_feature(part, DESCENDENT_PROPORTION)] = part_features[
             DESCENDENT_PROPORTION
         ]
-        
+
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
         intervals = part_data[DATA_INTERVALS]
         interval_features = get_interval_features(intervals, part_prefix)
@@ -320,7 +320,6 @@ def get_interval_count_features(intervals: List[Interval], prefix: str = "") -> 
 
 
 def get_interval_type_features(intervals_list: List[Interval], prefix: str = ""):
-
     repeated_notes_list = []
     stepwise_list = []
     leaps_list = []
@@ -592,7 +591,7 @@ def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
             if [i for i in absolute_numeric_intervals if i != 0]
             else None
         )
-        
+
     return {
         f"{prefix}{INTERVALLIC_SKEWNESS}": intervals_skewness,
         f"{prefix}{INTERVALLIC_KURTOSIS}": intervals_kurtosis,
@@ -608,10 +607,10 @@ def get_motion_features(part_data) -> dict:
         if hasattr(note, "pitch"):
             notes_midi.append(note.pitch.midi)
             notes_duration.append(note.duration.quarterLength)
-    
+
     notes_midi = np.asarray(notes_midi)
     notes_duration = np.asarray(notes_duration)
-    
+
     if len(notes_midi) == 0:
         return {
             SPEED_AVG_ABS: 0,
