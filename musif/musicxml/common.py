@@ -10,7 +10,6 @@ from roman import toRoman
 from musif.cache import isinstance
 
 
-
 def is_voice(part: Part) -> bool:
     """
     Returns True if the part is a singer part, otherwise returns False
@@ -47,7 +46,7 @@ def split_layers(score: Score, split_keywords: List[str]):
         instrument = part.getInstrument(returnDefault=False)
 
         possible_layers = False
-        if instrument.instrumentSound is not None:
+        if instrument is not None and instrument.instrumentSound is not None:
             for keyword in split_keywords:
                 if keyword in instrument.instrumentSound:
                     possible_layers = True
@@ -96,8 +95,9 @@ def get_notes_and_measures(
 
     measures = list(part.getElementsByClass(Measure))
     sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
-    original_notes = [note for measure in measures for note in measure.notes if
-                      isinstance(note, Note)]
+    original_notes = [
+        note for measure in measures for note in measure.notes if isinstance(note, Note)
+    ]
     notes_and_rests = [n for measure in measures for n in measure.notesAndRests]
 
     return original_notes, measures, sounding_measures, notes_and_rests
