@@ -26,6 +26,19 @@ def is_voice(part: Part) -> bool:
     return "voice" in instrument.instrumentSound
 
 
+def name_parts(score: Score):
+    """
+    This function assign a name to each part in the score. If a name is already present,
+    we keep it there, otherwise, we create a name of type `missingName#` where # is an
+    incremental number,
+    """
+    i = 0
+    for part in score.parts:
+        if part.partName is None:
+            part.partName = f"missingName{i}"
+            i += 1
+
+
 def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split possible layers. Those instruments that include to parts in the same staff

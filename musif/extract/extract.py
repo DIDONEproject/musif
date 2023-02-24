@@ -26,10 +26,10 @@ from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import extract_global_time_signature, process_musescore_file, cast_mixed_dtypes
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug, pwarn
+from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
-from musif.musicxml import extract_numeric_tempo, split_layers
+from musif.musicxml import extract_numeric_tempo, split_layers, name_parts
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,
@@ -80,6 +80,8 @@ def parse_filename(
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name
             store_score_df(score, dest_path)
+        # give a name to all parts in the score
+        name_parts(score)
         split_layers(score, split_keywords)
         if expand_repeats:
             score = score.expandRepeats()
