@@ -335,7 +335,7 @@ class FeaturesExtractor:
     def _init_score_processing(self, idx: int, filename: PurePath):
         if self._cfg.cache_dir is not None:
             cache_name = Path(self._cfg.cache_dir) / filename.parent / (
-                filename.with_suffix(CACHE_FILE_EXTENSION).name
+                filename.name + CACHE_FILE_EXTENSION
             )
             cache_name.parent.mkdir(parents=True, exist_ok=True)
         else:
