@@ -34,9 +34,14 @@ def name_parts(score: Score):
     """
     i = 0
     for part in score.parts:
+        increment = False
         if part.partName is None:
             part.partName = f"NoName{i}"
+            increment = True
+        if part.partAbbreviation is None:
             part.partAbbreviation = f"NoName{i}"
+            increment = True
+        if increment:
             i += 1
 
 
