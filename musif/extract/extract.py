@@ -584,7 +584,7 @@ class FeaturesExtractor:
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
-        self._deal_with_dupicated_parts(parts)
+        # self._deal_with_dupicated_parts(parts)
         if self._cfg.parts_filter is None or len(self._cfg.parts_filter) == 0:
             return parts
         filter_set = set(self._cfg.parts_filter)
