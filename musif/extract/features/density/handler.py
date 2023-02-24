@@ -55,9 +55,10 @@ def update_part_objects(
     # measures = part_data[DATA_MEASURES]
     # time_signature = score_data[TIME_SIGNATURE].split(",")
     time_signatures = score_data[TIME_SIGNATURES]
-    sounding_measures = range(
-        0, len(sounding_measures)
-    )  ## TODO: cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
+    # sounding_measures = range(
+    #     0, len(sounding_measures)
+    # )  
+    ## TODO: cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
     sounding_time_signatures = [time_signatures[i] for i in sounding_measures]
 
     part_features.update(
