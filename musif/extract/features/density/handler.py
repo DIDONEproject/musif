@@ -52,7 +52,7 @@ def update_part_objects(
         return {}
     notes = part_data[DATA_NOTES]
     sounding_measures = part_data[DATA_SOUNDING_MEASURES]
-    measures = part_data[DATA_MEASURES]
+    # measures = part_data[DATA_MEASURES]
     # time_signature = score_data[TIME_SIGNATURE].split(",")
     time_signatures = score_data[TIME_SIGNATURES]
     sounding_measures = range(
