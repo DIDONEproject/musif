@@ -1,11 +1,9 @@
 import itertools
-import os
 from typing import Union
 
 import ms3
 import music21 as m21
 import pandas as pd
-from ms3.utils import next2sequence
 from music21.stream.base import Measure
 from pandas import DataFrame
 
