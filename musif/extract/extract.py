@@ -298,10 +298,17 @@ class FeaturesExtractor:
         self, filenames: List[PurePath]
     ) -> Tuple[List[dict], List[dict]]:
         def process_corpus_par(idx, filename):
-            if self._cfg.window_size is not None:
-                score_features = self._process_score_windows(idx, filename)
-            else:
-                score_features = self._process_score(idx, filename)
+            try:
+                if self._cfg.window_size is not None:
+                    score_features = self._process_score_windows(idx, filename)
+                else:
+                    score_features = self._process_score(idx, filename)
+            except Exception as e:
+                if self._cfg.ignore_errors:
+                    lerr(f"Error while extracting features for file {filename}, skipping it because `ignore_errors` is True!")
+                    return {}
+                else:
+                    raise e
             return score_features
 
         scores_features = Parallel(n_jobs=self._cfg.parallel)(

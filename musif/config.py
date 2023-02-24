@@ -13,6 +13,7 @@ CONSOLE_LOG_LEVEL = "console_log_level"
 XML_DIR = "xml_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
+IGNORE_ERRORS = "ignore_errors"
 PARALLEL = "parallel"
 FEATURES = "features"
 BASIC_MODULES = "basic_modules"
@@ -54,6 +55,7 @@ _CONFIG_FALLBACK = {
     PARALLEL: 1,
     PRECACHE_HOOKS: [],
     BASIC_MODULES: [],
+    IGNORE_ERRORS: False,
     BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
     FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
     FEATURES: ["core"],
