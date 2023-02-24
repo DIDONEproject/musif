@@ -36,6 +36,20 @@ def update_part_objects(
     time_signature = list(part.getTimeSignatures())[0].ratioString
     time_signature_grouped = get_time_signature_type(time_signature)
     number_of_beats = get_number_of_beats(time_signature)
+
+    (
+        time_signature,
+        measures,
+        time_signatures,
+        time_signature_grouped,
+        number_of_beats,
+    ) = extract_time_signatures(list(part.getElementsByClass(Measure)), score_data)
+    part_data.update(
+        {
+            C.TIME_SIGNATURES: time_signatures,
+            C.TS_MEASURES: measures,
+        }
+    )
     part_features.update(
         {
             C.TIME_SIGNATURE: time_signature,
@@ -63,6 +77,7 @@ def update_score_objects(
     # time_signatures.append(time_signature)
 
     score = score_data[DATA_SCORE]
+    # for the features, we use the first part as reference!
     part = score.parts[0]
     numeric_tempo, tempo_mark = extract_tempo(score_data, part)
     tempo_grouped_1 = get_tempo_grouped_1(tempo_mark)
@@ -76,34 +91,25 @@ def update_score_objects(
         number_of_beats,
     ) = extract_time_signatures(list(part.getElementsByClass(Measure)), score_data)
 
-    score_data.update(
-        {
-            C.TIME_SIGNATURE: time_signature,
-            C.TIME_SIGNATURES: time_signatures,
-            C.TS_MEASURES: measures,
-        }
-    )
-
     score_features.update(
         {
             C.TEMPO: tempo_mark,
             C.NUMERIC_TEMPO: numeric_tempo,
             C.TIME_SIGNATURE: time_signature.split(",")[0],
             C.TIME_SIGNATURE_GROUPED: time_signature_grouped,
+            C.NUMBER_OF_BEATS: number_of_beats,
             C.TEMPO_GROUPED_1: tempo_grouped_1,
             C.TEMPO_GROUPED_2: tempo_grouped_2,
-            C.NUMBER_OF_BEATS: number_of_beats,
         }
     )
 
 
 def extract_time_signatures(measures: list, score_data: dict):
-    ts_measures = []
+    ts_measures = {}
     time_signatures = []
     for i, element in enumerate(measures):
-        ts_measures.append(element.measureNumber)
-        if element.measureNumber not in ts_measures[:-1]:
-            if element.timeSignature:
+        if element.measureNumber not in ts_measures:
+            if element.timeSignature is not None:
                 time_signatures.append(element.timeSignature.ratioString)
             else:
                 if len(time_signatures) >= 1:
@@ -113,12 +119,13 @@ def extract_time_signatures(measures: list, score_data: dict):
                         score_data[GLOBAL_TIME_SIGNATURE].ratioString
                     )
                 else:
-                    raise Exception("There was an error when omputing time signatures of the score.")
-                    
+                    raise Exception(
+                        "There was an error when omputing time signatures of the score."
+                    )
+
+            ts_measures[element.measureNumber] = i
         else:
-            time_signatures.append(
-                time_signatures[ts_measures.index(element.measureNumber)]
-            )
+            time_signatures.append(time_signatures[ts_measures[element.measureNumber]])
 
     time_signatures_set = set(time_signatures)
     time_signature = ",".join(
@@ -147,4 +154,3 @@ def extract_tempo(score_data, part):
                         tempo_mark = element.content
             break  # only take into account the first bar!
     return numeric_tempo, tempo_mark
-

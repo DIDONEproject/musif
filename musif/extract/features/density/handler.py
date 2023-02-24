@@ -54,7 +54,7 @@ def update_part_objects(
     sounding_measures = part_data[DATA_SOUNDING_MEASURES]
     # measures = part_data[DATA_MEASURES]
     # time_signature = score_data[TIME_SIGNATURE].split(",")
-    time_signatures = score_data[TIME_SIGNATURES]
+    time_signatures = part_data[TIME_SIGNATURES]
     # sounding_measures = range(
     #     0, len(sounding_measures)
     # )  
