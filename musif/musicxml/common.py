@@ -94,7 +94,9 @@ def get_notes_and_measures(
     """
 
     measures = list(part.getElementsByClass(Measure))
-    sounding_measures = [measure for measure in measures if len(measure.notes) > 0]
+    sounding_measures = [
+        idx for idx, measure in enumerate(measures) if len(measure.notes) > 0
+    ]
     original_notes = [
         note for measure in measures for note in measure.notes if isinstance(note, Note)
     ]
