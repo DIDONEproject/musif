@@ -476,10 +476,11 @@ class MethodCache:
                 kwargs = {k: v.cache["_reference"].reference for k, v in kwargs.items()}
             res = attr(*args, **kwargs)
             if res is None:
-                res = _MyNone
+                # caching _MyNone and returning None
+                self.cache[call_args] = _MyNone
             else:
                 res = self._wmo(res, args=(*args, *kwargs.values()))
-            self.cache[call_args] = res
+                self.cache[call_args] = res
             if self.check_reference_changes and self.reference.ischanged():
                 pwarn(str(SmartCacheModified(self, self.name)))
             return res
