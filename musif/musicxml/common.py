@@ -35,7 +35,8 @@ def name_parts(score: Score):
     i = 0
     for part in score.parts:
         if part.partName is None:
-            part.partName = f"missingName{i}"
+            part.partName = f"NoName{i}"
+            part.partAbbreviation = f"NoName{i}"
             i += 1
 
 
