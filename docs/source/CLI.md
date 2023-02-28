@@ -19,8 +19,13 @@ SYNOPSIS
 
 DESCRIPTION
     This tool uses `music21` to load files, so any file format supported by `music21`
-    also works, e.g. MIDI, MusicXML, Kern, ABC files. It uses cache and parallel
-    processing by default. See the options to disable them.
+    also works, e.g. MIDI, MusicXML, Kern, ABC files. It uses cache, parallel
+    processing, and ignore errors by default. See the options to disable them.
+
+    This tool uses a default configuration that should work well in most cases. See
+    [paper] for more benchmarks. By default, it extracts all features except the ones
+    that require harmonic annotations. You can use `-y/--yaml` and `-c/--config` for
+    more tweaks.
 
     Examples of usage:
         musif dataset/**/*.mid
@@ -43,7 +48,8 @@ DESCRIPTION
 
 POSITIONAL ARGUMENTS
     PATHS
-        one or more paths; if provided, the extraction is limited to them; these paths can be absolute or relative to the current directory; all the paths should contain a common parent part; incompatible with `--source_dir`
+        one or more paths; if provided, the extraction is limited to them; these paths can be absolute or relative to the current directory; all the pa
+ths should contain a common parent part; incompatible with `--source_dir`
 
 FLAGS
     -o, --output_path=OUTPUT_PATH
@@ -52,8 +58,12 @@ FLAGS
         output file; extension is added or changed to 'csv'
     -s, --source_dir=SOURCE_DIR
         Type: Optional[str]
-        Default: None 
+        Default: None
         relative path to the directory; searched recursively; incompatible with other files provided
+    -e, --extension=EXTENSION
+        Type: str
+        Default: '.xml'
+        extension, including the dot, e.g. '.mid', '.krn', '.mxl'; only has effect if `source_dir` is used
     -n, --njobs=NJOBS
         Type: int
         Default: -1
@@ -62,10 +72,15 @@ FLAGS
         Type: str
         Default: 'musif_cache'
         directory where cache files are saved; set to 'None' to disable
-    -e, --extension=EXTENSION
-        Type: str
-        Default: '.xml'
-        extension, including the dot, e.g. '.mid', '.krn', '.mxl'; only has effect if `source_dir` is used
+    -i, --ignore_errors=IGNORE_ERRORS
+        Type: bool
+        Default: True
+        True or False; if False, blocks when a file cannot be processed, if True, cprints a warning and continue
+    -y, --yaml=YAML
+        Type: Optional[str]
+        Default: None
+        path to a configuration file that will be used for both extraction and post-processing; command line options have the precedence on this yaml f
+ile
     Additional flags are accepted.
-        further flags can be used to change musif's configuration (see the docs for possible options)
+        Further flags can be used to change musif's configuration (see the docs for possible options)
 ```

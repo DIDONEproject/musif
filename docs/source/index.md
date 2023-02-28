@@ -8,6 +8,7 @@ hidden:
 
 Getting started <Tutorial>
 Getting advanced <Tutorial poprock>
+Comman Line Interface (CLI) <CLI>
 File_loading
 Feature_definition
 Custom_features

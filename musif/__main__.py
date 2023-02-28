@@ -12,17 +12,24 @@ def main(
     *paths,
     output_path: str = "musif_features.csv",
     source_dir: str = None,
+    extension: str = ".xml",
     njobs: int = -1,
     cache_dir: str = "musif_cache",
-    extension: str = ".xml",
-    **configs,
+    ignore_errors: bool = True,
+    yaml: str = None,
+    **options,
 ):
     """
     Python tool for extracting features from music score files.
 
     This tool uses `music21` to load files, so any file format supported by `music21`
-    also works, e.g. MIDI, MusicXML, Kern, ABC files. It uses cache and parallel
-    processing by default. See the options to disable them.
+    also works, e.g. MIDI, MusicXML, Kern, ABC files. It uses cache, parallel
+    processing, and ignore errors by default. See the options to disable them.
+
+    This tool uses a default configuration that should work well in most cases. See
+    [paper] for more benchmarks. By default, it extracts all features except the ones
+    that require harmonic annotations. You can use `-y/--yaml` and `-c/--config` for
+    more tweaks.
 
     Examples of usage:
         musif dataset/**/*.mid
@@ -56,7 +63,11 @@ def main(
         njobs : number of jobs used, according to joblib: -1 means "all the
             available virtual cores"; 1 means no parallel processing
         cache_dir : directory where cache files are saved; set to 'None' to disable
-        configs : further flags can be used to change musif's configuration (see the
+        ignore_errors : True or False; if False, blocks when a file cannot be
+            processed, if True, cprints a warning and continue
+        yaml : path to a configuration file that will be used for both extraction and
+            post-processing; command line options have the precedence on this yaml file
+        options : Further flags can be used to change musif's configuration (see the
             docs for possible options)
     """
 
@@ -91,12 +102,16 @@ def main(
         paths = None
 
     config = ExtractConfiguration(
-        None,
+        yaml,
         xml_dir=source_dir,
-        musescore_dir=None,
-        cache_dir="musif_cache/",
-        basic_modules=["scoring"],
-        features=[
+        cache_dir=cache_dir,
+        parallel=njobs,
+        ignore_errors=ignore_errors,
+        **options
+    )
+
+    if len(config.features) == 0:
+        config.features = [
             "core",
             "ambitus",
             "melody",
@@ -108,10 +123,10 @@ def main(
             "key",
             "dynamics",
             "rhythm",
-        ],
-        parallel=njobs,
-        **configs,
-    )
+        ]
+    if len(config.basic_modules) == 0:
+        config.basic_modules = ["scoring"]
+
     musicxml_c.MUSICXML_FILE_EXTENSION = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
