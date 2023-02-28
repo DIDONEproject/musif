@@ -17,7 +17,7 @@ def main(
     cache_dir: str = "musif_cache",
     ignore_errors: bool = True,
     yaml: str = None,
-    **options,
+    tweaks: dict = {}
 ):
     """
     Python tool for extracting features from music score files.
@@ -67,8 +67,10 @@ def main(
             processed, if True, cprints a warning and continue
         yaml : path to a configuration file that will be used for both extraction and
             post-processing; command line options have the precedence on this yaml file
-        options : Further flags can be used to change musif's configuration (see the
-            docs for possible options)
+        tweaks : Further flags can be used to change musif's configuration
+            (see the docs for possible options); for this, you should
+            pass them as a dictionary, e.g. `musif -t
+            '{musescore_dir: "mscore_data"}'`
     """
 
     if source_dir is not None and len(paths) > 0:
@@ -107,7 +109,7 @@ def main(
         cache_dir=cache_dir,
         parallel=njobs,
         ignore_errors=ignore_errors,
-        **options
+        **tweaks
     )
 
     if len(config.features) == 0:
@@ -130,7 +132,7 @@ def main(
     musicxml_c.MUSICXML_FILE_EXTENSION = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
-    processed_df = DataProcessor(raw_df, None).process().data
+    processed_df = DataProcessor(raw_df, yaml, **tweaks).process().data
     output_path = Path(output_path).with_suffix(".csv")
     processed_df.to_csv(output_path)
 

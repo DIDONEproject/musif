@@ -81,6 +81,10 @@ FLAGS
         Default: None
         path to a configuration file that will be used for both extraction and post-processing; command line options have the precedence on this yaml f
 ile
-    Additional flags are accepted.
-        Further flags can be used to change musif's configuration (see the docs for possible options)
+    -t, --tweaks=TWEAKS
+        Type: dict
+        Default: {}
+        Further flags can be used to change musif's configuration (see the
+        docs for possible options); for this, you should pass them as a
+        dictionary, e.g. `musif -t '{musescore_dir: "mscore_data"}'`
 ```
