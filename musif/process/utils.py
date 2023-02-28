@@ -115,6 +115,13 @@ def _delete_columns(data: DataFrame, config: dictConfig) -> None:
         if col.startswith(tuple(voices_list_prefixes))
         and all(data[col].isnull().values)
     ]
+
+    # remove columns containing nan
+    # TODO
+
+    # remove _count features
+    # TODO
+
     data.drop(columns=to_delete, inplace=True, errors="ignore")
 
 

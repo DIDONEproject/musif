@@ -81,6 +81,14 @@ replace_nans: []
   # - Degree
   # - Harmony
 
+# Remove columns containing NaNs
+remove_nan_columns: False
+
+# for each feature that is computed as a ratio or as a percentage, remove the two
+# numerator used for computing it; e.g. remove the
+# AscendingIntervals_Count and keep only AscendingIntervals_Per
+remove_count_features: False
+
 # Columns ending with any of these strings will be deleted
 # Matching is case-sensitive
 columns_endswith: []
