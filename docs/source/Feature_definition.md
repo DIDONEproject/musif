@@ -7,6 +7,8 @@ final DataFrame.
 
 Finally, the _Sock module_ column lists the module distributed in `musif` and that generates each feature.
 
+Note that none of these features works on percussion instruments.
+
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
 | `FileName`                         | File name of the original score                                                                                                                                                                                                           | `core`            |

@@ -24,6 +24,7 @@ EXPAND_REPEATS = "expand_repeats"
 WINDOW_SIZE = "window_size"
 OVERLAP = "overlap"
 PRECACHE_HOOKS = "precache_hooks"
+REMOVE_UNPITCHED_OBJECTS = "remove_unpitched_objects"
 MSCORE_EXEC = "mscore_exec"
 # Didone specific?
 SPLIT_KEYWORDS = "split_keywords"
@@ -66,6 +67,7 @@ _CONFIG_FALLBACK = {
     OVERLAP: 2,
     MSCORE_EXEC: None,
     DFS_DIR: None,
+    REMOVE_UNPITCHED_OBJECTS: True
 }
 
 _CONFIG_POST_FALLBACK = {

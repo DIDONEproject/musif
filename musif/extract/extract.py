@@ -25,11 +25,15 @@ from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
-from musif.extract.utils import extract_global_time_signature, process_musescore_file, cast_mixed_dtypes
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug
+from musif.extract.utils import (
+    cast_mixed_dtypes,
+    extract_global_time_signature,
+    process_musescore_file,
+)
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
-from musif.musicxml import extract_numeric_tempo, split_layers, name_parts
+from musif.musicxml import extract_numeric_tempo, name_parts, split_layers
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,
@@ -44,6 +48,7 @@ def parse_filename(
     split_keywords: List[str],
     expand_repeats: bool = False,
     export_dfs_to: Union[str, PurePath] = None,
+    remove_unpitched_objects: bool = True,
 ) -> Score:
     """
     This function parses a musicxml file and returns a music21 Score object. If
@@ -82,6 +87,11 @@ def parse_filename(
             store_score_df(score, dest_path)
         # give a name to all parts in the score
         name_parts(score)
+        if remove_unpitched_objects:
+            unpitched_objs = list(
+                score.flatten().getElementsByClass(["PercussionChord", "Unpitched"])
+            )
+            score.remove(unpitched_objs, recurse=True)
         split_layers(score, split_keywords)
         if expand_repeats:
             score = score.expandRepeats()
@@ -192,12 +202,14 @@ def find_files(
 class FeaturesExtractor:
     """
     Extract features for a score or a list of scores, according to the parameters
-    established in the configurtaion files. It extracts musical features from .xml and
-    .mscx files based on the configuration and stores them in a dictionary
-    (score features) that at the end will be returned as a DataFrame. Features
-    corresponds to modules placed in musif/features directory, and will be computed in
-    order according to the configuration. Some features might depend on the previous
-    ones, so order is important.
+    established in the configuration files. It extracts musical features using music21
+    and ms3 library, based on the configuration and stores them in a dictionary
+    (score features) that at the end will be returned as a DataFrame by the
+    `extract` method.
+
+    During the parsing, unpitched objects, (e.g. objects referred to percussion
+    instruments) may be removed (see the option
+    `remove_unpitched_objects` in the configuration).
 
     """
 
@@ -307,7 +319,9 @@ class FeaturesExtractor:
                     score_features = self._process_score(idx, filename)
             except Exception as e:
                 if self._cfg.ignore_errors:
-                    lerr(f"Error while extracting features for file {filename}, skipping it because `ignore_errors` is True!")
+                    lerr(
+                        f"Error while extracting features for file {filename}, skipping it because `ignore_errors` is True!"
+                    )
                     return {}
                 else:
                     raise e
@@ -334,8 +348,10 @@ class FeaturesExtractor:
 
     def _init_score_processing(self, idx: int, filename: PurePath):
         if self._cfg.cache_dir is not None:
-            cache_name = Path(self._cfg.cache_dir) / filename.parent / (
-                filename.name + CACHE_FILE_EXTENSION
+            cache_name = (
+                Path(self._cfg.cache_dir)
+                / filename.parent
+                / (filename.name + CACHE_FILE_EXTENSION)
             )
             cache_name.parent.mkdir(parents=True, exist_ok=True)
         else:
@@ -371,9 +387,7 @@ class FeaturesExtractor:
             pickle.dump(score_data, open(cache_name, "wb"))
         return score_features
 
-    def _process_score_windows(
-        self, idx: int, filename: PurePath
-    ) -> List[dict]:
+    def _process_score_windows(self, idx: int, filename: PurePath) -> List[dict]:
         (
             basic_features,
             cache_name,
@@ -422,7 +436,7 @@ class FeaturesExtractor:
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
         return all_windows_features
-    
+
     def _select_window_data(
         self, score_data: dict, parts_data: list, first_measure: int, last_measure: int
     ):
@@ -497,6 +511,7 @@ class FeaturesExtractor:
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
             export_dfs_to=self._cfg.dfs_dir,
+            remove_unpitched_objects=self._cfg.remove_unpitched_objects,
         )
         numeric_tempo = extract_numeric_tempo(tmp_path)
         if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
@@ -556,7 +571,7 @@ class FeaturesExtractor:
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
-                    if isinstance(hook,str):
+                    if isinstance(hook, str):
                         hook = __import__(hook, fromlist=[""])
                     hook.execute(self._cfg, data)
             if self._cfg.cache_dir is not None:
@@ -642,7 +657,7 @@ class FeaturesExtractor:
 
     def _find_modules(self, package: str, basic: bool):
         found_features = set()
-        if isinstance(package,str):
+        if isinstance(package, str):
             package = __import__(package, fromlist=[""])
         if basic:
             to_extract = self._cfg.basic_modules

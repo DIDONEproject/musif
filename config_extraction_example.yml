@@ -102,6 +102,10 @@ feature_modules_addresses: ["musif.extract.features"]
 # See `Caching` page for more info
 precache_hooks: []
 
+# remove notes and objects referred to percussion instruments
+# (musif stock features do not work with percussion instruments)
+remove_unpitched_objects: True
+
 # Filter to select only some instruments to be processed for each score. 
 # If the filter is None (disabling all parts), the program will extract all parts.
 parts_filter: []
