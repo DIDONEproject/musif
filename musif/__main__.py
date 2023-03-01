@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 import musif.musicxml.constants as musicxml_c
-from musif.config import ExtractConfiguration
+from musif.config import ExtractConfiguration, PostProcessConfiguration
 from musif.extract.extract import FeaturesExtractor
 from musif.logs import perr, pinfo
 from musif.process.processor import DataProcessor
@@ -111,7 +111,6 @@ def main(
         ignore_errors=ignore_errors,
         **tweaks
     )
-
     if len(config.features) == 0:
         config.features = [
             "core",
@@ -128,11 +127,21 @@ def main(
         ]
     if len(config.basic_modules) == 0:
         config.basic_modules = ["scoring"]
-
     musicxml_c.MUSICXML_FILE_EXTENSION = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
-    processed_df = DataProcessor(raw_df, yaml, **tweaks).process().data
+    config = PostProcessConfiguration(yaml, **tweaks)
+    if len(config.columns_contain) == 0:
+        config.columns_contain = [
+                "_Count", "_SmallestInterval", "_NumberOfFilteredParts"
+                ]
+    if len(config.replace_nans) == 0:
+        config.replace_nans = ['Interval', 'Degree', 'Harmony']
+    if config.max_nan_rows is None:
+        config.max_nan_rows = 0.5
+    if config.max_nan_columns is None:
+        config.max_nan_columns = 0.5
+    processed_df = DataProcessor(raw_df, config).process().data
     output_path = Path(output_path).with_suffix(".csv")
     processed_df.to_csv(output_path)
 
