@@ -42,8 +42,8 @@ REPLACE_NANS = "replace_nans"
 DFS_DIR = "dfs_dir"
 GROUPED = "grouped_analysis"
 MERGE_VOICES = "merge_voices"
-REMOVE_COUNT_FEATURES = "remove_count_features"
-REMOVE_NAN_COLUMNS = "remove_nan_columns"
+MAX_NAN_COLUMNS = "max_nan_columns"
+MAX_NAN_ROWS = "max_nan_rows"
 
 _CONFIG_LOG_FALLBACK = {
     LOG_FILE_PATH: "./musif.log",
@@ -86,8 +86,8 @@ _CONFIG_POST_FALLBACK = {
     CONTAIN: [],
     REPLACE_NANS: [],
     MATCH: [],
-    REMOVE_COUNT_FEATURES: False,
-    REMOVE_NAN_COLUMNS: False
+    MAX_NAN_COLUMNS: None,
+    MAX_NAN_ROWS: None
 }
 
 

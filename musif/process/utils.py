@@ -1,7 +1,6 @@
 import re
 from logging.config import dictConfig
 from typing import List
-from musif.extract.features.prefix import get_part_prefix
 
 import pandas as pd
 from pandas import DataFrame
@@ -23,6 +22,7 @@ from musif.extract.features.harmony.constants import (
     CHORD_prefix,
 )
 from musif.extract.features.melody.constants import TRIMMED_INTERVALLIC_MEAN
+from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.logs import pinfo
 
@@ -77,19 +77,21 @@ def log_errors_and_shape(
 
 
 def _delete_columns(data: DataFrame, config: dictConfig) -> None:
-    pinfo("\nDeleting not useful columns...")
+    # pinfo("\nDeleting not useful columns...")
     to_delete = []
-    instruments_to_keep = [get_part_prefix(i) for i in config[INSTRUMENTS_TO_KEEP]] 
+    instruments_to_keep = [get_part_prefix(i) for i in config[INSTRUMENTS_TO_KEEP]]
     for inst in config[INSTRUMENTS_TO_DELETE]:
         # for i in data.columns:
         #     if "Part" + inst + "_" in i
-        part_prefix = "Part" + inst #+ "_"
+        part_prefix = "Part" + inst  # + "_"
         for col in data.columns:
-                if part_prefix in col and all(inst not in col for inst in instruments_to_keep):
-                    pass
-                    to_delete.append(col)
-                else:
-                    pass
+            if part_prefix in col and all(
+                inst not in col for inst in instruments_to_keep
+            ):
+                pass
+                to_delete.append(col)
+            else:
+                pass
         # to_delete += [i for i in data.columns if part_prefix in i and instrument not in i for instrument in instruments_to_keep]
 
     to_delete += [i for i in data.columns if i.endswith(tuple(config[ENDSWITH]))]
@@ -116,11 +118,10 @@ def _delete_columns(data: DataFrame, config: dictConfig) -> None:
         and all(data[col].isnull().values)
     ]
 
-    # remove columns containing nan
-    # TODO
-
-    # remove _count features
-    # TODO
+    # removing columns containing nans
+    th = config["max_nan_columns"] or 1.0
+    idx = data.isna().sum(axis=0) / data.shape[0] > th
+    to_delete += data.columns[idx].to_list()
 
     data.drop(columns=to_delete, inplace=True, errors="ignore")
 

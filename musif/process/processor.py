@@ -1,15 +1,14 @@
 import os
 from pathlib import PurePath
 from typing import Union
-from musif.common.sort import sort_columns
 
 import pandas as pd
 from pandas import DataFrame
 
+from musif.common.sort import sort_columns
 from musif.config import PostProcessConfiguration
+from musif.extract.basic_modules.file_name_generic.constants import ARTIST, TITLE
 from musif.extract.basic_modules.scoring.constants import INSTRUMENTATION
-from musif.extract.basic_modules.file_name_generic.constants import TITLE, ARTIST
-
 from musif.extract.constants import ID, WINDOW_ID
 from musif.extract.features.core.constants import FILE_NAME
 from musif.extract.features.harmony.constants import (
@@ -100,7 +99,7 @@ class DataProcessor:
                 return df
 
             elif isinstance(info, DataFrame):
-                pinfo("\nProcessing DataFrame...")
+                # pinfo("\nProcessing DataFrame...")
                 return info
             else:
                 perr(
@@ -124,7 +123,7 @@ class DataProcessor:
         Dataframe object
         """
 
-        pinfo("\nPreprocessing data...")
+        pinfo("\nPost-processing data...")
         self.data.dropna(axis=1, how="all", inplace=True)
         if self._post_config.delete_files_without_harmony:
             self.delete_files_without_harmony()
@@ -187,7 +186,7 @@ class DataProcessor:
         )
 
     def delete_undesired_columns(self, **kwargs) -> None:
-        """Deletes not necessary columns for statistical analysis.
+        """Deletes not necessary columns and rows for statistical analysis.
 
         If keyword arguments are passed in, they overwrite those found
         into configurationg file
@@ -206,13 +205,18 @@ class DataProcessor:
         """
         config_data = self._post_config.__dict__
         config_data.update(kwargs)  # Override values
-        try:
-            _delete_columns(self.data, config_data)
-        except KeyError:
-            perr("Some columns are already not present in the Dataframe")
+
+        # deleting rows
+        th = config_data["max_nan_rows"] or 1.0
+        idx = self.data.isna().sum(axis=1) / self.data.shape[1] > th
+        to_delete = self.data.index[idx]
+        self.data.drop(index=to_delete, inplace=True)
+
+        # delete cols
+        _delete_columns(self.data, config_data)
 
     def replace_nans(self) -> None:
-        pinfo("Replacing NaN values in selected columns")
+        # pinfo("Replacing NaN values in selected columns")
         cols = []
         for col in self.data.columns:
             if any(
@@ -220,10 +224,12 @@ class DataProcessor:
                 for substring in tuple(self._post_config.replace_nans)
             ):
                 cols.append(col)
-        cols = self.data[cols].select_dtypes(include='number').columns
+        cols = self.data[cols].select_dtypes(include="number").columns
         self.data[cols] = self.data[cols].fillna(0)
 
-    def save(self, dest_path: Union[str, PurePath], ext=".csv", ft="csv", **kwargs) -> None:
+    def save(
+        self, dest_path: Union[str, PurePath], ext=".csv", ft="csv", **kwargs
+    ) -> None:
         """Saves current information into a file given the name of dest_path
 
         To load one of those file, remember to set the index to
@@ -250,8 +256,8 @@ class DataProcessor:
         pinfo(f"Writing data to {dest_path}_*{ext}")
         ft = "to_" + ft
         dest_path = str(dest_path)
-        if ft == 'csv':
-            kwargs['index'] = False
+        if ft == "csv":
+            kwargs["index"] = False
         getattr(self.data, ft)(dest_path + "_alldata" + ext, **kwargs)
 
     def _group_keys_modulatory(self) -> None:
@@ -295,8 +301,8 @@ class DataProcessor:
         self.replace_nans()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         if TITLE and ARTIST in self.data.columns:
-            priority_columns =[FILE_NAME, TITLE, ARTIST]
+            priority_columns = [FILE_NAME, TITLE, ARTIST]
         else:
-            priority_columns=[] 
+            priority_columns = []
         self.data = sort_columns(self.data, [ID, WINDOW_ID] + priority_columns)
         self.data.drop("index", axis=1, inplace=True, errors="ignore")
