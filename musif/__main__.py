@@ -111,7 +111,7 @@ def main(
         ignore_errors=ignore_errors,
         **tweaks
     )
-    if len(config.features) == 0:
+    if config.features == ["core"]:
         config.features = [
             "core",
             "ambitus",
@@ -140,7 +140,7 @@ def main(
     if config.max_nan_rows is None:
         config.max_nan_rows = 0.5
     if config.max_nan_columns is None:
-        config.max_nan_columns = 0.5
+        config.max_nan_columns = 0.
     processed_df = DataProcessor(raw_df, config).process().data
     output_path = Path(output_path).with_suffix(".csv")
     processed_df.to_csv(output_path)
