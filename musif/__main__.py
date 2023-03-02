@@ -17,7 +17,7 @@ def main(
     cache_dir: str = "musif_cache",
     ignore_errors: bool = True,
     yaml: str = None,
-    tweaks: dict = {}
+    tweaks: dict = {},
 ):
     """
     Python tool for extracting features from music score files.
@@ -109,7 +109,7 @@ def main(
         cache_dir=cache_dir,
         parallel=njobs,
         ignore_errors=ignore_errors,
-        **tweaks
+        **tweaks,
     )
     if config.features == ["core"]:
         config.features = [
@@ -133,17 +133,21 @@ def main(
     config = PostProcessConfiguration(yaml, **tweaks)
     if len(config.columns_contain) == 0:
         config.columns_contain = [
-                "_Count", "_SmallestInterval", "_NumberOfFilteredParts"
-                ]
+            "_Count",
+            "_SmallestInterval",
+            "_NumberOfFilteredParts",
+        ]
     if len(config.replace_nans) == 0:
-        config.replace_nans = ['Interval', 'Degree', 'Harmony']
+        config.replace_nans = ["Interval", "Degree", "Harmony"]
     if config.max_nan_rows is None:
         config.max_nan_rows = 0.99
     if config.max_nan_columns is None:
-        config.max_nan_columns = 0.
+        config.max_nan_columns = 0.0
     processed_df = DataProcessor(raw_df, config).process().data
     output_path = Path(output_path).with_suffix(".csv")
-    processed_df = processed_df.fillna('NA')
+    # replace empty strings with "NA" only in string columns
+    string_cols = processed_df.select_dtypes(include=["object", "string"]).columns
+    processed_df[string_cols] = processed_df[string_cols].replace("", "-")
     processed_df.to_csv(output_path, index=False)
 
 
