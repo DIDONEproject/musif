@@ -138,12 +138,13 @@ def main(
     if len(config.replace_nans) == 0:
         config.replace_nans = ['Interval', 'Degree', 'Harmony']
     if config.max_nan_rows is None:
-        config.max_nan_rows = 0.5
+        config.max_nan_rows = 0.99
     if config.max_nan_columns is None:
         config.max_nan_columns = 0.
     processed_df = DataProcessor(raw_df, config).process().data
     output_path = Path(output_path).with_suffix(".csv")
-    processed_df.to_csv(output_path)
+    processed_df = processed_df.fillna('NA')
+    processed_df.to_csv(output_path, index=False)
 
 
 if __name__ == "__main__":
