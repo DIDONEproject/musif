@@ -130,6 +130,9 @@ def main(
     musicxml_c.MUSICXML_FILE_EXTENSION = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
+    output_path = Path(output_path).with_suffix(".csv")
+    # raw_df.to_csv(output_path.with_suffix(".raw.csv"), index=False)
+
     config = PostProcessConfiguration(yaml, **tweaks)
     if len(config.columns_contain) == 0:
         config.columns_contain = [
@@ -140,15 +143,30 @@ def main(
     if len(config.replace_nans) == 0:
         config.replace_nans = ["Interval", "Degree", "Harmony"]
     if config.max_nan_rows is None:
-        config.max_nan_rows = 0.99
+        # instead of using a threshold, we remove the rows whose number of
+        # nans is an outlier
+        nans = raw_df.isna().sum(axis=1)
+        idx = _find_upper_outliers_iqr(nans)
+        raw_df = raw_df.loc[~idx]
+        config.max_nan_rows = 1.0
     if config.max_nan_columns is None:
         config.max_nan_columns = 0.0
     processed_df = DataProcessor(raw_df, config).process().data
-    output_path = Path(output_path).with_suffix(".csv")
     # replace empty strings with "NA" only in string columns
     string_cols = processed_df.select_dtypes(include=["object", "string"]).columns
     processed_df[string_cols] = processed_df[string_cols].replace("", "-")
     processed_df.to_csv(output_path, index=False)
+
+
+def _find_upper_outliers_iqr(serie):
+    """
+    Return the indices of the outliers in a series, using IQR.
+    This does not use traditional IQR, because it consider the 0.25 quantile as
+    non-outliers.
+    """
+    iqr = serie.quantile(0.75)
+    idx = serie > 1.5 * iqr
+    return idx
 
 
 if __name__ == "__main__":

@@ -132,7 +132,7 @@ class DataProcessor:
             pinfo('\nSeparating "Instrumentation" column...')
             self.separate_instrumentation_column()
 
-        self.delete_undesired_columns()
+        self.delete_undesired()
 
         if self._post_config.grouped_analysis:
             self.group_columns()
@@ -185,7 +185,7 @@ class DataProcessor:
             .astype(int)
         )
 
-    def delete_undesired_columns(self, **kwargs) -> None:
+    def delete_undesired(self, **kwargs) -> None:
         """Deletes not necessary columns and rows for statistical analysis.
 
         If keyword arguments are passed in, they overwrite those found
@@ -205,6 +205,11 @@ class DataProcessor:
         """
         config_data = self._post_config.__dict__
         config_data.update(kwargs)  # Override values
+
+        # deleting columns that are completely nans
+        idx = self.data.isna().all()
+        to_delete = self.data.columns[idx].to_list()
+        self.data.drop(columns=to_delete, inplace=True)
 
         # deleting rows
         th = config_data["max_nan_rows"] or 1.0
