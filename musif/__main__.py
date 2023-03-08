@@ -143,12 +143,15 @@ def main(
     if len(config.replace_nans) == 0:
         config.replace_nans = ["Interval", "Degree", "Harmony"]
     if config.max_nan_rows is None:
-        # instead of using a threshold, we remove the rows whose number of
-        # nans is an outlier
-        nans = raw_df.isna().sum(axis=1)
-        idx = _find_upper_outliers_iqr(nans)
-        raw_df = raw_df.loc[~idx]
-        config.max_nan_rows = 1.0
+        # if the columns without nans would produce a table with columns/row ratio <
+        # 0.25, we remove the rows that are outliers of the 0.99 quantile
+        raw_df_na = raw_df.isna()
+        num_columns_without_na = (~raw_df_na.any(axis=0)).sum()
+        if num_columns_without_na / raw_df.shape[0] < 0.1:
+            nans = raw_df_na.sum(axis=1)
+            config.max_nan_rows = 1/0.99 * nans.quantile(0.99) / raw_df.shape[1]
+        else:
+            config.max_nan_rows = 1.0
     if config.max_nan_columns is None:
         config.max_nan_columns = 0.0
     processed_df = DataProcessor(raw_df, config).process().data
@@ -156,17 +159,6 @@ def main(
     string_cols = processed_df.select_dtypes(include=["object", "string"]).columns
     processed_df[string_cols] = processed_df[string_cols].replace("", "-")
     processed_df.to_csv(output_path, index=False)
-
-
-def _find_upper_outliers_iqr(serie):
-    """
-    Return the indices of the outliers in a series, using IQR.
-    This does not use traditional IQR, because it consider the 0.25 quantile as
-    non-outliers.
-    """
-    iqr = serie.quantile(0.75)
-    idx = serie > 1.5 * iqr
-    return idx
 
 
 if __name__ == "__main__":
