@@ -51,13 +51,17 @@ def main(
         (see pipx documentation for instructions: https://pypa.github.io/pipx/)
 
     Args:
-        paths : one or more paths; if provided, the extraction is limited to
+        paths : one or more paths to file; if provided, the extraction is limited to
             them; these paths can be absolute or relative to the current
             directory; all the paths should contain a common parent part;
             incompatible with `--source_dir`
         output_path : output file; extension is added or changed to 'csv'
         extension : extension, including the dot, e.g. '.mid', '.krn', '.mxl'; only
-            has effect if `source_dir` is used
+            has effect if `source_dir` is used, otherwise it's
+            inferred from the file names; if one of ['.mxl', '.xml',
+            '.musicxml'] is passed, all the other used as well; you can
+            set it to a list or to a tuple to include multiple
+            extensions;
         source_dir : relative path to the directory; searched recursively;
             incompatible with other files provided
         njobs : number of jobs used, according to joblib: -1 means "all the
@@ -102,6 +106,8 @@ def main(
         pinfo(f"Detected extension: {extension}")
     else:
         paths = None
+        if extension in [".xml", ".mxl", ".musicxml"]:
+            extension = [".xml", ".mxl", ".musicxml"]
 
     config = ExtractConfiguration(
         yaml,
@@ -127,7 +133,7 @@ def main(
         ]
     if len(config.basic_modules) == 0:
         config.basic_modules = ["scoring"]
-    musicxml_c.MUSICXML_FILE_EXTENSION = extension
+    musicxml_c.MUSIC21_FILE_EXTENSIONS = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
     output_path = Path(output_path).with_suffix(".csv")
@@ -149,7 +155,7 @@ def main(
         num_columns_without_na = (~raw_df_na.any(axis=0)).sum()
         if num_columns_without_na / raw_df.shape[0] < 0.1:
             nans = raw_df_na.sum(axis=1)
-            config.max_nan_rows = 1/0.99 * nans.quantile(0.99) / raw_df.shape[1]
+            config.max_nan_rows = 1 / 0.99 * nans.quantile(0.99) / raw_df.shape[1]
         else:
             config.max_nan_rows = 1.0
     if config.max_nan_columns is None:

@@ -137,7 +137,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
 
 
 def find_files(
-    extension: str,
+    extensions: str or List[str],
     base_dir: Union[str, List[Union[str, PurePath]]],
     limit_files: List[str] = None,
     exclude_files: List[str] = None,
@@ -152,14 +152,14 @@ def find_files(
 
     Parameters
     ----------
-    extension: str
-        A string representing the extension that will be looked for
+    extension: str or Iterable[str]
+        A list of strings representing the extensions that will be looked for
     base_dir : Union[str, Iterable[str]]
         A path or directory
-    limit_files: List[str] = None
+    limit_files: Iterable[str] = None
         List of file names relative to `base_dir`. Only these files are taken.
         Incompatible with `exclude_files`
-    exclude_files: List[str] = None
+    exclude_files: Iterable[str] = None
         List of file names relative to `base_dir`. None of these files are taken.
         Incompatible with `limit_files`
 
@@ -177,13 +177,18 @@ def find_files(
     ValueError
       If the provided string is neither a directory nor a file path
     """
+    if isinstance(extensions, str):
+        extensions = [extensions]
+
     if base_dir is None:
         return []
     base_dir = Path(base_dir)
     if not base_dir.exists():
         raise ValueError(f"File {base_dir} doesn't exist")
     elif base_dir.is_dir():
-        ret = sorted(base_dir.glob(f"**/*{extension}"))
+        ret = []
+        for ext in extensions:
+            ret += sorted(base_dir.glob(f"**/*{ext}"))
         if limit_files is not None:
             limit_stems = set(map(lambda x: Path(x).stem, limit_files))
             return [f for f in ret if f.stem in limit_stems]
@@ -192,7 +197,7 @@ def find_files(
             return [f for f in ret if f.stem not in exclude_stems]
         else:
             return ret
-    elif base_dir.is_file() and base_dir.suffix == f"{extension}":
+    elif base_dir.is_file() and base_dir.suffix in extensions:
         return [base_dir]
     else:
         return []
@@ -268,7 +273,7 @@ class FeaturesExtractor:
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
         xml_filenames = find_files(
-            musicxml_c.MUSICXML_FILE_EXTENSION,
+            musicxml_c.MUSIC21_FILE_EXTENSIONS,
             self._cfg.xml_dir,
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
@@ -496,7 +501,8 @@ class FeaturesExtractor:
                 # this is needed to allow stuffs like `xvfb-run -a mscore`
                 mscore = (mscore,)
             tmp_d, tmp_path = mkstemp(
-                prefix=filename.stem, suffix=musicxml_c.MUSICXML_FILE_EXTENSION
+                prefix=filename.stem,
+                suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
             )
             process = mscore + ("-fo", tmp_path, filename)
             res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
