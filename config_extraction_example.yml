@@ -89,6 +89,7 @@ features: ['core']
   # - key
   # - dynamics    
   # - rhythm
+  # - music21
 
 # The list of packages/modules where basic features are. See page `Custom Features` for
 # more info

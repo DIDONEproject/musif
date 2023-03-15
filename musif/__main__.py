@@ -119,6 +119,7 @@ def main(
     )
     if config.features == ["core"]:
         config.features = [
+            "music21",
             "core",
             "ambitus",
             "melody",

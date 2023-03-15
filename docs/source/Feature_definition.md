@@ -5,9 +5,12 @@ The following table presents the definition of all the stock features provided w
 The first column are Python Regular Expressions that match the relevant columns of the
 final DataFrame.
 
-Finally, the _Sock module_ column lists the module distributed in `musif` and that generates each feature.
+Finally, the _Stock module_ column lists the module distributed in `musif` and that generates each feature.
 
 Note that none of these features works on percussion instruments.
+
+In addition to the features in the present page, the feature in the `'music21'` stock
+module provides all the features from `music21`.
 
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
