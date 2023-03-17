@@ -188,7 +188,7 @@ def find_files(
     elif base_dir.is_dir():
         ret = []
         for ext in extensions:
-            ret += sorted(base_dir.glob(f"**/*{ext}"))
+            ret += sorted([f for f in base_dir.glob(f"**/*{ext}") if f.is_file()])
         if limit_files is not None:
             limit_stems = set(map(lambda x: Path(x).stem, limit_files))
             return [f for f in ret if f.stem in limit_stems]
@@ -501,8 +501,7 @@ class FeaturesExtractor:
                 # this is needed to allow stuffs like `xvfb-run -a mscore`
                 mscore = (mscore,)
             tmp_d, tmp_path = mkstemp(
-                prefix=filename.stem,
-                suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
+                prefix=filename.stem, suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
             )
             process = mscore + ("-fo", tmp_path, filename)
             res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
