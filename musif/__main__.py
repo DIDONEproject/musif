@@ -119,7 +119,6 @@ def main(
     )
     if config.features == ["core"]:
         config.features = [
-            "music21",
             "core",
             "ambitus",
             "melody",
@@ -131,6 +130,7 @@ def main(
             "key",
             "dynamics",
             "rhythm",
+            "music21",
         ]
     if len(config.basic_modules) == 0:
         config.basic_modules = ["scoring"]

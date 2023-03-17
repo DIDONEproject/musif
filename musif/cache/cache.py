@@ -64,6 +64,9 @@ class ObjectReference:
     def get_attr(self, name: str) -> Any:
         if not hasattr(self, "reference") or self.reference is None:
             # pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
+            # traceback.print_list(
+            #     [f for f in traceback.extract_stack() if "musif" in f.filename]
+            # )
             self._try_resurrect()
         return getattr(self.reference, name)
 
