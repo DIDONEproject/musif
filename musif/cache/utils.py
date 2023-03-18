@@ -1,5 +1,6 @@
 import builtins
 import pickle
+import weakref
 from pathlib import PurePath, Path
 from typing import Any, List, Optional, Tuple
 
@@ -89,7 +90,15 @@ def wrap_module_objects(
 
     If `obj` is a list or a tuple, e new list/tuple this function works
     recursively on their objects.
+
+    If the object is an instance of `weakref.ReferenceType`
+    this function converts the object to a regular
+    reference and then applies the wrapping.
     """
+    if isinstance(obj, weakref.ReferenceType):
+        __import__('ipdb').set_trace()
+        return obj()
+
     __module = obj.__class__.__module__
     for module in target_addresses:
         if __module.startswith(module):
@@ -116,9 +125,8 @@ def wrap_module_objects(
         ]
         if isinstance(obj, list):
             return ret
-        else:
+        elif isinstance(obj, tuple):
             return tuple(ret)
-
     return obj
 
 
