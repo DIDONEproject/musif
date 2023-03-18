@@ -1,15 +1,15 @@
 from typing import List
 
+import gc
 import music21 as m21
 from music21.features import jSymbolic, native
 
 from musif import cache
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_SCORE
-from .constants import COLUMNS
+from .constants import COLUMNS, ERRORED_NAMES
 
 
-import pickle
 def allFeaturesAsList(streamInput):
     """
     only a little change around m21.features.base.allFeaturesAsList: no Parallel
@@ -18,8 +18,10 @@ def allFeaturesAsList(streamInput):
 
     ds = m21.features.base.DataSet(classLabel="")
     ds.runParallel = False  # this is the only difference with the m21 original code
-    # f = list(jSymbolic.featureExtractors) + list(native.featureExtractors)
-    f = list(native.featureExtractors)
+    all_features = list(jSymbolic.featureExtractors) + list(native.featureExtractors)
+    f = [feature for feature in all_features if feature.id not in
+         ERRORED_NAMES]
+    # f = list(native.featureExtractors)
     ds.addFeatureExtractors(f)
     ds.addData(streamInput)
     ds.process()
