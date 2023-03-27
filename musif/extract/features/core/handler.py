@@ -3,7 +3,7 @@ from typing import List
 import pandas as pd
 from music21 import *
 from music21.stream import Measure
-from musif.extract.constants import DATA_FILTERED_PARTS 
+from musif.extract.constants import DATA_FILTERED_PARTS
 from musif.extract.features.tempo.constants import TIME_SIGNATURE
 
 from musif.config import ExtractConfiguration
@@ -91,15 +91,15 @@ def update_score_objects(
     score_features[FILE_NAME] = path.abspath(score_data[DATA_FILE])
     num_measures = len(score.parts[0].getElementsByClass(Measure))
     key_signature = _get_key_signature(score_key)
-    
+
     part = score.parts[0]
-    time_signature = _get_time_signature(list(part.getElementsByClass(Measure)), score_data)
+    time_signature = _get_time_signature(score_data)
 
     score_data.update(
         {
             DATA_KEY: score_key,
             KEY_SIGNATURE: key_signature,
-            TIME_SIGNATURE: time_signature,      
+            TIME_SIGNATURE: time_signature,
             KEY_SIGNATURE: key_signature,
             DATA_KEY_NAME: key_name,
             DATA_MODE: mode,
@@ -175,9 +175,27 @@ def update_score_objects(
     features[NUM_MEASURES] = num_measures
     score_features.update(features)
 
-def _get_time_signature(measures: list, score_data: dict):
+
+def _get_time_signature(score_data: dict) -> str:
+    """
+    This function takes in a dictionary of score data and returns the global time
+    signature of the score as a string.
+
+    Parameters:
+    score_data (dict): A dictionary containing score data.
+
+    Returns:
+    str: A string representing the time signature of the score. It is `'NA'`
+        if no time signature is found.
+    """
     if GLOBAL_TIME_SIGNATURE in score_data:
         time_signature = score_data[GLOBAL_TIME_SIGNATURE].ratioString
     else:
-        time_signature = score_data[DATA_FILTERED_PARTS][0].getElementsByClass(Measure)[0].timeSignature.ratioString
+        first_measure = score_data[DATA_FILTERED_PARTS][0].getElementsByClass(Measure)[
+            0
+        ]
+        if first_measure.timeSignature is not None:
+            time_signature = first_measure.timeSignature.ratioString
+        else:
+            time_signature = "NA"
     return time_signature

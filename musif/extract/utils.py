@@ -38,10 +38,10 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     harmonic_analysis.reset_index(inplace=True)
     if expand_repeats:
         harmonic_analysis = msc3_score.mscx.expanded(unfold=True)
-        harmonic_analysis.reset_index(inplace=True) 
+        harmonic_analysis.reset_index(inplace=True)
         # unfolded_mc=msc3_score.mscx.measures().set_index("mc").next
-        # mn = next2sequence(unfolded_mc) 
-        # mn = ms3.utils.next2sequence(unfolded_mc) 
+        # mn = next2sequence(unfolded_mc)
+        # mn = ms3.utils.next2sequence(unfolded_mc)
         # mn = pd.Series(mn, name="mc_playthrough")
         # harmonic_analysis = ms3.utils.unfold_repeats(harmonic_analysis, mn)
         harmonic_analysis.rename(columns={"mc_playthrough": PLAYTHROUGH}, inplace=True)
@@ -585,8 +585,9 @@ def cast_mixed_dtypes(col):
             col = col.convert_dtypes()
         elif issubclass(newtype, int):
             # convert to string
-            col = col.astype('string')
+            col = col.astype("string")
     return col
+
 
 def extract_global_time_signature(score_data):
     """
@@ -598,5 +599,6 @@ def extract_global_time_signature(score_data):
         .timeSignature
     )
     if global_ts is None:
-        pwarn('Global Time Signature could not possible to be extracted!')
+        pwarn("Couldn't extract Global Time Sigature!")
+        global_ts = "NA"
     return global_ts

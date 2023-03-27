@@ -3,6 +3,8 @@ import xml.etree.ElementTree as ET
 from enum import Enum
 from typing import Optional
 
+import pandas as pd
+
 
 class TempoGroup2(Enum):
     """
@@ -248,6 +250,7 @@ def get_number_of_beats(time_signature: str) -> int:
 
     By default, this returns the numerator, with the exceptions when the numerator is
     6, 9, or 12 and when the time signature is C or 3/8. If it is empty, it returns 1.
+    If it is `"NA"`, it returns `pd.NA`.
 
     Parameters
     ----------
@@ -256,11 +259,14 @@ def get_number_of_beats(time_signature: str) -> int:
             signature type.
 
     """
+    # we only take the first time signature in case we receive more than one
     time_signature = time_signature.split(",")[0]
     if time_signature == "C":
         return 4
     elif time_signature == "":
         return 1
+    elif time_signature == "NA":
+        return pd.NA
     num, den = time_signature.split("/")
     if num == "3" and den == "8":
         return 1
@@ -277,7 +283,8 @@ def get_number_of_beats(time_signature: str) -> int:
 
 def extract_numeric_tempo(file_path: str) -> Optional[int]:
     """
-    Finds the numeric tempo in a musixml file by looking at the tempo marking in the xml code.
+    Finds the numeric tempo in a musixml file by looking at the tempo marking in
+    the xml code.
 
     Parameters
     ----------
