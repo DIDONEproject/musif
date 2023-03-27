@@ -5,6 +5,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+import ipdb
 
 from musif.cache import hasattr
 from musif.config import ExtractConfiguration
@@ -14,7 +15,10 @@ from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import _get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
 
-from .constants import *
+from music21.analysis.patel import nPVI
+
+
+from musif.extract.features.rhythm.constants import *
 
 
 def update_part_objects(
@@ -81,6 +85,13 @@ def update_part_objects(
         if measure in part_data["sounding_measures"]:
             total_sounding_beats += beats
 
+    try:
+        _nPVI = nPVI(measure)
+        print(_nPVI)
+    except:
+        _nPVI = 0.0
+        print('nPVI not working')
+
     rhythm_intensity_period.append(
         sum([j / i if i != 0.0 else 0 for i, j in Counter(notes_dict).items()])
         / total_sounding_beats
@@ -90,6 +101,8 @@ def update_part_objects(
     notes_duration = [
         i for i in notes_duration if i != 0.0
     ]  # remove notes with duration equal to 0
+    # print(f"nPVI({part_data['part']}):,  {nPVI(part_data['part'])}")
+
 
     part_features.update(
         {
@@ -101,6 +114,10 @@ def update_part_objects(
             if total_sounding_beats
             else "NA",
             DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats),
+            NPVI: _nPVI
+            if _nPVI
+            else 0,
+
         }
     )
 
@@ -123,6 +140,12 @@ def update_score_objects(
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
 
+        # features[get_part_feature(part, NPVI)] = [print(i) for i in part_features[NPVI] if i != 0]
+
+        # print('he' , part_features[NPVI])
+        features[get_part_feature(part, NPVI)] = part_features[
+            NPVI
+        ]
         features[get_part_feature(part, AVERAGE_DURATION)] = part_features[
             AVERAGE_DURATION
         ]
@@ -183,6 +206,9 @@ def update_score_objects(
 
 
 def get_motion_features(part_data) -> dict:
+    # import pdb
+    # pdb.set_trace()
+    # print(f"nPVI({part_data['part']}):,  {nPVI(part_data['part'])}")
     notes_midi = []
     notes_duration = []
     for note in part_data["notes_and_rests"]:
@@ -201,6 +227,7 @@ def get_motion_features(part_data) -> dict:
             DESCENDENT_AVERAGE: 0,
             ASCENDENT_PROPORTION: 0,
             DESCENDENT_PROPORTION: 0,
+            NPVI: 0
         }
 
     step = 0.125
@@ -254,4 +281,5 @@ def get_motion_features(part_data) -> dict:
         DESCENDENT_AVERAGE: dsc_avg,
         ASCENDENT_PROPORTION: asc_prp,
         DESCENDENT_PROPORTION: dsc_prp,
+        NPVI: NPVI
     }
