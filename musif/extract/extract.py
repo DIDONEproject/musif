@@ -419,7 +419,8 @@ class FeaturesExtractor:
         window_score = score_data[C.DATA_SCORE].measures(
             first_measure, last_measure, indicesNotNumbers=True
         )
-        window_parts = window_score.parts
+        filtered_partNames = [i.partName for i in score_data['parts']]
+        window_parts = [i for i in window_score.parts if i.partName in filtered_partNames]
         if (
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
