@@ -188,13 +188,13 @@ def _get_time_signature(score_data: dict) -> str:
     str: A string representing the time signature of the score. It is `'NA'`
         if no time signature is found.
     """
-    if GLOBAL_TIME_SIGNATURE in score_data:
+    if hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
         time_signature = score_data[GLOBAL_TIME_SIGNATURE].ratioString
     else:
         first_measure = score_data[DATA_FILTERED_PARTS][0].getElementsByClass(Measure)[
             0
         ]
-        if first_measure.timeSignature is not None:
+        if hasattr(first_measure.timeSignature, 'ratioString'):
             time_signature = first_measure.timeSignature.ratioString
         else:
             time_signature = "NA"

@@ -124,7 +124,7 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
             else:
                 if len(time_signatures) >= 1:
                     time_signatures.append(time_signatures[-1])
-                elif GLOBAL_TIME_SIGNATURE in score_data:
+                elif hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
                     time_signatures.append(
                         score_data[GLOBAL_TIME_SIGNATURE].ratioString
                     )

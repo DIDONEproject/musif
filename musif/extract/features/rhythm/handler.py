@@ -31,7 +31,7 @@ def update_part_objects(
     total_sounding_beats = 0
     beat_count = (
         score_data[GLOBAL_TIME_SIGNATURE].beatCount
-        if GLOBAL_TIME_SIGNATURE in score_data
+        if hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'beatCount')
         else 1
     )
     # motion_features = get_motion_features(part_data)

@@ -381,10 +381,10 @@ class FeaturesExtractor:
             parts_data,
             score_data,
         ) = self._init_score_processing(idx, filename)
+        extract_global_time_signature(score_data)
         score_features = self.extract_modules(
             self._cfg.feature_modules_addresses, score_data, parts_data, basic=False
         )
-        extract_global_time_signature(score_data)
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
 
