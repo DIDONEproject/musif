@@ -29,9 +29,8 @@ def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     intervals = part_data[DATA_INTERVALS]
-    motion_features = get_motion_features(part_data)
-    part_features.update(motion_features)
 
+    part_features.update(get_motion_features(part_data))
     part_features.update(get_interval_features(intervals))
     part_features.update(get_interval_count_features(intervals))
     part_features.update(get_interval_type_features(intervals))
@@ -53,6 +52,8 @@ def update_score_objects(
         part = part_data[DATA_PART_ABBREVIATION]
         for step in MOTION_STEPS:
             for win in MOTION_WINS:
+                if step > win:
+                    continue
                 key_postfix = _motion_postfix(step, win)
                 features[
                     get_part_feature(part, SPEED_AVG_ABS + key_postfix)
@@ -68,7 +69,7 @@ def update_score_objects(
                 ] = part_features[DESCENDENT_AVERAGE + key_postfix]
                 features[
                     get_part_feature(part, ASCENDENT_PROPORTION + key_postfix)
-                ] = part_features[ASCENDENT_PROPORTION]
+                ] = part_features[ASCENDENT_PROPORTION + key_postfix]
                 features[
                     get_part_feature(part, DESCENDENT_PROPORTION + key_postfix)
                 ] = part_features[DESCENDENT_PROPORTION + key_postfix]
@@ -625,32 +626,40 @@ def _motion_features_single_window_step(
 
     Returns:
     Dict[str, Union[float, np.ndarray]]: Dictionary containing the following motion features:
-        - SPEED_AVG_ABS_{step}_{win: Average absolute speed.
-        - ACCELERATION_AVG_ABS_{step}_{win: Average absolute acceleration.
-        - ASCENDENT_AVERAGE_{step}_{win: Average length of prolonged ascent chunks in the smoothed midis of the aria.
-        - DESCENDENT_AVERAGE_{step}_{win: Average length of prolonged descent chunks in the smoothed midis of the aria.
-        - ASCENDENT_PROPORTION_{step}_{win: Proportion of prolonged ascent chunks over the total of the aria.
-        - DESCENDENT_PROPORTION_{step}_{win: Proportion of prolonged descent chunks over the total of the aria.
+        - SPEED_AVG_ABS_{step}_{win} Average absolute speed.
+        - ACCELERATION_AVG_ABS_{step}_{win} Average absolute acceleration.
+        - ASCENDENT_AVERAGE_{step}_{win} Average length of prolonged ascent chunks in the smoothed midis of the aria.
+        - DESCENDENT_AVERAGE_{step}_{win} Average length of prolonged descent chunks in the smoothed midis of the aria.
+        - ASCENDENT_PROPORTION_{step}_{win} Proportion of prolonged ascent chunks over the total of the aria.
+        - DESCENDENT_PROPORTION_{step}_{win} Proportion of prolonged descent chunks over the total of the aria.
     """
     key_postfix = _motion_postfix(step, win)
-
+    default_dict = {
+        SPEED_AVG_ABS + key_postfix: 0,
+        ACCELERATION_AVG_ABS + key_postfix: 0,
+        ASCENDENT_AVERAGE + key_postfix: 0,
+        DESCENDENT_AVERAGE + key_postfix: 0,
+        ASCENDENT_PROPORTION + key_postfix: 0,
+        DESCENDENT_PROPORTION + key_postfix: 0,
+    }
+    
     if len(notes_midi) == 0:
-        return {
-            SPEED_AVG_ABS + key_postfix: 0,
-            ACCELERATION_AVG_ABS + key_postfix: 0,
-            ASCENDENT_AVERAGE + key_postfix: 0,
-            DESCENDENT_AVERAGE + key_postfix: 0,
-            ASCENDENT_PROPORTION + key_postfix: 0,
-            DESCENDENT_PROPORTION + key_postfix: 0,
-        }
-
-    midis_raw = np.repeat(notes_midi, [i / step for i in notes_duration], axis=0)
-    spe_raw = np.diff(midis_raw) / step
-    acc_raw = np.diff(spe_raw) / step
+        return default_dict
+    midis_raw = np.repeat(notes_midi, np.divide(notes_duration, step).astype(int), axis=0)
+    if midis_raw.size == 0:
+        return default_dict
 
     # Absolute means of speed and acceleration
-    spe_avg_abs = np.mean(abs(spe_raw))
-    acc_avg_abs = np.mean(abs(acc_raw))
+    spe_raw = np.diff(midis_raw) / step
+    if spe_raw.size > 0:
+        spe_avg_abs = np.mean(abs(spe_raw))
+    else:
+        spe_avg_abs = 0
+    acc_raw = np.diff(spe_raw) / step
+    if acc_raw.size > 0:
+        acc_avg_abs = np.mean(abs(acc_raw))
+    else:
+        acc_avg_abs = 0
 
     # Rolling mean to smooth the midis by +-1 compasses -- not required for
     # statistics based on means but important for detecting increasing sequences
@@ -679,16 +688,14 @@ def _motion_features_single_window_step(
     asc_prp = sum(asc) / (len(dife) - 1) if asc else np.nan
     dsc_prp = sum(dsc) / (len(dife) - 1) if dsc else np.nan
 
-    return_dict = {
-        SPEED_AVG_ABS + "_" + key_postfix: spe_avg_abs,
-        ACCELERATION_AVG_ABS + "_" + key_postfix: acc_avg_abs,
-        ASCENDENT_AVERAGE + "_" + key_postfix: asc_avg,
-        DESCENDENT_AVERAGE + "_" + key_postfix: dsc_avg,
-        ASCENDENT_PROPORTION + "_" + key_postfix: asc_prp,
-        DESCENDENT_PROPORTION + "_" + key_postfix: dsc_prp,
+    return {
+        SPEED_AVG_ABS + key_postfix: spe_avg_abs,
+        ACCELERATION_AVG_ABS + key_postfix: acc_avg_abs,
+        ASCENDENT_AVERAGE + key_postfix: asc_avg,
+        DESCENDENT_AVERAGE + key_postfix: dsc_avg,
+        ASCENDENT_PROPORTION + key_postfix: asc_prp,
+        DESCENDENT_PROPORTION + key_postfix: dsc_prp,
     }
-    return_dict.update(return_dict)
-    return return_dict
 
 
 def get_motion_features(part_data) -> dict:
@@ -714,10 +721,12 @@ def get_motion_features(part_data) -> dict:
     notes_midi = np.asarray(notes_midi)
     notes_duration = np.asarray(notes_duration)
 
+    return_dict = {}
     for step in MOTION_STEPS:
         for win in MOTION_WINS:
-            return_dict = _motion_features_single_window_step(
-                notes_duration, notes_midi, step, win
+            return_dict.update(
+                _motion_features_single_window_step(
+                    notes_duration, notes_midi, step, win
+                )
             )
-
     return return_dict
