@@ -2,7 +2,7 @@
 
 ## Authorship
 
-`musif` is the result of interdisciplinary work within the ERC project “DIDONE”. The following 
+`musif` is the result of interdisciplinary work within the ERC project [“DIDONE”](https://didone.eu). The following 
 are the people involved in its creation.
 
 ### Conception
@@ -49,7 +49,7 @@ the lead author on GitHub or [her email address](allorens@ucm.es). If you want t
 
 When using it, please cite `musif` as Llorens, Ana; Simonetta, Federico; Serrano, Martín; Torrente, Álvaro. "musif: a Python package for symbolic music feature extraction", *Sound and Music Computing Conference 2023*, Stockholm, 12-17 June 2023 (to appear).
 
-## Licencing
-musif is Copyright © 2023, Ana Llorens, Álvaro Torrente, ICCMU. musif code (excluding 
+## Licensing
+`musif` is Copyright © 2023, Ana Llorens, Álvaro Torrente, [ICCMU](https://iccmu.es). `musif` code (excluding 
 content encoded in the corpus) is free and open-source software, licensed under the BSD 
-License
+License.
