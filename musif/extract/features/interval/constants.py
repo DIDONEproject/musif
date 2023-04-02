@@ -114,7 +114,6 @@ SMALLEST_ABSOLUTE_SEMITONES_DESC = "SmallestAbsoluteSemitonesDesc"
 SMALLEST_INTERVAL_ALL = "SmallestIntervalAll"
 SMALLEST_SEMITONES_ALL = "SmallestSemitonesAll"
 SMALLEST_ABSOLUTE_SEMITONES_ALL = "SmallestAbsoluteSemitonesAll"
-MIV = "MIV"
 
 SCORE_FEATURES = [
     MEAN_INTERVAL,
