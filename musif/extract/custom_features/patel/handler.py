@@ -17,7 +17,6 @@ def update_part_objects(
     )
 
     for measure in part_data["measures"]:
-        # for i, element in enumerate(measure.elements):
         try:
             _nPVI = nPVI(measure)
             _melodicIntervalVariability = melodicIntervalVariability(measure)
@@ -41,7 +40,7 @@ def update_score_objects(
     # the dictionary where all final info is stored. 
     # Otherwise it will not be reflected in the final dataframe.
     print(
-        "We are updating stuffs from module inside a package  given its parent package (part)!"
+        "Updating stuffs from module inside a package  given its parent package (part)!"
     )
 
     features = {}
