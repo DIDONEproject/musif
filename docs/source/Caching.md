@@ -1,6 +1,6 @@
 # Caching
 
-`musiF` is entirely written using [`music21`](https://web.mit.edu/music21/) objects for
+`musif` is entirely written using [`music21`](https://web.mit.edu/music21/) objects for
 computing features. This approach allows users to easily add features using a python
 library that is largely supported by the community. However, it doesn't come without
 issues.
@@ -10,9 +10,9 @@ We have mainly found two weaknesses in this approach:
    iterating over complex and deeply nested objects and even more slow while parsing
    large MusicXML files.
 2. `music21` still has various issues about serializing data, including pickling and
-   deepcopying
+   deepcopying.
 
-For this reason, we have implemented a system for automatic caching music21 objects in a
+For this reason, we have implemented a system for automatic caching `music21` objects in a
 serializable format. The only drawback of our system is that it is not possible to use
 the cached objects for writing data, but only for reading. Put in simple words, if you
 decide to use the cache system, you cannot modify any `music21` object from inside the
@@ -27,9 +27,9 @@ The cache system is implemented in the package `musif.cache`. It allows you to:
 
 In our experiments we have obtained a code around 2-3 times faster when using the cache.
 
-Once you have cached your objects, you can use them with the existing properties; you
-change them, for instance running a wrong code, you will have to delete them to get back
-the original results.
+Once you have cached your objects, you can use them with the existing properties; if you
+change them, for instance running a wrong code, you will have to delete them to get 
+the original results back.
 
 If you try to access a property that is not cached, the caching system will try to parse
 the file from where that property may be available.
@@ -41,24 +41,24 @@ cached object, but store the returned values in a property named `cache`. When u
 `SmartModuleCache` interactivly you can look at `cache.keys()` for inspecting it.
 
 Most of the values stored inside the `cache` dictionary will be other `SmartModuleCache`
-or `MethodCache`. `MethodCache` are special objects that are used to cache the calls to
+or `MethodCache` objects. `MethodCache` are special objects that are used to cache the calls to
 methods, similarly to the standard `lru_cache`, but with the ability of pickling them.
 To this purpose, we use the `deephash` module, which computes a fixed hash based on the
 content of the objects. However, since `music21` objects are often deeply nested, `deephash`
-would be slow. As such, `SmartModuleCache` objects implements their own hashing function
-as well. Note that `SmartModuleCache` objects for now implement a weak hash, which is in
+would be slow. As such, `SmartModuleCache` objects implement their own hashing function
+as well. Note that, for now, `SmartModuleCache` objects implement a weak hash, which is in
 no way proven to be effective for situations where many objects interact.
 
-Another feature that you should be aware of is that `SmartModuleCache` transform any
+Another feature that you should be aware of is that `SmartModuleCache` transforms any
 iterator to lists and make it available under the `__list__` field. The successive calls
 to the iterator will then return the list.
 
 ## Modifying `music21` objects before of caching
 
-The only condition for using the cache system is that you do not change the music21
-objects from inside the features, which is a reasonable condition. If you are doing it,
-you should probably stopping doing it, because it necessarily involves a copy of the
+The only condition for using the cache system is that you do not change the `music21`
+objects from inside the features. If you are doing it,
+you should probably stop doing so, because it necessarily involves a copy of the
 `music21` objects, which is slow.
 
 To allow you to modify the parsed score, we have introduced the option of using hooks,
-as explained [here](./Hooks.html)
+as explained [here](./Hooks.html).

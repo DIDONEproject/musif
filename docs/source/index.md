@@ -1,4 +1,4 @@
-# Welcome to musiF's documentation!
+# Welcome to `musif`'s documentation!
 
 ```{toctree}
 ---
@@ -6,31 +6,31 @@ maxdepth: 2
 hidden:
 ---
 
-Getting Started <Tutorial>
+Getting started <Tutorial>
+Getting advanced <Tutorial poprock>
 File_loading
 Feature_definition
 Custom_features
 Caching
 Hooks
 Configuration
+Acknowledgments
+
 API <API/modules>
-General Index <genindex>
-Module Index <modindex>
+General index <genindex>
+Module index <modindex>
 Search <search>
 ```
 
-`musiF` is a Python module for computing features from music scores. It is especially
-designed for arias from 18th Century Italian Operas. It has extensively been used and
-designed by the [Didone](https://didone.eu) team for analyzing Opera arias from the
-Metastasian literature.
+`musif` is a Python module for computing features from music scores. It has been designed and extensively used by the [Didone](https://didone.eu) team for analyzing arias from 18th-century Italian operas on texts by Pietro Metastasio.
 
 Please, see the [Tutorial](Tutorial.html) for an easy introduction.
 
-For more advanced usage, have a look at the [Configuration](Configuration.html),
+For a more advanced usage, have a look at the [Configuration](Configuration.html),
 [Custom Features](Custom_features.html), and [Caching](Caching.html) pages.
 
-If you have any issue or question, feel free to open an issue on our [Github
-repo](https://github.com/DIDONEproject/musiF/).
+If you have any issues or questions, feel free to open an issue on our [Github
+repo](https://github.com/DIDONEproject/musif/).
 
 <p style="text-align:center;margin:100px 0;">
   <a href="https://www.ucm.es" target="_blank"><img src="./_static/imgs/ucm.jpg" alt="Logo UCM" align="middle"></a>

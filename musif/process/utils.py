@@ -22,7 +22,7 @@ from musif.extract.features.harmony.constants import (
     KEY_PREFIX,
     CHORD_prefix,
 )
-from musif.extract.features.interval.constants import TRIMMED_INTERVALLIC_MEAN
+from musif.extract.features.melody.constants import TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.logs import pinfo
 

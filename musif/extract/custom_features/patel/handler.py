@@ -5,6 +5,8 @@ from music21.analysis.patel import nPVI, melodicIntervalVariability
 import musif.extract.constants as C
 from musif.extract.features.prefix import get_part_feature
 from musif.config import ExtractConfiguration
+from typing import List
+
 
 from musif.extract.custom_features.patel.constants import *
 
@@ -12,10 +14,8 @@ from musif.extract.custom_features.patel.constants import *
 def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
-    print(
-        "update_part_objects from module inside a package given its parent package (score)!"
-    )
-
+    # "update_part_objects from module inside a package given its parent package (score)!"
+  
     for measure in part_data["measures"]:
         try:
             _nPVI = nPVI(measure)
@@ -32,16 +32,16 @@ def update_part_objects(
 
 
 def update_score_objects(
-    parts_data: list = None,
-    parts_features: list = None,
-    score_features: dict = None,
+    score_data: dict,
+    parts_data: List[dict],
+    cfg: ExtractConfiguration,
+    parts_features: List[dict],
+    score_features: dict,
 ):
-    # Finally, we need to add the data to score_features, 
+    # We need to add the data to score_features, 
     # the dictionary where all final info is stored. 
     # Otherwise it will not be reflected in the final dataframe.
-    print(
-        "Updating stuffs from module inside a package  given its parent package (part)!"
-    )
+    # "Updating stuffs from module inside a package  given its parent package (part)!"
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
@@ -53,8 +53,6 @@ def update_score_objects(
         feature_name = get_part_feature(part_abbreviation, MIV)
         features[feature_name] = part_features['MIV']
 
-
-    # ipdb.set_trace()
     score_features.update(features)
 
 

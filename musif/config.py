@@ -5,7 +5,7 @@ from musif.common._utils import read_object_from_yaml_file
 from musif.extract.constants import REQUIRE_MSCORE
 
 # TODO: add documentation for these variables
-LOGGER_NAME = "musiF"
+LOGGER_NAME = "musif"
 LOG = "log"
 LOG_FILE_PATH = "log_file"
 FILE_LOG_LEVEL = "file_log_level"
@@ -42,7 +42,7 @@ GROUPED = "grouped_analysis"
 MERGE_VOICES = "merge_voices"
 
 _CONFIG_LOG_FALLBACK = {
-    LOG_FILE_PATH: "./musiF.log",
+    LOG_FILE_PATH: "./musif.log",
     FILE_LOG_LEVEL: "DEBUG",
     CONSOLE_LOG_LEVEL: "ERROR",
 }

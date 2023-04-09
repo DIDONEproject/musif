@@ -37,8 +37,8 @@ def update_part_objects(
         if GLOBAL_TIME_SIGNATURE in score_data
         else 1
     )
-    motion_features = get_motion_features(part_data)
-    part_features.update(motion_features)
+    # motion_features = get_motion_features(part_data)
+    # part_features.update(motion_features)
 
     for measure in part_data["measures"]:
         for i, element in enumerate(measure.elements):
@@ -143,22 +143,7 @@ def update_score_objects(
         ]
         double_dotted_rhythm.append(part_features[DOUBLE_DOTTEDRHYTHM])
 
-        features[get_part_feature(part, SPEED_AVG_ABS)] = part_features[SPEED_AVG_ABS]
-        features[get_part_feature(part, ACCELERATION_AVG_ABS)] = part_features[
-            ACCELERATION_AVG_ABS
-        ]
-        features[get_part_feature(part, ASCENDENT_AVERAGE)] = part_features[
-            ASCENDENT_AVERAGE
-        ]
-        features[get_part_feature(part, DESCENDENT_AVERAGE)] = part_features[
-            DESCENDENT_AVERAGE
-        ]
-        features[get_part_feature(part, ASCENDENT_PROPORTION)] = part_features[
-            ASCENDENT_PROPORTION
-        ]
-        features[get_part_feature(part, DESCENDENT_PROPORTION)] = part_features[
-            DESCENDENT_PROPORTION
-        ]
+
 
     dotted_rhythm = [i for i in dotted_rhythm if i not in (0.0, "NA")]
     features.update(
@@ -256,3 +241,4 @@ def get_motion_features(part_data) -> dict:
         ASCENDENT_PROPORTION: asc_prp,
         DESCENDENT_PROPORTION: dsc_prp
     }
+
