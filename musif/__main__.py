@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 from pathlib import Path
 
 import musif.musicxml.constants as musicxml_c
@@ -18,6 +19,7 @@ def main(
     ignore_errors: bool = True,
     yaml: str = None,
     tweaks: dict = {},
+    harmony: Optional[str] = None,
 ):
     """
     Python tool for extracting features from music score files.
@@ -75,6 +77,7 @@ def main(
             (see the docs for possible options); for this, you should
             pass them as a dictionary, e.g. `musif -t
             '{musescore_dir: "mscore_data"}'`
+        harmony : extract harmonic features using musescore files from this directory
     """
 
     if source_dir is not None and len(paths) > 0:
@@ -114,6 +117,7 @@ def main(
         xml_dir=source_dir,
         cache_dir=cache_dir,
         parallel=njobs,
+        musescore_dir=harmony,
         ignore_errors=ignore_errors,
         **tweaks,
     )
@@ -132,6 +136,8 @@ def main(
             "rhythm",
             "music21",
         ]
+    if harmony is not None:
+        config.features += ["harmony", "scale_relative"]
     if len(config.basic_modules) == 0:
         config.basic_modules = ["scoring"]
     musicxml_c.MUSIC21_FILE_EXTENSIONS = extension
