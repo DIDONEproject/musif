@@ -1,6 +1,5 @@
 from typing import List
 
-import gc
 import music21 as m21
 from music21.features import jSymbolic, native
 
@@ -10,7 +9,7 @@ from musif.extract.constants import DATA_SCORE
 from .constants import COLUMNS, ERRORED_NAMES
 
 
-def allFeaturesAsList(streamInput):
+def allFeaturesAsList(streamInput, includeJSymbolic=True):
     """
     only a little change around m21.features.base.allFeaturesAsList: no Parallel
     processing
@@ -18,7 +17,9 @@ def allFeaturesAsList(streamInput):
 
     ds = m21.features.base.DataSet(classLabel="")
     ds.runParallel = False  # this is the only difference with the m21 original code
-    all_features = list(jSymbolic.featureExtractors) + list(native.featureExtractors)
+    all_features = list(native.featureExtractors)
+    if includeJSymbolic:
+        all_features += list(jSymbolic.featureExtractors)
     f = [feature for feature in all_features if feature.id not in
          ERRORED_NAMES]
     # f = list(native.featureExtractors)
@@ -43,7 +44,9 @@ def update_score_objects(
     # override the isinstance and hasattr definitions for the caching system
     m21.features.base.isinstance = cache.isinstance
     m21.features.base.hasattr = cache.hasattr
-    features = allFeaturesAsList(score)
+    # avoid extracting jsymbolic features twice
+    includeJSymbolic = 'jsymbolic' in cfg.features
+    features = allFeaturesAsList(score, includeJSymbolic=includeJSymbolic)
     score_features.update(
         {
             COLUMNS[outer] + f"_{i}": f
