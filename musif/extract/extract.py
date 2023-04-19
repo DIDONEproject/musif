@@ -254,6 +254,12 @@ class FeaturesExtractor:
             pinfo("Cache activated!")
             Path(self._cfg.cache_dir).mkdir(exist_ok=True)
 
+        if "jsymbolic" in self._cfg.features:
+            from musif.extract.features import jsymbolic
+
+            jsymbolic.utils.download_jsymbolic()
+            jsymbolic.utils.get_java_path()
+
     def extract(self) -> DataFrame:
         """
         Extracts features given in the configuration data getting a file, directory or several file paths,
@@ -448,8 +454,10 @@ class FeaturesExtractor:
         window_score = score_data[C.DATA_SCORE].measures(
             first_measure, last_measure, indicesNotNumbers=True
         )
-        filtered_partNames = [i.partName for i in score_data['parts']]
-        window_parts = [i for i in window_score.parts if i.partName in filtered_partNames]
+        filtered_partNames = [i.partName for i in score_data["parts"]]
+        window_parts = [
+            i for i in window_score.parts if i.partName in filtered_partNames
+        ]
         if (
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
