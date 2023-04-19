@@ -10,10 +10,16 @@ Finally, the _Stock module_ column lists the module distributed in `musif` and t
 Note that none of these features works on percussion instruments.
 
 In addition to the features in the present page, the feature in the `'music21'` stock
-module provides all the features from `music21`.
+module provides all the features from `music21`, while those in the
+`'jsymbolic` module provide the features extracted using `jSymbolic`. For this, you
+jSymbolic will be downloaded at the first run ad you will eed Java installed
+in your OS. You can force the download od jSymbolic and the check of Java
+installatio by running `python -m musif.extract.features.jsymbolic`
 
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| `m21_.*`                         | Music21 features; only native features if `jsymbolic` is also included | `music21`            |
+| `js_.*`                          |  jSymbolic features; need Java installed | `jsymbolic`            |
 | `FileName`                         | File name of the original score                                                                                                                                                                                                           | `core`            |
 | `Measures`                         | No. of measures of the piece                                                                                                                                                                                                              | `core`            |
 | `.+_SoundingMeasures`              | No. of measures that have at least one note (not all silence) for a given part                                                                                                                                                                                                                                      | `core`            |

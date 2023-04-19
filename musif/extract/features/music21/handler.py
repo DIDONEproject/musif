@@ -49,7 +49,7 @@ def update_score_objects(
     features = allFeaturesAsList(score, includeJSymbolic=includeJSymbolic)
     score_features.update(
         {
-            COLUMNS[outer] + f"_{i}": f
+            'm21_' + COLUMNS[outer] + f"_{i}": f
             for outer in range(len(COLUMNS))
             for i, f in enumerate(features[outer])
         }
