@@ -29,19 +29,20 @@ def update_score_objects(
     # 1. create a temporary directory (if Linux, force RAM usig /dev/shm)
     with get_tmpdir() as tmpdirname:
         # 2. convert the score to MEI usiing music21
-        mei_path = os.path.join(tmpdirname, "score.mei")
-        score_data.write("MEI", mei_path)
+        midi_path = os.path.join(tmpdirname, "score.midi")
+        # TODO: id music21 implements export to MEI, use it
+        score_data['score'].write("MIDI", midi_path)
         # 3. run the MEI file through the jSymbolic jar savign csv into the temporary
         # directory in RAM
         out_path = os.path.join(tmpdirname, "features")
         subprocess.run(
             [
                 JAVA_PATH,
-                "-Xmx25g",
+                "-Xmx4g", # TODO: use a config option here
                 "-jar",
                 JSYMBOLIC_JAR,
                 "-csv",
-                mei_path,
+                midi_path,
                 out_path + ".xml",
                 out_path + "_def.xml",
             ],

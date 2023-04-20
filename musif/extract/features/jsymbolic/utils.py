@@ -1,8 +1,10 @@
+import io
 import os
 import shutil
 import sys
 import subprocess
 import platform
+import zipfile
 import urllib.request
 from tqdm import tqdm
 
@@ -89,9 +91,14 @@ def download_jsymbolic():
     filename = _jsymbolic_path()
 
     if not os.path.exists(filename):
-        with TqdmUpTo(unit='B', unit_scale=True, unit_divisor=1024, miniters=1,
-                      desc="Downloading jSymbolic ") as t:
-            urllib.request.urlretrieve(JSYMBOLIC_URL, filename, reporthook=t.update_to)
-        print("Download complete.")
-    else:
-        print("jSymbolic already downloaded.")
+        # Download the zip file
+        with TqdmUpTo(unit='B', unit_scale=True, unit_divisor=1024, miniters=1, desc="Downloading jSymbolic ") as t:
+            response = urllib.request.urlopen(JSYMBOLIC_URL)
+            data = response.read()
+            t.update_to(len(data))
+
+        # Extract the jar file from the zip file
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            with zf.open('jSymbolic_2_2_user/jSymbolic2.jar') as f:
+                with open(filename, 'wb') as fout:
+                    fout.write(f.read())
