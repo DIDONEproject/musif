@@ -24,7 +24,7 @@ def get_java_path():
     if java is not None:
         return java
     raise JavaNotFoundError(
-        "Could not find Java! Plese, set JAVA_HOME environment variable or make it available in the PATH."
+        "Could not find Java Runtime Environment (JRE)! Please, set JAVA_HOME environment variable or make it available in the PATH."
     )
 
 
@@ -66,14 +66,31 @@ def _jsymbolic_path():
     return filename
 
 
+class TqdmUpTo(tqdm):
+    """Provides `update_to(n)` which uses `tqdm.update(delta_n)`."""
+
+    def update_to(self, b=1, bsize=1, tsize=None):
+        """
+        b  : int, optional
+            Number of blocks transferred so far [default: 1].
+        bsize  : int, optional
+            Size of each block (in tqdm units) [default: 1].
+        tsize  : int, optional
+            Total size (in tqdm units). If [default: None] remains unchanged.
+        """
+        if tsize is not None:
+            self.total = tsize
+        return self.update(b * bsize - self.n)  # also sets self.n = b * bsize
+
+
 def download_jsymbolic():
     # Download jSymbolic, if not already downloaded
     # and save it to the OS cache directory
     filename = _jsymbolic_path()
 
     if not os.path.exists(filename):
-        print("Downloading jSymbolic...")
-        with tqdm(unit="B", unit_scale=True, unit_divisor=1024, miniters=1) as t:
+        with TqdmUpTo(unit='B', unit_scale=True, unit_divisor=1024, miniters=1,
+                      desc="Downloading jSymbolic ") as t:
             urllib.request.urlretrieve(JSYMBOLIC_URL, filename, reporthook=t.update_to)
         print("Download complete.")
     else:
