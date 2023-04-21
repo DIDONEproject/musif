@@ -56,7 +56,7 @@ def update_score_objects(
             stdout=subprocess.DEVNULL,
         )
         # 4. read the csv file into a pandas dataframe
-        df = pd.read_csv(out_path + ".csv")
+        df = pd.read_csv(out_path + ".csv", na_values=["NaN", " NaN", "NaN ", " NaN "])
         df = df.drop(columns=df.columns[0])
         # 5. add `js_` prefix to the column names
         df.columns = ["js_" + c for c in df.columns]

@@ -354,7 +354,7 @@ class FeaturesExtractor:
         else:
             all_dfs = DataFrame(scores_features)
             all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
-            all_dfs = all_dfs.replace(pd.NA, "NA").replace("NA", pd.NA)
+            all_dfs = all_dfs.replace("NA", pd.NA)
         return all_dfs
 
     def _init_score_processing(self, idx: int, filename: PurePath):
