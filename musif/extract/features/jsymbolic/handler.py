@@ -35,25 +35,30 @@ def update_score_objects(
         # 3. run the MEI file through the jSymbolic jar savign csv into the temporary
         # directory in RAM
         out_path = os.path.abspath(os.path.join(tmpdirname, "features"))
+        cmd = [JAVA_PATH,
+               f"-Xmx{cfg.jsymbolic_max_ram}",
+               "-jar",
+               JSYMBOLIC_JAR,
+               "-csv",
+               ]
+        if cfg.jsymbolic_config_file is not None:
+            cmd += ["-configrun", cfg.jsymbolic_config_file]
         subprocess.run(
-            [
-                JAVA_PATH,
-                "-Xmx4g",  # TODO: use a config option here
-                "-jar",
-                JSYMBOLIC_JAR,
-                "-csv",
+            cmd + [
                 midi_path,
                 out_path + ".xml",
                 out_path + "_def.xml",
             ],
             check=True,
+            stdout=subprocess.DEVNULL,
         )
         # 4. read the csv file into a pandas dataframe
         df = pd.read_csv(out_path + ".csv")
+        df = df.drop(columns=df.columns[0])
         # 5. add `js_` prefix to the column names
         df.columns = ["js_" + c for c in df.columns]
         # 6. load the features into the score_features dictionary
-        score_features.update(df.to_dict())
+        score_features.update(df.to_dict(orient='records')[0])
 
 
 def update_part_objects(
