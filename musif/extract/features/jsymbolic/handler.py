@@ -1,6 +1,7 @@
 from typing import List
 from musif.config import ExtractConfiguration
 
+import contextlib
 import os
 import tempfile
 import subprocess
@@ -31,7 +32,9 @@ def update_score_objects(
         # 2. convert the score to MEI usiing music21
         # TODO: if music21 implements export to MEI, use it
         midi_path = os.path.abspath(os.path.join(tmpdirname, "score.midi"))
-        score_data['score'].write("MIDI", midi_path)
+        with open(os.devnull, 'w') as devnull:
+            with contextlib.redirect_stdout(devnull):
+                score_data['score'].write("MIDI", midi_path)
         # 3. run the MEI file through the jSymbolic jar savign csv into the temporary
         # directory in RAM
         out_path = os.path.abspath(os.path.join(tmpdirname, "features"))
