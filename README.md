@@ -16,6 +16,7 @@ For more info, see the documentation website at: https://musif.didone.eu
 * `MUSICXML_EXTENSION` became `MUSIC21_EXTENSION`
 * multiple windows and step size for the motion features
 * added new module for music21's features
+* added new module for jSymbolic's features
 * CLI tool with sane defaults; CLI is able to handle all MusicXML extensions
 
 #### v1.0.1
