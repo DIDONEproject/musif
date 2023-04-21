@@ -8,7 +8,7 @@ import pandas as pd
 
 from musif.extract.features.jsymbolic.utils import get_java_path, _jsymbolic_path
 
-JSYMBOLIC_JAR = _jsymbolic_path()
+JSYMBOLIC_JAR = str(_jsymbolic_path())
 JAVA_PATH = get_java_path()
 
 
@@ -29,16 +29,16 @@ def update_score_objects(
     # 1. create a temporary directory (if Linux, force RAM usig /dev/shm)
     with get_tmpdir() as tmpdirname:
         # 2. convert the score to MEI usiing music21
-        midi_path = os.path.join(tmpdirname, "score.midi")
-        # TODO: id music21 implements export to MEI, use it
+        # TODO: if music21 implements export to MEI, use it
+        midi_path = os.path.abspath(os.path.join(tmpdirname, "score.midi"))
         score_data['score'].write("MIDI", midi_path)
         # 3. run the MEI file through the jSymbolic jar savign csv into the temporary
         # directory in RAM
-        out_path = os.path.join(tmpdirname, "features")
+        out_path = os.path.abspath(os.path.join(tmpdirname, "features"))
         subprocess.run(
             [
                 JAVA_PATH,
-                "-Xmx4g", # TODO: use a config option here
+                "-Xmx4g",  # TODO: use a config option here
                 "-jar",
                 JSYMBOLIC_JAR,
                 "-csv",

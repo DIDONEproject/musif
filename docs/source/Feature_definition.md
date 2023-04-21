@@ -11,10 +11,10 @@ Note that none of these features works on percussion instruments.
 
 In addition to the features in the present page, the feature in the `'music21'` stock
 module provides all the features from `music21`, while those in the
-`'jsymbolic` module provide the features extracted using `jSymbolic`. For this, you
-jSymbolic will be downloaded at the first run ad you will eed Java installed
+`'jsymbolic` module provide the features extracted using `jSymbolic`. For this, 
+jSymbolic will be downloaded at the first run and you will need Java JRE installed
 in your OS. You can force the download od jSymbolic and the check of Java
-installatio by running `python -m musif.extract.features.jsymbolic`
+installation by running `python -m musif.extract.features.jsymbolic`
 
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|

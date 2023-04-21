@@ -5,7 +5,10 @@ import sys
 import subprocess
 import platform
 import zipfile
-import urllib.request
+import requests
+from pathlib import Path
+
+from musif.logs import linfo
 from tqdm import tqdm
 
 JSYMBOLIC_URL = "https://master.dl.sourceforge.net/project/jmir/jSymbolic/jSymbolic%202.2/jSymbolic_2_2_user.zip"
@@ -55,50 +58,59 @@ def __get_java_path_subprocess():
 
 def _jsymbolic_path():
     if platform.system() == "Windows":
-        cache_dir = os.path.join(os.getenv("APPDATA"), "jSymbolic")
+        cache_dir = Path(os.getenv("APPDATA"), "jSymbolic")
     elif platform.system() == "Linux":
-        cache_dir = os.path.expanduser("~/.cache/jsymbolic")
+        cache_dir = Path.home() / ".cache" / "jSymbolic"
     elif platform.system() == "Darwin":
-        cache_dir = os.path.expanduser("~/Library/Caches/jSymbolic")
+        cache_dir = Path.home() / "Library" / "Caches" / "jSymbolic"
     else:
         raise Exception("Unsupported operating system: " + platform.system())
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
-    filename = os.path.join(cache_dir, "jsymbolic.jar")
+    if not cache_dir.exists():
+        cache_dir.mkdir(parents=True)
+    filename = cache_dir / "jSymbolic.jar"
     return filename
 
 
-class TqdmUpTo(tqdm):
-    """Provides `update_to(n)` which uses `tqdm.update(delta_n)`."""
-
-    def update_to(self, b=1, bsize=1, tsize=None):
-        """
-        b  : int, optional
-            Number of blocks transferred so far [default: 1].
-        bsize  : int, optional
-            Size of each block (in tqdm units) [default: 1].
-        tsize  : int, optional
-            Total size (in tqdm units). If [default: None] remains unchanged.
-        """
-        if tsize is not None:
-            self.total = tsize
-        return self.update(b * bsize - self.n)  # also sets self.n = b * bsize
+def download(url):
+    resp = requests.get(url, stream=True)
+    total = int(resp.headers.get('content-length', 0))
+    data = b''
+    with tqdm(
+        desc=url,
+        total=total,
+        unit='iB',
+        unit_scale=True,
+        unit_divisor=1024,
+    ) as bar:
+        for chunk in resp.iter_content(chunk_size=1024):
+            data += chunk
+            bar.update(len(chunk))
+    return data
 
 
 def download_jsymbolic():
     # Download jSymbolic, if not already downloaded
     # and save it to the OS cache directory
     filename = _jsymbolic_path()
+    libdir = filename.parent / 'lib'
 
-    if not os.path.exists(filename):
+    if not filename.exists() or not libdir.exists():
         # Download the zip file
-        with TqdmUpTo(unit='B', unit_scale=True, unit_divisor=1024, miniters=1, desc="Downloading jSymbolic ") as t:
-            response = urllib.request.urlopen(JSYMBOLIC_URL)
-            data = response.read()
-            t.update_to(len(data))
+        data = download(JSYMBOLIC_URL)
 
         # Extract the jar file from the zip file
         with zipfile.ZipFile(io.BytesIO(data)) as zf:
+
+            # Extract the lib directory recursively
+            libdir.mkdir()
+            for f in zf.filelist:
+                if f.filename.startswith('jSymbolic_2_2_user/lib'):
+                    with zf.open(f.filename) as fin:
+                        with open(libdir.as_posix() + f.filename[len('jSymbolic_2_2_user/lib'):], 'wb') as fout:
+                            fout.write(fin.read())
+
+            # Extract the jar file
             with zf.open('jSymbolic_2_2_user/jSymbolic2.jar') as f:
-                with open(filename, 'wb') as fout:
+                with open(filename.as_posix(), 'wb') as fout:
                     fout.write(f.read())
+        linfo("jSymbolic downloaded into {filname}")
