@@ -1,7 +1,3 @@
-from music21.features import jSymbolic, native
-from music21.features.base import extractorsById
-
-all_columns = [x.id for x in extractorsById("all")]
 ERRORED_NAMES = {
     "T1",
     "T2",
@@ -18,6 +14,3 @@ ERRORED_NAMES = {
     "CS10",
     "CS11",
 }
-COLUMNS = [c for c in all_columns if c not in ERRORED_NAMES]
-
-# COLUMNS = [x.id for x in extractorsById("native")]

@@ -2,11 +2,12 @@ from typing import List
 
 import music21 as m21
 from music21.features import jSymbolic, native
+from music21.features.base import extractorsById
 
 from musif import cache
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_SCORE
-from .constants import COLUMNS, ERRORED_NAMES
+from .constants import ERRORED_NAMES
 
 
 def allFeaturesAsList(streamInput, includeJSymbolic=True):
@@ -47,10 +48,15 @@ def update_score_objects(
     # avoid extracting jsymbolic features twice
     includeJSymbolic = 'jsymbolic' in cfg.features
     features = allFeaturesAsList(score, includeJSymbolic=includeJSymbolic)
+    if includeJSymbolic:
+        all_columns = [x.id for x in extractorsById("all")]
+    else:
+        all_columns = [x.id for x in extractorsById("native")]
+    columns = [c for c in all_columns if c not in ERRORED_NAMES]
     score_features.update(
         {
-            'm21_' + COLUMNS[outer] + f"_{i}": f
-            for outer in range(len(COLUMNS))
+            'm21_' + columns[outer] + f"_{i}": f
+            for outer in range(len(columns))
             for i, f in enumerate(features[outer])
         }
     )
