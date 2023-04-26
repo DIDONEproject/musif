@@ -7,7 +7,7 @@ If you have musif installed in your environment, you can access it using
 Alternatively, you can install musif system-wide with `pipx install musif`
 (see pipx documentation for instructions: https://pypa.github.io/pipx/)
 
-Here is the help page of the tool. To show it, just use `python -m musif -- -h` (or
+Below, you can find the help page of the tool. To show it, just use `python -m musif -- -h` (or
 `musif -- -h` if you installed it via `pipx`).
 
 ```
@@ -48,8 +48,7 @@ DESCRIPTION
 
 POSITIONAL ARGUMENTS
     PATHS
-        one or more paths; if provided, the extraction is limited to them; these paths can be absolute or relative to the current directory; all the pa
-ths should contain a common parent part; incompatible with `--source_dir`
+        one or more paths to file; if provided, the extraction is limited to them; these paths can be absolute or relative to the current directory; all the paths should contain a common parent part; incompatible with `--source_dir`
 
 FLAGS
     -o, --output_path=OUTPUT_PATH
@@ -63,7 +62,7 @@ FLAGS
     -e, --extension=EXTENSION
         Type: str
         Default: '.xml'
-        extension, including the dot, e.g. '.mid', '.krn', '.mxl'; only has effect if `source_dir` is used
+        extension, including the dot, e.g. '.mid', '.krn', '.mxl'; only has effect if `source_dir` is used, otherwise it's inferred from the file names; if one of ['.mxl', '.xml', '.musicxml'] is passed, all the other used as well; you can set it to a list or to a tuple to include multiple extensions;
     -n, --njobs=NJOBS
         Type: int
         Default: -1
@@ -79,12 +78,13 @@ FLAGS
     -y, --yaml=YAML
         Type: Optional[str]
         Default: None
-        path to a configuration file that will be used for both extraction and post-processing; command line options have the precedence on this yaml f
-ile
+        path to a configuration file that will be used for both extraction and post-processing; command line options have the precedence on this yaml file
     -t, --tweaks=TWEAKS
         Type: dict
         Default: {}
-        Further flags can be used to change musif's configuration (see the
-        docs for possible options); for this, you should pass them as a
-        dictionary, e.g. `musif -t '{musescore_dir: "mscore_data"}'`
+        Further flags can be used to change musif's configuration (see the docs for possible options); for this, you should pass them as a dictionary, e.g. `musif -t '{musescore_dir
+    -h, --harmony=HARMONY
+        Type: Optional[Optional]
+        Default: None
+        extract harmonic features using musescore files from this directory
 ```

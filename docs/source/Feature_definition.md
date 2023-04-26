@@ -9,12 +9,21 @@ Finally, the _Stock module_ column lists the module distributed in `musif` and t
 
 Note that none of these features works on percussion instruments.
 
-In addition to the features in the present page, the feature in the `'music21'` stock
-module provides all the features from `music21`, while those in the
-`'jsymbolic` module provide the features extracted using `jSymbolic`. For this, 
-jSymbolic will be downloaded at the first run and you will need Java JRE installed
-in your OS. You can force the download od jSymbolic and the check of Java
-installation by running `python -m musif.extract.features.jsymbolic`
+In addition to the features in the present page, the features in the `'music21'` stock
+module (first row of the below table) provide all the features from [`music21.features.native`](http://web.mit.edu/music21/doc/moduleReference/moduleFeaturesNative.html) 
+and [`music21.features.jSymbolic`](http://web.mit.edu/music21/doc/moduleReference/moduleFeaturesJSymbolic.html). The stock module
+`'jsymbolic`, instead, provide the features extracted using
+[`jSymbolic`](https://jmir.sourceforge.net/manuals/jSymbolic_manual/featureexplanations_files/featureexplanations.html) in the default configuration. 
+
+You can provide custom `jSymbolic` configurations using the `jsymbolic_config_file` and `jsymbolic_max_ram` options in the [extraction configuration](Configuration.html).
+When you use both the `jsymbolic` and `music21` features, `music21.features.jSymbolic`
+is disabled, as it corresponds to a subset of musif's `jsymbolic` module.
+
+For the `jsymbolic` stock module, jSymbolic will be downloaded at the first run and you
+will need Java JRE >= 8 installed in your OS. You can force the download of jSymbolic
+and the check of Java installation by running `python -m
+musif.extract.features.jsymbolic`.
+
 
 | **Column RegEx**                   | **Explanation**                                                                                                                                                                                                                           | Stock module      |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
