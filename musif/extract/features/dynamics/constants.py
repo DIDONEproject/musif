@@ -9,6 +9,10 @@ TIMESIGNATURE = "TimeSignature"
 REST = "Rest"
 
 DYNAMIC_VALUES = {
+    "sfz": 127,
+    "fz": 120,
+    "ffff": 116,
+    "fff": 112,
     "ff": 101,
     "più f": 96,
     "f assai": 94,
@@ -25,6 +29,9 @@ DYNAMIC_VALUES = {
     "poco p": 49,
     "p assai": 42,
     "pp": 36,
+    "ppp": 24,
+    "sfp": 20,
+    "pppp": 12,
     "sempre pp": 36,
     "sotto voce assai": 36,
     "dolce": 49,

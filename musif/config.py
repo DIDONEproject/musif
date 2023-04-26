@@ -13,6 +13,7 @@ CONSOLE_LOG_LEVEL = "console_log_level"
 XML_DIR = "xml_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
+IGNORE_ERRORS = "ignore_errors"
 PARALLEL = "parallel"
 FEATURES = "features"
 BASIC_MODULES = "basic_modules"
@@ -23,7 +24,10 @@ EXPAND_REPEATS = "expand_repeats"
 WINDOW_SIZE = "window_size"
 OVERLAP = "overlap"
 PRECACHE_HOOKS = "precache_hooks"
+REMOVE_UNPITCHED_OBJECTS = "remove_unpitched_objects"
 MSCORE_EXEC = "mscore_exec"
+JSYMBOLIC_CONFIG_FILE = "jsymbolic_config_file"
+JSYMBOLIC_MAX_RAM = "jsymbolic_max_ram"
 # Didone specific?
 SPLIT_KEYWORDS = "split_keywords"
 
@@ -40,6 +44,8 @@ REPLACE_NANS = "replace_nans"
 DFS_DIR = "dfs_dir"
 GROUPED = "grouped_analysis"
 MERGE_VOICES = "merge_voices"
+MAX_NAN_COLUMNS = "max_nan_columns"
+MAX_NAN_ROWS = "max_nan_rows"
 
 _CONFIG_LOG_FALLBACK = {
     LOG_FILE_PATH: "./musif.log",
@@ -54,6 +60,7 @@ _CONFIG_FALLBACK = {
     PARALLEL: 1,
     PRECACHE_HOOKS: [],
     BASIC_MODULES: [],
+    IGNORE_ERRORS: False,
     BASIC_MODULES_ADDRESSES: ["musif.extract.basic_modules"],
     FEATURE_MODULES_ADDRESSES: ["musif.extract.features"],
     FEATURES: ["core"],
@@ -64,6 +71,9 @@ _CONFIG_FALLBACK = {
     OVERLAP: 2,
     MSCORE_EXEC: None,
     DFS_DIR: None,
+    REMOVE_UNPITCHED_OBJECTS: True,
+    JSYMBOLIC_MAX_RAM: "4g",
+    JSYMBOLIC_CONFIG_FILE: None
 }
 
 _CONFIG_POST_FALLBACK = {
@@ -79,7 +89,9 @@ _CONFIG_POST_FALLBACK = {
     STARTSWITH: [],
     CONTAIN: [],
     REPLACE_NANS: [],
-    MATCH: []
+    MATCH: [],
+    MAX_NAN_COLUMNS: None,
+    MAX_NAN_ROWS: None
 }
 
 

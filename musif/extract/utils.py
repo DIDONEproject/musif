@@ -1,17 +1,16 @@
 import itertools
-import os
 from typing import Union
 
 import ms3
 import music21 as m21
-from music21.stream.base import Measure
-from musif.logs import pwarn
 import pandas as pd
+from music21.stream.base import Measure
 from pandas import DataFrame
 
 import musif.extract.constants as C
 from musif.cache import isinstance
 from musif.extract.constants import PLAYTHROUGH
+from musif.logs import pwarn
 from musif.musicxml.tempo import get_number_of_beats
 
 file_names = []
@@ -38,11 +37,17 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     harmonic_analysis = msc3_score.mscx.expanded()
     harmonic_analysis.reset_index(inplace=True)
     if expand_repeats:
-        mn = ms3.parse.next2sequence(msc3_score.mscx.measures.set_index("mc").next)
-        mn = pd.Series(mn, name="mc_playthrough")
-        harmonic_analysis = ms3.parse.unfold_repeats(harmonic_analysis, mn)
+        harmonic_analysis = msc3_score.mscx.expanded(unfold=True)
+        harmonic_analysis.reset_index(inplace=True)
+        # unfolded_mc=msc3_score.mscx.measures().set_index("mc").next
+        # mn = next2sequence(unfolded_mc)
+        # mn = ms3.utils.next2sequence(unfolded_mc)
+        # mn = pd.Series(mn, name="mc_playthrough")
+        # harmonic_analysis = ms3.utils.unfold_repeats(harmonic_analysis, mn)
         harmonic_analysis.rename(columns={"mc_playthrough": PLAYTHROUGH}, inplace=True)
     else:
+        harmonic_analysis = msc3_score.mscx.expanded()
+        harmonic_analysis.reset_index(inplace=True)
         if harmonic_analysis.mn[0] == 0:
             harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mc"]
         else:
@@ -580,18 +585,21 @@ def cast_mixed_dtypes(col):
             col = col.convert_dtypes()
         elif issubclass(newtype, int):
             # convert to string
-            col = col.astype('string')
+            col = col.astype("string")
     return col
+
 
 def extract_global_time_signature(score_data):
     """
     Extracts a global time signature for the score for cases where is not possibel to get measure-by-measure TS
     """
-    global_ts = score_data[C.GLOBAL_TIME_SIGNATURE] = (
+    global_ts = (
         score_data[C.DATA_FILTERED_PARTS][0]
         .getElementsByClass(Measure)[0]
         .timeSignature
     )
     if global_ts is None:
-        pwarn('Global Time Signature could not possible to be extracted!')
+        pwarn("Couldn't extract Global Time Sigature!")
+        global_ts = "NA"
+    score_data[C.GLOBAL_TIME_SIGNATURE] = global_ts
     return global_ts

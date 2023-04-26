@@ -89,6 +89,8 @@ features: ['core']
   # - key
   # - dynamics    
   # - rhythm
+  # - music21
+  # - jsymbolic
 
 # The list of packages/modules where basic features are. See page `Custom Features` for
 # more info
@@ -101,6 +103,18 @@ feature_modules_addresses: ["musif.extract.features"]
 # List of hooks executed before of creating the read-only cache objects.
 # See `Caching` page for more info
 precache_hooks: []
+
+# Maximum RAM allowed to the Java Virtual Machine for each file (if using parallel,
+# this parameter is multiplied for the number of processes)
+jsymbolic_max_ram: "4g"
+
+# Path to file containing jsymbolic configuration; if None (default) the default
+# jSymbolic configuration is used
+jsymbolic_config_file: null
+
+# remove notes and objects referred to percussion instruments
+# (musif stock features do not work with percussion instruments)
+remove_unpitched_objects: True
 
 # Filter to select only some instruments to be processed for each score. 
 # If the filter is None (disabling all parts), the program will extract all parts.

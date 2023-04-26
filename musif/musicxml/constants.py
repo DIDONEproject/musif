@@ -1,5 +1,5 @@
-MUSICXML_FILE_EXTENSION = ".xml"
-"""Extension of the MusicXML file. Defaults to ".xml"."""
+MUSIC21_FILE_EXTENSIONS = [".xml", ".mxl", ".musicxml"]
+"""Extensions used by music21. Defaults to `[".xml", ".mxl", ".musicxml"]`"""
 
 
 SOUND_TO_ABBREVIATION = {
