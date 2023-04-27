@@ -8,7 +8,7 @@ from musif.config import ExtractConfiguration
 from typing import List
 
 
-from musif.extract.custom_features.patel.constants import *
+from musif.extract.features.patel.constants import *
 
 
 def update_part_objects(

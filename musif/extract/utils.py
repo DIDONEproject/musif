@@ -594,11 +594,16 @@ def extract_global_time_signature(score_data):
     """
     Extracts a global time signature for the score for cases where is not possibel to get measure-by-measure TS
     """
-    global_ts = score_data[C.GLOBAL_TIME_SIGNATURE] = (
-        score_data[C.DATA_FILTERED_PARTS][0]
-        .getElementsByClass(Measure)[0]
-        .timeSignature
-    )
-    if global_ts is None:
+    global_ts=None
+    try:
+        score_data[C.GLOBAL_TIME_SIGNATURE] = (
+            score_data[C.DATA_FILTERED_PARTS][0]
+            .getElementsByClass(Measure)[0]
+            .timeSignature
+        )
+        global_ts = score_data[C.GLOBAL_TIME_SIGNATURE]
+    except Exception:
         pwarn('Global Time Signature could not possible to be extracted!')
+    # if global_ts is None:
+    #     pwarn('Global Time Signature could not possible to be extracted!')
     return global_ts

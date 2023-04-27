@@ -5,6 +5,7 @@ from pathlib import Path, PurePath
 from subprocess import DEVNULL
 from tempfile import mkstemp
 from typing import List, Optional, Tuple, Union
+import ipdb
 
 import ms3
 import pandas as pd
@@ -709,3 +710,7 @@ class FeaturesExtractor:
             raise FeatureError(
                 f"In {score_name} while computing {module.__name__}"
             ) from e
+        # except Exception:
+        #     score_name = score_data["file"]
+        #     print(f"{score_name} gives trouble, going to the next one")
+        #     pass
