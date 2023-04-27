@@ -7,6 +7,8 @@ import tempfile
 import subprocess
 import pandas as pd
 
+import musif.extract.constants as C
+from musif.logs import pwarn
 from musif.extract.features.jsymbolic.utils import get_java_path, _jsymbolic_path
 
 JSYMBOLIC_JAR = str(_jsymbolic_path())
@@ -32,9 +34,15 @@ def update_score_objects(
         # 2. convert the score to MEI usiing music21
         # TODO: if music21 implements export to MEI, use it
         midi_path = os.path.abspath(os.path.join(tmpdirname, "score.midi"))
-        with open(os.devnull, 'w') as devnull:
-            with contextlib.redirect_stdout(devnull):
-                score_data['score'].write("MIDI", midi_path)
+        try:
+            with open(os.devnull, 'w') as devnull:
+                with contextlib.redirect_stdout(devnull):
+                    score_data['score'].write("MIDI", midi_path)
+        except Exception as e:
+            filename = score_data[C.DATA_FILE]
+            pwarn(f"jSymbolic: could not convert {filename} to MIDI: {e}")
+            return
+
         # 3. run the MEI file through the jSymbolic jar savign csv into the temporary
         # directory in RAM
         out_path = os.path.abspath(os.path.join(tmpdirname, "features"))
@@ -46,15 +54,20 @@ def update_score_objects(
                ]
         if cfg.jsymbolic_config_file is not None:
             cmd += ["-configrun", cfg.jsymbolic_config_file]
-        subprocess.run(
-            cmd + [
-                midi_path,
-                out_path + ".xml",
-                out_path + "_def.xml",
-            ],
-            check=True,
-            stdout=subprocess.DEVNULL,
-        )
+        try:
+            subprocess.run(
+                cmd + [
+                    midi_path,
+                    out_path + ".xml",
+                    out_path + "_def.xml",
+                ],
+                check=True,
+                stdout=subprocess.DEVNULL,
+            )
+        except Exception as e:
+            filename = score_data[C.DATA_FILE]
+            pwarn(f"jSymbolic: cannot run jSymbolic on {filename}: {e}")
+            return
         # 4. read the csv file into a pandas dataframe
         df = pd.read_csv(out_path + ".csv", na_values=["NaN", " NaN", "NaN ", " NaN "])
         df = df.drop(columns=df.columns[0])
