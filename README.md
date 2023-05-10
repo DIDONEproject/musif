@@ -4,6 +4,12 @@ Python library for **Music Feature Extraction and Analysis**, developed by [Dido
 
 For more info, see the documentation website at: https://musif.didone.eu
 
+### Instalation
+To install the latest version of musif, just run
+<pip install musif>
+which will download musif and all its necessary dependencies. 
+IMPORTANT: If jsymbolic featers are selected for extraction, JAVA must be installed and JAVA_HOME included in the environment variables. Musif will download Jsymbolic automatically and these features will be available during the extraction.
+  
 ## Changelog
 
 #### v1.1.0
