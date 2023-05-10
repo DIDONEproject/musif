@@ -9,7 +9,10 @@ To install the latest version of musif, just run
 <pip install musif>
 which will download musif and all its necessary dependencies. 
 IMPORTANT: If jsymbolic featers are selected for extraction, JAVA must be installed and JAVA_HOME included in the environment variables. Musif will download Jsymbolic automatically and these features will be available during the extraction.
-  
+(In case oof problems when install Java or geting it to work as a command, these sites might be helpful:
+https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
+https://help.sap.com/docs/SAP_BUSINESSOBJECTS_ANALYSIS,_EDITION_FOR_OLAP/c4341f1ce3324d9d9309163567effc1b/eca795926fdb101497906a7cb0e91070.html )
+ 
 ## Changelog
 
 #### v1.1.0
