@@ -7,12 +7,16 @@ For more info, see the documentation website at: https://musif.didone.eu
 ### Instalation
 To install the latest version of musif, just run
 <pip install musif>
-which will download musif and all its necessary dependencies. 
-IMPORTANT: If jsymbolic featers are selected for extraction, JAVA must be installed and JAVA_HOME included in the environment variables. Musif will download Jsymbolic automatically and these features will be available during the extraction.
-(In case oof problems when install Java or geting it to work as a command, these sites might be helpful:
-https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
-https://help.sap.com/docs/SAP_BUSINESSOBJECTS_ANALYSIS,_EDITION_FOR_OLAP/c4341f1ce3324d9d9309163567effc1b/eca795926fdb101497906a7cb0e91070.html )
+which will download musif and all its necessary dependencies.
+
+# Jsymbolic and music21 features
+Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 installed in your OS and JAVA_HOME included in the environment variables. jSymbolic will be downloaded automatically at the first run. You can force the download of jSymbolic and the check of Java installation by running python -m musif.extract.features.jsymbolicMusif will download Jsymbolic automatically and these features will be available during the extraction.
+Important: right now these features are NOT compatible with musif's cache system, unlike the other stock features. 
  
+(In case of problems when installing Java or getting it to work as a command, these sites might be helpful:
+https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
+https://www.wikihow.com/Set-Java-Home)
+
 ## Changelog
 
 #### v1.1.0
