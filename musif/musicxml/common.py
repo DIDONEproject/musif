@@ -128,6 +128,8 @@ def get_notes_and_measures(
 
 def _separate_info_in_two_parts(score, final_parts, part):
     parts_splitted = part.voicesToParts().elements
+    for p in parts_splitted[1:]:
+        p.removeByClass("RepeatMark")
     num_measure = 0
     for measure in part.elements:
         # add missing information to both parts (dynamics, text annotations, etc are
@@ -138,7 +140,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
                 not_voices_elements = [
                     e
                     for e in measure.elements
-                    if not isinstance(e, (RepeatMark, Voice))
+                    if not isinstance(e, Voice)
                 ]  # elements such as clefs, dynamics, text annotations...
                 for p in parts_splitted:
                     if measure.measureNumber == 0 and isinstance(measure, Measure):
@@ -162,6 +164,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
         p.id = part.id + " " + toRoman(num)  # only I or II
         p.partName = part.partName + " " + toRoman(num)  # only I or II
         # p.elements = p.elements
+        p.write("MIDI", "temp_.mid")
         final_parts.append(p)
 
         # p_copy = copy.deepcopy(part)
