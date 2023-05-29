@@ -6,6 +6,12 @@ For more info, see the documentation website at: https://musif.didone.eu
 
 ## Changelog
 
+#### v1.1.2
+* fixed major bug with music21 automatic onversion to MIDI for jSymbolic features
+
+#### v1.1.1
+* added exception handling for jSymbolic
+
 #### v1.1.0
 * bug fixing
 * improved musif parsing abilities for non-well formatted files
