@@ -1,7 +1,9 @@
+from copy import deepcopy
 from typing import List, Tuple
 
 from music21.interval import Interval
 from music21.note import Note
+from music21.repeat import RepeatMark
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
@@ -134,7 +136,9 @@ def _separate_info_in_two_parts(score, final_parts, part):
             num_measure += 1
             if any(not isinstance(e, Voice) for e in measure.elements):
                 not_voices_elements = [
-                    e for e in measure.elements if not isinstance(e, Voice)
+                    e
+                    for e in measure.elements
+                    if not isinstance(e, (RepeatMark, Voice))
                 ]  # elements such as clefs, dynamics, text annotations...
                 for p in parts_splitted:
                     if measure.measureNumber == 0 and isinstance(measure, Measure):
@@ -142,7 +146,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
                         # only add elements if we are in am measure
                         if isinstance(p.elements[num_measure], Measure):
                             p.elements[num_measure].elements += tuple(
-                                e
+                                deepcopy(e)
                                 for e in not_voices_elements
                                 if e not in p.elements[num_measure].elements
                             )
@@ -150,7 +154,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
                         if not isinstance(p.elements[num_measure], Measure):
                             continue
                         p.elements[num_measure].elements += tuple(
-                            e
+                            deepcopy(e)
                             for e in not_voices_elements
                             if e not in p.elements[num_measure].elements
                         )
