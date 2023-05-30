@@ -33,7 +33,7 @@ from musif.extract.utils import (
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
-from musif.musicxml import extract_numeric_tempo, name_parts, split_layers
+from musif.musicxml import extract_numeric_tempo, name_parts, split_layers, fix_repeats
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,
@@ -80,7 +80,7 @@ def parse_filename(
     if score is not None:
         return score
     try:
-        score = parse(file_path)
+        score = parse(file_path).makeRests()
         if export_dfs_to is not None:
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name
@@ -93,6 +93,7 @@ def parse_filename(
             )
             score.remove(unpitched_objs, recurse=True)
         split_layers(score, split_keywords)
+        fix_repeats(score)
         if expand_repeats:
             score = score.expandRepeats()
         _cache.put(file_path, score)
