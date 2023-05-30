@@ -28,6 +28,7 @@ REMOVE_UNPITCHED_OBJECTS = "remove_unpitched_objects"
 MSCORE_EXEC = "mscore_exec"
 JSYMBOLIC_CONFIG_FILE = "jsymbolic_config_file"
 JSYMBOLIC_MAX_RAM = "jsymbolic_max_ram"
+JSYMBOLIC_TRY_WITHOUT_REPEATS = "jsymbolic_try_without_repeats"
 # Didone specific?
 SPLIT_KEYWORDS = "split_keywords"
 
@@ -73,7 +74,8 @@ _CONFIG_FALLBACK = {
     DFS_DIR: None,
     REMOVE_UNPITCHED_OBJECTS: True,
     JSYMBOLIC_MAX_RAM: "4g",
-    JSYMBOLIC_CONFIG_FILE: None
+    JSYMBOLIC_CONFIG_FILE: None,
+    JSYMBOLIC_TRY_WITHOUT_REPEATS: False
 }
 
 _CONFIG_POST_FALLBACK = {

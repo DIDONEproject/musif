@@ -22,6 +22,12 @@ def get_tmpdir():
         return tempfile.TemporaryDirectory()
 
 
+def write_midi(score, midi_path):
+    with open(os.devnull, "w") as devnull:
+        with contextlib.redirect_stdout(devnull):
+            score.write("MIDI", midi_path)
+
+
 def update_score_objects(
     score_data: dict,
     parts_data: List[dict],
@@ -29,34 +35,48 @@ def update_score_objects(
     parts_features: List[dict],
     score_features: dict,
 ):
+    score = score_data["score"]
     # 1. create a temporary directory (if Linux, force RAM usig /dev/shm)
     with get_tmpdir() as tmpdirname:
         # 2. convert the score to MEI usiing music21
         # TODO: if music21 implements export to MEI, use it
         midi_path = os.path.abspath(os.path.join(tmpdirname, "score.midi"))
         try:
-            with open(os.devnull, 'w') as devnull:
-                with contextlib.redirect_stdout(devnull):
-                    score_data['score'].write("MIDI", midi_path)
+            write_midi(score, midi_path)
         except Exception as e:
             filename = score_data[C.DATA_FILE]
-            pwarn(f"jSymbolic: could not convert {filename} to MIDI: {e}")
-            return
+            if cfg.jsymbolic_try_without_repeats:
+                found = False
+                for el in score.recurse().getElementsByClass("RepeatMark"):
+                    found = True
+                    # WARNING! this is not campatible with the cache system!
+                    score.remove(el, recurse=True)
+                if found:
+                    try:
+                        write_midi(score, midi_path)
+                    except Exception as e:
+                        pwarn(f"jsymbolic: could not convert {filename} to midi: {e}")
+                        return
+            if not cfg.jsymbolic_try_without_repeats or not found:
+                pwarn(f"jSymbolic: could not convert {filename} to MIDI: {e}")
+                return
 
-        # 3. run the MEI file through the jSymbolic jar savign csv into the temporary
+        # 3. run the MEI file through the jSymbolic jar saving csv into the temporary
         # directory in RAM
         out_path = os.path.abspath(os.path.join(tmpdirname, "features"))
-        cmd = [JAVA_PATH,
-               f"-Xmx{cfg.jsymbolic_max_ram}",
-               "-jar",
-               JSYMBOLIC_JAR,
-               "-csv",
-               ]
+        cmd = [
+            JAVA_PATH,
+            f"-Xmx{cfg.jsymbolic_max_ram}",
+            "-jar",
+            JSYMBOLIC_JAR,
+            "-csv",
+        ]
         if cfg.jsymbolic_config_file is not None:
             cmd += ["-configrun", cfg.jsymbolic_config_file]
         try:
             subprocess.run(
-                cmd + [
+                cmd
+                + [
                     midi_path,
                     out_path + ".xml",
                     out_path + "_def.xml",
@@ -74,7 +94,7 @@ def update_score_objects(
         # 5. add `js_` prefix to the column names
         df.columns = ["js_" + c for c in df.columns]
         # 6. load the features into the score_features dictionary
-        score_features.update(df.to_dict(orient='records')[0])
+        score_features.update(df.to_dict(orient="records")[0])
 
 
 def update_part_objects(
