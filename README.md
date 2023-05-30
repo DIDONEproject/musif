@@ -20,11 +20,11 @@ https://www.wikihow.com/Set-Java-Home
 
 ## Changelog
 
-#### v1.1.2
+#### v1.1.1 - v1.1.3
 * fixed major bug with music21 automatic onversion to MIDI for jSymbolic features
-
-#### v1.1.1
 * added exception handling for jSymbolic
+* fixed repeats for MIDI conversion for jSymbolic
+* fixed initial anacrusis
 
 #### v1.1.0
 * bug fixing
