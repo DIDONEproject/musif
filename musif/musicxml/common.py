@@ -1,7 +1,10 @@
+from copy import deepcopy
 from typing import List, Tuple
+import itertools
 
 from music21.interval import Interval
 from music21.note import Note
+from music21.repeat import RepeatMark
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
@@ -91,7 +94,7 @@ def split_layers(score: Score, split_keywords: List[str]):
             final_parts.append(part)  # without any change
             score.remove(part)
 
-    for part in final_parts:
+    for idx, part in enumerate(final_parts):
         try:
             score.insert(0, part)
         except Exception:
@@ -142,7 +145,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
                         # only add elements if we are in am measure
                         if isinstance(p.elements[num_measure], Measure):
                             p.elements[num_measure].elements += tuple(
-                                e
+                                deepcopy(e)
                                 for e in not_voices_elements
                                 if e not in p.elements[num_measure].elements
                             )
@@ -150,7 +153,7 @@ def _separate_info_in_two_parts(score, final_parts, part):
                         if not isinstance(p.elements[num_measure], Measure):
                             continue
                         p.elements[num_measure].elements += tuple(
-                            e
+                            deepcopy(e)
                             for e in not_voices_elements
                             if e not in p.elements[num_measure].elements
                         )
@@ -160,11 +163,6 @@ def _separate_info_in_two_parts(score, final_parts, part):
         # p.elements = p.elements
         final_parts.append(p)
 
-        # p_copy = copy.deepcopy(part)
-        # p_copy.id = p_copy.id + " " + toRoman(num)  # only I or II
-        # p_copy.partName = p_copy.partName + " " + toRoman(num)  # only I or II
-        # p_copy.elements = p.elements
-        # final_parts.append(p_copy)
     score.remove(part)
 
 
@@ -220,3 +218,27 @@ def _get_lyrics_in_notes(notes: List[Note]) -> List[str]:
         ]
         lyrics.extend(note_lyrics)
     return lyrics
+
+
+def fix_repeats(score: Score):
+    """Fix the repeat sign in the score by ensuring that all the parts have
+    the same signs"""
+    signs = score.recurse().getElementsByClass("RepeatMark")
+    # measure_parts is an iterator, but successive loops won't restart from index
+    # 0 but from where the previous one was left
+    # for this, we use itertools.chain to force the creation of a proper
+    # iterator
+    measure_parts = [
+        itertools.chain(p.getElementsByClass("Measure")) for p in score.parts
+    ]
+    for sign in signs:
+        measure_sign = sign.activeSite
+        measure_sign_offset = measure_sign.offset
+        offset_sign = sign.offset
+        for measures in measure_parts:
+            for m in measures:
+                if m.offset == measure_sign_offset:
+                    marks = m.getElementsByClass("RepeatMark")
+                    if sign.__class__ not in [mark.__class__ for mark in marks]:
+                        m.insert(offset_sign, sign)
+                    break
