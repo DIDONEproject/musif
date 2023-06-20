@@ -1,2 +1,2 @@
 from .constants import *
-musif_dependencies = ['core']
+musif_dependencies = ['core', 'tempo']
