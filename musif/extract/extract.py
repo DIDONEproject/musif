@@ -1,6 +1,7 @@
 import os
 import pickle
 import subprocess
+import types
 from pathlib import Path, PurePath
 from subprocess import DEVNULL
 from tempfile import mkstemp
@@ -9,39 +10,36 @@ from typing import List, Optional, Tuple, Union
 import ms3
 import pandas as pd
 from joblib import Parallel, delayed
-from music21.converter import parse
+from music21.converter import parse, toData
 from music21.stream import Measure, Part, Score
 from pandas import DataFrame
 from tqdm import tqdm
+from music21 import stream
 
 import musif.extract.constants as C
-from musif.cache import (
-    CACHE_FILE_EXTENSION,
-    FileCacheIntoRAM,
-    SmartModuleCache,
-    store_score_df,
-)
+from musif.cache import (CACHE_FILE_EXTENSION, FileCacheIntoRAM,
+                         SmartModuleCache, store_score_df)
 from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
-from musif.extract.utils import (
-    cast_mixed_dtypes,
-    extract_global_time_signature,
-    process_musescore_file,
-)
+from musif.extract.utils import (cast_mixed_dtypes,
+                                 extract_global_time_signature,
+                                 process_musescore_file)
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
-from musif.musicxml import extract_numeric_tempo, name_parts, split_layers, fix_repeats
-from musif.musicxml.scoring import (
-    _extract_abbreviated_part,
-    extract_sound,
-    to_abbreviation,
-)
+from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
+                            split_layers)
+from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
+                                    to_abbreviation)
 
 _cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
+# attach a method to convert it into bytestring
+# the first argument of toData is the object to be translated, so that could be the `self` of a class method, perfectly ok
+# this must be done before of start the caching, because we are modifying the object!
+stream.Stream.toData = toData
 
 def parse_filename(
     file_path: str,
@@ -80,11 +78,14 @@ def parse_filename(
     if score is not None:
         return score
     try:
+
         score = parse(file_path).makeRests()
         if export_dfs_to is not None:
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name
             store_score_df(score, dest_path)
+            
+
         # give a name to all parts in the score
         name_parts(score)
         if remove_unpitched_objects:
@@ -540,6 +541,7 @@ class FeaturesExtractor:
     ) -> dict:
         data = None
         info_load_str = ""
+        
         if load_cache is not None and load_cache.exists():
             try:
                 data = pickle.load(open(load_cache, "rb"))
@@ -547,7 +549,7 @@ class FeaturesExtractor:
                 info_load_str += f" Error while loading pickled object, continuing with extraction from scratch: {e}"
             else:
                 info_load_str += " File was loaded from cache."
-
+                
         if data is None:
             try:
                 score, filtered_parts, numeric_tempo = self._load_xml_data(filename)
