@@ -19,21 +19,23 @@ class JavaNotFoundError(RuntimeError):
 
 
 def get_java_path():
-    java = __get_java_path_env()
-    if java is not None:
-        return java
-    java = __get_java_path_subprocess()
-    if java is not None:
-        return java
-    java = __get_java_path_env()
-    if java is not None:
-        return java
+    try:
+        java = __get_java_path_env()
+        if java is not None:
+            return java
+        java = __get_java_path_shutil()
+        if java is not None:
+            return java
+    except Exception as e:
+        pass  # just raise an exception, see next line
     raise JavaNotFoundError(
         "Could not find Java Runtime Environment (JRE)! Please, set JAVA_HOME environment variable or make it available in the PATH."
     )
 
 
 def __get_java_path_env():
+    if ["JAVA_HOME"] not in os.environ:
+        return None
     if sys.platform == "win32":
         java = os.path.join(os.environ["JAVA_HOME"], "bin", "java.exe")
     else:
@@ -47,13 +49,6 @@ def __get_java_path_env():
 def __get_java_path_shutil():
     path = shutil.which("java")
     return path
-
-
-def __get_java_path_subprocess():
-    try:
-        return subprocess.check_output(["which", "java"]).decode("utf-8").strip()
-    except subprocess.CalledProcessError:
-        return None
 
 
 def _jsymbolic_path():
