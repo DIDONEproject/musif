@@ -21,6 +21,8 @@ API <API/modules>
 General index <genindex>
 Module index <modindex>
 Search <search>
+
+[Source code](https://github.com/DIDONEproject/musif/)
 ```
 
 `musif` is a Python module for computing features from music scores. It has been designed and extensively used by the [Didone](https://didone.eu) team for analyzing arias from 18th-century Italian operas on texts by Pietro Metastasio.
