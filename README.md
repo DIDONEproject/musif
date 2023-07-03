@@ -4,19 +4,24 @@ Python library for **Music Feature Extraction and Analysis**, developed by [Dido
 
 For more info, see the documentation website at: https://musif.didone.eu
 
-### Instalation
+### Installation
 To install the latest version of musif, just run
 `pip install musif`
 which will download musif and all its necessary dependencies.
 
-# jSymbolic and music21 features
-Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable correctly set. `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
+## jSymbolic and music21 features
+Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable is correctly set. `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
 
 *Important*: right now jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike the other stock features and music21 ones. 
  
 In case of problems when installing Java or getting it to work as a command, these sites might be helpful:
 https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
 https://www.wikihow.com/Set-Java-Home
+
+## References 
+
+1. A. Llorens, F. Simonetta, M. Serrano, and Á. Torrente, “musif: a Python package for symbolic music feature extraction,” in Proceedings of the Sound and Music Computing Conference, Stockholm, Sweden, 2023.
+2. F. Simonetta, A. Llorens, M. Serrano, E. García-Portugués, and Á. Torrente, “Optimizing Feature Extraction for Symbolic Music,” in Proceedings of the 24th International Society for Music Information Retrieval Conference, Milan, Nov. 2023.
 
 ## Changelog
 
