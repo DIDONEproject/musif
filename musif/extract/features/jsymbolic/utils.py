@@ -27,14 +27,16 @@ def get_java_path():
         if java is not None:
             return java
     except Exception as e:
-        pass  # just raise an exception, see next line
+        exc = "Raised exception: " + str(e)
+    else:
+        exc = ""
     raise JavaNotFoundError(
-        "Could not find Java Runtime Environment (JRE)! Please, set JAVA_HOME environment variable or make it available in the PATH."
+        "Could not find Java Runtime Environment (JRE)! Please, set JAVA_HOME environment variable or make it available in the PATH. " + exc
     )
 
 
 def __get_java_path_env():
-    if ["JAVA_HOME"] not in os.environ:
+    if "JAVA_HOME" not in os.environ:
         return None
     if sys.platform == "win32":
         java = os.path.join(os.environ["JAVA_HOME"], "bin", "java.exe")
