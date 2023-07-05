@@ -538,16 +538,28 @@ class FeaturesExtractor:
     def _get_score_data(
         self, filename: PurePath, load_cache: Optional[Path] = None
     ) -> dict:
-        data = None
+        from music21 import converter
+        import types
+        data = None 
         info_load_str = ""
         if load_cache is not None and load_cache.exists():
+            s = converter.parse(filename)
+            s.toData = types.MethodType(converter.toData, converter)
+            cached_object = SmartModuleCache(s)
             try:
                 data = pickle.load(open(load_cache, "rb"))
             except Exception as e:
                 info_load_str += f" Error while loading pickled object, continuing with extraction from scratch: {e}"
             else:
                 info_load_str += " File was loaded from cache."
-
+            # get bytes
+            bytes = cached_object.toData('midi')
+            # write to file
+            with open('output.mid', 'wb') as f:
+                f.write(bytes)
+            # save cached object
+            pickle.dump(cached_object, open(load_cache, 'wb'))
+        
         if data is None:
             try:
                 score, filtered_parts, numeric_tempo = self._load_xml_data(filename)
