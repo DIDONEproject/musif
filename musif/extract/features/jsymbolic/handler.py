@@ -23,9 +23,9 @@ def get_tmpdir():
 
 
 def write_midi(score, midi_path):
-    with open(os.devnull, "w") as devnull:
-        with contextlib.redirect_stdout(devnull):
-            score.write("MIDI", midi_path)
+    bytes = score.toData('midi') 
+    with open(midi_path, 'wb') as f:
+        f.write(bytes)
 
 
 def update_score_objects(
@@ -82,7 +82,7 @@ def update_score_objects(
                     out_path + "_def.xml",
                 ],
                 check=True,
-                stdout=subprocess.DEVNULL,
+                # stdout=subprocess.DEVNULL,
             )
         except Exception as e:
             filename = score_data[C.DATA_FILE]
