@@ -7,7 +7,7 @@ dependencies = [
     'roman>=3.3',
     'joblib>=1.0.0',
     'scipy>=1.6.0',
-    'music21>=8,<9',
+    'music21>=9.1',
     # music21 has a different version for each python 3.*
     "deepdiff>=6.2.1",
 ]
