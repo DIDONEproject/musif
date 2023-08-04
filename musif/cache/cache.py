@@ -1,6 +1,6 @@
 import logging
 import random
-import traceback
+import weakref
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from deepdiff import DeepHash, deephash
@@ -64,6 +64,10 @@ class ObjectReference:
     def get_attr(self, name: str) -> Any:
         if not hasattr(self, "reference") or self.reference is None:
             # pinfo(f"Resurrecting reference object due to call to attribute '{name}'")
+            # traceback = __import__('traceback')
+            # traceback.print_list(
+            #     [f for f in traceback.extract_stack() if "musif" in f.filename]
+            # )
             self._try_resurrect()
         return getattr(self.reference, name)
 
@@ -255,6 +259,7 @@ class SmartModuleCache:
         pwarn(
             "You are using a music21 object in writing mode! consider change your code so that SmartModuleCache works correctly. See the stack-trace:"
         )
+        # traceback = __import__('traceback')
         # traceback.print_list(
         #     [f for f in traceback.extract_stack() if "musif" in f.filename]
         # )
@@ -330,6 +335,7 @@ class SmartModuleCache:
         pwarn(
             "You are using a music21 object in writing mode! consider change your code so that SmartModuleCache works correctly. See the stack-trace:"
         )
+        # traceback = __import__('traceback')
         # traceback.print_list(
         #     [f for f in traceback.extract_stack() if "musif" in f.filename]
         # )
@@ -378,12 +384,29 @@ class CallableArguments:
     """
 
     def __init__(self, *args, **kwargs):
-        self.args = args
-        self.kwargs = kwargs
+        self.args = []
+        self.kwargs = {}
+
+        # removing weakreferences (cannot be pickled)
+        for arg in args:
+            if isinstance(arg, weakref.ReferenceType):
+                __import__('ipdb').set_trace()
+                self.args.append(arg())
+            else:
+                self.args.append(arg)
+
+        for k, v in kwargs.items():
+            if isinstance(k, weakref.ReferenceType):
+                __import__('ipdb').set_trace()
+                k = k()
+            if isinstance(v, weakref.ReferenceType):
+                __import__('ipdb').set_trace()
+                v = v()
+            kwargs[k] = v
 
         h = ""
 
-        # hashing  SmartModuleCache
+        # hashing SmartModuleCache
         for arg in self.args:
             if type(arg) is SmartModuleCache:
                 h += str(hash(arg))
@@ -395,7 +418,7 @@ class CallableArguments:
                 h += str(hash(v))
 
         # hashing other object types by value
-        all_args = (args, kwargs)
+        all_args = (self.args, self.kwargs)
         h += DeepHash(all_args, exclude_types=[SmartModuleCache])[all_args]
 
         self._hash = int(h, 16)
@@ -476,10 +499,11 @@ class MethodCache:
                 kwargs = {k: v.cache["_reference"].reference for k, v in kwargs.items()}
             res = attr(*args, **kwargs)
             if res is None:
-                res = _MyNone
+                # caching _MyNone and returning None
+                self.cache[call_args] = _MyNone
             else:
                 res = self._wmo(res, args=(*args, *kwargs.values()))
-            self.cache[call_args] = res
+                self.cache[call_args] = res
             if self.check_reference_changes and self.reference.ischanged():
                 pwarn(str(SmartCacheModified(self, self.name)))
             return res

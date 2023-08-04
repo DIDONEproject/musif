@@ -73,7 +73,17 @@ instruments_to_delete: []
   # - CiII
   # - CiI
 
+# Rows having more than this percentage of NaN will be deleted
+# value null (or None) means "keep all"
+max_nan_rows: null
+
+# Columns having more than this percentage of NaN will be deleted (applied after
+# `max_nan_rows`)
+# value null (or None) means "keep all"
+max_nan_columns: null
+
 # Columns containing these substrings will have nan values replaced with 0
+# Applied after `max_nan_rows` and `max_nan_columns`
 # Matching is case-sensitive
 replace_nans: []
   # Example of values (but any substring can be used):

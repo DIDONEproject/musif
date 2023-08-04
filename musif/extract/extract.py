@@ -26,11 +26,15 @@ from musif.common._constants import GENERAL_FAMILY
 from musif.common.exceptions import FeatureError, ParseFileError
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
-from musif.extract.utils import extract_global_time_signature, process_musescore_file, cast_mixed_dtypes
-from musif.logs import ldebug, lerr, linfo, lwarn, perr, pinfo, pdebug, pwarn
+from musif.extract.utils import (
+    cast_mixed_dtypes,
+    extract_global_time_signature,
+    process_musescore_file,
+)
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
-from musif.musicxml import extract_numeric_tempo, split_layers
+from musif.musicxml import extract_numeric_tempo, name_parts, split_layers
 from musif.musicxml.scoring import (
     _extract_abbreviated_part,
     extract_sound,
@@ -45,6 +49,7 @@ def parse_filename(
     split_keywords: List[str],
     expand_repeats: bool = False,
     export_dfs_to: Union[str, PurePath] = None,
+    remove_unpitched_objects: bool = True,
 ) -> Score:
     """
     This function parses a musicxml file and returns a music21 Score object. If
@@ -81,6 +86,13 @@ def parse_filename(
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name
             store_score_df(score, dest_path)
+        # give a name to all parts in the score
+        name_parts(score)
+        if remove_unpitched_objects:
+            unpitched_objs = list(
+                score.flatten().getElementsByClass(["PercussionChord", "Unpitched"])
+            )
+            score.remove(unpitched_objs, recurse=True)
         split_layers(score, split_keywords)
         if expand_repeats:
             score = score.expandRepeats()
@@ -126,7 +138,7 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
 
 
 def find_files(
-    extension: str,
+    extensions: str or List[str],
     base_dir: Union[str, List[Union[str, PurePath]]],
     limit_files: List[str] = None,
     exclude_files: List[str] = None,
@@ -141,14 +153,14 @@ def find_files(
 
     Parameters
     ----------
-    extension: str
-        A string representing the extension that will be looked for
+    extension: str or Iterable[str]
+        A list of strings representing the extensions that will be looked for
     base_dir : Union[str, Iterable[str]]
         A path or directory
-    limit_files: List[str] = None
+    limit_files: Iterable[str] = None
         List of file names relative to `base_dir`. Only these files are taken.
         Incompatible with `exclude_files`
-    exclude_files: List[str] = None
+    exclude_files: Iterable[str] = None
         List of file names relative to `base_dir`. None of these files are taken.
         Incompatible with `limit_files`
 
@@ -166,13 +178,18 @@ def find_files(
     ValueError
       If the provided string is neither a directory nor a file path
     """
+    if isinstance(extensions, str):
+        extensions = [extensions]
+
     if base_dir is None:
         return []
     base_dir = Path(base_dir)
     if not base_dir.exists():
         raise ValueError(f"File {base_dir} doesn't exist")
     elif base_dir.is_dir():
-        ret = sorted(base_dir.glob(f"**/*{extension}"))
+        ret = []
+        for ext in extensions:
+            ret += sorted([f for f in base_dir.glob(f"**/*{ext}") if f.is_file()])
         if limit_files is not None:
             limit_stems = set(map(lambda x: Path(x).stem, limit_files))
             return [f for f in ret if f.stem in limit_stems]
@@ -181,7 +198,7 @@ def find_files(
             return [f for f in ret if f.stem not in exclude_stems]
         else:
             return ret
-    elif base_dir.is_file() and base_dir.suffix == f"{extension}":
+    elif base_dir.is_file() and base_dir.suffix in extensions:
         return [base_dir]
     else:
         return []
@@ -191,12 +208,14 @@ def find_files(
 class FeaturesExtractor:
     """
     Extract features for a score or a list of scores, according to the parameters
-    established in the configurtaion files. It extracts musical features from .xml and
-    .mscx files based on the configuration and stores them in a dictionary
-    (score features) that at the end will be returned as a DataFrame. Features
-    corresponds to modules placed in musif/features directory, and will be computed in
-    order according to the configuration. Some features might depend on the previous
-    ones, so order is important.
+    established in the configuration files. It extracts musical features using music21
+    and ms3 library, based on the configuration and stores them in a dictionary
+    (score features) that at the end will be returned as a DataFrame by the
+    `extract` method.
+
+    During the parsing, unpitched objects, (e.g. objects referred to percussion
+    instruments) may be removed (see the option
+    `remove_unpitched_objects` in the configuration).
 
     """
 
@@ -236,6 +255,12 @@ class FeaturesExtractor:
             pinfo("Cache activated!")
             Path(self._cfg.cache_dir).mkdir(exist_ok=True)
 
+        if "jsymbolic" in self._cfg.features:
+            from musif.extract.features import jsymbolic
+
+            jsymbolic.utils.download_jsymbolic()
+            jsymbolic.utils.get_java_path()
+
     def extract(self) -> DataFrame:
         """
         Extracts features given in the configuration data getting a file, directory or several file paths,
@@ -255,7 +280,7 @@ class FeaturesExtractor:
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
         xml_filenames = find_files(
-            musicxml_c.MUSICXML_FILE_EXTENSION,
+            musicxml_c.MUSIC21_FILE_EXTENSIONS,
             self._cfg.xml_dir,
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
@@ -299,10 +324,19 @@ class FeaturesExtractor:
         self, filenames: List[PurePath]
     ) -> Tuple[List[dict], List[dict]]:
         def process_corpus_par(idx, filename):
-            if self._cfg.window_size is not None:
-                score_features = self._process_score_windows(idx, filename)
-            else:
-                score_features = self._process_score(idx, filename)
+            try:
+                if self._cfg.window_size is not None:
+                    score_features = self._process_score_windows(idx, filename)
+                else:
+                    score_features = self._process_score(idx, filename)
+            except Exception as e:
+                if self._cfg.ignore_errors:
+                    lerr(
+                        f"Error while extracting features for file {filename}, skipping it because `ignore_errors` is True!"
+                    )
+                    return {}
+                else:
+                    raise e
             return score_features
 
         scores_features = Parallel(n_jobs=self._cfg.parallel)(
@@ -321,14 +355,17 @@ class FeaturesExtractor:
         else:
             all_dfs = DataFrame(scores_features)
             all_dfs = all_dfs.reindex(sorted(all_dfs.columns), axis=1)
-            all_dfs.replace("NA", pd.NA, inplace=True)
+            all_dfs = all_dfs.replace("NA", pd.NA)
         return all_dfs
 
     def _init_score_processing(self, idx: int, filename: PurePath):
         if self._cfg.cache_dir is not None:
-            cache_name = Path(self._cfg.cache_dir) / (
-                filename.with_suffix(CACHE_FILE_EXTENSION).name
+            cache_name = (
+                Path(self._cfg.cache_dir)
+                / filename.parent
+                / (filename.name + CACHE_FILE_EXTENSION)
             )
+            cache_name.parent.mkdir(parents=True, exist_ok=True)
         else:
             cache_name = None
         score_data = self._get_score_data(filename, load_cache=cache_name)
@@ -351,10 +388,10 @@ class FeaturesExtractor:
             parts_data,
             score_data,
         ) = self._init_score_processing(idx, filename)
+        extract_global_time_signature(score_data)
         score_features = self.extract_modules(
             self._cfg.feature_modules_addresses, score_data, parts_data, basic=False
         )
-        extract_global_time_signature(score_data)
         score_features = {**basic_features, **score_features}
         score_features[C.WINDOW_ID] = 0
 
@@ -362,9 +399,7 @@ class FeaturesExtractor:
             pickle.dump(score_data, open(cache_name, "wb"))
         return score_features
 
-    def _process_score_windows(
-        self, idx: int, filename: PurePath
-    ) -> List[dict]:
+    def _process_score_windows(self, idx: int, filename: PurePath) -> List[dict]:
         (
             basic_features,
             cache_name,
@@ -413,15 +448,17 @@ class FeaturesExtractor:
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
         return all_windows_features
-    
+
     def _select_window_data(
         self, score_data: dict, parts_data: list, first_measure: int, last_measure: int
     ):
         window_score = score_data[C.DATA_SCORE].measures(
             first_measure, last_measure, indicesNotNumbers=True
         )
-        filtered_partNames = [i.partName for i in score_data['parts']]
-        window_parts = [i for i in window_score.parts if i.partName in filtered_partNames]
+        filtered_partNames = [i.partName for i in score_data["parts"]]
+        window_parts = [
+            i for i in window_score.parts if i.partName in filtered_partNames
+        ]
         if (
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
@@ -474,7 +511,7 @@ class FeaturesExtractor:
                 # this is needed to allow stuffs like `xvfb-run -a mscore`
                 mscore = (mscore,)
             tmp_d, tmp_path = mkstemp(
-                prefix=filename.stem, suffix=musicxml_c.MUSICXML_FILE_EXTENSION
+                prefix=filename.stem, suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
             )
             process = mscore + ("-fo", tmp_path, filename)
             res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
@@ -489,6 +526,7 @@ class FeaturesExtractor:
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
             export_dfs_to=self._cfg.dfs_dir,
+            remove_unpitched_objects=self._cfg.remove_unpitched_objects,
         )
         numeric_tempo = extract_numeric_tempo(tmp_path)
         if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
@@ -548,7 +586,7 @@ class FeaturesExtractor:
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
-                    if isinstance(hook,str):
+                    if isinstance(hook, str):
                         hook = __import__(hook, fromlist=[""])
                     hook.execute(self._cfg, data)
             if self._cfg.cache_dir is not None:
@@ -586,7 +624,7 @@ class FeaturesExtractor:
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
-        self._deal_with_dupicated_parts(parts)
+        # self._deal_with_dupicated_parts(parts)
         if self._cfg.parts_filter is None or len(self._cfg.parts_filter) == 0:
             return parts
         filter_set = set(self._cfg.parts_filter)
@@ -634,7 +672,7 @@ class FeaturesExtractor:
 
     def _find_modules(self, package: str, basic: bool):
         found_features = set()
-        if isinstance(package,str):
+        if isinstance(package, str):
             package = __import__(package, fromlist=[""])
         if basic:
             to_extract = self._cfg.basic_modules

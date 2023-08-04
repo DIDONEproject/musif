@@ -1,15 +1,15 @@
-import re
-from asyncio import constants
 from collections import Counter
+from itertools import groupby
 from statistics import mean, stdev
-from typing import List, Tuple
-import ipdb
+from typing import List, Tuple, Dict, Union
 
 import numpy as np
+import pandas as pd
 from music21.interval import Interval
 from scipy.stats import kurtosis, skew
 from scipy.stats.mstats import trimmed_mean, trimmed_std
 
+from musif.cache import hasattr
 from musif.common._utils import extract_digits
 from musif.config import ExtractConfiguration
 from musif.extract.common import _mix_data_with_precedent_data
@@ -29,9 +29,8 @@ def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     intervals = part_data[DATA_INTERVALS]
-    motion_features = get_motion_features(part_data)
-    part_features.update(motion_features)
 
+    part_features.update(get_motion_features(part_data))
     part_features.update(get_interval_features(intervals))
     part_features.update(get_interval_count_features(intervals))
     part_features.update(get_interval_type_features(intervals))
@@ -46,29 +45,36 @@ def update_score_objects(
     parts_features: List[dict],
     score_features: dict,
 ):
-
     if len(parts_data) == 0:
         return
 
     features = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
-        features[get_part_feature(part, SPEED_AVG_ABS)] = part_features[SPEED_AVG_ABS]
-        features[get_part_feature(part, ACCELERATION_AVG_ABS)] = part_features[
-            ACCELERATION_AVG_ABS
-        features[get_part_feature(part, ASCENDENT_AVERAGE)] = part_features[
-            ASCENDENT_AVERAGE
-        ]
-        features[get_part_feature(part, DESCENDENT_AVERAGE)] = part_features[
-            DESCENDENT_AVERAGE
-        ]
-        features[get_part_feature(part, ASCENDENT_PROPORTION)] = part_features[
-            ASCENDENT_PROPORTION
-        ]
-        features[get_part_feature(part, DESCENDENT_PROPORTION)] = part_features[
-            DESCENDENT_PROPORTION
-        ]
-        
+        for step in MOTION_STEPS:
+            for win in MOTION_WINS:
+                if step > win:
+                    continue
+                key_postfix = _motion_postfix(step, win)
+                features[
+                    get_part_feature(part, SPEED_AVG_ABS + key_postfix)
+                ] = part_features[SPEED_AVG_ABS + key_postfix]
+                features[
+                    get_part_feature(part, ACCELERATION_AVG_ABS + key_postfix)
+                ] = part_features[ACCELERATION_AVG_ABS + key_postfix]
+                features[
+                    get_part_feature(part, ASCENDENT_AVERAGE + key_postfix)
+                ] = part_features[ASCENDENT_AVERAGE + key_postfix]
+                features[
+                    get_part_feature(part, DESCENDENT_AVERAGE + key_postfix)
+                ] = part_features[DESCENDENT_AVERAGE + key_postfix]
+                features[
+                    get_part_feature(part, ASCENDENT_PROPORTION + key_postfix)
+                ] = part_features[ASCENDENT_PROPORTION + key_postfix]
+                features[
+                    get_part_feature(part, DESCENDENT_PROPORTION + key_postfix)
+                ] = part_features[DESCENDENT_PROPORTION + key_postfix]
+
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
         intervals = part_data[DATA_INTERVALS]
         interval_features = get_interval_features(intervals, part_prefix)
@@ -322,7 +328,6 @@ def get_interval_count_features(intervals: List[Interval], prefix: str = "") -> 
 
 
 def get_interval_type_features(intervals_list: List[Interval], prefix: str = ""):
-
     repeated_notes_list = []
     stepwise_list = []
     leaps_list = []
@@ -594,7 +599,7 @@ def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
             if [i for i in absolute_numeric_intervals if i != 0]
             else None
         )
-        
+
     return {
         f"{prefix}{INTERVALLIC_SKEWNESS}": intervals_skewness,
         f"{prefix}{INTERVALLIC_KURTOSIS}": intervals_kurtosis,
@@ -603,55 +608,71 @@ def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
     }
 
 
-def get_motion_features(part_data) -> dict:
-    notes_midi = []
-    notes_duration = []
-    for note in part_data["notes_and_rests"]:
-        if hasattr(note, "pitch"):
-            notes_midi.append(note.pitch.midi)
-            notes_duration.append(note.duration.quarterLength)
-    
-    notes_midi = np.asarray(notes_midi)
-    notes_duration = np.asarray(notes_duration)
+def _motion_postfix(step, win):
+    key_postfix = f"_step_{step}_win_{win}"
+    return key_postfix
+
+
+def _motion_features_single_window_step(
+    notes_duration: List[float], notes_midi: List[int], step: float, win: int
+) -> Dict[str, Union[float, np.ndarray]]:
+    """
+    Calculates motion features for a single window step of an aria.
+
+    Parameters:
+    notes_duration (List[float]): List of note durations in seconds.
+    notes_midi (List[int]): List of MIDI note numbers.
+    step (float): Step size in seconds.
+    win (int): Window size in compasses.
+
+    Returns:
+    Dict[str, Union[float, np.ndarray]]: Dictionary containing the following motion features:
+        - SPEED_AVG_ABS_{step}_{win} Average absolute speed.
+        - ACCELERATION_AVG_ABS_{step}_{win} Average absolute acceleration.
+        - ASCENDENT_AVERAGE_{step}_{win} Average length of prolonged ascent chunks in the smoothed midis of the aria.
+        - DESCENDENT_AVERAGE_{step}_{win} Average length of prolonged descent chunks in the smoothed midis of the aria.
+        - ASCENDENT_PROPORTION_{step}_{win} Proportion of prolonged ascent chunks over the total of the aria.
+        - DESCENDENT_PROPORTION_{step}_{win} Proportion of prolonged descent chunks over the total of the aria.
+    """
+    key_postfix = _motion_postfix(step, win)
+    default_dict = {
+        SPEED_AVG_ABS + key_postfix: 0,
+        ACCELERATION_AVG_ABS + key_postfix: 0,
+        ASCENDENT_AVERAGE + key_postfix: 0,
+        DESCENDENT_AVERAGE + key_postfix: 0,
+        ASCENDENT_PROPORTION + key_postfix: 0,
+        DESCENDENT_PROPORTION + key_postfix: 0,
+    }
     
     if len(notes_midi) == 0:
-        return {
-            SPEED_AVG_ABS: 0,
-            ACCELERATION_AVG_ABS: 0,
-            ASCENDENT_AVERAGE: 0,
-            DESCENDENT_AVERAGE: 0,
-            ASCENDENT_PROPORTION: 0,
-            DESCENDENT_PROPORTION: 0,
-        }
-
-    step = 0.125
-    midis_raw = np.repeat(notes_midi, [i / step for i in notes_duration], axis=0)
-    spe_raw = np.diff(midis_raw) / step
-    acc_raw = np.diff(spe_raw) / step
+        return default_dict
+    midis_raw = np.repeat(notes_midi, np.divide(notes_duration, step).astype(int), axis=0)
+    if midis_raw.size == 0:
+        return default_dict
 
     # Absolute means of speed and acceleration
-    spe_avg_abs = np.mean(abs(spe_raw))
-    acc_avg_abs = np.mean(abs(acc_raw))
+    spe_raw = np.diff(midis_raw) / step
+    if spe_raw.size > 0:
+        spe_avg_abs = np.mean(abs(spe_raw))
+    else:
+        spe_avg_abs = 0
+    acc_raw = np.diff(spe_raw) / step
+    if acc_raw.size > 0:
+        acc_avg_abs = np.mean(abs(acc_raw))
+    else:
+        acc_avg_abs = 0
 
     # Rolling mean to smooth the midis by +-1 compasses -- not required for
     # statistics based on means but important for detecting increasing sequences
     # with a tolerance.
-    measure = 4
     midis_smo_series = pd.Series(midis_raw)
     midis_smo = [
-        np.mean(i.to_list())
-        for i in midis_smo_series.rolling(2 * measure + 1, center=True)
+        np.mean(i.to_list()) for i in midis_smo_series.rolling(2 * win + 1, center=True)
     ]
-
-    # midis_smo = np.rollmean(midis_raw, k = 2 * compass + 1, align = "center")
-
-    # spe_smo = np.diff(midis_smo) / step
-    # acc_smo = np.diff(spe_smo) / step
 
     # Prolonged ascent/descent chunks in smoothed midis of the aria (allows for
     # small violations in the form of decrements/increments that do not
     # decrease/increase the rolling mean).
-
     dife = np.diff(midis_smo)
 
     asc = [(k, sum(1 for i in g)) for k, g in groupby(dife > 0)]
@@ -669,10 +690,44 @@ def get_motion_features(part_data) -> dict:
     dsc_prp = sum(dsc) / (len(dife) - 1) if dsc else np.nan
 
     return {
-        SPEED_AVG_ABS: spe_avg_abs,
-        ACCELERATION_AVG_ABS: acc_avg_abs,
-        ASCENDENT_AVERAGE: asc_avg,
-        DESCENDENT_AVERAGE: dsc_avg,
-        ASCENDENT_PROPORTION: asc_prp,
-        DESCENDENT_PROPORTION: dsc_prp,
+        SPEED_AVG_ABS + key_postfix: spe_avg_abs,
+        ACCELERATION_AVG_ABS + key_postfix: acc_avg_abs,
+        ASCENDENT_AVERAGE + key_postfix: asc_avg,
+        DESCENDENT_AVERAGE + key_postfix: dsc_avg,
+        ASCENDENT_PROPORTION + key_postfix: asc_prp,
+        DESCENDENT_PROPORTION + key_postfix: dsc_prp,
     }
+
+
+def get_motion_features(part_data) -> dict:
+    """
+    Extracts motion features from the given part data.
+
+    Parameters:
+    part_data (dict): A dictionary containing the notes and rests of a music part.
+
+    Returns:
+    dict: A dictionary containing the extracted motion features.
+
+    Raises:
+    This function does not raise any exceptions.
+    """
+    notes_midi = []
+    notes_duration = []
+    for note in part_data["notes_and_rests"]:
+        if hasattr(note, "pitch"):
+            notes_midi.append(note.pitch.midi)
+            notes_duration.append(note.duration.quarterLength)
+
+    notes_midi = np.asarray(notes_midi)
+    notes_duration = np.asarray(notes_duration)
+
+    return_dict = {}
+    for step in MOTION_STEPS:
+        for win in MOTION_WINS:
+            return_dict.update(
+                _motion_features_single_window_step(
+                    notes_duration, notes_midi, step, win
+                )
+            )
+    return return_dict
