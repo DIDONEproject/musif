@@ -73,3 +73,7 @@ def setup(app):
 html_theme = "alabaster"
 html_static_path = ["_static"]
 html_css_files = ["css/custom.css"]
+html_theme_options = {
+        'logo': 'imgs/logo.png',
+        'logo_name': True
+        }

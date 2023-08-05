@@ -21,6 +21,8 @@ API <API/modules>
 General index <genindex>
 Module index <modindex>
 Search <search>
+
+[Source code](https://github.com/DIDONEproject/musif/)
 ```
 
 `musif` is a Python module for computing features from music scores. It has been designed and extensively used by the [Didone](https://didone.eu) team for analyzing arias from 18th-century Italian operas on texts by Pietro Metastasio.
@@ -39,7 +41,8 @@ repo](https://github.com/DIDONEproject/musif/).
 
 ## References
 
-1. Llorens A., Simonetta F., Serrano M., Torrente A., "Musif: a Python package for symbolic music feature extraction", Sound and Music Computing Conference, Stockholm, 2023.
+1. A. Llorens, F. Simonetta, M. Serrano, and Á. Torrente, “musif: a Python package for symbolic music feature extraction,” in Proceedings of the Sound and Music Computing Conference, Stockholm, Sweden, 2023.
+2. F. Simonetta, A. Llorens, M. Serrano, E. García-Portugués, and Á. Torrente, “Optimizing Feature Extraction for Symbolic Music,” in Proceedings of the 24th International Society for Music Information Retrieval Conference, Milan, Nov. 2023.
 
 <p style="text-align:center;margin:100px 0;">
   <a href="https://www.ucm.es" target="_blank"><img src="./_static/imgs/ucm.jpg" alt="Logo UCM" align="middle"></a>

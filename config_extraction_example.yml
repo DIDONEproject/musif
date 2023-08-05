@@ -112,9 +112,14 @@ jsymbolic_max_ram: "4g"
 # jSymbolic configuration is used
 jsymbolic_config_file: null
 
+# jsymbolic needs conversion to MIDI and this is not feasible if repeat marks are
+# not properly set up in the input file; when this option is true, if exporting to MIDI fails, we retry after having removed all the repeat signs
+# If this option is true, the caching system should not be used.
+jsymbolic_try_without_repeats: false
+
 # remove notes and objects referred to percussion instruments
 # (musif stock features do not work with percussion instruments)
-remove_unpitched_objects: True
+remove_unpitched_objects: true
 
 # Filter to select only some instruments to be processed for each score. 
 # If the filter is None (disabling all parts), the program will extract all parts.

@@ -27,3 +27,4 @@ docs/source/musif.log.2023-01-31
 docs/source/.ipynb_checkpoints
 dist
 .DS_Store
+.pdm-python
