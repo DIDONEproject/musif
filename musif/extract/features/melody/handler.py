@@ -22,6 +22,8 @@ from musif.extract.features.prefix import (
     get_sound_prefix,
 )
 
+import pandas as pd
+
 from .constants import *
 
 

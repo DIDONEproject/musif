@@ -24,10 +24,10 @@ def update_part_objects(
             _nPVI = 0.0
             _melodicIntervalVariability = 0.0
 
-        print('_nPVI: ', _nPVI)
+        # print('_nPVI: ', _nPVI)
         part_features['NPVI'] =  _nPVI
 
-        print('_melodicIntervalVariability: ', _melodicIntervalVariability)
+        # print('_melodicIntervalVariability: ', _melodicIntervalVariability)
         part_features['MIV'] =  _melodicIntervalVariability
 
 
