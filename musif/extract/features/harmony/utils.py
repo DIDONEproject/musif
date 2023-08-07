@@ -48,13 +48,12 @@ def get_harmonic_rhythm(ms3_table) -> dict:
                 periods_ts.append(
                     len(measures_compressed[0 : playthrough[t - 1]]) - sum(periods_ts)
                 )
-
         harmonic_rhythm_beats = number_of_chords / sum(
             [
                 period * get_number_of_beats(time_changes[j])
                 for j, period in enumerate(periods_ts)
             ]
-        )
+        ) if periods_ts else 0
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
