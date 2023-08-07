@@ -10,7 +10,7 @@ LOG = "log"
 LOG_FILE_PATH = "log_file"
 FILE_LOG_LEVEL = "file_log_level"
 CONSOLE_LOG_LEVEL = "console_log_level"
-XML_DIR = "xml_dir"
+data_dir = "data_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
 IGNORE_ERRORS = "ignore_errors"
@@ -55,7 +55,7 @@ _CONFIG_LOG_FALLBACK = {
 }
 
 _CONFIG_FALLBACK = {
-    XML_DIR: None,
+    data_dir: None,
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
     PARALLEL: 1,

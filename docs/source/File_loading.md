@@ -13,7 +13,7 @@ Finally, we offer the option to load any file format supported by MuseScore or
 `music21`.
 
 All these file formats are managed by 3 directories:
-1. `xml_dir`: directory for MusicXML files or files loaded by `music21`
+1. `data_dir`: directory for MusicXML files or files loaded by `music21`
 2. `musescore_dir`: directory for MuseScore files or files loaded by MuseScore
 3. `cache_dir`: directory for cached files
 
@@ -31,7 +31,7 @@ The file loading system works as follows.
 
 First, a list of files is obtained in this way:
 
-1. The `xml_dir` directory is recuresively searched for a [specific
+1. The `data_dir` directory is recuresively searched for a [specific
    extension](./API/musif.musicxml.html#musif.musicxml.constants.MUSICXML_FILE_EXTENSION)
    (`.xml` by default).
 2. The `musescore_dir` directory is recursively searched for a
@@ -39,10 +39,10 @@ First, a list of files is obtained in this way:
    extension](./API/musif.musescore.html#musif.musescore.constants.MUSESCORE_FILE_EXTENSION)
    (`.mscx` by default).
 3. Choose the main directory for file discovery:
-    1. Try using `xml_dir` and the discovered files in it.
-    2. Ff no file in `xml_dir` is found or if `xml_dir` is not specified, try using the
+    1. Try using `data_dir` and the discovered files in it.
+    2. Ff no file in `data_dir` is found or if `data_dir` is not specified, try using the
      `musescore_dir` and the files found in it .
-    3. If no file is found in the `musescore_dir` or in the `xml_dir`, the `cache_dir` is
+    3. If no file is found in the `musescore_dir` or in the `data_dir`, the `cache_dir` is
      recursively searched.
 
 Once the list of files has been obtained, we proceed to the parsing of each
@@ -76,11 +76,11 @@ Thus, you will need to tune the extraction process using [hooks](./Hooks.html) a
 MIDI files by using MuseScore or Humdrum/ABC/MEI files by using `music21`. Where possible,
 we suggest the use of MuseScore. See the [advanced tutorial]() for an example.
 
-It is not possible to mix `xml_dir` and `musescore_dir`, except when [harmonic
+It is not possible to mix `data_dir` and `musescore_dir`, except when [harmonic
 annotations](./API/musif.extract.html#musif.extract.constants.REQUIRE_MSCORE) are
-needed. Indeed, if a file is found in `xml_dir`, then
+needed. Indeed, if a file is found in `data_dir`, then
 `musescore_dir` is expected to contain files with harmonic features, i.e., MuseScore
-files loadable by `ms3`. On the contrary, if `xml_dir` is empty, MusicXML files will
+files loadable by `ms3`. On the contrary, if `data_dir` is empty, MusicXML files will
 be created using MuseScore; thus, if you need harmonic annotations, you could
 theoretically provide only MuseScore files with harmonic annotations. However, we
 experienced errors due to the parsing of MusicXML by `music21` and to the  slight

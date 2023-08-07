@@ -114,7 +114,7 @@ def main(
 
     config = ExtractConfiguration(
         yaml,
-        xml_dir=source_dir,
+        data_dir=source_dir,
         cache_dir=cache_dir,
         parallel=njobs,
         musescore_dir=harmony,

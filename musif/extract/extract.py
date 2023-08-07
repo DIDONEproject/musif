@@ -34,7 +34,8 @@ from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
                             split_layers)
 from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
                                     to_abbreviation)
-
+from music21 import converter
+import types
 _cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 # attach a method to convert it into bytestring
@@ -283,7 +284,7 @@ class FeaturesExtractor:
 
         xml_filenames = find_files(
             musicxml_c.MUSIC21_FILE_EXTENSIONS,
-            self._cfg.xml_dir,
+            self._cfg.data_dir,
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
         )
@@ -498,50 +499,49 @@ class FeaturesExtractor:
                 )
         return score_features
 
-    def _load_xml_data(self, filename: Union[str, PurePath]):
+    def _load_score_data(self, filename: Union[str, PurePath]):
         filename = Path(filename)
-        if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
-            # convert to xml in a temporary file
-            mscore = self._cfg.mscore_exec
-            if mscore is None:
-                mscore = ms3.utils.get_musescore("auto")
-            if mscore is None:
-                raise RuntimeError(
-                    "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exec`"
-                )
-            if not isinstance(mscore, (list, tuple)):
-                # this is needed to allow stuffs like `xvfb-run -a mscore`
-                mscore = (mscore,)
-            tmp_d, tmp_path = mkstemp(
-                prefix=filename.stem, suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
-            )
-            process = mscore + ("-fo", tmp_path, filename)
-            res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
-            if res.returncode != 0:
-                raise RuntimeError(
-                    f"Error while converting musescore file to xml: {filename}"
-                )
-        else:
-            tmp_path = filename
+        # if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
+        #     # convert to xml in a temporary file
+        #     mscore = self._cfg.mscore_exec
+        #     if mscore is None:
+        #         mscore = ms3.utils.get_musescore("auto")
+        #     if mscore is None:
+        #         raise RuntimeError(
+        #             "Cannot find musescore executable. Please provide xml files or the path to a musescore installation with the configuration `mscore_exec`"
+        #         )
+        #     # if not isinstance(mscore, (list, tuple)):
+        #     #     # this is needed to allow stuffs like `xvfb-run -a mscore`
+        #     #     mscore = (mscore,)
+        #     # tmp_d, tmp_path = mkstemp(
+        #     #     prefix=filename.stem, suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
+        #     # )
+        #     # process = mscore + ("-fo", tmp_path, filename)
+        #     # res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)
+        #     # if res.returncode != 0:
+        #     #     raise RuntimeError(
+        #     #         f"Error while converting musescore file to xml: {filename}"
+        #         )
+        # else:
+            # tmp_path = filename
         score = parse_filename(
-            tmp_path,
+            filename,
             self._cfg.split_keywords,
             expand_repeats=self._cfg.expand_repeats,
             export_dfs_to=self._cfg.dfs_dir,
             remove_unpitched_objects=self._cfg.remove_unpitched_objects,
         )
-        numeric_tempo = extract_numeric_tempo(tmp_path)
-        if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
-            os.close(tmp_d)
-            os.remove(tmp_path)
+        numeric_tempo = extract_numeric_tempo(filename)
+        # if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
+        #     os.close(tmp_d)
+        #     os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
         return score, tuple(filtered_parts), numeric_tempo
 
     def _get_score_data(
         self, filename: PurePath, load_cache: Optional[Path] = None
     ) -> dict:
-        from music21 import converter
-        import types
+
         data = None 
         info_load_str = ""
         
@@ -565,7 +565,7 @@ class FeaturesExtractor:
         
         if data is None:
             try:
-                score, filtered_parts, numeric_tempo = self._load_xml_data(filename)
+                score, filtered_parts, numeric_tempo = self._load_score_data(filename)
             except ParseFileError as e:
                 perr(f"Error while parsing file {filename}")
                 raise e
@@ -608,7 +608,7 @@ class FeaturesExtractor:
                 m21_objects = SmartModuleCache(
                     (data[C.DATA_SCORE], data[C.DATA_FILTERED_PARTS]),
                     resurrect_reference=(
-                        self._load_xml_data,
+                        self._load_score_data,
                         # filename.relative_to("."),
                         filename,
                     ),
