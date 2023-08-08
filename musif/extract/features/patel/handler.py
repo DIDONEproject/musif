@@ -1,5 +1,3 @@
-import ipdb
-
 from music21.analysis.patel import nPVI, melodicIntervalVariability
 
 import musif.extract.constants as C
