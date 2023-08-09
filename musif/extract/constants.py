@@ -1,3 +1,6 @@
+MUSIC21_FILE_EXTENSIONS = [".xml", ".mxl", ".musicxml", ".mid", ".mei"]
+"""Extensions used by music21. Defaults to `[".xml", ".mxl", ".musicxml", ".mid", ".mei"]`"""
+
 DATA_PART = "part"
 DATA_PART_NUMBER = "part_number"
 DATA_PART_ABBREVIATION = "abbreviation"

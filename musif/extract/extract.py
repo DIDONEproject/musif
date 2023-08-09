@@ -282,7 +282,7 @@ class FeaturesExtractor:
         linfo("--- Analyzing scores ---\n".center(120, " "))
 
         xml_filenames = find_files(
-            musicxml_c.MUSIC21_FILE_EXTENSIONS,
+            C.MUSIC21_FILE_EXTENSIONS,
             self._cfg.data_dir,
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
@@ -513,7 +513,7 @@ class FeaturesExtractor:
         #     #     # this is needed to allow stuffs like `xvfb-run -a mscore`
         #     #     mscore = (mscore,)
         #     # tmp_d, tmp_path = mkstemp(
-        #     #     prefix=filename.stem, suffix=musicxml_c.MUSIC21_FILE_EXTENSIONS[0]
+        #     #     prefix=filename.stem, suffix=C.MUSIC21_FILE_EXTENSIONS[0]
         #     # )
         #     # process = mscore + ("-fo", tmp_path, filename)
         #     # res = subprocess.run(process, stdout=DEVNULL, stderr=DEVNULL)

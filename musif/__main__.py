@@ -3,6 +3,8 @@ from typing import Optional
 from pathlib import Path
 
 import musif.musicxml.constants as musicxml_c
+import musif.extract.constants as extract_c
+
 from musif.config import ExtractConfiguration, PostProcessConfiguration
 from musif.extract.extract import FeaturesExtractor
 from musif.logs import perr, pinfo
@@ -140,7 +142,7 @@ def main(
         config.features += ["harmony", "scale_relative"]
     if len(config.basic_modules) == 0:
         config.basic_modules = ["scoring"]
-    musicxml_c.MUSIC21_FILE_EXTENSIONS = extension
+    extract_c.MUSIC21_FILE_EXTENSIONS = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
     output_path = Path(output_path).with_suffix(".csv")
