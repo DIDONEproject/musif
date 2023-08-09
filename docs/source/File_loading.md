@@ -32,6 +32,8 @@ First, a list of files is obtained in this way:
    extension](./API/musif.musescore.html#musif.musescore.constants.MUSESCORE_FILE_EXTENSION) for harmony annotations only (used to calculate harmony features)
    (`.mscx` by default).
 
+Even if no files are found in `data_dir` directory, musif will attempt to find files in `cache_dir` and proceed with the extraction. If even then no files are found, the extraction will stop. 
+
 Once the list of files has been obtained, we proceed to the parsing of each
 `filename`:
 1. If a corresponding file is found in `cache_dir`, unpickle it and skip the parsing.

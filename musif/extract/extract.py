@@ -293,6 +293,7 @@ class FeaturesExtractor:
             limit_files=self.limit_files,
             exclude_files=self.exclude_files,
         )
+        
         if len(musescore_filenames) == 0:
             if self._cfg.is_requested_musescore_file():
                 perr(
@@ -300,8 +301,6 @@ class FeaturesExtractor:
                 )
         if len(xml_filenames) > 0:
             filenames = xml_filenames
-        elif len(musescore_filenames) > 0:
-            filenames = musescore_filenames
         elif self._cfg.cache_dir is not None:
             filenames = find_files(
                 CACHE_FILE_EXTENSION,
@@ -312,7 +311,7 @@ class FeaturesExtractor:
         else:
             filenames = []
         if len(filenames) == 0:
-            raise FileNotFoundError("No file found for extracting features!")
+            raise FileNotFoundError("No file found for extracting features! Use data_dir (or cache_dir) to point to your files directory.")
 
         score_df = self._process_corpus(filenames)
 
