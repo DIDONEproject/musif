@@ -1,0 +1,1 @@
+musif_dependencies = ['core']

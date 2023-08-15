@@ -1,10 +1,11 @@
 from typing import List
+from musif.extract.features.core.constants import FILE_NAME
 
 from pandas import DataFrame
 
 from musif.config import ExtractConfiguration
 from musif.extract.features.core.handler import DATA_MODE
-from musif.logs import perr
+from musif.logs import perr, pwarn
 from .constants import *
 from .utils import (
     get_additions,
@@ -37,7 +38,9 @@ def update_score_objects(
     try:
         harmonic_analysis = score_data.get(DATA_MUSESCORE_SCORE)
 
-        if harmonic_analysis is None:
+        if harmonic_analysis.empty:
+            file_name = score_features[FILE_NAME]
+            pwarn(f"No harmonic analysis was found in {file_name} or one of its windows.")
             features[HARMONY_AVAILABLE] = 0
             return features
         else:
@@ -81,7 +84,7 @@ def update_score_objects(
         )
 
     except Exception as e:
-        perr(f"Harmony problem found: {str(e)}")
+        perr(f"Harmony problem found: {str(e)} in file {file_name}")
 
     finally:
         score_features.update(features)
