@@ -29,7 +29,6 @@ def allFeaturesAsList(streamInput, include_jSymbolic_from_m21=True):
     allData = ds.getFeaturesAsList(
         includeClassLabel=False, includeId=False, concatenateLists=False
     )
-
     return allData, [c.__name__ for c in final_features]
 
 

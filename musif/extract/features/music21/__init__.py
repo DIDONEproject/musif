@@ -1,1 +1,1 @@
-musif_dependencies = ["rhythm"]  # here to avoid some issue with the cache (?!)
+# musif_dependencies = ["rhythm"]  # here to avoid some issue with the cache (?!)

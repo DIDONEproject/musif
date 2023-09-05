@@ -288,7 +288,6 @@ def extract_numeric_tempo(file_path: str) -> Optional[int]:
 
     Parameters
     ----------
-
         file_path: str
         Path to xml file to get the tempo from.
 

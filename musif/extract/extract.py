@@ -706,6 +706,7 @@ class FeaturesExtractor:
                     raise ValueError(
                         f"Feature {feature} is dependent on feature {dependency} ({dependency} should appear before {feature} in the configuration)"
                     )
+                    
             found_features.add(feature)
             yield module
 

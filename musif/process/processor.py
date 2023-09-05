@@ -211,13 +211,12 @@ class DataProcessor:
         to_delete = self.data.columns[idx].to_list()
         self.data.drop(columns=to_delete, inplace=True)
 
-        # deleting rows
+        # Deleting rows
         th = config_data["max_nan_rows"] or 1.0
         idx = self.data.isna().sum(axis=1) / self.data.shape[1] > th
         to_delete = self.data.index[idx]
         self.data.drop(index=to_delete, inplace=True)
 
-        # delete cols
         _delete_columns(self.data, config_data)
 
     def replace_nans(self) -> None:

@@ -47,6 +47,7 @@ GROUPED = "grouped_analysis"
 MERGE_VOICES = "merge_voices"
 MAX_NAN_COLUMNS = "max_nan_columns"
 MAX_NAN_ROWS = "max_nan_rows"
+DELETE_COLUMNS_WITH_NANS = "delete_columns_with_nans"
 
 _CONFIG_LOG_FALLBACK = {
     LOG_FILE_PATH: "./musif.log",
@@ -85,6 +86,7 @@ _CONFIG_POST_FALLBACK = {
     DELETE_HARMONY: False,
     UNBUNDLE_INSTRUMENTATION: False,
     MERGE_VOICES: True,
+    DELETE_COLUMNS_WITH_NANS: True,
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_DELETE: [],
     ENDSWITH: [],

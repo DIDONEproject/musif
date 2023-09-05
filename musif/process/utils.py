@@ -119,9 +119,10 @@ def _delete_columns(data: DataFrame, config: dictConfig) -> None:
     ]
 
     # removing columns containing nans
-    th = config["max_nan_columns"] or 0.0
-    idx = data.isna().sum(axis=0) / data.shape[0] > th
-    to_delete += data.columns[idx].to_list()
+    if config['delete_columns_with_nans']:
+        th = config["max_nan_columns"] or 0.0
+        idx = data.isna().sum(axis=0) / data.shape[0] > th
+        to_delete += data.columns[idx].to_list()
 
     data.drop(columns=to_delete, inplace=True, errors="ignore")
 
