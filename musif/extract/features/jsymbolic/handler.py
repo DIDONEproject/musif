@@ -82,7 +82,7 @@ def update_score_objects(
                     out_path + "_def.xml",
                 ],
                 check=True,
-                # stdout=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
             )
         except Exception as e:
             filename = score_data[C.DATA_FILE]

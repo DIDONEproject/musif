@@ -603,7 +603,7 @@ def extract_global_time_signature(score_data):
         global_ts = None
         
     if global_ts is None:
-        pwarn("Couldn't extract Global Time Sigature!")
+        pwarn("Couldn't extract global time signature!")
         global_ts = "NA"
         
     score_data[C.GLOBAL_TIME_SIGNATURE] = global_ts

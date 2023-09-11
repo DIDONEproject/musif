@@ -79,7 +79,6 @@ def parse_filename(
     if score is not None:
         return score
     try:
-
         score = parse(file_path).makeRests()
         if export_dfs_to is not None:
             dest_path = Path(export_dfs_to)
@@ -382,7 +381,6 @@ class FeaturesExtractor:
         return basic_features, cache_name, parts_data, score_data
 
     def _process_score(self, idx: int, filename: PurePath) -> dict:
-
         (
             basic_features,
             cache_name,
