@@ -148,13 +148,14 @@ class DataProcessor:
         """
         if HARMONY_AVAILABLE in self.data:
             number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
-            pinfo(
-                f"{number_files} files were found without mscx analysis or errors in harmonic analysis. They'll be deleted."
-            )
-            pinfo(
-                f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}"
-            )
-
+            if number_files > 0:
+                pinfo(
+                    f"{number_files} files were found without mscx analysis or errors in harmonic analysis."
+                )
+                pinfo(f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}")
+            else:
+                pinfo(f"No files were found without harmonic analysis!")
+                
     def group_columns(self) -> None:
         """
         Groups Key_*_PercentageMeasures, Key_Modulatory and Degrees columns. Into bigger

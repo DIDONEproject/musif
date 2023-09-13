@@ -681,12 +681,12 @@ def _motion_features_single_window_step(
     dsc = [i for b, i in dsc if b]
 
     # Average length of ascent/descent chunks of the aria
-    asc_avg = mean(asc) if asc else np.nan
-    dsc_avg = mean(dsc) if dsc else np.nan
+    asc_avg = mean(asc) if asc else 0 #np.nan
+    dsc_avg = mean(dsc) if dsc else 0 #np.nan
 
     # Proportion of ascent/descent chunks over the total of the aria
-    asc_prp = sum(asc) / (len(dife) - 1) if asc else np.nan
-    dsc_prp = sum(dsc) / (len(dife) - 1) if dsc else np.nan
+    asc_prp = sum(asc) / (len(dife) - 1) if asc else 0 #np.nan
+    dsc_prp = sum(dsc) / (len(dife) - 1) if dsc else 0 #np.nan
 
     return {
         SPEED_AVG_ABS + key_postfix: spe_avg_abs,
