@@ -55,7 +55,6 @@ def join_part_degrees(
     degree_nat = [x for x in part_degrees if re.search(pattern, x)]
     degree_nonat = [i for i in part_degrees if i not in degree_nat]
 
-    # TODO: strange names here, should be like aug, dim, etc.
     df[part + DEGREE_PREFIX + "_Asc" + sufix] = df[aug].sum(axis=1)
     df[part + DEGREE_PREFIX + "_Desc" + sufix] = df[desc].sum(axis=1)
     df[part + DEGREE_PREFIX + "_Dasc" + sufix] = df[d_asc].sum(axis=1)
@@ -225,13 +224,31 @@ def join_keys_modulatory(df: DataFrame):
     df[KEY_PREFIX + KEY_MODULATORY + "rel"] = df[key_rel].sum(axis=1)
     df[KEY_PREFIX + KEY_MODULATORY + "Other"] = df[others_key_mod].sum(axis=1)
 
+def _drop_filenames_nan_rows(df):
+    rows_with_nan_filename = list(df[df['FileName'].isna()]['FileName'].index)
+    if len(rows_with_nan_filename)>0:
+        print('There are som files with computation errors!')
+        print(rows_with_nan_filename)
+        df.dropna(subset=['FileName'], inplace=True)
 
 def merge_dataframes(name: str, dest_path: str) -> None:
+    """
+    Takes two dataframes and joins them, apart from deleting rows that are all nans.
+    This is intended for cases where all extraction of a folder cannot be done all at once.
+    
+    Returns
+    ------
+    Dataframe with the extracted features as a concatenation of two dataframes
+    """
     csv = ".csv"
     name1 = name + "_1" + csv
     name2 = name + "_2" + csv
 
     df1 = pd.read_csv(name1)
     df2 = pd.read_csv(name2)
+    
+    _drop_filenames_nan_rows(df1)
+    _drop_filenames_nan_rows(df2)
+    
     total_dataframe = pd.concat((df1, df2), axis=0)
     total_dataframe.to_csv(dest_path, index=False)

@@ -38,7 +38,7 @@ def update_score_objects(
     try:
         harmonic_analysis = score_data.get(DATA_MUSESCORE_SCORE)
 
-        if harmonic_analysis.empty:
+        if harmonic_analysis is None or harmonic_analysis.empty:
             file_name = score_features[FILE_NAME]
             pwarn(f"No harmonic analysis was found in {file_name} or one of its windows.")
             features[HARMONY_AVAILABLE] = 0

@@ -2,6 +2,7 @@ import itertools
 import re
 from collections import Counter
 from typing import Dict, List
+from types import NoneType
 
 import numpy as np
 import pandas as pd
@@ -371,8 +372,8 @@ def get_first_numeral(numeral, relativeroot, local_key):
 def get_numerals_lists(list_numerals, list_relativeroots, list_local_keys):
     tuples = list(zip(list_numerals, list_relativeroots, list_local_keys))
     result_dict = {t: get_first_numeral(*t) for t in set(tuples)}
-    function1 = [result_dict[t] for t in tuples]
-    function2 = [get_function_second(g1) for g1 in function1]
+    function1 = [result_dict[t] for t in tuples if t]
+    function2 = [get_function_second(g1) for g1 in function1 if type(g1) is not NoneType]
     return function1, function2
 
 
@@ -467,8 +468,8 @@ def get_chords(harmonic_analysis):
 
     counter_function_1 = Counter(chords_functionalities1)
     counter_function_2 = Counter(chords_functionalities2)
-    chords_group_1 = CountChordsGroup(counter_function_1, "1")
-    chords_group_2 = CountChordsGroup(counter_function_2, "2")
+    chords_group_1 = count_chords_group(counter_function_1, "1")
+    chords_group_2 = count_chords_group(counter_function_2, "2")
 
     return chords_dict, chords_group_1, chords_group_2
 
@@ -488,7 +489,7 @@ def count_chords(chords: list, order: List[str] = []) -> Dict[str, str]:
     return chords_dict
 
 
-def CountChordsGroup(counter_function: List[str], number: str) -> Dict[str, str]:
+def count_chords_group(counter_function: List[str], number: str) -> Dict[str, str]:
     chords_group = {}
     total_chords_group = sum(Counter(counter_function).values())
 
@@ -532,6 +533,7 @@ def get_chord_type(chord_type):
     elif chord_type in ["+", "+M7", "+m7"]:
         return "aug"
     else:
+    #raise Exception:
         pwarn(f"Chord type {chord_type} not observed")
         return "other"
 
@@ -568,7 +570,7 @@ def get_first_chord_local(chord, local_key):
 
 
 # Function to return second grouping for any chord in any given local key,
-def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
+def get_second_grouping_localkey(first_grouping: str, relativeroot: str, local_key: str):
     mode = "M" if local_key else "m"
     if str(relativeroot) != "nan":
         mode = "M" if relativeroot.isupper() else "m"
@@ -590,21 +592,21 @@ def get_second_grouping_localkey(first_grouping, relativeroot, local_key):
     return degree
 
 
-def get_chords_functions(chords, relativeroots, local_keys) -> list:
+def get_chords_functions(chords: List[str], relativeroots: List[str], local_keys: List[str]) -> list:
 
     chords_localkeys = list(zip(chords, local_keys))
     functionalities_dict = {t: get_first_chord_local(*t) for t in set(chords_localkeys)}
 
-    function_first = [functionalities_dict[t] for t in chords_localkeys]
-
+    first_function = [functionalities_dict[t] for t in chords_localkeys]
+    first_function = [chord for chord in first_function if type(chord) != NoneType]
+    
     # Redefine chords_localkeys to get second chord's functionality
-    second_chords_localkeys = list(zip(function_first, relativeroots, local_keys))
-    function_second = [
+    second_chords_localkeys = list(zip(first_function, relativeroots, local_keys))
+    second_function = [
         get_second_grouping_localkey(*first_grouping)
-        for first_grouping in second_chords_localkeys
-    ]
+        for first_grouping in second_chords_localkeys]
 
-    return function_first, function_second
+    return first_function, second_function
 
 
 def make_type_col(df, num_col="numeral", form_col="form", fig_col="figbass"):
