@@ -88,7 +88,8 @@ def update_score_objects(
             score_key = key.Key(tonality_ms3)
             mode, key_name = get_name_from_key(score_key)
 
-    score_features[FILE_NAME] = path.abspath(score_data[DATA_FILE])
+    # score_features[FILE_NAME] = path.abspath(score_data[DATA_FILE])
+    score_features[FILE_NAME] = path.basename(score_data[DATA_FILE]) # TODO: KMore like this maybe???
     num_measures = len(score.parts[0].getElementsByClass(Measure))
     key_signature = _get_key_signature(score_key)
 

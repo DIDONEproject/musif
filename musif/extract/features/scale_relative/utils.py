@@ -2,6 +2,7 @@ from collections import Counter
 from itertools import chain
 from math import ceil, floor
 from typing import List, Tuple, Union
+from musif.logs import perr
 
 import pandas as pd
 import roman
@@ -87,7 +88,12 @@ def get_emphasised_scale_degrees_relative(
     tonality_map = get_tonality_per_beat(
         harmonic_analysis, tonality, min_beat, max_beat
     )
-    emph_degrees = get_emphasized_degrees(notes_list, tonality_map, harmonic_analysis)
+    try:
+        emph_degrees = get_emphasized_degrees(notes_list, tonality_map, harmonic_analysis)
+    except Exception:
+        file_name = score_data['file']
+        perr(f'Check the relative degrees on {file_name}')
+        emph_degrees = {}
     return emph_degrees
 
 

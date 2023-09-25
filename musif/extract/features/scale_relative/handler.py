@@ -14,7 +14,7 @@ from .utils import get_emphasised_scale_degrees_relative
 def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
-    if score_data[DATA_MUSESCORE_SCORE]:
+    if score_data[DATA_MUSESCORE_SCORE] is not None:
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
@@ -52,7 +52,7 @@ def update_score_objects(
     for part_data in parts_data:
 
         notes = part_data[DATA_NOTES]
-    if score_data[DATA_MUSESCORE_SCORE]:    
+    if score_data[DATA_MUSESCORE_SCORE] is not None:    
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
