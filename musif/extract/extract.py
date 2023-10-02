@@ -686,9 +686,9 @@ class FeaturesExtractor:
         if isinstance(package, str):
             package = __import__(package, fromlist=[""])
         if basic:
-            to_extract = self._cfg.basic_modules
+            to_extract = self._cfg.basic_modules if self._cfg.basic_modules else []
         else:
-            to_extract = self._cfg.features
+            to_extract = self._cfg.features if self._cfg.features else []
         for feature in to_extract:
             feature_package = self._get_module_or_attribute(package, feature)
             if isinstance(feature_package, Exception):
