@@ -36,3 +36,5 @@ WINDOW_ID = "WindowId"
 
 ID = "Id"
 """The name used for the column of the music score's id"""
+
+MUSIF_ID = "musif_Id"

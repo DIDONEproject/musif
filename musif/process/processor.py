@@ -223,8 +223,9 @@ class DataProcessor:
     def replace_nans(self) -> None:
         # pinfo("Replacing NaN values in selected columns")
         cols = []
+        
         for col in self.data.columns:
-            if any(
+            if self._post_config.replace_nans is not None and any(
                 substring.lower() in col.lower()
                 for substring in tuple(self._post_config.replace_nans)
             ):
@@ -303,6 +304,7 @@ class DataProcessor:
 
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
+        
         self.replace_nans()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         if TITLE and ARTIST in self.data.columns:

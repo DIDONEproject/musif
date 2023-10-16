@@ -377,7 +377,7 @@ class FeaturesExtractor:
         basic_features = self.extract_modules(
             self._cfg.basic_modules_addresses, score_data, parts_data, basic=True
         )
-        # basic_features[C.ID] = idx #WHY this??
+        basic_features[C.MUSIF_ID] = idx
         return basic_features, cache_name, parts_data, score_data
 
     def _process_score(self, idx: int, filename: PurePath) -> dict:
