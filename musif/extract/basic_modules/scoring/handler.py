@@ -95,7 +95,7 @@ def update_score_objects(
             if instrumental:
                 instrument_abbreviations.append(sound_abbreviation)
         if not instrumental:
-            voice_abbreviations.append(sound_abbreviation)
+            voice_abbreviations.append(part_abbreviation)
         if family not in families:
             families.append(family)
             family_abbreviations.append(family_abbreviation)

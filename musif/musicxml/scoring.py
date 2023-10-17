@@ -80,7 +80,6 @@ def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config:
     return abbreviation + (part_roman_number or ""), sound_abbreviation, part_number
 
 def _get_part_normal_number(part: Part) -> Optional[str]:
-    # this is didone-specific
     if '(' and ')' in part.partAbbreviation:
         return part.partAbbreviation.split('(')[1].split(')')[0]
     return None
@@ -92,7 +91,6 @@ def _get_part_roman_number(part: Part) -> Optional[str]:
         ):
             return number
     return None
-
 
 def _get_part_roman_number_by_position(part: Part, parts: List[Part]) -> Optional[str]:
     same_sound_parts = [same_sound_part
