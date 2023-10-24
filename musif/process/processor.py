@@ -127,7 +127,6 @@ class DataProcessor:
         self.data.dropna(axis=1, how="all", inplace=True)
         if self._post_config.delete_files_without_harmony:
             self.delete_files_without_harmony()
-
         if self._post_config.separate_intrumentation_column:
             pinfo('\nSeparating "Instrumentation" column...')
             self.separate_instrumentation_column()
@@ -136,7 +135,7 @@ class DataProcessor:
 
         if self._post_config.grouped_analysis:
             self.group_columns()
-
+        self.data.reset_index(inplace=True)
         self._final_data_processing()
         return self
 
@@ -150,10 +149,12 @@ class DataProcessor:
             number_files = len(self.data[self.data[HARMONY_AVAILABLE] == 0])
             if number_files > 0:
                 pinfo(
-                    f"{number_files} files were found without mscx analysis or errors in harmonic analysis."
+                    f"{number_files} file(s) were found without mscx analysis or errors in harmonic analysis. They'll be deleted from the df"
                 )
                 pinfo(f"{self.data[self.data[HARMONY_AVAILABLE] == 0][FILE_NAME].to_string()}")
-            else:
+            mask = (self.data[HARMONY_AVAILABLE] == 0)
+            self.data = self.data[~mask]           
+        else:
                 pinfo(f"No files were found without harmonic analysis!")
                 
     def group_columns(self) -> None:
@@ -304,7 +305,6 @@ class DataProcessor:
 
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
-        
         self.replace_nans()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         if TITLE and ARTIST in self.data.columns:
