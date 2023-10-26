@@ -7,6 +7,8 @@ from musif.config import ExtractConfiguration
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import _get_beat_position
 from musif.logs import lwarn, pwarn
+
+from musif.extract.features.core.constants import DATA_SOUNDING_MEASURES
 from musif.musicxml.tempo import get_number_of_beats
 
 from ...constants import DATA_PART_ABBREVIATION
@@ -128,7 +130,7 @@ def update_part_objects(
 
         beats_section += number_of_beats
         total_beats += number_of_beats
-        if measure.measureNumber in part_data["sounding_measures"]:
+        if measure.measureNumber in part_data[DATA_SOUNDING_MEASURES]:
             total_sounding_beats += number_of_beats
 
     dyn_mean_weighted += beats_section * dynamics[-1] if len(dynamics) != 0 else 0

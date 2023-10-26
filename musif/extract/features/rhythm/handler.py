@@ -6,7 +6,7 @@ import numpy as np
 
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATURE
-from musif.extract.features.core.constants import DATA_NOTES
+from musif.extract.features.core.constants import DATA_NOTES, DATA_SOUNDING_MEASURES
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.extract.utils import _get_beat_position
 from musif.musicxml.tempo import get_number_of_beats
@@ -75,7 +75,7 @@ def update_part_objects(
                 beat_unit = element.beatStrength
         total_beats += beats
 
-        if measure in part_data["sounding_measures"]:
+        if measure.measureNumber in part_data[DATA_SOUNDING_MEASURES]:
             total_sounding_beats += beats
 
     rhythm_intensity_period.append(
