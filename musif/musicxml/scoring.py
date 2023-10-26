@@ -7,8 +7,6 @@ from musif.config import ExtractConfiguration
 
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 
-
-
 def to_abbreviation(part: Part, parts: List[Part], cfg: ExtractConfiguration) -> str:
     """
         Returns abbreviation name for a specific part based on the sound name
@@ -25,7 +23,6 @@ def to_abbreviation(part: Part, parts: List[Part], cfg: ExtractConfiguration) ->
     
     sound = extract_sound(part, cfg)
     return list(_extract_abbreviated_part(sound, part, parts, cfg))[0]
-
 
 def extract_sound(part: Part, config: ExtractConfiguration) -> str:
     """
@@ -61,7 +58,6 @@ def extract_sound(part: Part, config: ExtractConfiguration) -> str:
         return sound_name
     else:
         return ''
-
 
 def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config: ExtractConfiguration) -> Tuple[str, str, int]:
     if sound not in config.sound_to_abbreviation:

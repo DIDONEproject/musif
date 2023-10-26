@@ -84,7 +84,6 @@ def parse_filename(
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name
             store_score_df(score, dest_path)
-            
 
         # give a name to all parts in the score
         name_parts(score)
