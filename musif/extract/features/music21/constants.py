@@ -13,4 +13,14 @@ ERRORED_FEATURES_IDS = {
     "CS9",
     "CS10",
     "CS11",
+    #
+    'P22',
+    'K1',
+    'QL1',
+    'QL2',
+    'QL3',
+    'CS12',
+    'MC1',
+    'TX1'
 }
+

@@ -5,12 +5,13 @@ from music21.features import jSymbolic, native
 from music21.features.base import extractorsById
 
 from musif import cache
-from musif.config import ExtractConfiguration
+from musif.logs import pwarn
+çfrom musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_SCORE
 from .constants import ERRORED_FEATURES_IDS
 
 
-def allFeaturesAsList(streamInput, include_jSymbolic_from_m21=True):
+def allFeaturesAsList(cfg, streamInput, include_jSymbolic_from_m21=True):
     """
     only a little change around m21.features.base.allFeaturesAsList: no Parallel
     processing
@@ -21,8 +22,12 @@ def allFeaturesAsList(streamInput, include_jSymbolic_from_m21=True):
     all_features = list(native.featureExtractors)
     if include_jSymbolic_from_m21:
         all_features += list(jSymbolic.featureExtractors)
-    final_features = [feature for feature in all_features if feature.id not in
-         ERRORED_FEATURES_IDS]
+    if cfg.cache:
+        pwarn('Cache activated! Some music21 features will NOT be computed.')
+        final_features = [feature for feature in all_features if feature.id not in
+            ERRORED_FEATURES_IDS]
+    else:
+        final_features = all_features
     ds.addFeatureExtractors(final_features)
     ds.addData(streamInput)
     ds.process()
@@ -44,10 +49,7 @@ def update_score_objects(
     m21.features.base.isinstance = cache.isinstance
     m21.features.base.hasattr = cache.hasattr
     include_jSymbolic_from_m21 = 'jsymbolic' not in cfg.features
-    if include_jSymbolic_from_m21:
-        features, columns = allFeaturesAsList(score, include_jSymbolic_from_m21=include_jSymbolic_from_m21)
-    else:
-        features, columns = allFeaturesAsList(score, include_jSymbolic_from_m21=include_jSymbolic_from_m21)
+    features, columns = allFeaturesAsList(cfg, score, include_jSymbolic_from_m21=include_jSymbolic_from_m21)
     score_features.update(
         {
             'm21_' + columns[outer] + f"_{i}": f
