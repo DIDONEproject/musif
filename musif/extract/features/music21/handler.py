@@ -5,9 +5,10 @@ from music21.features import jSymbolic, native
 from music21.features.base import extractorsById
 
 from musif import cache
-from musif.logs import pwarn
-çfrom musif.config import ExtractConfiguration
+from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_SCORE
+from musif.logs import pwarn
+
 from .constants import ERRORED_FEATURES_IDS
 
 
@@ -22,8 +23,8 @@ def allFeaturesAsList(cfg, streamInput, include_jSymbolic_from_m21=True):
     all_features = list(native.featureExtractors)
     if include_jSymbolic_from_m21:
         all_features += list(jSymbolic.featureExtractors)
-    if cfg.cache:
-        pwarn('Cache activated! Some music21 features will NOT be computed.')
+    if cfg.cache_dir:
+        pwarn('\nCache is activated! Some music21 features will NOT be computed.')
         final_features = [feature for feature in all_features if feature.id not in
             ERRORED_FEATURES_IDS]
     else:

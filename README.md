@@ -1,8 +1,14 @@
 # musif
 
-Python library for **Music Feature Extraction and Analysis**, developed by [Didone Project](https://didone.eu/). 
+Python library for **Music Feature Extraction and Analysis**, developed by the [Didone Project](https://didone.eu/). 
 
-For more info, see the documentation website at: https://musif.didone.eu
+### Documentation
+Tho read the documentation, please see the website at: https://musif.didone.eu
+Includes definitions for musif's functions and classes, definitions for all type sof features that musif extracts, as well as example code for using musif.
+
+You will find also two tutorials:
+- A basic Tutorial, to jus tstart using musif and extracting some features and even running some ML experiments with them.
+- An Advanced Tutorial, to extract features of different corpora and create your own hooks and features.
 
 ### Installation
 To install the latest version of musif, just run
@@ -12,11 +18,15 @@ which will download musif and all its necessary dependencies.
 ## jSymbolic and music21 features
 Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable is correctly set. `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
 
-*Important*: right now jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike the other stock features and music21 ones. 
+*Important*: right now jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike some music21 stock features. 
  
 In case of problems when installing Java or getting it to work as a command, these sites might be helpful:
 https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
 https://www.wikihow.com/Set-Java-Home
+
+## Testing and features extraction
+Apart from the documentation of musif, where Tutorials and example code can be found, please feel free to clone and check this repository, where musif is used to extract features from different corpuses
+https://github.com/DIDONEproject/music_symbolic_features
 
 ## References 
 
@@ -24,6 +34,14 @@ https://www.wikihow.com/Set-Java-Home
 2. F. Simonetta, A. Llorens, M. Serrano, E. García-Portugués, and Á. Torrente, “Optimizing Feature Extraction for Symbolic Music,” in Proceedings of the 24th International Society for Music Information Retrieval Conference, Milan, Nov. 2023.
 
 ## Changelog
+
+#### v1.2
+* fixed bug with muisc21 features not compatible with cache system. Now only those compatible will be computed
+* include MUSIF_ID
+* bug fix in dynamic features
+* include Key Signature feature
+* minor bug fixes in the post-processor
+* handling of errors for speciic configurations
 
 #### v1.1.1 - v1.1.3
 * fixed major bug with music21 automatic onversion to MIDI for jSymbolic features
