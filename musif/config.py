@@ -29,11 +29,11 @@ MSCORE_EXEC = "mscore_exec"
 JSYMBOLIC_CONFIG_FILE = "jsymbolic_config_file"
 JSYMBOLIC_MAX_RAM = "jsymbolic_max_ram"
 JSYMBOLIC_TRY_WITHOUT_REPEATS = "jsymbolic_try_without_repeats"
-# Didone specific?
 SPLIT_KEYWORDS = "split_keywords"
 
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
+
 UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
 INSTRUMENTS_TO_DELETE = "instruments_to_delete"

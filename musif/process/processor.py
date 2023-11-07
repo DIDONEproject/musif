@@ -1,6 +1,7 @@
 import os
 from pathlib import PurePath
 from typing import Union
+import numpy as np
 
 import pandas as pd
 from pandas import DataFrame
@@ -84,7 +85,7 @@ class DataProcessor:
 
         try:
             if isinstance(info, str) or isinstance(info, PurePath):
-                pinfo("\nReading csv file...")
+                pinfo(f"\nReading csv file {info}...")
                 if not os.path.exists(info):
                     raise FileNotFoundError("A .csv file could not be found")
                 if isinstance(info, PurePath):
@@ -99,7 +100,6 @@ class DataProcessor:
                 return df
 
             elif isinstance(info, DataFrame):
-                # pinfo("\nProcessing DataFrame...")
                 return info
             else:
                 perr(
@@ -178,9 +178,11 @@ class DataProcessor:
         0 if it is not for every row (aria).
         """
         for i, row in enumerate(self.data[INSTRUMENTATION]):
-            for element in row.split(","):
-                self.data.at[i, PRESENCE + "_" + element] = 1
-
+            if str(row) != 'nan':
+                for element in row.split(","):
+                    self.data.at[i, PRESENCE + "_" + element] = 1
+            else:
+                pass
         self.data[[i for i in self.data if PRESENCE + "_" in i]] = (
             self.data[[i for i in self.data if PRESENCE + "_" in i]]
             .fillna(0)
