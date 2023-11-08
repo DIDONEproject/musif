@@ -18,7 +18,7 @@ which will download musif and all its necessary dependencies.
 ## jSymbolic and music21 features
 Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable is correctly set. `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
 
-*Important*: right now jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike some music21 stock features. 
+*Important*: right now music21 and jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike some music21 stock features. 
  
 In case of problems when installing Java or getting it to work as a command, these sites might be helpful:
 https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
@@ -35,8 +35,7 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
-#### v1.2
-* fixed bug with muisc21 features not compatible with cache system. Now only those compatible will be computed
+#### v1.1.4
 * include MUSIF_ID
 * bug fix in dynamic features
 * include Key Signature feature

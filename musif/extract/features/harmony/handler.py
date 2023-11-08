@@ -84,7 +84,8 @@ def update_score_objects(
         )
 
     except Exception as e:
-        perr(f"Harmony problem found: {str(e)} in file {file_name}")
+        name = score_features[FILE_NAME]
+        perr(f"Harmony problem found: {str(e)} in file {name}")
 
     finally:
         score_features.update(features)

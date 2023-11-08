@@ -449,13 +449,9 @@ def get_chords(harmonic_analysis):
 
     numerals_and_types = [
         str(chord) + str(types[index]).replace("Mm", "").replace("mm", "")
-        if types[index] not in ("M", "m")
-        else str(chord)
-        for index, chord in enumerate(numerals)
-    ]
+        if types[index] not in ("M", "m") else str(chord) for index, chord in enumerate(numerals)]
 
     # chords_order = sort_labels(numerals_and_types, numeral=['I', 'i', 'V', 'v', 'VII', 'vii', 'II', 'ii', 'IV', 'iv','VI','vi','III','iii'], chordtype=['', '7', '+', 'o', '%', 'M', 'm','It'], drop_duplicates=True)
-
     chords_dict = count_chords(numerals_and_types)  # ,order)
 
     # Exception for #viio chords

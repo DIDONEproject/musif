@@ -26,7 +26,7 @@ from musif.extract.common import _filter_parts_data
 from musif.extract.utils import (cast_mixed_dtypes,
                                  extract_global_time_signature,
                                  process_musescore_file)
-from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo
+from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
 from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
@@ -249,12 +249,13 @@ class FeaturesExtractor:
         self.exclude_files = kwargs.get("exclude_files") or getattr(
             self._cfg, "exclude_files", None
         )
-        # self.regex = re.compile("from {FEATURES_MODULES}.([\w\.]+) import")
-        # creates the directory for the cache
+        if any(i in self._cfg.features for i in ("jsymbolic","music21")):
+            pwarn("\nEither music21 or jsymbolic features were requested. musif's caching system is not compatible with these, so cache will be disabled! \n")
+            self._cfg.cache_dir = None
+            
         if self._cfg.cache_dir is not None:
             pinfo("Cache activated!")
             Path(self._cfg.cache_dir).mkdir(exist_ok=True)
-
         if "jsymbolic" in self._cfg.features:
             from musif.extract.features import jsymbolic
 
@@ -361,7 +362,7 @@ class FeaturesExtractor:
         if self._cfg.cache_dir is not None:
             cache_name = (
                 Path(self._cfg.cache_dir)
-                / filename.parent
+                # / filename.parent
                 / (filename.name + CACHE_FILE_EXTENSION)
             )
             cache_name.parent.mkdir(parents=True, exist_ok=True)
