@@ -35,7 +35,6 @@ from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
                                     to_abbreviation)
 from music21 import converter
 import types
-_cache = FileCacheIntoRAM(10000)  # To cache scanned scores
 
 # attach a method to convert it into bytestring
 # the first argument of toData is the object to be translated, so that could be the `self` of a class method, perfectly ok
@@ -75,9 +74,6 @@ def parse_filename(
      ParseFileError
        If the xml file can't be parsed for any reason.
     """
-    score = _cache.get(file_path)
-    if score is not None:
-        return score
     try:
         score = parse(file_path).makeRests()
         if export_dfs_to is not None:
@@ -96,7 +92,6 @@ def parse_filename(
         fix_repeats(score)
         if expand_repeats:
             score = score.expandRepeats()
-        _cache.put(file_path, score)
     except Exception as e:
         print(file_path)
         raise ParseFileError(file_path) from e
@@ -124,12 +119,10 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     ParseFileError
         If the musescore file can't be parsed for any reason.
     """
-    harmonic_analysis = _cache.get(file_path)
     if harmonic_analysis is not None:
         return harmonic_analysis
     try:
         harmonic_analysis = process_musescore_file(file_path, expand_repeats)
-        _cache.put(file_path, harmonic_analysis)
     except Exception as e:
         harmonic_analysis = None
         print(file_path)
@@ -249,7 +242,7 @@ class FeaturesExtractor:
         self.exclude_files = kwargs.get("exclude_files") or getattr(
             self._cfg, "exclude_files", None
         )
-        if any(i in self._cfg.features for i in ("jsymbolic","music21")):
+        if any(i in self._cfg.features for i in ("jsymbolic","music21")) and self._cfg.cache_dir:
             pwarn("\nEither music21 or jsymbolic features were requested. musif's caching system is not compatible with these, so cache will be disabled! \n")
             self._cfg.cache_dir = None
             
