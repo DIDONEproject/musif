@@ -35,6 +35,9 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
+#### v1.1.5
+* fix minor bug that caused very unnecesary large memory usage
+
 #### v1.1.4
 * include MUSIF_ID
 * bug fix in dynamic features
