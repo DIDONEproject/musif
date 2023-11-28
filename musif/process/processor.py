@@ -267,7 +267,7 @@ class DataProcessor:
         dest_path = str(dest_path)
         if ft == "csv":
             kwargs["index"] = False
-        getattr(self.data, ft)(dest_path + "_alldata" + "." + ext, **kwargs)
+        getattr(self.data, ft)(dest_path + "_alldata" + ext, **kwargs)
 
     def _group_keys_modulatory(self) -> None:
         self.data.update(
