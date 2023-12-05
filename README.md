@@ -16,7 +16,7 @@ To install the latest version of musif, just run
 which will download musif and all its necessary dependencies.
 
 ## jSymbolic and music21 features
-Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable is correctly set. `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
+Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable is correctly set (Download Java Development Kit: https://www.oracle.com/es/java/technologies/downloads/). `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
 
 *Important*: right now music21 and jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike some music21 stock features. 
  
