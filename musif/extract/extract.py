@@ -119,8 +119,6 @@ def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.Dat
     ParseFileError
         If the musescore file can't be parsed for any reason.
     """
-    if harmonic_analysis is not None:
-        return harmonic_analysis
     try:
         harmonic_analysis = process_musescore_file(file_path, expand_repeats)
     except Exception as e:

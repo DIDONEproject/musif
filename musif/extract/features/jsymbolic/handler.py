@@ -1,15 +1,17 @@
-from typing import List
-from musif.config import ExtractConfiguration
-
 import contextlib
+import copy
 import os
-import tempfile
 import subprocess
+import tempfile
+from typing import List
+
 import pandas as pd
 
 import musif.extract.constants as C
+from musif.config import ExtractConfiguration
+from musif.extract.features.jsymbolic.utils import (_jsymbolic_path,
+                                                    get_java_path)
 from musif.logs import pwarn
-from musif.extract.features.jsymbolic.utils import get_java_path, _jsymbolic_path
 
 JSYMBOLIC_JAR = str(_jsymbolic_path())
 JAVA_PATH = get_java_path()
@@ -41,25 +43,25 @@ def update_score_objects(
         # 2. convert the score to MEI usiing music21
         # TODO: if music21 implements export to MEI, use it
         midi_path = os.path.abspath(os.path.join(tmpdirname, "score.midi"))
-        try:
-            write_midi(score, midi_path)
-        except Exception as e:
-            filename = score_data[C.DATA_FILE]
-            if cfg.jsymbolic_try_without_repeats:
-                found = False
-                for el in score.recurse().getElementsByClass("RepeatMark"):
-                    found = True
-                    # WARNING! this is not campatible with the cache system!
-                    score.remove(el, recurse=True)
-                if found:
-                    try:
-                        write_midi(score, midi_path)
-                    except Exception as e:
-                        pwarn(f"jsymbolic: could not convert {filename} to midi: {e}")
-                        return
-            if not cfg.jsymbolic_try_without_repeats or not found:
-                pwarn(f"jSymbolic: could not convert {filename} to MIDI: {e}")
-                return
+        if cfg.jsymbolic_remove_repeats:
+            score_without_repeats, _ = _remove_repetitions_from_score(score)
+            write_midi(score_without_repeats, midi_path)
+        else:
+            try:
+                write_midi(score, midi_path)
+            except Exception as e:
+                filename = score_data[C.DATA_FILE]
+                if cfg.jsymbolic_try_without_repeats:
+                    score_without_repeats, found = _remove_repetitions_from_score(score)
+                    if found:
+                        try:
+                            write_midi(score_without_repeats, midi_path)
+                        except Exception as e:
+                            pwarn(f"jsymbolic: could not convert {filename} to MIDI: {e}")
+                            return
+                if not cfg.jsymbolic_try_without_repeats or not found:
+                    pwarn(f"jSymbolic: could not convert {filename} to MIDI or process repetitions correctly: {e}")
+                    return
 
         # 3. run the MEI file through the jSymbolic jar saving csv into the temporary
         # directory in RAM
@@ -85,16 +87,44 @@ def update_score_objects(
                 stdout=subprocess.DEVNULL,
             )
         except Exception as e:
-            filename = score_data[C.DATA_FILE]
-            pwarn(f"jSymbolic: cannot run jSymbolic on {filename}: {e}")
+            pwarn(f"jSymbolic: cannot run jSymbolic on {filename}: {e}. Trying again without repeat marks.")
+            score_without_repeats, found = _remove_repetitions_from_score(score)
+            if found:
+                try:
+                    write_midi(score_without_repeats, midi_path)
+                except Exception as e:
+                    pwarn(f"jsymbolic: could not convert {filename} to MIDI: {e}")
+                    return
+            subprocess.run(
+                cmd
+                + [
+                    midi_path,
+                    out_path + ".xml",
+                    out_path + "_def.xml",
+                ],
+                check=True,
+                stdout=subprocess.DEVNULL,
+            )        
+        filename = score_data[C.DATA_FILE]
+
+        try:
+            df = pd.read_csv(out_path + ".csv", na_values=["NaN", " NaN", "NaN ", " NaN "])
+            df = df.drop(columns = df.columns[0])
+            df.columns = ["js_" + c for c in df.columns] # 5. add `js_` prefix to the column names
+            # 6. load the features into the score_features dictionary
+            score_features.update(df.to_dict(orient="records")[0])
+        except Exception as e:
+            pwarn(f"jSymbolic fetures failed run jSymbolic on {filename}: {e}")
             return
-        # 4. read the csv file into a pandas dataframe
-        df = pd.read_csv(out_path + ".csv", na_values=["NaN", " NaN", "NaN ", " NaN "])
-        df = df.drop(columns=df.columns[0])
-        # 5. add `js_` prefix to the column names
-        df.columns = ["js_" + c for c in df.columns]
-        # 6. load the features into the score_features dictionary
-        score_features.update(df.to_dict(orient="records")[0])
+        
+def _remove_repetitions_from_score(score):
+    score_without_repeats = copy.deepcopy(score)
+    found = False
+    for el in score.recurse().getElementsByClass("RepeatMark"):
+        found = True
+        # WARNING! this is not campatible with the cache system!
+        score.remove(el, recurse=True)
+    return score_without_repeats, found
 
 
 def update_part_objects(
