@@ -29,6 +29,7 @@ MSCORE_EXEC = "mscore_exec"
 JSYMBOLIC_CONFIG_FILE = "jsymbolic_config_file"
 JSYMBOLIC_MAX_RAM = "jsymbolic_max_ram"
 JSYMBOLIC_TRY_WITHOUT_REPEATS = "jsymbolic_try_without_repeats"
+JSYMBOLIC_REMOVE_REPEATS = "jsymbolic_remove_repeats"
 SPLIT_KEYWORDS = "split_keywords"
 
 DELETE_FILES = "delete_failed_files"
@@ -76,7 +77,8 @@ _CONFIG_FALLBACK = {
     REMOVE_UNPITCHED_OBJECTS: True,
     JSYMBOLIC_MAX_RAM: "4g",
     JSYMBOLIC_CONFIG_FILE: None,
-    JSYMBOLIC_TRY_WITHOUT_REPEATS: False
+    JSYMBOLIC_TRY_WITHOUT_REPEATS: False,
+    JSYMBOLIC_REMOVE_REPEATS: False
 }
 
 _CONFIG_POST_FALLBACK = {
