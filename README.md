@@ -16,15 +16,14 @@ To install the latest version of musif, just run
 `pip install musif`
 which will download musif and all its necessary dependencies.
 
-## jSymbolic and music21 features
-Currently, musif is able to process and integrate jsymbolic as well as basic music21 features. If jsymbolic features are selected, Java JRE >= 8 must be installed in your OS and the `JAVA_HOME` environment variable is correctly set (Download Java Development Kit: https://www.oracle.com/es/java/technologies/downloads/). `jSymbolic` will be downloaded automatically at the first run. You can force the download of `jSymbolic` and the check of Java installation by running `python -m musif.extract.features.jsymbolic`.
+## music21 and jsymbollic features
+Currently, musif is able to process and integrate basic music21 features. 
+For jsymbollic features, musif currently does not support the integration of these features, but a tutorial will be provided to manually merge them into musif's dataframe.
+# jsymbollic installation
+Java JRE >= 8 must be installed in your OS. Download Java Development Kit: https://www.oracle.com/es/java/technologies/downloads/
 
-*Important*: right now music21 and jSymbolic features are NOT guaranteed to be compatible with musif's cache system, unlike some music21 stock features. 
+*Important*: right now music21 features are NOT guaranteed to be compatible with musif's cache system. Native musif's features work with cache system just fine. 
  
-In case of problems when installing Java or getting it to work as a command, these sites might be helpful:
-https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
-https://www.wikihow.com/Set-Java-Home
-
 ## Testing and features extraction
 Apart from the documentation of musif, where Tutorials and example code can be found, please feel free to clone and check this repository, where musif is used to extract features from different corpuses
 https://github.com/DIDONEproject/music_symbolic_features

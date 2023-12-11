@@ -240,18 +240,13 @@ class FeaturesExtractor:
         self.exclude_files = kwargs.get("exclude_files") or getattr(
             self._cfg, "exclude_files", None
         )
-        if any(i in self._cfg.features for i in ("jsymbolic","music21")) and self._cfg.cache_dir:
-            pwarn("\nEither music21 or jsymbolic features were requested. musif's caching system is not compatible with these, so cache will be disabled! \n")
+        if any(i in self._cfg.features for i in ("music21")) and self._cfg.cache_dir:
+            pwarn("\nmusic21's features were requested. musif's caching system is not compatible with these, so cache will be disabled. \n")
             self._cfg.cache_dir = None
             
         if self._cfg.cache_dir is not None:
             pinfo("Cache activated!")
             Path(self._cfg.cache_dir).mkdir(exist_ok=True)
-        if "jsymbolic" in self._cfg.features:
-            from musif.extract.features import jsymbolic
-
-            jsymbolic.utils.download_jsymbolic()
-            jsymbolic.utils.get_java_path()
 
     def extract(self) -> DataFrame:
         """
