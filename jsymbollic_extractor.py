@@ -9,6 +9,9 @@ from musif.extract.extract import parse_filename
 import musif.extract.constants as C
 from musif.logs import pwarn
 
+import sys
+import os
+sys.path.append(os.path.pardir)
 from feature_extraction.custom_conf import CustomConf
 from feature_extraction.utils import get_ariaid
 
