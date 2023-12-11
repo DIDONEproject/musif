@@ -1,12 +1,10 @@
 # Welcome to `musif`'s documentation!
-
 ```{toctree}
 ---
 maxdepth: 2
 hidden:
 layout: default
 ---
-
 Getting started <Tutorial>
 Getting advanced <Tutorial poprock>
 Comman Line Interface (CLI) <CLI>
@@ -25,7 +23,6 @@ Search <search>
 
 [Source code](https://github.com/DIDONEproject/musif/)
 ```
-
 `musif` is a Python module for computing features from music scores. It has been designed and extensively used by the [Didone](https://didone.eu) team for analyzing arias from 18th-century Italian operas on texts by Pietro Metastasio.
 
 It also includes tools for extracting features using [`music21`](http://web.mit.edu/music21/) and [`jSymbolic`](https://jmir.sourceforge.net/jSymbolic.html). For this, see the [Feature Definition](Feature_definition.html) page.
