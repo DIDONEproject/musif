@@ -4,6 +4,7 @@ Here we present an example of using ExtracConfiguration class by subclassing it 
 In DIDONE project's case, It was needed to load many *.csv files contatining metadata information and include this inofrmation into the DataFrame that musif extracts. This metadata information loaded in our Custom conf, was later used by our custom modules to include it in the final DataFrame. Check how we inherit parent class 'ExtractConfiguration' and add some customized methods:
 
 ## Code
+```
 from glob import glob
 from os import path
 
@@ -28,3 +29,4 @@ class CustomConf(ExtractConfiguration):
         self.characters_gender = read_dicts_from_csv(
             path.join(self.internal_data_dir, "characters_gender.csv")
         )
+```

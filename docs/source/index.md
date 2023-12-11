@@ -44,10 +44,10 @@ repo](https://github.com/DIDONEproject/musif/).
 1. A. Llorens, F. Simonetta, M. Serrano, and Á. Torrente, “musif: a Python package for symbolic music feature extraction,” in Proceedings of the Sound and Music Computing Conference, Stockholm, Sweden, 2023.
 2. F. Simonetta, A. Llorens, M. Serrano, E. García-Portugués, and Á. Torrente, “Optimizing Feature Extraction for Symbolic Music,” in Proceedings of the 24th International Society for Music Information Retrieval Conference, Milan, Nov. 2023.
 
+<link rel="shortcut icon" href="./_static/imgs/logo.png"/>
 <p style="text-align:center;margin:100px 0;">
   <a href="https://www.ucm.es" target="_blank"><img src="./_static/imgs/ucm.jpg" alt="Logo UCM" align="middle"></a>
   <a href="https://iccmu.es/" target="_blank"> <img src="./_static/imgs/iccmu.png" alt="Logo ICCMU" align="middle"></a>
   <a href="https://www.uc3m.es" target="_blank"><img src="./_static/imgs/uc3m.png" alt="Logo UC3M" align="middle"></a>
   <a href="https://erc.europa.eu/" target="_blank"><img src="./_static/imgs/erc.jpg" alt="Logo DIDONE ERC" align="middle"></a>
 </p>
-<link rel="icon" type="image/png" href="./_static/imgs/logo.png" alt="Logo DIDONE"/>
