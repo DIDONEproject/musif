@@ -1,5 +1,6 @@
 # musif
-![musif](https://github.com/DIDONEproject/musif/assets/45066115/a7a5f6f4-57db-4fbb-8e98-91a63cf4eec8)
+<center><img src="https://github.com/DIDONEproject/musif/assets/45066115/a7a5f6f4-57db-4fbb-8e98-91a63cf4eec8" width="450" height="450"></center>
+
 Python library for **Music Feature Extraction and Analysis**, developed by the [Didone Project](https://didone.eu/). 
 
 ### Documentation
