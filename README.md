@@ -17,7 +17,8 @@ To install the latest version of musif, just run
 which will download musif and all its necessary dependencies.
 
 ## music21 and jsymbollic features
-Currently, musif is able to process and integrate basic music21 features. 
+Currently, musif is able to process and integrate basic music21 features.
+
 For jsymbollic features, musif currently does not support the integration of these features, but a tutorial will be provided to manually merge them into musif's dataframe.
 # jsymbollic installation
 Java JRE >= 8 must be installed in your OS. Download Java Development Kit: https://www.oracle.com/es/java/technologies/downloads/
