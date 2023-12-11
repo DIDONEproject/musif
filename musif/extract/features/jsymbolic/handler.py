@@ -41,7 +41,6 @@ def update_score_objects(
     # 1. create a temporary directory (if Linux, force RAM usig /dev/shm)
     with get_tmpdir() as tmpdirname:
         # 2. convert the score to MEI usiing music21
-        # TODO: if music21 implements export to MEI, use it
         midi_path = os.path.abspath(os.path.join(tmpdirname, "score.midi"))
         if cfg.jsymbolic_remove_repeats:
             score_without_repeats, _ = _remove_repetitions_from_score(score)

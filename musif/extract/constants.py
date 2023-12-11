@@ -17,6 +17,7 @@ DATA_NUMERIC_TEMPO = "numeric_tempo"
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
 REQUIRE_MSCORE = [HARMONY_FEATURES, SCALE_RELATIVE_FEATURES]
+
 """Names of modules taht require harmonic analysis in a .mscx file"""
 
 VOICES_LIST = ["sop", "ten", "alt", "bar", "bbar", "bass"]

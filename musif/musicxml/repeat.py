@@ -11,8 +11,6 @@ from music21.stream import Measure, Part, Score
 
 from musif.logs import ldebug
 
-# TODO: document this module
-
 
 def measure_ranges(
     instrument_measures,
@@ -83,7 +81,6 @@ def measure_ranges(
     return measures
 
 
-# TODO: This function is too long
 def expand_repeat_bars(score):
     final_score = Score()
     final_score.metadata = score.metadata
@@ -254,7 +251,6 @@ def expand_score_repetitions(score, repeat_elements):
     return final_score
 
 
-# TODO: this function seems alittle long as well
 def get_expanded_measures(part_measures, repeat_elements):
     repeat_bracket = (
         sum([1 if "repeat bracket" in item[1] else 0 for item in repeat_elements]) > 0

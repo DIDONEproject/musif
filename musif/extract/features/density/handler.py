@@ -55,13 +55,11 @@ def update_part_objects(
 
     time_signatures = part_data[TIME_SIGNATURES]
 
-    ## TODO: cuando haya repeticiones, revisar esto. Lo hice por un error en la numeracion cuando hay 70x1 (celdillas)
     sounding_time_signatures = [time_signatures[i] for i in sounding_measures]
 
     part_features.update(
         {
-            SOUNDING_DENSITY: len(notes)
-            / _calculate_total_number_of_beats(sounding_time_signatures)
+            SOUNDING_DENSITY: len(notes) / _calculate_total_number_of_beats(sounding_time_signatures)
             if len(sounding_time_signatures) > 0
             else 0,
             DENSITY: len(notes)

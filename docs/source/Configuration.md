@@ -52,4 +52,4 @@ def update_part_objects(
 
 Also, have a look the [Configuration API page](./API/musif.config.html) to understand how
 the `Configuration` class works. You can subclass it for advanced handling of
-configurations; see, for instance, the [Didone feature project](//TODO).
+configurations; see, for instance, the [Didone feature project](./Custom_Configuration.html).

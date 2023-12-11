@@ -40,7 +40,6 @@ separate_intrumentation_column: False
 instruments_to_keep: []
   # Possible values are from abbreviations from musif.musicxml.constants.SOUND_TO_ABBREVIATION
   # Note that if an abbreviation is not available, the full instrument name is used
-  # TODO: why these instrument names are not capitalized?
   # Example:
   # - vnI
   # - bs

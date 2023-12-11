@@ -50,3 +50,4 @@ repo](https://github.com/DIDONEproject/musif/).
   <a href="https://www.uc3m.es" target="_blank"><img src="./_static/imgs/uc3m.png" alt="Logo UC3M" align="middle"></a>
   <a href="https://erc.europa.eu/" target="_blank"><img src="./_static/imgs/erc.jpg" alt="Logo DIDONE ERC" align="middle"></a>
 </p>
+<link rel="icon" type="image/png" href="./_static/imgs/logo.png" alt="Logo DIDONE"/>

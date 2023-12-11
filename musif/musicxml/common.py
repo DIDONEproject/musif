@@ -197,7 +197,6 @@ def _get_degrees_and_accidentals(key: str, notes: List[Note]) -> List[Tuple[str,
 
 
 def _get_intervals(notes: List[Note]) -> List[Interval]:
-    # TODO: this takes > 6% of the time
     return [
         Interval(notes[i].pitches[0], notes[i + 1].pitches[0])
         for i in range(len(notes) - 1)

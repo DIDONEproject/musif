@@ -4,7 +4,7 @@ from musif.common._logs import create_logger
 from musif.common._utils import read_object_from_yaml_file
 from musif.extract.constants import REQUIRE_MSCORE
 
-# TODO: add documentation for these variables
+"""Check config_extraction_example.yml file for the purpose of these variables, if needed."""
 LOGGER_NAME = "musif"
 LOG = "log"
 LOG_FILE_PATH = "log_file"

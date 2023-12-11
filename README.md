@@ -35,6 +35,9 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
+#### v1.1.6
+* fix bug on previoous release and add jsimbollic remove repetitions
+
 #### v1.1.5
 * fix minor bug that caused very unnecesary large memory usage
 
