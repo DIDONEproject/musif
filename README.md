@@ -20,7 +20,7 @@ which will download musif and all its necessary dependencies.
 Currently, musif is able to process and integrate basic music21 features.
 
 For jsymbollic features, musif currently does not support the integration of these features, but a tutorial will be provided to manually merge them into musif's dataframe.
-# jsymbollic installation
+#### jsymbollic installation
 Java JRE >= 8 must be installed in your OS. Download Java Development Kit: https://www.oracle.com/es/java/technologies/downloads/
 
 *Important*: right now music21 features are NOT guaranteed to be compatible with musif's cache system. Native musif's features work with cache system just fine. 
