@@ -1,10 +1,10 @@
+#%%
 import os
 import subprocess
 import sys
 from math import floor
 from os import path
 from pathlib import Path
-from venv import logger
 
 from music21.stream.base import Measure, Score
 
@@ -16,13 +16,14 @@ sys.path.append(os.path.abspath('.'))
 from feature_extraction.custom_conf import CustomConf
 from feature_extraction.utils import get_ariaid
 
+#%%
 
 def cut_by_measures_theme_A(cfg, data):
-    aria_id = get_ariaid(path.basename(data[C.DATA_FILE]))
+    score_id = get_ariaid(path.basename(data[C.DATA_FILE]))
     score: Score = data[C.DATA_SCORE]
     last_measure = 1000000
-    for d in cfg.scores_metadata[cfg.theme_a_metadata]:
-        if d["Id"] == aria_id:
+    for d in cfg.scores_metadata[last_measure]:
+        if d["Id"] == score_id:
             last_measure = floor(float(d.get(cfg.end_of_theme_a, last_measure)))
             if last_measure == 0:
                 name = data['file'].name
@@ -30,7 +31,9 @@ def cut_by_measures_theme_A(cfg, data):
                 last_measure = 1000000
             break
 
-    # removing everything after end of theme A
+    remove_everything_after_measure(score, last_measure)
+
+def remove_everything_after_measure(score, last_measure):
     for part in score.parts:
         read_measures = 0
         elements_to_remove = []
@@ -63,6 +66,7 @@ def save_to_midi(filename):
             f"Continuing because time expired for file {filename}! Try running:\n"
             + "".join(cmd)
         ) 
+#%%
 
 didone_config = "feature_extraction/config_extraction.yml"
 
@@ -70,6 +74,7 @@ cfg = CustomConf(didone_config)
 data_path = 'data/xml/'
 data_path_cutted = Path('data/xml/cutted_themeA/')
 
+#%%
 
 for filename in sorted(Path(data_path).glob(f"*.xml")):
         data = {}
@@ -97,4 +102,3 @@ for filename in sorted(Path(data_path).glob(f"*.xml")):
             save_to_midi(new_filename)
         except Exception as e:
             perr(f'There was an error saving score {filename} to midi: {e}. Skipping it!')
-            
