@@ -16,12 +16,13 @@ To install the latest version of musif, just run
 `pip install musif`
 which will download musif and all its necessary dependencies.
 
-## music21 and jsymbollic features
+## music21 and jSymbolic features
 Currently, musif is able to process and integrate basic music21 features.
 
-For jsymbollic features, musif currently does not support the integration of these features, but a tutorial will be provided to manually merge them into musif's dataframe.
-#### jsymbollic installation
-Java JRE >= 8 must be installed in your OS. Download Java Development Kit: https://www.oracle.com/es/java/technologies/downloads/
+For jSymbolic features, musif currently does not support the integration of these features, but a tutorial will be provided to manually merge them into musif's dataframe.
+
+#### jSymbolic installation
+Java JRE >= 8 must be installed in your OS. Download jSymbolic from https://sourceforge.net/projects/jmir/files/jSymbolic/
 
 *Important*: right now music21 features are NOT guaranteed to be compatible with musif's cache system. Native musif's features work with cache system just fine. 
  
@@ -37,7 +38,7 @@ https://github.com/DIDONEproject/music_symbolic_features
 ## Changelog
 
 #### v1.2
-* Remove musif's native support on jsymbollic features. Add notebook to extract them independently
+* Remove musif's native support on jSymbolic features. Add notebook to extract them independently
 * Improve documentation
 * fix bug on previous release
 
