@@ -28,12 +28,12 @@ Search <search>
 It also includes tools for extracting features using [`music21`](http://web.mit.edu/music21/). For this, see the [Feature Definition](Feature_definition.html) page.
 
 Please, see the [Tutorial](Tutorial.html) for an easy introduction.
-
 For a more advanced usage, have a look at the [Configuration](Configuration.html),
 [Custom Features](Custom_features.html), and [Caching](Caching.html) pages.
 
-You can also use `musif` via [Command Line Interface (CLI)](CLI.html)
+It is also provided a [Cutter](Cutter_and_midi_extractor.html) script that loads xml files, cuts them to a certain part (if desired) and outputs the equivalent midi file. This can then be loaded by jSymbolic GUI if we desire to use these features in our music analysis. The code also provides a wayof natively join these features with musif's features. 
 
+You can also use `musif` via [Command Line Interface (CLI)](CLI.html)
 If you have any issues or questions, feel free to open an issue on our [Github
 repo](https://github.com/DIDONEproject/musif/).
 
