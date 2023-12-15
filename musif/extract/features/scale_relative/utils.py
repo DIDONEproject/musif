@@ -76,9 +76,12 @@ def get_emphasised_scale_degrees_relative(
     notes_list: list, score_data: dict
 ) -> List[list]:
     harmonic_analysis, tonality = extract_harmony(score_data)
-    if harmonic_analysis.size == 0:
-        return None
-
+    try:
+        if harmonic_analysis.size == 0:
+            return None
+    except:  # noqa: E722
+        print('harmonic_analysis has NoneType')
+        return None 
     measures = [
         m for p in score_data[C.DATA_SCORE].parts for m in
         p.getElementsByClass(Measure)
