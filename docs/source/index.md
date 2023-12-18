@@ -7,7 +7,7 @@ layout: default
 ---
 Getting started <Tutorial>
 Getting advanced <Tutorial poprock>
-Comman Line Interface (CLI) <CLI>
+Command Line Interface (CLI) <CLI>
 File_loading
 Feature_definition
 Custom_features
@@ -21,7 +21,7 @@ General index <genindex>
 Module index <modindex>
 Search <search>
 
-[Source code](https://github.com/DIDONEproject/musif/)
+Source code <https://github.com/DIDONEproject/musif/>
 ```
 `musif` is a Python module for computing features from music scores. It has been designed and extensively used by the [Didone](https://didone.eu) team for analyzing arias from 18th-century Italian operas on texts by Pietro Metastasio.
 

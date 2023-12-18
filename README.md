@@ -4,11 +4,11 @@
 Python library for **Music Feature Extraction and Analysis**, developed by the [Didone Project](https://didone.eu/). 
 
 ### Documentation
-Tho read the documentation, please see the website at: https://musif.didone.eu
-Includes definitions for musif's functions and classes, definitions for all type sof features that musif extracts, as well as example code for using musif.
+To read the documentation, please see the website at: https://musif.didone.eu
+Includes definitions for musif's functions and classes, definitions for all types of features that musif extracts, as well as example code for using musif.
 
 You will find also two tutorials:
-- A basic Tutorial, to jus tstart using musif and extracting some features and even running some ML experiments with them.
+- A basic Tutorial, to just start using musif and extracting some features and even running some ML experiments with them.
 - An Advanced Tutorial, to extract features of different corpora and create your own hooks and features.
 
 ### Installation
