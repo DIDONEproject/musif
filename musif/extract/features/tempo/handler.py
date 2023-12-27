@@ -136,7 +136,7 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
             time_signatures.append(time_signatures[ts_measures[element.measureNumber]])
 
     time_signatures_set = set(time_signatures)
-    time_signature = list(sorted(time_signatures_set, key=time_signatures.index))[0]
+    time_signature = list(sorted(time_signatures_set, key=time_signatures.index))[0] if time_signatures_set else ''
 
     time_signature_grouped = get_time_signature_type(time_signature)
     number_of_beats = get_number_of_beats(time_signature)
