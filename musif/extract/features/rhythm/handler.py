@@ -97,7 +97,7 @@ def update_part_objects(
             DOTTEDRHYTHM: (rhythm_dot / total_sounding_beats)
             if total_sounding_beats
             else "NA",
-            DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats),
+            DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_beats) if total_beats else 'NA',
         }
     )
 
