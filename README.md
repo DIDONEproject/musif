@@ -12,9 +12,11 @@ You will find also two tutorials:
 - An Advanced Tutorial, to extract features of different corpora and create your own hooks and features.
 
 ### Installation
-To install the latest version of musif, just run
+To install the latest version of musif, just run:
 `pip install musif`
 which will download musif and all its necessary dependencies.
+
+(Good practice is to update your package manager: `python3 -m pip install –-upgrade pip`)
 
 ## music21 and jSymbolic features
 Currently, musif is able to process and integrate basic music21 features.
