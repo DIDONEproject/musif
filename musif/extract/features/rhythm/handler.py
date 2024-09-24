@@ -139,9 +139,9 @@ def update_score_objects(
         ]
         double_dotted_rhythm.append(part_features[DOUBLE_DOTTEDRHYTHM])
 
-
-
     dotted_rhythm = [i for i in dotted_rhythm if i not in (0.0, "NA")]
+    double_dotted_rhythm = [i for i in double_dotted_rhythm if i not in (0.0, "NA")]
+    
     features.update(
         {
             # get_score_feature(AVERAGE_DURATION): mean(average_durations),
