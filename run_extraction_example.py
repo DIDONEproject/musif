@@ -6,8 +6,9 @@ from pathlib import Path
 
 import pandas as pd
 from feature_extraction.custom_conf import CustomConf
-from feature_extraction.processor_didone import DataProcessorDidone
 from musif.extract.extract import FeaturesExtractor
+
+from musiF.musif.process.processor import DataProcessor
 
 # MAIN FILE to run extractions of data by Didone Project.
 
@@ -44,7 +45,7 @@ extracted_df.to_csv(str(DEST_PATH)+'.csv', index=False)
 
 # The raw df will be now saved in the DEST_PATH, and now post-processed
 # by the Didone Processor, and ALSO saved in 4 separated csv files.
-p = DataProcessorDidone(str(DEST_PATH) + '.csv', "config_postprocess_example.yml")
+p = DataProcessor(str(DEST_PATH) + '.csv', "config_postprocess_example.yml")
 p.process()
 
 p.data.drop('level_0', axis='columns')
