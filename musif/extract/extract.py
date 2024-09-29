@@ -310,12 +310,17 @@ class FeaturesExtractor:
         self, filenames: List[PurePath]
     ) -> Tuple[List[dict], List[dict]]:
         def process_corpus_par(idx, filename):
+            error_files = []
             try:
                 if self._cfg.window_size is not None:
                     score_features = self._process_score_windows(idx, filename)
                 else:
                     score_features = self._process_score(idx, filename)
             except Exception as e:
+                print('error!')
+                error_files.append(filename)
+                df = pd.DataFrame(error_files, columns=['ErrorFiles'])
+                df.to_csv(str(self._cfg.output_dir)+'/error_files.csv', mode='a', index=False)
                 if self._cfg.ignore_errors:
                     lerr(
                         f"Error while extracting features for file {filename}, skipping it because `ignore_errors` is True!"
