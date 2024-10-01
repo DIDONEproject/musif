@@ -10,8 +10,6 @@ from musif.extract.extract import FeaturesExtractor
 from musif.logs import perr, pinfo
 from musif.process.processor import DataProcessor
 
-import pandas as pd
-
 def main(
     *paths,
     output_path: str = "musif_features.csv",
@@ -144,7 +142,7 @@ def main(
     if len(config.basic_modules) == 0:
         config.basic_modules = ["scoring"]
     extract_c.MUSIC21_FILE_EXTENSIONS = extension
-    raw_df, error_files = FeaturesExtractor(config, limit_files=paths).extract()
+    raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
     output_path = Path(output_path).with_suffix(".csv")
     # raw_df.to_csv(output_path.with_suffix(".raw.csv"), index=False)
@@ -175,7 +173,6 @@ def main(
     string_cols = processed_df.select_dtypes(include=["object", "string"]).columns
     processed_df[string_cols] = processed_df[string_cols].replace("", "-")
     processed_df.to_csv(output_path, index=False)
-    pd.DataFrame(error_files).to_csv('errors_file.csv', index=False)
 
 
 if __name__ == "__main__":
