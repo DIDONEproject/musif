@@ -39,6 +39,13 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
+#### v1.2.1
+* Added some extra documentation
+* Added run_extraction.py, example script for extrating features using musif
+* Added erros variable on FeaturesExtractor to store files that were not procesed correctly in error_files.csv file
+* fix some dependencies problems
+* bug fixing on rhythm features
+
 #### v1.2
 * Remove musif's native support on jSymbolic features. Add notebook to extract them independently
 * Improve documentation
