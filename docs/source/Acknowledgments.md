@@ -32,6 +32,9 @@ documentation and website. He tested the library on multiple corpora.
 **Paula Muñoz-Lago**, computer scientist, contributed to the initial code and first stages of the 
 tool.
 
+**Carlos Vaquero Patricio**, Joined the project as a Data Scientist postdoc researcher in 2023 and has contributed to debugging musif, developing its final stages as well as making it accessible to the MIR community.
+
+
 ### Acknowledgments
 `musif` is a result of the Didone Project, which has received funding from the European 
 Research Council (ERC) under the European Union’s Horizon 2020 research and innovation
