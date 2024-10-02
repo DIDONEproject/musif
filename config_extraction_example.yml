@@ -43,7 +43,7 @@ expand_repeats: false
 window_size: null
 
 # Size of overlap (in measures) beatween each window. Considered only if `window_size` is
-# null
+# not null. It must be less than window_size - 1!
 overlap: 2
 
 # Number of parallel processes to be used as defined by joblib: 
@@ -64,9 +64,8 @@ log:
 # in errors when extracting features.
 # Dependencies may be expressed in the `musif_dependencies` property of the feature, see
 # for instance `musif.extract.features.density.__init__.py`
-basic_modules: []
-  # Possible values:
-  # - scoring
+basic_modules: ['scoring']
+# Other values: file_name_generic
 
 # Modules to be extracting from scores. Order is important, so last ones will be
 # processed last. Some of them might depends on others.
@@ -111,7 +110,7 @@ remove_unpitched_objects: true
 # Filter to select only some instruments to be processed for each score. 
 # If the filter is None (disabling all parts), the program will extract all parts.
 parts_filter: []
-  # Possible Values
+  # Possible Values. If non it selected, all parts will be computed.
   # - vnI
   # - vnII
   # - obI

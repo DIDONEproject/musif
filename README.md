@@ -27,7 +27,10 @@ For jSymbolic features, musif currently does not support the integration of thes
 Java JRE >= 8 must be installed in your OS. Download jSymbolic from https://sourceforge.net/projects/jmir/files/jSymbolic/
 
 *Important*: right now music21 features are NOT guaranteed to be compatible with musif's cache system. Native musif's features work with cache system just fine. 
- 
+
+## Example
+Check and run run_extraction.py to see a initial script for extracting xml files by using musif.
+
 ## Testing and features extraction
 Apart from the documentation of musif, where Tutorials and example code can be found, please feel free to clone and check this repository, where musif is used to extract features from different corpuses
 https://github.com/DIDONEproject/music_symbolic_features
