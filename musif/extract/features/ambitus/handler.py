@@ -49,7 +49,7 @@ def update_score_objects(
     parts_data = _filter_parts_data(parts_data, cfg.parts_filter)
     if len(parts_data) == 0:
         return
-
+    
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
         for feature_name in SCORE_FEATURES:

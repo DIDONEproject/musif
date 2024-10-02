@@ -50,11 +50,13 @@ def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:
         score : Score
       Music21 score to take the info from
     """
-
-    score_key = score.analyze("key")
-    mode, tonality = get_name_from_key(score_key)
-    return score_key, tonality, mode
-
+    try:
+        score_key = score.analyze("key")
+        mode, tonality = get_name_from_key(score_key)
+        return score_key, tonality, mode
+    except Exception as e:
+        print(f'{e}')
+        return 'NA', 'NA', 'NA'
 
 def get_name_from_key(score_key: Key) -> Tuple[str, str]:
     """

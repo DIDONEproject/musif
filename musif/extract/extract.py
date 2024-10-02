@@ -758,3 +758,7 @@ class FeaturesExtractor:
             raise FeatureError(
                 f"In {score_name} while computing {module.__name__}"
             ) from e
+        # except Exception:
+        #     score_name = score_data["file"]
+        #     print(f"{score_name} gives trouble, going to the next one")
+        #     pass

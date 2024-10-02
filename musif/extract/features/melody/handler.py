@@ -22,6 +22,8 @@ from musif.extract.features.prefix import (
     get_sound_prefix,
 )
 
+import pandas as pd
+
 from .constants import *
 
 
@@ -35,6 +37,7 @@ def update_part_objects(
     part_features.update(get_interval_count_features(intervals))
     part_features.update(get_interval_type_features(intervals))
     part_features.update(get_interval_stats_features(intervals))
+
 
 
 def update_score_objects(
