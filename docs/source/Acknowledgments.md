@@ -32,6 +32,9 @@ documentation and website. He tested the library on multiple corpora.
 **Paula Muñoz-Lago**, computer scientist, contributed to the initial code and first stages of the 
 tool.
 
+**Carlos Vaquero Patricio**, received a PhD from the Institute for Logic, Language and Computation (Music Cognition Group) at the University of Amsterdam. Joined Didone as a postdoc researcher (Data Scientist) in 2023. Contributed to the final stages of musif, debugging, developing and making it accessible to the MIR community.
+
+
 ### Acknowledgments
 `musif` is a result of the Didone Project, which has received funding from the European 
 Research Council (ERC) under the European Union’s Horizon 2020 research and innovation

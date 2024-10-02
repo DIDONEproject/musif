@@ -20,8 +20,13 @@ DEST_PATH = "destination_path"
 cache_dir = None
 
 # csv file containing files which raised error and need to be reextracted
-# path_error = 'error_files.csv'
-# errored_files = list(pd.read_csv(path_error, low_memory=False)[FILE_NAME])
+try:
+    path_error = f'{DEST_PATH}/error_files.csv'
+    errored_files = list(pd.read_csv(path_error, low_memory=False)[FILE_NAME])
+except Exception:
+    # Handle the case where there is no file is empty
+    print("There is no error_files.csv, it will be created and loaded error files are included manually in it.")
+    pass
 
 # In case a partial extraction has been run, set here the previous df to avoid re-extracting these files.
 # prev_path = str(prefix / NAME) + '.csv'
