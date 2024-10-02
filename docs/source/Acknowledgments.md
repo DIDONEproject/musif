@@ -32,7 +32,7 @@ documentation and website. He tested the library on multiple corpora.
 **Paula Muñoz-Lago**, computer scientist, contributed to the initial code and first stages of the 
 tool.
 
-**Carlos Vaquero Patricio**, Joined the project as a Data Scientist postdoc researcher in 2023 and has contributed to debugging musif, developing its final stages as well as making it accessible to the MIR community.
+**Carlos Vaquero Patricio**, received a PhD from the Institute for Logic, Language and Computation (Music Cognition Group) at the University of Amsterdam. Joined Didone as a postdoc researcher (Data Scientist) in 2023. Contributed to the final stages of musif, debugging, developing and making it accessible to the MIR community.
 
 
 ### Acknowledgments
