@@ -42,6 +42,9 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
+#### v1.2.2
+* Fix incompatible dependencies on ms3 and webcolors
+
 #### v1.2.1
 * Added some extra documentation
 * Added run_extraction.py, example script for extrating features using musif
