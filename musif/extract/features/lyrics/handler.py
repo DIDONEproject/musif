@@ -43,7 +43,7 @@ def update_part_objects(
 
         voice_presence = len(part_data[DATA_SOUNDING_MEASURES]) / len(
             part_data[DATA_MEASURES]
-        )
+        ) if part_data[DATA_MEASURES] else 0
 
         part_features.update(
             {
