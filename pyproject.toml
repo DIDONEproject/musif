@@ -13,7 +13,7 @@ dependencies = [
     "deepdiff>=6.2.1",
 ]
 name = "musif"
-version = "1.2.2"
+version = "1.2.3"
 description = "Music feature extraction library from the DIDONE project"
 authors = [{name = "Didone Project", email = "didone@iccmu.es"}]
 requires-python = ">=3.10"
