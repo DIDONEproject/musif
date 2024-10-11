@@ -6,7 +6,7 @@ hidden:
 layout: default
 ---
 Getting started <Tutorial>
-Getting advanced <Tutorial poprock>
+Getting advanced <Tutorial_poprock>
 Command Line Interface (CLI) <CLI>
 File_loading
 Feature_definition
