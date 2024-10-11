@@ -310,6 +310,19 @@ class FeaturesExtractor:
 
         return score_df
 
+    def _check_for_error_file(self):
+        # Check for error file
+        try:
+            df = pd.read_csv(f'{self._cfg.output_dir}/error_files.csv', low_memory=False)
+            df['ErrorFiles'] = df['ErrorFiles'].astype(str)
+            df['ErrorFiles'] = df['ErrorFiles'].str.rsplit('/', 1).str[-1]
+            errored_files = list(df['ErrorFiles'])
+            print(errored_files)
+            print("CSV loaded successfully.")
+        except Exception:
+            # Handle the case where the file is empty
+            print("There is no error_files.csv, it will be created and loaded error files are included manually in it.")
+
     def _process_corpus(
         self, filenames: List[PurePath]
     ) -> Tuple[List[dict], List[dict]]:
