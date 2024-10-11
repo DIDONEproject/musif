@@ -42,6 +42,9 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
+#### v1.2.4
+* Fix on lyrics module. Implemeted error output file for error registration.
+
 #### v1.2.3
 * Minifix on lyrics module
 
