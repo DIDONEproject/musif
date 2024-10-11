@@ -90,7 +90,7 @@ def update_score_objects(
 
             features[get_part_feature(part, VOICE_PRESENCE)] = len(
                 part_data[DATA_SOUNDING_MEASURES]
-            ) / len(part_data[DATA_MEASURES])
+            ) / len(part_data[DATA_MEASURES]) if part_data[DATA_MEASURES] else 0
 
             features[get_part_feature(part, SYLLABIC_RATIO)] = get_syllabic_ratio(
                 part_data[DATA_NOTES], part_data[DATA_LYRICS]

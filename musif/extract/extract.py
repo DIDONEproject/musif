@@ -335,12 +335,12 @@ class FeaturesExtractor:
                 else:
                     score_features = self._process_score(idx, filename)
             except Exception as e:
-                print(f"Error found on {filename}. Saving the filename and error print to {str(self._cfg.output_dir)}/error_files.csv for latter tracking")
-                error_files.append(filename)
-                errors.append(e)
-                df = pd.DataFrame({'ErrorFiles': error_files,
-                                   'Errors': errors})
-                df.to_csv(str(self._cfg.output_dir)+'/error_files.csv', mode='a', index=False)
+                # print(f"Error found on {filename}. Saving the filename and error print to {str(self._cfg.output_dir)}/error_files.csv for latter tracking")
+                # error_files.append(filename)
+                # errors.append(e)
+                # df = pd.DataFrame({'ErrorFiles': error_files,
+                #                    'Errors': errors})
+                # df.to_csv(str(self._cfg.output_dir)+'/error_files.csv', mode='a', index=False)
                 if self._cfg.ignore_errors:
                     lerr(
                         f"Error while extracting features for file {filename}, skipping it because `ignore_errors` is True!"
