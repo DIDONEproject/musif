@@ -31,8 +31,9 @@ SPLIT_KEYWORDS = "split_keywords"
 
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
+DELETE_SOUND_COLUMNS = "delete_sound_columns"
 
-UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
+UNBUNDLE_INSTRUMENTATION = "separate_instrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
 INSTRUMENTS_TO_DELETE = "instruments_to_delete"
 ENDSWITH = "columns_endswith"
@@ -78,6 +79,7 @@ _CONFIG_POST_FALLBACK = {
     DELETE_FILES: False,
     GROUPED: False,
     DELETE_HARMONY: False,
+    DELETE_SOUND_COLUMNS: False,
     UNBUNDLE_INSTRUMENTATION: False,
     DELETE_COLUMNS_WITH_NANS: True,
     INSTRUMENTS_TO_KEEP: [],
@@ -96,6 +98,7 @@ _CONFIG_POST_FALLBACK = {
 _KEY_ALIASES = {
     "grouped": GROUPED,
     "delete_files": DELETE_FILES,
+    "separate_intrumentation_column": UNBUNDLE_INSTRUMENTATION,
     "file_path": LOG_FILE_PATH,
     "file_level": FILE_LOG_LEVEL,
     "console_level": CONSOLE_LOG_LEVEL,
@@ -207,6 +210,15 @@ class ExtractConfiguration(GenericConfiguration):
         self.family_to_abbreviation = musicxml_c.FAMILY_TO_ABBREVIATION
         self.sound_to_abbreviation = musicxml_c.SOUND_TO_ABBREVIATION
         super().__init__(*args, **kwargs)
+        # expand the 'voice' shorthand once, up front, so every consumer of
+        # parts_filter sees the same expanded list (the old lazy in-place
+        # expansion broke the first score of every corpus)
+        if self.parts_filter and "voice" in self.parts_filter:
+            from musif.extract.constants import VOICES_LIST
+
+            self.parts_filter = [
+                p for p in self.parts_filter if p != "voice"
+            ] + list(VOICES_LIST)
 
     def _get_fallback(self):
         return _CONFIG_FALLBACK

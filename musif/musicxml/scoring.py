@@ -5,6 +5,21 @@ from roman import fromRoman, toRoman
 
 from musif.config import ExtractConfiguration
 
+# last tokens of music21 instrumentSound values that qualify an instrument
+# rather than name one (e.g. 'wind.reed.saxophone.alto')
+VARIANT_QUALIFIERS = {
+    "alto",
+    "tenor",
+    "soprano",
+    "sopranino",
+    "baritone",
+    "bass",
+    "contrabass",
+    "acoustic",
+    "electric",
+    "piccolo",
+}
+
 ROMAN_NUMERALS_FROM_1_TO_20 = [toRoman(i).upper() for i in range(1, 21)]
 
 def to_abbreviation(part: Part, parts: List[Part], cfg: ExtractConfiguration) -> str:
@@ -44,14 +59,24 @@ def extract_sound(part: Part, config: ExtractConfiguration) -> str:
             sound_name = _replace_naming_exceptions(sound_name, part)
             sound_name = sound_name if sound_name[-1] != 's' else sound_name[:-1]
     else:
-        for instrument in instrument.instrumentSound.split(".")[::-1]:
+        tokens = [
+            token
+            for token in instrument.instrumentSound.split(".")
+            if "flat" not in token and "sharp" not in token and len(token) > 2
+        ]
+        if tokens:
+            sound_name = tokens[-1]
+            # in sounds like 'saxophone.alto', 'clarinet.bass' or
+            # 'guitar.acoustic' the last token is a variant qualifier, not the
+            # instrument: prefer the preceding token when it is a known sound
             if (
-                "flat" not in instrument
-                and "sharp" not in instrument
-                and len(instrument) > 2
+                len(tokens) > 1
+                and sound_name in VARIANT_QUALIFIERS
+                and tokens[-2] != "voice"
+                and tokens[-2].replace("-", " ").lower()
+                in config.sound_to_abbreviation
             ):
-                sound_name = instrument
-                break
+                sound_name = tokens[-2]
     if sound_name:
         sound_name = sound_name.replace('-', ' ').lower()
         sound_name = _replace_naming_exceptions(sound_name, part)

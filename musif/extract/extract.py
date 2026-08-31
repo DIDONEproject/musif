@@ -244,7 +244,7 @@ class FeaturesExtractor:
         self.exclude_files = kwargs.get("exclude_files") or getattr(
             self._cfg, "exclude_files", None
         )
-        if any(i in self._cfg.features for i in ("music21")) and self._cfg.cache_dir:
+        if "music21" in (self._cfg.features or []) and self._cfg.cache_dir:
             pwarn("\nmusic21's features were requested. musif's caching system is not compatible with these, so cache will be disabled. \n")
             self._cfg.cache_dir = None
             
@@ -574,23 +574,13 @@ class FeaturesExtractor:
         info_load_str = ""
         
         if load_cache is not None and load_cache.exists():
-            s = converter.parse(filename)
-            s.toData = types.MethodType(converter.toData, converter)
-            cached_object = SmartModuleCache(s)
             try:
                 data = pickle.load(open(load_cache, "rb"))
             except Exception as e:
                 info_load_str += f" Error while loading pickled object, continuing with extraction from scratch: {e}"
             else:
                 info_load_str += " File was loaded from cache."
-            # get bytes
-            bytes = cached_object.toData('midi')
-            # write to file
-            with open('output.mid', 'wb') as f:
-                f.write(bytes)
-            # save cached object
-            pickle.dump(cached_object, open(load_cache, 'wb'))
-        
+
         if data is None:
             try:
                 score, filtered_parts, numeric_tempo = self._load_score_data(filename)
@@ -667,7 +657,6 @@ class FeaturesExtractor:
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
-        # self._deal_with_dupicated_parts(parts)
         if self._cfg.parts_filter is None or len(self._cfg.parts_filter) == 0:
             return parts
         filter_set = set(self._cfg.parts_filter)
@@ -676,14 +665,6 @@ class FeaturesExtractor:
             for part in parts
             if to_abbreviation(part, parts, self._cfg) in filter_set
         )
-
-    def _deal_with_dupicated_parts(self, parts):
-        for part in parts:
-            # Keeping onle solo and 1º part of duplicated instruments
-            part.id = part.id.replace(" 1º", "")
-            part.partAbbreviation = part.partAbbreviation.replace(" 1º", "")
-            if "2º" in part.id:
-                parts.remove(part)
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
@@ -724,6 +705,10 @@ class FeaturesExtractor:
         for feature in to_extract:
             feature_package = self._get_module_or_attribute(package, feature)
             if isinstance(feature_package, Exception):
+                pwarn(
+                    f"Requested feature module '{feature}' was not found in "
+                    f"{package.__name__} and will be skipped"
+                )
                 continue
             module = self._get_module_or_attribute(feature_package, "handler")
             if isinstance(module, Exception):

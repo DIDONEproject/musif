@@ -57,10 +57,6 @@ def get_score_prefix() -> str:
     return "Score_"
 
 
-def get_corpus_prefix() -> str:
-    return "Corpus_"
-
-
 def get_part_feature(part: str, feature: str) -> str:
     """
     It builds the name of a feature with part scope.

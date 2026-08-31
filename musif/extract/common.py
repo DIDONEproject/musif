@@ -12,8 +12,8 @@ def _filter_parts_data(
         return parts_data
 
     if "voice" in parts_filter:
-        parts_filter.remove("voice")
-        parts_filter.extend(VOICES_LIST)
+        # never mutate the caller's (usually the config's) list
+        parts_filter = [p for p in parts_filter if p != "voice"] + list(VOICES_LIST)
 
     parts_filter_set = set(parts_filter)
 

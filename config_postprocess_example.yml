@@ -28,7 +28,7 @@ grouped_analysis: False
 # Flag to determine if Intrumentation column should be disgregated in several columns
 # (Presence_of_*) having a value of 1 if instrument is present, 0 otherwise.
 # see also `delete_presence` option
-separate_intrumentation_column: False
+separate_instrumentation_column: False
 
 # Instruments exempted from `instruments_to_delete` below
 # Matching is case-sensitive

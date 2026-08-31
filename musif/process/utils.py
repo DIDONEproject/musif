@@ -6,6 +6,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from musif.config import (
+    DELETE_SOUND_COLUMNS,
     ENDSWITH,
     INSTRUMENTS_TO_DELETE,
     INSTRUMENTS_TO_KEEP,
@@ -108,9 +109,11 @@ def _delete_columns(data: DataFrame, config: dictConfig) -> None:
         for col in data.columns
         if any(string == col for string in config["columns_match"])
     ]
-    to_delete += [i for i in data.columns if i.startswith("Sound") and "Voice" not in i]
-
-    to_delete += [FAMILY_INSTRUMENTATION, FAMILY_SCORING]
+    if config.get(DELETE_SOUND_COLUMNS, False):
+        to_delete += [
+            i for i in data.columns if i.startswith("Sound") and "Voice" not in i
+        ]
+        to_delete += [FAMILY_INSTRUMENTATION, FAMILY_SCORING]
 
     # Remove empty voices
     to_delete += [
@@ -120,9 +123,10 @@ def _delete_columns(data: DataFrame, config: dictConfig) -> None:
         and all(data[col].isnull().values)
     ]
 
-    # removing columns containing nans
+    # removing columns containing nans; None means "keep all"
     if config['delete_columns_with_nans']:
-        th = config["max_nan_columns"] or 0.0
+        th = config["max_nan_columns"]
+        th = 1.0 if th is None else th
         idx = data.isna().sum(axis=0) / data.shape[0] > th
         to_delete += data.columns[idx].to_list()
 

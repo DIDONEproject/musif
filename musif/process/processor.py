@@ -126,10 +126,13 @@ class DataProcessor:
         self.data.dropna(axis=1, how="all", inplace=True)
         if self._post_config.delete_files_without_harmony:
             self.delete_files_without_harmony()
-        if self._post_config.separate_intrumentation_column:
+        if self._post_config.separate_instrumentation_column:
             pinfo('\nSeparating "Instrumentation" column...')
             self.separate_instrumentation_column()
 
+        # replace the configured NaNs BEFORE deleting NaN-bearing columns,
+        # otherwise the deletion leaves replace_nans nothing to act on
+        self.replace_nans()
         self.delete_undesired()
 
         if self._post_config.grouped_analysis:
@@ -176,12 +179,12 @@ class DataProcessor:
         Instrumentation, assigning a value of 1 for every instrument that is present and
         0 if it is not for every row (aria).
         """
-        for i, row in enumerate(self.data[INSTRUMENTATION]):
+        # iterate by index LABEL: positional .at[] corrupted the frame after
+        # row deletions and on windowed (MultiIndex) data
+        for label, row in self.data[INSTRUMENTATION].items():
             if str(row) != 'nan':
                 for element in row.split(","):
-                    self.data.at[i, PRESENCE + "_" + element] = 1
-            else:
-                pass
+                    self.data.at[label, PRESENCE + "_" + element] = 1
         self.data[[i for i in self.data if PRESENCE + "_" in i]] = (
             self.data[[i for i in self.data if PRESENCE + "_" in i]]
             .fillna(0)
@@ -251,8 +254,8 @@ class DataProcessor:
         Parameters
         ----------
         dest_path : str or Path
-            Path to directory where the file will be stored; a suffix like
-            `_metadata.csv` will be added.
+            Path to directory where the file will be stored; the suffix
+            `_alldata` plus the extension is added.
         ext : str
             Extension used to save files. Use `.gz`, `.xz`, `.zip` etc. to compress the
             files. Default: `.csv`
@@ -262,10 +265,10 @@ class DataProcessor:
         """
 
         pinfo(f"Writing data to {dest_path}_*{ext}")
-        ft = "to_" + ft
         dest_path = str(dest_path)
         if ft == "csv":
-            kwargs["index"] = False
+            kwargs.setdefault("index", False)
+        ft = "to_" + ft
         getattr(self.data, ft)(dest_path + "_alldata" + ext, **kwargs)
 
     def _group_keys_modulatory(self) -> None:
@@ -308,9 +311,11 @@ class DataProcessor:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
         self.replace_nans()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
-        if TITLE and ARTIST in self.data.columns:
+        if TITLE in self.data.columns and ARTIST in self.data.columns:
             priority_columns = [FILE_NAME, TITLE, ARTIST]
         else:
             priority_columns = []
         self.data = sort_columns(self.data, [ID, WINDOW_ID] + priority_columns)
-        self.data.drop("index", axis=1, inplace=True, errors="ignore")
+        self.data.drop(
+            columns=["index", "level_0", "level_1"], inplace=True, errors="ignore"
+        )

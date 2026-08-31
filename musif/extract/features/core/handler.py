@@ -100,7 +100,6 @@ def update_score_objects(
             DATA_KEY: score_key,
             KEY_SIGNATURE: key_signature,
             TIME_SIGNATURE: time_signature,
-            KEY_SIGNATURE: key_signature,
             DATA_KEY_NAME: key_name,
             DATA_MODE: mode,
             DATA_MEASURES: num_measures,

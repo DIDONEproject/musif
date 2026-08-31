@@ -11,6 +11,8 @@ dependencies = [
     'webcolors==1.12',
     # music21 has a different version for each python 3.*
     "deepdiff>=6.2.1",
+    # CLI
+    'fire>=0.4.0',
 ]
 name = "musif"
 version = "1.2.4"
@@ -20,6 +22,9 @@ requires-python = ">=3.10"
 readme = "README.md"
 license = { text = "MIT"}
 [project.optional-dependencies]
+
+[project.scripts]
+musif = "musif.__main__:run"
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
