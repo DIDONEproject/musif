@@ -490,13 +490,14 @@ class FeaturesExtractor:
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
             # first_measure/last_measure are 0-based, end-exclusive measure
-            # INDICES (music21 indicesNotNumbers); translate them to the ms3
-            # measure numbers, whose numbering starts at the table's first mn.
+            # INDICES (music21 indicesNotNumbers). playthrough aligns 1:1 with
+            # those indices in both folded and unfolded scores (written mn is
+            # non-monotonic under expand_repeats and lost whole repeats).
             mscore = score_data[C.DATA_MUSESCORE_SCORE]
-            first_mn = mscore["mn"].min()
+            first_playthrough = int(mscore[C.PLAYTHROUGH].min())
             window_mscore = mscore.loc[
-                (mscore["mn"] >= first_mn + first_measure)
-                & (mscore["mn"] < first_mn + last_measure)
+                (mscore[C.PLAYTHROUGH] >= first_playthrough + first_measure)
+                & (mscore[C.PLAYTHROUGH] < first_playthrough + last_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
         else:
@@ -657,9 +658,14 @@ class FeaturesExtractor:
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
-        if self._cfg.parts_filter is None or len(self._cfg.parts_filter) == 0:
+        parts_filter = self._cfg.parts_filter
+        if parts_filter is None or len(parts_filter) == 0:
             return parts
-        filter_set = set(self._cfg.parts_filter)
+        if "voice" in parts_filter:
+            parts_filter = [p for p in parts_filter if p != "voice"] + list(
+                C.VOICES_LIST
+            )
+        filter_set = set(parts_filter)
         return (
             part
             for part in parts

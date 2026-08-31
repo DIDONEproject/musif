@@ -5,6 +5,8 @@ from music21.expressions import TextExpression
 from music21.stream import Measure
 
 from musif.cache import isinstance
+from music21.meter import TimeSignature as M21TimeSignature
+
 from musif.config import ExtractConfiguration
 from musif.extract.constants import (
     DATA_NUMERIC_TEMPO,
@@ -127,12 +129,18 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
             time_signatures.append(time_signatures[ts_measures[element.measureNumber]])
         elif len(time_signatures) >= 1:
             time_signatures.append(time_signatures[-1])
-        elif hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
-            time_signatures.append(
-                score_data[GLOBAL_TIME_SIGNATURE].ratioString
-            )
         else:
-            time_signatures.append("NA")
+            # window slices carry the prevailing TS at Part level: resolve it
+            # from context before falling back to the score-global metre
+            context_ts = element.getContextByClass(M21TimeSignature)
+            if hasattr(context_ts, "ratioString"):
+                time_signatures.append(context_ts.ratioString)
+            elif hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
+                time_signatures.append(
+                    score_data[GLOBAL_TIME_SIGNATURE].ratioString
+                )
+            else:
+                time_signatures.append("NA")
 
         if element.measureNumber not in ts_measures:
             ts_measures[element.measureNumber] = i

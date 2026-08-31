@@ -30,5 +30,7 @@ def _part_matches_filter(
 
     if parts_filter is None or len(parts_filter) == 0:
         return True
+    if "voice" in parts_filter:
+        parts_filter = [p for p in parts_filter if p != "voice"] + list(VOICES_LIST)
     parts_filter_set = set(parts_filter)
     return part_abbreviation in parts_filter_set

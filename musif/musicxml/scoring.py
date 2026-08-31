@@ -68,7 +68,10 @@ def extract_sound(part: Part, config: ExtractConfiguration) -> str:
             sound_name = tokens[-1]
             # in sounds like 'saxophone.alto', 'clarinet.bass' or
             # 'guitar.acoustic' the last token is a variant qualifier, not the
-            # instrument: prefer the preceding token when it is a known sound
+            # instrument: prefer the preceding token when it is a known sound.
+            # EXCEPT when both tokens name sounds of the same family
+            # ('wind.flutes.flute.piccolo'): there the last token is the more
+            # specific instrument, not a qualifier
             if (
                 len(tokens) > 1
                 and sound_name in VARIANT_QUALIFIERS
@@ -76,7 +79,14 @@ def extract_sound(part: Part, config: ExtractConfiguration) -> str:
                 and tokens[-2].replace("-", " ").lower()
                 in config.sound_to_abbreviation
             ):
-                sound_name = tokens[-2]
+                last_family = config.sound_to_family.get(
+                    sound_name.replace("-", " ").lower()
+                )
+                prev_family = config.sound_to_family.get(
+                    tokens[-2].replace("-", " ").lower()
+                )
+                if last_family is None or last_family != prev_family:
+                    sound_name = tokens[-2]
     if sound_name:
         sound_name = sound_name.replace('-', ' ').lower()
         sound_name = _replace_naming_exceptions(sound_name, part)

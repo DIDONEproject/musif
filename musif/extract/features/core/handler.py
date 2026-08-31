@@ -205,14 +205,17 @@ def _get_time_signature(score_data: dict) -> str:
     str: A string representing the time signature of the score. It is `'NA'`
         if no time signature is found.
     """
-    if hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
-        time_signature = score_data[GLOBAL_TIME_SIGNATURE].ratioString
-    else:
-        first_measure = score_data[DATA_FILTERED_PARTS][0].getElementsByClass(Measure)[
-            0
-        ]
-        if hasattr(first_measure.timeSignature, 'ratioString'):
-            time_signature = first_measure.timeSignature.ratioString
-        else:
-            time_signature = "NA"
-    return time_signature
+    parts = score_data.get(DATA_FILTERED_PARTS) or ()
+    if len(parts) > 0:
+        first_measure = parts[0].getElementsByClass(Measure)[0]
+        time_signature = first_measure.timeSignature
+        if not hasattr(time_signature, "ratioString"):
+            # window slices carry the prevailing TS at Part level, not inside
+            # the first measure: resolve it from context, or every window
+            # after a metre change inherits the score's opening metre
+            time_signature = first_measure.getContextByClass(meter.TimeSignature)
+        if hasattr(time_signature, "ratioString"):
+            return time_signature.ratioString
+    if hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), "ratioString"):
+        return score_data[GLOBAL_TIME_SIGNATURE].ratioString
+    return "NA"

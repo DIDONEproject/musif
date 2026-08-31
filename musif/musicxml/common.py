@@ -4,6 +4,7 @@ import itertools
 
 from music21.interval import Interval
 from music21.note import GeneralNote, Note
+from music21.bar import Repeat
 from music21.repeat import RepeatMark
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
@@ -182,23 +183,18 @@ def _separate_info_in_two_parts(score, final_parts, part):
                     if not isinstance(e, Voice) and not isinstance(e, GeneralNote)
                 ]
                 for p in parts_splitted:
-                    if measure.measureNumber == 0 and isinstance(measure, Measure):
-                        # number = measure.measureNumber+1
-                        # only add elements if we are in am measure
-                        if isinstance(p.elements[num_measure], Measure):
-                            p.elements[num_measure].elements += tuple(
-                                deepcopy(e)
-                                for e in not_voices_elements
-                                if e not in p.elements[num_measure].elements
-                            )
-                    if measure.measureNumber > 0:
-                        if not isinstance(p.elements[num_measure], Measure):
-                            continue
-                        p.elements[num_measure].elements += tuple(
-                            deepcopy(e)
-                            for e in not_voices_elements
-                            if e not in p.elements[num_measure].elements
-                        )
+                    if num_measure >= len(p.elements):
+                        continue
+                    target = p.elements[num_measure]
+                    if not isinstance(target, Measure):
+                        continue
+                    for e in not_voices_elements:
+                        if e not in target.elements:
+                            # insert at the element's real offset: rebuilding
+                            # .elements dropped every offset to 0 (dynamics and
+                            # tempo marks all landed on the downbeat) and
+                            # cleared the measure's end elements (barlines)
+                            target.insert(e.offset, deepcopy(e))
     for num, p in enumerate(parts_splitted, 1):
         p.id = part.id + " " + toRoman(num)  # only I or II
         p.partName = part.partName + " " + toRoman(num)  # only I or II
@@ -281,5 +277,15 @@ def fix_repeats(score: Score):
                 if m.offset == measure_sign_offset:
                     marks = m.getElementsByClass("RepeatMark")
                     if sign.__class__ not in [mark.__class__ for mark in marks]:
-                        m.insert(offset_sign, sign)
+                        if isinstance(sign, Repeat):
+                            # repeat barlines only take effect as the measure's
+                            # left/right barline: inserted mid-stream they are
+                            # invisible to expandRepeats, and sharing one
+                            # object across parts corrupts its sites
+                            if sign.direction == "start":
+                                m.leftBarline = deepcopy(sign)
+                            else:
+                                m.rightBarline = deepcopy(sign)
+                        else:
+                            m.insert(offset_sign, deepcopy(sign))
                     break
