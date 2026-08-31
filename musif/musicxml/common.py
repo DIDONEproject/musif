@@ -3,7 +3,7 @@ from typing import List, Tuple
 import itertools
 
 from music21.interval import Interval
-from music21.note import Note
+from music21.note import GeneralNote, Note
 from music21.repeat import RepeatMark
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
@@ -11,6 +11,7 @@ from music21.text import assembleLyrics
 from roman import toRoman
 
 from musif.cache import isinstance
+from musif.logs import pwarn
 
 
 def is_voice(part: Part) -> bool:
@@ -116,13 +117,35 @@ def get_notes_and_measures(
     """
 
     measures = list(part.getElementsByClass(Measure))
+    # collect notes from the measure itself AND from its Voice sub-streams:
+    # Measure.notes is non-recursive, and whole parts written in voices used
+    # to be reported as silent. Chords are excluded from the note lists (but
+    # their measures still count as sounding) - see Feature_definition.md.
+    notes_per_measure = []
+    notes_and_rests = []
+    for measure in measures:
+        measure_notes = list(measure.notes)
+        notes_and_rests.extend(measure.notesAndRests)
+        for voice in measure.voices:
+            measure_notes.extend(voice.notes)
+            notes_and_rests.extend(voice.notesAndRests)
+        notes_per_measure.append(measure_notes)
+
     sounding_measures = [
-        idx for idx, measure in enumerate(measures) if len(measure.notes) > 0
+        idx for idx, measure_notes in enumerate(notes_per_measure)
+        if len(measure_notes) > 0
     ]
     original_notes = [
-        note for measure in measures for note in measure.notes if isinstance(note, Note)
+        note
+        for measure_notes in notes_per_measure
+        for note in measure_notes
+        if isinstance(note, Note)
     ]
-    notes_and_rests = [n for measure in measures for n in measure.notesAndRests]
+    if len(original_notes) == 0 and len(measures) > 0:
+        pwarn(
+            f"Part '{part.partName}' yielded no notes; its note-based features "
+            "will be empty"
+        )
 
     return original_notes, measures, sounding_measures, notes_and_rests
 
@@ -136,9 +159,14 @@ def _separate_info_in_two_parts(score, final_parts, part):
         if isinstance(measure, Measure):
             num_measure += 1
             if any(not isinstance(e, Voice) for e in measure.elements):
+                # elements such as clefs, dynamics, text annotations...
+                # Notes/rests are excluded: copying them into every split part
+                # used to duplicate the measure's direct notes in all voices.
                 not_voices_elements = [
-                    e for e in measure.elements if not isinstance(e, Voice)
-                ]  # elements such as clefs, dynamics, text annotations...
+                    e
+                    for e in measure.elements
+                    if not isinstance(e, Voice) and not isinstance(e, GeneralNote)
+                ]
                 for p in parts_splitted:
                     if measure.measureNumber == 0 and isinstance(measure, Measure):
                         # number = measure.measureNumber+1
