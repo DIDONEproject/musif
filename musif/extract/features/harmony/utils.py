@@ -3,7 +3,6 @@ from collections import Counter
 from typing import Dict, List
 
 import pandas as pd
-from ms3.expand_dcml import features2type
 from musif.logs import pwarn
 from musif.musicxml.tempo import get_number_of_beats
 from .constants import *
@@ -17,7 +16,7 @@ def get_harmonic_rhythm(ms3_table, number_of_measures=None) -> dict:
     playthrough measure carrying a label is used as an approximation.
     """
     hr = {}
-    numerals = ms3_table.numeral.dropna().tolist()
+    numerals = [n for n in ms3_table.numeral.dropna().tolist() if str(n) != "@none"]
     number_of_chords = len(numerals)
     playthrough = ms3_table.playthrough.dropna().tolist()
     time_signatures = ms3_table.timesig.tolist()
@@ -61,7 +60,7 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
     done = 0
     starting_measure = 0
 
-    new_measures = create_measures_extended(measures)
+    new_measures = measures
     numberofmeasures = len(new_measures)
 
     for i, key in enumerate(keys):
@@ -107,24 +106,6 @@ def _measure_fraction(timesig, mc_onset) -> float:
     return float(mc_onset) / measure_whole_notes if measure_whole_notes else 0.0
 
 
-def create_measures_extended(measures):
-    new_measures = []
-    new_measures.append(measures[0])
-    for i in range(1, len(measures)):
-        if measures[i] < max(measures[:i]):
-            if same_measure(measures, i):
-                new_measures.append(new_measures[i - 1])
-            else:
-                new_measures.append(new_measures[i - 1] + 1)
-        else:
-            new_measures.append(measures[i])
-    return new_measures
-
-
-def same_measure(measures, i):
-    return measures[i] == measures[i - 1]
-
-
 def compute_number_of_measures(
     done, starting_measure, previous_measure, measure, onset_fraction
 ):
@@ -133,12 +114,12 @@ def compute_number_of_measures(
         measures = previous_measure - 1 - starting_measure
         return measures + onset_fraction, onset_fraction
 
-    if measure - previous_measure > 1:  # the key changes at a measure boundary
-        return (
-            previous_measure - starting_measure + (measure - 1 - previous_measure),
-            0,
-        )
-    return previous_measure - starting_measure, 0
+    # the key changes in a later measure: the old key owns everything up to
+    # that measure plus the fractional onset of the change inside it
+    whole_measures = previous_measure - starting_measure + (
+        measure - 1 - previous_measure
+    )
+    return whole_measures + onset_fraction, onset_fraction
 
 
 ################################################################################
@@ -155,8 +136,12 @@ def compute_number_of_measures(
 ###################
 
 
-def get_keyareas(lausanne_table, major=True):
-    keys = lausanne_table.localkey.dropna().tolist()
+def get_keyareas(lausanne_table):
+    # row-aligned extraction: independent dropna() calls used to shift the
+    # zip whenever one column had a gap
+    rows = lausanne_table[["localkey", "playthrough", "mc_onset", "timesig"]]
+    rows = rows.dropna(subset=["localkey", "playthrough"])
+    keys = rows.localkey.tolist()
 
     key_areas = []
     last_key = ""
@@ -166,9 +151,11 @@ def get_keyareas(lausanne_table, major=True):
             last_key = k
     number_blocks_keys = Counter(key_areas)
 
-    measures = lausanne_table.mc.dropna().tolist()
-    beats = lausanne_table.mc_onset.dropna().tolist()
-    time_signatures = lausanne_table.timesig.tolist()
+    # playthrough is the exact per-playthrough measure counter (monotonic
+    # even under expand_repeats, where mc jumps backwards)
+    measures = [int(m) for m in rows.playthrough.tolist()]
+    beats = [0 if b != b else b for b in rows.mc_onset.tolist()]
+    time_signatures = rows.timesig.tolist()
 
     key_measures = get_measures_per_key(
         list(set(keys)), measures, keys, beats, time_signatures
@@ -260,17 +247,17 @@ def get_function_second(element):
 
 
 def get_numerals(lausanne_table):
-    numerals = lausanne_table.numeral.dropna().tolist()
+    numerals = [
+        n
+        for n in lausanne_table.numeral.dropna().tolist()
+        if str(n) not in ("", "@none")
+    ]
     numerals_counter = Counter(numerals)
 
     total_numerals = sum(list(numerals_counter.values()))
     nc = {}
     for n in numerals_counter:
-        if str(n) == "":
-            continue
-        nc[NUMERALS_prefix + str(n) + "_Per"] = round(
-            (numerals_counter[n] / total_numerals), 3
-        )
+        nc[NUMERALS_prefix + str(n) + "_Per"] = numerals_counter[n] / total_numerals
         nc[NUMERALS_prefix + str(n) + "_Count"] = numerals_counter[n]
 
     return nc
@@ -318,10 +305,13 @@ def get_additions(lausanne_table):
 
 
 def get_chord_types(lausanne_table):
-
-    chords_forms = make_type_col(
-        lausanne_table
-    )  # Nan values represent {} notations, not chords
+    # ms3's chord_type column is assigned BEFORE special labels are expanded,
+    # so it still says It/Ger/Fr for augmented sixths; re-deriving the type
+    # from the post-expansion numeral (the old make_type_col) could never
+    # produce them, leaving the documented aug6 bucket unreachable
+    rows = lausanne_table[["numeral", "chord_type"]].dropna(subset=["chord_type"])
+    rows = rows[rows.numeral.astype(str) != "@none"]
+    chords_forms = [str(t) for t in rows.chord_type.tolist()]
 
     grouped_forms = get_chord_types_groupings(chords_forms)
 
@@ -334,24 +324,38 @@ def get_chord_types(lausanne_table):
     return features_chords
 
 
-def get_chords(harmonic_analysis):
+def _strip_accidentals(label: str) -> str:
+    return str(label).replace("#", "").replace("b", "")
 
-    relativeroots = harmonic_analysis.relativeroot.tolist()
-    keys = harmonic_analysis.localkey.dropna().tolist()
-    chords = harmonic_analysis.chord.dropna().tolist()
-    numerals = harmonic_analysis.numeral.dropna().tolist()
-    types = [str(i) for i in harmonic_analysis.chord_type.dropna().tolist()]
+
+def get_chords(harmonic_analysis):
+    # row-aligned extraction: only rows that carry a chord label (phrase-only
+    # rows have a propagated localkey but no chord, and used to shift the
+    # pairing); '@none' rows are explicit non-harmony and are excluded
+    rows = harmonic_analysis[["chord", "localkey", "numeral", "chord_type"]]
+    rows = rows.dropna(subset=["chord"])
+    rows = rows[rows.numeral.astype(str) != "@none"]
+
+    keys = rows.localkey.tolist()
+    chords = rows.chord.tolist()
+    numerals = rows.numeral.tolist()
+    types = [str(i) for i in rows.chord_type.tolist()]
 
     chords_functionalities1, chords_functionalities2 = get_chords_functions(
-        chords, relativeroots, keys
+        chords, keys
     )
 
-    numerals_and_types = [
-        str(numeral) + _seventh_suffix(str(types[index]))
-        if types[index] not in ("M", "m")
-        else str(numeral)
-        for index, numeral in enumerate(numerals)
-    ]
+    numerals_and_types = []
+    for index, numeral in enumerate(numerals):
+        chord_type = types[index]
+        if chord_type in ("It", "Ger", "Fr"):
+            # augmented sixths keep their own label (ms3 rewrites their
+            # numeral to vii/V, which used to produce 'viiIt'-style names)
+            numerals_and_types.append(chord_type)
+        elif chord_type in ("M", "m"):
+            numerals_and_types.append(str(numeral))
+        else:
+            numerals_and_types.append(str(numeral) + _seventh_suffix(chord_type))
 
     # #viio chords are counted together with viio
     numerals_and_types = [
@@ -448,18 +452,21 @@ def get_chord_types_groupings(chordtype_list):
 
 
 def get_first_chord_local(chord, local_key):
-    local_key_mode = "M" if local_key.isupper() else "m"
+    # DCML rule (ms3's series_is_minor): a key is minor only when the numeral
+    # is all-lowercase - 'bVI' is a MAJOR local key despite isupper()==False
+    local_key_mode = "m" if _strip_accidentals(local_key).islower() else "M"
 
     if "/" not in chord:
         return get_function_first(parse_chord(chord), local_key_mode)
     # applied chords (X/Y[/Z]): classify the chord against its direct reference
     parts = chord.split("/")
-    return get_function_first(parse_chord(parts[0]), "M" if parts[1].isupper() else "m")
+    return get_function_first(
+        parse_chord(parts[0]),
+        "m" if _strip_accidentals(parts[1]).islower() else "M",
+    )
 
 
-def get_chords_functions(
-    chords: List[str], relativeroots: List[str], local_keys: List[str]
-) -> list:
+def get_chords_functions(chords: List[str], local_keys: List[str]) -> list:
     chords_localkeys = list(zip(chords, local_keys))
     functionalities_dict = {t: get_first_chord_local(*t) for t in set(chords_localkeys)}
 
@@ -477,11 +484,3 @@ def get_chords_functions(
     return first_function, second_function
 
 
-def make_type_col(df, num_col="numeral", form_col="form", fig_col="figbass"):
-    param_tuples = list(
-        df[[num_col, form_col, fig_col]].itertuples(index=False, name=None)
-    )
-    result_dict = {t: features2type(*t) for t in set(param_tuples)}
-    return pd.Series(
-        [result_dict[t] for t in param_tuples], index=df.index, name="chordtype"
-    ).dropna()

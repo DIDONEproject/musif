@@ -4,7 +4,6 @@ from musif.extract.features.core.constants import FILE_NAME, NUM_MEASURES
 from pandas import DataFrame
 
 from musif.config import ExtractConfiguration
-from musif.extract.features.core.handler import DATA_MODE
 from musif.logs import perr, pwarn
 from .constants import *
 from .utils import (
@@ -47,9 +46,7 @@ def update_score_objects(
             return features
 
         all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
-        keyareas = get_keyareas(
-            harmonic_analysis, major=score_data[DATA_MODE] == "major"
-        )
+        keyareas = get_keyareas(harmonic_analysis)
         chords, chords_grouping1, chords_grouping2 = get_chords(harmonic_analysis)
 
         features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]

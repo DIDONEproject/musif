@@ -168,10 +168,17 @@ def join_keys(df: DataFrame) -> None:
     key_d = [i for i in [KEY_PREFIX + "v" + KEY_PERCENTAGE] if i in df]
 
     total_key = key_rel + key_tonic + key_sd + key_SD + key_D + key_d
+    derived = {
+        KEY_PREFIX + name + KEY_PERCENTAGE
+        for name in ("SD", "sd", "SubD", "D", "d", "Dom", "T", "rel", "Other")
+    }
     others_key = [
         i
         for i in df.columns
-        if KEY_PREFIX in i and i not in total_key and KEY_MODULATORY not in i
+        if KEY_PREFIX in i
+        and i not in total_key
+        and KEY_MODULATORY not in i
+        and i not in derived
     ]
 
     df[KEY_PREFIX + "SD" + KEY_PERCENTAGE] = df[key_SD].sum(axis=1)
@@ -225,10 +232,16 @@ def join_keys_modulatory(df: DataFrame):
     key_d = [i for i in [KEY_PREFIX + KEY_MODULATORY + "v"] if i in df]
 
     total_key_mod = key_rel + key_tonic + key_sd + key_SD + key_D + key_d
+    derived_mod = {
+        KEY_PREFIX + KEY_MODULATORY + name
+        for name in ("SD", "sd", "SubD", "D", "d", "Dom", "T", "rel", "Other")
+    }
     others_key_mod = [
         i
         for i in df.columns
-        if KEY_PREFIX + KEY_MODULATORY in i and i not in total_key_mod
+        if KEY_PREFIX + KEY_MODULATORY in i
+        and i not in total_key_mod
+        and i not in derived_mod
     ]
 
     df[KEY_PREFIX + KEY_MODULATORY + "SD"] = df[key_SD].sum(axis=1)

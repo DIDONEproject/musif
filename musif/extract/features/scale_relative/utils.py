@@ -14,18 +14,19 @@ from musif.musicxml.tempo import get_number_of_beats
 
 
 def get_emphasised_scale_degrees_relative(
-    notes_list: List[Note], score_data: dict
+    notes_list: List[Note], score_data: dict, expanded: bool = False
 ) -> Optional[dict]:
     """Count one part's notes per scale degree relative to the local key.
 
     Returns None when the score carries no harmonic analysis, and an empty
     dict (after logging an error) when the degrees could not be computed.
+    Pass ``expanded=True`` under ``expand_repeats``.
     """
     harmonic_analysis, tonality = extract_harmony(score_data)
     if harmonic_analysis.size == 0:
         return None
     try:
-        keys_by_measure = _get_keys_by_measure(harmonic_analysis, tonality)
+        keys_by_measure = _get_keys_by_measure(harmonic_analysis, tonality, expanded)
         emph_degrees = get_emphasized_degrees(notes_list, keys_by_measure)
     except Exception as e:
         file_name = score_data.get("file", "")
@@ -34,13 +35,22 @@ def get_emphasised_scale_degrees_relative(
     return emph_degrees
 
 
-def _get_keys_by_measure(harmonic_analysis: DataFrame, tonality: str) -> dict:
-    """Map every playthrough measure to the local key in force at its start,
-    plus the (beat, key) changes annotated inside the measure."""
+def _get_keys_by_measure(
+    harmonic_analysis: DataFrame, tonality: str, expanded: bool = False
+) -> dict:
+    """Map every measure (numbered as music21 numbers the notes) to the local
+    key in force at its start, plus the (beat, key) changes inside it.
+
+    Folded scores are keyed by the written measure number ``mn`` (for pickup
+    scores ``playthrough`` is mn+1, which used to shift every key one bar);
+    unfolded scores (``expand_repeats``) are keyed by ``playthrough``-1,
+    matching music21's renumbering of the expanded score.
+    """
     changes_by_measure = {}
     key_cache = {}
-    for measure, mc_onset, timesig, localkey in zip(
+    for playthrough, mn, mc_onset, timesig, localkey in zip(
         harmonic_analysis[C.PLAYTHROUGH],
+        harmonic_analysis.mn,
         harmonic_analysis.mc_onset,
         harmonic_analysis.timesig,
         harmonic_analysis.localkey,
@@ -48,10 +58,11 @@ def _get_keys_by_measure(harmonic_analysis: DataFrame, tonality: str) -> dict:
         label = str(localkey).strip()
         if label in ("", "nan", "None", "@none"):
             continue
+        measure = int(playthrough) - 1 if expanded else int(mn)
         if label not in key_cache:
             key_cache[label] = get_localTonalty(tonality, label)
         beat = _beat_in_measure(str(timesig), mc_onset)
-        changes_by_measure.setdefault(int(measure), []).append(
+        changes_by_measure.setdefault(measure, []).append(
             (beat, key_cache[label])
         )
     if not changes_by_measure:

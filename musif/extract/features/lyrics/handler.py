@@ -72,19 +72,27 @@ def update_score_objects(
 
     if voice_parts_data:
 
+        # staves sharing an abbreviation are one logical part: pool counts
+        part_totals = {}
         for part_data in voice_parts_data:
-
             part = part_data[DATA_PART_ABBREVIATION]
+            totals = part_totals.setdefault(part, [0, 0, 0, 0])
+            totals[0] += len(part_data[DATA_NOTES])
+            totals[1] += len(part_data[DATA_LYRICS])
+            totals[2] += len(part_data[DATA_SOUNDING_MEASURES])
+            totals[3] += len(part_data[DATA_MEASURES])
 
-            features[get_part_feature(part, SYLLABIC_RATIO)] = get_syllabic_ratio(
-                part_data[DATA_NOTES], part_data[DATA_LYRICS]
+        for part, (num_notes, num_syllables, sounding, measures) in part_totals.items():
+
+            features[get_part_feature(part, SYLLABIC_RATIO)] = (
+                num_notes / num_syllables if num_syllables else float("nan")
             )
 
-            features[get_part_feature(part, SYLLABLES)] = len(part_data[DATA_LYRICS])
+            features[get_part_feature(part, SYLLABLES)] = num_syllables
 
-            features[get_part_feature(part, VOICE_PRESENCE)] = len(
-                part_data[DATA_SOUNDING_MEASURES]
-            ) / len(part_data[DATA_MEASURES]) if part_data[DATA_MEASURES] else 0
+            features[get_part_feature(part, VOICE_PRESENCE)] = (
+                sounding / measures if measures else 0
+            )
 
         notes = [
             note for part_data in voice_parts_data for note in part_data[DATA_NOTES]

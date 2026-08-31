@@ -1,11 +1,12 @@
-from typing import List
+import re
+from typing import Dict, List
 
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import (DATA_MUSESCORE_SCORE,
                                      DATA_PART_ABBREVIATION)
 from musif.extract.features.core.constants import DATA_NOTES
-from musif.extract.features.prefix import get_part_prefix, get_score_feature
+from musif.extract.features.prefix import get_part_feature, get_score_feature
 
 from .constants import *
 from .utils import get_emphasised_scale_degrees_relative
@@ -16,7 +17,7 @@ def update_part_objects(
 ):
     if score_data[DATA_MUSESCORE_SCORE] is not None:
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
-            part_data[DATA_NOTES], score_data
+            part_data[DATA_NOTES], score_data, expanded=cfg.expand_repeats
         )
         if notes_per_degree_relative is None: # No harmonic data in the musescore file (or window)
             return
@@ -52,7 +53,7 @@ def update_score_objects(
 
     for part_data in parts_data:
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
-            part_data[DATA_NOTES], score_data
+            part_data[DATA_NOTES], score_data, expanded=cfg.expand_repeats
         )
         if notes_per_degree_relative is None:
             # no harmonic data in the musescore file (or window)
@@ -71,12 +72,29 @@ def update_score_objects(
             value / all_score_degrees if all_score_degrees != 0 else 0
         )
 
+    # Promote part-level relative degrees to score scope. Staves sharing an
+    # abbreviation are one logical part: counts summed, percentages
+    # recomputed (the old copy loop silently kept only the last staff).
+    count_pattern = re.compile(DEGREE_RELATIVE_COUNT.format(key="(.+)"))
+
+    part_degree_counts: Dict[str, Dict[str, int]] = {}
     for part_data, part_features in zip(parts_data, parts_features):
+        part = part_data[DATA_PART_ABBREVIATION]
+        counts = part_degree_counts.setdefault(part, {})
+        for feature_name, value in part_features.items():
+            match = count_pattern.fullmatch(feature_name)
+            if match:
+                degree = match.group(1)
+                counts[degree] = counts.get(degree, 0) + value
 
-        part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
-
-        for feature in part_features:
-            if "Degree" in feature and "relative" in feature:
-                features[f"{part_prefix}{feature}"] = part_features[feature]
+    for part, counts in part_degree_counts.items():
+        part_total = sum(counts.values())
+        for degree, value in counts.items():
+            features[
+                get_part_feature(part, DEGREE_RELATIVE_COUNT.format(key=degree))
+            ] = value
+            features[
+                get_part_feature(part, DEGREE_RELATIVE_PER.format(key=degree))
+            ] = (value / part_total if part_total != 0 else 0)
 
     score_features.update(features)
