@@ -42,6 +42,28 @@ https://github.com/DIDONEproject/music_symbolic_features
 
 ## Changelog
 
+#### v1.3.0
+* Bug fixed in scale degree features
+* Bug fixed in relative scale degree features
+* Bug fixed in melody features (intervals and motion)
+* Bug fixed in rhythm features
+* Bug fixed in dynamics features
+* Bug fixed in harmony features
+* Bug fixed in key features
+* Bug fixed in density features
+* Bug fixed in texture features
+* Bug fixed in lyrics features
+* Bug fixed in ambitus features
+* Bug fixed in core features
+* Bug fixed in tempo and time signature features
+* Bug fixed in scoring features
+* Bug fixed in music21 features
+* Bug fixed in windowed extraction
+* Bug fixed in the post-processor
+* Renamed motion columns and removed redundant interval columns (breaking change)
+* Features extracted with previous versions should be extracted again
+* Added a test suite and updated the feature documentation
+
 #### v1.2.4
 * Fix on lyrics module. Implemeted error output file for error registration.
 
