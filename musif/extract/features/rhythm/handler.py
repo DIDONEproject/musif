@@ -3,13 +3,20 @@ from typing import List
 
 import numpy as np
 
+from musif.cache import hasattr
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATURE
-from musif.extract.features.core.constants import DATA_NOTES, DATA_SOUNDING_MEASURES
+from musif.extract.features.core.constants import (
+    DATA_MELODIC_LINES,
+    DATA_NOTES,
+    DATA_SOUNDING_MEASURES,
+)
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 from musif.musicxml.tempo import get_number_of_beats
 
 from .constants import *
+
+_COMPONENTS = "_rhythm_components"
 
 
 def update_part_objects(
@@ -25,39 +32,42 @@ def update_part_objects(
         if hasattr(global_time_signature, "ratioString")
         else 1
     )
-    beat_unit = (
-        float(global_time_signature.beatDuration.quarterLength)
-        if hasattr(global_time_signature, "beatDuration")
-        else 1.0
-    )
+
     rhythm_dot = 0
     rhythm_double_dot = 0
-    total_beats = 0
     total_sounding_beats = 0
 
-    for measure_index, measure in enumerate(part_data["measures"]):
-        for i, element in enumerate(measure.elements):
-            if element.classes[0] == "Note":
-                # a dotted figure: a dotted note shorter than one beat,
-                # followed on the same beat by a shorter note
-                if (
-                    element.duration.dots > 0
-                    and element.duration.quarterLength < beat_unit
-                    and i + 1 < len(measure.elements)
-                    and measure.elements[i + 1].beatStr.split()[0]
-                    == element.beatStr.split()[0]
-                    and measure.elements[i + 1].duration.quarterLength
-                    < element.duration.quarterLength
-                ):
-                    if element.duration.dots == 2:
-                        rhythm_double_dot += 1
-                    else:
-                        rhythm_dot += 1
-            elif element.classes[0] == "TimeSignature":
-                beats = get_number_of_beats(element.ratioString)
-                beat_unit = float(element.beatDuration.quarterLength)
-        total_beats += beats
+    # Dotted figures are scanned per melodic line, so notes inside Voice
+    # sub-streams count too, and the "shorter following" element must itself
+    # be a note of the same line (a rest or barline never completes a figure).
+    for line in part_data[DATA_MELODIC_LINES]:
+        for element, following in zip(line, line[1:]):
+            if not hasattr(element, "pitch") or not hasattr(following, "pitch"):
+                continue
+            if element.duration.dots == 0:
+                continue
+            try:
+                beat_duration = float(element.beatDuration.quarterLength)
+                same_beat = (
+                    following.beatStr.split()[0] == element.beatStr.split()[0]
+                )
+            except Exception:
+                continue
+            if (
+                element.duration.quarterLength < beat_duration
+                and same_beat
+                and following.duration.quarterLength
+                < element.duration.quarterLength
+            ):
+                if element.duration.dots == 2:
+                    rhythm_double_dot += 1
+                else:
+                    rhythm_dot += 1
 
+    for measure_index, measure in enumerate(part_data["measures"]):
+        for element in measure.elements:
+            if element.classes[0] == "TimeSignature":
+                beats = get_number_of_beats(element.ratioString)
         # DATA_SOUNDING_MEASURES holds 0-based measure indices
         if measure_index in part_data[DATA_SOUNDING_MEASURES]:
             total_sounding_beats += beats
@@ -79,6 +89,15 @@ def update_part_objects(
             DOUBLE_DOTTEDRHYTHM: (rhythm_double_dot / total_sounding_beats)
             if total_sounding_beats
             else "NA",
+            # raw components so staves sharing an abbreviation can be summed
+            _COMPONENTS: (
+                sum(notes_duration),
+                total_sounding_beats,
+                rhythm_dot,
+                rhythm_double_dot,
+                sum(nonzero_durations),
+                len(nonzero_durations),
+            ),
         }
     )
 
@@ -96,28 +115,44 @@ def update_score_objects(
     double_dotted_rhythm = []
     total_notes_duration = []
 
+    # staves sharing an abbreviation are one logical part: sum components
+    part_components = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
+        components = part_components.setdefault(part, [0.0, 0, 0, 0, 0.0, 0])
+        for i, value in enumerate(part_features[_COMPONENTS]):
+            components[i] += value
 
-        features[get_part_feature(part, AVERAGE_DURATION)] = part_features[
-            AVERAGE_DURATION
-        ]
         total_notes_duration.extend(
             duration
             for note in part_data[DATA_NOTES]
             if (duration := float(note.duration.quarterLength)) != 0.0
         )
 
-        features[get_part_feature(part, RHYTHMINT)] = part_features[RHYTHMINT]
-        rhythm_intensities.append(part_features[RHYTHMINT])
+    for part, components in part_components.items():
+        (
+            duration_sum,
+            sounding_beats,
+            dots,
+            double_dots,
+            nonzero_sum,
+            nonzero_count,
+        ) = components
+        average_duration = (
+            nonzero_sum / nonzero_count if nonzero_count else "NA"
+        )
+        rhythm_int = duration_sum / sounding_beats if sounding_beats else "NA"
+        dotted = dots / sounding_beats if sounding_beats else "NA"
+        double_dotted = double_dots / sounding_beats if sounding_beats else "NA"
 
-        features[get_part_feature(part, DOTTEDRHYTHM)] = part_features[DOTTEDRHYTHM]
-        dotted_rhythm.append(part_features[DOTTEDRHYTHM])
+        features[get_part_feature(part, AVERAGE_DURATION)] = average_duration
+        features[get_part_feature(part, RHYTHMINT)] = rhythm_int
+        features[get_part_feature(part, DOTTEDRHYTHM)] = dotted
+        features[get_part_feature(part, DOUBLE_DOTTEDRHYTHM)] = double_dotted
 
-        features[get_part_feature(part, DOUBLE_DOTTEDRHYTHM)] = part_features[
-            DOUBLE_DOTTEDRHYTHM
-        ]
-        double_dotted_rhythm.append(part_features[DOUBLE_DOTTEDRHYTHM])
+        rhythm_intensities.append(rhythm_int)
+        dotted_rhythm.append(dotted)
+        double_dotted_rhythm.append(double_dotted)
 
     # keep genuine zeros; drop only the NA sentinel of silent parts
     rhythm_intensities = [i for i in rhythm_intensities if i != "NA"]

@@ -47,8 +47,11 @@ def get_time_signature_type(time_signature: str) -> str:
     ]:
         return "simple duple"
 
-    elif time_signature in ["6/8", "3/8", "6/2", "6/4", "6/16", "12/2", "12/4", "12/8", "12/16"]:
+    elif time_signature in ["6/8", "3/8", "6/2", "6/4", "6/16"]:
         return "compound duple"
+
+    elif time_signature in ["12/2", "12/4", "12/8", "12/16"]:
+        return "compound quadruple"
 
     elif time_signature in ["3/2", "3/4", "3/16"]:
         return "simple triple"
@@ -107,6 +110,9 @@ def get_tempo_grouped_1(tempo: str) -> str:
         "presto",
         "vivace",
         "minueto",
+        "minuetto",
+        "menuetto",
+        "marcia",
     ]
     # if the tempo marking ends in -ietto and or -issimo, it retuns the marking without that ending
     important_words = (
@@ -215,7 +221,9 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         "Maestoso",
         "Minueto",
         "Moderato",
-        "Marcía",
+        "Marcia",
+        "Minuetto",
+        "Menuetto",
         "Amoroso",
     ]
     moderate = moderate_basis + [
