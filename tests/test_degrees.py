@@ -82,10 +82,14 @@ def _part_notes(measure_pitches, time_signature="4/4"):
 
 class TestRelativeDegrees:
     def _harmonic_table(self):
-        # C major for measures 1-2, then G major (V) for measures 3-4
+        # C major for measures 1-2, then G major (V) for measures 3-4.
+        # Real ms3 tables always carry both mn (written number) and
+        # playthrough (unfolded counter); the folded path keys by mn.
         rows = [
-            {"playthrough": 1, "mc_onset": 0, "timesig": "4/4", "localkey": "I"},
-            {"playthrough": 3, "mc_onset": 0, "timesig": "4/4", "localkey": "V"},
+            {"mn": 1, "playthrough": 1, "mc_onset": 0, "timesig": "4/4",
+             "localkey": "I"},
+            {"mn": 3, "playthrough": 3, "mc_onset": 0, "timesig": "4/4",
+             "localkey": "V"},
         ]
         return pd.DataFrame(rows)
 
@@ -101,6 +105,38 @@ class TestRelativeDegrees:
         assert counts["1"] == 4
         assert counts["2"] == 4
         assert sum(counts.values()) == 8
+        del part
+
+    def test_anacrusis_keys_by_written_measure_number(self):
+        # a pickup score numbers its measures 0..3; the local-key map must
+        # follow the written numbers, or every key is read one bar late
+        # (round-2 R2-8)
+        part = Part()
+        for number, pitches in enumerate([["C4"], ["C4"], ["G4"], ["G4"]]):
+            measure = Measure(number=number)
+            if number == 0:
+                measure.append(TimeSignature("4/4"))
+            for pitch in pitches:
+                measure.append(Note(pitch, quarterLength=1.0))
+            part.append(measure)
+        notes = [n for m in part.getElementsByClass(Measure) for n in m.notes]
+        table = pd.DataFrame(
+            [
+                {"mn": 0, "playthrough": 1, "mc_onset": 0, "timesig": "4/4",
+                 "localkey": "I"},
+                {"mn": 2, "playthrough": 3, "mc_onset": 0, "timesig": "4/4",
+                 "localkey": "V"},
+            ]
+        )
+        score_data = {
+            DATA_MUSESCORE_SCORE: table,
+            "key": "C major",
+            "file": "synthetic",
+        }
+        counts = get_emphasised_scale_degrees_relative(notes, score_data)
+        # mm 0-1: C in C = degree 1; mm 2-3: G in G = degree 1
+        assert counts["1"] == 4
+        assert sum(counts.values()) == 4
         del part
 
     def test_no_analysis_returns_none(self):

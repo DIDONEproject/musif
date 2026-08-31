@@ -85,3 +85,45 @@ class TestRhythmFormulas:
         part_features = {}
         update_part_objects({}, data, None, part_features)
         assert part_features["RhythmInt"] == 8 / 4
+
+
+class TestWindowMetre:
+    def test_window_slice_reads_prevailing_metre_from_context(self):
+        # a window sliced with .measures(...) carries the prevailing time
+        # signature at Part level, not inside its first measure; both TS
+        # readers must resolve it from context instead of falling back to
+        # the score's opening metre (round-2 R2-1)
+        from music21.meter import TimeSignature
+        from music21.note import Note
+        from music21.stream import Measure, Part
+
+        from musif.extract.constants import (
+            DATA_FILTERED_PARTS,
+            GLOBAL_TIME_SIGNATURE,
+        )
+        from musif.extract.features.core.handler import _get_time_signature
+        from musif.extract.features.tempo.handler import extract_time_signatures
+
+        part = Part()
+        for index in range(10):
+            measure = Measure(number=index + 1)
+            if index == 0:
+                measure.append(TimeSignature("3/4"))
+            if index == 4:
+                measure.append(TimeSignature("2/2"))
+            for _ in range(3):
+                measure.append(Note("C4", quarterLength=1.0))
+            part.append(measure)
+        window = part.measures(5, 9, indicesNotNumbers=True)  # all in 2/2
+        score_data = {
+            DATA_FILTERED_PARTS: [window],
+            GLOBAL_TIME_SIGNATURE: TimeSignature("3/4"),
+        }
+        assert _get_time_signature(score_data) == "2/2"
+        time_signature, _, per_measure, grouped, beats = extract_time_signatures(
+            list(window.getElementsByClass(Measure)), score_data
+        )
+        assert time_signature == "2/2"
+        assert set(per_measure) == {"2/2"}
+        assert beats == 2
+        assert grouped == "simple duple"

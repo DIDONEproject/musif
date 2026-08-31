@@ -9,6 +9,7 @@ from musif.extract.constants import DATA_PART_ABBREVIATION, GLOBAL_TIME_SIGNATUR
 from musif.extract.features.core.constants import (
     DATA_MELODIC_LINES,
     DATA_NOTES,
+    DATA_NOTES_AND_RESTS,
     DATA_SOUNDING_MEASURES,
 )
 from musif.extract.features.prefix import get_part_feature, get_score_feature
@@ -40,7 +41,11 @@ def update_part_objects(
     # Dotted figures are scanned per melodic line, so notes inside Voice
     # sub-streams count too, and the "shorter following" element must itself
     # be a note of the same line (a rest or barline never completes a figure).
-    for line in part_data[DATA_MELODIC_LINES]:
+    lines = part_data.get(DATA_MELODIC_LINES)
+    if lines is None:
+        # custom callers may not run the core module first
+        lines = [part_data.get(DATA_NOTES_AND_RESTS, part_data[DATA_NOTES])]
+    for line in lines:
         for element, following in zip(line, line[1:]):
             if not hasattr(element, "pitch") or not hasattr(following, "pitch"):
                 continue

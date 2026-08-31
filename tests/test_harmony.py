@@ -112,3 +112,103 @@ class TestAvailabilityFlag:
             [], None, [], score_features,
         )
         assert score_features[HARMONY_AVAILABLE] == 0
+
+
+def _rows(records):
+    return pd.DataFrame(records)
+
+
+class TestAugmentedSixths:
+    def _table(self):
+        # chord_type is assigned by ms3 before special labels are expanded,
+        # so It/Ger/Fr survive there even though the numeral reads "vii"
+        return _rows(
+            [
+                {"chord": "I", "localkey": "I", "numeral": "I", "chord_type": "M"},
+                {"chord": "Ger6", "localkey": "I", "numeral": "vii",
+                 "chord_type": "Ger"},
+                {"chord": "It6", "localkey": "I", "numeral": "vii",
+                 "chord_type": "It"},
+                {"chord": "Fr43", "localkey": "I", "numeral": "V",
+                 "chord_type": "Fr"},
+                {"chord": "V", "localkey": "I", "numeral": "V", "chord_type": "M"},
+                {"chord": "I", "localkey": "I", "numeral": "I", "chord_type": "M"},
+            ]
+        )
+
+    def test_aug6_reaches_its_bucket(self):
+        from musif.extract.features.harmony.utils import get_chord_types
+
+        types = get_chord_types(self._table())
+        assert types["Harmony_Chord_types_aug6"] == 0.5
+
+    def test_aug6_chords_are_named_not_mangled(self):
+        from musif.extract.features.harmony.utils import get_chords
+
+        chords, _, _ = get_chords(self._table())
+        count_keys = {key for key in chords if key.endswith("_Count")}
+        assert "Harmony_Chord_Ger_Count" in count_keys
+        assert "Harmony_Chord_It_Count" in count_keys
+        assert "Harmony_Chord_Fr_Count" in count_keys
+        assert not any("viiIt" in key or "viiGer" in key for key in count_keys)
+
+
+class TestNonHarmonyRows:
+    def test_at_none_is_not_a_chord(self):
+        table = _rows(
+            [
+                {"chord": "I", "localkey": "I", "numeral": "I", "chord_type": "M",
+                 "playthrough": 1, "timesig": "4/4", "mc_onset": 0},
+                {"chord": "@none", "localkey": "I", "numeral": "@none",
+                 "chord_type": "m", "playthrough": 2, "timesig": "4/4",
+                 "mc_onset": 0},
+                {"chord": "V", "localkey": "I", "numeral": "V", "chord_type": "M",
+                 "playthrough": 3, "timesig": "4/4", "mc_onset": 0},
+                {"chord": "I", "localkey": "I", "numeral": "I", "chord_type": "M",
+                 "playthrough": 4, "timesig": "4/4", "mc_onset": 0},
+            ]
+        )
+        assert get_harmonic_rhythm(table, 4)["Harmony_HarmonicRhythm"] == 0.75
+
+
+class TestLocalKeyMode:
+    def test_flat_major_keys_classify_as_major(self):
+        # DCML: minor iff the numeral is all-lowercase; bVI is a MAJOR key
+        from musif.extract.features.harmony.utils import get_first_chord_local
+
+        assert get_first_chord_local("viio", "bVI") == "D"
+        assert get_first_chord_local("viio", "vi") == "st"
+
+
+class TestKeyAreasPlaythrough:
+    def test_mid_measure_change_is_onset_aware(self):
+        from musif.extract.features.harmony.utils import get_keyareas
+
+        table = _rows(
+            [
+                {"localkey": "I", "playthrough": 1, "mc_onset": 0,
+                 "timesig": "3/4"},
+                {"localkey": "I", "playthrough": 2, "mc_onset": 0,
+                 "timesig": "3/4"},
+                {"localkey": "V", "playthrough": 3, "mc_onset": 0.25,
+                 "timesig": "3/4"},
+                {"localkey": "V", "playthrough": 4, "mc_onset": 0,
+                 "timesig": "3/4"},
+            ]
+        )
+        areas = get_keyareas(table)
+        # I holds mm 1-2 plus the first third of m 3 (0.25 of a whole note
+        # in 3/4): (2 + 1/3) / 4
+        assert abs(areas["Harmony_Key_I_PercentageMeasures"] - (2 + 1 / 3) / 4) < 1e-9
+
+    def test_unfolded_repeats_follow_playthrough(self):
+        from musif.extract.features.harmony.utils import get_keyareas
+
+        rows = [
+            {"localkey": "I" if playthrough <= 4 else "V",
+             "playthrough": playthrough, "mc_onset": 0, "timesig": "4/4"}
+            for playthrough in range(1, 9)
+        ]
+        areas = get_keyareas(_rows(rows))
+        assert areas["Harmony_Key_I_PercentageMeasures"] == 0.5
+        assert areas["Harmony_Key_V_PercentageMeasures"] == 0.5

@@ -84,3 +84,28 @@ class TestGroupedAnalysis:
         assert df["Harmony_Key_T_PercentageMeasures"].iloc[0] == 0.5
         # V no longer leaks into Other
         assert df["Harmony_Key_Other_PercentageMeasures"].iloc[0] == 0.0
+
+
+class TestKeyGroupingIdempotency:
+    def test_join_keys_twice_gives_same_result(self):
+        # the derived buckets must be excluded from "Other", or re-processing
+        # an already-processed frame inflates it (round-2 O3-8)
+        import pandas as pd
+
+        from musif.extract.features.harmony.constants import (
+            KEY_PERCENTAGE,
+            KEY_PREFIX,
+        )
+        from musif.process.utils import join_keys
+
+        frame = pd.DataFrame(
+            {
+                KEY_PREFIX + "I" + KEY_PERCENTAGE: [0.5],
+                KEY_PREFIX + "V" + KEY_PERCENTAGE: [0.3],
+                KEY_PREFIX + "bVII" + KEY_PERCENTAGE: [0.2],
+            }
+        )
+        join_keys(frame)
+        first = frame.copy()
+        join_keys(frame)
+        pd.testing.assert_frame_equal(frame, first)
