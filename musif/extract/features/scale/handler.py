@@ -1,7 +1,6 @@
 import re
-from statistics import mean
 
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 
 from music21.note import Note
@@ -14,6 +13,8 @@ from musif.extract.common import _filter_parts_data
 from musif.extract.features.core.handler import DATA_KEY, DATA_NOTES
 
 from musif.extract.features.prefix import get_part_feature, get_score_feature
+
+from musif.logs import pwarn
 
 from musif.musicxml.common import _get_degrees_and_accidentals
 
@@ -83,31 +84,38 @@ def update_score_objects(
             value / all_score_degrees if all_score_degrees != 0 else 0
         )
 
-    for part_data, parts_features in zip(parts_data, parts_features):
+    # Promote part-level degree features to score scope. Parts sharing an
+    # abbreviation are treated as one logical part: their counts are summed
+    # and the percentages recomputed from the summed counts.
+    degree_count_pattern = re.compile(DEGREE_COUNT.format(key="(.+)"))
+
+    part_degree_counts: Dict[str, Dict[str, int]] = {}
+
+    for part_data, part_features in zip(parts_data, parts_features):
 
         part = part_data[DATA_PART_ABBREVIATION]
 
-        degree_count_pattern = DEGREE_COUNT.format(key=".+")
+        counts = part_degree_counts.setdefault(part, {})
 
-        degree_per_pattern = DEGREE_PER.format(key=".+")
+        for feature_name, value in part_features.items():
 
-        for feature_name in parts_features:
+            match = degree_count_pattern.fullmatch(feature_name)
 
-            if re.match(degree_count_pattern, feature_name) or re.match(
-                degree_per_pattern, feature_name
-            ):
+            if match:
+                degree = match.group(1)
+                counts[degree] = counts.get(degree, 0) + value
 
-                part_feature = get_part_feature(part, feature_name)
+    for part, counts in part_degree_counts.items():
 
-                if part_feature in score_features:
+        part_total = sum(counts.values())
 
-                    score_features[part_feature] = mean(
-                        [score_features[part_feature], parts_features[feature_name]]
-                    )
+        for degree, value in counts.items():
 
-                else:
+            score_features[get_part_feature(part, DEGREE_COUNT.format(key=degree))] = value
 
-                    score_features[part_feature] = parts_features[feature_name]
+            score_features[get_part_feature(part, DEGREE_PER.format(key=degree))] = (
+                value / part_total if part_total != 0 else 0
+            )
 
 
 def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
@@ -118,19 +126,24 @@ def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
 
-    all_degrees = 0
-
     for degree, accidental in _get_degrees_and_accidentals(key, notes):
 
-        if to_full_degree(degree, accidental) not in notes_per_degree:
+        full_degree = to_full_degree(degree, accidental)
+
+        if full_degree is None:
             continue
 
-        notes_per_degree[to_full_degree(degree, accidental)] += 1
+        notes_per_degree[full_degree] = notes_per_degree.get(full_degree, 0) + 1
 
-        all_degrees += 1
     return notes_per_degree
 
 
-def to_full_degree(degree: Union[int, str], accidental: str) -> str:
+def to_full_degree(degree: Union[int, str], accidental: str) -> Optional[str]:
 
-    return f"{ACCIDENTAL_ABBREVIATION[accidental]}{degree}"
+    abbreviation = ACCIDENTAL_ABBREVIATION.get(accidental)
+
+    if abbreviation is None:
+        pwarn(f"Unsupported accidental {accidental!r} on degree {degree}; note not counted")
+        return None
+
+    return f"{abbreviation}{degree}"
