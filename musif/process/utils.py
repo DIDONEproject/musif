@@ -44,23 +44,40 @@ def replace_nans(df):
 def join_part_degrees(
     total_degrees: List[str], part: str, df: DataFrame, sufix: str = ""
 ) -> None:
-    part_degrees = [i for i in total_degrees if part in i]
+    """Group one prefix's per-degree columns into Asc/Desc/Dasc/Ddesc/Nat/Nonat
+    aggregates, separately for _Count and _Per columns.
 
-    aug = [i for i in part_degrees if "#" in i]
-    desc = [i for i in part_degrees if "b" in i and "bb" not in i]
-    d_desc = [i for i in part_degrees if "bb" in i]
-    d_asc = [i for i in part_degrees if "x" in i]
-
-    pattern = "^" + part + "Degree" + "[0-9].*"
-    degree_nat = [x for x in part_degrees if re.search(pattern, x)]
-    degree_nonat = [i for i in part_degrees if i not in degree_nat]
-
-    df[part + DEGREE_PREFIX + "_Asc" + sufix] = df[aug].sum(axis=1)
-    df[part + DEGREE_PREFIX + "_Desc" + sufix] = df[desc].sum(axis=1)
-    df[part + DEGREE_PREFIX + "_Dasc" + sufix] = df[d_asc].sum(axis=1)
-    df[part + DEGREE_PREFIX + "_Ddesc" + sufix] = df[d_desc].sum(axis=1)
-    df[part + DEGREE_PREFIX + "_Nat" + sufix] = df[degree_nat].sum(axis=1)
-    df[part + DEGREE_PREFIX + "_Nonat" + sufix] = df[degree_nonat].sum(axis=1)
+    The accidental is matched as a token of the column name (not a substring),
+    so prefixes containing 'b' or 'x' (PartOb_, PartTbn_, ...) cannot
+    contaminate the groups.
+    """
+    pattern = re.compile(
+        re.escape(part) + r"Degree(b+|#x?|x)?(\d+)_(Count|Per)" + re.escape(sufix) + "$"
+    )
+    for kind in ("Count", "Per"):
+        selected = {name: [] for name in ("Asc", "Desc", "Dasc", "Ddesc", "Nat", "Nonat")}
+        for col in total_degrees:
+            match = pattern.fullmatch(col)
+            if match is None or match.group(3) != kind:
+                continue
+            accidental = match.group(1) or ""
+            if accidental == "":
+                selected["Nat"].append(col)
+            else:
+                selected["Nonat"].append(col)
+                if accidental == "#":
+                    selected["Asc"].append(col)
+                elif accidental == "b":
+                    selected["Desc"].append(col)
+                elif accidental in ("x", "#x"):
+                    selected["Dasc"].append(col)
+                else:  # bb, bbb, ...
+                    selected["Ddesc"].append(col)
+        if not any(selected.values()):
+            continue
+        for name, cols in selected.items():
+            column = part + DEGREE_PREFIX + "_" + name + "_" + kind + sufix
+            df[column] = df[cols].sum(axis=1) if cols else 0.0
 
 
 def log_errors_and_shape(

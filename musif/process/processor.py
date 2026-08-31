@@ -17,7 +17,6 @@ from musif.extract.features.harmony.constants import (
     KEY_MODULATORY,
     KEY_PREFIX,
 )
-from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.logs import perr, pinfo
 from musif.process.constants import PRESENCE
 from musif.process.utils import (
@@ -288,22 +287,22 @@ class DataProcessor:
             i for i in self.data.columns if "_Degree" in i and "relative" not in i
         ]
 
-        for part in self._post_config.instruments_to_keep:
-            join_part_degrees(total_degrees, get_part_prefix(part), self.data)
-        join_part_degrees(total_degrees, get_sound_prefix("voice"), self.data)
+        for prefix in self._degree_prefixes(total_degrees):
+            join_part_degrees(total_degrees, prefix, self.data)
 
     def _join_degrees_relative(self) -> None:
         total_degrees = [
             i for i in self.data.columns if "_Degree" in i and "relative" in i
         ]
 
-        for part in self._post_config.instruments_to_keep:
-            join_part_degrees(
-                total_degrees, get_part_prefix(part), self.data, sufix="_relative"
-            )
-        join_part_degrees(
-            total_degrees, get_sound_prefix("voice"), self.data, sufix="_relative"
-        )
+        for prefix in self._degree_prefixes(total_degrees):
+            join_part_degrees(total_degrees, prefix, self.data, sufix="_relative")
+
+    @staticmethod
+    def _degree_prefixes(total_degrees) -> list:
+        """Scope prefixes (PartVnI_, Score_, ...) that actually carry degree
+        columns, so grouping covers every present scope and no phantom ones."""
+        return sorted({col.split("Degree", 1)[0] for col in total_degrees if col.split("Degree", 1)[0]})
 
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
