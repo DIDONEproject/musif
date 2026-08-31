@@ -14,7 +14,10 @@ from musif.cache import hasattr
 from musif.common._utils import extract_digits
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_PART_ABBREVIATION, DATA_SOUND_ABBREVIATION
-from musif.extract.features.core.constants import DATA_INTERVALS
+from musif.extract.features.core.constants import (
+    DATA_INTERVALS,
+    DATA_MELODIC_LINES,
+)
 from musif.extract.features.prefix import (
     get_part_feature,
     get_part_prefix,
@@ -24,9 +27,13 @@ from musif.extract.features.prefix import (
 
 from .constants import *
 
-MOTION_FEATURE_NAMES = (
+# speed/acceleration depend only on the sampling step; the smoothing window
+# applies only to the four chunk statistics below
+STEP_FEATURE_NAMES = (
     SPEED_AVG_ABS,
     ACCELERATION_AVG_ABS,
+)
+CHUNK_FEATURE_NAMES = (
     ASCENDENT_AVERAGE,
     DESCENDENT_AVERAGE,
     ASCENDENT_PROPORTION,
@@ -68,18 +75,25 @@ def update_score_objects(
         if len(group) == 1:
             motion_features = group[0][1]
         else:
+            # duplicate staves: each staff's melodic lines stay separate
+            # lines, so nothing is spliced across simultaneous streams
             merged_part_data = {
-                "notes_and_rests": [
-                    element
+                DATA_MELODIC_LINES: [
+                    line
                     for part_data, _ in group
-                    for element in part_data["notes_and_rests"]
+                    for line in part_data[DATA_MELODIC_LINES]
                 ]
             }
             motion_features = get_motion_features(merged_part_data)
         for step in MOTION_STEPS:
+            step_postfix = _motion_step_postfix(step)
+            for name in STEP_FEATURE_NAMES:
+                features[get_part_feature(part, name + step_postfix)] = (
+                    motion_features[name + step_postfix]
+                )
             for win in MOTION_WINS:
                 key_postfix = _motion_postfix(step, win)
-                for name in MOTION_FEATURE_NAMES:
+                for name in CHUNK_FEATURE_NAMES:
                     features[get_part_feature(part, name + key_postfix)] = (
                         motion_features[name + key_postfix]
                     )
@@ -213,10 +227,10 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
         sum(descending_intervals) if len(descending_intervals) > 0 else 0
     )
     ascending_intervals_percentage = (
-        num_ascending_intervals / len(intervals) if len(intervals) > 0 else 0
+        num_ascending_intervals / len(intervals) if len(intervals) > 0 else nan
     )
     descending_intervals_percentage = (
-        num_descending_intervals / len(intervals) if len(intervals) > 0 else 0
+        num_descending_intervals / len(intervals) if len(intervals) > 0 else nan
     )
 
     # Extremes are selected by magnitude and keep the notated interval object,
@@ -226,12 +240,6 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
     )
     largest_semitones = largest_interval.semitones if largest_interval else None
     largest = largest_interval.directedName if largest_interval else None
-    smallest_interval = (
-        min(intervals, key=lambda i: abs(i.semitones)) if len(intervals) > 0 else None
-    )
-    smallest_semitones = smallest_interval.semitones if smallest_interval else None
-    smallest = smallest_interval.directedName if smallest_interval else None
-
     ascending_objects = [i for i in intervals if i.semitones > 0]
     descending_objects = [i for i in intervals if i.semitones < 0]
 
@@ -311,29 +319,10 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
         f"{prefix}{LARGEST_ABSOLUTE_SEMITONES_ALL}": abs(largest_semitones)
         if largest_semitones is not None
         else None,
-        f"{prefix}{LARGEST_ABSOLUTE_SEMITONES_ASC}": abs(largest_ascending_semitones)
-        if largest_ascending_semitones is not None
-        else None,
-        f"{prefix}{LARGEST_ABSOLUTE_SEMITONES_DESC}": abs(largest_descending_semitones)
-        if largest_descending_semitones is not None
-        else None,
-        f"{prefix}{SMALLEST_INTERVAL_ALL}": smallest,
         f"{prefix}{SMALLEST_INTERVAL_ASC}": smallest_ascending,
         f"{prefix}{SMALLEST_INTERVAL_DESC}": smallest_descending,
-        f"{prefix}{SMALLEST_SEMITONES_ALL}": smallest_semitones,
         f"{prefix}{SMALLEST_SEMITONES_ASC}": smallest_ascending_semitones,
         f"{prefix}{SMALLEST_SEMITONES_DESC}": smallest_descending_semitones,
-        f"{prefix}{SMALLEST_ABSOLUTE_SEMITONES_ALL}": abs(smallest_semitones)
-        if smallest_semitones is not None
-        else None,
-        f"{prefix}{SMALLEST_ABSOLUTE_SEMITONES_ASC}": abs(smallest_ascending_semitones)
-        if smallest_ascending_semitones is not None
-        else None,
-        f"{prefix}{SMALLEST_ABSOLUTE_SEMITONES_DESC}": abs(
-            smallest_descending_semitones
-        )
-        if smallest_descending_semitones is not None
-        else None,
     }
     return features
 
@@ -442,150 +431,150 @@ def get_interval_type_features(intervals_list: List[Interval], prefix: str = "")
         f"{prefix}{REPEATED_NOTES_COUNT}": all_repeated,
         f"{prefix}{REPEATED_NOTES_PER}": all_repeated / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{STEPWISE_MOTION_ASC_COUNT}": ascending_stepwise,
         f"{prefix}{STEPWISE_MOTION_DESC_COUNT}": descending_stepwise,
         f"{prefix}{STEPWISE_MOTION_ALL_COUNT}": all_stepwise,
         f"{prefix}{STEPWISE_MOTION_ASC_PER}": ascending_stepwise / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{STEPWISE_MOTION_DESC_PER}": descending_stepwise / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{STEPWISE_MOTION_ALL_PER}": all_stepwise / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{LEAPS_ASC_COUNT}": ascending_leaps,
         f"{prefix}{LEAPS_DESC_COUNT}": descending_leaps,
         f"{prefix}{LEAPS_ALL_COUNT}": all_leaps,
         f"{prefix}{LEAPS_ASC_PER}": ascending_leaps / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{LEAPS_DESC_PER}": descending_leaps / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{LEAPS_ALL_PER}": all_leaps / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_PERFECT_ASC_COUNT}": ascending_perfect,
         f"{prefix}{INTERVALS_PERFECT_DESC_COUNT}": descending_perfect,
         f"{prefix}{INTERVALS_PERFECT_ALL_COUNT}": all_perfect,
         f"{prefix}{INTERVALS_PERFECT_ASC_PER}": ascending_perfect / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_PERFECT_DESC_PER}": descending_perfect / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_PERFECT_ALL_PER}": all_perfect / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_MAJOR_ASC_COUNT}": ascending_major,
         f"{prefix}{INTERVALS_MAJOR_DESC_COUNT}": descending_major,
         f"{prefix}{INTERVALS_MAJOR_ALL_COUNT}": all_major,
         f"{prefix}{INTERVALS_MAJOR_ASC_PER}": ascending_major / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_MAJOR_DESC_PER}": descending_major / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_MAJOR_ALL_PER}": all_major / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_MINOR_ASC_COUNT}": ascending_minor,
         f"{prefix}{INTERVALS_MINOR_DESC_COUNT}": descending_minor,
         f"{prefix}{INTERVALS_MINOR_ALL_COUNT}": all_minor,
         f"{prefix}{INTERVALS_MINOR_ASC_PER}": ascending_minor / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_MINOR_DESC_PER}": descending_minor / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_MINOR_ALL_PER}": all_minor / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_AUGMENTED_ASC_COUNT}": ascending_augmented,
         f"{prefix}{INTERVALS_AUGMENTED_DESC_COUNT}": descending_augmented,
         f"{prefix}{INTERVALS_AUGMENTED_ALL_COUNT}": all_augmented,
         f"{prefix}{INTERVALS_AUGMENTED_ASC_PER}": ascending_augmented / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_AUGMENTED_DESC_PER}": descending_augmented / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_AUGMENTED_ALL_PER}": all_augmented / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DIMINISHED_ASC_COUNT}": ascending_diminished,
         f"{prefix}{INTERVALS_DIMINISHED_DESC_COUNT}": descending_diminished,
         f"{prefix}{INTERVALS_DIMINISHED_ALL_COUNT}": all_diminished,
         f"{prefix}{INTERVALS_DIMINISHED_ASC_PER}": ascending_diminished / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DIMINISHED_DESC_PER}": descending_diminished
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DIMINISHED_ALL_PER}": all_diminished / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ASC_COUNT}": ascending_double_augmented,
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_DESC_COUNT}": descending_double_augmented,
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ALL_COUNT}": all_double_augmented,
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ASC_PER}": ascending_double_augmented
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_DESC_PER}": descending_double_augmented
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DOUBLE_AUGMENTED_ALL_PER}": all_double_augmented
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ASC_COUNT}": ascending_double_diminished,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_DESC_COUNT}": descending_double_diminished,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ALL_COUNT}": all_double_diminished,
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ASC_PER}": ascending_double_diminished
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_DESC_PER}": descending_double_diminished
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_DOUBLE_DIMINISHED_ALL_PER}": all_double_diminished
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_COUNT}": ascending_within_octave,
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_COUNT}": descending_within_octave,
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_COUNT}": all_within_octave,
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_ASC_PER}": ascending_within_octave
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_DESC_PER}": descending_within_octave
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_WITHIN_OCTAVE_ALL_PER}": all_within_octave / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_COUNT}": ascending_beyond_octave,
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_COUNT}": descending_beyond_octave,
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_COUNT}": all_beyond_octave,
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_ASC_PER}": ascending_beyond_octave
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_DESC_PER}": descending_beyond_octave
         / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
         f"{prefix}{INTERVALS_BEYOND_OCTAVE_ALL_PER}": all_beyond_octave / all_intervals
         if all_intervals != 0
-        else 0,
+        else float("nan"),
     }
 
 
@@ -616,7 +605,7 @@ def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
         )
         intervals_kurtosis = (
             kurtosis(numeric_intervals, bias=False)
-            if len(numeric_intervals) >= 3
+            if len(numeric_intervals) >= 4
             else np.nan
         )
         absolute_intervals_skewness = (
@@ -626,7 +615,7 @@ def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
         )
         absolute_intervals_kurtosis = (
             kurtosis(absolute_numeric_intervals, bias=False)
-            if len(absolute_numeric_intervals) >= 3
+            if len(absolute_numeric_intervals) >= 4
             else np.nan
         )
 
@@ -639,132 +628,121 @@ def get_interval_stats_features(intervals: List[Interval], prefix: str = ""):
 
 
 def _motion_postfix(step, win):
-    key_postfix = f"_step_{step}_win_{win}"
-    return key_postfix
+    return f"_step_{step}_win_{win}"
 
 
-def _motion_features_single_window_step(
-    notes_duration: List[float], notes_midi: List[int], step: float, win: int
-) -> Dict[str, Union[float, np.ndarray]]:
-    """
-    Calculates motion features for a single window step of an aria.
+def _motion_step_postfix(step):
+    return f"_step_{step}"
 
-    Parameters:
-    notes_duration (List[float]): List of note durations in quarter lengths.
-    notes_midi (List[int]): List of MIDI note numbers.
-    step (float): Sampling step in quarter lengths.
-    win (int): Half-width of the smoothing window in samples (the rolling
-        window spans 2*win+1 samples).
 
-    Returns:
-    Dict[str, Union[float, np.ndarray]]: Dictionary containing the following motion features:
-        - SPEED_AVG_ABS_{step}_{win} Average absolute speed.
-        - ACCELERATION_AVG_ABS_{step}_{win} Average absolute acceleration.
-        - ASCENDENT_AVERAGE_{step}_{win} Average length of prolonged ascent chunks in the smoothed midis of the aria.
-        - DESCENDENT_AVERAGE_{step}_{win} Average length of prolonged descent chunks in the smoothed midis of the aria.
-        - ASCENDENT_PROPORTION_{step}_{win} Proportion of prolonged ascent chunks over the total of the aria.
-        - DESCENDENT_PROPORTION_{step}_{win} Proportion of prolonged descent chunks over the total of the aria.
-    """
-    key_postfix = _motion_postfix(step, win)
-    # NaN, not 0: an empty sampling grid means the feature is undefined, and a
-    # genuine 0 (a flat melody) must stay distinguishable from it.
-    default_dict = {
-        SPEED_AVG_ABS + key_postfix: np.nan,
-        ACCELERATION_AVG_ABS + key_postfix: np.nan,
-        ASCENDENT_AVERAGE + key_postfix: np.nan,
-        DESCENDENT_AVERAGE + key_postfix: np.nan,
-        ASCENDENT_PROPORTION + key_postfix: np.nan,
-        DESCENDENT_PROPORTION + key_postfix: np.nan,
-    }
+def _melodic_segments(lines):
+    """Runs of consecutive notes per melodic line; any rest splits a line
+    into segments so motion is never measured across a silence."""
+    segments = []
+    for line in lines:
+        durations, midis = [], []
+        for element in line:
+            if hasattr(element, "pitch"):
+                durations.append(float(element.duration.quarterLength))
+                midis.append(element.pitch.midi)
+            elif durations:
+                segments.append((np.asarray(durations), np.asarray(midis)))
+                durations, midis = [], []
+        if durations:
+            segments.append((np.asarray(durations), np.asarray(midis)))
+    return segments
 
-    if len(notes_midi) == 0:
-        return default_dict
-    # Resample the note stream on a regular grid of `step` quarter lengths:
-    # each note covers its span of grid points (cumulative-time tiling), so
-    # notes shorter than `step` no longer vanish from the time axis.
-    boundaries = np.round(np.cumsum(notes_duration) / step).astype(int)
+
+def _resample(durations, midis, step):
+    """Tile each note over its span of grid points of ``step`` quarter
+    lengths (round-half-up boundaries, so the tie-break is consistent)."""
+    boundaries = np.floor(np.cumsum(durations) / step + 0.5).astype(int)
     counts = np.diff(boundaries, prepend=0)
-    midis_raw = np.repeat(notes_midi, counts, axis=0)
-    if midis_raw.size == 0:
-        return default_dict
+    return np.repeat(midis, counts)
 
-    # Absolute means of speed and acceleration (undefined with too few samples)
-    spe_raw = np.diff(midis_raw) / step
-    spe_avg_abs = np.mean(abs(spe_raw)) if spe_raw.size > 0 else np.nan
-    acc_raw = np.diff(spe_raw) / step
-    acc_avg_abs = np.mean(abs(acc_raw)) if acc_raw.size > 0 else np.nan
 
-    # Rolling mean to smooth the midis by +-win samples -- not required for
-    # statistics based on means but important for detecting increasing sequences
-    # with a tolerance.
-    midis_smo_series = pd.Series(midis_raw)
-    midis_smo = [
-        np.mean(i.to_list()) for i in midis_smo_series.rolling(2 * win + 1, center=True)
-    ]
-
-    # Prolonged ascent/descent chunks in smoothed midis of the aria (allows for
-    # small violations in the form of decrements/increments that do not
-    # decrease/increase the rolling mean).
-    dife = np.diff(midis_smo)
-
-    asc = [(k, sum(1 for i in g)) for k, g in groupby(dife > 0)]
-    dsc = [(k, sum(1 for i in g)) for k, g in groupby(dife < 0)]
-
-    asc = [i for b, i in asc if b]
-    dsc = [i for b, i in dsc if b]
-
-    if len(dife) == 0:
-        # a single sample: chunk statistics are undefined
-        asc_avg = dsc_avg = asc_prp = dsc_prp = np.nan
-    else:
-        # Average length of ascent/descent chunks of the aria
-        asc_avg = mean(asc) if asc else 0
-        dsc_avg = mean(dsc) if dsc else 0
-
-        # Proportion of rising/falling steps over all steps of the aria
-        asc_prp = sum(asc) / len(dife) if asc else 0
-        dsc_prp = sum(dsc) / len(dife) if dsc else 0
-
+def _chunk_features(resampled_segments, step, win):
+    """Ascent/descent chunk statistics over the smoothed samples of every
+    segment (rolling window of 2*win+1 samples, centered)."""
+    key_postfix = _motion_postfix(step, win)
+    ascending, descending = [], []
+    total_steps = 0
+    for samples in resampled_segments:
+        smoothed_series = pd.Series(samples)
+        smoothed = [
+            np.mean(window.to_list())
+            for window in smoothed_series.rolling(2 * win + 1, center=True)
+        ]
+        dife = np.diff(smoothed)
+        total_steps += len(dife)
+        for rising, group in groupby(dife > 0):
+            length = sum(1 for _ in group)
+            if rising:
+                ascending.append(length)
+        for falling, group in groupby(dife < 0):
+            length = sum(1 for _ in group)
+            if falling:
+                descending.append(length)
+    if total_steps == 0:
+        return {
+            ASCENDENT_AVERAGE + key_postfix: np.nan,
+            DESCENDENT_AVERAGE + key_postfix: np.nan,
+            ASCENDENT_PROPORTION + key_postfix: np.nan,
+            DESCENDENT_PROPORTION + key_postfix: np.nan,
+        }
     return {
-        SPEED_AVG_ABS + key_postfix: spe_avg_abs,
-        ACCELERATION_AVG_ABS + key_postfix: acc_avg_abs,
-        ASCENDENT_AVERAGE + key_postfix: asc_avg,
-        DESCENDENT_AVERAGE + key_postfix: dsc_avg,
-        ASCENDENT_PROPORTION + key_postfix: asc_prp,
-        DESCENDENT_PROPORTION + key_postfix: dsc_prp,
+        ASCENDENT_AVERAGE + key_postfix: mean(ascending) if ascending else 0,
+        DESCENDENT_AVERAGE + key_postfix: mean(descending) if descending else 0,
+        ASCENDENT_PROPORTION + key_postfix: sum(ascending) / total_steps
+        if ascending
+        else 0,
+        DESCENDENT_PROPORTION + key_postfix: sum(descending) / total_steps
+        if descending
+        else 0,
     }
 
 
 def get_motion_features(part_data) -> dict:
+    """Motion features over the part's melodic lines.
+
+    Every line (voice) is resampled separately and split at rests, so the
+    time axis is per melodic segment: nothing is measured across
+    simultaneous voices or across silences. Speed/acceleration depend only
+    on the sampling step; the smoothing window shapes only the chunk
+    statistics.
     """
-    Extracts motion features from the given part data.
-
-    Parameters:
-    part_data (dict): A dictionary containing the notes and rests of a music part.
-
-    Returns:
-    dict: A dictionary containing the extracted motion features.
-
-    Raises:
-    This function does not raise any exceptions.
-    """
-    notes_midi = []
-    notes_duration = []
-    for note in part_data["notes_and_rests"]:
-        if hasattr(note, "pitch"):
-            notes_midi.append(note.pitch.midi)
-            # durations may be Fractions; the resampling grid needs floats
-            notes_duration.append(float(note.duration.quarterLength))
-
-    notes_midi = np.asarray(notes_midi)
-    notes_duration = np.asarray(notes_duration)
+    lines = part_data.get(DATA_MELODIC_LINES)
+    if lines is None:
+        lines = [part_data["notes_and_rests"]]
+    segments = _melodic_segments(lines)
 
     return_dict = {}
     for step in MOTION_STEPS:
+        resampled = [
+            _resample(durations, midis, step) for durations, midis in segments
+        ]
+        resampled = [samples for samples in resampled if samples.size >= 2]
+
+        step_postfix = _motion_step_postfix(step)
+        speed_diffs = [np.diff(samples) / step for samples in resampled]
+        all_speed = (
+            np.concatenate(speed_diffs) if speed_diffs else np.array([])
+        )
+        return_dict[SPEED_AVG_ABS + step_postfix] = (
+            np.mean(np.abs(all_speed)) if all_speed.size else np.nan
+        )
+        acceleration_diffs = [
+            np.diff(diff) / step for diff in speed_diffs if diff.size >= 2
+        ]
+        all_acceleration = (
+            np.concatenate(acceleration_diffs)
+            if acceleration_diffs
+            else np.array([])
+        )
+        return_dict[ACCELERATION_AVG_ABS + step_postfix] = (
+            np.mean(np.abs(all_acceleration)) if all_acceleration.size else np.nan
+        )
+
         for win in MOTION_WINS:
-            return_dict.update(
-                _motion_features_single_window_step(
-                    notes_duration, notes_midi, step, win
-                )
-            )
+            return_dict.update(_chunk_features(resampled, step, win))
     return return_dict

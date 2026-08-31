@@ -120,9 +120,11 @@ def update_score_objects(
 
 def get_notes_per_degree(key: str, notes: List[Note]) -> Dict[str, int]:
 
+    # seed EVERY known accidental so the emitted column set is identical for
+    # every score (on-demand keys used to create ragged, file-dependent columns)
     notes_per_degree = {
         to_full_degree(degree, accidental): 0
-        for accidental in ["", "sharp", "flat"]
+        for accidental in ACCIDENTAL_ABBREVIATION
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
 

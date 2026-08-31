@@ -121,15 +121,29 @@ def get_notes_and_measures(
     # Measure.notes is non-recursive, and whole parts written in voices used
     # to be reported as silent. Chords are excluded from the note lists (but
     # their measures still count as sounding) - see Feature_definition.md.
+    #
+    # Elements are also grouped into MELODIC LINES (the measures' direct
+    # elements form one line, each Voice id another): intervals and motion
+    # must never be computed across simultaneous lines, or leaps are
+    # fabricated at every voice boundary.
     notes_per_measure = []
     notes_and_rests = []
+    lines = {}
     for measure in measures:
         measure_notes = list(measure.notes)
         notes_and_rests.extend(measure.notesAndRests)
+        lines.setdefault("", []).extend(measure.notesAndRests)
         for voice in measure.voices:
             measure_notes.extend(voice.notes)
             notes_and_rests.extend(voice.notesAndRests)
+            lines.setdefault(str(voice.id), []).extend(voice.notesAndRests)
         notes_per_measure.append(measure_notes)
+
+    melodic_lines = [
+        line
+        for line in lines.values()
+        if any(isinstance(element, Note) for element in line)
+    ]
 
     sounding_measures = [
         idx for idx, measure_notes in enumerate(notes_per_measure)
@@ -147,7 +161,7 @@ def get_notes_and_measures(
             "will be empty"
         )
 
-    return original_notes, measures, sounding_measures, notes_and_rests
+    return original_notes, measures, sounding_measures, notes_and_rests, melodic_lines
 
 
 def _separate_info_in_two_parts(score, final_parts, part):

@@ -2,7 +2,10 @@ from os import path
 from typing import List
 import pandas as pd
 from music21 import *
+from music21.note import Note
 from music21.stream import Measure
+
+from musif.cache import isinstance
 from musif.extract.constants import DATA_FILTERED_PARTS
 from musif.extract.features.tempo.constants import TIME_SIGNATURE
 
@@ -47,9 +50,18 @@ def update_part_objects(
         measures,
         sounding_measures,
         notes_and_rests,
+        melodic_lines,
     ) = get_notes_and_measures(part)
     lyrics = _get_lyrics_in_notes(notes)
-    intervals = _get_intervals(notes)
+    # intervals are computed per melodic line, never across simultaneous
+    # voices (that used to fabricate a leap at every voice boundary)
+    intervals = [
+        interval
+        for line in melodic_lines
+        for interval in _get_intervals(
+            [element for element in line if isinstance(element, Note)]
+        )
+    ]
     part_data.update(
         {
             DATA_NOTES: notes,
@@ -58,6 +70,7 @@ def update_part_objects(
             DATA_MEASURES: measures,
             DATA_INTERVALS: intervals,
             DATA_NOTES_AND_RESTS: notes_and_rests,
+            DATA_MELODIC_LINES: melodic_lines,
         }
     )
     part_features.update(
@@ -120,16 +133,21 @@ def update_score_objects(
     )
     df_score = df_parts.aggregate({NUM_NOTES: "sum", NUM_SOUNDING_MEASURES: "sum"})
 
+    # staves sharing an abbreviation are one logical part: counts are summed
+    # (the old per-part assignment silently kept only the last staff)
+    part_totals = {}
     for part_data, part_features in zip(parts_data, parts_features):
         part = part_data[DATA_PART_ABBREVIATION]
-        features[get_part_feature(part, NUM_NOTES)] = part_features[NUM_NOTES]
-        features[get_part_feature(part, NUM_SOUNDING_MEASURES)] = part_features[
-            NUM_SOUNDING_MEASURES
-        ]
-        part_data[get_part_feature(part, NUM_NOTES)] = part_features[NUM_NOTES]
-        part_data[get_part_feature(part, NUM_SOUNDING_MEASURES)] = part_features[
-            NUM_SOUNDING_MEASURES
-        ]
+        totals = part_totals.setdefault(part, [0, 0])
+        totals[0] += part_features[NUM_NOTES]
+        totals[1] += part_features[NUM_SOUNDING_MEASURES]
+    for part, (num_notes, num_sounding_measures) in part_totals.items():
+        features[get_part_feature(part, NUM_NOTES)] = num_notes
+        features[get_part_feature(part, NUM_SOUNDING_MEASURES)] = num_sounding_measures
+    for part_data in parts_data:
+        part = part_data[DATA_PART_ABBREVIATION]
+        part_data[get_part_feature(part, NUM_NOTES)] = part_totals[part][0]
+        part_data[get_part_feature(part, NUM_SOUNDING_MEASURES)] = part_totals[part][1]
 
     for sound in df_sound.index:
         notes = df_sound.loc[sound, NUM_NOTES].tolist()
