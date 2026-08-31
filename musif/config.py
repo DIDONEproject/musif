@@ -11,6 +11,7 @@ LOG_FILE_PATH = "log_file"
 FILE_LOG_LEVEL = "file_log_level"
 CONSOLE_LOG_LEVEL = "console_log_level"
 data_dir = "data_dir"
+OUTPUT_DIR = "output_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
 IGNORE_ERRORS = "ignore_errors"
@@ -53,6 +54,7 @@ _CONFIG_LOG_FALLBACK = {
 
 _CONFIG_FALLBACK = {
     data_dir: None,
+    OUTPUT_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
     PARALLEL: 1,

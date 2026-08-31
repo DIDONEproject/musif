@@ -3,6 +3,9 @@
 # Note that MusicXML files supported are limited to Finale exported ones.
 data_dir: null
 
+# Directory where musif writes error_files.csv when a score fails to process.
+output_dir: .
+
 # Directory containing MuseScore files to be analyzed. By default, the extension should
 # be .xml, but you can change it via `musif.musescore.constants.MUSESCORE_FILE_EXTENSION`
 # If only musescore_dir is give, musif will try to convert the files to MusicXML using
