@@ -22,6 +22,7 @@ requires-python = ">=3.10"
 readme = "README.md"
 license = { text = "MIT"}
 [project.optional-dependencies]
+test = ['pytest>=7.0']
 
 [project.scripts]
 musif = "musif.__main__:run"
@@ -31,6 +32,10 @@ requires = ["pdm-pep517>=1.0.0"]
 build-backend = "pdm.pep517.api"
 
 [tool]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]
+
 [tool.pdm]
 [tool.pdm.build]
 # includes = ["musif/py.typed", "musif/**"]
