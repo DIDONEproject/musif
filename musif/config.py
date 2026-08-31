@@ -32,6 +32,7 @@ SPLIT_KEYWORDS = "split_keywords"
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
 DELETE_SOUND_COLUMNS = "delete_sound_columns"
+DELETE_DUPLICATED_SOUND_COLUMNS = "delete_duplicated_sound_columns"
 
 UNBUNDLE_INSTRUMENTATION = "separate_instrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
@@ -80,6 +81,7 @@ _CONFIG_POST_FALLBACK = {
     GROUPED: False,
     DELETE_HARMONY: False,
     DELETE_SOUND_COLUMNS: False,
+    DELETE_DUPLICATED_SOUND_COLUMNS: False,
     UNBUNDLE_INSTRUMENTATION: False,
     DELETE_COLUMNS_WITH_NANS: True,
     INSTRUMENTS_TO_KEEP: [],

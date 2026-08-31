@@ -85,6 +85,12 @@ delete_columns_with_nans: True
 # FamilyScoring. Off by default: these are stock features.
 delete_sound_columns: False
 
+# Delete the Sound<X>_ columns of every sound performed by exactly one part in
+# the whole DataFrame: they equal the Part<X>_ columns by construction. The
+# per-part means and part counts (NotesMean, SoundingMeasuresMean,
+# NumberOfParts, NumberOfFilteredParts) are kept. Off by default.
+delete_duplicated_sound_columns: False
+
 # Columns containing these substrings will have nan values replaced with 0
 # Applied before the column deletions, so the replaced columns survive them
 # Matching is case-insensitive

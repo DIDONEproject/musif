@@ -9,9 +9,17 @@ from pandas import DataFrame
 from musif.common.sort import sort_columns
 from musif.config import PostProcessConfiguration
 from musif.extract.basic_modules.file_name_generic.constants import ARTIST, TITLE
-from musif.extract.basic_modules.scoring.constants import INSTRUMENTATION
+from musif.extract.basic_modules.scoring.constants import (
+    INSTRUMENTATION,
+    NUMBER_OF_FILTERED_PARTS,
+    NUMBER_OF_PARTS,
+)
 from musif.extract.constants import ID, WINDOW_ID
-from musif.extract.features.core.constants import FILE_NAME
+from musif.extract.features.core.constants import (
+    FILE_NAME,
+    NOTES_MEAN,
+    SOUNDING_MEASURES_MEAN,
+)
 from musif.extract.features.harmony.constants import (
     HARMONY_AVAILABLE,
     KEY_MODULATORY,
@@ -134,12 +142,55 @@ class DataProcessor:
         # otherwise the deletion leaves replace_nans nothing to act on
         self.replace_nans()
         self.delete_undesired()
+        if self._post_config.delete_duplicated_sound_columns:
+            self.delete_duplicated_sound_columns()
 
         if self._post_config.grouped_analysis:
             self.group_columns()
         self.data.reset_index(inplace=True)
         self._final_data_processing()
         return self
+
+    def delete_duplicated_sound_columns(self) -> None:
+        """
+        Deletes the ``Sound<X>_*`` columns of every sound performed by exactly
+        one part throughout the DataFrame: for a single-part sound they equal
+        the ``Part<X>_*`` columns by construction (the sound scope aggregates
+        over one part). The per-part-mean and part-count columns
+        (``NotesMean``, ``SoundingMeasuresMean``, ``NumberOfParts``,
+        ``NumberOfFilteredParts``) are kept.
+        """
+        spared = (
+            NOTES_MEAN,
+            SOUNDING_MEASURES_MEAN,
+            NUMBER_OF_PARTS,
+            NUMBER_OF_FILTERED_PARTS,
+        )
+        sounds = {
+            col[len("Sound"):].split("_", 1)[0]
+            for col in self.data.columns
+            if col.startswith("Sound") and "_" in col
+        }
+        to_delete = []
+        for sound in sorted(sounds):
+            prefix = f"Sound{sound}_"
+            parts_col = prefix + NUMBER_OF_PARTS
+            if parts_col not in self.data.columns:
+                continue
+            n_parts = self.data[parts_col].dropna()
+            if len(n_parts) == 0 or n_parts.max() != 1:
+                continue
+            to_delete += [
+                col
+                for col in self.data.columns
+                if col.startswith(prefix) and not col.endswith(spared)
+            ]
+        if to_delete:
+            pinfo(
+                f"\nDeleting {len(to_delete)} single-part Sound columns "
+                "duplicating their Part columns..."
+            )
+            self.data.drop(columns=to_delete, inplace=True, errors="ignore")
 
     def delete_files_without_harmony(self):
         """
