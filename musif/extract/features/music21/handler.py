@@ -22,7 +22,11 @@ def allFeaturesAsList(cfg, streamInput):
     ds.runParallel = False  # this is the only difference with the m21 original code
     all_features = list(native.featureExtractors)
     if cfg.cache_dir:
-        pwarn('\nCache is activated! Some music21 features will NOT be computed.')
+        pwarn(
+            "\nCache is activated! The music21 features "
+            f"{ERRORED_FEATURES_IDS} will NOT be computed, so the m21_ "
+            "column set differs from a cache-less run."
+        )
         final_features = [feature for feature in all_features if feature.id not in
             ERRORED_FEATURES_IDS]
     else:
@@ -32,6 +36,11 @@ def allFeaturesAsList(cfg, streamInput):
     ds.process()
     allData = ds.getFeaturesAsList(
         includeClassLabel=False, includeId=False, concatenateLists=False
+    )
+    # with those flags getFeaturesAsList returns the single row: one vector
+    # per extractor, aligned with final_features
+    assert len(allData) == len(final_features), (
+        "music21 features misaligned with their extractors"
     )
     return allData, [c.__name__ for c in final_features]
 

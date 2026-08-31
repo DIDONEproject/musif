@@ -1,42 +1,6 @@
-ERRORED_FEATURES_IDS = {
-'R15',
-'R17',
-'R18',
-'R19',
-'R20',
-'R21',
-'R22',
-'R23',
-'R24',
-'R25',
-'R30',
-'R31',
-'R32',
-'R33',
-'R34',
-'R35',
-'R36',
-'T1',
-'T2',
-'T3',
-'P1',
-'P2',
-'P3',
-'P4',
-'P5',
-'P6',
-'P7',
-'P8',
-'P9',
-'P10',
-'P11',
-'P12',
-'P13',
-'P14',
-'P15',
-'P16',
-'P19',
-'P20',
-'P21',
-'P22'
-}
+# music21 native extractors that fail when the SmartModuleCache wraps the
+# score, skipped when cache_dir is set. NOTE: with caching on, the m21_
+# column set differs from a cache-less run by exactly these extractors.
+ERRORED_FEATURES_IDS = [
+    "P22",  # QualityFeature
+]
