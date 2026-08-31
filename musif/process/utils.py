@@ -160,8 +160,10 @@ def join_keys(df: DataFrame) -> None:
         ]
         if i in df
     ]
+    key_D = [i for i in [KEY_PREFIX + "V" + KEY_PERCENTAGE] if i in df]
+    key_d = [i for i in [KEY_PREFIX + "v" + KEY_PERCENTAGE] if i in df]
 
-    total_key = key_rel + key_tonic + key_sd + key_SD
+    total_key = key_rel + key_tonic + key_sd + key_SD + key_D + key_d
     others_key = [
         i
         for i in df.columns
@@ -172,6 +174,11 @@ def join_keys(df: DataFrame) -> None:
     df[KEY_PREFIX + "sd" + KEY_PERCENTAGE] = df[key_sd].sum(axis=1)
     df[KEY_PREFIX + "SubD" + KEY_PERCENTAGE] = (
         df[KEY_PREFIX + "sd" + KEY_PERCENTAGE] + df[KEY_PREFIX + "SD" + KEY_PERCENTAGE]
+    )
+    df[KEY_PREFIX + "D" + KEY_PERCENTAGE] = df[key_D].sum(axis=1)
+    df[KEY_PREFIX + "d" + KEY_PERCENTAGE] = df[key_d].sum(axis=1)
+    df[KEY_PREFIX + "Dom" + KEY_PERCENTAGE] = (
+        df[KEY_PREFIX + "D" + KEY_PERCENTAGE] + df[KEY_PREFIX + "d" + KEY_PERCENTAGE]
     )
     df[KEY_PREFIX + "T" + KEY_PERCENTAGE] = df[key_tonic].sum(axis=1)
     df[KEY_PREFIX + "rel" + KEY_PERCENTAGE] = df[key_rel].sum(axis=1)
@@ -210,8 +217,10 @@ def join_keys_modulatory(df: DataFrame):
         ]
         if i in df
     ]
+    key_D = [i for i in [KEY_PREFIX + KEY_MODULATORY + "V"] if i in df]
+    key_d = [i for i in [KEY_PREFIX + KEY_MODULATORY + "v"] if i in df]
 
-    total_key_mod = key_rel + key_tonic + key_sd + key_SD
+    total_key_mod = key_rel + key_tonic + key_sd + key_SD + key_D + key_d
     others_key_mod = [
         i
         for i in df.columns
@@ -222,6 +231,11 @@ def join_keys_modulatory(df: DataFrame):
     df[KEY_PREFIX + KEY_MODULATORY + "sd"] = df[key_sd].sum(axis=1)
     df[KEY_PREFIX + KEY_MODULATORY + "SubD"] = (
         df[KEY_PREFIX + KEY_MODULATORY + "sd"] + df[KEY_PREFIX + KEY_MODULATORY + "SD"]
+    )
+    df[KEY_PREFIX + KEY_MODULATORY + "D"] = df[key_D].sum(axis=1)
+    df[KEY_PREFIX + KEY_MODULATORY + "d"] = df[key_d].sum(axis=1)
+    df[KEY_PREFIX + KEY_MODULATORY + "Dom"] = (
+        df[KEY_PREFIX + KEY_MODULATORY + "D"] + df[KEY_PREFIX + KEY_MODULATORY + "d"]
     )
     df[KEY_PREFIX + KEY_MODULATORY + "T"] = df[key_tonic].sum(axis=1)
     df[KEY_PREFIX + KEY_MODULATORY + "rel"] = df[key_rel].sum(axis=1)

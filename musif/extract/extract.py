@@ -427,12 +427,24 @@ class FeaturesExtractor:
         nmeasures = len(score_data[C.DATA_SCORE].parts[0].getElementsByClass(Measure))
 
         ws = self._cfg.window_size
+        if self._cfg.overlap >= ws:
+            raise ValueError(
+                f"overlap ({self._cfg.overlap}) must be smaller than "
+                f"window_size ({ws})"
+            )
         hopsize = ws - self._cfg.overlap
+        # only complete windows are extracted; a tail shorter than one window
+        # is not analyzed
         number_windows = (nmeasures - self._cfg.overlap) // hopsize
+        if number_windows <= 0:
+            pwarn(
+                f"{filename}: {nmeasures} measures is shorter than one window "
+                f"({ws}); the score yields no rows"
+            )
 
         all_windows_features = []
-        for idx in range(number_windows):
-            first_window_measure = idx * hopsize
+        for window_index in range(number_windows):
+            first_window_measure = window_index * hopsize
             last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
                 score_data, parts_data, first_window_measure, last_window_measure
@@ -448,16 +460,16 @@ class FeaturesExtractor:
                 basic=False,
             )
 
+            # half-open range of 0-based measure indices
             window_features[
                 C.WINDOW_RANGE
             ] = f"{first_window_measure} - {last_window_measure}"
 
-            window_features[C.WINDOW_ID] = idx
+            window_features[C.WINDOW_ID] = window_index
 
             window_features = {**basic_features, **window_features}
 
             all_windows_features.append(window_features)
-            first_window_measure = last_window_measure - self._cfg.overlap
 
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
@@ -477,9 +489,14 @@ class FeaturesExtractor:
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
-            window_mscore = score_data[C.DATA_MUSESCORE_SCORE].loc[
-                (score_data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure)
-                & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
+            # first_measure/last_measure are 0-based, end-exclusive measure
+            # INDICES (music21 indicesNotNumbers); translate them to the ms3
+            # measure numbers, whose numbering starts at the table's first mn.
+            mscore = score_data[C.DATA_MUSESCORE_SCORE]
+            first_mn = mscore["mn"].min()
+            window_mscore = mscore.loc[
+                (mscore["mn"] >= first_mn + first_measure)
+                & (mscore["mn"] < first_mn + last_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
         else:

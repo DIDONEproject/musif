@@ -1,5 +1,5 @@
 from typing import List
-from musif.extract.features.core.constants import FILE_NAME
+from musif.extract.features.core.constants import FILE_NAME, NUM_MEASURES
 
 from pandas import DataFrame
 
@@ -20,7 +20,9 @@ from ...constants import DATA_MUSESCORE_SCORE
 
 def get_harmony_data(score_features: dict, harmonic_analysis: DataFrame) -> dict:
 
-    harmonic_rhythm = get_harmonic_rhythm(harmonic_analysis)
+    harmonic_rhythm = get_harmonic_rhythm(
+        harmonic_analysis, score_features.get(NUM_MEASURES)
+    )
     numerals = get_numerals(harmonic_analysis)
     chord_types = get_chord_types(harmonic_analysis)
     additions = get_additions(harmonic_analysis)
@@ -43,8 +45,6 @@ def update_score_objects(
             pwarn(f"No harmonic analysis was found in {file_name} or one of its windows.")
             features[HARMONY_AVAILABLE] = 0
             return features
-        else:
-            features[HARMONY_AVAILABLE] = 1
 
         all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
         keyareas = get_keyareas(
@@ -83,9 +83,14 @@ def update_score_objects(
             }
         )
 
+        # only set once everything above succeeded: the flag means "harmony
+        # features were extracted", not "an analysis file existed"
+        features[HARMONY_AVAILABLE] = 1
+
     except Exception as e:
         name = score_features[FILE_NAME]
-        perr(f"Harmony problem found: {str(e)} in file {name}")
+        perr(f"Harmony extraction failed in file {name}: {e!r}")
+        features = {HARMONY_AVAILABLE: 0}
 
     finally:
         score_features.update(features)
