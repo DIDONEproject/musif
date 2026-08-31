@@ -16,13 +16,15 @@ delete_files_without_harmony: False
 
 # Flag to determine if keys, keys modulatory and degrees columns should be grouped per type
 # For instance, about the keys:
-# * IV, II, and VI will be merged into the SD group (subdominant)
-# * iv, ii, will be merged into the sd group (subdominant)
-# * I and i will be merged into the T group (tonic)
-# * III and vi will be merged into the rel group (relative)
-# 
-# The degrees will be merged into [Doubly] Augmented, [Doubly] Diminished, Natural, No
-# Natural. This applies to both raw and percentage degree features.
+# * V and v are merged into the D and d groups (dominant), and Dom = D + d
+# * IV, II, and VI are merged into the SD group (subdominant)
+# * iv and ii are merged into the sd group (subdominant), and SubD = SD + sd
+# * I and i are merged into the T group (tonic)
+# * III and vi are merged into the rel group (relative)
+#
+# The degrees are grouped into Asc (#), Desc (b), Dasc (x), Ddesc (bb), Nat and
+# Nonat columns, separately for _Count and _Per features (and their _relative
+# variants), for every scope prefix that carries degree columns.
 grouped_analysis: False
 
 # Flag to determine if Intrumentation column should be disgregated in several columns
@@ -68,17 +70,24 @@ instruments_to_delete: []
   # - CiI
 
 # Rows having more than this percentage of NaN will be deleted
-# value null (or None) means "keep all"
+# value null (or None) means "keep all" columns/rows
 max_nan_rows: null
 
 # Columns having more than this percentage of NaN will be deleted (applied after
 # `max_nan_rows`)
-# value null (or None) means "keep all"
+# value null (or None) means "keep all" columns/rows
 max_nan_columns: null
 
+# Master switch for the NaN-based column deletion above
+delete_columns_with_nans: True
+
+# Delete every Sound*_ column (except Sound*Voice*) plus FamilyInstrumentation and
+# FamilyScoring. Off by default: these are stock features.
+delete_sound_columns: False
+
 # Columns containing these substrings will have nan values replaced with 0
-# Applied after `max_nan_rows` and `max_nan_columns`
-# Matching is case-sensitive
+# Applied before the column deletions, so the replaced columns survive them
+# Matching is case-insensitive
 replace_nans: []
   # Example of values (but any substring can be used):
   # - Interval

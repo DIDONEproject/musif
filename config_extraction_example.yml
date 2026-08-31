@@ -1,5 +1,5 @@
-# Directory containing MusicXML files to be analized. By default, the extension should
-# be .xml, but you can change it via `musif.musicxml.constants.MUSICXML_FILE_EXTENSION`
+# Directory containing MusicXML files to be analyzed. By default, the extension should
+# be .xml, but you can change it via `musif.extract.constants.MUSIC21_FILE_EXTENSIONS`
 # Note that MusicXML files supported are limited to Finale exported ones.
 data_dir: null
 
@@ -7,24 +7,12 @@ data_dir: null
 output_dir: .
 
 # Directory containing MuseScore files to be analyzed. By default, the extension should
-# be .xml, but you can change it via `musif.musescore.constants.MUSESCORE_FILE_EXTENSION`
-# If only musescore_dir is give, musif will try to convert the files to MusicXML using
-# musescore -- see `mscore_exe` setting.
-# If xml_dr is given, musescore files are only used if one of the following features are
-# requested: [ harmonic, scale_relative ]. In this case, only the harmonic annotations
-# are ridden from MuseScore files.
+# be .mscx, as set in `musif.musescore.constants.MUSESCORE_FILE_EXTENSION`.
+# MuseScore files are only used when one of the following features is requested:
+# [ harmony, scale_relative ]. In that case, only the harmonic annotations
+# are read from the MuseScore files; `data_dir` must still point to the scores.
 musescore_dir: null
   
-# Path to the binary of musescore. Used in case only MuseScore files are provided to
-# convert them to MusicXML. Note that most of the features won't work with those files.
-# Prefer using Finale MusicXML files, instead.
-# This option can be:
-# a) null -> ms3 library will try to find the musescore binary by itself
-# c) string -> the path to the mscore executable
-# b) list or tuple -> each element is a string as in `subprocess.run()` use it for remote
-#    server processing such as `xvfb-run -a mscore`
-mscore_exec: null
-
 # Directory to keep .pkl files if caching is enabled. null for disabling cache.
 # See `Caching` page for more info
 cache_dir: null
@@ -45,8 +33,10 @@ expand_repeats: false
 # Note that the standard `Id` column referred to the MusicXML files is always present.
 window_size: null
 
-# Size of overlap (in measures) beatween each window. Considered only if `window_size` is
-# not null. It must be less than window_size - 1!
+# Size of overlap (in measures) between consecutive windows. Considered only if
+# `window_size` is not null. It must be smaller than window_size. Only complete
+# windows are extracted: a tail shorter than one window is skipped, and a score
+# shorter than one window yields no rows (a warning is logged).
 overlap: 2
 
 # Number of parallel processes to be used as defined by joblib: 
@@ -92,7 +82,6 @@ features: ['core']
   # - dynamics    
   # - rhythm
   # - music21
-  # - jsymbolic
 
 # The list of packages/modules where basic features are. See page `Custom Features` for
 # more info
@@ -110,10 +99,11 @@ precache_hooks: []
 # (musif stock features do not work with percussion instruments)
 remove_unpitched_objects: true
 
-# Filter to select only some instruments to be processed for each score. 
-# If the filter is None (disabling all parts), the program will extract all parts.
+# Filter to select only some parts to be processed for each score.
+# An empty list (or null) extracts all parts. The special value `voice` expands
+# to every singer abbreviation (sop, ten, alt, bar, bbar, bass).
 parts_filter: []
-  # Possible Values. If non it selected, all parts will be computed.
+  # Possible values; if none is selected, all parts are computed.
   # - vnI
   # - vnII
   # - obI
@@ -128,12 +118,14 @@ parts_filter: []
   # - bbar
 
 # Used to split the possible layers present depending on the instrument name
+# Split parts whose music21 `instrumentSound` contains one of these keywords into
+# one part per voice/layer (e.g. "Oboi" split into obI and obII). Matched against
+# instrumentSound values such as `wind.reed.oboe` or `strings.cello`.
 split_keywords: []
-  # Possible Values
-  # - woodwind
+  # Example values
+  # - oboe
+  # - horn
   # - brass
   # - wind
   # - viola
   # - cello
-  # - bass
-  # - oboi
