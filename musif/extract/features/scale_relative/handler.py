@@ -4,7 +4,7 @@ from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import (DATA_MUSESCORE_SCORE,
                                      DATA_PART_ABBREVIATION)
-from musif.extract.features.core.constants import DATA_KEY, DATA_NOTES
+from musif.extract.features.core.constants import DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix, get_score_feature
 
 from .constants import *
@@ -45,20 +45,18 @@ def update_score_objects(
     if len(parts_data) == 0:
         return
 
-    degree = score_data[DATA_KEY]
+    if score_data[DATA_MUSESCORE_SCORE] is None:
+        return
 
     score_notes_per_degree = {}
 
     for part_data in parts_data:
-
-        notes = part_data[DATA_NOTES]
-    if score_data[DATA_MUSESCORE_SCORE] is not None:    
         notes_per_degree_relative = get_emphasised_scale_degrees_relative(
             part_data[DATA_NOTES], score_data
         )
         if notes_per_degree_relative is None:
             # no harmonic data in the musescore file (or window)
-            return
+            continue
 
         for degree, notes in notes_per_degree_relative.items():
             if degree not in score_notes_per_degree:
@@ -73,12 +71,12 @@ def update_score_objects(
             value / all_score_degrees if all_score_degrees != 0 else 0
         )
 
-    for part_data, parts_features in zip(parts_data, parts_features):
+    for part_data, part_features in zip(parts_data, parts_features):
 
         part_prefix = get_part_prefix(part_data[DATA_PART_ABBREVIATION])
 
-        for feature in parts_features:
-            if "Degree" and "relative" in feature:
-                features[f"{part_prefix}{feature}"] = parts_features[feature]
+        for feature in part_features:
+            if "Degree" in feature and "relative" in feature:
+                features[f"{part_prefix}{feature}"] = part_features[feature]
 
     score_features.update(features)
