@@ -7,6 +7,7 @@ from musif.extract.common import _filter_parts_data
 from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_NOTES
 from musif.extract.features.prefix import get_part_prefix
+from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20
 
 from .constants import *
 
@@ -31,10 +32,15 @@ def update_score_objects(
         key = abbreviation[0].upper() + abbreviation[1:]
         notes[key] = notes.get(key, 0) + len(part_data[DATA_NOTES])
 
-    # canonical pair order (the configured scoring order), so a given pair
-    # always produces the same column name across a corpus, regardless of the
-    # order of the staves in each score
-    scoring_order = list(getattr(cfg, "scoring_order", []) or [])
+    # canonical pair order (the configured scoring order, expanded with the
+    # Roman numerals part abbreviations carry), so a given pair always
+    # produces the same column name across a corpus, regardless of the order
+    # of the staves in each score
+    scoring_order = [
+        instrument + numeral
+        for instrument in getattr(cfg, "scoring_order", []) or []
+        for numeral in [""] + ROMAN_NUMERALS_FROM_1_TO_20
+    ]
 
     def _canonical(item):
         name = item[0][0].lower() + item[0][1:]
