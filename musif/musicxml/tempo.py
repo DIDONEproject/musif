@@ -47,10 +47,10 @@ def get_time_signature_type(time_signature: str) -> str:
     ]:
         return "simple duple"
 
-    elif time_signature in ["6/8", "3/8", "12/2", "12/4", "12/8", "12/16"]:
+    elif time_signature in ["6/8", "3/8", "6/2", "6/4", "6/16", "12/2", "12/4", "12/8", "12/16"]:
         return "compound duple"
 
-    elif time_signature in ["3/2", "3/4", "3/16", "6/2", "6/4", "6/16"]:
+    elif time_signature in ["3/2", "3/4", "3/16"]:
         return "simple triple"
 
     elif time_signature in ["9/2", "9/4", "9/8", "9/16"]:
@@ -166,18 +166,17 @@ def get_tempo_grouped_1(tempo: str) -> str:
     elif len(words_contained) > 1:
         for w in words_contained:
             if w[0].isupper():
-                if w.lower() != "tempo":
-                    return w  # returns the capitalized term
-                elif w.lower() == "tempo":
+                if w.lower() == "tempo":
                     return "A tempo"
-                else:
+                elif w.lower() == "brio":
                     return "Con brio"
-        if words_contained[0] != "tempo":
-            return words_contained[0].capitalize()
-        elif words_contained[0] == "tempo":
+                return w  # returns the capitalized term
+        first = words_contained[0].lower()
+        if first == "tempo":
             return "A tempo"  # or the first one
-        else:
+        elif first == "brio":
             return "Con brio"
+        return words_contained[0].capitalize()
 
     return "NA"
 
@@ -191,7 +190,7 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         tempo_grouped_1: str
         Tempo string got from get_tempo_grouped_1
     """
-    if tempo_grouped_1 is None or tempo_grouped_1.lower() == TempoGroup2.NA.value:
+    if tempo_grouped_1 is None or tempo_grouped_1.upper() == TempoGroup2.NA.value:
         return TempoGroup2.NA.value
     possible_terminations = ["ino", "etto", "ietto", "ssimo", "issimo", "hetto"]
     slow_basis = [
@@ -242,6 +241,9 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         return TempoGroup2.MODERATE.value
     elif tempo_grouped_1 in fast:
         return TempoGroup2.FAST.value
+
+    # unknown tempo terms get the sentinel, never a silent None
+    return TempoGroup2.NA.value
 
 
 def get_number_of_beats(time_signature: str) -> int:
