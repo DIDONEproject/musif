@@ -1,161 +1,124 @@
-from collections import Counter
-from itertools import chain
-from math import ceil, floor
-from typing import List, Tuple, Union
-from musif.logs import perr
+from typing import List, Optional, Tuple, Union
 
 import pandas as pd
 import roman
 from music21 import pitch, scale
 from music21.note import Note
-from music21.stream import Measure
 from pandas.core.frame import DataFrame
 
 import musif.extract.constants as C
-from musif.common.sort import sort_dict
 from musif.extract.features.core.handler import DATA_KEY
-from musif.extract.features.harmony.utils import get_function_first, get_function_second
-
-accidental_abbreviation = {
-    "": "",
-    "sharp": "#",
-    "flat": "b",
-    "double-sharp": "x",
-    "double-flat": "bb",
-}
-
-
-def get_keys_functions(list_keys: list, mode: str) -> Tuple[str, str]:
-    result_dict = {t: get_function_first(t, mode) for t in set(list_keys)}
-    first_function = [result_dict[t] for t in list_keys]
-    second_function = [get_function_second(g1) for g1 in first_function]
-    return first_function, second_function
-
-
-def continued_sections(sections: list, mc: dict) -> list:
-    extended_sections = []
-    repeated_measures = Counter(mc)
-    for i, c in enumerate(repeated_measures):
-        extended_sections.append([sections[i]] * repeated_measures[c])
-    return list(chain(*extended_sections))
-
-
-def IsAnacrusis(harmonic_analysis):
-    return harmonic_analysis.mn.dropna().tolist()[0] == 0
-
-
-def get_tonality_per_beat(
-    harmonic_analysis: DataFrame, tonality: str, start_beat: float, end_beat: float
-):
-    tonality_map = {}
-    for index, degree in enumerate(harmonic_analysis.localkey):
-        beat = harmonic_analysis.beats[index]
-        tonality_map[beat] = get_localTonalty(tonality, degree.strip())
-
-    _fill_gaps_in_tonality_map(tonality_map, start_beat, end_beat)
-
-    tonality_map = sort_dict(tonality_map, sorted(tonality_map.keys()))
-    return tonality_map
-
-
-def _fill_gaps_in_tonality_map(tonality_map, start_beat, end_beat):
-    if 0 not in tonality_map:
-        tonality_map[0] = tonality_map[list(tonality_map.keys())[0]]
-
-    for beat in range(floor(start_beat), ceil(end_beat) + 1):
-        if beat not in tonality_map:
-            if beat-1 in tonality_map:
-            # If tonality is not found 
-                tonality_map[beat] = tonality_map[beat - 1]
-            # In case there is no tonality for first beats, we assume the first one we can find.
-            else:
-                tonality_map[beat] = tonality_map[list(tonality_map.keys())[0]]
+from musif.extract.features.scale.constants import ACCIDENTAL_ABBREVIATION
+from musif.logs import perr
+from musif.musicxml.tempo import get_number_of_beats
 
 
 def get_emphasised_scale_degrees_relative(
-    notes_list: list, score_data: dict
-) -> List[list]:
+    notes_list: List[Note], score_data: dict
+) -> Optional[dict]:
+    """Count one part's notes per scale degree relative to the local key.
+
+    Returns None when the score carries no harmonic analysis, and an empty
+    dict (after logging an error) when the degrees could not be computed.
+    """
     harmonic_analysis, tonality = extract_harmony(score_data)
     if harmonic_analysis.size == 0:
         return None
-
-    measures = [
-        m for p in score_data[C.DATA_SCORE].parts for m in
-        p.getElementsByClass(Measure)
-    ]
-    min_beat = min(m.offset for m in measures)
-    max_beat = max(m.offset + m.quarterLength for m in measures)
-    tonality_map = get_tonality_per_beat(
-        harmonic_analysis, tonality, min_beat, max_beat
-    )
     try:
-        emph_degrees = get_emphasized_degrees(notes_list, tonality_map, harmonic_analysis)
-    except Exception:
-        file_name = score_data['file']
-        perr(f'Check the relative degrees on {file_name}')
+        keys_by_measure = _get_keys_by_measure(harmonic_analysis, tonality)
+        emph_degrees = get_emphasized_degrees(notes_list, keys_by_measure)
+    except Exception as e:
+        file_name = score_data.get("file", "")
+        perr(f"Could not compute relative degrees on {file_name}: {e!r}")
         emph_degrees = {}
     return emph_degrees
 
 
-def get_emphasized_degrees(
-    notes_list: List[Note], tonality_map: dict, harmonic_analysis
-) -> dict:
-    local_tonality = ""
+def _get_keys_by_measure(harmonic_analysis: DataFrame, tonality: str) -> dict:
+    """Map every playthrough measure to the local key in force at its start,
+    plus the (beat, key) changes annotated inside the measure."""
+    changes_by_measure = {}
+    key_cache = {}
+    for measure, mc_onset, timesig, localkey in zip(
+        harmonic_analysis[C.PLAYTHROUGH],
+        harmonic_analysis.mc_onset,
+        harmonic_analysis.timesig,
+        harmonic_analysis.localkey,
+    ):
+        label = str(localkey).strip()
+        if label in ("", "nan", "None", "@none"):
+            continue
+        if label not in key_cache:
+            key_cache[label] = get_localTonalty(tonality, label)
+        beat = _beat_in_measure(str(timesig), mc_onset)
+        changes_by_measure.setdefault(int(measure), []).append(
+            (beat, key_cache[label])
+        )
+    if not changes_by_measure:
+        raise ValueError("harmonic analysis contains no usable local keys")
+
+    keys_by_measure = {}
+    current_key = None
+    for measure in range(min(changes_by_measure), max(changes_by_measure) + 1):
+        changes = sorted(changes_by_measure.get(measure, []), key=lambda c: c[0])
+        if current_key is None and changes:
+            current_key = changes[0][1]
+        keys_by_measure[measure] = (current_key, changes)
+        if changes:
+            current_key = changes[-1][1]
+    return keys_by_measure
+
+
+def _beat_in_measure(timesig: str, mc_onset) -> float:
+    """Convert an ms3 mc_onset (a fraction of a whole note from the measure
+    start) into a 1-based beat position inside that measure."""
+    beats = get_number_of_beats(timesig)
+    if "/" in timesig:
+        num, den = timesig.split("/")[:2]
+        measure_whole_notes = int(num) / int(den)
+    else:
+        measure_whole_notes = 1.0
+    if measure_whole_notes == 0:
+        return 1.0
+    return 1 + float(mc_onset) / measure_whole_notes * beats
+
+
+def get_emphasized_degrees(notes_list: List[Note], keys_by_measure: dict) -> dict:
+    """Resolve each note's local key from its measure (and the annotated
+    changes inside that measure) and tally scale degrees."""
     notes_per_degree_relative = {
         to_full_degree(degree, accidental): 0
         for accidental in ["", "sharp", "flat"]
         for degree in [1, 2, 3, 4, 5, 6, 7]
     }
-    for j, note in enumerate(notes_list):
-        note = note[0] if note.isChord else note
-        if note.measureNumber in list(harmonic_analysis["playthrough"]) and str(note.beat) != 'nan':
-            note_offset = round(
-                list(harmonic_analysis[harmonic_analysis["playthrough"] == note.measureNumber].beats)[0]
-                - 1
-                + note.beat
-            )
-        else:
-            note_offset = round(note.offset)
-
-        if note_offset is None:
-            note_offset = notes_list[j - 1].offset
-
-        if note_offset in tonality_map:
-            local_tonality = tonality_map[round(note_offset)]
-        else:
-            local_tonality = tonality_map[list(tonality_map.keys())[-1]]
-
+    first_measure = min(keys_by_measure)
+    last_measure = max(keys_by_measure)
+    for note in notes_list:
+        measure = note.measureNumber
+        if measure is None:
+            continue
+        measure = min(max(int(measure), first_measure), last_measure)
+        local_tonality, changes = keys_by_measure[measure]
+        try:
+            beat = float(note.beat)
+        except Exception:
+            beat = None
+        if beat is not None and beat == beat:  # NaN-safe
+            for change_beat, key in changes:
+                if beat >= change_beat:
+                    local_tonality = key
+                else:
+                    break
+        if local_tonality is None:
+            continue
         degree_value = get_note_degree(local_tonality, note.name)
-
-        if str(degree_value) not in notes_per_degree_relative:
-            notes_per_degree_relative[str(degree_value)] = 1
+        if degree_value is None:
+            continue
+        if degree_value not in notes_per_degree_relative:
+            notes_per_degree_relative[degree_value] = 1
         else:
-            notes_per_degree_relative[str(degree_value)] += 1
-
+            notes_per_degree_relative[degree_value] += 1
     return notes_per_degree_relative
-
-
-def get_modulations(lausanne_table: DataFrame, sections, major=True):
-    keys = lausanne_table.localkey.dropna().tolist()
-    grouping, _ = get_keys_functions(keys, mode="M" if major else "m")
-    modulations_sections = {group: [] for group in grouping}
-    last_key = ""
-    for i, key in enumerate(keys):
-        if (key.lower() != "i") and key != last_key:
-            section = sections[i]
-            last_key = key
-            modulation = grouping[i]
-            modulations_sections[modulation].append(section)
-
-        if last_key == key and sections[i] != section:
-            section = sections[i]
-            modulations_sections[modulation].append(section)
-
-    ms = {}
-    for m in modulations_sections:
-        if len(modulations_sections[m]) != 0:
-            ms["Modulations" + str(m)] = len(list(set(modulations_sections[m])))
-    return ms
 
 
 def extract_harmony(score_data):
@@ -166,65 +129,51 @@ def extract_harmony(score_data):
     return harmonic_analysis, tonality
 
 
-def get_note_degree(key, note):
+def get_note_degree(key: str, note: str) -> Optional[str]:
+    """Scale degree of a note name relative to a key given as e.g. 'F#' /
+    'e-' (uppercase tonic = major, lowercase = minor; the reference scale in
+    minor is the natural minor, i.e. the key signature)."""
     if key[0].isupper():
         scl = scale.MajorScale(key.split(" ")[0])
     else:
         scl = scale.MinorScale(key.split(" ")[0])
 
-    degree = scl.getScaleDegreeAndAccidentalFromPitch(pitch.Pitch(note))
-    accidental = degree[1].fullName if degree[1] != None else ""
-
-    acc = ""
-    if accidental == "sharp":
-        acc = "#"
-    elif accidental == "flat":
-        acc = "b"
-    elif accidental == "double-sharp":
-        acc = "x"
-    elif accidental == "double-flat":
-        acc = "bb"
-
-    return acc + str(degree[0])
+    degree, accidental = scl.getScaleDegreeAndAccidentalFromPitch(pitch.Pitch(note))
+    accidental_name = accidental.fullName if accidental is not None else ""
+    abbreviation = ACCIDENTAL_ABBREVIATION.get(accidental_name)
+    if abbreviation is None:
+        perr(f"Unsupported accidental {accidental_name!r} on note {note}; not counted")
+        return None
+    return abbreviation + str(degree)
 
 
-def get_localTonalty(globalkey, degree):
-    accidental = ""
-    if "#" in degree:
-        accidental = "#"
-        degree = degree.replace("#", "")
+def get_localTonalty(globalkey: str, degree: str) -> str:
+    """Tonic of the local key expressed by a DCML degree label (a roman
+    numeral with optional leading accidentals, possibly nested like 'V/V')
+    relative to ``globalkey`` ('D major' / 'b minor' style).
 
-    elif "b" in degree:
-        accidental = "-"
-        degree = degree.replace("b", "")
+    Returned uppercase for a major local key, lowercase for minor.
+    """
+    key_name = globalkey.split(" ")[0]
+    is_major = "major" in globalkey
+    for part in reversed(str(degree).split("/")):
+        key_name, is_major = _tonic_from_degree(key_name, is_major, part)
+    return key_name.upper() if is_major else key_name.lower()
 
-    degree_int = roman.fromRoman(degree.upper())
 
-    if "major" in globalkey:
-        pitch_scale = (
-            scale.MajorScale(globalkey.split()[0]).pitchFromDegree(degree_int).name
-        )
-    else:
-        pitch_scale = (
-            scale.MinorScale(globalkey.split(" ")[0]).pitchFromDegree(degree_int).name
-        )
-
-    if ("#" or "b") in [char for char in pitch_scale][
-        -1:
-    ]:  # checks for exceptions in which we already have an accidental
-        modulation = (
-            scale.MajorScale(globalkey.split()[0]).pitchFromDegree(degree_int - 1).name
-            if "major" in globalkey
-            else scale.MinorScale(globalkey.split(" ")[0])
-            .pitchFromDegree(degree_int - 1)
-            .name
-        )
-
-    else:
-        modulation = pitch_scale + accidental
-
-    return modulation.upper() if degree.isupper() else modulation.lower()
+def _tonic_from_degree(key_name: str, is_major: bool, degree: str) -> Tuple[str, bool]:
+    sharps = degree.count("#")
+    flats = degree.count("b")
+    numeral = degree.replace("#", "").replace("b", "")
+    degree_int = roman.fromRoman(numeral.upper())
+    scl = scale.MajorScale(key_name) if is_major else scale.MinorScale(key_name)
+    tonic = scl.pitchFromDegree(degree_int)
+    for _ in range(sharps):
+        tonic = tonic.transpose("A1")
+    for _ in range(flats):
+        tonic = tonic.transpose("-A1")
+    return tonic.name, numeral.isupper()
 
 
 def to_full_degree(degree: Union[int, str], accidental: str) -> str:
-    return f"{accidental_abbreviation[accidental]}{degree}"
+    return f"{ACCIDENTAL_ABBREVIATION[accidental]}{degree}"
