@@ -1,22 +1,18 @@
-# Directory to save the logs files, level for logging in the console (console_level) and
-# in the log file (file_level)
+# Log file path and logging levels for the console (console_log_level) and
+# the log file (file_log_level)
 log:
-  file_path: ./musif.log
-  file_level: DEBUG
-  console_level: ERROR
+  log_file: ./musif.log
+  file_log_level: DEBUG
+  console_log_level: ERROR
 
 # Flag to determine whether to delete rows associated to files containing errors (whose
-# FileNames bust be contained in a './errors.csv' file) or not
-delete_files: False
+# FileNames must be contained in a './errors.csv' file) or not
+delete_failed_files: False
 
 # Flag to determine whether delete rows associated to files that do not have harmonic
 # annotations (and
 # hence, no harmonic analysis) or not
 delete_files_without_harmony: False
-
-# Flag to determine if multiple voices (e.g. duetos and trios) sould be merge into
-# the same column (SoundVoice_*), calculating averages, min or max of both values 
-merge_voices: True
 
 # Flag to determine if keys, keys modulatory and degrees columns should be grouped per type
 # For instance, about the keys:
@@ -27,15 +23,14 @@ merge_voices: True
 # 
 # The degrees will be merged into [Doubly] Augmented, [Doubly] Diminished, Natural, No
 # Natural. This applies to both raw and percentage degree features.
-grouped: False
+grouped_analysis: False
 
 # Flag to determine if Intrumentation column should be disgregated in several columns
 # (Presence_of_*) having a value of 1 if instrument is present, 0 otherwise.
 # see also `delete_presence` option
 separate_intrumentation_column: False
 
-# Specify the instruments whose features will be kept even if they are merged with the option
-# `grouped`
+# Instruments exempted from `instruments_to_delete` below
 # Matching is case-sensitive
 instruments_to_keep: []
   # Possible values are from abbreviations from musif.musicxml.constants.SOUND_TO_ABBREVIATION

@@ -51,12 +51,12 @@ overlap: 2
 # available virtual cores except 1
 parallel: 1
 
-# Directory to save the logs files, level for logging in the console (console_level) and
-# inthe log file (file_level)
+# Log file path and logging levels for the console (console_log_level) and
+# the log file (file_log_level)
 log:
-  file_path: ./musif.log
-  file_level: DEBUG
-  console_level: ERROR
+  log_file: ./musif.log
+  file_log_level: DEBUG
+  console_log_level: ERROR
 
 # Modules that are run once for every score. This distinction is important only when
 # `window_size` > 1

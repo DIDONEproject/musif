@@ -41,7 +41,6 @@ MATCH = "columns_match"
 REPLACE_NANS = "replace_nans"
 DFS_DIR = "dfs_dir"
 GROUPED = "grouped_analysis"
-MERGE_VOICES = "merge_voices"
 MAX_NAN_COLUMNS = "max_nan_columns"
 MAX_NAN_ROWS = "max_nan_rows"
 DELETE_COLUMNS_WITH_NANS = "delete_columns_with_nans"
@@ -76,10 +75,8 @@ _CONFIG_FALLBACK = {
 _CONFIG_POST_FALLBACK = {
     DELETE_FILES: False,
     GROUPED: False,
-    DELETE_FILES: False,
     DELETE_HARMONY: False,
     UNBUNDLE_INSTRUMENTATION: False,
-    MERGE_VOICES: True,
     DELETE_COLUMNS_WITH_NANS: True,
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_DELETE: [],
@@ -90,6 +87,16 @@ _CONFIG_POST_FALLBACK = {
     MATCH: [],
     MAX_NAN_COLUMNS: None,
     MAX_NAN_ROWS: None
+}
+
+# Historic names still accepted in configuration files; mapped to the real
+# option (and reported) so that setting them is no longer silently ignored.
+_KEY_ALIASES = {
+    "grouped": GROUPED,
+    "delete_files": DELETE_FILES,
+    "file_path": LOG_FILE_PATH,
+    "file_level": FILE_LOG_LEVEL,
+    "console_level": CONSOLE_LOG_LEVEL,
 }
 
 
@@ -141,15 +148,27 @@ class GenericConfiguration:
         # override values with kwargs
         config_data.update(kwargs)
         log_config = config_data.get(LOG, {})
+        aliased = []
         for config in [config_data, log_config]:
             for k, v in config.items():
                 if k == LOG:
                     continue
+                if k in _KEY_ALIASES:
+                    aliased.append(k)
+                    k = _KEY_ALIASES[k]
                 self.__dict__[k] = v
 
         create_logger(
             LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level
         )
+        if aliased:
+            from musif.logs import pwarn
+
+            for k in aliased:
+                pwarn(
+                    f"Configuration key '{k}' is deprecated; use "
+                    f"'{_KEY_ALIASES[k]}' instead"
+                )
 
     def to_dict(self) -> dict:
         """
