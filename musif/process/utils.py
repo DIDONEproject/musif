@@ -19,26 +19,12 @@ from musif.extract.features.harmony.constants import (
     KEY_MODULATORY,
     KEY_PERCENTAGE,
     KEY_PREFIX,
-    CHORD_prefix,
 )
-from musif.extract.features.melody.constants import TRIMMED_INTERVALLIC_MEAN
 from musif.extract.features.prefix import get_part_prefix
 from musif.extract.features.scale.constants import DEGREE_PREFIX
 from musif.logs import pinfo
 
 from .constants import voices_list_prefixes
-
-
-def replace_nans(df):
-    for col in df.columns:
-        if (
-            "Interval" in col
-            or col.startswith("Key_")
-            or col.startswith((CHORD_prefix, "Chords_", "Additions_", "Numerals_"))
-            or col.endswith(("_DottedRhythm", "_DoubleDottedRhythm"))
-            or ("_Degree" and TRIMMED_INTERVALLIC_MEAN and "_Dyn") in col
-        ):
-            df[col] = df[col].fillna("NA")
 
 
 def join_part_degrees(
