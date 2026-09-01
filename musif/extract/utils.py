@@ -579,11 +579,21 @@ def cast_mixed_dtypes(col):
     if "mixed" in pd.api.types.infer_dtype(col):
         notna = col.notna()
         newtype = col[notna].map(type).mode()[0]
-        if issubclass(newtype, float):
-            #  convert fractions like '1/3' to float
-            col[notna] = col[notna].apply(pd.eval)
+        if newtype is float:
+            # convert fractions like '1/3' to float; a value that cannot be
+            # evaluated (e.g. a stray string) becomes NaN instead of crashing
+            # the whole extraction after the corpus was parsed
+            def _to_number(value):
+                if isinstance(value, (int, float)):
+                    return value
+                try:
+                    return float(pd.eval(value))
+                except Exception:
+                    return float("nan")
+
+            col[notna] = col[notna].apply(_to_number)
             col = col.convert_dtypes()
-        elif issubclass(newtype, int):
+        elif newtype is int:
             # convert to string
             col = col.astype("string")
     return col

@@ -1,42 +1,7 @@
-ERRORED_FEATURES_IDS = {
-'R15',
-'R17',
-'R18',
-'R19',
-'R20',
-'R21',
-'R22',
-'R23',
-'R24',
-'R25',
-'R30',
-'R31',
-'R32',
-'R33',
-'R34',
-'R35',
-'R36',
-'T1',
-'T2',
-'T3',
-'P1',
-'P2',
-'P3',
-'P4',
-'P5',
-'P6',
-'P7',
-'P8',
-'P9',
-'P10',
-'P11',
-'P12',
-'P13',
-'P14',
-'P15',
-'P16',
-'P19',
-'P20',
-'P21',
-'P22'
-}
+# music21 native extractors excluded from extraction. P22 (QualityFeature)
+# duplicated the Mode feature (0/1 major-minor), crashed under the
+# SmartModuleCache wrapper (so cached and cache-less runs disagreed on the
+# column set), and music21 itself documents it as unreliable - dropped.
+EXCLUDED_FEATURES_IDS = [
+    "P22",  # QualityFeature
+]

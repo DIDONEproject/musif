@@ -9,15 +9,22 @@ from pandas import DataFrame
 from musif.common.sort import sort_columns
 from musif.config import PostProcessConfiguration
 from musif.extract.basic_modules.file_name_generic.constants import ARTIST, TITLE
-from musif.extract.basic_modules.scoring.constants import INSTRUMENTATION
+from musif.extract.basic_modules.scoring.constants import (
+    INSTRUMENTATION,
+    NUMBER_OF_FILTERED_PARTS,
+    NUMBER_OF_PARTS,
+)
 from musif.extract.constants import ID, WINDOW_ID
-from musif.extract.features.core.constants import FILE_NAME
+from musif.extract.features.core.constants import (
+    FILE_NAME,
+    NOTES_MEAN,
+    SOUNDING_MEASURES_MEAN,
+)
 from musif.extract.features.harmony.constants import (
     HARMONY_AVAILABLE,
     KEY_MODULATORY,
     KEY_PREFIX,
 )
-from musif.extract.features.prefix import get_part_prefix, get_sound_prefix
 from musif.logs import perr, pinfo
 from musif.process.constants import PRESENCE
 from musif.process.utils import (
@@ -127,17 +134,63 @@ class DataProcessor:
         self.data.dropna(axis=1, how="all", inplace=True)
         if self._post_config.delete_files_without_harmony:
             self.delete_files_without_harmony()
-        if self._post_config.separate_intrumentation_column:
+        if self._post_config.separate_instrumentation_column:
             pinfo('\nSeparating "Instrumentation" column...')
             self.separate_instrumentation_column()
 
+        # replace the configured NaNs BEFORE deleting NaN-bearing columns,
+        # otherwise the deletion leaves replace_nans nothing to act on
+        self.replace_nans()
         self.delete_undesired()
+        if self._post_config.delete_duplicated_sound_columns:
+            self.delete_duplicated_sound_columns()
 
         if self._post_config.grouped_analysis:
             self.group_columns()
         self.data.reset_index(inplace=True)
         self._final_data_processing()
         return self
+
+    def delete_duplicated_sound_columns(self) -> None:
+        """
+        Deletes the ``Sound<X>_*`` columns of every sound performed by exactly
+        one part throughout the DataFrame: for a single-part sound they equal
+        the ``Part<X>_*`` columns by construction (the sound scope aggregates
+        over one part). The per-part-mean and part-count columns
+        (``NotesMean``, ``SoundingMeasuresMean``, ``NumberOfParts``,
+        ``NumberOfFilteredParts``) are kept.
+        """
+        spared = (
+            NOTES_MEAN,
+            SOUNDING_MEASURES_MEAN,
+            NUMBER_OF_PARTS,
+            NUMBER_OF_FILTERED_PARTS,
+        )
+        sounds = {
+            col[len("Sound"):].split("_", 1)[0]
+            for col in self.data.columns
+            if col.startswith("Sound") and "_" in col
+        }
+        to_delete = []
+        for sound in sorted(sounds):
+            prefix = f"Sound{sound}_"
+            parts_col = prefix + NUMBER_OF_PARTS
+            if parts_col not in self.data.columns:
+                continue
+            n_parts = self.data[parts_col].dropna()
+            if len(n_parts) == 0 or n_parts.max() != 1:
+                continue
+            to_delete += [
+                col
+                for col in self.data.columns
+                if col.startswith(prefix) and not col.endswith(spared)
+            ]
+        if to_delete:
+            pinfo(
+                f"\nDeleting {len(to_delete)} single-part Sound columns "
+                "duplicating their Part columns..."
+            )
+            self.data.drop(columns=to_delete, inplace=True, errors="ignore")
 
     def delete_files_without_harmony(self):
         """
@@ -177,12 +230,12 @@ class DataProcessor:
         Instrumentation, assigning a value of 1 for every instrument that is present and
         0 if it is not for every row (aria).
         """
-        for i, row in enumerate(self.data[INSTRUMENTATION]):
+        # iterate by index LABEL: positional .at[] corrupted the frame after
+        # row deletions and on windowed (MultiIndex) data
+        for label, row in self.data[INSTRUMENTATION].items():
             if str(row) != 'nan':
                 for element in row.split(","):
-                    self.data.at[i, PRESENCE + "_" + element] = 1
-            else:
-                pass
+                    self.data.at[label, PRESENCE + "_" + element] = 1
         self.data[[i for i in self.data if PRESENCE + "_" in i]] = (
             self.data[[i for i in self.data if PRESENCE + "_" in i]]
             .fillna(0)
@@ -252,8 +305,8 @@ class DataProcessor:
         Parameters
         ----------
         dest_path : str or Path
-            Path to directory where the file will be stored; a suffix like
-            `_metadata.csv` will be added.
+            Path to directory where the file will be stored; the suffix
+            `_alldata` plus the extension is added.
         ext : str
             Extension used to save files. Use `.gz`, `.xz`, `.zip` etc. to compress the
             files. Default: `.csv`
@@ -263,10 +316,10 @@ class DataProcessor:
         """
 
         pinfo(f"Writing data to {dest_path}_*{ext}")
-        ft = "to_" + ft
         dest_path = str(dest_path)
         if ft == "csv":
-            kwargs["index"] = False
+            kwargs.setdefault("index", False)
+        ft = "to_" + ft
         getattr(self.data, ft)(dest_path + "_alldata" + ext, **kwargs)
 
     def _group_keys_modulatory(self) -> None:
@@ -288,30 +341,32 @@ class DataProcessor:
             i for i in self.data.columns if "_Degree" in i and "relative" not in i
         ]
 
-        for part in self._post_config.instruments_to_keep:
-            join_part_degrees(total_degrees, get_part_prefix(part), self.data)
-        join_part_degrees(total_degrees, get_sound_prefix("voice"), self.data)
+        for prefix in self._degree_prefixes(total_degrees):
+            join_part_degrees(total_degrees, prefix, self.data)
 
     def _join_degrees_relative(self) -> None:
         total_degrees = [
             i for i in self.data.columns if "_Degree" in i and "relative" in i
         ]
 
-        for part in self._post_config.instruments_to_keep:
-            join_part_degrees(
-                total_degrees, get_part_prefix(part), self.data, sufix="_relative"
-            )
-        join_part_degrees(
-            total_degrees, get_sound_prefix("voice"), self.data, sufix="_relative"
-        )
+        for prefix in self._degree_prefixes(total_degrees):
+            join_part_degrees(total_degrees, prefix, self.data, sufix="_relative")
+
+    @staticmethod
+    def _degree_prefixes(total_degrees) -> list:
+        """Scope prefixes (PartVnI_, Score_, ...) that actually carry degree
+        columns, so grouping covers every present scope and no phantom ones."""
+        return sorted({col.split("Degree", 1)[0] for col in total_degrees if col.split("Degree", 1)[0]})
 
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
         self.replace_nans()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
-        if TITLE and ARTIST in self.data.columns:
+        if TITLE in self.data.columns and ARTIST in self.data.columns:
             priority_columns = [FILE_NAME, TITLE, ARTIST]
         else:
             priority_columns = []
         self.data = sort_columns(self.data, [ID, WINDOW_ID] + priority_columns)
-        self.data.drop("index", axis=1, inplace=True, errors="ignore")
+        self.data.drop(
+            columns=["index", "level_0", "level_1"], inplace=True, errors="ignore"
+        )

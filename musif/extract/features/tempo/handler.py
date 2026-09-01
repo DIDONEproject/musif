@@ -5,6 +5,8 @@ from music21.expressions import TextExpression
 from music21.stream import Measure
 
 from musif.cache import isinstance
+from music21.meter import TimeSignature as M21TimeSignature
+
 from musif.config import ExtractConfiguration
 from musif.extract.constants import (
     DATA_NUMERIC_TEMPO,
@@ -118,22 +120,30 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
     ts_measures = {}
     time_signatures = []
     for i, element in enumerate(measures):
-        if element.measureNumber not in ts_measures:
-            if element.timeSignature is not None:
-                time_signatures.append(element.timeSignature.ratioString)
-            else:
-                if len(time_signatures) >= 1:
-                    time_signatures.append(time_signatures[-1])
-                elif hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
-                    time_signatures.append(
-                        score_data[GLOBAL_TIME_SIGNATURE].ratioString
-                    )
-                else:
-                    time_signatures.append("NA")
-
-            ts_measures[element.measureNumber] = i
-        else:
+        # a measure's own time signature always wins, even when its measure
+        # number repeats (repeats/windows): the old lookup silently replaced
+        # a real metre change with the earlier same-numbered measure's TS
+        if element.timeSignature is not None:
+            time_signatures.append(element.timeSignature.ratioString)
+        elif element.measureNumber in ts_measures:
             time_signatures.append(time_signatures[ts_measures[element.measureNumber]])
+        elif len(time_signatures) >= 1:
+            time_signatures.append(time_signatures[-1])
+        else:
+            # window slices carry the prevailing TS at Part level: resolve it
+            # from context before falling back to the score-global metre
+            context_ts = element.getContextByClass(M21TimeSignature)
+            if hasattr(context_ts, "ratioString"):
+                time_signatures.append(context_ts.ratioString)
+            elif hasattr(score_data.get(GLOBAL_TIME_SIGNATURE), 'ratioString'):
+                time_signatures.append(
+                    score_data[GLOBAL_TIME_SIGNATURE].ratioString
+                )
+            else:
+                time_signatures.append("NA")
+
+        if element.measureNumber not in ts_measures:
+            ts_measures[element.measureNumber] = i
 
     time_signatures_set = set(time_signatures)
     time_signature = list(sorted(time_signatures_set, key=time_signatures.index))[0] if time_signatures_set else ''

@@ -115,7 +115,11 @@ def update_score_objects(
         INSTRUMENTATION: ",".join(
             sort_list(instrument_abbreviations, cfg.scoring_order)
         ),
-        VOICES: ",".join(sort_list(voice_abbreviations, cfg.scoring_order)),
+        # voice entries carry part abbreviations (sopI, sopII...), so they are
+        # sorted against the numeral-expanded order like SCORING above
+        VOICES: ",".join(
+            sort_list(voice_abbreviations, abbreviated_parts_scoring_order)
+        ),
         FAMILY_SCORING: ",".join(
             sort_list(family_abbreviations, cfg.scoring_family_order)
         ),
@@ -141,9 +145,10 @@ def update_score_objects(
             get_family_feature(family, NUMBER_OF_FILTERED_PARTS)
         ] = filtered_count_by_family[family]
 
-    features[get_score_feature(NUMBER_OF_FILTERED_PARTS)] = len(abbreviated_parts)
+    number_of_filtered_parts = sum(filtered_count_by_sound.values())
+    features[get_score_feature(NUMBER_OF_FILTERED_PARTS)] = number_of_filtered_parts
     features[get_score_feature(NUMBER_OF_PARTS)] = len(score.parts)
-    score_data[get_score_feature(NUMBER_OF_FILTERED_PARTS)] = len(abbreviated_parts)
+    score_data[get_score_feature(NUMBER_OF_FILTERED_PARTS)] = number_of_filtered_parts
     score_data[get_score_feature(NUMBER_OF_PARTS)] = len(score.parts)
 
     return score_features.update(features)

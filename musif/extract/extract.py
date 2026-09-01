@@ -244,7 +244,7 @@ class FeaturesExtractor:
         self.exclude_files = kwargs.get("exclude_files") or getattr(
             self._cfg, "exclude_files", None
         )
-        if any(i in self._cfg.features for i in ("music21")) and self._cfg.cache_dir:
+        if "music21" in (self._cfg.features or []) and self._cfg.cache_dir:
             pwarn("\nmusic21's features were requested. musif's caching system is not compatible with these, so cache will be disabled. \n")
             self._cfg.cache_dir = None
             
@@ -427,12 +427,24 @@ class FeaturesExtractor:
         nmeasures = len(score_data[C.DATA_SCORE].parts[0].getElementsByClass(Measure))
 
         ws = self._cfg.window_size
+        if self._cfg.overlap >= ws:
+            raise ValueError(
+                f"overlap ({self._cfg.overlap}) must be smaller than "
+                f"window_size ({ws})"
+            )
         hopsize = ws - self._cfg.overlap
+        # only complete windows are extracted; a tail shorter than one window
+        # is not analyzed
         number_windows = (nmeasures - self._cfg.overlap) // hopsize
+        if number_windows <= 0:
+            pwarn(
+                f"{filename}: {nmeasures} measures is shorter than one window "
+                f"({ws}); the score yields no rows"
+            )
 
         all_windows_features = []
-        for idx in range(number_windows):
-            first_window_measure = idx * hopsize
+        for window_index in range(number_windows):
+            first_window_measure = window_index * hopsize
             last_window_measure = first_window_measure + ws
             window_data, window_parts_data = self._select_window_data(
                 score_data, parts_data, first_window_measure, last_window_measure
@@ -448,16 +460,16 @@ class FeaturesExtractor:
                 basic=False,
             )
 
+            # half-open range of 0-based measure indices
             window_features[
                 C.WINDOW_RANGE
             ] = f"{first_window_measure} - {last_window_measure}"
 
-            window_features[C.WINDOW_ID] = idx
+            window_features[C.WINDOW_ID] = window_index
 
             window_features = {**basic_features, **window_features}
 
             all_windows_features.append(window_features)
-            first_window_measure = last_window_measure - self._cfg.overlap
 
         if self._cfg.cache_dir is not None:
             pickle.dump(score_data, open(cache_name, "wb"))
@@ -477,9 +489,15 @@ class FeaturesExtractor:
             self._cfg.is_requested_musescore_file()
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
-            window_mscore = score_data[C.DATA_MUSESCORE_SCORE].loc[
-                (score_data[C.DATA_MUSESCORE_SCORE]["mn"] <= last_measure)
-                & (score_data[C.DATA_MUSESCORE_SCORE]["mn"] >= first_measure)
+            # first_measure/last_measure are 0-based, end-exclusive measure
+            # INDICES (music21 indicesNotNumbers). playthrough aligns 1:1 with
+            # those indices in both folded and unfolded scores (written mn is
+            # non-monotonic under expand_repeats and lost whole repeats).
+            mscore = score_data[C.DATA_MUSESCORE_SCORE]
+            first_playthrough = int(mscore[C.PLAYTHROUGH].min())
+            window_mscore = mscore.loc[
+                (mscore[C.PLAYTHROUGH] >= first_playthrough + first_measure)
+                & (mscore[C.PLAYTHROUGH] < first_playthrough + last_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
         else:
@@ -557,23 +575,13 @@ class FeaturesExtractor:
         info_load_str = ""
         
         if load_cache is not None and load_cache.exists():
-            s = converter.parse(filename)
-            s.toData = types.MethodType(converter.toData, converter)
-            cached_object = SmartModuleCache(s)
             try:
                 data = pickle.load(open(load_cache, "rb"))
             except Exception as e:
                 info_load_str += f" Error while loading pickled object, continuing with extraction from scratch: {e}"
             else:
                 info_load_str += " File was loaded from cache."
-            # get bytes
-            bytes = cached_object.toData('midi')
-            # write to file
-            with open('output.mid', 'wb') as f:
-                f.write(bytes)
-            # save cached object
-            pickle.dump(cached_object, open(load_cache, 'wb'))
-        
+
         if data is None:
             try:
                 score, filtered_parts, numeric_tempo = self._load_score_data(filename)
@@ -650,23 +658,19 @@ class FeaturesExtractor:
 
     def _filter_parts(self, score: Score) -> List[Part]:
         parts = list(score.parts)
-        # self._deal_with_dupicated_parts(parts)
-        if self._cfg.parts_filter is None or len(self._cfg.parts_filter) == 0:
+        parts_filter = self._cfg.parts_filter
+        if parts_filter is None or len(parts_filter) == 0:
             return parts
-        filter_set = set(self._cfg.parts_filter)
+        if "voice" in parts_filter:
+            parts_filter = [p for p in parts_filter if p != "voice"] + list(
+                C.VOICES_LIST
+            )
+        filter_set = set(parts_filter)
         return (
             part
             for part in parts
             if to_abbreviation(part, parts, self._cfg) in filter_set
         )
-
-    def _deal_with_dupicated_parts(self, parts):
-        for part in parts:
-            # Keeping onle solo and 1º part of duplicated instruments
-            part.id = part.id.replace(" 1º", "")
-            part.partAbbreviation = part.partAbbreviation.replace(" 1º", "")
-            if "2º" in part.id:
-                parts.remove(part)
 
     def _get_part_data(self, score_data: dict, part: Part) -> dict:
         sound = extract_sound(part, self._cfg)
@@ -707,6 +711,10 @@ class FeaturesExtractor:
         for feature in to_extract:
             feature_package = self._get_module_or_attribute(package, feature)
             if isinstance(feature_package, Exception):
+                pwarn(
+                    f"Requested feature module '{feature}' was not found in "
+                    f"{package.__name__} and will be skipped"
+                )
                 continue
             module = self._get_module_or_attribute(feature_package, "handler")
             if isinstance(module, Exception):

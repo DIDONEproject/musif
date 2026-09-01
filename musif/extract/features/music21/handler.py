@@ -7,9 +7,8 @@ from music21.features.base import extractorsById
 from musif import cache
 from musif.config import ExtractConfiguration
 from musif.extract.constants import DATA_SCORE
-from musif.logs import pwarn
 
-from .constants import ERRORED_FEATURES_IDS
+from .constants import EXCLUDED_FEATURES_IDS
 
 
 def allFeaturesAsList(cfg, streamInput):
@@ -20,18 +19,21 @@ def allFeaturesAsList(cfg, streamInput):
 
     ds = m21.features.base.DataSet(classLabel="")
     ds.runParallel = False  # this is the only difference with the m21 original code
-    all_features = list(native.featureExtractors)
-    if cfg.cache_dir:
-        pwarn('\nCache is activated! Some music21 features will NOT be computed.')
-        final_features = [feature for feature in all_features if feature.id not in
-            ERRORED_FEATURES_IDS]
-    else:
-        final_features = all_features
+    final_features = [
+        feature
+        for feature in native.featureExtractors
+        if feature.id not in EXCLUDED_FEATURES_IDS
+    ]
     ds.addFeatureExtractors(final_features)
     ds.addData(streamInput)
     ds.process()
     allData = ds.getFeaturesAsList(
         includeClassLabel=False, includeId=False, concatenateLists=False
+    )
+    # with those flags getFeaturesAsList returns the single row: one vector
+    # per extractor, aligned with final_features
+    assert len(allData) == len(final_features), (
+        "music21 features misaligned with their extractors"
     )
     return allData, [c.__name__ for c in final_features]
 

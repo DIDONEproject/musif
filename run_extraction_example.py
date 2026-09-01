@@ -22,7 +22,7 @@ cache_dir = None
 # csv file containing files which raised error and need to be reextracted
 try:
     path_error = f'{DEST_PATH}/error_files.csv'
-    errored_files = list(pd.read_csv(path_error, low_memory=False)[FILE_NAME])
+    errored_files = list(pd.read_csv(path_error, low_memory=False)['ErrorFiles'])
 except Exception:
     # Handle the case where there is no file is empty
     print("There is no error_files.csv, it will be created and loaded error files are included manually in it.")

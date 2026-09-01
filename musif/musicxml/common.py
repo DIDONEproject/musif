@@ -3,7 +3,8 @@ from typing import List, Tuple
 import itertools
 
 from music21.interval import Interval
-from music21.note import Note
+from music21.note import GeneralNote, Note
+from music21.bar import Repeat
 from music21.repeat import RepeatMark
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
@@ -11,6 +12,7 @@ from music21.text import assembleLyrics
 from roman import toRoman
 
 from musif.cache import isinstance
+from musif.logs import pwarn
 
 
 def is_voice(part: Part) -> bool:
@@ -116,15 +118,51 @@ def get_notes_and_measures(
     """
 
     measures = list(part.getElementsByClass(Measure))
+    # collect notes from the measure itself AND from its Voice sub-streams:
+    # Measure.notes is non-recursive, and whole parts written in voices used
+    # to be reported as silent. Chords are excluded from the note lists (but
+    # their measures still count as sounding) - see Feature_definition.md.
+    #
+    # Elements are also grouped into MELODIC LINES (the measures' direct
+    # elements form one line, each Voice id another): intervals and motion
+    # must never be computed across simultaneous lines, or leaps are
+    # fabricated at every voice boundary.
+    notes_per_measure = []
+    notes_and_rests = []
+    lines = {}
+    for measure in measures:
+        measure_notes = list(measure.notes)
+        notes_and_rests.extend(measure.notesAndRests)
+        lines.setdefault("", []).extend(measure.notesAndRests)
+        for voice in measure.voices:
+            measure_notes.extend(voice.notes)
+            notes_and_rests.extend(voice.notesAndRests)
+            lines.setdefault(str(voice.id), []).extend(voice.notesAndRests)
+        notes_per_measure.append(measure_notes)
+
+    melodic_lines = [
+        line
+        for line in lines.values()
+        if any(isinstance(element, Note) for element in line)
+    ]
+
     sounding_measures = [
-        idx for idx, measure in enumerate(measures) if len(measure.notes) > 0
+        idx for idx, measure_notes in enumerate(notes_per_measure)
+        if len(measure_notes) > 0
     ]
     original_notes = [
-        note for measure in measures for note in measure.notes if isinstance(note, Note)
+        note
+        for measure_notes in notes_per_measure
+        for note in measure_notes
+        if isinstance(note, Note)
     ]
-    notes_and_rests = [n for measure in measures for n in measure.notesAndRests]
+    if len(original_notes) == 0 and len(measures) > 0:
+        pwarn(
+            f"Part '{part.partName}' yielded no notes; its note-based features "
+            "will be empty"
+        )
 
-    return original_notes, measures, sounding_measures, notes_and_rests
+    return original_notes, measures, sounding_measures, notes_and_rests, melodic_lines
 
 
 def _separate_info_in_two_parts(score, final_parts, part):
@@ -136,27 +174,27 @@ def _separate_info_in_two_parts(score, final_parts, part):
         if isinstance(measure, Measure):
             num_measure += 1
             if any(not isinstance(e, Voice) for e in measure.elements):
+                # elements such as clefs, dynamics, text annotations...
+                # Notes/rests are excluded: copying them into every split part
+                # used to duplicate the measure's direct notes in all voices.
                 not_voices_elements = [
-                    e for e in measure.elements if not isinstance(e, Voice)
-                ]  # elements such as clefs, dynamics, text annotations...
+                    e
+                    for e in measure.elements
+                    if not isinstance(e, Voice) and not isinstance(e, GeneralNote)
+                ]
                 for p in parts_splitted:
-                    if measure.measureNumber == 0 and isinstance(measure, Measure):
-                        # number = measure.measureNumber+1
-                        # only add elements if we are in am measure
-                        if isinstance(p.elements[num_measure], Measure):
-                            p.elements[num_measure].elements += tuple(
-                                deepcopy(e)
-                                for e in not_voices_elements
-                                if e not in p.elements[num_measure].elements
-                            )
-                    if measure.measureNumber > 0:
-                        if not isinstance(p.elements[num_measure], Measure):
-                            continue
-                        p.elements[num_measure].elements += tuple(
-                            deepcopy(e)
-                            for e in not_voices_elements
-                            if e not in p.elements[num_measure].elements
-                        )
+                    if num_measure >= len(p.elements):
+                        continue
+                    target = p.elements[num_measure]
+                    if not isinstance(target, Measure):
+                        continue
+                    for e in not_voices_elements:
+                        if e not in target.elements:
+                            # insert at the element's real offset: rebuilding
+                            # .elements dropped every offset to 0 (dynamics and
+                            # tempo marks all landed on the downbeat) and
+                            # cleared the measure's end elements (barlines)
+                            target.insert(e.offset, deepcopy(e))
     for num, p in enumerate(parts_splitted, 1):
         p.id = part.id + " " + toRoman(num)  # only I or II
         p.partName = part.partName + " " + toRoman(num)  # only I or II
@@ -239,5 +277,15 @@ def fix_repeats(score: Score):
                 if m.offset == measure_sign_offset:
                     marks = m.getElementsByClass("RepeatMark")
                     if sign.__class__ not in [mark.__class__ for mark in marks]:
-                        m.insert(offset_sign, sign)
+                        if isinstance(sign, Repeat):
+                            # repeat barlines only take effect as the measure's
+                            # left/right barline: inserted mid-stream they are
+                            # invisible to expandRepeats, and sharing one
+                            # object across parts corrupts its sites
+                            if sign.direction == "start":
+                                m.leftBarline = deepcopy(sign)
+                            else:
+                                m.rightBarline = deepcopy(sign)
+                        else:
+                            m.insert(offset_sign, deepcopy(sign))
                     break

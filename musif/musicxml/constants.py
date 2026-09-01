@@ -265,6 +265,9 @@ FAMILY_TO_ABBREVIATION = {
     "brass": "br",
     "percussion": "perc",
     "voice": "voice",
+    "plucked": "pluc",
+    "keyboard": "kb",
+    "electric": "elec",
     "general": "gen",
 }
 """Dictionary containing abbreviation of each family"""
@@ -530,20 +533,23 @@ SOUND_TO_FAMILY = {
 """Dictionary containing the family of each instrument (sound)"""
 
 SCORING_ORDER = [
+    "picc",
     "fl",
     "ob",
     "eh",
     "cl",
+    "sax",
     "bn",
     "hn",
     "tpt",
-    "tb",
-    "clno",
+    "tbn",
+    "tba",
     "timp",
-    "tamb",
-    "triang",
+    "perc",
     "mand",
-    "salt",
+    "hp",
+    "pf",
+    "org",
     "vv",
     "cv",
     "eq",
@@ -553,14 +559,29 @@ SCORING_ORDER = [
     "ten",
     "bar",
     "bbar",
-    "bas",
+    "bass",
     "vn",
     "va",
     "viol",
     "vc",
+    "db",
     "bs",
 ]
-"""List of sounds/instruments in the order we want them TODO: better documentation here!"""
+"""Abbreviations of sounds/instruments in scoring order. Abbreviations not
+listed here are appended at the end of Scoring/Instrumentation strings."""
 
-SCORING_FAMILY_ORDER = ["ww", "br", "perc", "pluc", "voice", "str"]
-"""List of families in the order we want them TODO: better documentation here!"""
+SCORING_FAMILY_ORDER = ["ww", "br", "perc", "pluc", "kb", "voice", "str", "elec", "gen"]
+"""Abbreviations of families in scoring order."""
+
+# Alternate spellings (Italian names etc.) share their abbreviation with a
+# sound of known family: let them inherit that family instead of falling back
+# to "general" (which also counted voice parts as instruments).
+_FAMILY_BY_ABBREVIATION = {}
+for _sound, _family in SOUND_TO_FAMILY.items():
+    _abbreviation = SOUND_TO_ABBREVIATION.get(_sound)
+    if _abbreviation is not None and _abbreviation not in _FAMILY_BY_ABBREVIATION:
+        _FAMILY_BY_ABBREVIATION[_abbreviation] = _family
+for _sound, _abbreviation in SOUND_TO_ABBREVIATION.items():
+    if _sound not in SOUND_TO_FAMILY and _abbreviation in _FAMILY_BY_ABBREVIATION:
+        SOUND_TO_FAMILY[_sound] = _FAMILY_BY_ABBREVIATION[_abbreviation]
+del _FAMILY_BY_ABBREVIATION

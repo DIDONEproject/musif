@@ -1,4 +1,3 @@
-ALPHA = "abcdefghijklmnopqrstuvwxyz"
 HARMONY_PREFIX = "Harmony_"
 HARMONIC_prefix = HARMONY_PREFIX + "Harmonic"
 HARMONY_AVAILABLE = HARMONY_PREFIX + "Analysis_Available"
@@ -13,11 +12,8 @@ OTHERS_NO_AUG = "Others_no_+"
 OTHERS_AUG = "Others_+"
 
 KEY_PREFIX = HARMONY_PREFIX + "Key_"
-KEY_GROUPING = "KeyGrouping"
-KEY_MEASURES = "Measures_"
 KEY_PERCENTAGE = "_PercentageMeasures"
 KEY_MODULATORY = "Modulatory_"
-KEY_MODCOMP = "ModComp_"
 
 NUMERALS_prefix = HARMONY_PREFIX + "Numerals_"
 

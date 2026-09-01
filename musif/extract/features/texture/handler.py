@@ -1,21 +1,13 @@
 from typing import List
 
 import numpy as np
-from pandas import DataFrame
 
-from musif.common._constants import VOICE_FAMILY
 from musif.config import ExtractConfiguration
-from musif.extract.basic_modules.scoring.constants import FAMILY
-from musif.extract.common import _filter_parts_data, _part_matches_filter
-from musif.extract.constants import (
-    DATA_FAMILY,
-    DATA_FAMILY_ABBREVIATION,
-    DATA_PART_ABBREVIATION,
-    DATA_SOUND_ABBREVIATION,
-)
-from musif.extract.features.core.constants import NUM_NOTES
+from musif.extract.common import _filter_parts_data
+from musif.extract.constants import DATA_PART_ABBREVIATION
 from musif.extract.features.core.handler import DATA_NOTES
-from musif.extract.features.prefix import get_part_feature, get_part_prefix
+from musif.extract.features.prefix import get_part_prefix
+from musif.musicxml.scoring import ROMAN_NUMERALS_FROM_1_TO_20
 
 from .constants import *
 
@@ -32,78 +24,48 @@ def update_score_objects(
     if len(parts_data) == 0:
         return
 
-    features = {}
-
-    for part_data, part_features in zip(parts_data, parts_features):
-
-        part = part_data[DATA_PART_ABBREVIATION]
-
-        features[get_part_feature(part, NUM_NOTES)] = part_features[NUM_NOTES]
-
-    score_features.update(features)
-
+    # actual note counts per part; staves sharing an abbreviation are summed
+    # as one logical part
     notes = {}
+    for part_data in parts_data:
+        abbreviation = part_data[DATA_PART_ABBREVIATION]
+        key = abbreviation[0].upper() + abbreviation[1:]
+        notes[key] = notes.get(key, 0) + len(part_data[DATA_NOTES])
 
-    for j, part in enumerate(parts_data):
+    # canonical pair order (the configured scoring order, expanded with the
+    # Roman numerals part abbreviations carry), so a given pair always
+    # produces the same column name across a corpus, regardless of the order
+    # of the staves in each score
+    scoring_order = [
+        instrument + numeral
+        for instrument in getattr(cfg, "scoring_order", []) or []
+        for numeral in [""] + ROMAN_NUMERALS_FROM_1_TO_20
+    ]
 
-        if part[DATA_PART_ABBREVIATION].startswith("vn"):
+    def _canonical(item):
+        name = item[0][0].lower() + item[0][1:]
+        try:
+            return (0, scoring_order.index(name))
+        except ValueError:
+            return (1, name)
 
-            # capitalization to preserve I and II in Violins
+    ordered = sorted(notes.items(), key=_canonical)
 
-            notes[
-                part[DATA_PART_ABBREVIATION][0].upper()
-                + part[DATA_PART_ABBREVIATION][1:]
-            ] = len(part[DATA_NOTES])
-
-        elif part[DATA_FAMILY] == VOICE_FAMILY:
-
-            notes[part[DATA_FAMILY_ABBREVIATION].capitalize()] = int(
-                score_features[
-                    FAMILY + part[DATA_FAMILY_ABBREVIATION].capitalize() + "_NotesMean"
-                ]
-            )
-
-        else:
-
-            abbreviation = (
-                part[DATA_SOUND_ABBREVIATION][0].upper()
-                + part[DATA_SOUND_ABBREVIATION][1:]
-            )
-
-            notes[part[DATA_SOUND_ABBREVIATION].capitalize()] = int(
-                score_features["Sound" + abbreviation + "_NotesMean"]
-            )
-
-    notes = list(notes.items())
-    for i in range(len(notes)):
-
-        key_1, value_1 = notes[i]
-
-        for j in range(i + 1, len(notes)):
-            key_2, value_2 = notes[j]
+    for i in range(len(ordered)):
+        key_1, value_1 = ordered[i]
+        for j in range(i + 1, len(ordered)):
+            key_2, value_2 = ordered[j]
             if value_2 == 0:
-                if value_1 > 0:
-                    texture = np.inf
-                else:
-                    texture = np.nan
+                texture = np.inf if value_1 > 0 else np.nan
             else:
                 texture = value_1 / value_2
 
             part1_prefix = get_part_prefix(key_1).replace("_", "")
-
             part2_prefix = get_part_prefix(key_2).replace("_", "")
-
             score_features[f"{part1_prefix}|{part2_prefix}_{TEXTURE}"] = texture
 
 
 def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
-
-    if not _part_matches_filter(part_data[DATA_PART_ABBREVIATION], cfg.parts_filter):
-
-        return {}
-
-    notes = part_data[DATA_NOTES]
-
-    part_features.update({DATA_NOTES: len(notes)})
+    pass

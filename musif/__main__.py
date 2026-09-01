@@ -1,3 +1,4 @@
+import os
 import sys
 from typing import Optional
 from pathlib import Path
@@ -92,9 +93,6 @@ def main(
     if source_dir is None:
         # look for the common parent part into `limit_to_files`
         first_file = Path(paths[0])
-        source_dir = first_file.parent
-
-        _source_dir = str(source_dir)
         extension = first_file.suffix
 
         for file in paths[1:]:
@@ -103,9 +101,11 @@ def main(
                 perr(
                     f"Please provide files with only one extension: first file has extension {extension}, but {file_} has extension {file_.suffix}"
                 )
-            while not file.startswith(_source_dir):
-                source_dir = source_dir.parent
-                _source_dir = str(source_dir)
+        if len(paths) > 1:
+            source_dir = Path(os.path.commonpath([str(Path(p).parent) for p in paths]))
+        else:
+            source_dir = first_file.parent
+        _source_dir = str(source_dir)
         pinfo(f"Detected parent directory: {_source_dir}")
         pinfo(f"Detected extension: {extension}")
     else:
@@ -143,7 +143,6 @@ def main(
         config.basic_modules = ["scoring"]
     extract_c.MUSIC21_FILE_EXTENSIONS = extension
     raw_df = FeaturesExtractor(config, limit_files=paths).extract()
-    raw_df = FeaturesExtractor(config, limit_files=paths).extract()
 
     output_path = Path(output_path).with_suffix(".csv")
     # raw_df.to_csv(output_path.with_suffix(".raw.csv"), index=False)
@@ -176,7 +175,11 @@ def main(
     processed_df.to_csv(output_path, index=False)
 
 
-if __name__ == "__main__":
+def run():
     import fire
 
     fire.Fire(main, name="musif")
+
+
+if __name__ == "__main__":
+    run()

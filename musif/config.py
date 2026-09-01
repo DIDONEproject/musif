@@ -11,6 +11,7 @@ LOG_FILE_PATH = "log_file"
 FILE_LOG_LEVEL = "file_log_level"
 CONSOLE_LOG_LEVEL = "console_log_level"
 data_dir = "data_dir"
+OUTPUT_DIR = "output_dir"
 MUSESCORE_DIR = "musescore_dir"
 CACHE_DIR = "cache_dir"
 IGNORE_ERRORS = "ignore_errors"
@@ -30,8 +31,10 @@ SPLIT_KEYWORDS = "split_keywords"
 
 DELETE_FILES = "delete_failed_files"
 DELETE_HARMONY = "delete_files_without_harmony"
+DELETE_SOUND_COLUMNS = "delete_sound_columns"
+DELETE_DUPLICATED_SOUND_COLUMNS = "delete_duplicated_sound_columns"
 
-UNBUNDLE_INSTRUMENTATION = "separate_intrumentation_column"
+UNBUNDLE_INSTRUMENTATION = "separate_instrumentation_column"
 INSTRUMENTS_TO_KEEP = "instruments_to_keep"
 INSTRUMENTS_TO_DELETE = "instruments_to_delete"
 ENDSWITH = "columns_endswith"
@@ -41,7 +44,6 @@ MATCH = "columns_match"
 REPLACE_NANS = "replace_nans"
 DFS_DIR = "dfs_dir"
 GROUPED = "grouped_analysis"
-MERGE_VOICES = "merge_voices"
 MAX_NAN_COLUMNS = "max_nan_columns"
 MAX_NAN_ROWS = "max_nan_rows"
 DELETE_COLUMNS_WITH_NANS = "delete_columns_with_nans"
@@ -54,6 +56,7 @@ _CONFIG_LOG_FALLBACK = {
 
 _CONFIG_FALLBACK = {
     data_dir: None,
+    OUTPUT_DIR: ".",
     MUSESCORE_DIR: None,
     CACHE_DIR: None,
     PARALLEL: 1,
@@ -76,10 +79,10 @@ _CONFIG_FALLBACK = {
 _CONFIG_POST_FALLBACK = {
     DELETE_FILES: False,
     GROUPED: False,
-    DELETE_FILES: False,
     DELETE_HARMONY: False,
+    DELETE_SOUND_COLUMNS: False,
+    DELETE_DUPLICATED_SOUND_COLUMNS: False,
     UNBUNDLE_INSTRUMENTATION: False,
-    MERGE_VOICES: True,
     DELETE_COLUMNS_WITH_NANS: True,
     INSTRUMENTS_TO_KEEP: [],
     INSTRUMENTS_TO_DELETE: [],
@@ -90,6 +93,17 @@ _CONFIG_POST_FALLBACK = {
     MATCH: [],
     MAX_NAN_COLUMNS: None,
     MAX_NAN_ROWS: None
+}
+
+# Historic names still accepted in configuration files; mapped to the real
+# option (and reported) so that setting them is no longer silently ignored.
+_KEY_ALIASES = {
+    "grouped": GROUPED,
+    "delete_files": DELETE_FILES,
+    "separate_intrumentation_column": UNBUNDLE_INSTRUMENTATION,
+    "file_path": LOG_FILE_PATH,
+    "file_level": FILE_LOG_LEVEL,
+    "console_level": CONSOLE_LOG_LEVEL,
 }
 
 
@@ -141,15 +155,27 @@ class GenericConfiguration:
         # override values with kwargs
         config_data.update(kwargs)
         log_config = config_data.get(LOG, {})
+        aliased = []
         for config in [config_data, log_config]:
             for k, v in config.items():
                 if k == LOG:
                     continue
+                if k in _KEY_ALIASES:
+                    aliased.append(k)
+                    k = _KEY_ALIASES[k]
                 self.__dict__[k] = v
 
         create_logger(
             LOGGER_NAME, self.log_file, self.file_log_level, self.console_log_level
         )
+        if aliased:
+            from musif.logs import pwarn
+
+            for k in aliased:
+                pwarn(
+                    f"Configuration key '{k}' is deprecated; use "
+                    f"'{_KEY_ALIASES[k]}' instead"
+                )
 
     def to_dict(self) -> dict:
         """
@@ -186,6 +212,15 @@ class ExtractConfiguration(GenericConfiguration):
         self.family_to_abbreviation = musicxml_c.FAMILY_TO_ABBREVIATION
         self.sound_to_abbreviation = musicxml_c.SOUND_TO_ABBREVIATION
         super().__init__(*args, **kwargs)
+        # expand the 'voice' shorthand once, up front, so every consumer of
+        # parts_filter sees the same expanded list (the old lazy in-place
+        # expansion broke the first score of every corpus)
+        if self.parts_filter and "voice" in self.parts_filter:
+            from musif.extract.constants import VOICES_LIST
+
+            self.parts_filter = [
+                p for p in self.parts_filter if p != "voice"
+            ] + list(VOICES_LIST)
 
     def _get_fallback(self):
         return _CONFIG_FALLBACK

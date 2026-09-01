@@ -23,7 +23,6 @@ from .constants import *
 from musif.extract.features.core.constants import (
     DATA_MEASURES,
     DATA_SOUNDING_MEASURES,
-    NUM_NOTES,
 )
 
 
@@ -39,8 +38,6 @@ def update_part_objects(
 
         syllabic_ratio = get_syllabic_ratio(notes, lyrics)
 
-        voice_reg = get_voice_reg(notes)
-
         voice_presence = len(part_data[DATA_SOUNDING_MEASURES]) / len(
             part_data[DATA_MEASURES]
         ) if part_data[DATA_MEASURES] else 0
@@ -49,7 +46,6 @@ def update_part_objects(
             {
                 SYLLABLES: len(lyrics),
                 SYLLABIC_RATIO: syllabic_ratio,
-                VOICE_REG: voice_reg,
                 VOICE_PRESENCE: voice_presence,
             }
         )
@@ -76,24 +72,26 @@ def update_score_objects(
 
     if voice_parts_data:
 
+        # staves sharing an abbreviation are one logical part: pool counts
+        part_totals = {}
         for part_data in voice_parts_data:
-
             part = part_data[DATA_PART_ABBREVIATION]
+            totals = part_totals.setdefault(part, [0, 0, 0, 0])
+            totals[0] += len(part_data[DATA_NOTES])
+            totals[1] += len(part_data[DATA_LYRICS])
+            totals[2] += len(part_data[DATA_SOUNDING_MEASURES])
+            totals[3] += len(part_data[DATA_MEASURES])
 
-            features[get_part_feature(part, NUM_NOTES)] = len(part_data[DATA_NOTES])
+        for part, (num_notes, num_syllables, sounding, measures) in part_totals.items():
 
-            features[get_part_feature(part, SYLLABIC_RATIO)] = get_syllabic_ratio(
-                part_data[DATA_NOTES], part_data[DATA_LYRICS]
+            features[get_part_feature(part, SYLLABIC_RATIO)] = (
+                num_notes / num_syllables if num_syllables else float("nan")
             )
 
-            features[get_part_feature(part, SYLLABLES)] = len(part_data[DATA_LYRICS])
+            features[get_part_feature(part, SYLLABLES)] = num_syllables
 
-            features[get_part_feature(part, VOICE_PRESENCE)] = len(
-                part_data[DATA_SOUNDING_MEASURES]
-            ) / len(part_data[DATA_MEASURES]) if part_data[DATA_MEASURES] else 0
-
-            features[get_part_feature(part, SYLLABIC_RATIO)] = get_syllabic_ratio(
-                part_data[DATA_NOTES], part_data[DATA_LYRICS]
+            features[get_part_feature(part, VOICE_PRESENCE)] = (
+                sounding / measures if measures else 0
             )
 
         notes = [
@@ -108,9 +106,17 @@ def update_score_objects(
 
         features[get_score_feature(SYLLABLES)] = len(lyrics)
 
+        # ratio of sums: a note-weighted aggregate over the voice parts
         features[get_score_feature(SYLLABIC_RATIO)] = get_syllabic_ratio(notes, lyrics)
 
-        features[get_score_feature(VOICE_REG)] = get_voice_reg(notes)
+        # each voice part is measured against its OWN last note, then averaged
+        voice_regs = [
+            get_voice_reg(part_data[DATA_NOTES]) for part_data in voice_parts_data
+        ]
+        voice_regs = [v for v in voice_regs if v == v]
+        features[get_score_feature(VOICE_REG)] = (
+            mean(voice_regs) if voice_regs else float("nan")
+        )
 
     return score_features.update(features)
 
@@ -118,28 +124,18 @@ def update_score_objects(
 def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:
 
     if lyrics is None or len(lyrics) == 0:
-
-        return 0.0
+        # undefined without lyrics; a genuine ratio is never 0
+        return float("nan")
 
     return len(notes) / len(lyrics)
 
 
 def get_voice_reg(notes: List[Note]) -> float:
-
+    # DATA_NOTES never contains chords (they are excluded from note-based
+    # features), so a plain pitch access is safe here
     if notes:
-
-        last_note = (
-            notes[-1].notes[0].pitch.midi if notes[-1].isChord else notes[-1].pitch.midi
-        )
-
-        # If we wave 2 or more notes at once, we just take the lowest one
-
-        distances = [
-            note[0].pitch.midi if note.isChord else (note.pitch.midi - last_note)
-            for note in notes
-        ]
+        last_note = notes[-1].pitch.midi
+        distances = [note.pitch.midi - last_note for note in notes]
         return mean(distances)
 
-    else:
-
-        return "NA"
+    return float("nan")

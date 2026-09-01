@@ -20,17 +20,13 @@ def update_score_objects(
     """
 
     file_name = basename(score_data[DATA_FILE])
-    name = file_name.split('.')[:-1]
-    if '_' in name:
-        name = name.split('_')
-        title = name[0]
+    stem = file_name.rsplit(".", 1)[0] if "." in file_name else file_name
+    artist, separator, title = stem.partition("_")
+    if not separator:
+        # no underscore: the whole stem is the title
         artist = ""
-    else:
-        title = "".join(name)
-        artist = ""
-    artist = name[0]
-    title = name[1]
-        
+        title = stem
+
     score_features.update(
         {
             ARTIST: artist,

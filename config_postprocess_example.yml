@@ -1,41 +1,38 @@
-# Directory to save the logs files, level for logging in the console (console_level) and
-# in the log file (file_level)
+# Log file path and logging levels for the console (console_log_level) and
+# the log file (file_log_level)
 log:
-  file_path: ./musif.log
-  file_level: DEBUG
-  console_level: ERROR
+  log_file: ./musif.log
+  file_log_level: DEBUG
+  console_log_level: ERROR
 
 # Flag to determine whether to delete rows associated to files containing errors (whose
-# FileNames bust be contained in a './errors.csv' file) or not
-delete_files: False
+# FileNames must be contained in a './errors.csv' file) or not
+delete_failed_files: False
 
 # Flag to determine whether delete rows associated to files that do not have harmonic
 # annotations (and
 # hence, no harmonic analysis) or not
 delete_files_without_harmony: False
 
-# Flag to determine if multiple voices (e.g. duetos and trios) sould be merge into
-# the same column (SoundVoice_*), calculating averages, min or max of both values 
-merge_voices: True
-
 # Flag to determine if keys, keys modulatory and degrees columns should be grouped per type
 # For instance, about the keys:
-# * IV, II, and VI will be merged into the SD group (subdominant)
-# * iv, ii, will be merged into the sd group (subdominant)
-# * I and i will be merged into the T group (tonic)
-# * III and vi will be merged into the rel group (relative)
-# 
-# The degrees will be merged into [Doubly] Augmented, [Doubly] Diminished, Natural, No
-# Natural. This applies to both raw and percentage degree features.
-grouped: False
+# * V and v are merged into the D and d groups (dominant), and Dom = D + d
+# * IV, II, and VI are merged into the SD group (subdominant)
+# * iv and ii are merged into the sd group (subdominant), and SubD = SD + sd
+# * I and i are merged into the T group (tonic)
+# * III and vi are merged into the rel group (relative)
+#
+# The degrees are grouped into Asc (#), Desc (b), Dasc (x), Ddesc (bb), Nat and
+# Nonat columns, separately for _Count and _Per features (and their _relative
+# variants), for every scope prefix that carries degree columns.
+grouped_analysis: False
 
 # Flag to determine if Intrumentation column should be disgregated in several columns
 # (Presence_of_*) having a value of 1 if instrument is present, 0 otherwise.
 # see also `delete_presence` option
-separate_intrumentation_column: False
+separate_instrumentation_column: False
 
-# Specify the instruments whose features will be kept even if they are merged with the option
-# `grouped`
+# Instruments exempted from `instruments_to_delete` below
 # Matching is case-sensitive
 instruments_to_keep: []
   # Possible values are from abbreviations from musif.musicxml.constants.SOUND_TO_ABBREVIATION
@@ -73,17 +70,30 @@ instruments_to_delete: []
   # - CiI
 
 # Rows having more than this percentage of NaN will be deleted
-# value null (or None) means "keep all"
+# value null (or None) means "keep all" columns/rows
 max_nan_rows: null
 
 # Columns having more than this percentage of NaN will be deleted (applied after
 # `max_nan_rows`)
-# value null (or None) means "keep all"
+# value null (or None) means "keep all" columns/rows
 max_nan_columns: null
 
+# Master switch for the NaN-based column deletion above
+delete_columns_with_nans: True
+
+# Delete every Sound*_ column (except Sound*Voice*) plus FamilyInstrumentation and
+# FamilyScoring. Off by default: these are stock features.
+delete_sound_columns: False
+
+# Delete the Sound<X>_ columns of every sound performed by exactly one part in
+# the whole DataFrame: they equal the Part<X>_ columns by construction. The
+# per-part means and part counts (NotesMean, SoundingMeasuresMean,
+# NumberOfParts, NumberOfFilteredParts) are kept. Off by default.
+delete_duplicated_sound_columns: False
+
 # Columns containing these substrings will have nan values replaced with 0
-# Applied after `max_nan_rows` and `max_nan_columns`
-# Matching is case-sensitive
+# Applied before the column deletions, so the replaced columns survive them
+# Matching is case-insensitive
 replace_nans: []
   # Example of values (but any substring can be used):
   # - Interval
