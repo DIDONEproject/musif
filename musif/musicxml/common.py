@@ -229,26 +229,58 @@ def get_notes_and_measures(
     # to be reported as silent. Chords are excluded from the note lists (but
     # their measures still count as sounding) - see Feature_definition.md.
     #
-    # Elements are also grouped into MELODIC LINES (the measures' direct
-    # elements form one line, each Voice id another): intervals and motion
-    # must never be computed across simultaneous lines, or leaps are
-    # fabricated at every voice boundary.
+    # Elements are also grouped into MELODIC LINES: intervals and motion must
+    # never be computed across simultaneous lines, or leaps are fabricated at
+    # every voice boundary.
+    #
+    # - The MAIN line runs through the whole part: the direct elements of the
+    #   measures written in one voice, continued by the FIRST voice of the
+    #   measures written in several. music21 stores the two kinds of measure
+    #   differently, but they are the same line of music; keeping them apart
+    #   joined the measure before a two-voice passage to the measure after it.
+    # - Every OTHER voice is a line of its own that starts anew at each
+    #   passage (a run of consecutive measures where that voice is written),
+    #   so nothing is measured from one passage to the next over the measures
+    #   in between.
+    # - A measure where nothing at all is written for the part (as in the
+    #   second part of a split staff while the staff shows a single line)
+    #   ends the main line in the same way; it starts anew afterwards.
     notes_per_measure = []
     notes_and_rests = []
-    lines = {}
+    main_line = []
+    lines = [main_line]
+    passages = {}
     for measure in measures:
         measure_notes = list(measure.notes)
-        notes_and_rests.extend(measure.notesAndRests)
-        lines.setdefault("", []).extend(measure.notesAndRests)
-        for voice in measure.voices:
+        direct_elements = list(measure.notesAndRests)
+        notes_and_rests.extend(direct_elements)
+        main_line.extend(direct_elements)
+        written = len(direct_elements) > 0
+        voices_here = set()
+        for position, voice in enumerate(measure.voices):
+            voice_elements = list(voice.notesAndRests)
             measure_notes.extend(voice.notes)
-            notes_and_rests.extend(voice.notesAndRests)
-            lines.setdefault(str(voice.id), []).extend(voice.notesAndRests)
+            notes_and_rests.extend(voice_elements)
+            written = written or len(voice_elements) > 0
+            if position == 0:
+                main_line.extend(voice_elements)
+                continue
+            voice_id = str(voice.id)
+            voices_here.add(voice_id)
+            if voice_id not in passages:
+                passages[voice_id] = []
+                lines.append(passages[voice_id])
+            passages[voice_id].extend(voice_elements)
+        for voice_id in [v for v in passages if v not in voices_here]:
+            del passages[voice_id]
+        if not written and len(main_line) > 0:
+            main_line = []
+            lines.append(main_line)
         notes_per_measure.append(measure_notes)
 
     melodic_lines = [
         line
-        for line in lines.values()
+        for line in lines
         if any(isinstance(element, Note) for element in line)
     ]
 
