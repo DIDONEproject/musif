@@ -70,7 +70,11 @@ def update_score_objects(
             }
         )
         features.update(
-            {k: v for (k, v) in chords.items() if k.startswith(CHORD_prefix)}
+            {
+                k: v
+                for (k, v) in chords.items()
+                if k.startswith((CHORD_prefix, APPLIED_prefix))
+            }
         )
         features.update({k: v for (k, v) in chords_grouping1.items()})
         features.update({k: v for (k, v) in chords_grouping2.items()})

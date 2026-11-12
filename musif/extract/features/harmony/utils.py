@@ -202,8 +202,8 @@ def get_function_first(element, mode):
     }
 
     # Special chords
-    if any([i for i in ("It", "Ger", "Fr") if i in element]):
-        return "D"
+    if any([i for i in AUGMENTED_SIXTHS if i in element]):
+        return FUNCTION_AUG6
 
     elif element.lower() == "bii":
         return "NAP"
@@ -259,21 +259,75 @@ def get_function_second(element):
         return element.upper().replace("-", "b")
 
 
+def _kinds_of_chord(rows) -> List[str]:
+    """For each chord row, AUG6, APPLIED or '' (a chord on a degree of the
+    key in force). The two special kinds are counted apart from the degrees:
+    an applied chord (V7/V, viio7/ii) names a degree of ANOTHER key, and ms3
+    rewrites an augmented sixth as a vii or V applied to the dominant."""
+    count = len(rows)
+    chord_types = (
+        rows.chord_type.astype(str).tolist() if "chord_type" in rows else [""] * count
+    )
+    relative_roots = (
+        rows.relativeroot.tolist() if "relativeroot" in rows else [None] * count
+    )
+    kinds = []
+    for chord_type, relative_root in zip(chord_types, relative_roots):
+        if chord_type in AUGMENTED_SIXTHS:
+            kinds.append(AUG6)
+        elif not pd.isna(relative_root) and str(relative_root) != "":
+            kinds.append(APPLIED)
+        else:
+            kinds.append("")
+    return kinds
+
+
+def _durations(rows):
+    """Length of each annotation in quarter notes, or None when the analysis
+    does not give it."""
+    if "duration_qb" not in rows:
+        return None
+    return (
+        pd.to_numeric(rows.duration_qb, errors="coerce").fillna(0.0).astype(float).tolist()
+    )
+
+
+def _proportions(labels, durations, name, count_suffix="_Count", per_suffix="_Per"):
+    """For each label: its count, its proportion of the annotations, and its
+    proportion of the annotated time (a chord held for four measures and a
+    passing chord count the same in the former, not in the latter).
+    ``name(label)`` gives the stem of the three columns."""
+    counts = Counter(labels)
+    total = sum(counts.values())
+    time = None
+    if durations is not None:
+        time = Counter()
+        for label, duration in zip(labels, durations):
+            time[label] += duration
+        total_time = sum(time.values())
+        if total_time <= 0:
+            time = None
+    features = {}
+    for label, count in counts.items():
+        stem = name(label)
+        features[stem + per_suffix] = count / total
+        if count_suffix is not None:
+            features[stem + count_suffix] = count
+        if time is not None:
+            features[stem + PER_TIME] = time[label] / total_time
+    return features
+
+
 def get_numerals(lausanne_table):
-    numerals = [
-        n
-        for n in lausanne_table.numeral.dropna().tolist()
-        if str(n) not in ("", "@none")
+    rows = lausanne_table.dropna(subset=["numeral"])
+    rows = rows[~rows.numeral.astype(str).isin(["", "@none"])]
+    # applied chords and augmented sixths are not degrees of the key in
+    # force: they are counted under one label each
+    labels = [
+        kind or str(numeral)
+        for numeral, kind in zip(rows.numeral.tolist(), _kinds_of_chord(rows))
     ]
-    numerals_counter = Counter(numerals)
-
-    total_numerals = sum(list(numerals_counter.values()))
-    nc = {}
-    for n in numerals_counter:
-        nc[NUMERALS_prefix + str(n) + "_Per"] = numerals_counter[n] / total_numerals
-        nc[NUMERALS_prefix + str(n) + "_Count"] = numerals_counter[n]
-
-    return nc
+    return _proportions(labels, _durations(rows), lambda label: NUMERALS_prefix + label)
 
 
 def get_additions(lausanne_table):
@@ -327,19 +381,19 @@ def get_chord_types(lausanne_table):
     # so it still says It/Ger/Fr for augmented sixths; re-deriving the type
     # from the post-expansion numeral (the old make_type_col) could never
     # produce them, leaving the documented aug6 bucket unreachable
-    rows = lausanne_table[["numeral", "chord_type"]].dropna(subset=["chord_type"])
+    rows = lausanne_table.dropna(subset=["chord_type"])
     rows = rows[rows.numeral.astype(str) != "@none"]
     chords_forms = [str(t) for t in rows.chord_type.tolist()]
 
     grouped_forms = get_chord_types_groupings(chords_forms)
 
-    form_counter = Counter(grouped_forms)
-    features_chords = {}
-    for f in form_counter:
-        features_chords[CHORD_TYPES_prefix + str(f)] = form_counter[f] / sum(
-            list(form_counter.values())
-        )
-    return features_chords
+    return _proportions(
+        grouped_forms,
+        _durations(rows),
+        lambda form: CHORD_TYPES_prefix + str(form),
+        count_suffix=None,
+        per_suffix="",
+    )
 
 
 def _strip_accidentals(label: str) -> str:
@@ -350,23 +404,20 @@ def get_chords(harmonic_analysis):
     # row-aligned extraction: only rows that carry a chord label (phrase-only
     # rows have a propagated localkey but no chord, and used to shift the
     # pairing); '@none' rows are explicit non-harmony and are excluded
-    rows = harmonic_analysis[["chord", "localkey", "numeral", "chord_type"]]
-    rows = rows.dropna(subset=["chord"])
+    rows = harmonic_analysis.dropna(subset=["chord"])
     rows = rows[rows.numeral.astype(str) != "@none"]
 
     keys = rows.localkey.tolist()
     chords = rows.chord.tolist()
     numerals = rows.numeral.tolist()
     types = [str(i) for i in rows.chord_type.tolist()]
-
-    chords_functionalities1, chords_functionalities2 = get_chords_functions(
-        chords, keys
-    )
+    kinds = _kinds_of_chord(rows)
+    durations = _durations(rows)
 
     numerals_and_types = []
     for index, numeral in enumerate(numerals):
         chord_type = types[index]
-        if chord_type in ("It", "Ger", "Fr"):
+        if chord_type in AUGMENTED_SIXTHS:
             # augmented sixths keep their own label (ms3 rewrites their
             # numeral to vii/V, which used to produce 'viiIt'-style names)
             numerals_and_types.append(chord_type)
@@ -381,12 +432,45 @@ def get_chords(harmonic_analysis):
         for label in numerals_and_types
     ]
 
-    chords_dict = count_chords(numerals_and_types)
+    # Chords on the degrees of the key in force (and the augmented sixths,
+    # under their own names) go to Chord_; applied chords go to Applied_,
+    # named by what they are (V7, viio...) whatever degree they lead to. The
+    # proportions of both share one denominator: all the chords.
+    chords_dict = _proportions(
+        list(zip([kind == APPLIED for kind in kinds], numerals_and_types)),
+        durations,
+        lambda key: (APPLIED_prefix if key[0] else CHORD_prefix) + key[1],
+    )
 
-    counter_function_1 = Counter(chords_functionalities1)
-    counter_function_2 = Counter(chords_functionalities2)
-    chords_group_1 = count_chords_group(counter_function_1, "1")
-    chords_group_2 = count_chords_group(counter_function_2, "2")
+    functions = []
+    for index, (chord, local_key) in enumerate(zip(chords, keys)):
+        if kinds[index] == AUG6:
+            functions.append(FUNCTION_AUG6)
+        elif kinds[index] == APPLIED:
+            # a secondary chord has its function in another key, not in this
+            # one (V7/IV leads to the subdominant)
+            functions.append(FUNCTION_SECONDARY)
+        else:
+            # A chord has the function of the numeral it was annotated with.
+            # In particular the cadential six-four is a dominant only where
+            # the annotation says so, `V(64)`: an `I64` followed by a `V` is
+            # not always one, and stays a tonic.
+            functions.append(get_first_chord_local(chord, local_key))
+
+    # unclassifiable chords are dropped from BOTH groupings together, keeping
+    # every list aligned with its source row
+    classified = [index for index, function in enumerate(functions) if function is not None]
+    first_function = [functions[index] for index in classified]
+    second_function = [get_function_second(function) for function in first_function]
+    function_durations = (
+        [durations[index] for index in classified] if durations is not None else None
+    )
+    chords_group_1 = _proportions(
+        first_function, function_durations, lambda f: CHORDS_GROUPING_prefix + "1" + f
+    )
+    chords_group_2 = _proportions(
+        second_function, function_durations, lambda f: CHORDS_GROUPING_prefix + "2" + f
+    )
 
     return chords_dict, chords_group_1, chords_group_2
 
