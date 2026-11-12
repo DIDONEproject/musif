@@ -27,7 +27,7 @@ def update_part_objects(
         for key, value in notes_per_degree_relative.items():
             part_features[DEGREE_RELATIVE_COUNT.format(key=key)] = value
             part_features[DEGREE_RELATIVE_PER.format(key=key)] = (
-                value / all_degrees if all_degrees != 0 else 0
+                value / all_degrees if all_degrees != 0 else float("nan")
             )
 
 
@@ -69,7 +69,7 @@ def update_score_objects(
     for degree, value in score_notes_per_degree.items():
         features[get_score_feature(DEGREE_RELATIVE_COUNT.format(key=degree))] = value
         features[get_score_feature(DEGREE_RELATIVE_PER.format(key=degree))] = (
-            value / all_score_degrees if all_score_degrees != 0 else 0
+            value / all_score_degrees if all_score_degrees != 0 else float("nan")
         )
 
     # Promote part-level relative degrees to score scope. Staves sharing an
@@ -95,6 +95,6 @@ def update_score_objects(
             ] = value
             features[
                 get_part_feature(part, DEGREE_RELATIVE_PER.format(key=degree))
-            ] = (value / part_total if part_total != 0 else 0)
+            ] = (value / part_total if part_total != 0 else float("nan"))
 
     score_features.update(features)

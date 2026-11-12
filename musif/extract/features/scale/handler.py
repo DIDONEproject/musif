@@ -40,7 +40,7 @@ def update_part_objects(
         part_features[DEGREE_COUNT.format(key=key)] = value
 
         part_features[DEGREE_PER.format(key=key)] = (
-            value / all_degrees if all_degrees != 0 else 0
+            value / all_degrees if all_degrees != 0 else float("nan")
         )
 
 
@@ -81,7 +81,7 @@ def update_score_objects(
         score_features[get_score_feature(DEGREE_COUNT.format(key=key))] = value
 
         score_features[get_score_feature(DEGREE_PER.format(key=key))] = (
-            value / all_score_degrees if all_score_degrees != 0 else 0
+            value / all_score_degrees if all_score_degrees != 0 else float("nan")
         )
 
     # Promote part-level degree features to score scope. Parts sharing an
@@ -114,7 +114,7 @@ def update_score_objects(
             score_features[get_part_feature(part, DEGREE_COUNT.format(key=degree))] = value
 
             score_features[get_part_feature(part, DEGREE_PER.format(key=degree))] = (
-                value / part_total if part_total != 0 else 0
+                value / part_total if part_total != 0 else float("nan")
             )
 
 
