@@ -182,17 +182,18 @@ def split_layers(score: Score, split_keywords: List[str]):
                     break
 
         if possible_layers:
-            has_voices = False
-            for measure in part.elements:
-                if isinstance(measure, Measure) and any(
-                    isinstance(e, Voice) for e in measure.elements
-                ):
-                    has_voices = True
-                    break
+            # The staff is split only if a second player really has something
+            # to play: a measure written in several voices in which a voice
+            # other than the first carries notes. A stray rest in a second
+            # voice (a leftover of the engraving, often invisible) used to
+            # split the staff and leave a second part without a single note.
+            has_second_voice = any(
+                len(voice.notes) > 0
+                for measure in part.getElementsByClass(Measure)
+                for voice in list(measure.voices)[1:]
+            )
 
-            if (
-                has_voices
-            ):  # recorrer los compases buscando las voices y separamos en dos parts
+            if has_second_voice:
                 _separate_info_in_two_parts(score, final_parts, part)
             else:
                 final_parts.append(part)  # without any change
