@@ -206,8 +206,10 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
             if len(intervals) > 1
             else nan
         )
-    trim_diff = intervallic_mean - trimmed_intervallic_mean
-    trim_ratio = trim_diff / intervallic_mean if intervallic_mean != 0 else nan
+    # No trim difference or ratio is derived from the signed mean: the signed
+    # intervals of a line cancel out (their sum is its last pitch minus its
+    # first), so that mean is a net displacement close to 0, and a ratio to
+    # it measures nothing.
     absolute_trim_diff = absolute_intervallic_mean - trimmed_absolute_intervallic_mean
     absolute_trim_ratio = (
         absolute_trim_diff / absolute_intervallic_mean
@@ -300,8 +302,6 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
         f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_intervallic_std,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_intervallic_mean,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_intervallic_std,
-        f"{prefix}{INTERVALLIC_TRIM_DIFF}": trim_diff,
-        f"{prefix}{INTERVALLIC_TRIM_RATIO}": trim_ratio,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": absolute_trim_diff,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": absolute_trim_ratio,
         f"{prefix}{ASCENDING_INTERVALS_COUNT}": num_ascending_intervals,
