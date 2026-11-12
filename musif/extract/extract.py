@@ -30,7 +30,7 @@ from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
 from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
-                            split_layers)
+                            split_layers, to_sounding_pitch)
 from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
                                     to_abbreviation)
 from music21 import converter
@@ -76,6 +76,11 @@ def parse_filename(
     """
     try:
         score = parse(file_path).makeRests()
+        # Every pitch is analysed as it sounds. Transposing instruments
+        # (horns, trumpets, clarinets...) are written in another key, and
+        # their written notes used to enter the scale-degree and ambitus
+        # features, and the score aggregates, as if they sounded as written.
+        to_sounding_pitch(score, file_path)
         if export_dfs_to is not None:
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name

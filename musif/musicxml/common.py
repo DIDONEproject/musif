@@ -1,9 +1,14 @@
 from copy import deepcopy
 from typing import List, Tuple
+from xml.etree import ElementTree
 import itertools
 
+from music21.chord import Chord
+from music21.instrument import Instrument
 from music21.interval import Interval
-from music21.note import GeneralNote, Note
+from music21.key import KeySignature
+from music21.musicxml.xmlToM21 import MeasureParser
+from music21.note import GeneralNote, Note, Rest
 from music21.bar import Repeat
 from music21.repeat import RepeatMark
 from music21.scale import MajorScale, MinorScale
@@ -48,6 +53,106 @@ def name_parts(score: Score):
             increment = True
         if increment:
             i += 1
+
+
+def _stated_transpositions(file_path):
+    """
+    The transpositions a MusicXML file states: for each part, in order, the
+    number of its measures and a list of (index of the measure, interval),
+    one entry per measure that carries a `<transpose>`.
+
+    Returns None when the file cannot be read this way: it is not plain
+    part-wise MusicXML (a compressed file, another format), or it states a
+    transposition for one staff of a part only.
+    """
+    try:
+        root = ElementTree.parse(file_path).getroot()
+    except Exception:
+        return None
+    parts = root.findall("part")
+    if len(parts) == 0:
+        return None
+    # music21's own reading of a <transpose> element, so that the intervals
+    # are the ones music21 would have attached to the instruments
+    reader = MeasureParser()
+    stated = []
+    for part in parts:
+        measures = part.findall("measure")
+        transpositions = {}
+        for index, measure in enumerate(measures):
+            for mx_transpose in measure.findall("attributes/transpose"):
+                if mx_transpose.get("number") is not None:
+                    return None
+                transpositions[index] = reader.xmlTransposeToInterval(mx_transpose)
+        stated.append((len(measures), sorted(transpositions.items())))
+    return stated
+
+
+def to_sounding_pitch(score: Score, file_path=None) -> None:
+    """
+    Transposes the score, in place, to sounding pitch: afterwards the notes,
+    chords and key signatures of every transposing instrument (horns,
+    trumpets, clarinets...) are the ones that sound. Only the transpositions
+    the file states are applied, each from the measure that states it: a part
+    that states none is left as it is, and so are the measures before the
+    first one a part states.
+
+    Parameters
+    ----------
+    score : Score
+        Music21 score to transpose
+    file_path : str, optional
+        The MusicXML file the score was read from. The transpositions are
+        taken from it, measure by measure. music21 alone cannot give them: it
+        attaches to every instrument a default transposition (a horn is in F
+        unless told otherwise) that cannot be told from one the file states,
+        and would apply it to the measures in which the file states nothing.
+        Without the file, or when it cannot be matched to the score part by
+        part, music21's reading of the instruments is used.
+    """
+    parts = list(score.parts)
+    stated = _stated_transpositions(file_path) if file_path else None
+    if stated is not None and (
+        len(stated) != len(parts)
+        or any(
+            len(part.getElementsByClass(Measure)) != number_of_measures
+            for part, (number_of_measures, _) in zip(parts, stated)
+        )
+    ):
+        stated = None
+
+    if stated is None:
+        for part in parts:
+            # A part whose transposition differs from the default of its
+            # instrument is loaded with two Instrument objects at the same
+            # place: the default one, and next to it the one carrying the
+            # transposition written in the file. Only the latter is in
+            # force; left in place, the former would transpose the opening
+            # key signature a second time.
+            instruments = list(part.getElementsByClass(Instrument))
+            for earlier, later in zip(instruments, instruments[1:]):
+                if part.elementOffset(earlier) == part.elementOffset(later):
+                    part.remove(earlier)
+        score.toSoundingPitch(inPlace=True)
+        return
+
+    for part, (_, transpositions) in zip(parts, stated):
+        measures = list(part.getElementsByClass(Measure))
+        for position, (first, interval) in enumerate(transpositions):
+            if position + 1 < len(transpositions):
+                last = transpositions[position + 1][0]
+            else:
+                last = len(measures)
+            if interval is None or interval.name == "P1":
+                continue
+            for measure in measures[first:last]:
+                measure.transpose(
+                    interval, inPlace=True, classFilterList=(Note, Chord, KeySignature)
+                )
+        # nothing is left to transpose, whatever the instruments say
+        for stream in part.recurse(streamsOnly=True, includeSelf=True):
+            stream.atSoundingPitch = True
+    score.atSoundingPitch = True
 
 
 def split_layers(score: Score, split_keywords: List[str]):
