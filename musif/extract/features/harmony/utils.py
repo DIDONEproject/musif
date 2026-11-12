@@ -208,6 +208,13 @@ def get_function_first(element, mode):
     elif element.lower() == "bii":
         return "NAP"
 
+    # the relative of the key in force: vi in major (relative minor, 'rm'),
+    # III in minor (relative major, 'rj')
+    if mode == "M" and element == "vi":
+        return "rm"
+    if mode == "m" and element == "III":
+        return "rj"
+
     if mode == "M":
         if element == "vii":
             return "D"
