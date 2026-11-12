@@ -270,36 +270,78 @@ def get_notes_and_measures(
     return original_notes, measures, sounding_measures, notes_and_rests, melodic_lines
 
 
+def _already_in(target: Measure, element, offset) -> bool:
+    """
+    Whether `target` already holds `element`, or a twin of it, at `offset`
+    (None for an element stored at the end of its measure, such as the right
+    barline).
+
+    music21's equality is too coarse to decide this alone: any two Dynamics,
+    and any two TextExpressions, compare equal whatever their value or
+    content. A plain ``element in target.elements`` test therefore dropped
+    every marking after the first of its kind in the measure.
+    """
+    for other in target.elements:
+        if other is element:
+            return True
+        if type(other) is not type(element) or other != element:
+            continue
+        if any(
+            getattr(other, attribute, None) != getattr(element, attribute, None)
+            for attribute in ("value", "content")
+        ):
+            continue
+        other_offset = target.elementOffset(other, returnSpecial=True)
+        other_at_end = isinstance(other_offset, str)
+        if offset is None:
+            if other_at_end:
+                return True
+        elif not other_at_end and abs(float(other_offset) - float(offset)) < 1e-6:
+            return True
+    return False
+
+
 def _separate_info_in_two_parts(score, final_parts, part):
     parts_splitted = part.voicesToParts().elements
-    num_measure = 0
-    for measure in part.elements:
-        # add missing information to both parts (dynamics, text annotations, etc are
-        # missing)
-        if isinstance(measure, Measure):
-            num_measure += 1
-            if any(not isinstance(e, Voice) for e in measure.elements):
-                # elements such as clefs, dynamics, text annotations...
-                # Notes/rests are excluded: copying them into every split part
-                # used to duplicate the measure's direct notes in all voices.
-                not_voices_elements = [
-                    e
-                    for e in measure.elements
-                    if not isinstance(e, Voice) and not isinstance(e, GeneralNote)
-                ]
-                for p in parts_splitted:
-                    if num_measure >= len(p.elements):
-                        continue
-                    target = p.elements[num_measure]
-                    if not isinstance(target, Measure):
-                        continue
-                    for e in not_voices_elements:
-                        if e not in target.elements:
-                            # insert at the element's real offset: rebuilding
-                            # .elements dropped every offset to 0 (dynamics and
-                            # tempo marks all landed on the downbeat) and
-                            # cleared the measure's end elements (barlines)
-                            target.insert(e.offset, deepcopy(e))
+    source_measures = [m for m in part.elements if isinstance(m, Measure)]
+    for p in parts_splitted:
+        # Pair every measure with its twin by position in time. Counting the
+        # elements of the split part instead put the markings one measure
+        # early whenever more than one element preceded its first measure
+        # (transposing instruments carry two Instrument objects).
+        targets = {
+            float(p.elementOffset(m)): m for m in p.getElementsByClass(Measure)
+        }
+        for measure in source_measures:
+            target = targets.get(float(part.elementOffset(measure)))
+            if target is None:
+                continue
+            # add the information music21 leaves out of the split parts:
+            # clefs, dynamics, text annotations... Notes are never copied
+            # (that used to duplicate the measure's direct notes in every
+            # part), and rests only when the whole staff rests, so that the
+            # measure is a silence in every split part and not a gap.
+            staff_rests = len(measure.notes) == 0 and not any(
+                isinstance(e, Voice) for e in measure.elements
+            )
+            for e in measure.elements:
+                if isinstance(e, Voice):
+                    continue
+                if isinstance(e, GeneralNote) and not (
+                    staff_rests and isinstance(e, Rest)
+                ):
+                    continue
+                offset = measure.elementOffset(e, returnSpecial=True)
+                if isinstance(offset, str):
+                    # stored at the end of the measure (right barline)
+                    if not _already_in(target, e, None):
+                        target.storeAtEnd(deepcopy(e))
+                elif not _already_in(target, e, offset):
+                    # insert at the element's real offset: rebuilding
+                    # .elements dropped every offset to 0 (dynamics and
+                    # tempo marks all landed on the downbeat) and
+                    # cleared the measure's end elements (barlines)
+                    target.insert(offset, deepcopy(e))
     for num, p in enumerate(parts_splitted, 1):
         p.id = part.id + " " + toRoman(num)  # only I or II
         p.partName = part.partName + " " + toRoman(num)  # only I or II
