@@ -2,6 +2,23 @@
 
 All notable changes to `musif`, newest first.
 
+## v1.3.1
+* Pitches are analysed as they sound: the parts of transposing instruments are transposed by the interval their file states
+* Bug fixed in the split of a staff shared by two players (dynamics, text and metre changes were lost or misplaced); a staff is split only when its second voice has notes
+* Melodic lines redefined: intervals and motion no longer skip the measures written in several voices
+* Dynamics: a silence is not a dynamic level, and parts without markings are NaN
+* Rates per quarter note added next to the rates per beat (`...Quarters` columns)
+* New column `RepriseInstruction` (da capo or dal segno not written out)
+* Harmony: applied chords counted apart (`Harmony_Applied_`), proportions by time (`_PerTime`), new groups for the relative, applied chords and augmented sixths
+* Motion features pruned, acceleration removed, and `IntervallicTrimDiff` and `IntervallicTrimRatio` removed (breaking change)
+* `Score_VoiceReg` is measured from the tonic of the key
+* Bug fixed in the syllable count, the dotted rhythm, the tempo heading and its grouping, and the harmonic additions
+* A value that cannot be computed is NaN, never 0 (density, texture, degree proportions, run lengths)
+* Post-processor: `replace_nans` replaces an empty cell only where 0 is the measured value
+* A score whose annotations state no global key is extracted without harmony features instead of being left empty; a score that failed has no `Presence_of_` values
+* Part numbering no longer depends on the cache
+* Features extracted with previous versions should be extracted again
+
 ## v1.3.0
 * Bug fixed in scale degree features
 * Bug fixed in relative scale degree features
