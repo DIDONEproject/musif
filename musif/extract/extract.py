@@ -29,6 +29,7 @@ from musif.extract.utils import (cast_mixed_dtypes,
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
+from musif.musicxml.tempo import extract_reprise_instruction
 from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
                             split_layers, to_sounding_pitch)
 from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
@@ -512,6 +513,7 @@ class FeaturesExtractor:
             C.DATA_FILTERED_PARTS: window_parts,
             C.DATA_MUSESCORE_SCORE: window_mscore,
             C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO],
+            C.DATA_REPRISE_INSTRUCTION: score_data.get(C.DATA_REPRISE_INSTRUCTION, "NA"),
         }
 
         for i, p in enumerate(window_parts):
@@ -622,6 +624,7 @@ class FeaturesExtractor:
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
                 C.DATA_NUMERIC_TEMPO: numeric_tempo,
+                C.DATA_REPRISE_INSTRUCTION: extract_reprise_instruction(filename),
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:

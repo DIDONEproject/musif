@@ -339,6 +339,37 @@ def get_number_of_beats(time_signature: str) -> int:
         # raise ValueError(f"The {time_signature} is not a known time signature")
 
 
+_REPRISE_WORDS = re.compile(r"^\W*(da\s+capo|dal\s+segno|d\.\s*c\.?|d\.\s*s\.?)(\W|$)", re.IGNORECASE)
+
+
+def extract_reprise_instruction(file_path: str):
+    """
+    Whether a MusicXML file carries a "da capo" or "dal segno" instruction: 1
+    if it does, 0 if it does not, `"NA"` if the file cannot be read.
+
+    Such a score does not write its reprise out: the opening section is on
+    the page once and is performed twice. Every proportion and mean computed
+    from the page therefore weighs that section once, where a score with a
+    written-out reprise weighs it twice.
+
+    Parameters
+    ----------
+        file_path: str
+        Path to xml file to look into.
+    """
+    try:
+        root = ET.parse(file_path).getroot()
+    except Exception:
+        return "NA"
+    for sound in root.iter("sound"):
+        if sound.get("dacapo") is not None or sound.get("dalsegno") is not None:
+            return 1
+    for words in root.iter("words"):
+        if words.text and _REPRISE_WORDS.match(words.text.strip()):
+            return 1
+    return 0
+
+
 def extract_numeric_tempo(file_path: str) -> Optional[int]:
     """
     Finds the numeric tempo in a musixml file by looking at the tempo marking in
