@@ -274,11 +274,15 @@ class DataProcessor:
             if str(row) != 'nan':
                 for element in row.split(","):
                     self.data.at[label, PRESENCE + "_" + element] = 1
-        self.data[[i for i in self.data if PRESENCE + "_" in i]] = (
-            self.data[[i for i in self.data if PRESENCE + "_" in i]]
-            .fillna(0)
-            .astype(int)
-        )
+        presence_columns = [i for i in self.data if PRESENCE + "_" in i]
+        if presence_columns:
+            # an instrument that is not listed is absent (0), but only for
+            # the scores that have a list: a score that failed to extract has
+            # none, and a 0 there would say that it has no violins
+            listed = self.data[INSTRUMENTATION].notna()
+            self.data.loc[listed, presence_columns] = self.data.loc[
+                listed, presence_columns
+            ].fillna(0)
 
     def delete_undesired(self, **kwargs) -> None:
         """Deletes not necessary columns and rows for statistical analysis.
