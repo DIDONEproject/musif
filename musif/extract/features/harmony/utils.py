@@ -277,7 +277,12 @@ def get_numerals(lausanne_table):
 
 
 def get_additions(lausanne_table):
-    additions = lausanne_table.changes.tolist()
+    changes = lausanne_table.changes
+    if "special" in lausanne_table:
+        # ms3 spells an augmented sixth out as a chord with an altered note
+        # (b3, b5): that alteration is its own, not an addition
+        changes = changes[lausanne_table.special.isna()]
+    additions = changes.tolist()
     total_chords = len(lausanne_table.chord.tolist())
     
     additions_cleaned = []
