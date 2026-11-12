@@ -53,8 +53,16 @@ def update_part_objects(
                 continue
             try:
                 beat_duration = float(element.beatDuration.quarterLength)
+                # "the same beat" is a beat of the same measure. The beat
+                # number alone is not enough: where a measure has one beat
+                # (3/8) every note is on beat 1, and a dotted note that ends
+                # its measure was paired with the next downbeat. Within a
+                # measure the following note comes later in the beat; across
+                # the barline it comes earlier.
                 same_beat = (
                     following.beatStr.split()[0] == element.beatStr.split()[0]
+                    and following.measureNumber == element.measureNumber
+                    and float(following.beat) > float(element.beat)
                 )
             except Exception:
                 continue
