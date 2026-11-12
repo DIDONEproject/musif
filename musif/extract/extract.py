@@ -104,6 +104,21 @@ def parse_filename(
     return score
 
 
+def _has_global_key(harmonic_analysis: pd.DataFrame) -> bool:
+    """
+    Whether the annotations read from a MuseScore file state the global key.
+    They do not when the first label is invalid: every key, local keys
+    included, is then undefined. An empty analysis passes: the feature
+    modules already treat it as "no analysis".
+    """
+    if harmonic_analysis is None or harmonic_analysis.empty:
+        return True
+    if "globalkey" not in harmonic_analysis.columns:
+        return False
+    global_key = harmonic_analysis["globalkey"].iloc[0]
+    return type(global_key) is str and global_key.strip() != ""
+
+
 def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.DataFrame:
     """
     This function parses a musescore file and returns a pandas dataframe. If the file
@@ -658,6 +673,16 @@ class FeaturesExtractor:
                 data_musescore = parse_musescore_file(
                     str(filename), self._cfg.expand_repeats
                 )
+                if not _has_global_key(data_musescore):
+                    # one invalid label used to blank the whole row of the
+                    # score: every feature, not only the harmonic ones
+                    perr(
+                        f"The harmonic annotations of {filename} state no "
+                        "global key (is the first label valid?). The score is "
+                        "extracted without them: these features are skipped: "
+                        f"{C.REQUIRE_MSCORE}"
+                    )
+                    return None
                 return data_musescore
             except ParseFileError as e:
                 data_musescore = None
