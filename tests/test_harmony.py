@@ -212,3 +212,111 @@ class TestKeyAreasPlaythrough:
         areas = get_keyareas(_rows(rows))
         assert areas["Harmony_Key_I_PercentageMeasures"] == 0.5
         assert areas["Harmony_Key_V_PercentageMeasures"] == 0.5
+
+
+NAN = float("nan")
+
+
+def _chord(chord, numeral, chord_type, duration, figbass=NAN, relativeroot=NAN,
+           localkey="I", special=NAN, changes=NAN):
+    return {
+        "chord": chord, "localkey": localkey, "numeral": numeral,
+        "chord_type": chord_type, "figbass": figbass,
+        "relativeroot": relativeroot, "duration_qb": duration,
+        "special": special, "changes": changes,
+    }
+
+
+class TestWhatIsCounted:
+    """Chords on the degrees of the key, applied chords and augmented sixths
+    are counted apart; every proportion exists by annotations and by time."""
+
+    def _table(self):
+        # eight chords over ten quarter notes
+        return _rows(
+            [
+                _chord("I", "I", "M", 4.0),
+                _chord("V7/V", "V", "Mm7", 1.0, figbass="7", relativeroot="V"),
+                _chord("V7", "V", "Mm7", 1.0, figbass="7"),
+                _chord("Ger65", "vii", "Ger", 1.0, figbass="65", relativeroot="V",
+                       special="Ger", changes="b3"),
+                _chord("I64", "I", "M", 0.5, figbass="64"),
+                _chord("V(64)", "V", "M", 0.5, changes="64"),
+                _chord("vi", "vi", "m", 1.0),
+                _chord("I", "I", "M", 1.0),
+            ]
+        )
+
+    def test_applied_chord_is_not_a_chord_of_the_key(self):
+        # V7/V used to be counted as the V7 of the key
+        chords, _, _ = get_chords(self._table())
+        assert chords["Harmony_Chord_V7_Count"] == 1
+        assert chords["Harmony_Applied_V7_Count"] == 1
+        # both proportions share one denominator: all the chords
+        assert chords["Harmony_Chord_V7_Per"] == 1 / 8
+        assert chords["Harmony_Applied_V7_Per"] == 1 / 8
+
+    def test_numerals_of_the_key_only(self):
+        from musif.extract.features.harmony.utils import get_numerals
+
+        numerals = get_numerals(self._table())
+        assert numerals["Harmony_Numerals_V_Count"] == 2  # V7 and V
+        assert numerals["Harmony_Numerals_Applied_Count"] == 1
+        # ms3 spells the German sixth as a vii applied to V
+        assert numerals["Harmony_Numerals_Aug6_Count"] == 1
+        assert "Harmony_Numerals_vii_Count" not in numerals
+
+    def test_proportion_of_time(self):
+        chords, _, _ = get_chords(self._table())
+        # the tonic is 3 of 8 annotations but 5.5 of 10 quarter notes
+        assert chords["Harmony_Chord_I_Per"] == 3 / 8
+        assert chords["Harmony_Chord_I_PerTime"] == 5.5 / 10
+
+    def test_chord_types_by_time(self):
+        from musif.extract.features.harmony.utils import get_chord_types
+
+        types = get_chord_types(self._table())
+        assert types["Harmony_Chord_types_7th"] == 2 / 8
+        assert types["Harmony_Chord_types_7th_PerTime"] == 2 / 10
+
+    def test_functions(self):
+        _, first, second = get_chords(self._table())
+        prefix = "Harmony_Chords_Grouping_"
+        # the two tonics and the I64: a six-four annotated on I is a tonic,
+        # even when a dominant follows
+        assert first[prefix + "1T_Count"] == 3
+        # V7 and the cadential six-four, which is the one annotated V(64)
+        assert first[prefix + "1D_Count"] == 2
+        assert first[prefix + "1SEC_Count"] == 1  # the applied chord
+        assert first[prefix + "1A6_Count"] == 1  # the augmented sixth
+        assert first[prefix + "1rm_Count"] == 1  # vi, the relative minor
+        assert second[prefix + "2rel_Count"] == 1
+        assert second[prefix + "2D_PerTime"] == (1.0 + 0.5) / 10
+
+    def test_relative_of_a_minor_key(self):
+        assert get_function_first("III", "m") == "rj"
+        assert get_function_first("vi", "M") == "rm"
+        assert get_function_second("rj") == "rel"
+        # the same numerals in the other mode are not the relative
+        assert get_function_first("vi", "m") != "rm"
+
+    def test_alteration_of_an_augmented_sixth_is_not_an_addition(self):
+        from musif.extract.features.harmony.utils import get_additions
+
+        additions = get_additions(self._table())
+        # the b3 that ms3 writes for the German sixth used to fall in the
+        # "other alterations" bucket
+        assert "Harmony_Additions_Others_no_+" not in additions
+        # the (64) of the cadential six-four
+        assert additions["Harmony_Additions_4_6_64"] == 1 / 8
+
+    def test_harmonic_rhythm_per_quarter_note(self):
+        rows = []
+        for measure in range(1, 11):
+            for onset in (0, 0.5):
+                rows.append({"playthrough": measure, "timesig": "3/8",
+                             "numeral": "I", "mc_onset": onset})
+        result = get_harmonic_rhythm(pd.DataFrame(rows), number_of_measures=10)
+        # one beat per measure of 3/8, but a quarter note and a half
+        assert result["Harmony_HarmonicRhythmBeats"] == 20 / 10
+        assert result["Harmony_HarmonicRhythmQuarters"] == 20 / 15

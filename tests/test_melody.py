@@ -69,9 +69,14 @@ class TestExtremes:
 
 
 class TestStatSentinels:
-    def test_trim_ratio_is_nan_when_mean_is_zero(self):
+    def test_no_trim_statistics_on_the_signed_mean(self):
+        # the signed intervals of a line cancel out: their mean is a net
+        # displacement near 0, and a difference or ratio to it says nothing
         features = get_interval_features([iv(3), iv(-3)])
-        assert math.isnan(features["IntervallicTrimRatio"])
+        assert features["IntervallicMean"] == 0
+        assert "IntervallicTrimRatio" not in features
+        assert "IntervallicTrimDiff" not in features
+        assert "AbsoluteIntervallicTrimRatio" in features
 
     def test_empty_scope_yields_undefined_stats(self):
         features = get_interval_features([])
@@ -101,7 +106,7 @@ class TestMotion:
     def test_empty_grid_is_nan_not_zero(self):
         line = [note(m, 0.5) for m in (60, 62, 64, 65)]  # 2 quarters total
         result = motion([line])
-        assert math.isnan(result["Spe_avg_abs_step_8.0"])
+        assert math.isnan(result["Spe_avg_abs_step_2.0"])
 
     def test_ascending_proportion_is_bounded(self):
         line = [note(60 + i, 1.0) for i in range(10)]
@@ -113,11 +118,53 @@ class TestMotion:
         # were 784 bit-identical duplicate columns (round-2 RD-1)
         result = motion([[note(60 + i, 1.0) for i in range(10)]])
         assert "Spe_avg_abs_step_1.0" in result
-        assert "Acc_avg_abs_step_1.0" in result
-        assert not any(
-            key.startswith(("Spe_avg_abs_step_1.0_win", "Acc_avg_abs_step_1.0_win"))
-            for key in result
-        )
+        assert not any(key.startswith("Spe_avg_abs_step_1.0_win") for key in result)
+
+    def test_no_acceleration(self):
+        # on a grid where each note is held over its span, the "acceleration"
+        # was twice the speed divided by the step
+        result = motion([[note(60 + i, 1.0) for i in range(10)]])
+        assert not any(key.startswith("Acc_") for key in result)
+
+    def test_steps_and_windows(self):
+        result = motion([[note(60 + i, 1.0) for i in range(10)]])
+        speeds = sorted(key for key in result if key.startswith("Spe_"))
+        assert speeds == [
+            "Spe_avg_abs_step_0.25", "Spe_avg_abs_step_1.0", "Spe_avg_abs_step_2.0",
+        ]
+        rises = sorted(key for key in result if key.startswith("Asc_prp_"))
+        assert rises == [
+            f"Asc_prp_step_{step}_win_{win}"
+            for step in ("0.25", "0.5", "1.0")
+            for win in (2, 4)
+        ]
+
+    def test_segment_shorter_than_the_window_is_not_measured(self):
+        # a rising scale of eight quarter notes at step 1: a window of nine
+        # samples (win=4) covers the whole segment, the smoothed line is
+        # flat, and the proportion that rises used to come out as 0
+        line = [note(60 + i, 1.0) for i in range(8)]
+        result = motion([line])
+        assert math.isnan(result["Asc_prp_step_1.0_win_4"])
+        assert result["Asc_prp_step_1.0_win_2"] > 0
+
+    def test_run_lengths_are_in_quarter_notes(self):
+        # a scale rising for 16 quarter notes: the run is as long on a grid
+        # of quarter notes as on a grid of sixteenths
+        line = [note(48 + i, 1.0) for i in range(16)]
+        result = motion([line])
+        coarse = result["Asc_avg_step_1.0_win_2"]
+        fine = result["Asc_avg_step_0.25_win_2"]
+        assert abs(coarse - fine) < 1.0
+
+    def test_mean_length_of_runs_that_do_not_exist_is_nan(self):
+        # a line that only descends: none of its motion ascends (a true 0),
+        # but the mean length of its ascending runs does not exist
+        line = [note(84 - i, 1.0) for i in range(12)]
+        result = motion([line])
+        assert result["Asc_prp_step_1.0_win_2"] == 0
+        assert math.isnan(result["Asc_avg_step_1.0_win_2"])
+        assert result["Dsc_avg_step_1.0_win_2"] > 0
 
     def test_rests_split_segments(self):
         # constant pitch on both sides of a rest: measuring across the rest

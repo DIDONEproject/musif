@@ -86,6 +86,41 @@ class TestRhythmFormulas:
         update_part_objects({}, data, None, part_features)
         assert part_features["RhythmInt"] == 8 / 4
 
+    def _one_beat_measures(self, first, second):
+        """Two 3/8 measures (one beat each) holding the given durations."""
+        part = Part()
+        for number, durations in ((1, first), (2, second)):
+            measure = Measure(number=number)
+            if number == 1:
+                measure.append(TimeSignature("3/8"))
+            for duration in durations:
+                measure.append(Note("C4", quarterLength=duration))
+            part.append(measure)
+        measures = list(part.getElementsByClass(Measure))
+        return {
+            "_part_keepalive": part,
+            "notes": [n for m in measures for n in m.notes],
+            "measures": measures,
+            DATA_SOUNDING_MEASURES: [0, 1],
+        }
+
+    def test_dotted_figure_does_not_cross_the_barline(self):
+        # every note of a 3/8 measure is on beat 1, so the dotted eighth that
+        # ends the first measure used to be paired with the sixteenth on the
+        # next downbeat
+        data = self._one_beat_measures([0.75, 0.75], [0.25, 0.25, 1.0])
+        part_features = {}
+        update_part_objects({}, data, None, part_features)
+        assert part_features["DottedRhythm"] == 0
+
+    def test_dotted_figure_within_a_one_beat_measure(self):
+        # dotted eighth + sixteenth inside each measure: two figures over
+        # two sounding beats
+        data = self._one_beat_measures([0.75, 0.25, 0.5], [0.5, 0.75, 0.25])
+        part_features = {}
+        update_part_objects({}, data, None, part_features)
+        assert part_features["DottedRhythm"] == 2 / 2
+
 
 class TestWindowMetre:
     def test_window_slice_reads_prevailing_metre_from_context(self):
@@ -127,3 +162,103 @@ class TestWindowMetre:
         assert set(per_measure) == {"2/2"}
         assert beats == 2
         assert grouped == "simple duple"
+
+
+class TestRatesPerQuarterNote:
+    def test_rhythm(self):
+        helper = TestRhythmFormulas()
+        data = helper._one_beat_measures([0.75, 0.25, 0.5], [0.5, 0.75, 0.25])
+        features = {}
+        update_part_objects({}, data, None, features)
+        # two measures of 3/8: two beats, but three quarter notes
+        assert features["RhythmInt"] == 3.0 / 2
+        assert features["RhythmIntQuarters"] == 3.0 / 3
+        assert features["DottedRhythm"] == 2 / 2
+        assert features["DottedRhythmQuarters"] == 2 / 3
+
+    def test_quarter_length_of_a_measure(self):
+        from musif.musicxml.tempo import get_quarter_length
+
+        assert get_quarter_length("4/4") == 4
+        assert get_quarter_length("2/2") == 4
+        assert get_quarter_length("3/8") == 1.5
+        assert get_quarter_length("6/8") == 3
+        assert get_quarter_length("C") == 4
+
+
+class TestTempoWords:
+    def test_tempo_giusto_and_comodo(self):
+        # "tempo" used to win over the word that says which tempo
+        assert get_tempo_grouped_1("Tempo giusto") == "Giusto"
+        assert get_tempo_grouped_2("Giusto") == "Moderate"
+        assert get_tempo_grouped_1("Tempo comodo") == "Comodo"
+        assert get_tempo_grouped_1("A tempo") == "A tempo"
+        assert get_tempo_grouped_2("A tempo") == "NA"
+
+    def test_spellings(self):
+        assert get_tempo_grouped_1("Tempo di Menuet") == "Minuetto"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("Adaggissimo")) == "Slow"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("Furioso")) == "Fast"
+
+    def _part(self, *measures):
+        from music21.expressions import TextExpression
+
+        part = Part()
+        for number, texts in measures:
+            measure = Measure(number=number)
+            for text in texts:
+                measure.insert(0, TextExpression(text))
+            measure.append(Note("C4", quarterLength=4))
+            part.append(measure)
+        return part
+
+    def _tempo(self, part):
+        from musif.extract.constants import DATA_NUMERIC_TEMPO
+        from musif.extract.features.tempo.handler import extract_tempo
+
+        return extract_tempo({DATA_NUMERIC_TEMPO: "NA"}, part)[1]
+
+    def test_heading_is_the_first_tempo_word_of_the_measure(self):
+        # an expression mark later in the measure used to replace it
+        part = self._part((1, ["Allegro moderato", "sostenuto"]))
+        assert self._tempo(part) == "Allegro moderato"
+
+    def test_heading_over_the_first_full_measure_after_a_pickup(self):
+        part = self._part((0, []), (1, ["Andante"]))
+        assert self._tempo(part) == "Andante"
+
+    def test_only_the_opening_counts(self):
+        part = self._part((1, []), (2, ["Presto"]))
+        assert self._tempo(part) == "NA"
+
+
+class TestRepriseInstruction:
+    def _file(self, tmp_path, direction):
+        path = tmp_path / "score.xml"
+        path.write_text(
+            '<score-partwise><part id="P1"><measure number="1">'
+            + direction
+            + "</measure></part></score-partwise>"
+        )
+        return str(path)
+
+    def _value(self, tmp_path, direction):
+        from musif.musicxml.tempo import extract_reprise_instruction
+
+        return extract_reprise_instruction(self._file(tmp_path, direction))
+
+    def test_da_capo_as_playback_instruction(self, tmp_path):
+        assert self._value(tmp_path, '<direction><sound dacapo="yes"/></direction>') == 1
+
+    def test_dal_segno_as_words(self, tmp_path):
+        direction = "<direction><direction-type><words>D.S. al Fine</words></direction-type></direction>"
+        assert self._value(tmp_path, direction) == 1
+
+    def test_other_words_are_not_an_instruction(self, tmp_path):
+        direction = "<direction><direction-type><words>dolce</words></direction-type></direction>"
+        assert self._value(tmp_path, direction) == 0
+
+    def test_unreadable_file(self, tmp_path):
+        from musif.musicxml.tempo import extract_reprise_instruction
+
+        assert extract_reprise_instruction(str(tmp_path / "missing.xml")) == "NA"
