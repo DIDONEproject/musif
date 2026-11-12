@@ -163,11 +163,22 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
 def extract_tempo(score_data, part):
     numeric_tempo = score_data[DATA_NUMERIC_TEMPO]
     tempo_mark = TempoGroup2.NA.value
+    examined = 0
     for measure in part:
-        if isinstance(measure, Measure):
-            for element in measure:
-                if isinstance(element, TextExpression):
-                    if get_tempo_grouped_1(element.content) != "NA":
-                        tempo_mark = element.content
-            break  # only take into account the first bar!
+        if not isinstance(measure, Measure):
+            continue
+        examined += 1
+        for element in measure:
+            if isinstance(element, TextExpression):
+                if get_tempo_grouped_1(element.content) != "NA":
+                    tempo_mark = element.content
+                    # the heading comes first; a later word of the measure
+                    # ("sostenuto" under an "Allegro moderato") is an
+                    # expression mark and used to replace it
+                    break
+        # Only the first bar counts; when it is a pickup that carries no
+        # heading, the heading stands over the first full bar.
+        is_pickup = examined == 1 and measure.number == 0
+        if tempo_mark != TempoGroup2.NA.value or not is_pickup:
+            break
     return numeric_tempo, tempo_mark

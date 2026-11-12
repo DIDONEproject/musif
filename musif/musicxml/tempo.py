@@ -75,6 +75,15 @@ def get_tempo_grouped_1(tempo: str) -> str:
 
     """
     tempo = re.sub("\\W+", " ", tempo)  # removes eventual special characters
+    # spellings found in sources: French and shortened forms of the minuet,
+    # doubled consonants, and diminutives the endings below do not cover
+    for spelling, standard in (
+        (r"\b(menuett?|minuet)\b", "minuetto"),
+        (r"\badagg", "adag"),
+        (r"\ballegrino\b", "allegretto"),
+        (r"\bcomodetto\b", "comodo"),
+    ):
+        tempo = re.sub(spelling, standard, tempo, flags=re.IGNORECASE)
     replacements = [
         (w, "")
         for w in [
@@ -146,6 +155,9 @@ def get_tempo_grouped_1(tempo: str) -> str:
         "spiritoso",
         "espressivo",
         "fiero",
+        "furioso",
+        "brillante",
+        "gaio",
         "giusto",
         "grave",
         "grazioso",
@@ -161,6 +173,12 @@ def get_tempo_grouped_1(tempo: str) -> str:
     for word in tempo.split(" "):
         if word.lower() in relevant_words:
             words_contained.append(word)
+    # "tempo" alone stands for "a tempo"; next to a word that says which
+    # tempo ("Tempo giusto", "Tempo comodo") it is that word that counts
+    if len(words_contained) > 1:
+        described = [w for w in words_contained if w.lower() != "tempo"]
+        if described:
+            words_contained = described
     ## FINAL DECISION (Two exceptions: tempo and con brio) ##
     if len(words_contained) == 1:
         if words_contained[0].lower() not in ["tempo", "brio"]:
@@ -215,6 +233,7 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         "Comodo",
         "Cantabile",
         "Comodo",
+        "Giusto",
         "Espressivo",
         "Grazioso",
         "Gustoso",
@@ -235,13 +254,16 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         "Con brio",
         "Spiritoso",
         "Fiero",
+        "Furioso",
+        "Brillante",
+        "Gaio",
         "Presto",
         "Risoluto",
         "Vivace",
     ]
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
-    if tempo_grouped_1 in ["A tempo", "Giusto"]:
+    if tempo_grouped_1 == "A tempo":
         return TempoGroup2.NA.value
     elif tempo_grouped_1 in slow:
         return TempoGroup2.SLOW.value
