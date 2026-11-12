@@ -431,7 +431,11 @@ def _get_lyrics_in_notes(notes: List[Note]) -> List[str]:
         if note.lyrics is None or len(note.lyrics) == 0:
             continue
         note_lyrics = [
-            syllable.text for syllable in note.lyrics if syllable.text is not None
+            syllable.text
+            for syllable in note.lyrics
+            # a lyric without text is not a syllable: MuseScore closes every
+            # melisma line with one, and each used to be counted
+            if syllable.text is not None and syllable.text.strip() != ""
         ]
         lyrics.extend(note_lyrics)
     return lyrics
