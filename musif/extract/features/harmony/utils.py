@@ -4,7 +4,7 @@ from typing import Dict, List
 
 import pandas as pd
 from musif.logs import pwarn
-from musif.musicxml.tempo import get_number_of_beats
+from musif.musicxml.tempo import get_number_of_beats, get_quarter_length
 from .constants import *
 
 
@@ -32,15 +32,28 @@ def get_harmonic_rhythm(ms3_table, number_of_measures=None) -> dict:
     total_beats = _total_beats(playthrough, time_signatures, number_of_measures)
     harmonic_rhythm_beats = number_of_chords / total_beats if total_beats else 0.0
 
+    # per quarter note: unlike the beat, the quarter note does not change
+    # with the metre, so this rate is comparable between arias in 4/4, 2/2,
+    # 3/8...
+    total_quarters = _total_beats(
+        playthrough, time_signatures, number_of_measures, get_quarter_length
+    )
+
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
+    hr[HARMONIC_RHYTHM_QUARTERS] = (
+        number_of_chords / total_quarters if total_quarters else float("nan")
+    )
 
     return hr
 
 
-def _total_beats(playthrough, time_signatures, number_of_measures) -> float:
-    """Beats in measures 1..number_of_measures, forward-filling the metre
-    from the labelled measures (every period counts, including the last)."""
+def _total_beats(
+    playthrough, time_signatures, number_of_measures, unit=get_number_of_beats
+) -> float:
+    """Beats (or, with ``unit=get_quarter_length``, quarter notes) in measures
+    1..number_of_measures, forward-filling the metre from the labelled
+    measures (every period counts, including the last)."""
     timesig_by_measure = {}
     for measure, timesig in zip(playthrough, time_signatures):
         timesig_by_measure.setdefault(int(measure), str(timesig))
@@ -50,7 +63,7 @@ def _total_beats(playthrough, time_signatures, number_of_measures) -> float:
     total = 0.0
     for measure in range(1, number_of_measures + 1):
         current = timesig_by_measure.get(measure, current)
-        total += get_number_of_beats(current)
+        total += unit(current)
     return total
 
 

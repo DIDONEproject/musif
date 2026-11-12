@@ -254,6 +254,32 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
     return TempoGroup2.NA.value
 
 
+def get_quarter_length(time_signature: str) -> float:
+    """
+    Returns the length of a measure in quarter notes for a time signature:
+    4 for 4/4 and for 2/2, 1.5 for 3/8, 3 for 6/8. Unlike the number of beats,
+    it does not depend on which note value the signature takes as the beat,
+    so rates per quarter note are comparable between metres.
+
+    It follows `get_number_of_beats` for the special values: 4 for `"C"`, 1 for
+    an empty signature, and `pd.NA` for `"NA"`.
+
+    Parameters
+    ----------
+        time_signature: str
+            Time signature in the form of string separated by '/'.
+    """
+    time_signature = time_signature.split(",")[0]
+    if time_signature == "C":
+        return 4.0
+    elif time_signature == "":
+        return 1.0
+    elif time_signature == "NA":
+        return pd.NA
+    num, den = time_signature.split("/")
+    return int(num) * 4 / int(den)
+
+
 def get_number_of_beats(time_signature: str) -> int:
     """
     Returns the number of beats corresponding to a time signature.

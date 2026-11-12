@@ -4,6 +4,7 @@ HARMONY_AVAILABLE = HARMONY_PREFIX + "Analysis_Available"
 
 HARMONIC_RHYTHM = HARMONIC_prefix + "Rhythm"
 HARMONIC_RHYTHM_BEATS = HARMONIC_prefix + "RhythmBeats"
+HARMONIC_RHYTHM_QUARTERS = HARMONIC_prefix + "RhythmQuarters"
 
 ADDITIONS_prefix = HARMONY_PREFIX + "Additions_"
 ADDITIONS_4_6_64 = "4_6_64"

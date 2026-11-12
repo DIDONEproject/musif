@@ -51,6 +51,9 @@ def update_score_objects(
 
         features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]
         features[f"{HARMONIC_RHYTHM_BEATS}"] = all_harmonic_info[HARMONIC_RHYTHM_BEATS]
+        features[HARMONIC_RHYTHM_QUARTERS] = all_harmonic_info[
+            HARMONIC_RHYTHM_QUARTERS
+        ]
         features.update(
             {
                 k: v
