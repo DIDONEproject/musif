@@ -2,6 +2,9 @@ DYNMEAN = "DynMean"
 DYNMEAN_WEIGHTED = "DynMean_weighted"
 DYNABRUPTNESS = "DynAbruptness"
 DYNGRAD = "DynGrad"
+# the two rates of change per quarter note instead of per beat
+DYNGRAD_QUARTERS = "DynGradQuarters"
+DYNABRUPTNESS_QUARTERS = "DynAbruptnessQuarters"
 
 DYNAMIC = "Dynamic"  # all coulf be in a dictionary with this variables?
 TEXTEXPRESSION = "TextExpression"
