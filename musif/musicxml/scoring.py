@@ -103,8 +103,15 @@ def _extract_abbreviated_part(sound: str, part: Part, parts: List[Part], config:
         )
     else:
         abbreviation = config.sound_to_abbreviation[sound]
-    part_roman_number = _get_part_roman_number(
-        part) or _get_part_roman_number_by_position(part, parts)
+    # Only a numeral written in the part's own name numbers it ("Violino
+    # II", "Ob. I"). Staves left with the same abbreviation are one logical
+    # part: two sopranos of a duet are `sop`, pooled. (A numbering by
+    # position among "the same instruments" used to be tried as well. It
+    # compared music21 instruments, which are equal whenever they are of the
+    # same class, and it only ran with the cache off: there it numbered a
+    # soprano and a tenor as `sopI` and `tenII`, so the names of the columns
+    # depended on a setting that should not touch them.)
+    part_roman_number = _get_part_roman_number(part)
     other_number = _get_part_normal_number(part)
     part_number = fromRoman(part_roman_number) if part_roman_number else (other_number if other_number else 0)
     sound_abbreviation = abbreviation.split('(')[0]
@@ -122,17 +129,6 @@ def _get_part_roman_number(part: Part) -> Optional[str]:
         ):
             return number
     return None
-
-def _get_part_roman_number_by_position(part: Part, parts: List[Part]) -> Optional[str]:
-    same_sound_parts = [same_sound_part
-                        for same_sound_part in parts
-                        if part.getInstrument(returnDefault=False) == same_sound_part.getInstrument(returnDefault=False)]
-    if len(same_sound_parts) > 1:
-        for i, same_sound_part in enumerate(same_sound_parts, 1):
-            if part.partName == same_sound_part.partName:
-                return toRoman(i)
-    return None
-
 
 def _replace_naming_exceptions(sound: str, part: Part) -> str:
     if 'da caccia' in sound:
