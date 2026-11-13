@@ -3,7 +3,11 @@ name: Build documentation
 on:
   push:
     branches: [ "main" ]
-    
+
+  # On pull requests the documentation is built but not published, so a
+  # broken build shows before the merge
+  pull_request:
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -15,7 +19,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: "pages-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -24,18 +28,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
       - name: Setup Pages
-        uses: actions/configure-pages@v3   
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
       - name: Install sphinx
-        run: python3 -m pip install --user sphinx myst_nb
+        run: python -m pip install sphinx myst_nb
       - name: Build htmls
         run: cd docs; make html; mv build/html ../_site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
 
   # Deployment job
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -44,4 +54,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v5
