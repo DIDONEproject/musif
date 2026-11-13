@@ -27,12 +27,11 @@ from musif.extract.features.prefix import (
 
 from .constants import *
 
-# speed/acceleration depend only on the sampling step; the smoothing window
-# applies only to the four chunk statistics below
-STEP_FEATURE_NAMES = (
-    SPEED_AVG_ABS,
-    ACCELERATION_AVG_ABS,
-)
+# speed depends only on the sampling step; the smoothing window applies only
+# to the four chunk statistics below. (An "acceleration" used to be emitted
+# too: on a grid where each note is held over its span it was twice the
+# speed divided by the step, not a measure of curvature.)
+STEP_FEATURE_NAMES = (SPEED_AVG_ABS,)
 CHUNK_FEATURE_NAMES = (
     ASCENDENT_AVERAGE,
     DESCENDENT_AVERAGE,
@@ -85,13 +84,14 @@ def update_score_objects(
                 ]
             }
             motion_features = get_motion_features(merged_part_data)
-        for step in MOTION_STEPS:
+        for step in SPEED_STEPS:
             step_postfix = _motion_step_postfix(step)
             for name in STEP_FEATURE_NAMES:
                 features[get_part_feature(part, name + step_postfix)] = (
                     motion_features[name + step_postfix]
                 )
-            for win in MOTION_WINS:
+        for step in CHUNK_STEPS:
+            for win in CHUNK_WINS:
                 key_postfix = _motion_postfix(step, win)
                 for name in CHUNK_FEATURE_NAMES:
                     features[get_part_feature(part, name + key_postfix)] = (
@@ -206,8 +206,10 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
             if len(intervals) > 1
             else nan
         )
-    trim_diff = intervallic_mean - trimmed_intervallic_mean
-    trim_ratio = trim_diff / intervallic_mean if intervallic_mean != 0 else nan
+    # No trim difference or ratio is derived from the signed mean: the signed
+    # intervals of a line cancel out (their sum is its last pitch minus its
+    # first), so that mean is a net displacement close to 0, and a ratio to
+    # it measures nothing.
     absolute_trim_diff = absolute_intervallic_mean - trimmed_absolute_intervallic_mean
     absolute_trim_ratio = (
         absolute_trim_diff / absolute_intervallic_mean
@@ -300,8 +302,6 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
         f"{prefix}{TRIMMED_INTERVALLIC_STD}": trimmed_intervallic_std,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_MEAN}": trimmed_absolute_intervallic_mean,
         f"{prefix}{TRIMMED_ABSOLUTE_INTERVALLIC_STD}": trimmed_absolute_intervallic_std,
-        f"{prefix}{INTERVALLIC_TRIM_DIFF}": trim_diff,
-        f"{prefix}{INTERVALLIC_TRIM_RATIO}": trim_ratio,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_DIFF}": absolute_trim_diff,
         f"{prefix}{ABSOLUTE_INTERVALLIC_TRIM_RATIO}": absolute_trim_ratio,
         f"{prefix}{ASCENDING_INTERVALS_COUNT}": num_ascending_intervals,
@@ -663,11 +663,16 @@ def _resample(durations, midis, step):
 
 def _chunk_features(resampled_segments, step, win):
     """Ascent/descent chunk statistics over the smoothed samples of every
-    segment (rolling window of 2*win+1 samples, centered)."""
+    segment (rolling window of 2*win+1 samples, centered). Only the segments
+    that hold at least one full window are measured: over a shorter one every
+    window covers the whole segment, the smoothed contour is flat, and a
+    proportion of 0 would say that the line neither rises nor falls."""
     key_postfix = _motion_postfix(step, win)
     ascending, descending = [], []
     total_steps = 0
     for samples in resampled_segments:
+        if len(samples) < 2 * win + 1:
+            continue
         smoothed_series = pd.Series(samples)
         smoothed = [
             np.mean(window.to_list())
@@ -690,9 +695,17 @@ def _chunk_features(resampled_segments, step, win):
             ASCENDENT_PROPORTION + key_postfix: np.nan,
             DESCENDENT_PROPORTION + key_postfix: np.nan,
         }
+    # without a single ascending (or descending) run, the proportion of the
+    # motion that ascends is a true 0, but the mean length of such runs does
+    # not exist. Lengths are given in quarter notes, so that they do not grow
+    # with the fineness of the grid.
     return {
-        ASCENDENT_AVERAGE + key_postfix: mean(ascending) if ascending else 0,
-        DESCENDENT_AVERAGE + key_postfix: mean(descending) if descending else 0,
+        ASCENDENT_AVERAGE + key_postfix: mean(ascending) * step
+        if ascending
+        else np.nan,
+        DESCENDENT_AVERAGE + key_postfix: mean(descending) * step
+        if descending
+        else np.nan,
         ASCENDENT_PROPORTION + key_postfix: sum(ascending) / total_steps
         if ascending
         else 0,
@@ -723,26 +736,14 @@ def get_motion_features(part_data) -> dict:
         ]
         resampled = [samples for samples in resampled if samples.size >= 2]
 
-        step_postfix = _motion_step_postfix(step)
-        speed_diffs = [np.diff(samples) / step for samples in resampled]
-        all_speed = (
-            np.concatenate(speed_diffs) if speed_diffs else np.array([])
-        )
-        return_dict[SPEED_AVG_ABS + step_postfix] = (
-            np.mean(np.abs(all_speed)) if all_speed.size else np.nan
-        )
-        acceleration_diffs = [
-            np.diff(diff) / step for diff in speed_diffs if diff.size >= 2
-        ]
-        all_acceleration = (
-            np.concatenate(acceleration_diffs)
-            if acceleration_diffs
-            else np.array([])
-        )
-        return_dict[ACCELERATION_AVG_ABS + step_postfix] = (
-            np.mean(np.abs(all_acceleration)) if all_acceleration.size else np.nan
-        )
+        if step in SPEED_STEPS:
+            speed_diffs = [np.diff(samples) / step for samples in resampled]
+            all_speed = np.concatenate(speed_diffs) if speed_diffs else np.array([])
+            return_dict[SPEED_AVG_ABS + _motion_step_postfix(step)] = (
+                np.mean(np.abs(all_speed)) if all_speed.size else np.nan
+            )
 
-        for win in MOTION_WINS:
-            return_dict.update(_chunk_features(resampled, step, win))
+        if step in CHUNK_STEPS:
+            for win in CHUNK_WINS:
+                return_dict.update(_chunk_features(resampled, step, win))
     return return_dict

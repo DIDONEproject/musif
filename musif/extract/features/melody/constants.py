@@ -114,5 +114,14 @@ ASCENDENT_AVERAGE = "Asc_avg"
 DESCENDENT_AVERAGE = "Dsc_avg"
 ASCENDENT_PROPORTION = "Asc_prp"
 DESCENDENT_PROPORTION = "Dsc_prp"
-MOTION_STEPS = [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
-MOTION_WINS = [2, 4, 8, 16, 32]
+# Sampling steps, in quarter notes.
+# Speed: one fine step and two coarse ones. (Finer steps repeat the fine one,
+# and at 4 and 8 quarter notes almost no note change is left to measure.)
+SPEED_STEPS = [0.25, 1.0, 2.0]
+# Rise and fall of the smoothed contour: the smoothing window spans
+# (2 * win + 1) * step quarter notes, here from 1.25 to 9. With longer spans
+# the window exceeded most melodic segments and nothing was measured.
+CHUNK_STEPS = [0.25, 0.5, 1.0]
+CHUNK_WINS = [2, 4]
+MOTION_STEPS = sorted(set(SPEED_STEPS + CHUNK_STEPS))
+MOTION_WINS = CHUNK_WINS

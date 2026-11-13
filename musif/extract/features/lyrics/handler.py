@@ -14,7 +14,7 @@ from musif.extract.common import _filter_parts_data
 
 from musif.extract.constants import DATA_FAMILY, DATA_PART_ABBREVIATION
 
-from musif.extract.features.core.handler import DATA_LYRICS, DATA_NOTES
+from musif.extract.features.core.handler import DATA_KEY, DATA_LYRICS, DATA_NOTES
 
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 
@@ -109,9 +109,11 @@ def update_score_objects(
         # ratio of sums: a note-weighted aggregate over the voice parts
         features[get_score_feature(SYLLABIC_RATIO)] = get_syllabic_ratio(notes, lyrics)
 
-        # each voice part is measured against its OWN last note, then averaged
+        # each voice part is measured against the tonic of the key, then
+        # averaged
         voice_regs = [
-            get_voice_reg(part_data[DATA_NOTES]) for part_data in voice_parts_data
+            get_voice_reg(part_data[DATA_NOTES], score_data.get(DATA_KEY))
+            for part_data in voice_parts_data
         ]
         voice_regs = [v for v in voice_regs if v == v]
         features[get_score_feature(VOICE_REG)] = (
@@ -130,12 +132,21 @@ def get_syllabic_ratio(notes: List[Note], lyrics: List[str]) -> float:
     return len(notes) / len(lyrics)
 
 
-def get_voice_reg(notes: List[Note]) -> float:
+def get_voice_reg(notes: List[Note], key=None) -> float:
+    """
+    Where the centre of a vocal part lies in relation to the tonic: the
+    distance, in semitones, from the mean pitch of its notes to the nearest
+    tonic of `key` (between -6 and 6; positive when the centre of the part is
+    above that tonic).
+
+    The reference used to be the part's own last note. Most da capo arias are
+    written once through, so their last written vocal note closes the middle
+    section, usually in another key: the same aria gave a different value
+    depending on whether its reprise was written out.
+    """
     # DATA_NOTES never contains chords (they are excluded from note-based
     # features), so a plain pitch access is safe here
-    if notes:
-        last_note = notes[-1].pitch.midi
-        distances = [note.pitch.midi - last_note for note in notes]
-        return mean(distances)
-
-    return float("nan")
+    if not notes or key is None:
+        return float("nan")
+    centre = mean([note.pitch.midi for note in notes])
+    return float((centre - key.tonic.pitchClass + 6) % 12 - 6)

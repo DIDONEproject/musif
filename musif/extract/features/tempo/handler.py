@@ -10,6 +10,7 @@ from music21.meter import TimeSignature as M21TimeSignature
 from musif.config import ExtractConfiguration
 from musif.extract.constants import (
     DATA_NUMERIC_TEMPO,
+    DATA_REPRISE_INSTRUCTION,
     DATA_PART,
     DATA_SCORE,
     GLOBAL_TIME_SIGNATURE,
@@ -85,6 +86,7 @@ def update_score_objects(
         {
             C.TEMPO: tempo_mark,
             C.NUMERIC_TEMPO: numeric_tempo,
+            C.REPRISE_INSTRUCTION: score_data.get(DATA_REPRISE_INSTRUCTION, "NA"),
             C.TIME_SIGNATURE: time_signature,
             C.TIME_SIGNATURE_GROUPED: time_signature_grouped,
             C.NUMBER_OF_BEATS: number_of_beats,
@@ -163,11 +165,22 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
 def extract_tempo(score_data, part):
     numeric_tempo = score_data[DATA_NUMERIC_TEMPO]
     tempo_mark = TempoGroup2.NA.value
+    examined = 0
     for measure in part:
-        if isinstance(measure, Measure):
-            for element in measure:
-                if isinstance(element, TextExpression):
-                    if get_tempo_grouped_1(element.content) != "NA":
-                        tempo_mark = element.content
-            break  # only take into account the first bar!
+        if not isinstance(measure, Measure):
+            continue
+        examined += 1
+        for element in measure:
+            if isinstance(element, TextExpression):
+                if get_tempo_grouped_1(element.content) != "NA":
+                    tempo_mark = element.content
+                    # the heading comes first; a later word of the measure
+                    # ("sostenuto" under an "Allegro moderato") is an
+                    # expression mark and used to replace it
+                    break
+        # Only the first bar counts; when it is a pickup that carries no
+        # heading, the heading stands over the first full bar.
+        is_pickup = examined == 1 and measure.number == 0
+        if tempo_mark != TempoGroup2.NA.value or not is_pickup:
+            break
     return numeric_tempo, tempo_mark

@@ -55,10 +55,8 @@ def update_score_objects(
         key_1, value_1 = ordered[i]
         for j in range(i + 1, len(ordered)):
             key_2, value_2 = ordered[j]
-            if value_2 == 0:
-                texture = np.inf if value_1 > 0 else np.nan
-            else:
-                texture = value_1 / value_2
+            # the ratio does not exist against a part without notes
+            texture = value_1 / value_2 if value_2 != 0 else np.nan
 
             part1_prefix = get_part_prefix(key_1).replace("_", "")
             part2_prefix = get_part_prefix(key_2).replace("_", "")

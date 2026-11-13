@@ -51,6 +51,9 @@ def update_score_objects(
 
         features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]
         features[f"{HARMONIC_RHYTHM_BEATS}"] = all_harmonic_info[HARMONIC_RHYTHM_BEATS]
+        features[HARMONIC_RHYTHM_QUARTERS] = all_harmonic_info[
+            HARMONIC_RHYTHM_QUARTERS
+        ]
         features.update(
             {
                 k: v
@@ -67,7 +70,11 @@ def update_score_objects(
             }
         )
         features.update(
-            {k: v for (k, v) in chords.items() if k.startswith(CHORD_prefix)}
+            {
+                k: v
+                for (k, v) in chords.items()
+                if k.startswith((CHORD_prefix, APPLIED_prefix))
+            }
         )
         features.update({k: v for (k, v) in chords_grouping1.items()})
         features.update({k: v for (k, v) in chords_grouping2.items()})

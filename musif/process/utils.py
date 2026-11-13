@@ -62,9 +62,13 @@ def join_part_degrees(
                     selected["Ddesc"].append(col)
         if not any(selected.values()):
             continue
+        # where the part has no degree value at all (it is not in the score,
+        # or the degrees could not be computed) its groups stay empty too
+        measured = df[[col for cols in selected.values() for col in cols]].notna().any(axis=1)
         for name, cols in selected.items():
             column = part + DEGREE_PREFIX + "_" + name + "_" + kind + sufix
-            df[column] = df[cols].sum(axis=1) if cols else 0.0
+            total = df[cols].sum(axis=1) if cols else pd.Series(0.0, index=df.index)
+            df[column] = total.where(measured)
 
 
 def log_errors_and_shape(

@@ -121,6 +121,10 @@ parts_filter: []
 # Split parts whose music21 `instrumentSound` contains one of these keywords into
 # one part per voice/layer (e.g. "Oboi" split into obI and obII). Matched against
 # instrumentSound values such as `wind.reed.oboe` or `strings.cello`.
+# List the instruments whose staff carries two players throughout (pairs of
+# winds). A staff with an occasional divisi (a viola section, say) is better left
+# whole: its second part would hold nothing but the divisi measures, and those
+# measures are analysed anyway, as a second melodic line of the unsplit part.
 split_keywords: []
   # Example values
   # - oboe

@@ -29,8 +29,9 @@ from musif.extract.utils import (cast_mixed_dtypes,
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musescore import constants as mscore_c
 from musif.musicxml import constants as musicxml_c
+from musif.musicxml.tempo import extract_reprise_instruction
 from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
-                            split_layers)
+                            split_layers, to_sounding_pitch)
 from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
                                     to_abbreviation)
 from music21 import converter
@@ -76,6 +77,11 @@ def parse_filename(
     """
     try:
         score = parse(file_path).makeRests()
+        # Every pitch is analysed as it sounds. Transposing instruments
+        # (horns, trumpets, clarinets...) are written in another key, and
+        # their written notes used to enter the scale-degree and ambitus
+        # features, and the score aggregates, as if they sounded as written.
+        to_sounding_pitch(score, file_path)
         if export_dfs_to is not None:
             dest_path = Path(export_dfs_to)
             dest_path /= Path(file_path).with_suffix(".pkl").name
@@ -96,6 +102,21 @@ def parse_filename(
         print(file_path)
         raise ParseFileError(file_path) from e
     return score
+
+
+def _has_global_key(harmonic_analysis: pd.DataFrame) -> bool:
+    """
+    Whether the annotations read from a MuseScore file state the global key.
+    They do not when the first label is invalid: every key, local keys
+    included, is then undefined. An empty analysis passes: the feature
+    modules already treat it as "no analysis".
+    """
+    if harmonic_analysis is None or harmonic_analysis.empty:
+        return True
+    if "globalkey" not in harmonic_analysis.columns:
+        return False
+    global_key = harmonic_analysis["globalkey"].iloc[0]
+    return type(global_key) is str and global_key.strip() != ""
 
 
 def parse_musescore_file(file_path: str, expand_repeats: bool = False) -> pd.DataFrame:
@@ -507,6 +528,7 @@ class FeaturesExtractor:
             C.DATA_FILTERED_PARTS: window_parts,
             C.DATA_MUSESCORE_SCORE: window_mscore,
             C.DATA_NUMERIC_TEMPO: score_data[C.DATA_NUMERIC_TEMPO],
+            C.DATA_REPRISE_INSTRUCTION: score_data.get(C.DATA_REPRISE_INSTRUCTION, "NA"),
         }
 
         for i, p in enumerate(window_parts):
@@ -617,6 +639,7 @@ class FeaturesExtractor:
                 C.DATA_FILTERED_PARTS: filtered_parts,
                 C.DATA_MUSESCORE_SCORE: data_musescore,
                 C.DATA_NUMERIC_TEMPO: numeric_tempo,
+                C.DATA_REPRISE_INSTRUCTION: extract_reprise_instruction(filename),
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
@@ -650,6 +673,16 @@ class FeaturesExtractor:
                 data_musescore = parse_musescore_file(
                     str(filename), self._cfg.expand_repeats
                 )
+                if not _has_global_key(data_musescore):
+                    # one invalid label used to blank the whole row of the
+                    # score: every feature, not only the harmonic ones
+                    perr(
+                        f"The harmonic annotations of {filename} state no "
+                        "global key (is the first label valid?). The score is "
+                        "extracted without them: these features are skipped: "
+                        f"{C.REQUIRE_MSCORE}"
+                    )
+                    return None
                 return data_musescore
             except ParseFileError as e:
                 data_musescore = None

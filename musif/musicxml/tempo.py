@@ -75,6 +75,15 @@ def get_tempo_grouped_1(tempo: str) -> str:
 
     """
     tempo = re.sub("\\W+", " ", tempo)  # removes eventual special characters
+    # spellings found in sources: French and shortened forms of the minuet,
+    # doubled consonants, and diminutives the endings below do not cover
+    for spelling, standard in (
+        (r"\b(menuett?|minuet)\b", "minuetto"),
+        (r"\badagg", "adag"),
+        (r"\ballegrino\b", "allegretto"),
+        (r"\bcomodetto\b", "comodo"),
+    ):
+        tempo = re.sub(spelling, standard, tempo, flags=re.IGNORECASE)
     replacements = [
         (w, "")
         for w in [
@@ -146,6 +155,9 @@ def get_tempo_grouped_1(tempo: str) -> str:
         "spiritoso",
         "espressivo",
         "fiero",
+        "furioso",
+        "brillante",
+        "gaio",
         "giusto",
         "grave",
         "grazioso",
@@ -161,6 +173,12 @@ def get_tempo_grouped_1(tempo: str) -> str:
     for word in tempo.split(" "):
         if word.lower() in relevant_words:
             words_contained.append(word)
+    # "tempo" alone stands for "a tempo"; next to a word that says which
+    # tempo ("Tempo giusto", "Tempo comodo") it is that word that counts
+    if len(words_contained) > 1:
+        described = [w for w in words_contained if w.lower() != "tempo"]
+        if described:
+            words_contained = described
     ## FINAL DECISION (Two exceptions: tempo and con brio) ##
     if len(words_contained) == 1:
         if words_contained[0].lower() not in ["tempo", "brio"]:
@@ -215,6 +233,7 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         "Comodo",
         "Cantabile",
         "Comodo",
+        "Giusto",
         "Espressivo",
         "Grazioso",
         "Gustoso",
@@ -235,13 +254,16 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
         "Con brio",
         "Spiritoso",
         "Fiero",
+        "Furioso",
+        "Brillante",
+        "Gaio",
         "Presto",
         "Risoluto",
         "Vivace",
     ]
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
-    if tempo_grouped_1 in ["A tempo", "Giusto"]:
+    if tempo_grouped_1 == "A tempo":
         return TempoGroup2.NA.value
     elif tempo_grouped_1 in slow:
         return TempoGroup2.SLOW.value
@@ -252,6 +274,32 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
 
     # unknown tempo terms get the sentinel, never a silent None
     return TempoGroup2.NA.value
+
+
+def get_quarter_length(time_signature: str) -> float:
+    """
+    Returns the length of a measure in quarter notes for a time signature:
+    4 for 4/4 and for 2/2, 1.5 for 3/8, 3 for 6/8. Unlike the number of beats,
+    it does not depend on which note value the signature takes as the beat,
+    so rates per quarter note are comparable between metres.
+
+    It follows `get_number_of_beats` for the special values: 4 for `"C"`, 1 for
+    an empty signature, and `pd.NA` for `"NA"`.
+
+    Parameters
+    ----------
+        time_signature: str
+            Time signature in the form of string separated by '/'.
+    """
+    time_signature = time_signature.split(",")[0]
+    if time_signature == "C":
+        return 4.0
+    elif time_signature == "":
+        return 1.0
+    elif time_signature == "NA":
+        return pd.NA
+    num, den = time_signature.split("/")
+    return int(num) * 4 / int(den)
 
 
 def get_number_of_beats(time_signature: str) -> int:
@@ -289,6 +337,37 @@ def get_number_of_beats(time_signature: str) -> int:
     else:
         return int(num)
         # raise ValueError(f"The {time_signature} is not a known time signature")
+
+
+_REPRISE_WORDS = re.compile(r"^\W*(da\s+capo|dal\s+segno|d\.\s*c\.?|d\.\s*s\.?)(\W|$)", re.IGNORECASE)
+
+
+def extract_reprise_instruction(file_path: str):
+    """
+    Whether a MusicXML file carries a "da capo" or "dal segno" instruction: 1
+    if it does, 0 if it does not, `"NA"` if the file cannot be read.
+
+    Such a score does not write its reprise out: the opening section is on
+    the page once and is performed twice. Every proportion and mean computed
+    from the page therefore weighs that section once, where a score with a
+    written-out reprise weighs it twice.
+
+    Parameters
+    ----------
+        file_path: str
+        Path to xml file to look into.
+    """
+    try:
+        root = ET.parse(file_path).getroot()
+    except Exception:
+        return "NA"
+    for sound in root.iter("sound"):
+        if sound.get("dacapo") is not None or sound.get("dalsegno") is not None:
+            return 1
+    for words in root.iter("words"):
+        if words.text and _REPRISE_WORDS.match(words.text.strip()):
+            return 1
+    return 0
 
 
 def extract_numeric_tempo(file_path: str) -> Optional[int]:

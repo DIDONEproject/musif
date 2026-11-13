@@ -91,8 +91,18 @@ delete_sound_columns: False
 # NumberOfParts, NumberOfFilteredParts) are kept. Off by default.
 delete_duplicated_sound_columns: False
 
-# Columns containing these substrings will have nan values replaced with 0
-# Applied before the column deletions, so the replaced columns survive them
+# Columns containing these substrings may have their empty cells replaced with
+# 0, where an empty cell stands for "no such event". The replacement is made
+# only where 0 is the measured value:
+#   - in the columns that count events or give their proportion (_Count, _Per,
+#     and the chord, numeral, key and addition columns of the harmonic
+#     analysis); a statistic (mean, deviation, ratio...) is never replaced;
+#   - for the scores in which the part, sound or family has notes, and, for
+#     the Harmony_ and _relative columns, in which the analysis is available.
+# The cells of a part that is not in a score stay empty. The replacement runs
+# before the NaN thresholds above, so max_nan_columns measures how often there
+# was nothing to measure: it deletes the parts that few scores have, not the
+# events that seldom happen.
 # Matching is case-insensitive
 replace_nans: []
   # Example of values (but any substring can be used):

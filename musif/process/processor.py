@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import PurePath
 from typing import Union
 import numpy as np
@@ -18,12 +19,19 @@ from musif.extract.constants import ID, WINDOW_ID
 from musif.extract.features.core.constants import (
     FILE_NAME,
     NOTES_MEAN,
+    NUM_NOTES,
     SOUNDING_MEASURES_MEAN,
 )
 from musif.extract.features.harmony.constants import (
+    ADDITIONS_prefix,
+    APPLIED_prefix,
+    CHORD_prefix,
+    CHORDS_GROUPING_prefix,
     HARMONY_AVAILABLE,
+    HARMONY_PREFIX,
     KEY_MODULATORY,
     KEY_PREFIX,
+    NUMERALS_prefix,
 )
 from musif.logs import perr, pinfo
 from musif.process.constants import PRESENCE
@@ -33,6 +41,32 @@ from musif.process.utils import (
     join_keys_modulatory,
     join_part_degrees,
 )
+
+
+# Columns that count events or give their proportion: an empty cell there can
+# stand for "no such event". Everything else is a statistic (a mean, a
+# deviation, a ratio, an extreme...), for which an empty cell means that the
+# value does not exist.
+_EVENT_SUFFIX = re.compile(r"(_Count|_Per)(_relative)?$")
+_HARMONY_EVENT_PREFIXES = (
+    KEY_PREFIX,
+    CHORD_prefix,
+    CHORDS_GROUPING_prefix,
+    NUMERALS_prefix,
+    ADDITIONS_prefix,
+    APPLIED_prefix,
+)
+# The scope a column describes: one part, sound or family, the whole score, or
+# the harmonic analysis.
+_SCOPE = re.compile(r"^((?:Part|Sound|Family)[^_|]+|Score|Harmony)_")
+
+
+def _counts_events(column: str) -> bool:
+    return (
+        _EVENT_SUFFIX.search(column) is not None
+        or column.startswith(_HARMONY_EVENT_PREFIXES)
+        or column.startswith(PRESENCE)
+    )
 
 
 class DataProcessor:
@@ -138,8 +172,12 @@ class DataProcessor:
             pinfo('\nSeparating "Instrumentation" column...')
             self.separate_instrumentation_column()
 
-        # replace the configured NaNs BEFORE deleting NaN-bearing columns,
-        # otherwise the deletion leaves replace_nans nothing to act on
+        # An empty cell is replaced by 0 only where 0 is the measured value:
+        # an event that did not happen in a part that does play (see
+        # replace_nans). The cells of a part that is not in the score, and
+        # the statistics that do not exist, stay empty, so the NaN thresholds
+        # that follow (max_nan_rows, max_nan_columns) judge exactly that: how
+        # often there was nothing to measure.
         self.replace_nans()
         self.delete_undesired()
         if self._post_config.delete_duplicated_sound_columns:
@@ -236,11 +274,15 @@ class DataProcessor:
             if str(row) != 'nan':
                 for element in row.split(","):
                     self.data.at[label, PRESENCE + "_" + element] = 1
-        self.data[[i for i in self.data if PRESENCE + "_" in i]] = (
-            self.data[[i for i in self.data if PRESENCE + "_" in i]]
-            .fillna(0)
-            .astype(int)
-        )
+        presence_columns = [i for i in self.data if PRESENCE + "_" in i]
+        if presence_columns:
+            # an instrument that is not listed is absent (0), but only for
+            # the scores that have a list: a score that failed to extract has
+            # none, and a 0 there would say that it has no violins
+            listed = self.data[INSTRUMENTATION].notna()
+            self.data.loc[listed, presence_columns] = self.data.loc[
+                listed, presence_columns
+            ].fillna(0)
 
     def delete_undesired(self, **kwargs) -> None:
         """Deletes not necessary columns and rows for statistical analysis.
@@ -277,17 +319,79 @@ class DataProcessor:
         _delete_columns(self.data, config_data)
 
     def replace_nans(self) -> None:
-        # pinfo("Replacing NaN values in selected columns")
-        cols = []
-        
-        for col in self.data.columns:
-            if self._post_config.replace_nans is not None and any(
-                substring.lower() in col.lower()
-                for substring in tuple(self._post_config.replace_nans)
-            ):
-                cols.append(col)
-        cols = self.data[cols].select_dtypes(include="number").columns
-        self.data[cols] = self.data[cols].fillna(0)
+        """
+        Replaces by 0 the empty cells that stand for "no such event".
+
+        Only the columns selected by `replace_nans` in the configuration are
+        touched, and among them only those that count events or give their
+        proportion (`_Count`, `_Per`, and the chord, numeral, key and addition
+        columns of the harmonic analysis). A cell is replaced only in the rows
+        where there was something to measure: the part, sound or family has
+        notes in that score, and, for the columns that depend on the harmonic
+        analysis (`Harmony_` and `_relative`), the analysis is available.
+
+        So after this step a 0 is always a measured zero. The cells of a part
+        that is absent from a score stay empty, and so do the statistics
+        (means, deviations, ratios...) that could not be computed.
+        """
+        substrings = self._post_config.replace_nans
+        if not substrings:
+            return
+        numeric = set(self.data.select_dtypes(include="number").columns)
+        columns = [
+            col
+            for col in self.data.columns
+            if col in numeric
+            and _counts_events(col)
+            and any(substring.lower() in col.lower() for substring in substrings)
+        ]
+        if not columns:
+            return
+
+        presence = {}
+
+        def measured(scope, needs_analysis):
+            key = (scope, needs_analysis)
+            if key not in presence:
+                rows = pd.Series(True, index=self.data.index)
+                if scope is not None and scope != HARMONY_PREFIX.rstrip("_"):
+                    rows &= self._has_notes(scope, numeric)
+                if needs_analysis:
+                    rows &= self._has_analysis(scope, numeric)
+                presence[key] = rows
+            return presence[key]
+
+        filled = {}
+        for col in columns:
+            match = _SCOPE.match(col)
+            scope = match.group(1) if match else None
+            needs_analysis = col.startswith(HARMONY_PREFIX) or col.endswith("_relative")
+            rows = measured(scope, needs_analysis)
+            filled[col] = self.data[col].where(self.data[col].notna() | ~rows, 0)
+        self.data[columns] = pd.DataFrame(filled, index=self.data.index)
+
+    def _has_notes(self, scope: str, numeric: set) -> pd.Series:
+        """Rows in which the part, sound or family `scope` has any note."""
+        notes = f"{scope}_{NUM_NOTES}"
+        if notes in numeric:
+            return self.data[notes].fillna(0) > 0
+        # without the note count, a scope counts as present where any of its
+        # columns holds a value
+        columns = [col for col in numeric if col.startswith(scope + "_")]
+        return self.data[columns].notna().any(axis=1)
+
+    def _has_analysis(self, scope, numeric: set) -> pd.Series:
+        """Rows for which the harmonic analysis was extracted."""
+        if HARMONY_AVAILABLE in self.data.columns:
+            return self.data[HARMONY_AVAILABLE] == 1
+        # without the flag, the analysis counts as available where any column
+        # that depends on it holds a value
+        columns = [
+            col
+            for col in numeric
+            if col.startswith(HARMONY_PREFIX) or col.endswith("_relative")
+        ]
+        return self.data[columns].notna().any(axis=1)
 
     def save(
         self, dest_path: Union[str, PurePath], ext=".csv", ft="csv", **kwargs
@@ -323,18 +427,23 @@ class DataProcessor:
         getattr(self.data, ft)(dest_path + "_alldata" + ext, **kwargs)
 
     def _group_keys_modulatory(self) -> None:
-        self.data.update(
-            self.data[
-                [i for i in self.data.columns if KEY_PREFIX + KEY_MODULATORY in i]
-            ].fillna(0)
+        self._group_key_columns(
+            join_keys_modulatory,
+            lambda col: KEY_PREFIX + KEY_MODULATORY in col,
         )
-        join_keys_modulatory(self.data)
 
     def _group_keys(self) -> None:
-        self.data.update(
-            self.data[[i for i in self.data.columns if KEY_PREFIX in i]].fillna(0)
-        )
-        join_keys(self.data)
+        self._group_key_columns(join_keys, lambda col: KEY_PREFIX in col)
+
+    def _group_key_columns(self, join, selects) -> None:
+        columns = [col for col in self.data.columns if selects(col)]
+        # a score without harmonic analysis has no key areas at all: its
+        # cells, and the groups built from them, stay empty
+        analysed = self.data[columns].notna().any(axis=1)
+        self.data.loc[analysed, columns] = self.data.loc[analysed, columns].fillna(0)
+        join(self.data)
+        columns = [col for col in self.data.columns if selects(col)]
+        self.data.loc[~analysed, columns] = np.nan
 
     def _join_degrees(self) -> None:
         total_degrees = [
@@ -360,7 +469,6 @@ class DataProcessor:
 
     def _final_data_processing(self) -> None:
         self.data.sort_values([ID, WINDOW_ID], inplace=True)
-        self.replace_nans()
         self.data = self.data.reindex(sorted(self.data.columns), axis=1)
         if TITLE in self.data.columns and ARTIST in self.data.columns:
             priority_columns = [FILE_NAME, TITLE, ARTIST]
