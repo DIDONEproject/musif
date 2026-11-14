@@ -66,10 +66,7 @@ def expected_features() -> pd.DataFrame:
     return pd.read_csv(STATIC_DIR / "expected_features.csv", low_memory=False)
 
 
-@pytest.fixture(scope="session")
-def didone_features(tmp_path_factory) -> pd.DataFrame:
-    """Extraction of one real DIDONE aria, harmony included. Skipped when the
-    corpus is not available locally."""
+def _didone_extraction(tmp_path_factory, **overrides) -> pd.DataFrame:
     xml = DIDONE_DIR / "xml" / f"{DIDONE_SAMPLE}.xml"
     mscx = DIDONE_DIR / "musescore" / f"{DIDONE_SAMPLE}.mscx"
     if not (xml.exists() and mscx.exists()):
@@ -88,5 +85,20 @@ def didone_features(tmp_path_factory) -> pd.DataFrame:
         tmp_dir,
         musescore_dir=str(mscore_dir),
         features=REGRESSION_FEATURES + ["harmony", "scale_relative"],
+        **overrides,
     )
     return FeaturesExtractor(config).extract()
+
+
+@pytest.fixture(scope="session")
+def didone_features(tmp_path_factory) -> pd.DataFrame:
+    """Extraction of one real DIDONE aria, harmony included. Skipped when the
+    corpus is not available locally."""
+    return _didone_extraction(tmp_path_factory)
+
+
+@pytest.fixture(scope="session")
+def didone_unfolded_features(tmp_path_factory) -> pd.DataFrame:
+    """The same aria unfolded in the order in which it is played (a dal segno
+    al Coda: 60 measures on the page, 90 played)."""
+    return _didone_extraction(tmp_path_factory, expand_repeats=True)

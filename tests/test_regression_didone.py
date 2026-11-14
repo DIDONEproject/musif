@@ -47,3 +47,23 @@ def test_relative_degrees_aggregate_all_parts(didone_features):
     ]
     per_sum = sum(row[c] for c in per_cols if pd.notna(row[c]))
     assert abs(per_sum - 1.0) < 1e-9
+
+
+def test_unfolded_aria_follows_the_reprise(didone_features, didone_unfolded_features):
+    written = didone_features.iloc[0]
+    unfolded = didone_unfolded_features.iloc[0]
+    assert written["RepeatsUnfolded"] == 0
+    assert unfolded["RepeatsUnfolded"] == 1
+    assert written["RepriseInstruction"] == unfolded["RepriseInstruction"] == 1
+    # bars 1-59, from the segno (bar 14) to the coda sign (bar 43), and the
+    # coda (bar 60): the order ms3 gives the MuseScore file
+    assert written["Measures"] == 60
+    assert unfolded["Measures"] == 59 + 30 + 1
+    assert unfolded["Score_Notes"] > written["Score_Notes"]
+    # the labels follow the measures: every note has a local key
+    relative = [
+        c for c in didone_unfolded_features.columns
+        if c.startswith("Score_Degree") and c.endswith("_Count_relative")
+    ]
+    assert sum(unfolded[c] for c in relative if pd.notna(unfolded[c])) == unfolded["Score_Notes"]
+    assert unfolded["Harmony_Analysis_Available"] == 1
