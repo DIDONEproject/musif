@@ -46,7 +46,7 @@ def update_score_objects(
             return features
 
         all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
-        keyareas = get_keyareas(harmonic_analysis)
+        keyareas = get_keyareas(harmonic_analysis, score_features.get(NUM_MEASURES))
         chords, chords_grouping1, chords_grouping2 = get_chords(harmonic_analysis)
 
         features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]

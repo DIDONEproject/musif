@@ -515,14 +515,15 @@ class FeaturesExtractor:
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
             # first_measure/last_measure are 0-based, end-exclusive measure
-            # INDICES (music21 indicesNotNumbers). playthrough aligns 1:1 with
-            # those indices in both folded and unfolded scores (written mn is
-            # non-monotonic under expand_repeats and lost whole repeats).
+            # INDICES (music21 indicesNotNumbers). playthrough is the 1-based
+            # position of the measure in both folded and unfolded scores
+            # (written mn is non-monotonic under expand_repeats and lost whole
+            # repeats), so measure index = playthrough - 1, also when the
+            # first label comes after the first measure.
             mscore = score_data[C.DATA_MUSESCORE_SCORE]
-            first_playthrough = int(mscore[C.PLAYTHROUGH].min())
+            measure_index = mscore[C.PLAYTHROUGH] - 1
             window_mscore = mscore.loc[
-                (mscore[C.PLAYTHROUGH] >= first_playthrough + first_measure)
-                & (mscore[C.PLAYTHROUGH] < first_playthrough + last_measure)
+                (measure_index >= first_measure) & (measure_index < last_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
         else:

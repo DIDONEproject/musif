@@ -48,11 +48,11 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     else:
         harmonic_analysis = msc3_score.mscx.expanded()
         harmonic_analysis.reset_index(inplace=True)
-        if harmonic_analysis.mn[0] == 0:
-            harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mc"]
-        else:
-            harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mn"]
-    _include_beats_column(harmonic_analysis)
+        # the position of the measure in the file (1, 2, 3...), whatever its
+        # printed number: the printed number ``mn`` repeats in voltas and in
+        # bars excluded from the count, so bars collapsed when it served as
+        # the counter (it did unless the first label sat in a pickup bar)
+        harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mc"]
     return harmonic_analysis
 
 
@@ -211,27 +211,6 @@ def get_repetition_elements(score, v=True):
     if v:
         print("The repeat elements found in this score are: " + str(repeat_elements))
     return repeat_elements
-
-
-def _include_beats_column(harmonic_analysis: DataFrame) -> None:
-    harmonic_analysis["beats"] = 0
-    for index, measure in enumerate(harmonic_analysis[PLAYTHROUGH].values):
-        if measure <= 1:
-            beat = int(
-                measure
-                + float(harmonic_analysis.mc_onset[index])
-                * get_number_of_beats(harmonic_analysis.timesig[index])
-            )
-        else:
-            time_sig = get_number_of_beats(harmonic_analysis.timesig[index - 1])
-            beat = int(
-                (measure - 1) * time_sig
-                + 1
-                + harmonic_analysis.mc_onset[index]
-                * get_number_of_beats(harmonic_analysis.timesig[index])
-            )
-
-        harmonic_analysis.at[index, "beats"] = beat
 
 
 def _get_beat_position(

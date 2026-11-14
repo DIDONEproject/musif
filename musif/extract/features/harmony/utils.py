@@ -67,7 +67,13 @@ def _total_beats(
     return total
 
 
-def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signatures):
+def get_measures_per_key(
+    keys_options, measures, keys, mc_onsets, time_signatures, last_measure=None
+):
+    """Measures spent in each local key. The last key lasts to the end of
+    ``last_measure`` (the last measure of the piece; by default the last
+    annotated one): the final chord is held to the end of its measure, and
+    the measures after the last label stay in the last key."""
     key_measures = {p: 0 for p in keys_options}
     last_key = 0
     done = 0
@@ -91,15 +97,13 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
             last_key = key
             starting_measure = new_measures[i] - 1
 
-    # last!
+    # last! It ends with its last measure, not at the onset of its last label
+    # (that onset used to be added as an extra fraction of a measure)
+    end = new_measures[numberofmeasures - 1]
+    if last_measure is not None and last_measure > end:
+        end = last_measure
     num_measures, _ = compute_number_of_measures(
-        done,
-        starting_measure,
-        new_measures[numberofmeasures - 1],
-        new_measures[numberofmeasures - 1] + 1,
-        _measure_fraction(
-            time_signatures[numberofmeasures - 1], mc_onsets[numberofmeasures - 1]
-        ),
+        done, starting_measure, end, end + 1, 0.0
     )
 
     key_measures[last_key] += num_measures
@@ -149,7 +153,12 @@ def compute_number_of_measures(
 ###################
 
 
-def get_keyareas(lausanne_table):
+def get_keyareas(lausanne_table, number_of_measures=None):
+    """Key areas: the share of measures in each local key, and the share of
+    key areas (blocks of consecutive labels in one key). Measures are counted
+    by their position in the file (``playthrough``); with
+    ``number_of_measures`` (the measures of the piece), the measures after
+    the last label count in the last key."""
     # row-aligned extraction: independent dropna() calls used to shift the
     # zip whenever one column had a gap
     rows = lausanne_table[["localkey", "playthrough", "mc_onset", "timesig"]]
@@ -170,8 +179,15 @@ def get_keyareas(lausanne_table):
     beats = [0 if b != b else b for b in rows.mc_onset.tolist()]
     time_signatures = rows.timesig.tolist()
 
+    if number_of_measures is not None and number_of_measures != number_of_measures:
+        number_of_measures = None  # NaN
     key_measures = get_measures_per_key(
-        list(set(keys)), measures, keys, beats, time_signatures
+        list(set(keys)),
+        measures,
+        keys,
+        beats,
+        time_signatures,
+        last_measure=int(number_of_measures) if number_of_measures else None,
     )
 
     total_measures = float(sum(list(key_measures.values())))
