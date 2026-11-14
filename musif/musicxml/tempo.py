@@ -47,13 +47,15 @@ def get_time_signature_type(time_signature: str) -> str:
     ]:
         return "simple duple"
 
-    elif time_signature in ["6/8", "3/8", "6/2", "6/4", "6/16"]:
+    elif time_signature in ["6/8", "6/2", "6/4", "6/16"]:
         return "compound duple"
 
     elif time_signature in ["12/2", "12/4", "12/8", "12/16"]:
         return "compound quadruple"
 
-    elif time_signature in ["3/2", "3/4", "3/16"]:
+    # 3/8 is simple triple, as 3/4 and 3/16 are (it used to be classed as
+    # compound duple). NumberOfBeats still counts one beat per bar in 3/8.
+    elif time_signature in ["3/2", "3/4", "3/8", "3/16"]:
         return "simple triple"
 
     elif time_signature in ["9/2", "9/4", "9/8", "9/16"]:
