@@ -15,6 +15,7 @@ All notable changes to `musif`, newest first.
 * `#vii%7` is counted with `vii%7`, as `#viio` is with `viio`
 * Documentation: motion breaks at chords, the dynamics vocabulary, what `NumberOfParts` and `Score_VoiceReg` count, and `DoubleDottedRhythm` is not always zero
 * `expand_repeats` unfolds each score in the order that ms3 gives its MuseScore file (music21's expansion ignored *Fine* and replayed to the end); new column `RepeatsUnfolded`
+* Memory: ms3 kept every MuseScore file read in memory (about 40 MB a score); its caches are now emptied after each file
 * Features extracted with previous versions should be extracted again
 
 ## v1.3.1
