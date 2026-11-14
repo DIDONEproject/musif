@@ -41,6 +41,14 @@ class TestExtremes:
         assert features["LargestAbsoluteSemitonesAll"] == 12
         assert features["LargestIntervalAll"] == "P-8"
 
+    def test_rising_interval_wins_a_tie(self):
+        # a +12 and a -12: the sign used to depend on which came first
+        for intervals in ([iv(-12), iv(12)], [iv(12), iv(-12)]):
+            features = get_interval_features(intervals)
+            assert features["LargestSemitonesAll"] == 12
+            assert features["LargestIntervalAll"] == "P8"
+            assert features["LargestAbsoluteSemitonesAll"] == 12
+
     def test_notated_spelling_is_preserved(self):
         tritone = Interval(Pitch("C4"), Pitch("F#4"))  # an A4, 6 semitones
         features = get_interval_features([tritone])

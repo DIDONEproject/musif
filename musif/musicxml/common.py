@@ -10,7 +10,10 @@ from music21.key import KeySignature
 from music21.musicxml.xmlToM21 import MeasureParser
 from music21.note import GeneralNote, Note, Rest
 from music21.bar import Repeat
+from music21.clef import Clef
+from music21.meter import TimeSignature
 from music21.repeat import RepeatMark
+from music21.spanner import Spanner
 from music21.scale import MajorScale, MinorScale
 from music21.stream.base import Measure, Part, Score, Voice
 from music21.text import assembleLyrics
@@ -155,6 +158,66 @@ def to_sounding_pitch(score: Score, file_path=None) -> None:
     score.atSoundingPitch = True
 
 
+def unfold_score(score: Score, order: List[int]) -> Score:
+    """
+    The score with its measures in the order in which they are played:
+    `order` gives, for each measure played, its 1-based position in every
+    part (as ms3's ``mc``). Repeated measures are copies; the score passed is
+    taken apart and must not be used afterwards.
+
+    Where the order jumps (a repeat, a da capo, a dal segno, a coda), the
+    measure jumped to restates the time signature, key signature and clef in
+    force at its place in the score, unless it states them itself: otherwise
+    it would inherit those of the measure played before it (the end of the B
+    section, often in another metre).
+
+    Parameters
+    ----------
+    score : Score
+        Music21 score, as written (one pass through its measures)
+    order : List[int]
+        Positions of the measures in the order in which they are played
+    """
+    unfolded = Score()
+    unfolded.metadata = score.metadata
+    for part in list(score.parts):
+        measures = list(part.getElementsByClass(Measure))
+        in_force = []
+        current = {TimeSignature: None, KeySignature: None, Clef: None}
+        for measure in measures:
+            for cls in current:
+                found = measure.getElementsByClass(cls)
+                if len(found) > 0:
+                    current[cls] = found[0]
+            in_force.append(dict(current))
+        new_part = Part()
+        new_part.id = part.id
+        new_part.partName = part.partName
+        new_part.partAbbreviation = part.partAbbreviation
+        new_part.atSoundingPitch = part.atSoundingPitch
+        for element in part.elements:
+            if isinstance(element, (Measure, Spanner)):
+                continue
+            new_part.insert(part.elementOffset(element), deepcopy(element))
+        part.remove(measures)
+        played = set()
+        previous = None
+        for position in order:
+            source = measures[position - 1]
+            # the first time a measure is played it is the measure itself;
+            # every later time, a copy
+            measure = source if position not in played else deepcopy(source)
+            played.add(position)
+            if previous is not None and position != previous + 1:
+                for cls, element in in_force[position - 1].items():
+                    if element is not None and len(measure.getElementsByClass(cls)) == 0:
+                        measure.insert(0, deepcopy(element))
+            new_part.append(measure)
+            previous = position
+        unfolded.insert(0, new_part)
+    return unfolded
+
+
 def split_layers(score: Score, split_keywords: List[str]):
     """
     Function used to split possible layers. Those instruments that include to parts in the same staff
@@ -211,6 +274,7 @@ def split_layers(score: Score, split_keywords: List[str]):
 
 def get_notes_and_measures(
     part: Part,
+    with_positions: bool = False,
 ) -> Tuple[List[Note], List[Note], List[Measure], List[Measure]]:
     """
     Obtains lists of notes, tied notes, measures, measures that containg notes, and notes and rests.
@@ -220,6 +284,11 @@ def get_notes_and_measures(
     ----------
     part : Part
       Music21 part to extract the info from.
+    with_positions : bool
+      When True, a sixth element is returned: for each note, a pair (0-based
+      position of its measure in the part, in the order of the file whatever
+      the printed numbers say; onset of the note in quarter notes from the
+      start of that measure as written).
 
     """
 
@@ -288,18 +357,31 @@ def get_notes_and_measures(
         idx for idx, measure_notes in enumerate(notes_per_measure)
         if len(measure_notes) > 0
     ]
-    original_notes = [
-        note
-        for measure_notes in notes_per_measure
-        for note in measure_notes
-        if isinstance(note, Note)
-    ]
+    original_notes = []
+    positions = []
+    for index, measure_notes in enumerate(notes_per_measure):
+        for note in measure_notes:
+            if isinstance(note, Note):
+                original_notes.append(note)
+                if with_positions:
+                    # read now, while the note's site is still the measure
+                    # (or the voice, which starts with it) it was taken from
+                    positions.append((index, note.offset))
     if len(original_notes) == 0 and len(measures) > 0:
         pwarn(
             f"Part '{part.partName}' yielded no notes; its note-based features "
             "will be empty"
         )
 
+    if with_positions:
+        return (
+            original_notes,
+            measures,
+            sounding_measures,
+            notes_and_rests,
+            melodic_lines,
+            positions,
+        )
     return original_notes, measures, sounding_measures, notes_and_rests, melodic_lines
 
 

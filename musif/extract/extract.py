@@ -2,6 +2,7 @@ import os
 import pickle
 import subprocess
 import types
+from fractions import Fraction
 from pathlib import Path, PurePath
 from subprocess import DEVNULL
 from tempfile import mkstemp
@@ -25,6 +26,7 @@ from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.utils import (cast_mixed_dtypes,
                                  extract_global_time_signature,
+                                 performance_order,
                                  process_musescore_file)
 from musif.logs import ldebug, lerr, linfo, lwarn, pdebug, perr, pinfo, pwarn
 from musif.musescore import constants as mscore_c
@@ -32,6 +34,7 @@ from musif.musicxml import constants as musicxml_c
 from musif.musicxml.tempo import extract_reprise_instruction
 from musif.musicxml import (extract_numeric_tempo, fix_repeats, name_parts,
                             split_layers, to_sounding_pitch)
+from musif.musicxml.common import unfold_score
 from musif.musicxml.scoring import (_extract_abbreviated_part, extract_sound,
                                     to_abbreviation)
 from music21 import converter
@@ -76,7 +79,11 @@ def parse_filename(
        If the xml file can't be parsed for any reason.
     """
     try:
-        score = parse(file_path).makeRests()
+        # Rests fill the voices that end early, up to the length of their
+        # measure as written. Measured against the full bar instead, a pickup
+        # bar got a rest that is not in the score after its notes, and melodic
+        # motion broke the upbeat off its phrase there.
+        score = parse(file_path).makeRests(timeRangeFromBarDuration=True)
         # Every pitch is analysed as it sounds. Transposing instruments
         # (horns, trumpets, clarinets...) are written in another key, and
         # their written notes used to enter the scale-degree and ambitus
@@ -511,14 +518,15 @@ class FeaturesExtractor:
             and score_data[C.DATA_MUSESCORE_SCORE] is not None
         ):
             # first_measure/last_measure are 0-based, end-exclusive measure
-            # INDICES (music21 indicesNotNumbers). playthrough aligns 1:1 with
-            # those indices in both folded and unfolded scores (written mn is
-            # non-monotonic under expand_repeats and lost whole repeats).
+            # INDICES (music21 indicesNotNumbers). playthrough is the 1-based
+            # position of the measure in both folded and unfolded scores
+            # (written mn is non-monotonic under expand_repeats and lost whole
+            # repeats), so measure index = playthrough - 1, also when the
+            # first label comes after the first measure.
             mscore = score_data[C.DATA_MUSESCORE_SCORE]
-            first_playthrough = int(mscore[C.PLAYTHROUGH].min())
+            measure_index = mscore[C.PLAYTHROUGH] - 1
             window_mscore = mscore.loc[
-                (mscore[C.PLAYTHROUGH] >= first_playthrough + first_measure)
-                & (mscore[C.PLAYTHROUGH] < first_playthrough + last_measure)
+                (measure_index >= first_measure) & (measure_index < last_measure)
             ]
             window_mscore.reset_index(inplace=True, drop=True, level=0)
         else:
@@ -578,16 +586,82 @@ class FeaturesExtractor:
         score = parse_filename(
             filename,
             self._cfg.split_keywords,
-            expand_repeats=self._cfg.expand_repeats,
+            # music21's own expansion ignores "Fine" (it replays to the end):
+            # the score is unfolded below, after the MuseScore file
+            expand_repeats=False,
             export_dfs_to=self._cfg.dfs_dir,
             remove_unpitched_objects=self._cfg.remove_unpitched_objects,
         )
+        unfolded = False
+        if self._cfg.expand_repeats:
+            score, unfolded = self._unfold_repeats(score, filename)
         numeric_tempo = extract_numeric_tempo(filename)
         # if filename.suffix == mscore_c.MUSESCORE_FILE_EXTENSION:
         #     os.close(tmp_d)
         #     os.remove(tmp_path)
         filtered_parts = self._filter_parts(score)
-        return score, tuple(filtered_parts), numeric_tempo
+        return score, tuple(filtered_parts), numeric_tempo, unfolded
+
+    def _musescore_path(self, filename: PurePath) -> Optional[Path]:
+        if self._cfg.musescore_dir is None:
+            return None
+        return Path(self._cfg.musescore_dir) / Path(filename).with_suffix(
+            mscore_c.MUSESCORE_FILE_EXTENSION
+        ).name
+
+    def _unfold_repeats(self, score: Score, filename: PurePath) -> Tuple[Score, bool]:
+        """The score with its measures in the order in which they are played,
+        and whether it could be unfolded.
+
+        The order is the one ms3 gives the MuseScore file of the score
+        (repeat signs, voltas, da capo and dal segno to Fine or Coda). It is
+        applied only where the MuseScore file is the MusicXML file annotated,
+        bar for bar (as many measures, each as long). Otherwise the score is
+        left as written, with a warning, and `RepeatsUnfolded` is 0.
+        """
+        name = Path(filename).name
+        mscx = self._musescore_path(filename)
+        if mscx is None or not mscx.exists():
+            lwarn(f"{name}: no MuseScore file to unfold its repeats from; extracted as written")
+            return score, False
+        try:
+            unfolding = performance_order(str(mscx))
+        except Exception as e:
+            lwarn(f"{name}: ms3 could not unfold {mscx.name} ({e!r}); extracted as written")
+            return score, False
+        if unfolding is None:
+            lwarn(f"{name}: ms3 could not unfold {mscx.name}; extracted as written")
+            return score, False
+        order, lengths = unfolding
+        parts = [list(part.getElementsByClass(Measure)) for part in score.parts]
+        if not parts or any(len(measures) != len(lengths) for measures in parts):
+            lwarn(
+                f"{name}: the MuseScore file has {len(lengths)} measures and the "
+                f"score {len(parts[0]) if parts else 0}; extracted as written"
+            )
+            return score, False
+        for index, length in enumerate(lengths):
+            # the longest of the parts: a measure in which half of a split
+            # staff has nothing to play is empty
+            written = max(
+                Fraction(measures[index].duration.quarterLength).limit_denominator(10_000)
+                for measures in parts
+            )
+            if length * 4 != written:
+                lwarn(
+                    f"{name}: measure {index + 1} lasts {written} quarter notes in the "
+                    f"score and {length * 4} in the MuseScore file; extracted as written"
+                )
+                return score, False
+        if order == list(range(1, len(lengths) + 1)) and (
+            extract_reprise_instruction(filename) == 1
+        ):
+            lwarn(
+                f"{name}: the score asks for a reprise that its MuseScore file does "
+                "not encode; extracted as written"
+            )
+            return score, False
+        return unfold_score(score, order), True
 
     def _get_score_data(
         self, filename: PurePath, load_cache: Optional[Path] = None
@@ -606,7 +680,9 @@ class FeaturesExtractor:
 
         if data is None:
             try:
-                score, filtered_parts, numeric_tempo = self._load_score_data(filename)
+                score, filtered_parts, numeric_tempo, unfolded = self._load_score_data(
+                    filename
+                )
             except ParseFileError as e:
                 perr(f"Error while parsing file {filename}")
                 raise e
@@ -620,12 +696,10 @@ class FeaturesExtractor:
                 self._cfg.is_requested_musescore_file()
                 and self._cfg.musescore_dir is not None
             ):
-                filename_ms3 = (
-                    Path(self._cfg.musescore_dir)
-                    / filename.with_suffix(mscore_c.MUSESCORE_FILE_EXTENSION).name
-                )
+                filename_ms3 = self._musescore_path(filename)
                 try:
-                    data_musescore = self._get_harmony_data(filename_ms3)
+                    # the labels follow the same order as the measures
+                    data_musescore = self._get_harmony_data(filename_ms3, unfolded)
                 except ParseFileError as e:
                     perr(f"Error while parsing file {filename_ms3}")
                     raise e
@@ -640,6 +714,7 @@ class FeaturesExtractor:
                 C.DATA_MUSESCORE_SCORE: data_musescore,
                 C.DATA_NUMERIC_TEMPO: numeric_tempo,
                 C.DATA_REPRISE_INSTRUCTION: extract_reprise_instruction(filename),
+                C.DATA_REPEATS_UNFOLDED: int(unfolded),
             }
             if len(self._cfg.precache_hooks) > 0:
                 for hook in self._cfg.precache_hooks:
@@ -661,7 +736,7 @@ class FeaturesExtractor:
         pdebug(f"\nProcessing score {filename}." + info_load_str)
         return data
 
-    def _get_harmony_data(self, filename: PurePath) -> pd.DataFrame:
+    def _get_harmony_data(self, filename: PurePath, unfold: bool = False) -> pd.DataFrame:
         if not filename.exists():
             lerr(f"Musescore file was not found for {filename} file!")
             lerr(
@@ -670,9 +745,7 @@ class FeaturesExtractor:
             return None
         else:
             try:
-                data_musescore = parse_musescore_file(
-                    str(filename), self._cfg.expand_repeats
-                )
+                data_musescore = parse_musescore_file(str(filename), unfold)
                 if not _has_global_key(data_musescore):
                     # one invalid label used to blank the whole row of the
                     # score: every feature, not only the harmonic ones

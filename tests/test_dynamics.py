@@ -134,3 +134,42 @@ class TestSilenceIsNotALevel:
         update_part_objects(SCORE_DATA, data, None, features)
         # one unmarked sounding measure is left out of the weighted mean
         assert features["DynMean_weighted"] == 49
+
+
+class TestAccents:
+    def _part(self, *markings):
+        """p in the first of four sounding measures, then `markings` opening
+        the second measure."""
+        measures = []
+        for index in range(4):
+            measure = Measure(number=index + 1)
+            if index == 0:
+                measure.insert(0, Dynamic("p"))
+            if index == 1:
+                for marking in markings:
+                    measure.insert(0, Dynamic(marking))
+            measure.append(Note("C5", quarterLength=4))
+            measures.append(measure)
+        part_data = {
+            "measures": measures,
+            DATA_SOUNDING_MEASURES: [0, 1, 2, 3],
+            DATA_PART_ABBREVIATION: "vnI",
+        }
+        features = {}
+        update_part_objects(SCORE_DATA, part_data, None, features)
+        return features
+
+    def test_sforzando_marks_are_not_levels(self):
+        # sfz and fz used to become lasting levels above fff (127, 120), like
+        # sf they accent one note
+        for accent in ("sf", "sfz", "fz"):
+            features = self._part(accent)
+            assert features["DynMean"] == 49, accent
+            assert math.isnan(features["DynGrad"]), accent
+
+    def test_sfp_sets_the_level_piano(self):
+        # it used to be a level of 20, below ppp
+        features = self._part("f")
+        assert features["DynMean"] == (49 + 88) / 2
+        measures_with_sfp = self._part("sfp")
+        assert measures_with_sfp["DynMean"] == 49

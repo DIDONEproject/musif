@@ -38,6 +38,11 @@ class TestTimeSignatures:
     def test_simple_triple(self):
         assert get_time_signature_type("3/4") == "simple triple"
 
+    def test_three_eight_is_simple_triple(self):
+        # it used to be classed as compound duple, with 6/8
+        assert get_time_signature_type("3/8") == "simple triple"
+        assert get_time_signature_type("3/16") == "simple triple"
+
     def test_number_of_beats(self):
         assert get_number_of_beats("4/4") == 4
         assert get_number_of_beats("6/8") == 2
@@ -262,3 +267,39 @@ class TestRepriseInstruction:
         from musif.musicxml.tempo import extract_reprise_instruction
 
         assert extract_reprise_instruction(str(tmp_path / "missing.xml")) == "NA"
+
+
+class TestNumericTempo:
+    def _file(self, tmp_path, first_measure):
+        path = tmp_path / "score.xml"
+        path.write_text(
+            '<score-partwise><part id="P1"><measure number="1">'
+            + first_measure
+            + '</measure><measure number="2"><direction><sound tempo="60"/>'
+            "</direction></measure></part></score-partwise>"
+        )
+        return str(path)
+
+    def _value(self, tmp_path, first_measure):
+        from musif.musicxml.tempo import extract_numeric_tempo
+
+        return extract_numeric_tempo(self._file(tmp_path, first_measure))
+
+    def test_tempo_after_another_direction(self, tmp_path):
+        # only the first direction of the measure used to be read
+        measure = (
+            "<direction><direction-type><dynamics><f/></dynamics>"
+            "</direction-type></direction>"
+            '<direction><direction-type><words>Allegro</words></direction-type>'
+            '<sound tempo="132"/></direction>'
+        )
+        assert self._value(tmp_path, measure) == 132
+
+    def test_tempo_stated_in_the_measure(self, tmp_path):
+        assert self._value(tmp_path, '<sound tempo="76"/>') == 76
+
+    def test_software_default_is_not_a_tempo(self, tmp_path):
+        assert self._value(tmp_path, '<direction><sound tempo="120"/></direction>') == "NA"
+
+    def test_only_the_first_measure_counts(self, tmp_path):
+        assert self._value(tmp_path, "") == "NA"

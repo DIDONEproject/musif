@@ -1,4 +1,7 @@
 DATA_NOTES = "notes"
+# for each note of DATA_NOTES: (0-based position of its measure in the part,
+# onset in quarter notes from the start of that measure as written)
+DATA_NOTES_POSITIONS = "notes_positions"
 DATA_NOTES_AND_RESTS = "notes_and_rests"
 DATA_MELODIC_LINES = "melodic_lines"
 DATA_LYRICS = "lyrics"

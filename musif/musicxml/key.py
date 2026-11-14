@@ -1,7 +1,9 @@
 from typing import Tuple
 
+from music21.chord import Chord
 from music21.key import Key
-from music21.stream.base import Score
+from music21.note import Note
+from music21.stream.base import Score, Stream
 
 
 def _get_key_signature(score_key: Key) -> str:
@@ -51,9 +53,34 @@ def get_key_and_mode(score: Score) -> Tuple[Key, str, str]:
       Music21 score to take the info from
     """
 
-    score_key = score.analyze("key")
+    score_key = analyze_key(score)
     mode, tonality = get_name_from_key(score_key)
     return score_key, tonality, mode
+
+
+def analyze_key(score: Score) -> Key:
+    """
+    music21's key analysis of the score (`score.analyze("key")`), run on a
+    separate stream that holds the same pitches and durations.
+
+    The analysis walks the notes of a flattened copy of the score, and every
+    note it walks takes that copy as its active site. Afterwards `note.beat`
+    is computed from the note's position in the whole score modulo the
+    length of a bar, which is wrong after a pickup, a metre change or a short
+    bar, and the dotted figures were read from those beats.
+    """
+    sample = Stream()
+    for element in score.recurse().notes:
+        pitches = [p.nameWithOctave for p in element.pitches]
+        if not pitches:
+            continue
+        if len(pitches) == 1 and not element.isChord:
+            copy = Note(pitches[0])
+        else:
+            copy = Chord(pitches)
+        copy.quarterLength = element.quarterLength
+        sample.append(copy)
+    return sample.analyze("key")
 
 
 def get_name_from_key(score_key: Key) -> Tuple[str, str]:
@@ -79,7 +106,7 @@ def get_name_from_key(score_key: Key) -> Tuple[str, str]:
 
 
 def _get_key(score: Score) -> str:
-    return str(score.analyze("key"))
+    return str(analyze_key(score))
 
 
 def _get_mode(key: str) -> str:

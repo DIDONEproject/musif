@@ -2,6 +2,22 @@
 
 All notable changes to `musif`, newest first.
 
+## v1.4.0
+* Bug fixed in the beats of notes written in voices: after the key analysis they were computed from their position in the whole score, which is wrong after a metre change or a short bar (dotted figures)
+* Relative scale degrees: a note takes the local key at its measure's position in the file and its exact onset (notes in Finale's X bars, in voltas and at mid-bar key changes took the wrong key)
+* Key areas: measures counted by position (second endings and bars excluded from the numbering are no longer lost), the last key ends with its measure and lasts to the end of the piece
+* `Harmony_HarmonicRhythmBeats` and `Quarters` follow the time signature of every measure of the score, labelled or not
+* A pickup bar no longer gets a rest that is not in the score (melodic motion broke the upbeat off its phrase)
+* `NumericTempo` reads the whole first measure, and is empty for 120, the default of notation software
+* `LargestSemitonesAll` and `LargestIntervalAll` report the rising interval when the largest rising and falling ones are equal
+* `TimeSignatureGrouped`: 3/8 is simple triple
+* Dynamics: `sfz` and `fz` are accents like `sf`, not levels; `sfp` sets the level p
+* `#vii%7` is counted with `vii%7`, as `#viio` is with `viio`
+* Documentation: motion breaks at chords, the dynamics vocabulary, what `NumberOfParts` and `Score_VoiceReg` count, and `DoubleDottedRhythm` is not always zero
+* `expand_repeats` unfolds each score in the order that ms3 gives its MuseScore file (music21's expansion ignored *Fine* and replayed to the end); new column `RepeatsUnfolded`
+* Memory: ms3 kept every MuseScore file read in memory (about 40 MB a score); its caches are now emptied after each file
+* Features extracted with previous versions should be extracted again
+
 ## v1.3.1
 * Pitches are analysed as they sound: the parts of transposing instruments are transposed by the interval their file states
 * Bug fixed in the split of a staff shared by two players (dynamics, text and metre changes were lost or misplaced); a staff is split only when its second voice has notes

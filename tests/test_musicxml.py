@@ -371,3 +371,122 @@ class TestSoundingPitch:
         assert self._first_note(at_pitch) == "E-4"
         assert self._key(at_pitch) == -3
         assert self._first_note(violin) == "E-5"
+
+
+class TestPickupBar:
+    def test_no_rest_is_invented_after_the_upbeat(self, tmp_path):
+        # a quarter-note upbeat in 2/4: the bar used to be filled to a whole
+        # bar with a rest after the upbeat, which is not in the score, and
+        # melodic motion broke the upbeat off its phrase there
+        from musif.extract.extract import parse_filename
+
+        path = tmp_path / "pickup.xml"
+        path.write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<score-partwise version="3.1"><part-list>'
+            '<score-part id="P1"><part-name>Violino</part-name>'
+            '<score-instrument id="P1-I1"><instrument-name>Violin</instrument-name>'
+            "<instrument-sound>strings.violin</instrument-sound>"
+            "</score-instrument></score-part></part-list>"
+            '<part id="P1"><measure number="0" implicit="yes"><attributes>'
+            "<divisions>1</divisions><key><fifths>0</fifths></key>"
+            "<time><beats>2</beats><beat-type>4</beat-type></time>"
+            "<clef><sign>G</sign><line>2</line></clef></attributes>"
+            "<note><pitch><step>G</step><octave>4</octave></pitch>"
+            "<duration>1</duration><type>quarter</type></note></measure>"
+            '<measure number="1"><note><pitch><step>C</step><octave>5</octave>'
+            "</pitch><duration>2</duration><type>half</type></note></measure>"
+            "</part></score-partwise>"
+        )
+        score = parse_filename(str(path), [])
+        pickup, first = score.parts[0].getElementsByClass(Measure)
+        assert len(pickup.recurse().getElementsByClass(Rest)) == 0
+        assert pickup.duration.quarterLength == 1.0
+        lines = get_notes_and_measures(score.parts[0])[-1]
+        assert _names(lines[0]) == ["G4", "C5"]
+
+
+class TestKeyAnalysisLeavesTheNotesAlone:
+    def test_beats_survive_the_key_analysis(self):
+        # music21's key analysis walks the notes of a flattened copy of the
+        # score and leaves them in it. A note written in a voice then found
+        # its beat from its position in the whole score modulo the bar: after
+        # a pickup, the downbeat of bar 1 read as beat 2
+        from music21.meter import TimeSignature
+
+        from musif.musicxml.key import get_key_and_mode
+
+        part = Part()
+        pickup = Measure(number=0)
+        pickup.append(TimeSignature("4/4"))
+        pickup.append(Note("G4", quarterLength=1.0))
+        pickup.paddingLeft = 3.0
+        part.append(pickup)
+        for number in (1, 2):
+            part.append(_two_voice_measure(number, ["C5"], ["E4"]))
+        score = Score([part])
+        notes = get_notes_and_measures(part)[0]
+        before = [float(n.beat) for n in notes]
+        get_key_and_mode(score)
+        assert [float(n.beat) for n in notes] == before
+        assert before[1:] == [1.0] * 4
+
+
+class TestUnfoldScore:
+    def _score(self):
+        """4/4 in measures 1-2 (only measure 1 states it), 3/8 in measure 3."""
+        from music21.meter import TimeSignature
+
+        part = Part()
+        part.partName = "Violino I"
+        for number, metre, pitches, length in (
+            (1, "4/4", ("C5", "D5", "E5", "F5"), 1.0),
+            (2, None, ("G5", "A5", "B5", "C6"), 1.0),
+            (3, "3/8", ("D6",), 1.5),
+        ):
+            measure = Measure(number=number)
+            if metre:
+                measure.append(TimeSignature(metre))
+            for pitch in pitches:
+                measure.append(Note(pitch, quarterLength=length))
+            part.append(measure)
+        return Score([part])
+
+    def test_measures_follow_the_order_played(self):
+        from musif.musicxml.common import unfold_score
+
+        unfolded = unfold_score(self._score(), [1, 2, 3, 1])
+        measures = list(unfolded.parts[0].getElementsByClass(Measure))
+        assert [m.number for m in measures] == [1, 2, 3, 1]
+        assert [n.nameWithOctave for n in measures[3].notes] == ["C5", "D5", "E5", "F5"]
+        assert measures[3] is not measures[0]
+        assert unfolded.parts[0].partName == "Violino I"
+
+    def test_the_measure_jumped_to_restates_its_metre(self):
+        # a dal segno returns from a 3/8 measure to measure 2, which states no
+        # time signature: without it restated, the reprise was read in 3/8
+        from musif.musicxml.common import unfold_score
+
+        unfolded = unfold_score(self._score(), [1, 2, 3, 2])
+        measures = list(unfolded.parts[0].getElementsByClass(Measure))
+        assert measures[3].timeSignature.ratioString == "4/4"
+        assert [float(n.beat) for n in measures[3].notes] == [1.0, 2.0, 3.0, 4.0]
+        # measures played in their own order are not touched
+        assert measures[1].timeSignature is None
+
+
+class TestUnfoldingFallback:
+    def test_without_a_musescore_file_the_score_stays_as_written(self, tmp_path):
+        from musif.extract.extract import FeaturesExtractor
+        from tests.conftest import SCORES_DIR, extraction_config
+
+        written = FeaturesExtractor(
+            extraction_config(SCORES_DIR, tmp_path, features=["core", "tempo"])
+        ).extract()
+        unfolded = FeaturesExtractor(
+            extraction_config(
+                SCORES_DIR, tmp_path, features=["core", "tempo"], expand_repeats=True
+            )
+        ).extract()
+        assert list(written["Measures"]) == list(unfolded["Measures"])
+        assert list(unfolded["RepeatsUnfolded"]) == [0, 0]

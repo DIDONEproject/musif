@@ -8,12 +8,20 @@ from musif.musicxml.tempo import get_number_of_beats, get_quarter_length
 from .constants import *
 
 
-def get_harmonic_rhythm(ms3_table, number_of_measures=None) -> dict:
+def get_harmonic_rhythm(
+    ms3_table, number_of_measures=None, measure_time_signatures=None
+) -> dict:
     """Harmonic annotations per measure and per beat.
 
     The denominator covers ALL measures of the piece (or window): pass the
     real measure count as ``number_of_measures``; without it, the highest
     playthrough measure carrying a label is used as an approximation.
+
+    ``measure_time_signatures`` (the time signature in force in each measure
+    of the score, as the tempo module gives it) sums beats and quarter notes
+    measure by measure. Without it, the metre is taken from the labelled
+    measures and carried over the unlabelled ones, which miscounts a metre
+    change in a stretch without labels.
     """
     hr = {}
     numerals = [n for n in ms3_table.numeral.dropna().tolist() if str(n) != "@none"]
@@ -29,15 +37,22 @@ def get_harmonic_rhythm(ms3_table, number_of_measures=None) -> dict:
         number_of_chords / number_of_measures if number_of_measures else 0.0
     )
 
-    total_beats = _total_beats(playthrough, time_signatures, number_of_measures)
+    if measure_time_signatures and all(
+        ts not in (None, "NA") for ts in measure_time_signatures
+    ):
+        total_beats = sum(get_number_of_beats(ts) for ts in measure_time_signatures)
+        total_quarters = sum(
+            get_quarter_length(ts) for ts in measure_time_signatures
+        )
+    else:
+        total_beats = _total_beats(playthrough, time_signatures, number_of_measures)
+        # per quarter note: unlike the beat, the quarter note does not change
+        # with the metre, so this rate is comparable between arias in 4/4,
+        # 2/2, 3/8...
+        total_quarters = _total_beats(
+            playthrough, time_signatures, number_of_measures, get_quarter_length
+        )
     harmonic_rhythm_beats = number_of_chords / total_beats if total_beats else 0.0
-
-    # per quarter note: unlike the beat, the quarter note does not change
-    # with the metre, so this rate is comparable between arias in 4/4, 2/2,
-    # 3/8...
-    total_quarters = _total_beats(
-        playthrough, time_signatures, number_of_measures, get_quarter_length
-    )
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
@@ -67,7 +82,13 @@ def _total_beats(
     return total
 
 
-def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signatures):
+def get_measures_per_key(
+    keys_options, measures, keys, mc_onsets, time_signatures, last_measure=None
+):
+    """Measures spent in each local key. The last key lasts to the end of
+    ``last_measure`` (the last measure of the piece; by default the last
+    annotated one): the final chord is held to the end of its measure, and
+    the measures after the last label stay in the last key."""
     key_measures = {p: 0 for p in keys_options}
     last_key = 0
     done = 0
@@ -91,15 +112,13 @@ def get_measures_per_key(keys_options, measures, keys, mc_onsets, time_signature
             last_key = key
             starting_measure = new_measures[i] - 1
 
-    # last!
+    # last! It ends with its last measure, not at the onset of its last label
+    # (that onset used to be added as an extra fraction of a measure)
+    end = new_measures[numberofmeasures - 1]
+    if last_measure is not None and last_measure > end:
+        end = last_measure
     num_measures, _ = compute_number_of_measures(
-        done,
-        starting_measure,
-        new_measures[numberofmeasures - 1],
-        new_measures[numberofmeasures - 1] + 1,
-        _measure_fraction(
-            time_signatures[numberofmeasures - 1], mc_onsets[numberofmeasures - 1]
-        ),
+        done, starting_measure, end, end + 1, 0.0
     )
 
     key_measures[last_key] += num_measures
@@ -149,7 +168,12 @@ def compute_number_of_measures(
 ###################
 
 
-def get_keyareas(lausanne_table):
+def get_keyareas(lausanne_table, number_of_measures=None):
+    """Key areas: the share of measures in each local key, and the share of
+    key areas (blocks of consecutive labels in one key). Measures are counted
+    by their position in the file (``playthrough``); with
+    ``number_of_measures`` (the measures of the piece), the measures after
+    the last label count in the last key."""
     # row-aligned extraction: independent dropna() calls used to shift the
     # zip whenever one column had a gap
     rows = lausanne_table[["localkey", "playthrough", "mc_onset", "timesig"]]
@@ -170,8 +194,15 @@ def get_keyareas(lausanne_table):
     beats = [0 if b != b else b for b in rows.mc_onset.tolist()]
     time_signatures = rows.timesig.tolist()
 
+    if number_of_measures is not None and number_of_measures != number_of_measures:
+        number_of_measures = None  # NaN
     key_measures = get_measures_per_key(
-        list(set(keys)), measures, keys, beats, time_signatures
+        list(set(keys)),
+        measures,
+        keys,
+        beats,
+        time_signatures,
+        last_measure=int(number_of_measures) if number_of_measures else None,
     )
 
     total_measures = float(sum(list(key_measures.values())))
@@ -433,9 +464,10 @@ def get_chords(harmonic_analysis):
         else:
             numerals_and_types.append(str(numeral) + _seventh_suffix(chord_type))
 
-    # #viio chords are counted together with viio
+    # the leading-tone chord is one column in both modes: #viio, #viio7 and
+    # #vii%7 (minor keys) are counted with viio, viio7 and vii%7
     numerals_and_types = [
-        "viio" + label[len("#viio"):] if label.startswith("#viio") else label
+        label[1:] if label.startswith(("#viio", "#vii%")) else label
         for label in numerals_and_types
     ]
 

@@ -14,6 +14,8 @@ DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
 DATA_NUMERIC_TEMPO = "numeric_tempo"
 DATA_REPRISE_INSTRUCTION = "reprise_instruction"
+# 1 when the score was unfolded in the order in which its measures are played
+DATA_REPEATS_UNFOLDED = "repeats_unfolded"
 
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"
@@ -26,6 +28,8 @@ VOICES_LIST = ["sop", "ten", "alt", "bar", "bbar", "bass"]
 
 PLAYTHROUGH = "playthrough"
 """Constant for playthrough (count fo measures) added to ms3 dataframe"""
+MEASURE_ACTUAL_DURATION = "act_dur"
+"""Actual length (whole notes) of the measure of each label, added to ms3 dataframe"""
 
 GLOBAL_TIME_SIGNATURE = "global_ts"
 """The name used for the column indicating the global time signature"""

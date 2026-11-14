@@ -11,9 +11,10 @@ TEXTEXPRESSION = "TextExpression"
 TIMESIGNATURE = "TimeSignature"
 REST = "Rest"
 
+# accents on one note, not levels: they are skipped
+DYNAMIC_ACCENTS = ("sf", "sfz", "fz")
+
 DYNAMIC_VALUES = {
-    "sfz": 127,
-    "fz": 120,
     "ffff": 116,
     "fff": 112,
     "ff": 101,
@@ -33,7 +34,8 @@ DYNAMIC_VALUES = {
     "p assai": 42,
     "pp": 36,
     "ppp": 24,
-    "sfp": 20,
+    # a sforzando followed by piano: the accent is skipped, the level is p
+    "sfp": 49,
     "pppp": 12,
     "sempre pp": 36,
     "sotto voce assai": 36,

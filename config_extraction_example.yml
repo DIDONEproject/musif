@@ -22,7 +22,9 @@ cache_dir: null
 # They are useful for allowing interoperability with data science packages.
 dfs_dir: null
 
-# Boolean flag to expand repetitions of the music score or not.
+# Analyse every score as it is played: its measures unfolded in the order that ms3 gives
+# its MuseScore file (repeat signs, voltas, da capo and dal segno to Fine or Coda).
+# Needs musescore_dir; the column RepeatsUnfolded says which scores could be unfolded.
 expand_repeats: false
 
 # Size of windows (in number of measures) when extracting features of the score in a.

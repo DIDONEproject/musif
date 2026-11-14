@@ -47,13 +47,15 @@ def get_time_signature_type(time_signature: str) -> str:
     ]:
         return "simple duple"
 
-    elif time_signature in ["6/8", "3/8", "6/2", "6/4", "6/16"]:
+    elif time_signature in ["6/8", "6/2", "6/4", "6/16"]:
         return "compound duple"
 
     elif time_signature in ["12/2", "12/4", "12/8", "12/16"]:
         return "compound quadruple"
 
-    elif time_signature in ["3/2", "3/4", "3/16"]:
+    # 3/8 is simple triple, as 3/4 and 3/16 are (it used to be classed as
+    # compound duple). NumberOfBeats still counts one beat per bar in 3/8.
+    elif time_signature in ["3/2", "3/4", "3/8", "3/16"]:
         return "simple triple"
 
     elif time_signature in ["9/2", "9/4", "9/8", "9/16"]:
@@ -370,10 +372,17 @@ def extract_reprise_instruction(file_path: str):
     return 0
 
 
+# the tempo that notation software writes when nobody sets one: in a score it
+# cannot be told from a tempo chosen by the engraver, so it is not reported
+DEFAULT_SOFTWARE_TEMPO = 120
+
+
 def extract_numeric_tempo(file_path: str) -> Optional[int]:
     """
-    Finds the numeric tempo in a musixml file by looking at the tempo marking in
-    the xml code.
+    Finds the numeric tempo in a musixml file: the first tempo stated in the
+    first measure of the first part (`<sound tempo="...">`, in a direction or
+    directly in the measure). It is `"NA"` when that measure states none, and
+    also when it states 120, the default of notation software.
 
     Parameters
     ----------
@@ -388,13 +397,10 @@ def extract_numeric_tempo(file_path: str) -> Optional[int]:
 
     root = tree.getroot()
     try:
-        tempo = int(
-            root.find("part")
-            .find("measure")
-            .find("direction")
-            .find("sound")
-            .get("tempo")
-        )
-    except:
-        tempo = "NA"
+        sound = root.find("part").find("measure").find(".//sound[@tempo]")
+        tempo = int(round(float(sound.get("tempo"))))
+    except Exception:
+        return "NA"
+    if tempo == DEFAULT_SOFTWARE_TEMPO:
+        return "NA"
     return tempo

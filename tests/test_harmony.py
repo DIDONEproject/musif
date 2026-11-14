@@ -47,6 +47,27 @@ class TestHarmonicRhythm:
         assert abs(result["Harmony_HarmonicRhythmBeats"] - 240 / 380) < 1e-12
 
 
+class TestHarmonicRhythmFollowsTheScore:
+    def test_unlabelled_measures_keep_their_own_metre(self):
+        # measures 1-2 in 2/4 carry labels, measures 3-4 are 4/4 without any:
+        # the metre used to be carried over from the labelled measures
+        table = pd.DataFrame(
+            [
+                {"playthrough": 1, "timesig": "2/4", "numeral": "I", "mc_onset": 0},
+                {"playthrough": 2, "timesig": "2/4", "numeral": "V", "mc_onset": 0},
+            ]
+        )
+        result = get_harmonic_rhythm(
+            table, number_of_measures=4,
+            measure_time_signatures=["2/4", "2/4", "4/4", "4/4"],
+        )
+        assert result["Harmony_HarmonicRhythmBeats"] == 2 / 12
+        assert result["Harmony_HarmonicRhythmQuarters"] == 2 / 12
+        # without the score's metre, the old estimate
+        old = get_harmonic_rhythm(table, number_of_measures=4)
+        assert old["Harmony_HarmonicRhythmBeats"] == 2 / 8
+
+
 class TestRiemannianClassifier:
     def test_vii_family_by_mode(self):
         # the early return used to collapse all of these into 'D'
@@ -80,6 +101,20 @@ class TestChordNaming:
         assert not any("#viio" in name for name in chords)
         assert "Harmony_Chord_IV7_Count" in chords
         assert not any("MM7" in name for name in chords)
+
+    def test_half_diminished_leading_tone_chord_folds_too(self):
+        table = pd.DataFrame(
+            {
+                "relativeroot": [float("nan")] * 2,
+                "localkey": ["i", "I"],
+                "chord": ["#vii%7", "vii%7"],
+                "numeral": ["#vii", "vii"],
+                "chord_type": ["%7", "%7"],
+            }
+        )
+        chords, _, _ = get_chords(table)
+        assert chords["Harmony_Chord_vii%7_Count"] == 2
+        assert not any("#vii" in name for name in chords)
 
     def test_chord_types(self):
         assert get_chord_type("M") == "major triad"
@@ -200,6 +235,36 @@ class TestKeyAreasPlaythrough:
         # I holds mm 1-2 plus the first third of m 3 (0.25 of a whole note
         # in 3/4): (2 + 1/3) / 4
         assert abs(areas["Harmony_Key_I_PercentageMeasures"] - (2 + 1 / 3) / 4) < 1e-9
+
+    def test_last_key_ends_with_its_measure(self):
+        # the last label sits at the last eighth of measure 4: the last key
+        # used to gain that onset as an extra fraction of a measure
+        from musif.extract.features.harmony.utils import get_keyareas
+
+        table = _rows(
+            [
+                {"localkey": "I", "playthrough": 1, "mc_onset": 0, "timesig": "4/4"},
+                {"localkey": "V", "playthrough": 3, "mc_onset": 0, "timesig": "4/4"},
+                {"localkey": "V", "playthrough": 4, "mc_onset": 0.875,
+                 "timesig": "4/4"},
+            ]
+        )
+        areas = get_keyareas(table)
+        assert areas["Harmony_Key_I_PercentageMeasures"] == 0.5
+        assert areas["Harmony_Key_V_PercentageMeasures"] == 0.5
+
+    def test_measures_after_the_last_label_stay_in_the_last_key(self):
+        from musif.extract.features.harmony.utils import get_keyareas
+
+        table = _rows(
+            [
+                {"localkey": "I", "playthrough": 1, "mc_onset": 0, "timesig": "4/4"},
+                {"localkey": "V", "playthrough": 3, "mc_onset": 0, "timesig": "4/4"},
+            ]
+        )
+        areas = get_keyareas(table, number_of_measures=6)
+        assert areas["Harmony_Key_I_PercentageMeasures"] == 2 / 6
+        assert areas["Harmony_Key_V_PercentageMeasures"] == 4 / 6
 
     def test_unfolded_repeats_follow_playthrough(self):
         from musif.extract.features.harmony.utils import get_keyareas

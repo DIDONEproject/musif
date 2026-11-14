@@ -1,9 +1,11 @@
-from typing import List
+from typing import List, Optional
 from musif.extract.features.core.constants import FILE_NAME, NUM_MEASURES
 
+from music21.stream import Measure
 from pandas import DataFrame
 
 from musif.config import ExtractConfiguration
+from musif.extract.features.tempo.handler import extract_time_signatures
 from musif.logs import perr, pwarn
 from .constants import *
 from .utils import (
@@ -14,13 +16,17 @@ from .utils import (
     get_keyareas,
     get_numerals,
 )
-from ...constants import DATA_MUSESCORE_SCORE
+from ...constants import DATA_MUSESCORE_SCORE, DATA_SCORE
 
 
-def get_harmony_data(score_features: dict, harmonic_analysis: DataFrame) -> dict:
+def get_harmony_data(
+    score_features: dict,
+    harmonic_analysis: DataFrame,
+    measure_time_signatures: Optional[List[str]] = None,
+) -> dict:
 
     harmonic_rhythm = get_harmonic_rhythm(
-        harmonic_analysis, score_features.get(NUM_MEASURES)
+        harmonic_analysis, score_features.get(NUM_MEASURES), measure_time_signatures
     )
     numerals = get_numerals(harmonic_analysis)
     chord_types = get_chord_types(harmonic_analysis)
@@ -45,8 +51,16 @@ def update_score_objects(
             features[HARMONY_AVAILABLE] = 0
             return features
 
-        all_harmonic_info = get_harmony_data(score_features, harmonic_analysis)
-        keyareas = get_keyareas(harmonic_analysis)
+        # the metre of every measure of the score (the same first part that
+        # gives `Measures`), so that beats follow the time signature in force
+        _, _, measure_time_signatures, _, _ = extract_time_signatures(
+            list(score_data[DATA_SCORE].parts[0].getElementsByClass(Measure)),
+            score_data,
+        )
+        all_harmonic_info = get_harmony_data(
+            score_features, harmonic_analysis, measure_time_signatures
+        )
+        keyareas = get_keyareas(harmonic_analysis, score_features.get(NUM_MEASURES))
         chords, chords_grouping1, chords_grouping2 = get_chords(harmonic_analysis)
 
         features[f"{HARMONIC_RHYTHM}"] = all_harmonic_info[HARMONIC_RHYTHM]

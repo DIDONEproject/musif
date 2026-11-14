@@ -4,21 +4,31 @@ from typing import Dict, List
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import (DATA_MUSESCORE_SCORE,
-                                     DATA_PART_ABBREVIATION)
-from musif.extract.features.core.constants import DATA_NOTES
+                                     DATA_PART_ABBREVIATION,
+                                     DATA_REPEATS_UNFOLDED)
+from musif.extract.features.core.constants import DATA_NOTES, DATA_NOTES_POSITIONS
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 
 from .constants import *
 from .utils import get_emphasised_scale_degrees_relative
 
 
+def _relative_degrees(part_data: dict, score_data: dict, cfg: ExtractConfiguration):
+    return get_emphasised_scale_degrees_relative(
+        part_data[DATA_NOTES],
+        score_data,
+        # whether this score was unfolded (an unfolded run leaves as written
+        # the scores it cannot unfold)
+        expanded=bool(score_data.get(DATA_REPEATS_UNFOLDED)),
+        positions=part_data.get(DATA_NOTES_POSITIONS),
+    )
+
+
 def update_part_objects(
     score_data: dict, part_data: dict, cfg: ExtractConfiguration, part_features: dict
 ):
     if score_data[DATA_MUSESCORE_SCORE] is not None:
-        notes_per_degree_relative = get_emphasised_scale_degrees_relative(
-            part_data[DATA_NOTES], score_data, expanded=cfg.expand_repeats
-        )
+        notes_per_degree_relative = _relative_degrees(part_data, score_data, cfg)
         if notes_per_degree_relative is None: # No harmonic data in the musescore file (or window)
             return
 
@@ -52,9 +62,7 @@ def update_score_objects(
     score_notes_per_degree = {}
 
     for part_data in parts_data:
-        notes_per_degree_relative = get_emphasised_scale_degrees_relative(
-            part_data[DATA_NOTES], score_data, expanded=cfg.expand_repeats
-        )
+        notes_per_degree_relative = _relative_degrees(part_data, score_data, cfg)
         if notes_per_degree_relative is None:
             # no harmonic data in the musescore file (or window)
             continue
