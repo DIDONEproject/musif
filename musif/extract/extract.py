@@ -76,7 +76,11 @@ def parse_filename(
        If the xml file can't be parsed for any reason.
     """
     try:
-        score = parse(file_path).makeRests()
+        # Rests fill the voices that end early, up to the length of their
+        # measure as written. Measured against the full bar instead, a pickup
+        # bar got a rest that is not in the score after its notes, and melodic
+        # motion broke the upbeat off its phrase there.
+        score = parse(file_path).makeRests(timeRangeFromBarDuration=True)
         # Every pitch is analysed as it sounds. Transposing instruments
         # (horns, trumpets, clarinets...) are written in another key, and
         # their written notes used to enter the scale-degree and ambitus
