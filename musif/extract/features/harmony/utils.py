@@ -464,9 +464,10 @@ def get_chords(harmonic_analysis):
         else:
             numerals_and_types.append(str(numeral) + _seventh_suffix(chord_type))
 
-    # #viio chords are counted together with viio
+    # the leading-tone chord is one column in both modes: #viio, #viio7 and
+    # #vii%7 (minor keys) are counted with viio, viio7 and vii%7
     numerals_and_types = [
-        "viio" + label[len("#viio"):] if label.startswith("#viio") else label
+        label[1:] if label.startswith(("#viio", "#vii%")) else label
         for label in numerals_and_types
     ]
 
