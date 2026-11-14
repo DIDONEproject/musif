@@ -150,6 +150,111 @@ class TestRelativeDegrees:
         del part
 
 
+def _score_with_x_bar():
+    """A score whose third measure is Finale's unnumbered "X1" bar: music21
+    gives it the number of the bar before it (2), while ms3 numbers it 3."""
+    from fractions import Fraction
+
+    from music21.stream import Score
+
+    from musif.musicxml.common import get_notes_and_measures
+
+    part = Part()
+    for number, suffix, pitches in (
+        (1, None, ["C4", "C4", "C4"]),
+        (2, None, ["C4", "C4", "C4"]),
+        (2, "X1", ["G4", "G4", "G4"]),
+        (3, None, ["G4", "G4", "G4"]),
+    ):
+        measure = Measure(number=number)
+        measure.numberSuffix = suffix
+        if number == 1:
+            measure.append(TimeSignature("3/4"))
+        for pitch in pitches:
+            measure.append(Note(pitch, quarterLength=1.0))
+        part.append(measure)
+    score = Score([part])
+    notes, *_, positions = get_notes_and_measures(part, with_positions=True)
+    table = pd.DataFrame(
+        [
+            {"mc": 1, "mn": 1, "playthrough": 1, "mc_onset": Fraction(0),
+             "timesig": "3/4", "localkey": "I", "act_dur": Fraction(3, 4)},
+            {"mc": 3, "mn": 3, "playthrough": 3, "mc_onset": Fraction(0),
+             "timesig": "3/4", "localkey": "V", "act_dur": Fraction(3, 4)},
+            {"mc": 4, "mn": 4, "playthrough": 4, "mc_onset": Fraction(0),
+             "timesig": "3/4", "localkey": "V", "act_dur": Fraction(3, 4)},
+        ]
+    )
+    score_data = {
+        DATA_MUSESCORE_SCORE: table,
+        "score": score,
+        "key": "C major",
+        "file": "synthetic",
+    }
+    return score, notes, positions, score_data
+
+
+class TestRelativeDegreesByPosition:
+    def test_x_bar_takes_the_key_of_its_own_position(self):
+        # the G major passage starts in the X bar: by printed number the bar
+        # was read as bar 2 (C major), and its Gs counted as degree 5
+        score, notes, positions, score_data = _score_with_x_bar()
+        counts = get_emphasised_scale_degrees_relative(
+            notes, score_data, positions=positions
+        )
+        assert counts["1"] == 12
+        assert counts["5"] == 0
+        del score
+
+    def test_onset_of_a_mid_measure_change_is_exact(self):
+        # 3/8, key change on the fifth sixteenth (5/16 of a whole note): the
+        # note on it used to be compared through a float beat and could keep
+        # the old key
+        from fractions import Fraction
+
+        from music21.stream import Score
+
+        from musif.musicxml.common import get_notes_and_measures
+
+        part = Part()
+        measure = Measure(number=1)
+        measure.append(TimeSignature("3/8"))
+        for pitch in ["C4", "C4", "C4", "C4", "G4", "G4"]:
+            measure.append(Note(pitch, quarterLength=0.25))
+        part.append(measure)
+        score = Score([part])
+        notes, *_, positions = get_notes_and_measures(part, with_positions=True)
+        table = pd.DataFrame(
+            [
+                {"mc": 1, "mn": 1, "playthrough": 1, "mc_onset": Fraction(0),
+                 "timesig": "3/8", "localkey": "I", "act_dur": Fraction(3, 8)},
+                {"mc": 1, "mn": 1, "playthrough": 1, "mc_onset": Fraction(1, 4),
+                 "timesig": "3/8", "localkey": "V", "act_dur": Fraction(3, 8)},
+            ]
+        )
+        score_data = {DATA_MUSESCORE_SCORE: table, "score": score,
+                      "key": "C major", "file": "synthetic"}
+        counts = get_emphasised_scale_degrees_relative(
+            notes, score_data, positions=positions
+        )
+        assert counts["1"] == 6
+        del score
+
+    def test_files_barred_differently_fall_back_to_printed_numbers(self):
+        # the analysis has a bar of another length at that position (the
+        # MuseScore file was rebarred): positions cannot be trusted
+        from fractions import Fraction
+
+        score, notes, positions, score_data = _score_with_x_bar()
+        score_data[DATA_MUSESCORE_SCORE].loc[1, "act_dur"] = Fraction(2, 4)
+        counts = get_emphasised_scale_degrees_relative(
+            notes, score_data, positions=positions
+        )
+        # by printed number the X bar is bar 2, in C: its Gs are degree 5
+        assert counts["5"] == 3
+        del score
+
+
 class TestDegreeGrouping:
     def _frame(self, prefix):
         return pd.DataFrame(
