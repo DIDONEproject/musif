@@ -18,6 +18,28 @@ file_names = []
 repeat_bracket = False
 
 
+def release_ms3_caches() -> None:
+    """
+    Empty the caches that ms3 keeps on the methods of its MuseScore parser.
+
+    ms3 (2.4) decorates methods of `_MSCX_bs4` and `Annotations` with
+    `functools.lru_cache`, whose cache belongs to the class: every file ever
+    parsed stayed in memory with its whole parse tree and its tables, about
+    40 MB a score, until a run of the corpus filled the swap. musif never
+    reads a file twice, so the caches are emptied once a file has been read.
+    """
+    try:
+        from ms3.annotations import Annotations
+        from ms3.bs4_parser import _MSCX_bs4
+    except ImportError:
+        return
+    for owner in (_MSCX_bs4, Annotations):
+        for attribute in vars(owner).values():
+            method = attribute.fget if isinstance(attribute, property) else attribute
+            if hasattr(method, "cache_clear"):
+                method.cache_clear()
+
+
 def process_musescore_file(file_path: str, expand_repeats: bool = False) -> DataFrame:
     """
     Given a mscx file name, parses the file using ms3 library and returns a dataframe containing all harmonic information.
@@ -35,6 +57,13 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
         Dataframe containing harmonic information
     """
 
+    try:
+        return _harmonic_analysis(file_path, expand_repeats)
+    finally:
+        release_ms3_caches()
+
+
+def _harmonic_analysis(file_path: str, expand_repeats: bool) -> DataFrame:
     msc3_score = ms3.score.Score(file_path, logger_cfg={"level": "ERROR"})
     if expand_repeats:
         harmonic_analysis = msc3_score.mscx.expanded(unfold=True)
@@ -74,9 +103,12 @@ def performance_order(file_path: str) -> Optional[Tuple[List[int], List[Fraction
     file_path: str
         Path to mscx file
     """
-    msc3_score = ms3.score.Score(file_path, logger_cfg={"level": "ERROR"})
-    folded = msc3_score.mscx.measures()
-    unfolded = msc3_score.mscx.measures(unfold=True)
+    try:
+        msc3_score = ms3.score.Score(file_path, logger_cfg={"level": "ERROR"})
+        folded = msc3_score.mscx.measures()
+        unfolded = msc3_score.mscx.measures(unfold=True)
+    finally:
+        release_ms3_caches()
     if folded is None or unfolded is None or len(unfolded) == 0:
         return None
     order = [int(mc) for mc in unfolded["mc"]]
