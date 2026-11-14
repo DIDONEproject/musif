@@ -4,7 +4,8 @@ from typing import Dict, List
 from musif.config import ExtractConfiguration
 from musif.extract.common import _filter_parts_data
 from musif.extract.constants import (DATA_MUSESCORE_SCORE,
-                                     DATA_PART_ABBREVIATION)
+                                     DATA_PART_ABBREVIATION,
+                                     DATA_REPEATS_UNFOLDED)
 from musif.extract.features.core.constants import DATA_NOTES, DATA_NOTES_POSITIONS
 from musif.extract.features.prefix import get_part_feature, get_score_feature
 
@@ -16,7 +17,9 @@ def _relative_degrees(part_data: dict, score_data: dict, cfg: ExtractConfigurati
     return get_emphasised_scale_degrees_relative(
         part_data[DATA_NOTES],
         score_data,
-        expanded=cfg.expand_repeats,
+        # whether this score was unfolded (an unfolded run leaves as written
+        # the scores it cannot unfold)
+        expanded=bool(score_data.get(DATA_REPEATS_UNFOLDED)),
         positions=part_data.get(DATA_NOTES_POSITIONS),
     )
 

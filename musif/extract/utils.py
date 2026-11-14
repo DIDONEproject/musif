@@ -1,5 +1,6 @@
 import itertools
-from typing import Union
+from fractions import Fraction
+from typing import List, Optional, Tuple, Union
 
 import ms3
 import music21 as m21
@@ -26,7 +27,8 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     file_path: str
         Path to mscx file
     expand_repeats: bool
-        Directory path to musescore file
+        Whether to unfold the labels in the order the measures are played
+        (repeats, da capo, dal segno), as `performance_order` gives it
     Returns
     -------
     harmonic_analysis: str
@@ -34,16 +36,10 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
     """
 
     msc3_score = ms3.score.Score(file_path, logger_cfg={"level": "ERROR"})
-    harmonic_analysis = msc3_score.mscx.expanded()
-    harmonic_analysis.reset_index(inplace=True)
     if expand_repeats:
         harmonic_analysis = msc3_score.mscx.expanded(unfold=True)
         harmonic_analysis.reset_index(inplace=True)
-        # unfolded_mc=msc3_score.mscx.measures().set_index("mc").next
-        # mn = next2sequence(unfolded_mc)
-        # mn = ms3.utils.next2sequence(unfolded_mc)
-        # mn = pd.Series(mn, name="mc_playthrough")
-        # harmonic_analysis = ms3.utils.unfold_repeats(harmonic_analysis, mn)
+        # the position of the measure in the unfolded sequence (1, 2, 3...)
         harmonic_analysis.rename(columns={"mc_playthrough": PLAYTHROUGH}, inplace=True)
     else:
         harmonic_analysis = msc3_score.mscx.expanded()
@@ -53,16 +49,42 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
         # bars excluded from the count, so bars collapsed when it served as
         # the counter (it did unless the first label sat in a pickup bar)
         harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mc"]
-        # the actual length of each label's measure (whole notes), so that the
-        # annotated measures can be matched with the score's, bar for bar
-        try:
-            act_dur = msc3_score.mscx.measures().set_index("mc")["act_dur"]
-            harmonic_analysis[MEASURE_ACTUAL_DURATION] = harmonic_analysis["mc"].map(
-                act_dur
-            )
-        except Exception:
-            pass
+    # the actual length of each label's measure (whole notes), so that the
+    # annotated measures can be matched with the score's, bar for bar
+    try:
+        act_dur = msc3_score.mscx.measures().set_index("mc")["act_dur"]
+        harmonic_analysis[MEASURE_ACTUAL_DURATION] = harmonic_analysis["mc"].map(
+            act_dur
+        )
+    except Exception:
+        pass
     return harmonic_analysis
+
+
+def performance_order(file_path: str) -> Optional[Tuple[List[int], List[Fraction]]]:
+    """
+    The order in which the measures of a MuseScore file are played, following
+    its repeat signs, voltas and jumps (da capo, dal segno, al Fine, al Coda),
+    as ms3 unfolds them: the 1-based position (``mc``) of each measure played.
+    Also the actual length of every measure of the file, in whole notes, in
+    the order of the file. None when ms3 cannot unfold the file.
+
+    Parameters
+    ----------
+    file_path: str
+        Path to mscx file
+    """
+    msc3_score = ms3.score.Score(file_path, logger_cfg={"level": "ERROR"})
+    folded = msc3_score.mscx.measures()
+    unfolded = msc3_score.mscx.measures(unfold=True)
+    if folded is None or unfolded is None or len(unfolded) == 0:
+        return None
+    order = [int(mc) for mc in unfolded["mc"]]
+    lengths = [
+        Fraction(str(length))
+        for _, length in sorted(zip(folded["mc"], folded["act_dur"]))
+    ]
+    return order, lengths
 
 
 def expand_score_repetitions(score, repeat_elements: list):

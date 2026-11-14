@@ -1,6 +1,7 @@
 TEMPO = "Tempo"
 NUMERIC_TEMPO = "NumericTempo"
 REPRISE_INSTRUCTION = "RepriseInstruction"
+REPEATS_UNFOLDED = "RepeatsUnfolded"
 TIME_SIGNATURE = "TimeSignature"
 TIME_SIGNATURES = "AllTimeSignatures"
 TS_MEASURES = "TimeSignatureMeasures"

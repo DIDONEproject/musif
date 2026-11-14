@@ -10,6 +10,7 @@ from music21.meter import TimeSignature as M21TimeSignature
 from musif.config import ExtractConfiguration
 from musif.extract.constants import (
     DATA_NUMERIC_TEMPO,
+    DATA_REPEATS_UNFOLDED,
     DATA_REPRISE_INSTRUCTION,
     DATA_PART,
     DATA_SCORE,
@@ -87,6 +88,9 @@ def update_score_objects(
             C.TEMPO: tempo_mark,
             C.NUMERIC_TEMPO: numeric_tempo,
             C.REPRISE_INSTRUCTION: score_data.get(DATA_REPRISE_INSTRUCTION, "NA"),
+            # whether the measures were unfolded in the order they are played
+            # (expand_repeats); 0 for a score analysed as written
+            C.REPEATS_UNFOLDED: score_data.get(DATA_REPEATS_UNFOLDED, 0),
             C.TIME_SIGNATURE: time_signature,
             C.TIME_SIGNATURE_GROUPED: time_signature_grouped,
             C.NUMBER_OF_BEATS: number_of_beats,

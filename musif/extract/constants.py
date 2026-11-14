@@ -14,6 +14,8 @@ DATA_FILE = "file"
 DATA_FILTERED_PARTS = "parts"
 DATA_NUMERIC_TEMPO = "numeric_tempo"
 DATA_REPRISE_INSTRUCTION = "reprise_instruction"
+# 1 when the score was unfolded in the order in which its measures are played
+DATA_REPEATS_UNFOLDED = "repeats_unfolded"
 
 HARMONY_FEATURES = "harmony"
 SCALE_RELATIVE_FEATURES = "scale_relative"

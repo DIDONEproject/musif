@@ -25,14 +25,15 @@ def get_emphasised_scale_degrees_relative(
 
     Returns None when the score carries no harmonic analysis, and an empty
     dict (after logging an error) when the degrees could not be computed.
-    Pass ``expanded=True`` under ``expand_repeats``.
+    Pass ``expanded=True`` when the score was unfolded (``expand_repeats``).
 
     With ``positions`` (for each note, the 0-based position of its measure in
     the part and its onset in quarter notes within that measure, as given by
     the core module), each note takes the local key in force at its
     measure's position in the file and at its exact onset: the MuseScore
     file is the MusicXML file annotated bar for bar, so the n-th measure of
-    the part is the analysis' ``mc`` n+1. Printed numbers cannot be trusted
+    the part is the analysis' ``mc`` n+1 (``playthrough`` n+1 when the score
+    and the analysis were unfolded). Printed numbers cannot be trusted
     for this: Finale's "X1" bars carry, in music21, the number of the bar
     before them, which ms3 numbers differently (a final da capo bar was read
     in the key that closes the B section), and ms3 gives a second ending the
@@ -43,10 +44,10 @@ def get_emphasised_scale_degrees_relative(
     if harmonic_analysis.size == 0:
         return None
     try:
-        if (
-            not expanded
-            and positions is not None
-            and analysis_follows_measures(score_data)
+        # an unfolded score was matched with its analysis, bar for bar, when
+        # it was unfolded
+        if positions is not None and (
+            expanded or analysis_follows_measures(score_data)
         ):
             keys_by_position = _get_keys_by_position(harmonic_analysis, tonality)
             emph_degrees = _get_degrees_by_position(
@@ -86,7 +87,7 @@ def analysis_follows_measures(score_data: dict) -> bool:
     if (
         harmonic_analysis is not None
         and score is not None
-        and "mc" in harmonic_analysis.columns
+        and _position_column(harmonic_analysis) is not None
     ):
         parts = [list(part.getElementsByClass(Measure)) for part in score.parts]
         result = _same_lengths(harmonic_analysis, parts) or _same_numbers(
@@ -94,6 +95,16 @@ def analysis_follows_measures(score_data: dict) -> bool:
         )
     score_data[_FOLLOWS_MEASURES] = (harmonic_analysis, result)
     return result
+
+
+def _position_column(harmonic_analysis: DataFrame) -> Optional[str]:
+    """The column giving each label's measure position (1-based):
+    ``playthrough``, which is ``mc`` in a folded analysis and the position in
+    the unfolded sequence in an unfolded one; ``mc`` in a bare ms3 table."""
+    for column in (C.PLAYTHROUGH, "mc"):
+        if column in harmonic_analysis.columns:
+            return column
+    return None
 
 
 def _same_lengths(harmonic_analysis: DataFrame, parts: List[list]) -> bool:
@@ -108,27 +119,30 @@ def _same_lengths(harmonic_analysis: DataFrame, parts: List[list]) -> bool:
         )
         for index in range(number_of_measures)
     ]
-    for mc, act_dur in zip(
-        harmonic_analysis["mc"], harmonic_analysis[C.MEASURE_ACTUAL_DURATION]
+    for position, act_dur in zip(
+        harmonic_analysis[_position_column(harmonic_analysis)],
+        harmonic_analysis[C.MEASURE_ACTUAL_DURATION],
     ):
-        if pd.isna(mc):
+        if pd.isna(position):
             continue
-        mc = int(mc)
-        if not 1 <= mc <= number_of_measures or pd.isna(act_dur):
+        position = int(position)
+        if not 1 <= position <= number_of_measures or pd.isna(act_dur):
             return False
-        if Fraction(str(act_dur)) * 4 != lengths[mc - 1]:
+        if Fraction(str(act_dur)) * 4 != lengths[position - 1]:
             return False
     return True
 
 
 def _same_numbers(harmonic_analysis: DataFrame, measures: list) -> bool:
-    for mc, mn in zip(harmonic_analysis["mc"], harmonic_analysis["mn"]):
-        if pd.isna(mc) or pd.isna(mn):
+    for position, mn in zip(
+        harmonic_analysis[_position_column(harmonic_analysis)], harmonic_analysis["mn"]
+    ):
+        if pd.isna(position) or pd.isna(mn):
             continue
-        mc = int(mc)
-        if not 1 <= mc <= len(measures):
+        position = int(position)
+        if not 1 <= position <= len(measures):
             return False
-        measure = measures[mc - 1]
+        measure = measures[position - 1]
         if not measure.numberSuffix and measure.number != int(mn):
             return False
     return True
@@ -142,22 +156,24 @@ def _onset_in_quarters(value) -> Fraction:
 
 def _get_keys_by_position(harmonic_analysis: DataFrame, tonality: str) -> dict:
     """Map every measure position between the first and the last annotated one
-    (0-based: ``mc`` - 1) to the local key in force at its start and the
+    (0-based: ``playthrough`` - 1) to the local key in force at its start and the
     (onset in quarter notes, key) changes inside it. ms3's ``mc_onset`` is
     counted, like music21's offsets, from the start of the measure as written
     (a pickup or a split bar starts at 0), in whole notes."""
     changes_by_position = {}
     key_cache = {}
-    for mc, mc_onset, localkey in zip(
-        harmonic_analysis["mc"], harmonic_analysis.mc_onset, harmonic_analysis.localkey
+    for position, mc_onset, localkey in zip(
+        harmonic_analysis[_position_column(harmonic_analysis)],
+        harmonic_analysis.mc_onset,
+        harmonic_analysis.localkey,
     ):
         label = str(localkey).strip()
-        if label in ("", "nan", "None", "@none") or mc != mc:
+        if label in ("", "nan", "None", "@none") or pd.isna(position):
             continue
         if label not in key_cache:
             key_cache[label] = get_localTonalty(tonality, label)
         onset = Fraction(str(mc_onset)) * 4
-        changes_by_position.setdefault(int(mc) - 1, []).append(
+        changes_by_position.setdefault(int(position) - 1, []).append(
             (onset, key_cache[label])
         )
     if not changes_by_position:
