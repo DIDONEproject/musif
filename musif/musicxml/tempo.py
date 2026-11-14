@@ -370,10 +370,17 @@ def extract_reprise_instruction(file_path: str):
     return 0
 
 
+# the tempo that notation software writes when nobody sets one: in a score it
+# cannot be told from a tempo chosen by the engraver, so it is not reported
+DEFAULT_SOFTWARE_TEMPO = 120
+
+
 def extract_numeric_tempo(file_path: str) -> Optional[int]:
     """
-    Finds the numeric tempo in a musixml file by looking at the tempo marking in
-    the xml code.
+    Finds the numeric tempo in a musixml file: the first tempo stated in the
+    first measure of the first part (`<sound tempo="...">`, in a direction or
+    directly in the measure). It is `"NA"` when that measure states none, and
+    also when it states 120, the default of notation software.
 
     Parameters
     ----------
@@ -388,13 +395,10 @@ def extract_numeric_tempo(file_path: str) -> Optional[int]:
 
     root = tree.getroot()
     try:
-        tempo = int(
-            root.find("part")
-            .find("measure")
-            .find("direction")
-            .find("sound")
-            .get("tempo")
-        )
-    except:
-        tempo = "NA"
+        sound = root.find("part").find("measure").find(".//sound[@tempo]")
+        tempo = int(round(float(sound.get("tempo"))))
+    except Exception:
+        return "NA"
+    if tempo == DEFAULT_SOFTWARE_TEMPO:
+        return "NA"
     return tempo
