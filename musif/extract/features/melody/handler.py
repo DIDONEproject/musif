@@ -237,8 +237,12 @@ def get_interval_features(intervals: List[Interval], prefix: str = ""):
 
     # Extremes are selected by magnitude and keep the notated interval object,
     # so the reported name preserves the original spelling (an A4 stays A4).
+    # When the largest rising and falling leaps are equal, the rising one is
+    # reported: the sign used to depend on which of the two came first.
     largest_interval = (
-        max(intervals, key=lambda i: abs(i.semitones)) if len(intervals) > 0 else None
+        max(intervals, key=lambda i: (abs(i.semitones), i.semitones > 0))
+        if len(intervals) > 0
+        else None
     )
     largest_semitones = largest_interval.semitones if largest_interval else None
     largest = largest_interval.directedName if largest_interval else None
