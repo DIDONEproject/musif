@@ -82,7 +82,7 @@ def update_part_objects(
         for element in measure_elements:
             if (
                 element.classes[0] == DYNAMIC
-                and not element.value == "sf"
+                and element.value not in DYNAMIC_ACCENTS
                 or (
                     element.classes[0] == TEXTEXPRESSION
                     and element.content in ("sotto voce assai", "dolce")
