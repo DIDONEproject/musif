@@ -8,12 +8,20 @@ from musif.musicxml.tempo import get_number_of_beats, get_quarter_length
 from .constants import *
 
 
-def get_harmonic_rhythm(ms3_table, number_of_measures=None) -> dict:
+def get_harmonic_rhythm(
+    ms3_table, number_of_measures=None, measure_time_signatures=None
+) -> dict:
     """Harmonic annotations per measure and per beat.
 
     The denominator covers ALL measures of the piece (or window): pass the
     real measure count as ``number_of_measures``; without it, the highest
     playthrough measure carrying a label is used as an approximation.
+
+    ``measure_time_signatures`` (the time signature in force in each measure
+    of the score, as the tempo module gives it) sums beats and quarter notes
+    measure by measure. Without it, the metre is taken from the labelled
+    measures and carried over the unlabelled ones, which miscounts a metre
+    change in a stretch without labels.
     """
     hr = {}
     numerals = [n for n in ms3_table.numeral.dropna().tolist() if str(n) != "@none"]
@@ -29,15 +37,22 @@ def get_harmonic_rhythm(ms3_table, number_of_measures=None) -> dict:
         number_of_chords / number_of_measures if number_of_measures else 0.0
     )
 
-    total_beats = _total_beats(playthrough, time_signatures, number_of_measures)
+    if measure_time_signatures and all(
+        ts not in (None, "NA") for ts in measure_time_signatures
+    ):
+        total_beats = sum(get_number_of_beats(ts) for ts in measure_time_signatures)
+        total_quarters = sum(
+            get_quarter_length(ts) for ts in measure_time_signatures
+        )
+    else:
+        total_beats = _total_beats(playthrough, time_signatures, number_of_measures)
+        # per quarter note: unlike the beat, the quarter note does not change
+        # with the metre, so this rate is comparable between arias in 4/4,
+        # 2/2, 3/8...
+        total_quarters = _total_beats(
+            playthrough, time_signatures, number_of_measures, get_quarter_length
+        )
     harmonic_rhythm_beats = number_of_chords / total_beats if total_beats else 0.0
-
-    # per quarter note: unlike the beat, the quarter note does not change
-    # with the metre, so this rate is comparable between arias in 4/4, 2/2,
-    # 3/8...
-    total_quarters = _total_beats(
-        playthrough, time_signatures, number_of_measures, get_quarter_length
-    )
 
     hr[HARMONIC_RHYTHM] = harmonic_rhythm
     hr[HARMONIC_RHYTHM_BEATS] = harmonic_rhythm_beats
