@@ -9,7 +9,7 @@ from pandas import DataFrame
 
 import musif.extract.constants as C
 from musif.cache import isinstance
-from musif.extract.constants import PLAYTHROUGH
+from musif.extract.constants import MEASURE_ACTUAL_DURATION, PLAYTHROUGH
 from musif.logs import pwarn
 from musif.musicxml.tempo import get_number_of_beats
 
@@ -53,6 +53,15 @@ def process_musescore_file(file_path: str, expand_repeats: bool = False) -> Data
         # bars excluded from the count, so bars collapsed when it served as
         # the counter (it did unless the first label sat in a pickup bar)
         harmonic_analysis[PLAYTHROUGH] = harmonic_analysis["mc"]
+        # the actual length of each label's measure (whole notes), so that the
+        # annotated measures can be matched with the score's, bar for bar
+        try:
+            act_dur = msc3_score.mscx.measures().set_index("mc")["act_dur"]
+            harmonic_analysis[MEASURE_ACTUAL_DURATION] = harmonic_analysis["mc"].map(
+                act_dur
+            )
+        except Exception:
+            pass
     return harmonic_analysis
 
 

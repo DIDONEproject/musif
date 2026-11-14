@@ -51,7 +51,8 @@ def update_part_objects(
         sounding_measures,
         notes_and_rests,
         melodic_lines,
-    ) = get_notes_and_measures(part)
+        notes_positions,
+    ) = get_notes_and_measures(part, with_positions=True)
     lyrics = _get_lyrics_in_notes(notes)
     # intervals are computed per melodic line, never across simultaneous
     # voices (that used to fabricate a leap at every voice boundary)
@@ -65,6 +66,7 @@ def update_part_objects(
     part_data.update(
         {
             DATA_NOTES: notes,
+            DATA_NOTES_POSITIONS: notes_positions,
             DATA_LYRICS: lyrics,
             DATA_SOUNDING_MEASURES: sounding_measures,
             DATA_MEASURES: measures,

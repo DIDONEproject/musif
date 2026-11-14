@@ -26,6 +26,8 @@ VOICES_LIST = ["sop", "ten", "alt", "bar", "bbar", "bass"]
 
 PLAYTHROUGH = "playthrough"
 """Constant for playthrough (count fo measures) added to ms3 dataframe"""
+MEASURE_ACTUAL_DURATION = "act_dur"
+"""Actual length (whole notes) of the measure of each label, added to ms3 dataframe"""
 
 GLOBAL_TIME_SIGNATURE = "global_ts"
 """The name used for the column indicating the global time signature"""

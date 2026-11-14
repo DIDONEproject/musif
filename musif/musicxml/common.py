@@ -211,6 +211,7 @@ def split_layers(score: Score, split_keywords: List[str]):
 
 def get_notes_and_measures(
     part: Part,
+    with_positions: bool = False,
 ) -> Tuple[List[Note], List[Note], List[Measure], List[Measure]]:
     """
     Obtains lists of notes, tied notes, measures, measures that containg notes, and notes and rests.
@@ -220,6 +221,11 @@ def get_notes_and_measures(
     ----------
     part : Part
       Music21 part to extract the info from.
+    with_positions : bool
+      When True, a sixth element is returned: for each note, a pair (0-based
+      position of its measure in the part, in the order of the file whatever
+      the printed numbers say; onset of the note in quarter notes from the
+      start of that measure as written).
 
     """
 
@@ -288,18 +294,31 @@ def get_notes_and_measures(
         idx for idx, measure_notes in enumerate(notes_per_measure)
         if len(measure_notes) > 0
     ]
-    original_notes = [
-        note
-        for measure_notes in notes_per_measure
-        for note in measure_notes
-        if isinstance(note, Note)
-    ]
+    original_notes = []
+    positions = []
+    for index, measure_notes in enumerate(notes_per_measure):
+        for note in measure_notes:
+            if isinstance(note, Note):
+                original_notes.append(note)
+                if with_positions:
+                    # read now, while the note's site is still the measure
+                    # (or the voice, which starts with it) it was taken from
+                    positions.append((index, note.offset))
     if len(original_notes) == 0 and len(measures) > 0:
         pwarn(
             f"Part '{part.partName}' yielded no notes; its note-based features "
             "will be empty"
         )
 
+    if with_positions:
+        return (
+            original_notes,
+            measures,
+            sounding_measures,
+            notes_and_rests,
+            melodic_lines,
+            positions,
+        )
     return original_notes, measures, sounding_measures, notes_and_rests, melodic_lines
 
 

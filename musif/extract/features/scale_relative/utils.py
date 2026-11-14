@@ -1,9 +1,11 @@
+from fractions import Fraction
 from typing import List, Optional, Tuple, Union
 
 import pandas as pd
 import roman
 from music21 import pitch, scale
 from music21.note import Note
+from music21.stream import Measure
 from pandas.core.frame import DataFrame
 
 import musif.extract.constants as C
@@ -14,25 +16,204 @@ from musif.musicxml.tempo import get_number_of_beats
 
 
 def get_emphasised_scale_degrees_relative(
-    notes_list: List[Note], score_data: dict, expanded: bool = False
+    notes_list: List[Note],
+    score_data: dict,
+    expanded: bool = False,
+    positions: Optional[List[Tuple[int, float]]] = None,
 ) -> Optional[dict]:
     """Count one part's notes per scale degree relative to the local key.
 
     Returns None when the score carries no harmonic analysis, and an empty
     dict (after logging an error) when the degrees could not be computed.
     Pass ``expanded=True`` under ``expand_repeats``.
+
+    With ``positions`` (for each note, the 0-based position of its measure in
+    the part and its onset in quarter notes within that measure, as given by
+    the core module), each note takes the local key in force at its
+    measure's position in the file and at its exact onset: the MuseScore
+    file is the MusicXML file annotated bar for bar, so the n-th measure of
+    the part is the analysis' ``mc`` n+1. Printed numbers cannot be trusted
+    for this: Finale's "X1" bars carry, in music21, the number of the bar
+    before them, which ms3 numbers differently (a final da capo bar was read
+    in the key that closes the B section), and ms3 gives a second ending the
+    number of the first. Where the two files are not barred alike, the
+    printed numbers are used, as before.
     """
     harmonic_analysis, tonality = extract_harmony(score_data)
     if harmonic_analysis.size == 0:
         return None
     try:
-        keys_by_measure = _get_keys_by_measure(harmonic_analysis, tonality, expanded)
-        emph_degrees = get_emphasized_degrees(notes_list, keys_by_measure)
+        if (
+            not expanded
+            and positions is not None
+            and analysis_follows_measures(score_data)
+        ):
+            keys_by_position = _get_keys_by_position(harmonic_analysis, tonality)
+            emph_degrees = _get_degrees_by_position(
+                notes_list, positions, keys_by_position
+            )
+        else:
+            keys_by_measure = _get_keys_by_measure(
+                harmonic_analysis, tonality, expanded
+            )
+            emph_degrees = get_emphasized_degrees(notes_list, keys_by_measure)
     except Exception as e:
         file_name = score_data.get("file", "")
         perr(f"Could not compute relative degrees on {file_name}: {e!r}")
         emph_degrees = {}
     return emph_degrees
+
+
+_FOLLOWS_MEASURES = "_analysis_follows_measures"
+
+
+def analysis_follows_measures(score_data: dict) -> bool:
+    """Whether the n-th measure of the score is the analysis' ``mc`` n+1, as
+    when the MuseScore file is the MusicXML file annotated. Decided once per
+    score (and per window) and kept in ``score_data``.
+
+    The two are matched by length: every annotated measure is as long as the
+    score's measure in that position (the longest of the parts, since a
+    measure in which half of a split staff has nothing to play is empty).
+    Failing that, by printed number: every annotated measure has the number
+    the analysis gives it, Finale's "X" bars apart."""
+    harmonic_analysis = score_data.get(C.DATA_MUSESCORE_SCORE)
+    cached = score_data.get(_FOLLOWS_MEASURES)
+    if cached is not None and cached[0] is harmonic_analysis:
+        return cached[1]
+    result = False
+    score = score_data.get(C.DATA_SCORE)
+    if (
+        harmonic_analysis is not None
+        and score is not None
+        and "mc" in harmonic_analysis.columns
+    ):
+        parts = [list(part.getElementsByClass(Measure)) for part in score.parts]
+        result = _same_lengths(harmonic_analysis, parts) or _same_numbers(
+            harmonic_analysis, parts[0] if parts else []
+        )
+    score_data[_FOLLOWS_MEASURES] = (harmonic_analysis, result)
+    return result
+
+
+def _same_lengths(harmonic_analysis: DataFrame, parts: List[list]) -> bool:
+    if C.MEASURE_ACTUAL_DURATION not in harmonic_analysis.columns or not parts:
+        return False
+    number_of_measures = max(len(measures) for measures in parts)
+    lengths = [
+        max(
+            Fraction(measures[index].duration.quarterLength).limit_denominator(10_000)
+            for measures in parts
+            if index < len(measures)
+        )
+        for index in range(number_of_measures)
+    ]
+    for mc, act_dur in zip(
+        harmonic_analysis["mc"], harmonic_analysis[C.MEASURE_ACTUAL_DURATION]
+    ):
+        if pd.isna(mc):
+            continue
+        mc = int(mc)
+        if not 1 <= mc <= number_of_measures or pd.isna(act_dur):
+            return False
+        if Fraction(str(act_dur)) * 4 != lengths[mc - 1]:
+            return False
+    return True
+
+
+def _same_numbers(harmonic_analysis: DataFrame, measures: list) -> bool:
+    for mc, mn in zip(harmonic_analysis["mc"], harmonic_analysis["mn"]):
+        if pd.isna(mc) or pd.isna(mn):
+            continue
+        mc = int(mc)
+        if not 1 <= mc <= len(measures):
+            return False
+        measure = measures[mc - 1]
+        if not measure.numberSuffix and measure.number != int(mn):
+            return False
+    return True
+
+
+def _onset_in_quarters(value) -> Fraction:
+    """An onset as an exact fraction of a quarter note (music21 gives floats
+    and Fractions; floats are dyadic here, so the conversion is exact)."""
+    return Fraction(value).limit_denominator(1_000_000)
+
+
+def _get_keys_by_position(harmonic_analysis: DataFrame, tonality: str) -> dict:
+    """Map every measure position between the first and the last annotated one
+    (0-based: ``mc`` - 1) to the local key in force at its start and the
+    (onset in quarter notes, key) changes inside it. ms3's ``mc_onset`` is
+    counted, like music21's offsets, from the start of the measure as written
+    (a pickup or a split bar starts at 0), in whole notes."""
+    changes_by_position = {}
+    key_cache = {}
+    for mc, mc_onset, localkey in zip(
+        harmonic_analysis["mc"], harmonic_analysis.mc_onset, harmonic_analysis.localkey
+    ):
+        label = str(localkey).strip()
+        if label in ("", "nan", "None", "@none") or mc != mc:
+            continue
+        if label not in key_cache:
+            key_cache[label] = get_localTonalty(tonality, label)
+        onset = Fraction(str(mc_onset)) * 4
+        changes_by_position.setdefault(int(mc) - 1, []).append(
+            (onset, key_cache[label])
+        )
+    if not changes_by_position:
+        raise ValueError("harmonic analysis contains no usable local keys")
+
+    keys_by_position = {}
+    current_key = None
+    for position in range(min(changes_by_position), max(changes_by_position) + 1):
+        changes = sorted(changes_by_position.get(position, []), key=lambda c: c[0])
+        if current_key is None and changes:
+            current_key = changes[0][1]
+        keys_by_position[position] = (current_key, changes)
+        if changes:
+            current_key = changes[-1][1]
+    return keys_by_position
+
+
+def _get_degrees_by_position(
+    notes_list: List[Note], positions: List[Tuple[int, float]], keys_by_position: dict
+) -> dict:
+    """Tally scale degrees, each note in the local key in force at its
+    measure's position and onset. Before the first annotation a note takes
+    the first key; after the last annotated measure, the last key."""
+    notes_per_degree_relative = {
+        to_full_degree(degree, accidental): 0
+        for accidental in ["", "sharp", "flat"]
+        for degree in [1, 2, 3, 4, 5, 6, 7]
+    }
+    first = min(keys_by_position)
+    last = max(keys_by_position)
+    first_key = keys_by_position[first][0]
+    last_key, last_changes = keys_by_position[last]
+    if last_changes:
+        last_key = last_changes[-1][1]
+    for note, (position, note_onset) in zip(notes_list, positions):
+        if position < first:
+            local_tonality = first_key
+        elif position > last:
+            local_tonality = last_key
+        else:
+            local_tonality, changes = keys_by_position[position]
+            onset = _onset_in_quarters(note_onset)
+            for change_onset, key in changes:
+                if onset >= change_onset:
+                    local_tonality = key
+                else:
+                    break
+        if local_tonality is None:
+            continue
+        degree_value = get_note_degree(local_tonality, note.name)
+        if degree_value is None:
+            continue
+        notes_per_degree_relative[degree_value] = (
+            notes_per_degree_relative.get(degree_value, 0) + 1
+        )
+    return notes_per_degree_relative
 
 
 def _get_keys_by_measure(
