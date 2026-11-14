@@ -14,6 +14,7 @@ All notable changes to `musif`, newest first.
 * Dynamics: `sfz` and `fz` are accents like `sf`, not levels; `sfp` sets the level p
 * `#vii%7` is counted with `vii%7`, as `#viio` is with `viio`
 * Documentation: motion breaks at chords, the dynamics vocabulary, what `NumberOfParts` and `Score_VoiceReg` count, and `DoubleDottedRhythm` is not always zero
+* `expand_repeats` unfolds each score in the order that ms3 gives its MuseScore file (music21's expansion ignored *Fine* and replayed to the end); new column `RepeatsUnfolded`
 * Features extracted with previous versions should be extracted again
 
 ## v1.3.1

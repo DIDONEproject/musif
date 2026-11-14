@@ -51,11 +51,18 @@ Conventions used throughout:
   written in 2/2 give twice the density per beat they give in 4/4. The columns ending in
   `Quarters` give the same rates per *quarter note*, which is the same length in every
   metre; use them to compare arias in different metres. Neither unit knows the tempo;
-* every feature describes **the notated score, read once through**: repeats, *da capo* and
-  *dal segno* instructions are not followed (unless `expand_repeats` is set). In an aria
-  whose reprise is not written out, the opening section is on the page once although it is
-  performed twice, so proportions and means weigh it less than a score with a written-out
-  reprise does. `RepriseInstruction` tells the two kinds of score apart;
+* by default every feature describes **the notated score, read once through**: repeats,
+  *da capo* and *dal segno* instructions are not followed. In an aria whose reprise is not
+  written out, the opening section is on the page once although it is performed twice, so
+  proportions and means weigh it less than a score with a written-out reprise does.
+  `RepriseInstruction` tells the two kinds of score apart. With `expand_repeats`, every
+  feature describes instead **the score as it is played**: its measures are unfolded in the
+  order that ms3 gives its MuseScore file (repeat signs, voltas, *da capo* and *dal segno*
+  to *Fine* or *Coda*), and the harmonic annotations follow the same order. This needs the
+  MuseScore file, and it is applied only where that file is the MusicXML file annotated, bar
+  for bar (as many measures, each as long); a score that cannot be unfolded is analysed as
+  written, and `RepeatsUnfolded` says which is which. Where the order jumps, the measure
+  jumped to keeps the time signature, key signature and clef in force at its place;
 * the **`Score_`** value of a feature covers every part of the score, and depends on which
   parts those are. Where it pools the notes of all parts (intervals, scale degrees,
   ambitus), it is dominated by the parts with most notes, usually the strings. Where it
@@ -110,6 +117,7 @@ module (first row of the below table) provide all the features from [`music21.fe
 | `NumericTempo` | Numeric tempo of the piece, as stated by the engravers and correctors in the MusicXML file: the first `<sound tempo>` of the first measure of the first part. Empty when that measure states none, and when it states 120, the default of notation software, which cannot be told from a tempo set on purpose | `tempo` |
 | `Tempo` | Verbal annotation for the tempo, as defined by the composer: the first tempo word of the first measure (of the first full measure, when the score opens with a pickup that carries none). Later changes of tempo are not reported | `tempo` |
 | `RepriseInstruction` | 1 when the score carries a *da capo* or *dal segno* instruction, 0 when it does not. With such an instruction the reprise is performed but not written out, so every proportion and mean describes the notated page, on which the opening section appears once; without it, a reprise that exists is on the page twice. Compare arias across this column with care | `tempo` |
+| `RepeatsUnfolded` | 1 when the measures of the score were unfolded in the order in which they are played (`expand_repeats`, see the conventions above), 0 when it is analysed as written: always without `expand_repeats`, and with it where the score has no MuseScore file or its MuseScore file is barred differently or does not encode the reprise the score asks for | `tempo` |
 | `TempoGrouped1`                    | Classification of `Tempo` according to the main term in the verbal annotation                                                                                                                                                             | `tempo`           |
 | `TempoGrouped2`                    | Classification of `Tempo` in Slow, Moderate, or Fast (`NA` when no tempo term is recognized)                                                                                                                                              | `tempo`           |
 | `.+_Density$` | Notes per beat: summed notes of the scope's parts / summed per-measure beats of those parts (metre changes are respected at every scope, and a single-part sound equals its part). The beat is the one of each time signature (see `NumberOfBeats`): one per measure in 3/8, two in 2/2 and 6/8, so values are comparable only within one metre. Produced at part/sound/family/score scope | `density` |
