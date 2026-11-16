@@ -3,7 +3,7 @@
 All notable changes to `musif`, newest first.
 
 ## Unreleased
-* `TempoGrouped2`: a tempo heading that names no speed (*A tempo*, *Parlante*, *Ad arbitrio*, *Tempo spazioso*) is Moderate instead of `NA`; *Parlante* and *Arbitrio* are read as tempo headings
+* `TempoGrouped2`: a tempo heading that names no speed (*A tempo*, *Parlante*, *Ad arbitrio*, *Tempo spazioso*) is Moderate instead of `NA`; *Parlante* and *Arbitrio* are read as tempo headings when no word of speed stands in the heading bars
 
 ## v1.4.0
 * Bug fixed in the beats of notes written in voices: after the key analysis they were computed from their position in the whole score, which is wrong after a metre change or a short bar (dotted figures)

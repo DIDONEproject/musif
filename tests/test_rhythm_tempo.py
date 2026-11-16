@@ -244,6 +244,14 @@ class TestTempoWords:
         part = self._part((1, []), (2, ["Presto"]))
         assert self._tempo(part) == "NA"
 
+    def test_a_manner_is_the_heading_only_without_a_speed(self):
+        # "Arbitrio" over a pickup and "Allegro" over the first bar: Allegro
+        part = self._part((0, ["Arbitrio"]), (1, ["Allegro"]))
+        assert self._tempo(part) == "Allegro"
+        # alone, it is the heading (and classed Moderate)
+        assert self._tempo(self._part((1, ["Parlante"]))) == "Parlante"
+        assert self._tempo(self._part((1, ["Ad arbitrio"]), (2, ["Allegro"]))) == "Ad arbitrio"
+
 
 class TestRepriseInstruction:
     def _file(self, tmp_path, direction):
