@@ -17,8 +17,16 @@ class TestTempoGrouping:
     def test_na_maps_to_na_not_none(self):
         assert get_tempo_grouped_2("NA") == "NA"
 
-    def test_unknown_terms_map_to_na(self):
-        assert get_tempo_grouped_2("Zanzara") == "NA"
+    def test_headings_without_a_speed_are_moderate(self):
+        # a heading names no known speed: Moderate; no heading: NA
+        assert get_tempo_grouped_2("Zanzara") == "Moderate"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("A tempo di capella")) == "Moderate"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("Tempo spazioso")) == "Moderate"
+        assert get_tempo_grouped_1("Parlante") == "Parlante"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("Parlante")) == "Moderate"
+        assert get_tempo_grouped_1("Ad arbitrio") == "Arbitrio"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("Ad arbitrio")) == "Moderate"
+        assert get_tempo_grouped_2(get_tempo_grouped_1("")) == "NA"
 
     def test_brio_normalization(self):
         assert get_tempo_grouped_1("brio e tempo") == "Con brio"
@@ -198,7 +206,7 @@ class TestTempoWords:
         assert get_tempo_grouped_2("Giusto") == "Moderate"
         assert get_tempo_grouped_1("Tempo comodo") == "Comodo"
         assert get_tempo_grouped_1("A tempo") == "A tempo"
-        assert get_tempo_grouped_2("A tempo") == "NA"
+        assert get_tempo_grouped_2("A tempo") == "Moderate"
 
     def test_spellings(self):
         assert get_tempo_grouped_1("Tempo di Menuet") == "Minuetto"

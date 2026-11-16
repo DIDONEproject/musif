@@ -170,6 +170,9 @@ def get_tempo_grouped_1(tempo: str) -> str:
         "sostenuto",
         "spiritoso",
         "tempo",
+        # headings that name a manner rather than a speed; classed Moderate
+        "parlante",
+        "arbitrio",
     ]
     words_contained = []
     for word in tempo.split(" "):
@@ -265,17 +268,17 @@ def get_tempo_grouped_2(tempo_grouped_1: str) -> str:
     ]
     fast = fast_basis + [w[:-1] + t for w in fast_basis for t in possible_terminations]
 
-    if tempo_grouped_1 == "A tempo":
-        return TempoGroup2.NA.value
-    elif tempo_grouped_1 in slow:
+    if tempo_grouped_1 in slow:
         return TempoGroup2.SLOW.value
     elif tempo_grouped_1 in moderate:
         return TempoGroup2.MODERATE.value
     elif tempo_grouped_1 in fast:
         return TempoGroup2.FAST.value
 
-    # unknown tempo terms get the sentinel, never a silent None
-    return TempoGroup2.NA.value
+    # A heading that names no speed ("A tempo", "Parlante", "Ad arbitrio",
+    # "Tempo spazioso") is classed Moderate; only the absence of a heading
+    # (NA, handled above) has no class.
+    return TempoGroup2.MODERATE.value
 
 
 def get_quarter_length(time_signature: str) -> float:
