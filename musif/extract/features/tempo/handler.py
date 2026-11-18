@@ -166,9 +166,16 @@ def extract_time_signatures(measures: list, score_data: dict) -> tuple:
     )
 
 
+# Words that name a manner of performance rather than a speed: a heading only
+# when no word of speed stands in the heading bars ("Arbitrio" over a pickup
+# followed by "Allegro" over the first bar: the tempo is Allegro)
+MANNER_TERMS = ("Parlante", "Arbitrio")
+
+
 def extract_tempo(score_data, part):
     numeric_tempo = score_data[DATA_NUMERIC_TEMPO]
     tempo_mark = TempoGroup2.NA.value
+    manner = None
     examined = 0
     for measure in part:
         if not isinstance(measure, Measure):
@@ -176,15 +183,22 @@ def extract_tempo(score_data, part):
         examined += 1
         for element in measure:
             if isinstance(element, TextExpression):
-                if get_tempo_grouped_1(element.content) != "NA":
-                    tempo_mark = element.content
-                    # the heading comes first; a later word of the measure
-                    # ("sostenuto" under an "Allegro moderato") is an
-                    # expression mark and used to replace it
-                    break
+                grouped = get_tempo_grouped_1(element.content)
+                if grouped == "NA":
+                    continue
+                if grouped in MANNER_TERMS:
+                    manner = manner or element.content
+                    continue
+                tempo_mark = element.content
+                # the heading comes first; a later word of the measure
+                # ("sostenuto" under an "Allegro moderato") is an
+                # expression mark and used to replace it
+                break
         # Only the first bar counts; when it is a pickup that carries no
         # heading, the heading stands over the first full bar.
         is_pickup = examined == 1 and measure.number == 0
         if tempo_mark != TempoGroup2.NA.value or not is_pickup:
             break
+    if tempo_mark == TempoGroup2.NA.value and manner is not None:
+        tempo_mark = manner
     return numeric_tempo, tempo_mark
